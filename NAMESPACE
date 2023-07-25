@@ -3,6 +3,7 @@
 S3method(print,hub_validations)
 export("%>%")
 export(capture_check_cnd)
+export(check_file_name)
 export(check_tbl_colnames)
 export(check_valid_round_id)
 importFrom(magrittr,"%>%")
