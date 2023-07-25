@@ -43,6 +43,8 @@ Remotes:
     Infectious-Disease-Modeling-Hubs/hubUtils
     assignUser/octolog
 Config/testthat/edition: 3
+Config/Needs/website:
+    pkgdown
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
