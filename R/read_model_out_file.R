@@ -1,15 +1,31 @@
-read_model_out_file <- function(file_path) {
-  if (!fs::file_exists(file_path)) {
-    cli::cli_abort("No file exists at path {.path {file_path}}")
+#' Check file can be read successfully
+#'
+#' @inherit check_file_exists
+#' @return a tibble of contents of the model output file.
+#' @export
+read_model_out_file <- function(file_path, hub_path = ".") {
+  full_path <- full_file_path(file_path, hub_path)
+
+  if (!fs::file_exists(full_path)) {
+    cli::cli_abort("No file exists at path {.path {full_path}}")
   }
 
-  file_ext <- rlang::arg_match(
-    fs::path_ext(file_path),
-    values = c("csv", "parquet", "arrow")
-  )
+  file_ext <- fs::path_ext(file_path)
+
+  if (!file_ext %in% valid_ext) {
+    cli::cli_abort("File cannot be read. File extension must be one of
+                   {.val {valid_ext}} not {.val {file_ext}}")
+  }
+
   switch(file_ext,
-    csv = arrow::read_csv_arrow(file_path),
-    parquet = arrow::read_parquet(file_path),
-    arrow = arrow::read_feather(file_path)
+    csv = arrow::read_csv_arrow(
+      full_path,
+      col_types = hubUtils::create_hub_schema(
+        config_tasks = hubUtils::read_config(hub_path, "tasks"),
+        partitions = NULL
+      )
+    ),
+    parquet = arrow::read_parquet(full_path),
+    arrow = arrow::read_feather(full_path)
   )
 }
