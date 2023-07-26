@@ -10,11 +10,11 @@
 #' the hub's model-output directory.
 #'
 #' @return
-#' A list containing one of:
+#' Depending on whether validation has succeeded, one of:
 #' - `<message/check_success>` condition class object
 #' - `<warning/check_failure>` condition class object
 #'
-#' depending on whether validation has succeeded.
+#' Objects also inherit from subclass `<hub_check>`.
 #' @export
 check_tbl_colnames <- function(tbl, round_id, config_tasks, file_path) {
     round_cols <- unname(c(

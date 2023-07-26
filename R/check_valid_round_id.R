@@ -2,11 +2,11 @@
 #'
 #' @inheritParams check_tbl_colnames
 #' @return
-#' A list containing one of:
+#' Depending on whether validation has succeeded, one of:
 #' - `<message/check_success>` condition class object
 #' - `<error/check_error>` condition class object
 #'
-#' depending on whether validation has succeeded.
+#' Objects also inherit from subclass `<hub_check>`.
 #' @export
 check_valid_round_id <- function(round_id, config_tasks, file_path) {
 

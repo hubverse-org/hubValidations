@@ -15,13 +15,13 @@ check_valid_round_id(round_id, config_tasks, file_path)
 the hub's model-output directory.}
 }
 \value{
-A list containing one of:
+Depending on whether validation has succeeded, one of:
 \itemize{
 \item \verb{<message/check_success>} condition class object
 \item \verb{<error/check_error>} condition class object
 }
 
-depending on whether validation has succeeded.
+Objects also inherit from subclass \verb{<hub_check>}.
 }
 \description{
 Check whether the \code{round_id} determined for the submission is valid
