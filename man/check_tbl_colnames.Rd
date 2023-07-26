@@ -13,7 +13,8 @@ check_tbl_colnames(tbl, round_id, config_tasks, file_path)
 
 \item{config_tasks}{a list version of the content's of a hub's \code{tasks.json}.}
 
-\item{file_path}{character string. Path to the file being validated.}
+\item{file_path}{character string. Path to the file being validated relative to
+the hub's model-output directory.}
 }
 \value{
 A list containing one of:

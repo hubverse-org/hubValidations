@@ -6,7 +6,8 @@
 #' @param tbl a tibble/data.frame of the contents of the file being validated.
 #' @param round_id character string. The round identifier.
 #' @param config_tasks a list version of the content's of a hub's `tasks.json`.
-#' @param file_path character string. Path to the file being validated.
+#' @param file_path character string. Path to the file being validated relative to
+#' the hub's model-output directory.
 #'
 #' @return
 #' A list containing one of:

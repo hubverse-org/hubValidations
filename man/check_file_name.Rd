@@ -7,7 +7,8 @@
 check_file_name(file_path)
 }
 \arguments{
-\item{file_path}{character string. Path to the file being validated.}
+\item{file_path}{character string. Path to the file being validated relative to
+the hub's model-output directory.}
 }
 \value{
 A list containing one of:
