@@ -4,11 +4,9 @@
       capture_check_cnd(check = TRUE, file_path = "test/file.csv", msg_subject = "{.var round_id}",
         msg_attribute = "valid.", error = FALSE)
     Output
-      [[1]]
       <message/check_success>
       Message:
       `round_id` is valid.
-      
 
 ---
 
@@ -16,11 +14,9 @@
       capture_check_cnd(check = FALSE, file_path = "test/file.csv", msg_subject = "{.var round_id}",
         msg_attribute = "valid.", error = FALSE, details = "Must be one of {.val {c('A', 'B')}}, not {.val C}")
     Output
-      [[1]]
       <warning/check_failure>
       Warning:
       `round_id` must be valid.  Must be one of "A" and "B", not "C"
-      
 
 ---
 
@@ -28,11 +24,9 @@
       capture_check_cnd(check = FALSE, file_path = "test/file.csv", msg_subject = "{.var round_id}",
         msg_attribute = "valid.", error = TRUE, details = "Must be one of 'A' or 'B', not 'C'")
     Output
-      [[1]]
       <error/check_error>
       Error:
       ! `round_id` must be valid.  Must be one of 'A' or 'B', not 'C'
-      
 
 ---
 
@@ -41,11 +35,9 @@
         msg_attribute = "consistent with expected round task IDs and std column names.",
         msg_verbs = c("are", "must be"))
     Output
-      [[1]]
       <message/check_success>
       Message:
       Column names are consistent with expected round task IDs and std column names.
-      
 
 ---
 
@@ -54,11 +46,9 @@
         msg_attribute = "consistent with expected round task IDs and std column names.",
         msg_verbs = c("are", "must always be"))
     Output
-      [[1]]
       <warning/check_failure>
       Warning:
       Column names must always be consistent with expected round task IDs and std column names.
-      
 
 # capture_check_cnd fails correctly
 

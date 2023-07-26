@@ -54,7 +54,7 @@ capture_check_cnd <- function(check, file_path, msg_subject, msg_attribute,
       paste(msg_subject, msg_verbs[1], msg_attribute, "\n", details)
     )
     res <- rlang::message_cnd(
-      "check_success",
+      c("check_success", "hub_check"),
       where = file_path,
       message = msg,
       use_cli_format = TRUE
@@ -65,19 +65,19 @@ capture_check_cnd <- function(check, file_path, msg_subject, msg_attribute,
     )
     if (error) {
       res <- rlang::error_cnd(
-        "check_error",
+        c("check_error", "hub_check"),
         where = file_path,
         message = msg,
         use_cli_format = TRUE
       )
     } else {
       res <- rlang::warning_cnd(
-        "check_failure",
+        c("check_failure", "hub_check"),
         where = file_path,
         message = msg,
         use_cli_format = TRUE
       )
     }
   }
-  return(list(res))
+  return(res)
 }
