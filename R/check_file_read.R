@@ -1,6 +1,7 @@
 #' Check file can be read successfully
 #'
-#' @inherit check_file_exists
+#' @inheritParams check_valid_round_id
+#' @inherit check_valid_round_id return
 #'
 #' @export
 check_file_read <- function(file_path, hub_path = ".") {

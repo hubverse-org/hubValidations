@@ -35,8 +35,8 @@ test_that("validate_model_file works", {
   )
 
   expect_snapshot(
-      validate_model_file(hub_path,
-                          file_path = "team1-goodmodel/2022-10-15-team1-goodmodel.csv"
-      )
+    validate_model_file(hub_path,
+      file_path = "team1-goodmodel/2022-10-15-hub-baseline.csv"
+    )
   )
 })

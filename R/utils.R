@@ -29,6 +29,13 @@ abs_file_path <- function(file_path, hub_path) {
   )
 }
 
+rel_file_path <- function(file_path, hub_path) {
+  fs::path(
+    get_hub_model_output_dir(hub_path),
+    file_path
+  )
+}
+
 get_file_round_id <- function(file_path) {
     parse_file_name(file_path)$round_id
 }

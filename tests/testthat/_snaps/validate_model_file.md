@@ -3,7 +3,7 @@
     Code
       validate_model_file(hub_path, file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv")
     Message <rlang_message>
-      v 2022-10-08-team1-goodmodel.csv: File exists at path '/Users/Anna/Library/R/arm64/4.2/library/hubUtils/testhubs/simple/model-output/team1-goodmodel/2022-10-08-team1-goodmodel.csv'.
+      v 2022-10-08-team1-goodmodel.csv: File exists at path 'model-output/team1-goodmodel/2022-10-08-team1-goodmodel.csv'.
       v 2022-10-08-team1-goodmodel.csv: File name "2022-10-08-team1-goodmodel.csv" is valid.
       v 2022-10-08-team1-goodmodel.csv: File directory name matches `model_id` metadata in file name.
       v 2022-10-08-team1-goodmodel.csv: `round_id` is valid.
@@ -16,7 +16,7 @@
     Output
       List of 5
        $ file_exists   :List of 4
-        ..$ message       : chr "File exists at path '/Users/Anna/Library/R/arm64/4.2/library/hubUtils/testhubs/simple/model-output/team1-goodmo"| __truncated__
+        ..$ message       : chr "File exists at path 'model-output/team1-goodmodel/2022-10-08-team1-goodmodel.csv'. \n "
         ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
         ..$ call          : NULL
         ..$ use_cli_format: logi TRUE
@@ -52,5 +52,16 @@
     Code
       validate_model_file(hub_path, file_path = "team1-goodmodel/2022-10-15-team1-goodmodel.csv")
     Message <rlang_message>
-      x 2022-10-15-team1-goodmodel.csv: File does not exist at path '/Users/Anna/Library/R/arm64/4.2/library/hubUtils/testhubs/simple/model-output/team1-goodmodel/2022-10-15-team1-goodmodel.csv'.
+      x 2022-10-15-team1-goodmodel.csv: File does not exist at path 'model-output/team1-goodmodel/2022-10-15-team1-goodmodel.csv'.
+
+---
+
+    Code
+      validate_model_file(hub_path, file_path = "team1-goodmodel/2022-10-15-hub-baseline.csv")
+    Message <rlang_message>
+      v 2022-10-15-hub-baseline.csv: File exists at path 'model-output/team1-goodmodel/2022-10-15-hub-baseline.csv'.
+      v 2022-10-15-hub-baseline.csv: File name "2022-10-15-hub-baseline.csv" is valid.
+      ! 2022-10-15-hub-baseline.csv: File directory name must match `model_id` metadata in file name.  File should be submitted to directory "hub-baseline" not "team1-goodmodel"
+      v 2022-10-15-hub-baseline.csv: `round_id` is valid.
+      v 2022-10-15-hub-baseline.csv: File is accepted hub format.
 

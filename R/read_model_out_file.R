@@ -1,13 +1,14 @@
 #' Check file can be read successfully
 #'
-#' @inherit check_file_exists
+#' @inheritParams check_valid_round_id
 #' @return a tibble of contents of the model output file.
 #' @export
 read_model_out_file <- function(file_path, hub_path = ".") {
   full_path <- abs_file_path(file_path, hub_path)
 
   if (!fs::file_exists(full_path)) {
-    cli::cli_abort("No file exists at path {.path {full_path}}")
+    rel_path <- rel_file_path(file_path, hub_path)
+    cli::cli_abort("No file exists at path {.path {rel_path}}")
   }
 
   file_ext <- fs::path_ext(file_path)
