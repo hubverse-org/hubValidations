@@ -7,7 +7,7 @@
 #' @export
 #'
 #' @examples
-#' hub_path <- system.file("testhubs/simple", package = "hubUtils")
+#' hub_path <- system.file("testhubs/simple", package = "hubValidations")
 #' validate_model_file(hub_path,
 #'   file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
 #' )

@@ -1,5 +1,5 @@
 test_that("check_file_read works", {
-  hub_path <- system.file("testhubs/simple", package = "hubUtils")
+  hub_path <- system.file("testhubs/simple", package = "hubValidations")
 
   expect_snapshot(
     check_file_read(

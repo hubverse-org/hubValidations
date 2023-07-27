@@ -1,7 +1,7 @@
 # ---- create file ----
 #library(dplyr)
 #library(tibble)
-hub_path <- system.file("testhubs/simple", package = "hubUtils")
+hub_path <- system.file("testhubs/simple", package = "hubValidations")
 model_id <- "team1-goodmodel"
 round_id <- "2022-10-15"
 submit_dir <- fs::path(hub_path, "model-output", model_id)

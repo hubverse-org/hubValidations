@@ -1,7 +1,7 @@
 # get_hub_file_formats works
 
     Code
-      get_hub_file_formats(hub_path = system.file("testhubs/simple", package = "hubUtils"),
+      get_hub_file_formats(hub_path = system.file("testhubs/simple", package = "hubValidations"),
       round_id = "2022-10-08")
     Output
       [1] "csv"     "parquet" "arrow"  
@@ -17,14 +17,14 @@
 # get_hub_timezone works
 
     Code
-      get_hub_timezone(hub_path = system.file("testhubs/simple", package = "hubUtils"))
+      get_hub_timezone(hub_path = system.file("testhubs/simple", package = "hubValidations"))
     Output
       [1] "US/Eastern"
 
 # get_hub_model_output_dir works
 
     Code
-      get_hub_model_output_dir(hub_path = system.file("testhubs/simple", package = "hubUtils"))
+      get_hub_model_output_dir(hub_path = system.file("testhubs/simple", package = "hubValidations"))
     Output
       [1] "model-output"
 
@@ -46,7 +46,7 @@
 
     Code
       get_file_round_config(file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv",
-        hub_path = system.file("testhubs/simple", package = "hubUtils"))
+        hub_path = system.file("testhubs/simple", package = "hubValidations"))
     Output
       $round_id_from_variable
       [1] TRUE

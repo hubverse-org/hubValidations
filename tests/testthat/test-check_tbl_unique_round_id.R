@@ -1,5 +1,5 @@
 test_that("check_tbl_unique_round_id works", {
-  hub_path <- system.file("testhubs/simple", package = "hubUtils")
+  hub_path <- system.file("testhubs/simple", package = "hubValidations")
   file_path <- "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
 
   expect_snapshot(
@@ -41,7 +41,7 @@ test_that("check_tbl_unique_round_id works", {
 
 
 test_that("check_tbl_unique_round_id works", {
-  hub_path <- system.file("testhubs/simple", package = "hubUtils")
+  hub_path <- system.file("testhubs/simple", package = "hubValidations")
   file_path <- "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
   expect_snapshot(
     check_tbl_unique_round_id(

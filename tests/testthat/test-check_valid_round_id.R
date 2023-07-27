@@ -1,5 +1,5 @@
 test_that("check_valid_round_id works", {
-    hub_path <- system.file("testhubs/simple", package = "hubUtils")
+    hub_path <- system.file("testhubs/simple", package = "hubValidations")
     file_path <- "test/file.csv"
 
     expect_snapshot(

@@ -1,5 +1,5 @@
 test_that("validate_model_file works", {
-  hub_path <- system.file("testhubs/simple", package = "hubUtils")
+  hub_path <- system.file("testhubs/simple", package = "hubValidations")
 
   # File that passes validation
   expect_snapshot(
