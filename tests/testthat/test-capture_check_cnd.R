@@ -35,6 +35,16 @@ test_that("capture_check_cnd works", {
       msg_verbs = c("are", "must always be")
     )
   )
+  expect_snapshot(
+    str(
+      capture_check_cnd(
+        check = FALSE, file_path = "test/file.csv",
+        msg_subject = "Column names",
+        msg_attribute = "consistent with expected round task IDs and std column names.",
+        msg_verbs = c("are", "must always be")
+      )
+    )
+  )
 })
 
 test_that("capture_check_cnd fails correctly", {
@@ -55,5 +65,15 @@ test_that("capture_check_cnd fails correctly", {
       msg_verbs = c("are")
     ),
     error = TRUE
+  )
+})
+
+test_that("capture_check_cnd works correctly", {
+  expect_snapshot(
+    capture_check_info(
+      file_path = "test/file.csv",
+      msg =  "Check {.code check_tbl_unique_round_id} only applicable to rounds
+        where {.code round_id_from_variable} is {.code TRUE}. Check skipped."
+    )
   )
 })
