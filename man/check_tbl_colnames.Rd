@@ -19,11 +19,11 @@ the hub's model-output directory.}
 \value{
 Depending on whether validation has succeeded, one of:
 \itemize{
-\item \verb{<message/check_success>} condition class object
-\item \verb{<warning/check_failure>} condition class object
+\item \verb{<message/check_success>} condition class object.
+\item \verb{<warning/check_failure>} condition class object.
 }
 
-Objects also inherit from subclass \verb{<hub_check>}.
+Returned object also inherits from subclass \verb{<hub_check>}.
 }
 \description{
 Checks that a tibble/data.frame of data read in from the file being validated

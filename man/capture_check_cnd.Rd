@@ -18,7 +18,8 @@ capture_check_cnd(
 \item{check}{logical, the result of a validation check. If \code{check} is \code{FALSE},
 validation has failed. If \code{check} is \code{TRUE}, validation has succeeded.}
 
-\item{file_path}{character string. Path to the file being validated.}
+\item{file_path}{character string. Path to the file being validated. Must be
+the relative path to the hub's \code{model-output} (or equivalent) directory.}
 
 \item{msg_subject}{character string. The subject of the validation.}
 
@@ -35,14 +36,15 @@ should return an object of class \verb{<error/check_error>} (\code{TRUE}) or
 \item{details}{further details to be appended to the output message.}
 }
 \value{
-A list containing one of:
+Depending on whether validation has succeeded and the value
+of the \code{error} argument, one of:
 \itemize{
-\item \verb{<message/check_success>} condition class object
-\item \verb{<warning/check_failure>} condition class object
-\item \verb{<error/check_error>} condition class object
+\item \verb{<message/check_success>} condition class object.
+\item \verb{<warning/check_failure>} condition class object.
+\item \verb{<error/check_error>} condition class object.
 }
 
-depending on whether validation has succeeded and the value of the \code{error} argument.
+Returned object also inherits from subclass \verb{<hub_check>}.
 }
 \description{
 Capture a condition of the result of validation check.

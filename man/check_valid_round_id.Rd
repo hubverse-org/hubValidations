@@ -17,11 +17,11 @@ the hub's model-output directory.}
 \value{
 Depending on whether validation has succeeded, one of:
 \itemize{
-\item \verb{<message/check_success>} condition class object
-\item \verb{<error/check_error>} condition class object
+\item \verb{<message/check_success>} condition class object.
+\item \verb{<error/check_error>} condition class object.
 }
 
-Objects also inherit from subclass \verb{<hub_check>}.
+Returned object also inherits from subclass \verb{<hub_check>}.
 }
 \description{
 Check whether the \code{round_id} determined for the submission is valid

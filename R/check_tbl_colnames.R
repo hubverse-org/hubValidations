@@ -11,10 +11,10 @@
 #'
 #' @return
 #' Depending on whether validation has succeeded, one of:
-#' - `<message/check_success>` condition class object
-#' - `<warning/check_failure>` condition class object
+#' - `<message/check_success>` condition class object.
+#' - `<warning/check_failure>` condition class object.
 #'
-#' Objects also inherit from subclass `<hub_check>`.
+#' Returned object also inherits from subclass `<hub_check>`.
 #' @export
 check_tbl_colnames <- function(tbl, round_id, config_tasks, file_path) {
     round_cols <- unname(c(
