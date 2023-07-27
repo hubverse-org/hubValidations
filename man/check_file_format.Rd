@@ -19,6 +19,8 @@ For more details consult the
 in the \code{arrow} package.
 The hub must be fully configured with valid \code{admin.json} and \code{tasks.json}
 files within the \code{hub-config} directory.}
+
+\item{round_id}{character string. The round identifier.}
 }
 \value{
 Depending on whether validation has succeeded, one of:

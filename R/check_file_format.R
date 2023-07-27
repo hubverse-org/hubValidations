@@ -1,6 +1,7 @@
 #' Check file format is accepted by hub.
 #'
-#' @inherit check_file_exists
+#' @inheritParams check_valid_round_id
+#' @inherit check_valid_round_id return
 #'
 #' @export
 check_file_format <- function(file_path, hub_path, round_id) {

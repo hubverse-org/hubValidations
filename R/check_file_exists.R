@@ -1,9 +1,9 @@
 #' Check file exists at the file path specified
-#' @inheritParams hubUtils::connect_hub
-#' @inherit check_valid_round_id
+#' @inheritParams check_valid_round_id
+#' @inherit check_valid_round_id return
 #'
 #' @export
-check_file_exists <- function(file_path, hub_path) {
+check_file_exists <- function(file_path, hub_path = ".") {
     model_output_dir <- get_hub_model_output_dir(hub_path)
     full_path <- fs::path(hub_path, model_output_dir, file_path)
     check <- fs::file_exists(full_path)

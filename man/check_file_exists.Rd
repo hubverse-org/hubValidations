@@ -4,7 +4,7 @@
 \alias{check_file_exists}
 \title{Check file exists at the file path specified}
 \usage{
-check_file_exists(file_path, hub_path)
+check_file_exists(file_path, hub_path = ".")
 }
 \arguments{
 \item{file_path}{character string. Path to the file being validated relative to

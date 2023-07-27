@@ -1,6 +1,6 @@
 #' Check a model output file name can be correctly parsed.
 #'
-#' @inheritParams check_valid_round_id
+#' @inheritParams check_tbl_colnames
 #' @inherit check_valid_round_id return
 #' @export
 check_file_name <- function(file_path) {
