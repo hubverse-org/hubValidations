@@ -1,7 +1,7 @@
 # check_valid_round_id works
 
     Code
-      check_valid_round_id("2022-10-29", config_tasks, file_path)
+      check_valid_round_id("2022-10-29", file_path, hub_path)
     Output
       <message/check_success>
       Message:
@@ -10,7 +10,7 @@
 ---
 
     Code
-      check_valid_round_id("invalid-round_id", config_tasks, file_path)
+      check_valid_round_id("invalid-round_id", file_path, hub_path)
     Output
       <error/check_error>
       Error:

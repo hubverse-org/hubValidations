@@ -1,7 +1,6 @@
 test_that("check_tbl_colnames validates correct files", {
   hub_path <- system.file("testhubs/simple", package = "hubUtils")
-  hub_con <- hubUtils::connect_hub(hub_path)
-  config_tasks <- attr(hub_con, "config_tasks")
+
   file_path <- "test/file.csv"
   round_id <- "2022-10-15"
 
@@ -10,7 +9,7 @@ test_that("check_tbl_colnames validates correct files", {
       system.file("files/2022-10-15-team1-goodmodel.csv",
         package = "hubValidations"
       )
-    ), round_id, config_tasks, file_path)
+    ), round_id, file_path, hub_path)
   )
   expect_snapshot(
     check_tbl_colnames(
@@ -19,15 +18,13 @@ test_that("check_tbl_colnames validates correct files", {
           package = "hubValidations"
         )
       ),
-      round_id, config_tasks, file_path
+      round_id, file_path, hub_path
     )
   )
 })
 
 test_that("check_tbl_colnames fails on files", {
   hub_path <- system.file("testhubs/simple", package = "hubUtils")
-  hub_con <- hubUtils::connect_hub(hub_path)
-  config_tasks <- attr(hub_con, "config_tasks")
   file_path <- "test/file.csv"
   round_id <- "2022-10-15"
 
@@ -40,7 +37,7 @@ test_that("check_tbl_colnames fails on files", {
   expect_snapshot(
     check_tbl_colnames(
       tbl =  missing_col,
-      round_id, config_tasks, file_path
+      round_id, file_path, hub_path
     )
   )
 })

@@ -5,9 +5,9 @@
 #' configuration being validated against.
 #' @param tbl a tibble/data.frame of the contents of the file being validated.
 #' @param round_id character string. The round identifier.
-#' @param config_tasks a list version of the content's of a hub's `tasks.json`.
 #' @param file_path character string. Path to the file being validated relative to
 #' the hub's model-output directory.
+#' @inheritParams hubUtils::connect_hub
 #'
 #' @return
 #' Depending on whether validation has succeeded, one of:
@@ -16,7 +16,8 @@
 #'
 #' Returned object also inherits from subclass `<hub_check>`.
 #' @export
-check_tbl_colnames <- function(tbl, round_id, config_tasks, file_path) {
+check_tbl_colnames <- function(tbl, round_id, file_path, hub_path = ".") {
+    config_tasks <- hubUtils::read_config(hub_path, "tasks")
     round_cols <- unname(c(
         hubUtils:::get_round_task_id_names(config_tasks, round_id),
         hubUtils::std_colnames[names(hubUtils::std_colnames) != "model_id"]

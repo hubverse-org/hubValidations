@@ -3,7 +3,7 @@
     Code
       check_tbl_colnames(tbl = arrow::read_csv_arrow(system.file(
         "files/2022-10-15-team1-goodmodel.csv", package = "hubValidations")),
-      round_id, config_tasks, file_path)
+      round_id, file_path, hub_path)
     Output
       <message/check_success>
       Message:
@@ -14,7 +14,7 @@
     Code
       check_tbl_colnames(tbl = arrow::read_parquet(system.file(
         "files/2022-10-15-team1-goodmodel.parquet", package = "hubValidations")),
-      round_id, config_tasks, file_path)
+      round_id, file_path, hub_path)
     Output
       <message/check_success>
       Message:
@@ -23,7 +23,7 @@
 # check_tbl_colnames fails on files
 
     Code
-      check_tbl_colnames(tbl = missing_col, round_id, config_tasks, file_path)
+      check_tbl_colnames(tbl = missing_col, round_id, file_path, hub_path)
     Output
       <warning/check_failure>
       Warning:
