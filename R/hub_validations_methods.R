@@ -17,6 +17,7 @@ print.hub_validations <- function(x, ...) {
             purrr::map_lgl(x, ~ rlang::inherits_any(.x, "check_success")) ~ "v",
             purrr::map_lgl(x, ~ rlang::inherits_any(.x, "check_failure")) ~ "!",
             purrr::map_lgl(x, ~ rlang::inherits_any(.x, "check_error")) ~ "x",
+            purrr::map_lgl(x, ~ rlang::inherits_any(.x, "check_info")) ~ "i",
             TRUE ~ "*"
         )
     )

@@ -18,8 +18,13 @@ is_failure <- function(x) {
 is_error <- function(x) {
     inherits(x, "check_error")
 }
+#' @describeIn is_success Is check info?
 #' @export
-#' @describeIn is_success Is check not success?
-not_success <- function(x) {
-    !inherits(x, "check_success")
+is_info <- function(x) {
+    inherits(x, "check_info")
+}
+#' @export
+#' @describeIn is_success Did check not pass?
+not_pass <- function(x) {
+    !inherits(x, "check_success") & !inherits(x, "check_info")
 }

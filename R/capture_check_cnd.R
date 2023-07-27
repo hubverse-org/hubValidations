@@ -2,7 +2,8 @@
 #'
 #' @param check logical, the result of a validation check. If `check` is `FALSE`,
 #' validation has failed. If `check` is `TRUE`, validation has succeeded.
-#' @param file_path character string. Path to the file being validated.
+#' @param file_path character string. Path to the file being validated. Must be
+#' the relative path to the hub's `model-output` (or equivalent) directory.
 #' @param msg_subject character string. The subject of the validation.
 #' @param msg_attribute character string. The attribute of subject being validated.
 #' @param msg_verbs character vector of length 2. The verbs describing the state
@@ -17,12 +18,13 @@
 #' Arguments `msg_subject`, `msg_attribute`, `msg_verbs` and `details`
 #' accept text that can interpreted and formatted by [cli::format_inline()].
 #'
-#' @return A list containing one of:
-#' - `<message/check_success>` condition class object
-#' - `<warning/check_failure>` condition class object
-#' - `<error/check_error>` condition class object
+#' @return Depending on whether validation has succeeded and the value
+#' of the `error` argument, one of:
+#' - `<message/check_success>` condition class object.
+#' - `<warning/check_failure>` condition class object.
+#' - `<error/check_error>` condition class object.
 #'
-#' depending on whether validation has succeeded and the value of the `error` argument.
+#' Returned object also inherits from subclass `<hub_check>`.
 #' @export
 #'
 #' @examples
@@ -80,4 +82,24 @@ capture_check_cnd <- function(check, file_path, msg_subject, msg_attribute,
     }
   }
   return(res)
+}
+
+#' Capture a simple info message condition
+#'
+#' Capture a simple info message condition. Useful for communicating when a check
+#' is ignored or skipped.
+#' @inheritParams capture_check_cnd
+#' @param msg Character string. Accepts text that can interpreted and
+#' formatted by [cli::format_inline()].
+#'
+#' @return A `<message/check_info>` condition class object. Returned object also
+#' inherits from subclass `<hub_check>`.
+#' @export
+capture_check_info <- function(file_path, msg) {
+  rlang::message_cnd(
+    c("check_info", "hub_check"),
+    where = file_path,
+    message = cli::format_inline(msg),
+    use_cli_format = TRUE
+  )
 }
