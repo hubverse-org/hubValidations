@@ -45,3 +45,7 @@ get_file_round_config <- function(file_path, hub_path) {
     round_idx <- get_file_round_idx(file_path, hub_path)
     config_tasks[["rounds"]][[round_idx]]
 }
+
+is_round_id_from_variable <- function(file_path, hub_path) {
+    get_file_round_config(file_path, hub_path)[["round_id_from_variable"]]
+}
