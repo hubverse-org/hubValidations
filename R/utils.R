@@ -28,3 +28,20 @@ full_file_path <- function(file_path, hub_path) {
     file_path
   )
 }
+
+get_file_round_id <- function(file_path) {
+    parse_file_name(file_path)$round_id
+}
+
+
+get_file_round_idx <- function(file_path, hub_path) {
+    round_id <- get_file_round_id(file_path)
+    config_tasks <- hubUtils::read_config(hub_path, "tasks")
+    hubUtils::get_round_idx(config_tasks, round_id)
+}
+
+get_file_round_config <- function(file_path, hub_path) {
+    config_tasks <- hubUtils::read_config(hub_path, "tasks")
+    round_idx <- get_file_round_idx(file_path, hub_path)
+    config_tasks[["rounds"]][[round_idx]]
+}
