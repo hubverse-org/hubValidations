@@ -29,7 +29,7 @@ check_file_read <- function(file_path, hub_path = ".") {
     file_path = file_path,
     msg_subject = "File",
     msg_attribute = "successfully.",
-    msg_verbs = c("read", "could not be read"),
+    msg_verbs = c("could be read", "could not be read"),
     error = TRUE,
     details = details
   )
