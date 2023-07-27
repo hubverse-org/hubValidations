@@ -34,8 +34,8 @@ test_that("get_hub_model_output_dir works", {
   )
 })
 
-test_that("full_file_path works", {
-  path_simple <- full_file_path(
+test_that("abs_file_path works", {
+  path_simple <- abs_file_path(
     hub_path = system.file("testhubs/simple", package = "hubValidations"),
     file_path = "test/file.csv"
   )
@@ -45,7 +45,7 @@ test_that("full_file_path works", {
     gsub("^.*library/", "", path_simple)
   )
 
-  path_flusight <- full_file_path(
+  path_flusight <- abs_file_path(
     hub_path = system.file("testhubs/flusight", package = "hubUtils"),
     file_path = "test/file.csv"
   )

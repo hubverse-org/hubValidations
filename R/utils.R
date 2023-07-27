@@ -21,7 +21,7 @@ get_hub_model_output_dir <- function(hub_path) {
   if (is.null(model_output_dir)) "model-output" else model_output_dir
 }
 
-full_file_path <- function(file_path, hub_path) {
+abs_file_path <- function(file_path, hub_path) {
   fs::path(
     hub_path,
     get_hub_model_output_dir(hub_path),

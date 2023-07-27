@@ -4,7 +4,7 @@
 #' @return a tibble of contents of the model output file.
 #' @export
 read_model_out_file <- function(file_path, hub_path = ".") {
-  full_path <- full_file_path(file_path, hub_path)
+  full_path <- abs_file_path(file_path, hub_path)
 
   if (!fs::file_exists(full_path)) {
     cli::cli_abort("No file exists at path {.path {full_path}}")
