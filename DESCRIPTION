@@ -39,7 +39,8 @@ Imports:
 Suggests: 
     covr,
     testthat (>= 3.0.0),
-    testthis
+    testthis,
+    withr
 Remotes:
     Infectious-Disease-Modeling-Hubs/hubUtils,
     assignUser/octolog
