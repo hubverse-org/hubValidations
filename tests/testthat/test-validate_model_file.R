@@ -33,6 +33,13 @@ test_that("validate_model_file works", {
 })
 
 cli::test_that_cli("validate_model_file print method work", {
+  mockery::stub(
+    octolog:::signal_github_condition,
+    "get_location_string",
+    "file=test-validate_model_file.R,line=57,endLine=61,col=3,endCol=3",
+    2
+  )
+
   hub_path <- system.file("testhubs/simple", package = "hubValidations")
   withr::local_envvar(GITHUB_ACTIONS = "false")
   # File that passes validation

@@ -38,6 +38,7 @@ Imports:
     tibble
 Suggests: 
     covr,
+    mockery,
     testthat (>= 3.0.0),
     testthis,
     withr
