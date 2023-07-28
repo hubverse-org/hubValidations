@@ -1,9 +1,12 @@
 #' Check file can be read successfully
 #'
 #' @inheritParams check_valid_round_id
+#' @param use_hub_schema Logical. When reading in `csv` files, whether to use
+#' the hub's schema to specify column data types.
 #' @return a tibble of contents of the model output file.
 #' @export
-read_model_out_file <- function(file_path, hub_path = ".") {
+read_model_out_file <- function(file_path, hub_path = ".",
+                                use_hub_schema = FALSE) {
   full_path <- abs_file_path(file_path, hub_path)
 
   if (!fs::file_exists(full_path)) {
@@ -19,13 +22,19 @@ read_model_out_file <- function(file_path, hub_path = ".") {
   }
 
   switch(file_ext,
-    csv = arrow::read_csv_arrow(
-      full_path,
-      col_types = hubUtils::create_hub_schema(
-        config_tasks = hubUtils::read_config(hub_path, "tasks"),
-        partitions = NULL
-      )
-    ),
+    csv = {
+      if (use_hub_schema) {
+        arrow::read_csv_arrow(
+          full_path,
+          col_types = hubUtils::create_hub_schema(
+            config_tasks = hubUtils::read_config(hub_path, "tasks"),
+            partitions = NULL
+          )
+        )
+      } else {
+        arrow::read_csv_arrow(full_path)
+      }
+    },
     parquet = arrow::read_parquet(full_path),
     arrow = arrow::read_feather(full_path)
   )

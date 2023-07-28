@@ -4,7 +4,7 @@
 \alias{read_model_out_file}
 \title{Check file can be read successfully}
 \usage{
-read_model_out_file(file_path, hub_path = ".")
+read_model_out_file(file_path, hub_path = ".", use_hub_schema = FALSE)
 }
 \arguments{
 \item{file_path}{character string. Path to the file being validated relative to
@@ -19,6 +19,9 @@ For more details consult the
 in the \code{arrow} package.
 The hub must be fully configured with valid \code{admin.json} and \code{tasks.json}
 files within the \code{hub-config} directory.}
+
+\item{use_hub_schema}{Logical. When reading in \code{csv} files, whether to use
+the hub's schema to specify column data types.}
 }
 \value{
 a tibble of contents of the model output file.
