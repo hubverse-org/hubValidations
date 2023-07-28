@@ -34,13 +34,14 @@ Imports:
     octolog,
     purrr,
     rlang,
-    stringr
+    stringr,
+    tibble
 Suggests: 
     covr,
     testthat (>= 3.0.0),
     testthis
 Remotes:
-    Infectious-Disease-Modeling-Hubs/hubUtils
+    Infectious-Disease-Modeling-Hubs/hubUtils,
     assignUser/octolog
 Config/testthat/edition: 3
 Config/Needs/website:
