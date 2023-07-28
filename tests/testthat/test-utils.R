@@ -40,9 +40,9 @@ test_that("abs_file_path works", {
     file_path = "test/file.csv"
   )
   expect_equal(
-    fs::path("hubValidations/testhubs/simple/model-output/test/file.csv"),
+    fs::path("simple/model-output/test/file.csv"),
     # test portable version of path
-    gsub("^.*library/", "", path_simple)
+    gsub("^.*testhubs/", "", path_simple)
   )
 
   path_flusight <- abs_file_path(
@@ -50,9 +50,9 @@ test_that("abs_file_path works", {
     file_path = "test/file.csv"
   )
   expect_equal(
-    fs::path("hubUtils/testhubs/flusight/forecasts/test/file.csv"),
+    fs::path("flusight/forecasts/test/file.csv"),
     # test portable version of path
-    gsub("^.*library/", "", path_flusight)
+    gsub("^.*testhubs/", "", path_flusight)
   )
 })
 
