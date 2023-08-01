@@ -56,3 +56,8 @@ get_file_round_config <- function(file_path, hub_path) {
 is_round_id_from_variable <- function(file_path, hub_path) {
     get_file_round_config(file_path, hub_path)[["round_id_from_variable"]]
 }
+
+
+conc_rows <- function(tbl, sep = "-") {
+  apply(tbl, 1, function(x){paste(x, collapse = sep)})
+}
