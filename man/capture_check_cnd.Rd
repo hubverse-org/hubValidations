@@ -11,7 +11,8 @@ capture_check_cnd(
   msg_attribute,
   msg_verbs = c("is", "must be"),
   error = FALSE,
-  details = NULL
+  details = NULL,
+  ...
 )
 }
 \arguments{
@@ -34,6 +35,9 @@ should return an object of class \verb{<error/check_error>} (\code{TRUE}) or
 \verb{<warning/check_failure>} (\code{FALSE}, default).}
 
 \item{details}{further details to be appended to the output message.}
+
+\item{...}{<\link[rlang:dyn-dots]{dynamic}> Named data fields stored inside
+the condition object.}
 }
 \value{
 Depending on whether validation has succeeded and the value

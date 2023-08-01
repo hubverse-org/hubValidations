@@ -13,6 +13,7 @@
 #' should return an object of class `<error/check_error>` (`TRUE`) or
 #' `<warning/check_failure>` (`FALSE`, default).
 #' @param details further details to be appended to the output message.
+#' @inheritParams rlang::error_cnd
 #'
 #' @details
 #' Arguments `msg_subject`, `msg_attribute`, `msg_verbs` and `details`
@@ -44,7 +45,7 @@
 #' )
 capture_check_cnd <- function(check, file_path, msg_subject, msg_attribute,
                               msg_verbs = c("is", "must be"), error = FALSE,
-                              details = NULL) {
+                              details = NULL, ...) {
   if (!rlang::is_character(msg_verbs, 2L)) {
     cli::cli_abort("{.arg msg_verbs} must be a character vector of length 2,
                        not class {.cls {class(msg_verbs)}}
@@ -58,6 +59,7 @@ capture_check_cnd <- function(check, file_path, msg_subject, msg_attribute,
     res <- rlang::message_cnd(
       c("check_success", "hub_check"),
       where = file_path,
+      ...,
       message = msg,
       use_cli_format = TRUE
     )
@@ -69,6 +71,7 @@ capture_check_cnd <- function(check, file_path, msg_subject, msg_attribute,
       res <- rlang::error_cnd(
         c("check_error", "hub_check"),
         where = file_path,
+        ...,
         message = msg,
         use_cli_format = TRUE
       )
@@ -76,6 +79,7 @@ capture_check_cnd <- function(check, file_path, msg_subject, msg_attribute,
       res <- rlang::warning_cnd(
         c("check_failure", "hub_check"),
         where = file_path,
+        ...,
         message = msg,
         use_cli_format = TRUE
       )
