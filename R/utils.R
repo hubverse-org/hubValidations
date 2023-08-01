@@ -58,6 +58,15 @@ is_round_id_from_variable <- function(file_path, hub_path) {
 }
 
 
-conc_rows <- function(tbl, sep = "-") {
-  apply(tbl, 1, function(x){paste(x, collapse = sep)})
+conc_rows <- function(tbl, mask = NULL, sep = "-") {
+  if (is.null(mask)) {
+    apply(tbl, 1, function(x){paste(x, collapse = sep)})
+  } else {
+    purrr::map2_chr(
+      split(tbl, f = seq_along(tbl[[1]])),
+      split(mask, f = seq_along(tbl[[1]])),
+    ~ paste(.x[, !.y], collapse = sep)) %>%
+      unname()
+  }
 }
+

@@ -7,24 +7,33 @@
 check_tbl_values_required <- function(tbl, round_id, file_path, hub_path) {
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
   tbl <- hubUtils::coerce_to_hub_schema(tbl, config_tasks)
+  tbl[["value"]] <- NULL
+
   req <- hubUtils::expand_model_out_val_grid(
     config_tasks,
     round_id = round_id,
     required_vals_only = TRUE
   )
-  all <- hubUtils::expand_model_out_val_grid(
+  full <- hubUtils::expand_model_out_val_grid(
     config_tasks,
     round_id = round_id,
     required_vals_only = FALSE
   )
+  req_mask <- are_required_vals(tbl, req)
 
-  tbl[["value"]] <- NULL
-  opt_cols <- !names(tbl) %in% names(req)
-  split_tbl <- split(tbl, conc_rows(tbl[, opt_cols]))
+  # We split the tbl & mask using a concatination of optional values in each row.
+  split_tbl <- split(tbl, conc_rows(tbl, mask = req_mask))
+  split_req_mask <- split(
+    tibble::as_tibble(req_mask),
+    conc_rows(tbl, mask = req_mask)
+  )
 
-  missing_df <- purrr::map(
-    split_tbl,
-    ~ missing_req_rows(.x, req, all, opt_cols)
+  # We can then map our check over each unique combination of optional
+  # values, ensuring any required value combination across the remaining columns
+  # exists in the tbl subset.
+  missing_df <- purrr::map2(
+    split_tbl, split_req_mask,
+    ~ missing_req_rows(.x, .y, req, full)
   ) %>%
     purrr::list_rbind()
 
@@ -48,23 +57,48 @@ check_tbl_values_required <- function(tbl, round_id, file_path, hub_path) {
 }
 
 
-missing_req_rows <- function(x, req, all, opt_cols) {
+missing_req_rows <- function(x, mask, req, full) {
+  opt_cols <- purrr::map_lgl(mask, ~ !all(.x))
+  if (all(opt_cols == FALSE)) {
+    return(req[!conc_rows(req) %in% conc_rows(x), ])
+  }
   opt_colnms <- names(x)[opt_cols]
-  applicaple_all <- all[
-    conc_rows(all[, opt_colnms]) %in% conc_rows(x[, opt_colnms]),
-  ]
-  applicaple_req <- req[
-    conc_rows(req) %in%
-      conc_rows(applicaple_all[, names(applicaple_all) != opt_colnms]),
-  ]
+  req <- req[, names(req) != opt_colnms]
 
-  missing <- !conc_rows(applicaple_req) %in% conc_rows(x[, !opt_cols])
+  # To ensure we focus on applicable required values (which may differ across
+  # modeling tasks) we first subset rows from the full combination of values that
+  # match a concanetated id of optional value combinations in x.
+  applicaple_full <- full[
+    conc_rows(full[, opt_colnms]) %in% conc_rows(x[, opt_colnms]),
+  ]
+  # Then we subset req for only the value combinations that are applicable to the
+  # values being validated. This gives a table of expected required values and
+  # avoids erroneously returning missing required values that are not applicable
+  # to a given model task or output type.
+  expected_req <- req[
+      conc_rows(req) %in%
+          conc_rows(applicaple_full[, names(applicaple_full) != opt_colnms]),
+  ] %>%
+    unique()
+
+  # Finally, we compare the expected required values for the optional value
+  # combination we are validating to those in x and return any expected rows
+  # that are not included in x.
+  missing <- !conc_rows(expected_req) %in% conc_rows(x[, !opt_cols])
   if (any(missing)) {
     cbind(
-      applicaple_req[missing, ],
+        expected_req[missing, ],
       unique(x[, opt_cols])
     )[names(x)]
   } else {
-    NULL
+    full[0, ]
   }
+}
+
+are_required_vals <- function(tbl, req) {
+  req_vals <- purrr::map2(
+    tbl, purrr::map(req, unique),
+    ~ .x %in% .y
+  )
+  do.call(cbind, req_vals)
 }
