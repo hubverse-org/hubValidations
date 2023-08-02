@@ -18,9 +18,8 @@
                         "optional": [2, 3, 4]
                     },
                     "location": {
-                        "required": null,
+                        "required": ["US"],
                         "optional": [
-                            "US",
                             "01",
                             "02",
                             "04",
@@ -158,9 +157,8 @@
                         "optional": [2, 3, 4]
                     },
                     "location": {
-                        "required": null,
+                        "required": ["US"],
                         "optional": [
-                            "US",
                             "01",
                             "02",
                             "04",
