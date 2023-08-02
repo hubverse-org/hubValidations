@@ -14,5 +14,5 @@
     Output
       <warning/check_failure>
       Warning:
-      All combinations of task ID column/`output_type`/`output_type_id` values must be unique.  Rows containing duplicate combinations: 24 and 25
+      All combinations of task ID column/`output_type`/`output_type_id` values must be unique.  Rows containing duplicate combinations: 48 and 49
 
