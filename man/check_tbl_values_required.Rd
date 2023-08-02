@@ -8,7 +8,9 @@ in model data.}
 check_tbl_values_required(tbl, round_id, file_path, hub_path)
 }
 \arguments{
-\item{tbl}{A tibble. The contents of model output data file being validated.}
+\item{tbl}{a tibble/data.frame of the contents of the file being validated.}
+
+\item{round_id}{character string. The round identifier.}
 
 \item{file_path}{character string. Path to the file being validated relative to
 the hub's model-output directory.}
