@@ -63,7 +63,7 @@ missing_req_rows <- function(x, mask, req, full) {
     return(req[!conc_rows(req) %in% conc_rows(x), ])
   }
   opt_colnms <- names(x)[opt_cols]
-  req <- req[, names(req) != opt_colnms]
+  req <- req[, !names(req) %in% opt_colnms]
 
   # To ensure we focus on applicable required values (which may differ across
   # modeling tasks) we first subset rows from the full combination of values that
@@ -76,8 +76,8 @@ missing_req_rows <- function(x, mask, req, full) {
   # avoids erroneously returning missing required values that are not applicable
   # to a given model task or output type.
   expected_req <- req[
-      conc_rows(req) %in%
-          conc_rows(applicaple_full[, names(applicaple_full) != opt_colnms]),
+    conc_rows(req) %in%
+      conc_rows(applicaple_full[, names(applicaple_full) != opt_colnms]),
   ] %>%
     unique()
 
@@ -87,7 +87,7 @@ missing_req_rows <- function(x, mask, req, full) {
   missing <- !conc_rows(expected_req) %in% conc_rows(x[, !opt_cols])
   if (any(missing)) {
     cbind(
-        expected_req[missing, ],
+      expected_req[missing, ],
       unique(x[, opt_cols])
     )[names(x)]
   } else {
@@ -96,6 +96,9 @@ missing_req_rows <- function(x, mask, req, full) {
 }
 
 are_required_vals <- function(tbl, req) {
+  req[, setdiff(names(tbl), names(req))] <- ""
+  req <- req[, names(tbl)]
+
   req_vals <- purrr::map2(
     tbl, purrr::map(req, unique),
     ~ .x %in% .y
