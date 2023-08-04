@@ -20,21 +20,40 @@ check_tbl_values_required <- function(tbl, round_id, file_path, hub_path) {
   )
   req_mask <- are_required_vals(tbl, req)
 
-  # We split the tbl & mask using a concatination of optional values in each row.
-  split_tbl <- split(tbl, conc_rows(tbl, mask = req_mask))
+  if (full_req_grid_tested(req_mask, req)) {
+    missing_df <- list(NULL)
+  } else {
+    missing_df <- list(req)
+  }
+  # We split the tbl & mask using a concatenation of optional values in each row.
+  split_idx <- conc_rows(tbl, mask = req_mask)
+  split_tbl <- split(tbl, split_idx)
   split_req_mask <- split(
     tibble::as_tibble(req_mask),
-    conc_rows(tbl, mask = req_mask)
+    split_idx
+  )
+  opt_indexes <- purrr::map2(
+    .x = split_tbl, .y = split_req_mask,
+    ~ get_opt_indexes(.x, .y)
   )
 
   # We can then map our check over each unique combination of optional
   # values, ensuring any required value combination across the remaining columns
   # exists in the tbl subset.
-  missing_df <- purrr::map2(
-    split_tbl, split_req_mask,
-    ~ missing_req_rows(.x, .y, req, full)
+  missing_df <- c(
+    missing_df,
+    purrr::map(
+      seq_along(split_tbl),
+      ~ missing_required(.x, split_tbl, split_req_mask, req, full, opt_indexes)
+    )
   ) %>%
-    purrr::list_rbind()
+    purrr::list_rbind() %>%
+    unique()
+
+  # Remove false positives
+  missing_df <- missing_df[
+    !conc_rows(missing_df) %in% conc_rows(tbl),
+  ]
 
   check <- nrow(missing_df) == 0L
 
@@ -55,18 +74,70 @@ check_tbl_values_required <- function(tbl, round_id, file_path, hub_path) {
   )
 }
 
+missing_required <- function(i, split_tbl, split_req_mask, req, full,
+                             opt_indexes) {
+  x <- split_tbl[[i]]
+  mask <- split_req_mask[[i]]
+  opt_cols_list <- get_opt_col_list(x, mask, full, req, opt_indexes)
 
-missing_req_rows <- function(x, mask, req, full) {
-  opt_cols <- purrr::map_lgl(mask, ~ !all(.x))
+  purrr::map(
+    opt_cols_list,
+    ~ missing_req_rows(.x, x, mask, req, full)
+  ) %>%
+    purrr::list_rbind()
+}
+
+# Function creates a list of all applicable recursive optional column combinations for a
+# given req_mask. Checking all combinations is required to ensure required values
+# in columns that contain both required and optional values are checked.
+get_opt_col_list <- function(x, mask, full, req, opt_indexes) {
+    min_opt_col <- ncol(x) - ncol(req)
+
+    opt_idx <- get_opt_indexes(x, mask) %>%
+        remove_opt_output_type(x, mask, full, req)
+
+    opt_combs <- get_opt_combs(opt_idx, min_opt_col)
+    opt_cols_list <- list(get_opt_cols(mask))
+
+    check_needed <- purrr::map_lgl(
+        opt_combs,
+        ~ opt_comb_needs_check(.x, opt_indexes)
+    )
+    if (any(check_needed)) {
+        opt_cols_list <- c(
+            opt_cols_list,
+            purrr::map(
+                opt_combs[check_needed],
+                ~ get_opt_cols(mask, .x)
+            )
+        )
+    }
+    # Always include columns whose values are all optional in opt_cols.
+    # This ensures correct applicable values are subset from appropriate model tasks.
+    if (!setequal(names(x), names(req))) {
+        opt_cols_list <- purrr::map(
+            opt_cols_list,
+            ~ {
+                .x[setdiff(names(x), names(req))] <- TRUE
+                .x
+            }
+        ) %>% unique()
+    }
+    opt_cols_list
+}
+
+
+missing_req_rows <- function(opt_cols, x, mask, req, full) {
   if (all(opt_cols == FALSE)) {
     return(req[!conc_rows(req) %in% conc_rows(x), ])
   }
+
   opt_colnms <- names(x)[opt_cols]
   req <- req[, !names(req) %in% opt_colnms]
 
   # To ensure we focus on applicable required values (which may differ across
   # modeling tasks) we first subset rows from the full combination of values that
-  # match a concanetated id of optional value combinations in x.
+  # match a concatenated id of optional value combinations in x.
   applicaple_full <- full[
     conc_rows(full[, opt_colnms]) %in% conc_rows(x[, opt_colnms]),
   ]
@@ -76,21 +147,21 @@ missing_req_rows <- function(x, mask, req, full) {
   # to a given model task or output type.
   expected_req <- req[
     conc_rows(req) %in%
-      conc_rows(applicaple_full[, names(applicaple_full) != opt_colnms]),
+      conc_rows(applicaple_full[, names(req)]),
   ] %>%
     unique()
 
   # Finally, we compare the expected required values for the optional value
   # combination we are validating to those in x and return any expected rows
   # that are not included in x.
-  missing <- !conc_rows(expected_req) %in% conc_rows(x[, !opt_cols])
+  missing <- !conc_rows(expected_req) %in% conc_rows(x[, names(expected_req)])
   if (any(missing)) {
     cbind(
       expected_req[missing, ],
       unique(x[, opt_cols])
-    )[names(x)]
+    )[, names(x)]
   } else {
-    full[0, ]
+    full[0, names(x)]
   }
 }
 
@@ -103,4 +174,92 @@ are_required_vals <- function(tbl, req) {
     ~ .x %in% .y
   )
   do.call(cbind, req_vals)
+}
+
+full_req_grid_tested <- function(req_mask, req) {
+  if (setequal(colnames(req_mask), names(req))) {
+    any(apply(req_mask, 1, FUN = function(x, req_cols = names(req)) {
+      all(req_cols %in% names(x)[x])
+    }))
+  } else {
+    TRUE
+  }
+}
+
+get_opt_indexes <- function(x, mask) {
+  idx <- purrr::map_lgl(mask, all)
+  if (all(idx)) {
+    return(NULL)
+  }
+  as.vector(unique(x[!idx]))
+}
+
+opt_comb_needs_check <- function(opt_comb, opt_indexes) {
+  !any(
+    purrr::map_lgl(
+      opt_indexes,
+      ~ identical(.x, opt_comb)
+    )
+  )
+}
+
+
+
+get_opt_combs <- function(opt_idx, min_opt_col = 0L) {
+  if (is.null(opt_idx)) {
+    return(NULL)
+  }
+
+  if (min_opt_col == 0L) {
+    base_opt_idx <- list(NULL)
+  } else {
+    base_opt_idx <- NULL
+  }
+  c(
+    base_opt_idx,
+    purrr::map(
+      seq(1, length(opt_idx)) - 1L,
+      ~ combn(opt_idx, m = .x, simplify = FALSE)
+    ) %>%
+      unlist(recursive = FALSE) %>%
+      purrr::compact()
+  )
+}
+
+get_opt_cols <- function(mask, check_opt_comb = NULL) {
+  opt_cols <- purrr::map_lgl(mask, ~ !all(.x))
+  if (!is.null(check_opt_comb)) {
+    opt_cols[names(check_opt_comb)] <- FALSE
+  }
+  opt_cols
+}
+
+
+get_required_output_types <- function(x, mask, full, req) {
+  cols <- get_opt_cols(mask)
+  applicaple_full <- full[
+    conc_rows(full[, cols]) %in% conc_rows(x[, cols]),
+  ]
+  req[
+    conc_rows(req[, !cols]) %in%
+      conc_rows(applicaple_full[, !cols]),
+  ][[
+  hubUtils::std_colnames["output_type"]
+  ]] %>%
+    unique()
+}
+
+remove_opt_output_type <- function(opt_idx, x, mask, full, req) {
+  output_tid_col <- hubUtils::std_colnames["output_type"]
+  if (!output_tid_col %in% names(opt_idx)) {
+    return(opt_idx)
+  }
+
+  req_output_types <- get_required_output_types(x, mask, full, req)
+  if (!opt_idx[[output_tid_col]] %in% req_output_types) {
+    opt_idx[hubUtils::std_colnames[
+      c("output_type", "output_type_id")
+    ]] <- NULL
+  }
+  opt_idx
 }
