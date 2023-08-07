@@ -102,13 +102,13 @@ get_opt_col_list <- function(x, mask, full, req) {
     opt_vals <- get_opt_vals(x, mask) %>%
         ignore_optional_output_type(x, mask, full, req)
 
-    opt_combs <- get_opt_val_combs(opt_vals, min_opt_col)
+    opt_val_combs <- get_opt_val_combs(opt_vals, min_opt_col)
     opt_cols_list <- list(get_opt_cols(mask))
 
     opt_cols_list <- c(
         opt_cols_list,
         purrr::map(
-            opt_combs,
+            opt_val_combs,
             ~ get_opt_cols(mask, .x)
         )
     )
@@ -176,6 +176,8 @@ are_required_vals <- function(tbl, req) {
   do.call(cbind, req_vals)
 }
 
+# If all columns have been configured with required values, check that there is
+# a block in the file of all required values.
 full_req_grid_tested <- function(req_mask, req) {
   if (setequal(colnames(req_mask), names(req))) {
     any(apply(req_mask, 1, FUN = function(x, req_cols = names(req)) {
@@ -186,6 +188,7 @@ full_req_grid_tested <- function(req_mask, req) {
   }
 }
 
+# Get a named list of the unique optional value in each optional column in x.
 get_opt_vals <- function(x, mask) {
   idx <- purrr::map_lgl(mask, all)
   if (all(idx)) {
@@ -194,6 +197,7 @@ get_opt_vals <- function(x, mask) {
   as.vector(unique(x[!idx]))
 }
 
+# Get each subset of combination of optional values of successively smaller n.
 get_opt_val_combs <- function(opt_vals, min_opt_col = 0L) {
   if (is.null(opt_vals)) {
     return(NULL)
@@ -215,6 +219,7 @@ get_opt_val_combs <- function(opt_vals, min_opt_col = 0L) {
   )
 }
 
+# Get a logical vector of whether a column contains all optional values or not.
 get_opt_cols <- function(mask, check_opt_comb = NULL) {
   opt_cols <- purrr::map_lgl(mask, ~ !all(.x))
   if (!is.null(check_opt_comb)) {
