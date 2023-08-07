@@ -82,7 +82,6 @@ check_tbl_values_required <- function(tbl, round_id, file_path, hub_path) {
 # contains all required values as well as each subset of combination of optional
 # values of successively smaller n.
 missing_required <- function(x, mask, req, full) {
-
   opt_cols_list <- get_opt_col_list(x, mask, full, req)
 
   purrr::map(
@@ -97,36 +96,25 @@ missing_required <- function(x, mask, req, full) {
 # Checking all combinations is required to ensure required values
 # in columns that contain both required and optional values are checked.
 get_opt_col_list <- function(x, mask, full, req) {
-    min_opt_col <- ncol(x) - ncol(req)
+  min_opt_col <- ncol(x) - ncol(req)
+  all_opt_cols <- setdiff(names(x), names(req))
 
-    opt_vals <- get_opt_vals(x, mask) %>%
-        ignore_optional_output_type(x, mask, full, req)
+  opt_vals <- get_opt_vals(x, mask) %>%
+    ignore_optional_output_type(x, mask, full, req)
 
-    opt_val_combs <- get_opt_val_combs(opt_vals, min_opt_col)
-    opt_cols_list <- list(get_opt_cols(mask))
+  opt_val_combs <- get_opt_val_combs(opt_vals, min_opt_col)
 
-    opt_cols_list <- c(
-        opt_cols_list,
-        purrr::map(
-            opt_val_combs,
-            ~ get_opt_cols(mask, .x)
-        )
+  c(
+    list(get_opt_cols(mask)),
+    purrr::map(
+      opt_val_combs,
+      ~ get_opt_cols(mask, .x, all_opt_cols)
     )
-    # Always include columns whose values are all optional in opt_cols.
-    # This ensures correct applicable values are subset from appropriate model tasks.
-    if (!setequal(names(x), names(req))) {
-        opt_cols_list <- purrr::map(
-            opt_cols_list,
-            ~ {
-                .x[setdiff(names(x), names(req))] <- TRUE
-                .x
-            }
-        ) %>% unique()
-    }
-    opt_cols_list
+  ) %>% unique()
 }
 
-
+# Identify missing required values for optional value combinations.
+# Output full missing rows compiled from optional values and missing required values.
 missing_req_rows <- function(opt_cols, x, mask, req, full) {
   if (all(opt_cols == FALSE)) {
     return(req[!conc_rows(req) %in% conc_rows(x), ])
@@ -220,16 +208,22 @@ get_opt_val_combs <- function(opt_vals, min_opt_col = 0L) {
 }
 
 # Get a logical vector of whether a column contains all optional values or not.
-get_opt_cols <- function(mask, check_opt_comb = NULL) {
+get_opt_cols <- function(mask, check_opt_comb = NULL, all_opt_cols = NULL) {
   opt_cols <- purrr::map_lgl(mask, ~ !all(.x))
   if (!is.null(check_opt_comb)) {
     opt_cols[names(check_opt_comb)] <- FALSE
   }
+  # Always include columns whose values are all optional in opt_cols if provided.
+  # This ensures correct applicable values are subset from appropriate model tasks.
+  opt_cols[all_opt_cols] <- TRUE
   opt_cols
 }
 
+# Get a character vector of output types that are required in the applicable
+# model task.
 get_required_output_types <- function(x, mask, full, req) {
   cols <- get_opt_cols(mask)
+
   applicaple_full <- full[
     conc_rows(full[, cols]) %in% conc_rows(x[, cols]),
   ]
@@ -242,6 +236,8 @@ get_required_output_types <- function(x, mask, full, req) {
     unique()
 }
 
+# If an output type is optional, ignore so that output type IDs associated with it
+# are not errorneously flagged as missing.
 ignore_optional_output_type <- function(opt_vals, x, mask, full, req) {
   output_tid_col <- hubUtils::std_colnames["output_type"]
   if (!output_tid_col %in% names(opt_vals)) {
