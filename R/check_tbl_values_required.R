@@ -106,7 +106,7 @@ get_opt_col_list <- function(x, mask, full, req, opt_indexes) {
     min_opt_col <- ncol(x) - ncol(req)
 
     opt_idx <- get_opt_indexes(x, mask) %>%
-        remove_opt_output_type(x, mask, full, req)
+        ignore_optional_output_type(x, mask, full, req)
 
     opt_combs <- get_opt_combs(opt_idx, min_opt_col)
     opt_cols_list <- list(get_opt_cols(mask))
@@ -258,7 +258,7 @@ get_required_output_types <- function(x, mask, full, req) {
     unique()
 }
 
-remove_opt_output_type <- function(opt_idx, x, mask, full, req) {
+ignore_optional_output_type <- function(opt_idx, x, mask, full, req) {
   output_tid_col <- hubUtils::std_colnames["output_type"]
   if (!output_tid_col %in% names(opt_idx)) {
     return(opt_idx)
