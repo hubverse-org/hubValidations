@@ -10,7 +10,7 @@ check_tbl_col_types <- function(tbl, file_path, hub_path) {
     r_schema = TRUE
   )[names(tbl)]
 
-  tbl_types <- purrr::map_chr(tbl, ~ if (class(.x) == "numeric") {
+  tbl_types <- purrr::map_chr(tbl, ~ if (inherits(.x, "numeric")) {
     typeof(.x)
   } else {
     class(.x)
