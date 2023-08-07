@@ -21,7 +21,7 @@ read_model_out_file <- function(file_path, hub_path = ".",
                    {.val {valid_ext}} not {.val {file_ext}}")
   }
 
-  switch(file_ext,
+  df <- switch(file_ext,
     csv = {
       if (use_hub_schema) {
         arrow::read_csv_arrow(
@@ -38,4 +38,5 @@ read_model_out_file <- function(file_path, hub_path = ".",
     parquet = arrow::read_parquet(full_path),
     arrow = arrow::read_feather(full_path)
   )
+  tibble::as_tibble(df)
 }
