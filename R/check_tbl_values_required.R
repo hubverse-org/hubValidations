@@ -99,10 +99,10 @@ missing_required <- function(x, mask, req, full) {
 get_opt_col_list <- function(x, mask, full, req) {
     min_opt_col <- ncol(x) - ncol(req)
 
-    opt_idx <- get_opt_indexes(x, mask) %>%
+    opt_vals <- get_opt_vals(x, mask) %>%
         ignore_optional_output_type(x, mask, full, req)
 
-    opt_combs <- get_opt_combs(opt_idx, min_opt_col)
+    opt_combs <- get_opt_val_combs(opt_vals, min_opt_col)
     opt_cols_list <- list(get_opt_cols(mask))
 
     opt_cols_list <- c(
@@ -186,7 +186,7 @@ full_req_grid_tested <- function(req_mask, req) {
   }
 }
 
-get_opt_indexes <- function(x, mask) {
+get_opt_vals <- function(x, mask) {
   idx <- purrr::map_lgl(mask, all)
   if (all(idx)) {
     return(NULL)
@@ -194,21 +194,21 @@ get_opt_indexes <- function(x, mask) {
   as.vector(unique(x[!idx]))
 }
 
-get_opt_combs <- function(opt_idx, min_opt_col = 0L) {
-  if (is.null(opt_idx)) {
+get_opt_val_combs <- function(opt_vals, min_opt_col = 0L) {
+  if (is.null(opt_vals)) {
     return(NULL)
   }
 
   if (min_opt_col == 0L) {
-    base_opt_idx <- list(NULL)
+    base_opt_vals <- list(NULL)
   } else {
-    base_opt_idx <- NULL
+    base_opt_vals <- NULL
   }
   c(
-    base_opt_idx,
+    base_opt_vals,
     purrr::map(
-      seq(1, length(opt_idx)) - 1L,
-      ~ combn(opt_idx, m = .x, simplify = FALSE)
+      seq(1, length(opt_vals)) - 1L,
+      ~ combn(opt_vals, m = .x, simplify = FALSE)
     ) %>%
       unlist(recursive = FALSE) %>%
       purrr::compact()
@@ -237,17 +237,17 @@ get_required_output_types <- function(x, mask, full, req) {
     unique()
 }
 
-ignore_optional_output_type <- function(opt_idx, x, mask, full, req) {
+ignore_optional_output_type <- function(opt_vals, x, mask, full, req) {
   output_tid_col <- hubUtils::std_colnames["output_type"]
-  if (!output_tid_col %in% names(opt_idx)) {
-    return(opt_idx)
+  if (!output_tid_col %in% names(opt_vals)) {
+    return(opt_vals)
   }
 
   req_output_types <- get_required_output_types(x, mask, full, req)
-  if (!opt_idx[[output_tid_col]] %in% req_output_types) {
-    opt_idx[hubUtils::std_colnames[
+  if (!opt_vals[[output_tid_col]] %in% req_output_types) {
+    opt_vals[hubUtils::std_colnames[
       c("output_type", "output_type_id")
     ]] <- NULL
   }
-  opt_idx
+  opt_vals
 }
