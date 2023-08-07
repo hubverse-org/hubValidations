@@ -18,14 +18,21 @@ check_tbl_values_required <- function(tbl, round_id, file_path, hub_path) {
     round_id = round_id,
     required_vals_only = FALSE
   )
+  # Get a logical mask of whether values in each column are required or not.
   req_mask <- are_required_vals(tbl, req)
 
+  # When required values are specified across all columns in the config (i.e. in `req`),
+  # we need to ensure that the full grid of required values is tested (i.e.
+  # there is a block in the data file containing required values across all columns).
+  # We therefore perform a specific check for this.
   if (full_req_grid_tested(req_mask, req)) {
     missing_df <- list(NULL)
   } else {
     missing_df <- list(req)
   }
   # We split the tbl & mask using a concatenation of optional values in each row.
+  # This enables us to check that for each unique combination of optional values,
+  # all related required values have also been supplied.
   split_idx <- conc_rows(tbl, mask = req_mask)
   split_tbl <- split(tbl, split_idx)
   split_req_mask <- split(
@@ -50,7 +57,8 @@ check_tbl_values_required <- function(tbl, round_id, file_path, hub_path) {
     purrr::list_rbind() %>%
     unique()
 
-  # Remove false positives
+  # Remove false positives that may have been erroneously identified because checks
+  # were performed on subsets of data.
   missing_df <- missing_df[
     !conc_rows(missing_df) %in% conc_rows(tbl),
   ]
@@ -74,6 +82,9 @@ check_tbl_values_required <- function(tbl, round_id, file_path, hub_path) {
   )
 }
 
+# For a combination of optional values, check the data subset of the combination
+# contains all required values as well as each subset of combination of optional
+# values of successively smaller n.
 missing_required <- function(i, split_tbl, split_req_mask, req, full,
                              opt_indexes) {
   x <- split_tbl[[i]]
@@ -87,8 +98,9 @@ missing_required <- function(i, split_tbl, split_req_mask, req, full,
     purrr::list_rbind()
 }
 
-# Function creates a list of all applicable recursive optional column combinations for a
-# given req_mask. Checking all combinations is required to ensure required values
+# Function creates a list of all optional column/value combinations of successively
+# smaller m for a given req_mask.
+# Checking all combinations is required to ensure required values
 # in columns that contain both required and optional values are checked.
 get_opt_col_list <- function(x, mask, full, req, opt_indexes) {
     min_opt_col <- ncol(x) - ncol(req)
@@ -203,8 +215,6 @@ opt_comb_needs_check <- function(opt_comb, opt_indexes) {
   )
 }
 
-
-
 get_opt_combs <- function(opt_idx, min_opt_col = 0L) {
   if (is.null(opt_idx)) {
     return(NULL)
@@ -233,7 +243,6 @@ get_opt_cols <- function(mask, check_opt_comb = NULL) {
   }
   opt_cols
 }
-
 
 get_required_output_types <- function(x, mask, full, req) {
   cols <- get_opt_cols(mask)
