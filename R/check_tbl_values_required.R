@@ -39,10 +39,6 @@ check_tbl_values_required <- function(tbl, round_id, file_path, hub_path) {
     tibble::as_tibble(req_mask),
     split_idx
   )
-  opt_indexes <- purrr::map2(
-    .x = split_tbl, .y = split_req_mask,
-    ~ get_opt_indexes(.x, .y)
-  )
 
   # We can then map our check over each unique combination of optional
   # values, ensuring any required value combination across the remaining columns
@@ -51,7 +47,7 @@ check_tbl_values_required <- function(tbl, round_id, file_path, hub_path) {
     missing_df,
     purrr::map2(
       .x = split_tbl, .y = split_req_mask,
-      ~ missing_required(x = .x, mask = .y, req, full, opt_indexes)
+      ~ missing_required(x = .x, mask = .y, req, full)
     )
   ) %>%
     purrr::list_rbind() %>%
@@ -85,9 +81,9 @@ check_tbl_values_required <- function(tbl, round_id, file_path, hub_path) {
 # For a combination of optional values, check the data subset x of the combination
 # contains all required values as well as each subset of combination of optional
 # values of successively smaller n.
-missing_required <- function(x, mask, req, full, opt_indexes) {
+missing_required <- function(x, mask, req, full) {
 
-  opt_cols_list <- get_opt_col_list(x, mask, full, req, opt_indexes)
+  opt_cols_list <- get_opt_col_list(x, mask, full, req)
 
   purrr::map(
     opt_cols_list,
@@ -100,7 +96,7 @@ missing_required <- function(x, mask, req, full, opt_indexes) {
 # smaller m for a given req_mask.
 # Checking all combinations is required to ensure required values
 # in columns that contain both required and optional values are checked.
-get_opt_col_list <- function(x, mask, full, req, opt_indexes) {
+get_opt_col_list <- function(x, mask, full, req) {
     min_opt_col <- ncol(x) - ncol(req)
 
     opt_idx <- get_opt_indexes(x, mask) %>%
@@ -109,19 +105,13 @@ get_opt_col_list <- function(x, mask, full, req, opt_indexes) {
     opt_combs <- get_opt_combs(opt_idx, min_opt_col)
     opt_cols_list <- list(get_opt_cols(mask))
 
-    check_needed <- purrr::map_lgl(
-        opt_combs,
-        ~ opt_comb_needs_check(.x, opt_indexes)
-    )
-    if (any(check_needed)) {
-        opt_cols_list <- c(
-            opt_cols_list,
-            purrr::map(
-                opt_combs[check_needed],
-                ~ get_opt_cols(mask, .x)
-            )
+    opt_cols_list <- c(
+        opt_cols_list,
+        purrr::map(
+            opt_combs,
+            ~ get_opt_cols(mask, .x)
         )
-    }
+    )
     # Always include columns whose values are all optional in opt_cols.
     # This ensures correct applicable values are subset from appropriate model tasks.
     if (!setequal(names(x), names(req))) {
@@ -202,15 +192,6 @@ get_opt_indexes <- function(x, mask) {
     return(NULL)
   }
   as.vector(unique(x[!idx]))
-}
-
-opt_comb_needs_check <- function(opt_comb, opt_indexes) {
-  !any(
-    purrr::map_lgl(
-      opt_indexes,
-      ~ identical(.x, opt_comb)
-    )
-  )
 }
 
 get_opt_combs <- function(opt_idx, min_opt_col = 0L) {
