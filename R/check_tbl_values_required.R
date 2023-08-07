@@ -49,9 +49,9 @@ check_tbl_values_required <- function(tbl, round_id, file_path, hub_path) {
   # exists in the tbl subset.
   missing_df <- c(
     missing_df,
-    purrr::map(
-      seq_along(split_tbl),
-      ~ missing_required(.x, split_tbl, split_req_mask, req, full, opt_indexes)
+    purrr::map2(
+      .x = split_tbl, .y = split_req_mask,
+      ~ missing_required(x = .x, mask = .y, req, full, opt_indexes)
     )
   ) %>%
     purrr::list_rbind() %>%
@@ -82,13 +82,11 @@ check_tbl_values_required <- function(tbl, round_id, file_path, hub_path) {
   )
 }
 
-# For a combination of optional values, check the data subset of the combination
+# For a combination of optional values, check the data subset x of the combination
 # contains all required values as well as each subset of combination of optional
 # values of successively smaller n.
-missing_required <- function(i, split_tbl, split_req_mask, req, full,
-                             opt_indexes) {
-  x <- split_tbl[[i]]
-  mask <- split_req_mask[[i]]
+missing_required <- function(x, mask, req, full, opt_indexes) {
+
   opt_cols_list <- get_opt_col_list(x, mask, full, req, opt_indexes)
 
   purrr::map(
