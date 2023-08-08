@@ -5,18 +5,21 @@
 #' @export
 check_tbl_values_required <- function(tbl, round_id, file_path, hub_path) {
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
-  tbl <- hubUtils::coerce_to_hub_schema(tbl, config_tasks)
+  tbl <- hubUtils::coerce_to_hub_schema(tbl, config_tasks,
+                                        skip_date_coercion = TRUE)
   tbl[["value"]] <- NULL
 
   req <- hubUtils::expand_model_out_val_grid(
     config_tasks,
     round_id = round_id,
-    required_vals_only = TRUE
+    required_vals_only = TRUE,
+    skip_date_coercion = TRUE
   )
   full <- hubUtils::expand_model_out_val_grid(
     config_tasks,
     round_id = round_id,
-    required_vals_only = FALSE
+    required_vals_only = FALSE,
+    skip_date_coercion = TRUE
   )
   # Get a logical mask of whether values in each column are required or not.
   req_mask <- are_required_vals(tbl, req)
