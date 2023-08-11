@@ -5,22 +5,24 @@
 #' @export
 check_tbl_values_required <- function(tbl, round_id, file_path, hub_path) {
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
-  tbl <- hubUtils::coerce_to_hub_schema(tbl, config_tasks,
-                                        skip_date_coercion = TRUE)
+  # tbl <- hubUtils::coerce_to_hub_schema(tbl, config_tasks,
+  #                                       skip_date_coercion = TRUE)
   tbl[["value"]] <- NULL
+  tbl <- hubUtils::coerce_to_character(tbl)
 
   req <- hubUtils::expand_model_out_val_grid(
     config_tasks,
     round_id = round_id,
     required_vals_only = TRUE,
-    skip_date_coercion = TRUE
+    all_character = TRUE
   )
   full <- hubUtils::expand_model_out_val_grid(
     config_tasks,
     round_id = round_id,
     required_vals_only = FALSE,
-    skip_date_coercion = TRUE
+    all_character = TRUE
   )
+
   # Get a logical mask of whether values in each column are required or not.
   req_mask <- are_required_vals(tbl, req)
 
@@ -58,15 +60,14 @@ check_tbl_values_required <- function(tbl, round_id, file_path, hub_path) {
 
   # Remove false positives that may have been erroneously identified because checks
   # were performed on subsets of data.
-  missing_df <- missing_df[
-    !conc_rows(missing_df) %in% conc_rows(tbl),
-  ]
+  missing_df <- dplyr::anti_join(missing_df, tbl, by = names(tbl))
 
   check <- nrow(missing_df) == 0L
 
   if (check) {
     details <- NULL
   } else {
+    missing_df <- hubUtils::coerce_to_hub_schema(missing_df, config_tasks)
     details <- cli::format_inline("See {.var missing} attribute for details.")
   }
 
@@ -119,6 +120,8 @@ get_opt_col_list <- function(x, mask, full, req) {
 # Identify missing required values for optional value combinations.
 # Output full missing rows compiled from optional values and missing required values.
 missing_req_rows <- function(opt_cols, x, mask, req, full) {
+  opt_cols[na_val_colnames(req)] <- TRUE
+
   if (all(opt_cols == FALSE)) {
     return(req[!conc_rows(req) %in% conc_rows(x), ])
   }
@@ -129,26 +132,24 @@ missing_req_rows <- function(opt_cols, x, mask, req, full) {
   # To ensure we focus on applicable required values (which may differ across
   # modeling tasks) we first subset rows from the full combination of values that
   # match a concatenated id of optional value combinations in x.
-  applicaple_full <- full[
-    conc_rows(full[, opt_colnms]) %in% conc_rows(x[, opt_colnms]),
-  ]
+  applicaple_full <- dplyr::inner_join(full, unique(x[, opt_colnms]),
+                                       by = opt_colnms)
   # Then we subset req for only the value combinations that are applicable to the
   # values being validated. This gives a table of expected required values and
   # avoids erroneously returning missing required values that are not applicable
   # to a given model task or output type.
-  expected_req <- req[
-    conc_rows(req) %in%
-      conc_rows(applicaple_full[, names(req)]),
-  ] %>%
+  expected_req <- dplyr::inner_join(req, applicaple_full[, names(req)],
+                                    by = names(req)) %>%
     unique()
 
   # Finally, we compare the expected required values for the optional value
   # combination we are validating to those in x and return any expected rows
   # that are not included in x.
-  missing <- !conc_rows(expected_req) %in% conc_rows(x[, names(expected_req)])
-  if (any(missing)) {
+  missing <- dplyr::anti_join(expected_req, x[, names(expected_req)],
+                              by = names(expected_req))
+  if (nrow(missing) != 0L) {
     cbind(
-      expected_req[missing, ],
+      missing,
       unique(x[, opt_cols])
     )[, names(x)]
   } else {
@@ -226,16 +227,18 @@ get_opt_cols <- function(mask, check_opt_comb = NULL, all_opt_cols = NULL) {
 # model task.
 get_required_output_types <- function(x, mask, full, req) {
   cols <- get_opt_cols(mask)
+  join_colnames <- names(cols)[cols]
 
-  applicaple_full <- full[
-    conc_rows(full[, cols]) %in% conc_rows(x[, cols]),
-  ]
-  req[
-    conc_rows(req[, !cols]) %in%
-      conc_rows(applicaple_full[, !cols]),
-  ][[
-  hubUtils::std_colnames["output_type"]
-  ]] %>%
+  applicaple_full <- dplyr::inner_join(
+    full, unique(x[, join_colnames]),
+    by = join_colnames
+  )
+
+  join_colnames <- names(cols)[!cols]
+  dplyr::inner_join(
+    req, unique(applicaple_full[, join_colnames]),
+    by = join_colnames
+  )[[hubUtils::std_colnames["output_type"]]] %>%
     unique()
 }
 
@@ -254,4 +257,8 @@ ignore_optional_output_type <- function(opt_vals, x, mask, full, req) {
     ]] <- NULL
   }
   opt_vals
+}
+
+na_val_colnames <- function(x) {
+  names(x)[purrr::map_lgl(x, ~ any(is.na(.x)))]
 }

@@ -19,6 +19,11 @@ test_that("check_tbl_values_required works with 1 model task & completely opt co
     str(missing_req_block)
   )
   expect_false("mean" %in% missing_req_block$missing$output_type)
+
+  expect_equal(
+    missing_req_block$missing, tbl[1:23, names(tbl) != "value"]
+  )
+
   # Test missing required output_type_id for optional task ID
   res_missing_otid <- check_tbl_values_required(
     tbl[-(24:26), ],
@@ -28,6 +33,10 @@ test_that("check_tbl_values_required works with 1 model task & completely opt co
     str(res_missing_otid)
   )
   expect_false("mean" %in% res_missing_otid$missing$output_type)
+
+  expect_equal(
+    res_missing_otid$missing, tbl[24:26, names(tbl) != "value"]
+  )
 })
 
 
