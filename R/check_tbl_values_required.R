@@ -5,8 +5,6 @@
 #' @export
 check_tbl_values_required <- function(tbl, round_id, file_path, hub_path) {
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
-  # tbl <- hubUtils::coerce_to_hub_schema(tbl, config_tasks,
-  #                                       skip_date_coercion = TRUE)
   tbl[["value"]] <- NULL
   tbl <- hubUtils::coerce_to_character(tbl)
 
@@ -90,11 +88,21 @@ check_tbl_values_required <- function(tbl, round_id, file_path, hub_path) {
 missing_required <- function(x, mask, req, full) {
   opt_cols_list <- get_opt_col_list(x, mask, full, req)
 
-  purrr::map(
-    opt_cols_list,
-    ~ missing_req_rows(.x, x, mask, req, full)
-  ) %>%
-    purrr::list_rbind()
+  out <- map_missing_req_rows(opt_cols_list, x, mask, req, full)
+
+  if (any(is.na(req))) {
+    # if req table contains any NAs, mapping over blocks of req columns containing
+    # complete cases is required.
+    out <- c(
+      list(out),
+      purrr::map(
+        split_na_req(req),
+        ~ map_missing_req_rows(opt_cols_list, x, mask, .x, full, split_req = TRUE)
+      )
+    ) %>%
+      purrr::list_rbind()
+  }
+  out
 }
 
 # Function creates a list of all optional column/value combinations of successively
@@ -121,43 +129,64 @@ get_opt_col_list <- function(x, mask, full, req) {
 
 # Identify missing required values for optional value combinations.
 # Output full missing rows compiled from optional values and missing required values.
-missing_req_rows <- function(opt_cols, x, mask, req, full) {
-  opt_cols[na_val_colnames(req)] <- TRUE
+missing_req_rows <- function(opt_cols, x, mask, req, full, split_req = FALSE) {
+  if (split_req) {
+    opt_cols[all_na_colnames(req)] <- TRUE
+  }
 
   if (all(opt_cols == FALSE)) {
     return(req[!conc_rows(req) %in% conc_rows(x), ])
   }
 
   opt_colnms <- names(x)[opt_cols]
+  if (split_req) {
+    opt_full_colnms <- unique(c(opt_colnms,
+                                hubUtils::std_colnames["output_type"]))
+  } else {
+    opt_full_colnms <- opt_colnms
+  }
+
   req <- req[, !names(req) %in% opt_colnms]
 
   # To ensure we focus on applicable required values (which may differ across
   # modeling tasks) we first subset rows from the full combination of values that
   # match a concatenated id of optional value combinations in x.
-  applicaple_full <- dplyr::inner_join(full, unique(x[, opt_colnms]),
-                                       by = opt_colnms)
+  applicaple_full <- dplyr::inner_join(full, unique(x[, opt_full_colnms]),
+    by = opt_full_colnms
+  )
   # Then we subset req for only the value combinations that are applicable to the
   # values being validated. This gives a table of expected required values and
   # avoids erroneously returning missing required values that are not applicable
   # to a given model task or output type.
   expected_req <- dplyr::inner_join(req,
-                                    tibble::as_tibble(applicaple_full[, names(req)]),
-                                    by = names(req)) %>%
+    tibble::as_tibble(applicaple_full[, names(req)]),
+    by = names(req)
+  ) %>%
     unique()
 
   # Finally, we compare the expected required values for the optional value
   # combination we are validating to those in x and return any expected rows
   # that are not included in x.
   missing <- dplyr::anti_join(expected_req, x[, names(expected_req)],
-                              by = names(expected_req))
+    by = names(expected_req)
+  )
   if (nrow(missing) != 0L) {
     cbind(
       missing,
       unique(x[, opt_cols])
     )[, names(x)]
   } else {
-    full[0, names(x)]
+    tibble::as_tibble(full[1, names(x)])[0, ]
   }
+}
+
+map_missing_req_rows <- function(opt_cols_list, x, mask, req, full,
+                                 split_req = FALSE) {
+  purrr::map(
+    opt_cols_list,
+    ~ missing_req_rows(.x, x, mask, req, full, split_req)
+  ) %>%
+    purrr::list_rbind()
 }
 
 are_required_vals <- function(tbl, req) {
@@ -262,6 +291,12 @@ ignore_optional_output_type <- function(opt_vals, x, mask, full, req) {
   opt_vals
 }
 
-na_val_colnames <- function(x) {
-  names(x)[purrr::map_lgl(x, ~ any(is.na(.x)))]
+all_na_colnames <- function(x) {
+  names(x)[purrr::map_lgl(x, ~ all(is.na(.x)))]
+}
+
+split_na_req <- function(req) {
+  na_idx <- which(is.na(req), arr.ind = TRUE)
+  req[na_idx[, "row"], ] %>%
+    split(na_idx[, "col"])
 }
