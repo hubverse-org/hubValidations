@@ -100,7 +100,7 @@
       List of 5
        $ message       : chr "Required task ID/output type/output type ID combinations missing.  \n See `missing` attribute for details."
        $ where         : chr "hub-ensemble/2023-05-08-hub-ensemble.parquet"
-       $ missing       :'data.frame':	4 obs. of  6 variables:
+       $ missing       : tibble [4 x 6] (S3: tbl_df/tbl/data.frame)
         ..$ forecast_date : Date[1:4], format: "2023-05-08" "2023-05-08" ...
         ..$ horizon       : int [1:4] 2 2 2 2
         ..$ target        : chr [1:4] "wk flu hosp rate change" "wk flu hosp rate change" "wk flu hosp rate change" "wk flu hosp rate change"
@@ -119,7 +119,7 @@
       List of 5
        $ message       : chr "Required task ID/output type/output type ID combinations missing.  \n See `missing` attribute for details."
        $ where         : chr "hub-ensemble/2023-05-08-hub-ensemble.parquet"
-       $ missing       :'data.frame':	9 obs. of  6 variables:
+       $ missing       : tibble [9 x 6] (S3: tbl_df/tbl/data.frame)
         ..$ forecast_date : Date[1:9], format: "2023-05-08" "2023-05-08" ...
         ..$ horizon       : int [1:9] 1 1 1 1 2 2 2 2 2
         ..$ target        : chr [1:9] "wk flu hosp rate change" "wk flu hosp rate change" "wk flu hosp rate change" "wk flu hosp rate change" ...

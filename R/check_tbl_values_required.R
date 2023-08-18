@@ -12,7 +12,8 @@ check_tbl_values_required <- function(tbl, round_id, file_path, hub_path) {
     config_tasks,
     round_id = round_id,
     required_vals_only = TRUE,
-    all_character = TRUE
+    all_character = TRUE,
+    bind_model_tasks = FALSE
   )
 
   full <- hubUtils::expand_model_out_val_grid(
@@ -20,9 +21,50 @@ check_tbl_values_required <- function(tbl, round_id, file_path, hub_path) {
     round_id = round_id,
     required_vals_only = FALSE,
     all_character = TRUE,
-    as_arrow_table = TRUE
+    as_arrow_table = TRUE,
+    bind_model_tasks = FALSE
   )
 
+  tbl <- purrr::map(
+    full,
+    ~ dplyr::inner_join(.x, tbl, by = names(tbl))[, names(tbl)] %>%
+      tibble::as_tibble()
+  )
+
+  missing_df <- purrr::pmap(
+    list(tbl, req, full),
+    check_modeling_task_values_required
+  ) %>%
+    purrr::list_rbind()
+
+  check <- nrow(missing_df) == 0L
+
+  if (check) {
+    details <- NULL
+  } else {
+    missing_df <- hubUtils::coerce_to_hub_schema(missing_df, config_tasks)
+    details <- cli::format_inline("See {.var missing} attribute for details.")
+  }
+
+  capture_check_cnd(
+    check = check,
+    file_path = file_path,
+    msg_subject = "Required task ID/output type/output type ID combinations",
+    msg_attribute = NULL,
+    msg_verbs = c("all present.", "missing."),
+    details = details,
+    missing = missing_df
+  )
+}
+
+check_modeling_task_values_required <- function(tbl, req, full) {
+  if (nrow(tbl) == 0L) {
+    if (setequal(names(tbl), names(req))){
+      return(req)
+    } else {
+      return(tbl)
+    }
+  }
   # Get a logical mask of whether values in each column are required or not.
   req_mask <- are_required_vals(tbl, req)
 
@@ -61,25 +103,6 @@ check_tbl_values_required <- function(tbl, round_id, file_path, hub_path) {
   # Remove false positives that may have been erroneously identified because checks
   # were performed on subsets of data.
   missing_df <- dplyr::anti_join(missing_df, tbl, by = names(tbl))
-
-  check <- nrow(missing_df) == 0L
-
-  if (check) {
-    details <- NULL
-  } else {
-    missing_df <- hubUtils::coerce_to_hub_schema(missing_df, config_tasks)
-    details <- cli::format_inline("See {.var missing} attribute for details.")
-  }
-
-  capture_check_cnd(
-    check = check,
-    file_path = file_path,
-    msg_subject = "Required task ID/output type/output type ID combinations",
-    msg_attribute = NULL,
-    msg_verbs = c("all present.", "missing."),
-    details = details,
-    missing = missing_df
-  )
 }
 
 # For a combination of optional values, check the data subset x of the combination
