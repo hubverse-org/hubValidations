@@ -16,11 +16,13 @@ check_tbl_values_required <- function(tbl, round_id, file_path, hub_path) {
     required_vals_only = TRUE,
     all_character = TRUE
   )
+
   full <- hubUtils::expand_model_out_val_grid(
     config_tasks,
     round_id = round_id,
     required_vals_only = FALSE,
-    all_character = TRUE
+    all_character = TRUE,
+    as_arrow_table = TRUE
   )
 
   # Get a logical mask of whether values in each column are required or not.
@@ -138,7 +140,8 @@ missing_req_rows <- function(opt_cols, x, mask, req, full) {
   # values being validated. This gives a table of expected required values and
   # avoids erroneously returning missing required values that are not applicable
   # to a given model task or output type.
-  expected_req <- dplyr::inner_join(req, applicaple_full[, names(req)],
+  expected_req <- dplyr::inner_join(req,
+                                    tibble::as_tibble(applicaple_full[, names(req)]),
                                     by = names(req)) %>%
     unique()
 
