@@ -291,7 +291,7 @@ get_required_output_types <- function(x, mask, full, req) {
 
   join_colnames <- names(cols)[!cols]
   dplyr::inner_join(
-    req, unique(applicaple_full[, join_colnames]),
+    unique(applicaple_full[, join_colnames]), req,
     by = join_colnames
   )[[hubUtils::std_colnames["output_type"]]] %>%
     unique()
