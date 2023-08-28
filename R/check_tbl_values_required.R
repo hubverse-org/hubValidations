@@ -60,7 +60,7 @@ check_tbl_values_required <- function(tbl, round_id, file_path, hub_path) {
 check_modeling_task_values_required <- function(tbl, req, full) {
   if (nrow(tbl) == 0L) {
     if (setequal(names(tbl), names(req))){
-      return(req)
+      return(req[, names(tbl)])
     } else {
       return(tbl)
     }
