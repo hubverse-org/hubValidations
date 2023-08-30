@@ -65,12 +65,10 @@ check_modeling_task_value_col <- function(tbl, output_type_config) {
 compare_values_to_config <- function(tbl, output_type, output_type_config) {
   details <- NULL
   values <- tbl$value
-  # values <- c("fail", values, "-6")
   config <- output_type_config[[output_type]][["value"]]
 
   # Check and coerce value data type
-  # TODO: Remove ::: when json_datatypes exported from hubUtils
-  values_type <- hubUtils:::json_datatypes[config$type]
+  values_type <- json_datatypes[config$type]
   values <- coerce_values(values, values_type)
   if (any(is.na(values))) {
     details <- c(

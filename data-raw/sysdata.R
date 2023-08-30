@@ -2,4 +2,12 @@
 
 valid_ext <- c("csv", "parquet", "arrow")
 
-usethis::use_data(valid_ext, overwrite = TRUE, internal = TRUE)
+## code to prepare `json_datatypes` dataset goes here
+json_datatypes <- c(
+    string = "character",
+    boolean = "logical",
+    integer = "integer",
+    number = "double"
+)
+
+usethis::use_data(valid_ext, json_datatypes, overwrite = TRUE, internal = TRUE)
