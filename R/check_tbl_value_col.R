@@ -41,12 +41,24 @@ check_tbl_value_col <- function(tbl, round_id, file_path, hub_path) {
 
   check <- is.null(details)
 
+  ## Example code for attempting bullets of details. Needs more experimentation
+  ## but parking for now.
+  # if (!check) {
+  #     details_bullets_div <- function(details) {
+  #         cli::cli_div()
+  #         cli::format_bullets_raw(
+  #             stats::setNames(details, rep("*", length(details)))
+  #         )
+  #     }
+  #     details <- details_bullets_div(details)
+  # }
+
   capture_check_cnd(
     check = check,
     file_path = file_path,
     msg_subject = "Values in column {.var value}",
     msg_verbs = c("all", "are not all"),
-    msg_attribute = "valid.",
+    msg_attribute = "valid with respect to modeling task config.",
     details = details
   )
 }
