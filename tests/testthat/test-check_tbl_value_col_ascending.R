@@ -1,0 +1,66 @@
+test_that("check_tbl_value_col_ascending works", {
+  hub_path <- system.file("testhubs/simple", package = "hubValidations")
+  file_path <- "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+  tbl <- hubValidations::read_model_out_file(file_path, hub_path)
+  round_id <- "2022-10-08"
+
+  expect_snapshot(
+    check_tbl_value_col_ascending(tbl, file_path)
+  )
+
+  hub_path <- system.file("testhubs/flusight", package = "hubUtils")
+  file_path <- "hub-ensemble/2023-05-08-hub-ensemble.parquet"
+  round_id <- "2023-05-08"
+  tbl <- hubValidations::read_model_out_file(file_path, hub_path)
+
+  expect_snapshot(
+    check_tbl_value_col_ascending(tbl, file_path)
+  )
+})
+
+
+test_that("check_tbl_value_col_ascending errors correctly", {
+  hub_path <- system.file("testhubs/simple", package = "hubValidations")
+  file_path <- "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+  tbl <- hubValidations::read_model_out_file(file_path, hub_path)
+  round_id <- "2022-10-08"
+
+  tbl$value[c(1, 10)] <- 150
+
+  expect_snapshot(
+    str(check_tbl_value_col_ascending(tbl, file_path))
+  )
+
+  hub_path <- system.file("testhubs/flusight", package = "hubUtils")
+  file_path <- "hub-ensemble/2023-05-08-hub-ensemble.parquet"
+  round_id <- "2023-05-08"
+  tbl <- hubValidations::read_model_out_file(file_path, hub_path)
+  tbl_error <- tbl
+  tbl_error$target <- "wk ahead inc covid hosp"
+  tbl_error$value[1] <- 800
+
+  expect_snapshot(
+    str(
+      check_tbl_value_col_ascending(tbl_error, file_path)
+    )
+  )
+  expect_snapshot(
+    str(
+      check_tbl_value_col_ascending(
+        rbind(tbl, tbl_error),
+        file_path
+      )
+    )
+  )
+})
+
+test_that("check_tbl_value_col_ascending skips correctly", {
+  hub_path <- system.file("testhubs/simple", package = "hubValidations")
+  file_path <- "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+  tbl <- hubValidations::read_model_out_file(file_path, hub_path)
+  tbl <- tbl[tbl$output_type == "mean", ]
+
+  expect_snapshot(
+    check_tbl_value_col_ascending(tbl, file_path)
+  )
+})
