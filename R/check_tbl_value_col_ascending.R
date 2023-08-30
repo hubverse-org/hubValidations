@@ -12,9 +12,12 @@
 #' @export
 check_tbl_value_col_ascending <- function(tbl, file_path) {
   if (all(!c("cdf", "quantile") %in% tbl[["output_type"]])) {
-    capture_check_info(
-      file_path,
-      "No quantile or cdf output types to check for non-descending values. Check skipped."
+    return(
+      capture_check_info(
+        file_path,
+        "No quantile or cdf output types to check for non-descending values.
+        Check skipped."
+      )
     )
   }
 
