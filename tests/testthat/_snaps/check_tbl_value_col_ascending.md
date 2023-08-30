@@ -5,7 +5,7 @@
     Output
       <message/check_success>
       Message:
-      For each unique task ID value/output type combination, all values non-decreasing as output_type_ids increase.
+      Values in `value` column are non-decreasing as output_type_ids increase for all unique task ID value/output type combinations of quantile or cdf output types.
 
 ---
 
@@ -14,7 +14,7 @@
     Output
       <message/check_success>
       Message:
-      For each unique task ID value/output type combination, all values non-decreasing as output_type_ids increase.
+      Values in `value` column are non-decreasing as output_type_ids increase for all unique task ID value/output type combinations of quantile or cdf output types.
 
 # check_tbl_value_col_ascending errors correctly
 
@@ -22,7 +22,7 @@
       str(check_tbl_value_col_ascending(tbl, file_path))
     Output
       List of 5
-       $ message       : chr "For each unique task ID value/output type combination, decreasing values detected as output_type_ids increase. "| __truncated__
+       $ message       : chr "Values in `value` column are not non-decreasing as output_type_ids increase for all unique task ID\n    value/o"| __truncated__
        $ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
        $ error_tbl     : tibble [1 x 5] (S3: tbl_df/tbl/data.frame)
         ..$ origin_date: Date[1:1], format: "2022-10-08"
@@ -40,7 +40,7 @@
       str(check_tbl_value_col_ascending(tbl_error, file_path))
     Output
       List of 5
-       $ message       : chr "For each unique task ID value/output type combination, decreasing values detected as output_type_ids increase. "| __truncated__
+       $ message       : chr "Values in `value` column are not non-decreasing as output_type_ids increase for all unique task ID\n    value/o"| __truncated__
        $ where         : chr "hub-ensemble/2023-05-08-hub-ensemble.parquet"
        $ error_tbl     : tibble [1 x 5] (S3: tbl_df/tbl/data.frame)
         ..$ forecast_date: Date[1:1], format: "2023-05-08"
@@ -58,7 +58,7 @@
       str(check_tbl_value_col_ascending(rbind(tbl, tbl_error), file_path))
     Output
       List of 5
-       $ message       : chr "For each unique task ID value/output type combination, decreasing values detected as output_type_ids increase. "| __truncated__
+       $ message       : chr "Values in `value` column are not non-decreasing as output_type_ids increase for all unique task ID\n    value/o"| __truncated__
        $ where         : chr "hub-ensemble/2023-05-08-hub-ensemble.parquet"
        $ error_tbl     : tibble [1 x 5] (S3: tbl_df/tbl/data.frame)
         ..$ forecast_date: Date[1:1], format: "2023-05-08"

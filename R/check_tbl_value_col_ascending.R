@@ -24,17 +24,17 @@ check_tbl_value_col_ascending <- function(tbl, file_path) {
   output_type_tbl <- split(tbl, tbl[["output_type"]])[c("cdf", "quantile")] %>%
     purrr::compact()
 
-  non_asc_df <- purrr::map(
+  error_tbl <- purrr::map(
     output_type_tbl,
     check_values_ascending
   ) %>%
     purrr::list_rbind()
 
-  check <- nrow(non_asc_df) == 0L
+  check <- nrow(error_tbl) == 0L
 
   if (check) {
     details <- NULL
-    non_asc_df <- NULL
+    error_tbl <- NULL
   } else {
     details <- cli::format_inline("See {.var error_tbl} attribute for details.")
   }
@@ -42,11 +42,12 @@ check_tbl_value_col_ascending <- function(tbl, file_path) {
   capture_check_cnd(
     check = check,
     file_path = file_path,
-    msg_subject = "For each unique task ID value/output type combination,",
-    msg_verbs = c("all values non-decreasing", "decreasing values detected"),
-    msg_attribute = "as output_type_ids increase.",
+    msg_subject = "Values in {.var value} column",
+    msg_verbs = c("are non-decreasing", "are not non-decreasing"),
+    msg_attribute = "as output_type_ids increase for all unique task ID
+    value/output type combinations of quantile or cdf output types.",
     details = details,
-    error_tbl = non_asc_df
+    error_tbl = error_tbl
   )
 }
 
