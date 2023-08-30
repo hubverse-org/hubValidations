@@ -1,3 +1,10 @@
+#' Check output type values of model output data against config
+#'
+#' Checks that values in the `value` column of a tibble/data.frame of data read
+#' in from the file being validated conform to the configuration for each output
+#' type of the appropriate model task.
+#' @inherit check_tbl_colnames params return
+#' @export
 check_tbl_value_col <- function(tbl, round_id, file_path, hub_path) {
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
 

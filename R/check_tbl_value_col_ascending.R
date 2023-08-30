@@ -1,3 +1,15 @@
+#' Check that `quantile` and `cdf` output type values of model output data
+#' are non-descending
+#'
+#' Checks that values in the `value` column for `quantile` and `cdf` output type
+#' data for each unique task ID/output type combination
+#' are non-descending when arranged by increasing `output_type_id` order.
+#' Check only performed if `tbl` contains `quantile` or `cdf` output type data.
+#' If not, the check is skipped and a `<message/check_info>` condition class
+#' object is returned.
+#'
+#' @inherit check_tbl_colnames params return
+#' @export
 check_tbl_value_col_ascending <- function(tbl, file_path) {
   if (all(!c("cdf", "quantile") %in% tbl[["output_type"]])) {
     capture_check_info(
