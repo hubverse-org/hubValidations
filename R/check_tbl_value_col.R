@@ -37,7 +37,7 @@ check_tbl_value_col <- function(tbl, round_id, file_path, hub_path) {
     tbl, output_type_config,
     check_modeling_task_value_col
   ) %>%
-      unlist(use.names = TRUE)
+    unlist(use.names = TRUE)
 
   check <- is.null(details)
 
@@ -65,16 +65,14 @@ check_tbl_value_col <- function(tbl, round_id, file_path, hub_path) {
 
 
 check_modeling_task_value_col <- function(tbl, output_type_config) {
-  output_type_tbl <- split(tbl, tbl[["output_type"]])
-
   purrr::imap(
-    output_type_tbl,
+    split(tbl, tbl[["output_type"]]),
     ~ compare_values_to_config(
       tbl = .x, output_type = .y,
       output_type_config
     )
   ) %>%
-      unlist(use.names = TRUE)
+    unlist(use.names = TRUE)
 }
 
 compare_values_to_config <- function(tbl, output_type, output_type_config) {
