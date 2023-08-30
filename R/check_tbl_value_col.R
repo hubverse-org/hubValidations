@@ -34,10 +34,6 @@ check_tbl_value_col <- function(tbl, round_id, file_path, hub_path) {
 
   check <- is.null(details)
 
-  # if (!check) {
-  #     details <- cli::cli_bullets(stats::setNames(details, rep("*", length(details))))
-  # }
-
   capture_check_cnd(
     check = check,
     file_path = file_path,
@@ -50,7 +46,7 @@ check_tbl_value_col <- function(tbl, round_id, file_path, hub_path) {
 
 
 check_modeling_task_value_col <- function(tbl, output_type_config) {
-  output_type_tbl <- split(tbl, tbl$output_type)
+  output_type_tbl <- split(tbl, tbl[["output_type"]])
 
   purrr::imap(
     output_type_tbl,
