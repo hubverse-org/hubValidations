@@ -32,5 +32,6 @@ Depending on whether validation has succeeded, one of:
 Returned object also inherits from subclass \verb{<hub_check>}.
 }
 \description{
-Check model data column data types
+Check that model output data column datatypes conform to those define in the
+hub config.
 }
