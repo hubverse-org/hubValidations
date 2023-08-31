@@ -1,38 +1,34 @@
 #' Check model output data tbl contains valid value combinations
 #'
-#' @inheritParams check_tbl_colnames
-#' @inherit check_tbl_colnames return
+#' @inherit check_tbl_colnames params
+#' @inherit check_tbl_col_types return
 #' @export
 check_tbl_values <- function(tbl, file_path, hub_path) {
   round_id <- get_file_round_id(file_path)
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
 
+  # Coerce both tbl and accepted vals to character for easier comparison of values.
+  # Use arrow tbls for comparisons as more efficient when working with larger files.
+  tbl <- hubUtils::coerce_to_character(tbl, as_arrow_table = TRUE)
   accepted_vals <- hubUtils::expand_model_out_val_grid(
     config_tasks = config_tasks,
-    round_id = round_id
+    round_id = round_id,
+    all_character = TRUE,
+    as_arrow_table = TRUE
   )
-  # TODO: Make this part of expand_model_out_val_grid
-  accepted_vals <- hubUtils::create_hub_schema(
-    config_tasks = config_tasks,
-    partitions = NULL,
-    r_schema = TRUE
-  )[names(accepted_vals)] %>%
-    purrr::map2(
-      accepted_vals,
-      ~ get(paste0("as.", .x))(.y)
-    ) %>%
-    tibble::as_tibble()
 
   # This approach uses dplyr to identify tbl rows that don't have a complete match
   # in accepted_vals.
   accepted_vals$valid <- TRUE
-  valid_tbl <- dplyr::left_join(tbl, accepted_vals)
+  valid_tbl <- dplyr::left_join(tbl, accepted_vals) %>%
+    dplyr::collect()
 
-  check <- any(is.na(valid_tbl$valid))
+  check <- !any(is.na(valid_tbl$valid))
 
   if (check) {
     details <- NULL
   } else {
+    # TODO: Should this be returning a row index or a df of invalid rows?
     details <- cli::format_inline(
         "Affected rows: {.val {which(is.na(valid_tbl$valid))}}")
   }
