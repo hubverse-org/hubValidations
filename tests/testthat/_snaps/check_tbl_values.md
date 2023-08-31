@@ -1,9 +1,18 @@
 # check_tbl_values works
 
     Code
-      check_tbl_values(tbl = tbl_10_08, file_path = file_path_10_08, hub_path = hub_path)
+      check_tbl_values(tbl = tbl, file_path = file_path, hub_path = hub_path)
+    Output
+      <message/check_success>
+      Message:
+      Data rows contain valid value combinations
+
+---
+
+    Code
+      check_tbl_values(tbl = tbl, file_path = file_path, hub_path = hub_path)
     Output
       <warning/check_failure>
       Warning:
-      Data rows do not contain valid value combinations Affected rows: 47
+      Data rows do not contain valid value combinations Affected rows: 1
 
