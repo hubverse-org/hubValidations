@@ -8,7 +8,7 @@
 #' @return
 #' #' Depending on whether validation has succeeded, one of:
 #' - `<message/check_success>` condition class object.
-#' - `<warning/check_failure>` condition class object.
+#' - `<warning/check_error>` condition class object.
 #'
 #' If `round_id_from_variable: false`, check is skipped and a
 #' `<message/check_info>` condition class object is returned.
