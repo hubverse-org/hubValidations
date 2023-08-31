@@ -2,7 +2,8 @@
 #'
 #' Checks that the `model_id` metadata in the file name matches the directory name
 #' the file is being submitted to.
-#' @inherit check_tbl_colnames
+#' @inherit check_tbl_colnames params
+#' @inherit check_tbl_col_types return
 #'
 #' @export
 check_file_location <- function(file_path) {
