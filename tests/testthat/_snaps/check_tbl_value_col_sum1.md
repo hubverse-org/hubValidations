@@ -13,7 +13,7 @@
       str(check_tbl_value_col_sum1(tbl, file_path))
     Output
       List of 5
-       $ message       : chr "Values in `value` column do not sum to 1 for all unique task ID value combination of pmf output types. \n See `"| __truncated__
+       $ message       : chr "Values in `value` column do not sum to 1 for all unique task ID value combination of pmf\n    output types. \n "| __truncated__
        $ where         : chr "umass_ens/2023-05-08-umass_ens.csv"
        $ error_tbl     : tibble [1 x 5] (S3: tbl_df/tbl/data.frame)
         ..$ forecast_date: Date[1:1], format: "2023-05-08"
@@ -31,7 +31,7 @@
       str(check_tbl_value_col_sum1(tbl, file_path))
     Output
       List of 5
-       $ message       : chr "Values in `value` column do not sum to 1 for all unique task ID value combination of pmf output types. \n See `"| __truncated__
+       $ message       : chr "Values in `value` column do not sum to 1 for all unique task ID value combination of pmf\n    output types. \n "| __truncated__
        $ where         : chr "umass_ens/2023-05-08-umass_ens.csv"
        $ error_tbl     : tibble [1 x 5] (S3: tbl_df/tbl/data.frame)
         ..$ forecast_date: Date[1:1], format: "2023-05-08"
