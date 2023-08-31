@@ -1,7 +1,8 @@
 # check_tbl_values works
 
     Code
-      check_tbl_values(tbl = tbl, file_path = file_path, hub_path = hub_path)
+      check_tbl_values(tbl = tbl, round_id = round_id, file_path = file_path,
+        hub_path = hub_path)
     Output
       <message/check_success>
       Message:
@@ -10,7 +11,8 @@
 ---
 
     Code
-      check_tbl_values(tbl = tbl, file_path = file_path, hub_path = hub_path)
+      check_tbl_values(tbl = tbl, round_id = round_id, file_path = file_path,
+        hub_path = hub_path)
     Output
       <warning/check_failure>
       Warning:

@@ -3,8 +3,7 @@
 #' @inherit check_tbl_colnames params
 #' @inherit check_tbl_col_types return
 #' @export
-check_tbl_values <- function(tbl, file_path, hub_path) {
-  round_id <- get_file_round_id(file_path)
+check_tbl_values <- function(tbl, round_id, file_path, hub_path) {
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
 
   # Coerce both tbl and accepted vals to character for easier comparison of

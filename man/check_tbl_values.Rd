@@ -4,10 +4,12 @@
 \alias{check_tbl_values}
 \title{Check model output data tbl contains valid value combinations}
 \usage{
-check_tbl_values(tbl, file_path, hub_path)
+check_tbl_values(tbl, round_id, file_path, hub_path)
 }
 \arguments{
 \item{tbl}{a tibble/data.frame of the contents of the file being validated.}
+
+\item{round_id}{character string. The round identifier.}
 
 \item{file_path}{character string. Path to the file being validated relative to
 the hub's model-output directory.}
