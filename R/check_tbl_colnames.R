@@ -8,11 +8,10 @@
 #' @param file_path character string. Path to the file being validated relative to
 #' the hub's model-output directory.
 #' @inheritParams hubUtils::connect_hub
-#'
 #' @return
 #' Depending on whether validation has succeeded, one of:
 #' - `<message/check_success>` condition class object.
-#' - `<warning/check_failure>` condition class object.
+#' - `<error/check_error>` condition class object.
 #'
 #' Returned object also inherits from subclass `<hub_check>`.
 #' @export
@@ -46,5 +45,6 @@ check_tbl_colnames <- function(tbl, round_id, file_path, hub_path = ".") {
                       msg_subject = "Column names",
                       msg_attribute = "consistent with expected round task IDs and std column names.",
                       msg_verbs = c("are", "must be"),
-                      details = details)
+                      details = details,
+                      error = TRUE)
 }

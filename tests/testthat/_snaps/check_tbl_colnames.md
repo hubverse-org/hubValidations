@@ -25,7 +25,7 @@
     Code
       check_tbl_colnames(tbl = missing_col, round_id, file_path, hub_path)
     Output
-      <warning/check_failure>
-      Warning:
-      Column names must be consistent with expected round task IDs and std column names.  Expected column "age_group" not present in file.
+      <error/check_error>
+      Error:
+      ! Column names must be consistent with expected round task IDs and std column names.  Expected column "age_group" not present in file.
 

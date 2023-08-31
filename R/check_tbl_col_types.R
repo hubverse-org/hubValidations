@@ -1,6 +1,14 @@
 #' Check model data column data types
 #'
-#' @inherit check_tbl_colnames params return
+#' Check that model output data column datatypes conform to those define in the
+#' hub config.
+#' @inherit check_tbl_colnames params
+#' @return
+#' Depending on whether validation has succeeded, one of:
+#' - `<message/check_success>` condition class object.
+#' - `<warning/check_failure>` condition class object.
+#'
+#' Returned object also inherits from subclass `<hub_check>`.
 #' @export
 check_tbl_col_types <- function(tbl, file_path, hub_path) {
   config_tasks <- hubUtils::read_config(hub_path, "tasks")

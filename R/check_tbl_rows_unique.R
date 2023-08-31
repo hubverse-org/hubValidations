@@ -3,7 +3,8 @@
 #' Checks that combinations of task ID, output type and output type ID value
 #' combinations are unique, by checking that there are no duplicate rows across
 #' all `tbl` columns excluding the `value` column.
-#' @inherit check_tbl_colnames params return
+#' @inherit check_tbl_colnames params
+#' @inherit check_tbl_col_types return
 #' @export
 check_tbl_rows_unique <- function(tbl, file_path, hub_path) {
     config_tasks <- hubUtils::read_config(hub_path, "tasks")

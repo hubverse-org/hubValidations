@@ -1,7 +1,8 @@
 #' Check all required task ID/output type/output type ID value combinations present
 #' in model data.
 #'
-#' @inherit check_tbl_colnames return params
+#' @inherit check_tbl_colnames params
+#' @inherit check_tbl_col_types return
 #' @export
 check_tbl_values_required <- function(tbl, round_id, file_path, hub_path) {
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
