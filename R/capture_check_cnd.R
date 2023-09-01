@@ -51,6 +51,10 @@ capture_check_cnd <- function(check, file_path, msg_subject, msg_attribute,
                        not class {.cls {class(msg_verbs)}}
                        of length {length(msg_verbs)}")
   }
+  call <- rlang::caller_call()
+  if (!is.null(call)) {
+    call <- rlang::call_name(call)
+  }
 
   if (check) {
     msg <- cli::format_inline(
@@ -60,7 +64,7 @@ capture_check_cnd <- function(check, file_path, msg_subject, msg_attribute,
       c("check_success", "hub_check"),
       where = file_path,
       ...,
-      call = rlang::call_name(rlang::caller_call()),
+      call = call,
       message = msg,
       use_cli_format = TRUE
     )
@@ -73,7 +77,7 @@ capture_check_cnd <- function(check, file_path, msg_subject, msg_attribute,
         c("check_error", "hub_check"),
         where = file_path,
         ...,
-        call = rlang::call_name(rlang::caller_call()),
+        call = call,
         message = msg,
         use_cli_format = TRUE
       )
@@ -82,7 +86,7 @@ capture_check_cnd <- function(check, file_path, msg_subject, msg_attribute,
         c("check_failure", "hub_check"),
         where = file_path,
         ...,
-        call = rlang::call_name(rlang::caller_call()),
+        call = call,
         message = msg,
         use_cli_format = TRUE
       )
@@ -103,10 +107,15 @@ capture_check_cnd <- function(check, file_path, msg_subject, msg_attribute,
 #' inherits from subclass `<hub_check>`.
 #' @export
 capture_check_info <- function(file_path, msg) {
+  call <- rlang::caller_call()
+  if (!is.null(call)) {
+    call <- rlang::call_name(call)
+  }
+
   rlang::message_cnd(
     c("check_info", "hub_check"),
     where = file_path,
-    call = rlang::call_name(rlang::caller_call()),
+    call = call,
     message = cli::format_inline(msg),
     use_cli_format = TRUE
   )
