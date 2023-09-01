@@ -14,14 +14,9 @@ check_file_read <- function(file_path, hub_path = ".") {
   if (check) {
     details <- NULL
   } else {
-    read_fun <- switch(fs::path_ext(file_path),
-      csv = "arrow::read_csv_arrow",
-      parquet = "arrow::read_parquet",
-      arrow = "arrow::read_feather"
-    )
     details <- cli::format_inline(
         attr(try_read, "condition")$message, "\n",
-      "Please check file path is correct and file can be read using {.fn {read_fun}}"
+      "Please check file path is correct and file can be read using {.fn read_model_out_file}"
     )
   }
 
