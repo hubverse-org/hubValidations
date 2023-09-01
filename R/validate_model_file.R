@@ -27,7 +27,7 @@ validate_model_file <- function(hub_path, file_path) {
   }
 
   checks$file_name <- check_file_name(file_path)
-  if (is_error(checks$file_exists)) {
+  if (is_error(checks$file_name)) {
     return(checks)
   }
 
@@ -41,7 +41,7 @@ validate_model_file <- function(hub_path, file_path) {
     file_path = file_path,
     hub_path = hub_path
   )
-  if (is_error(checks$file_exists)) {
+  if (is_error(checks$round_id_valid)) {
     return(checks)
   }
 
