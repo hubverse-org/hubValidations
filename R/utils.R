@@ -56,3 +56,11 @@ get_file_round_config <- function(file_path, hub_path) {
 is_round_id_from_variable <- function(file_path, hub_path) {
   get_file_round_config(file_path, hub_path)[["round_id_from_variable"]]
 }
+
+get_file_round_id_col <- function(file_path, hub_path) {
+  if (is_round_id_from_variable(file_path, hub_path)) {
+    get_file_round_config(file_path, hub_path)[["round_id"]]
+  } else {
+    NULL
+  }
+}
