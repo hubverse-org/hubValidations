@@ -30,7 +30,7 @@
         ..$ horizon    : int 1
         ..$ location   : chr "US"
         ..$ output_type: chr "quantile"
-       $ call          : NULL
+       $ call          : chr "check_tbl_value_col_ascending"
        $ use_cli_format: logi TRUE
        - attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_warning" "warning" ...
 
@@ -48,7 +48,7 @@
         ..$ target       : chr "wk ahead inc covid hosp"
         ..$ location     : chr "US"
         ..$ output_type  : chr "quantile"
-       $ call          : NULL
+       $ call          : chr "check_tbl_value_col_ascending"
        $ use_cli_format: logi TRUE
        - attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_warning" "warning" ...
 
@@ -66,7 +66,7 @@
         ..$ target       : chr "wk ahead inc covid hosp"
         ..$ location     : chr "US"
         ..$ output_type  : chr "quantile"
-       $ call          : NULL
+       $ call          : chr "check_tbl_value_col_ascending"
        $ use_cli_format: logi TRUE
        - attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_warning" "warning" ...
 

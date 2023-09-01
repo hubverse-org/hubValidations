@@ -22,7 +22,7 @@
         ..$ location      : chr [1:23] "US" "US" "US" "US" ...
         ..$ output_type   : chr [1:23] "quantile" "quantile" "quantile" "quantile" ...
         ..$ output_type_id: num [1:23] 0.01 0.025 0.05 0.1 0.15 0.2 0.25 0.3 0.35 0.4 ...
-       $ call          : NULL
+       $ call          : chr "check_tbl_values_required"
        $ use_cli_format: logi TRUE
        - attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_warning" "warning" ...
 
@@ -41,7 +41,7 @@
         ..$ location      : chr [1:3] "02" "02" "02"
         ..$ output_type   : chr [1:3] "quantile" "quantile" "quantile"
         ..$ output_type_id: num [1:3] 0.01 0.025 0.05
-       $ call          : NULL
+       $ call          : chr "check_tbl_values_required"
        $ use_cli_format: logi TRUE
        - attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_warning" "warning" ...
 
@@ -69,7 +69,7 @@
         ..$ location      : chr [1:2] "US" "US"
         ..$ output_type   : chr [1:2] "quantile" "quantile"
         ..$ output_type_id: chr [1:2] "0.01" "0.025"
-       $ call          : NULL
+       $ call          : chr "check_tbl_values_required"
        $ use_cli_format: logi TRUE
        - attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_warning" "warning" ...
 
@@ -88,7 +88,7 @@
         ..$ location      : chr [1:2] "US" "US"
         ..$ output_type   : chr [1:2] "quantile" "quantile"
         ..$ output_type_id: chr [1:2] "0.01" "0.025"
-       $ call          : NULL
+       $ call          : chr "check_tbl_values_required"
        $ use_cli_format: logi TRUE
        - attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_warning" "warning" ...
 
@@ -107,7 +107,7 @@
         ..$ location      : chr [1:4] "US" "US" "US" "US"
         ..$ output_type   : chr [1:4] "pmf" "pmf" "pmf" "pmf"
         ..$ output_type_id: chr [1:4] "decrease" "stable" "increase" "large_increase"
-       $ call          : NULL
+       $ call          : chr "check_tbl_values_required"
        $ use_cli_format: logi TRUE
        - attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_warning" "warning" ...
 
@@ -126,7 +126,7 @@
         ..$ location      : chr [1:9] "US" "US" "US" "US" ...
         ..$ output_type   : chr [1:9] "pmf" "pmf" "pmf" "pmf" ...
         ..$ output_type_id: chr [1:9] "decrease" "stable" "increase" "large_increase" ...
-       $ call          : NULL
+       $ call          : chr "check_tbl_values_required"
        $ use_cli_format: logi TRUE
        - attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_warning" "warning" ...
 

@@ -60,6 +60,7 @@ capture_check_cnd <- function(check, file_path, msg_subject, msg_attribute,
       c("check_success", "hub_check"),
       where = file_path,
       ...,
+      call = rlang::call_name(rlang::caller_call()),
       message = msg,
       use_cli_format = TRUE
     )
@@ -72,6 +73,7 @@ capture_check_cnd <- function(check, file_path, msg_subject, msg_attribute,
         c("check_error", "hub_check"),
         where = file_path,
         ...,
+        call = rlang::call_name(rlang::caller_call()),
         message = msg,
         use_cli_format = TRUE
       )
@@ -80,6 +82,7 @@ capture_check_cnd <- function(check, file_path, msg_subject, msg_attribute,
         c("check_failure", "hub_check"),
         where = file_path,
         ...,
+        call = rlang::call_name(rlang::caller_call()),
         message = msg,
         use_cli_format = TRUE
       )
@@ -103,6 +106,7 @@ capture_check_info <- function(file_path, msg) {
   rlang::message_cnd(
     c("check_info", "hub_check"),
     where = file_path,
+    call = rlang::call_name(rlang::caller_call()),
     message = cli::format_inline(msg),
     use_cli_format = TRUE
   )

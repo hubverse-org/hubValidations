@@ -21,7 +21,7 @@
         ..$ target       : chr "wk flu hosp rate change"
         ..$ location     : chr "US"
         ..$ output_type  : chr "pmf"
-       $ call          : NULL
+       $ call          : chr "check_tbl_value_col_sum1"
        $ use_cli_format: logi TRUE
        - attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_warning" "warning" ...
 
@@ -39,7 +39,7 @@
         ..$ target       : chr "wk flu hosp rate change"
         ..$ location     : chr "US"
         ..$ output_type  : chr "pmf"
-       $ call          : NULL
+       $ call          : chr "check_tbl_value_col_sum1"
        $ use_cli_format: logi TRUE
        - attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_warning" "warning" ...
 

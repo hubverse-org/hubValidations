@@ -60,7 +60,7 @@
       List of 4
        $ message       : chr "Column names must always be consistent with expected round task IDs and std column names. \n "
        $ where         : chr "test/file.csv"
-       $ call          : NULL
+       $ call          : chr "eval"
        $ use_cli_format: logi TRUE
        - attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_warning" "warning" ...
 

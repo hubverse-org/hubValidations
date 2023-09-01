@@ -16,7 +16,7 @@ test_that("check_tbl_unique_round_id works", {
     check_tbl_unique_round_id(
       tbl = arrow::read_csv_arrow(
         system.file("files/2022-10-15-team1-goodmodel.csv",
-                    package = "hubValidations"
+          package = "hubValidations"
         )
       ),
       file_path = file_path, hub_path = hub_path,
@@ -24,16 +24,18 @@ test_that("check_tbl_unique_round_id works", {
     )
   )
   expect_snapshot(
-    str(check_tbl_unique_round_id(
-      tbl = arrow::read_csv_arrow(
-        system.file("files/2022-10-15-team1-goodmodel.csv",
-          package = "hubValidations"
-        )
-      ),
-      round_id_col = "origin_date",
-      file_path = file_path,
-      hub_path = hub_path
-    ))
+    str(
+      check_tbl_unique_round_id(
+        tbl = arrow::read_csv_arrow(
+          system.file("files/2022-10-15-team1-goodmodel.csv",
+            package = "hubValidations"
+          )
+        ),
+        round_id_col = "origin_date",
+        file_path = file_path,
+        hub_path = hub_path
+      )
+    )
   )
 })
 
@@ -62,6 +64,16 @@ test_that("check_tbl_unique_round_id fails correctly", {
       file_path = file_path,
       hub_path = hub_path,
       round_id_col = "random_column"
+    )
+  )
+  expect_snapshot(
+    str(
+      check_tbl_unique_round_id(
+        tbl = multiple_rids,
+        file_path = file_path,
+        hub_path = hub_path,
+        round_id_col = "random_column"
+      )
     )
   )
 })
