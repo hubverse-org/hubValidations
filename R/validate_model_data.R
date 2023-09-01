@@ -108,5 +108,7 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL) {
     file_path = file_path
   )
 
+  # TODO: Add custom fn & fn requiring additional arguments section.
+
   return(checks)
 }
