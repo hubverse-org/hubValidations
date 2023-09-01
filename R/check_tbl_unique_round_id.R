@@ -1,34 +1,37 @@
 #' Check model output data tbl contains a single unique round ID.
 #'
-#' @param tbl A tibble. The contents of model output data file being validated.
 #' @param round_id_col Character string. The name of the column containing
 #' `round_id`s. Usually, the value of round property `round_id` in hub `tasks.json`
 #' config file.
 #' @inheritParams check_tbl_colnames
 #' @return
-#' #' Depending on whether validation has succeeded, one of:
+#' Depending on whether validation has succeeded, one of:
 #' - `<message/check_success>` condition class object.
 #' - `<warning/check_error>` condition class object.
 #'
-#' If `round_id_from_variable: false`, check is skipped and a
-#' `<message/check_info>` condition class object is returned.
-#' Returned object also inherits from subclass `<hub_check>`.
+#' If `round_id_from_variable: false` and no `round_id_col` name is provided,
+#' check is skipped and a `<message/check_info>` condition class object is
+#' returned. If no valid `round_id_col` name is provided or can extracted from
+#' config (check through `check_valid_round_id_col`), a `<message/check_warning>`
+#' condition class object is returned and the rest of the check skipped.
 #' @details
 #' This check only applies to files being submitted to rounds where
-#' `round_id_from_variable: true` and is skipped otherwise.
+#' `round_id_from_variable: true` or where a `round_id_col` name is explicitly
+#' provided. Skipped otherwise.
 #' @export
-check_tbl_unique_round_id <- function(tbl, round_id_col, file_path, hub_path) {
-  if (!is_round_id_from_variable(file_path, hub_path)) {
-    return(
-      capture_check_info(
-        file_path,
-        msg =  "Check {.code check_tbl_unique_round_id} only applicable to rounds
-        where {.code round_id_from_variable} is {.code TRUE}. Check skipped."
-      )
-    )
-  }
-  round_id_col <- rlang::arg_match(round_id_col, values = names(tbl))
+check_tbl_unique_round_id <- function(tbl, file_path, hub_path,
+                                      round_id_col = NULL) {
 
+  check_round_id_col <- check_valid_round_id_col(
+    tbl, file_path, hub_path, round_id_col)
+
+  if (!is_success(check_round_id_col)) {
+    return(check_round_id_col)
+  }
+
+  if (is.null(round_id_col)) {
+    round_id_col <- get_file_round_id_col(file_path, hub_path)
+  }
   unique_round_ids <- unique(tbl[[round_id_col]])
   check <- length(unique_round_ids) == 1L
 
@@ -44,8 +47,9 @@ check_tbl_unique_round_id <- function(tbl, round_id_col, file_path, hub_path) {
   capture_check_cnd(
     check = check,
     file_path = file_path,
-    msg_subject = cli::format_inline("{.var round_id} column
-                                                       {.val {round_id_col}}"),
+    msg_subject = cli::format_inline(
+      "{.var round_id} column {.val {round_id_col}}"
+      ),
     msg_attribute = "a single, unique round ID value.",
     msg_verbs = c("contains", "must contain"),
     error = TRUE,

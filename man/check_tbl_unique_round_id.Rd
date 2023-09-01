@@ -4,14 +4,10 @@
 \alias{check_tbl_unique_round_id}
 \title{Check model output data tbl contains a single unique round ID.}
 \usage{
-check_tbl_unique_round_id(tbl, round_id_col, file_path, hub_path)
+check_tbl_unique_round_id(tbl, file_path, hub_path, round_id_col = NULL)
 }
 \arguments{
-\item{tbl}{A tibble. The contents of model output data file being validated.}
-
-\item{round_id_col}{Character string. The name of the column containing
-\code{round_id}s. Usually, the value of round property \code{round_id} in hub \code{tasks.json}
-config file.}
+\item{tbl}{a tibble/data.frame of the contents of the file being validated.}
 
 \item{file_path}{character string. Path to the file being validated relative to
 the hub's model-output directory.}
@@ -25,22 +21,29 @@ For more details consult the
 in the \code{arrow} package.
 The hub must be fully configured with valid \code{admin.json} and \code{tasks.json}
 files within the \code{hub-config} directory.}
+
+\item{round_id_col}{Character string. The name of the column containing
+\code{round_id}s. Usually, the value of round property \code{round_id} in hub \code{tasks.json}
+config file.}
 }
 \value{
-#' Depending on whether validation has succeeded, one of:
+Depending on whether validation has succeeded, one of:
 \itemize{
 \item \verb{<message/check_success>} condition class object.
 \item \verb{<warning/check_error>} condition class object.
 }
 
-If \code{round_id_from_variable: false}, check is skipped and a
-\verb{<message/check_info>} condition class object is returned.
-Returned object also inherits from subclass \verb{<hub_check>}.
+If \code{round_id_from_variable: false} and no \code{round_id_col} name is provided,
+check is skipped and a \verb{<message/check_info>} condition class object is
+returned. If no valid \code{round_id_col} name is provided or can extracted from
+config (check through \code{check_valid_round_id_col}), a \verb{<message/check_warning>}
+condition class object is returned and the rest of the check skipped.
 }
 \description{
 Check model output data tbl contains a single unique round ID.
 }
 \details{
 This check only applies to files being submitted to rounds where
-\code{round_id_from_variable: true} and is skipped otherwise.
+\code{round_id_from_variable: true} or where a \code{round_id_col} name is explicitly
+provided. Skipped otherwise.
 }
