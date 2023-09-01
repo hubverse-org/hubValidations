@@ -12,7 +12,7 @@
 #' If `round_id_from_variable: false` and no `round_id_col` name is provided,
 #' check is skipped and a `<message/check_info>` condition class object is
 #' returned. If no valid `round_id_col` name is provided or can extracted from
-#' config (check through `check_valid_round_id_col`), a `<message/check_warning>`
+#' config (check through `check_valid_round_id_col`), a `<message/check_error>`
 #' condition class object is returned and the rest of the check skipped.
 #' @details
 #' This check only applies to files being submitted to rounds where
@@ -25,7 +25,11 @@ check_tbl_unique_round_id <- function(tbl, file_path, hub_path,
   check_round_id_col <- check_valid_round_id_col(
     tbl, file_path, hub_path, round_id_col)
 
-  if (!is_success(check_round_id_col)) {
+  if (is_info(check_round_id_col)) {
+    return(check_round_id_col)
+  }
+  if (is_failure(check_round_id_col)) {
+    class(check_round_id_col)[1] <- "check_error"
     return(check_round_id_col)
   }
 

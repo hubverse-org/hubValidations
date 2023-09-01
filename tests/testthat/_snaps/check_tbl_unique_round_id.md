@@ -49,7 +49,7 @@
       check_tbl_unique_round_id(tbl = multiple_rids, file_path = file_path, hub_path = hub_path,
         round_id_col = "random_column")
     Output
-      <warning/check_failure>
+      <warning/check_error>
       Warning:
       `round_id_col` name must be valid.  Must be one of "origin_date", "target", "horizon", "location", and "age_group" not "random_column".
 

@@ -36,7 +36,7 @@ Depending on whether validation has succeeded, one of:
 If \code{round_id_from_variable: false} and no \code{round_id_col} name is provided,
 check is skipped and a \verb{<message/check_info>} condition class object is
 returned. If no valid \code{round_id_col} name is provided or can extracted from
-config (check through \code{check_valid_round_id_col}), a \verb{<message/check_warning>}
+config (check through \code{check_valid_round_id_col}), a \verb{<message/check_error>}
 condition class object is returned and the rest of the check skipped.
 }
 \description{
