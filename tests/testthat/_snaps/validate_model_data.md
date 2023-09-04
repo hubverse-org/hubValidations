@@ -183,11 +183,11 @@
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ value_col_valid   :List of 4
-        ..$ message       : chr "Values in column `value` all valid with respect to modeling task config. \n "
+        ..$ message       : chr "Values in column `value` are not all valid with respect to modeling task config. \n  Values 196.83, 367.89, 244"| __truncated__
         ..$ where         : chr "hub-ensemble/2023-05-08-hub-ensemble.parquet"
         ..$ call          : chr "check_tbl_value_col"
         ..$ use_cli_format: logi TRUE
-        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+        ..- attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_warning" "warning" ...
        $ value_col_non_desc:List of 5
         ..$ message       : chr "Values in `value` column are non-decreasing as output_type_ids increase for all unique task ID\n    value/outpu"| __truncated__
         ..$ where         : chr "hub-ensemble/2023-05-08-hub-ensemble.parquet"

@@ -85,17 +85,34 @@ compare_values_to_config <- function(tbl, output_type, output_type_config) {
   values_type <- json_datatypes[config$type]
   values <- coerce_values(values, values_type)
   if (any(is.na(values))) {
+    invalid_vals <- tbl$value[is.na(values)]
     details <- c(
       details,
       cli::format_inline(
-        "Contains values that cannot be coerced to
-              expected data type {.val {values_type}} for output type {.val {output_type}}."
+        "{cli::qty(length(invalid_vals))} Value{?s} {.val {invalid_vals}}
+        cannot be coerced to expected data type {.val {values_type}}
+        for output type {.val {output_type}}."
       )
     )
     values <- stats::na.omit(values)
     if (length(values) == 0L) {
       return(details)
     }
+  }
+
+  invalid_int <- detect_invalid_int(
+    original_values = tbl$value,
+    coerced_values = values
+  )
+  if (invalid_int$check) {
+    details <- c(
+      details,
+      cli::format_inline(
+        "{cli::qty(length(invalid_int$vals))} Value{?s} {.val {invalid_int$vals}}
+        cannot be coerced to expected data type
+        {.val {values_type}} for output type {.val {output_type}}."
+      )
+    )
   }
 
   if (any(names(config) == "maximum")) {
@@ -134,4 +151,27 @@ compare_values_to_config <- function(tbl, output_type, output_type_config) {
 coerce_values <- function(values, type) {
   coerce_fn <- get(paste("as", type, sep = "."))
   suppressWarnings(coerce_fn(values))
+}
+
+detect_invalid_int <- function(original_values, coerced_values) {
+  if (!is.integer(coerced_values)) {
+    return(list(check = FALSE, vals = NULL))
+  }
+  if (!is.null(attr(coerced_values, "na.action"))){
+    original_values <- original_values[-attr(coerced_values, "na.action")]
+  }
+
+  compare <- as.numeric(original_values) - coerced_values
+  invalid_int <- compare > 0L
+
+  if (any(invalid_int)) {
+    return(
+      list(
+        check = TRUE,
+        vals = original_values[invalid_int]
+      )
+    )
+  } else {
+    return(list(check = FALSE, vals = NULL))
+  }
 }
