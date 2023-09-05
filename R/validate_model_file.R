@@ -1,4 +1,4 @@
-#' Valid properties of a file.
+#' Valid properties of a model output file.
 #'
 #' @inheritParams check_tbl_colnames
 #' @return An object of class `hub_validations`. Each named element contains
@@ -51,6 +51,14 @@ validate_model_file <- function(hub_path, file_path) {
     round_id = round_id
   )
   if (is_error(checks$file_format)) {
+    return(checks)
+  }
+
+  checks$metadata_exists <- check_metadata_file_exists(
+    hub_path = hub_path,
+    file_path = file_path
+  )
+  if (is_error(checks$metadata_exists)) {
     return(checks)
   }
 

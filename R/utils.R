@@ -21,17 +21,23 @@ get_hub_model_output_dir <- function(hub_path) {
   if (is.null(model_output_dir)) "model-output" else model_output_dir
 }
 
-abs_file_path <- function(file_path, hub_path) {
+abs_file_path <- function(file_path, hub_path,
+                          subdir = c("model-output", "model-metadata")) {
+  subdir <- match.arg(subdir)
+  if (subdir == "model-output") subdir <- get_hub_model_output_dir(hub_path)
   fs::path(
     hub_path,
-    get_hub_model_output_dir(hub_path),
+    subdir,
     file_path
   )
 }
 
-rel_file_path <- function(file_path, hub_path) {
+rel_file_path <- function(file_path, hub_path,
+                          subdir = c("model-output", "model-metadata")) {
+  subdir <- match.arg(subdir)
+  if (subdir == "model-output") subdir <- get_hub_model_output_dir(hub_path)
   fs::path(
-    get_hub_model_output_dir(hub_path),
+    subdir,
     file_path
   )
 }

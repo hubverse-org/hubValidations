@@ -4,15 +4,14 @@ model_name: "Baseline"
 model_abbr: "baseline"
 model_version: "1.0"
 model_contributors: [
-    {
-            "name": "Joe Bloggs",
-            "email": "j.bloggs@email.com"
-        },
-        {
-            "name": "J Smith",
-            "email": "j.smith@email.com"
-        }
-
+  {
+    "name": "Joe Bloggs",
+    "email": "j.bloggs@email.com"
+  },
+  {
+    "name": "J Smith",
+    "email": "j.smith@email.com"
+  }
 ]
 website_url: "https://team1goodmodel.website"
 license: "cc-by-4.0"
@@ -21,6 +20,6 @@ include_ensemble: false
 include_eval: true
 models_details: [
     methods: "this the method description of the model.",
-    data_imputs: "description of the data imputs"
+    data_inputs: "description of the data inputs"
 ]
 ensemble_of_hub_models": false
