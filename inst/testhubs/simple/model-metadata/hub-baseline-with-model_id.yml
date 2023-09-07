@@ -1,7 +1,6 @@
 team_name: "Hub Coordination Team"
-team_abbr: "hub"
 model_name: "Baseline"
-model_abbr: "baseline"
+model_id: "hub-baseline-with-model_id"
 model_version: "1.0"
 model_contributors: [
   {

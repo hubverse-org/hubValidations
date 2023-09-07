@@ -13,7 +13,7 @@
 #' @examples
 #' hub_path <- system.file("testhubs/simple", package = "hubValidations")
 #' validate_model_file(hub_path,
-#'   file_path = "model-metadata/team1-goodmodel.yml"
+#'   file_path = "team1-goodmodel.yml"
 #' )
 validate_model_metadata <- function(hub_path, file_path) {
   checks <- list()
@@ -24,17 +24,16 @@ validate_model_metadata <- function(hub_path, file_path) {
     return(checks)
   }
 
-  checks$metadata_file_exists <- check_file_exists(
+  checks$metadata_file_exists <- check_metadata_file_exists(
     file_path = file_path,
     hub_path = hub_path
   )
-  if (is_error(checks$file_exists)) {
+  if (is_error(checks$metadata_file_exists)) {
     return(checks)
   }
 
   checks$metadata_file_ext <- check_metadata_file_ext(file_path)
 
-  # TODO: unit tests for functions called below this point.
   checks$metadata_file_location <- check_metadata_file_location(file_path)
   if (is_error(checks$metadata_file_location) ||
       is_error(checks$metadata_file_ext)) {
@@ -44,15 +43,16 @@ validate_model_metadata <- function(hub_path, file_path) {
   checks$metadata_matches_schema <- check_metadata_matches_schema(
     file_path = file_path,
     hub_path = hub_path)
-
-  # file name matches model id specified in metadata file
-  checks$metadata_file_name <- check_metadata_file_name(file_path)
-  if (is_error(checks$metadata_file_name)) {
+  if (is_error(checks$metadata_matches_schema)) {
     return(checks)
   }
 
-  # TODO: Add checks for number of models from the same team that are
-  # included in evaluations, ensembles, and visualizations
+  # file name matches model id specified in metadata file
+  checks$metadata_file_name <- check_metadata_file_name(file_path = file_path,
+                                                        hub_path = hub_path)
+  if (is_error(checks$metadata_file_name)) {
+    return(checks)
+  }
 
   # TODO: Add section for custom file checks
 

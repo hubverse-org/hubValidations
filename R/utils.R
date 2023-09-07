@@ -22,7 +22,7 @@ get_hub_model_output_dir <- function(hub_path) {
 }
 
 abs_file_path <- function(file_path, hub_path,
-                          subdir = c("model-output", "model-metadata")) {
+                          subdir = c("model-output", "model-metadata", "hub-config")) {
   subdir <- match.arg(subdir)
   if (subdir == "model-output") subdir <- get_hub_model_output_dir(hub_path)
   fs::path(
@@ -33,7 +33,7 @@ abs_file_path <- function(file_path, hub_path,
 }
 
 rel_file_path <- function(file_path, hub_path,
-                          subdir = c("model-output", "model-metadata")) {
+                          subdir = c("model-output", "model-metadata", "hub-config")) {
   subdir <- match.arg(subdir)
   if (subdir == "model-output") subdir <- get_hub_model_output_dir(hub_path)
   fs::path(
