@@ -1,8 +1,15 @@
 # execute_custom_checks works
 
     Code
-      test_custom_checks_caller(validations_cfg_path = testthat::test_path("testdata",
-        "config", "validations.yml"))
-    Message <rlang_message>
-      v 2023-05-08-hub-ensemble.parquet: Time differences between t0 var `forecast_date` and t1 var `target_end_date` all match expected period of 14d 0H 0M 0S.
+      str(test_custom_checks_caller(validations_cfg_path = testthat::test_path(
+        "testdata", "config", "validations.yml")))
+    Output
+      List of 1
+       $ col_timediff:List of 4
+        ..$ message       : chr "Time differences between t0 var `forecast_date` and t1 var\n        `target_end_date` all match expected period"| __truncated__
+        ..$ where         : chr "hub-ensemble/2023-05-08-hub-ensemble.parquet"
+        ..$ call          : NULL
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       - attr(*, "class")= chr [1:2] "hub_validations" "list"
 
