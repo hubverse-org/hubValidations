@@ -6,7 +6,7 @@ execute_custom_checks <- function(validations_cfg_path = NULL) {
     if (!is.null(validations_cfg_path)) {
         if (!fs::file_exists(validations_cfg_path)) {
             cli::cli_abort(
-                "Validations .yml file not found at {.path validations_cfg_path}",
+                "Validations .yml file not found at {.path {validations_cfg_path}}",
                 call = caller_call)
         }
     }
