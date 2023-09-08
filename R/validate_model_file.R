@@ -1,6 +1,8 @@
 #' Valid properties of a file.
 #'
 #' @inheritParams check_tbl_colnames
+#' @param validations_cfg_path Path to `validations.yml` file. If `NULL`
+#' defaults to `hub-config/validations.yml`.
 #' @return An object of class `hub_validations`. Each named element contains
 #' a `hub_check` class object reflecting the result of a given check. Function
 #' will return early if a check returns an error.
@@ -14,7 +16,8 @@
 #' validate_model_file(hub_path,
 #'   file_path = "team1-goodmodel/2022-10-15-team1-goodmodel.csv"
 #' )
-validate_model_file <- function(hub_path, file_path) {
+validate_model_file <- function(hub_path, file_path,
+                                validations_cfg_path = NULL) {
   checks <- list()
   class(checks) <- c("hub_validations", "list")
 
@@ -54,7 +57,9 @@ validate_model_file <- function(hub_path, file_path) {
     return(checks)
   }
 
-  # TODO: Add section for custom file checks
+  custom_checks <- execute_custom_checks(validations_cfg_path = validations_cfg_path)
+  checks <- c(checks, custom_checks)
+  class(checks) <- c("hub_validations", "list")
 
   checks
 }

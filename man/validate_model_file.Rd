@@ -4,7 +4,7 @@
 \alias{validate_model_file}
 \title{Valid properties of a file.}
 \usage{
-validate_model_file(hub_path, file_path)
+validate_model_file(hub_path, file_path, validations_cfg_path = NULL)
 }
 \arguments{
 \item{hub_path}{Either a character string path to a local Modeling Hub directory
@@ -19,6 +19,9 @@ files within the \code{hub-config} directory.}
 
 \item{file_path}{character string. Path to the file being validated relative to
 the hub's model-output directory.}
+
+\item{validations_cfg_path}{Path to \code{validations.yml} file. If \code{NULL}
+defaults to \code{hub-config/validations.yml}.}
 }
 \value{
 An object of class \code{hub_validations}. Each named element contains

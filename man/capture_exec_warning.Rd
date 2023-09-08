@@ -11,6 +11,9 @@ capture_exec_warning(file_path, msg, call = NULL)
 the relative path to the hub's \code{model-output} (or equivalent) directory.}
 
 \item{msg}{Character string.}
+
+\item{call}{Character string. Name of the parent call that failed to execute.
+If \code{NULL} (default), the caller's call name is captured.}
 }
 \value{
 A \verb{<warning/check_exec_warn>} condition class object. Returned object also

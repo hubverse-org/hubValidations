@@ -4,6 +4,8 @@
 #' execution has failed. Usually used in conjunction with [`try`].
 #' @inheritParams capture_check_cnd
 #' @param msg Character string.
+#' @param call Character string. Name of the parent call that failed to execute.
+#' If `NULL` (default), the caller's call name is captured.
 #' @return A `<error/check_exec_error>` condition class object. Returned object also
 #' inherits from subclass `<hub_check>`.
 #' @export
@@ -29,8 +31,7 @@ capture_exec_error <- function(file_path, msg, call = NULL) {
 #'
 #' Capture an execution warning condition. Useful for communicating when a check
 #' execution has failed. Usually used in conjunction with [`try`].
-#' @inheritParams capture_check_cnd
-#' @param msg Character string.
+#' @inheritParams capture_exec_error
 #'
 #' @return A `<warning/check_exec_warn>` condition class object. Returned object also
 #' inherits from subclass `<hub_check>`.
