@@ -10,4 +10,5 @@ json_datatypes <- c(
     number = "double"
 )
 
-usethis::use_data(valid_ext, json_datatypes, overwrite = TRUE, internal = TRUE)
+usethis::use_data(valid_ext, json_datatypes,
+                  overwrite = TRUE, internal = TRUE)

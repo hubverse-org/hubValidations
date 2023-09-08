@@ -4,7 +4,12 @@
 \alias{validate_model_data}
 \title{Validate a submitted model data file}
 \usage{
-validate_model_data(hub_path, file_path, round_id_col = NULL)
+validate_model_data(
+  hub_path,
+  file_path,
+  round_id_col = NULL,
+  validations_cfg_path = NULL
+)
 }
 \arguments{
 \item{hub_path}{Either a character string path to a local Modeling Hub directory
