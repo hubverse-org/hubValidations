@@ -26,6 +26,7 @@ execute_custom_checks <- function(validations_cfg_path = NULL) {
 
   validations_cfg <- config::get(
     value = rlang::call_name(caller_call),
+    config = rlang::env_get(env = caller_env, nm = "round_id"),
     file = validations_cfg_path
   )
 

@@ -1,0 +1,19 @@
+default:
+    test_custom_checks_caller:
+      col_timediff:
+        fn: "cfg_check_tbl_col_timediff"
+        pkg: "hubValidations"
+        args:
+          t0_colname: "forecast_date"
+          t1_colname: "target_end_date"
+          timediff: !expr lubridate::weeks(2)
+
+2023-05-08:
+    test_custom_checks_caller:
+      col_timediff:
+        fn: "cfg_check_tbl_col_timediff"
+        pkg: "hubValidations"
+        args:
+          t0_colname: "forecast_date"
+          t1_colname: "target_end_date"
+          timediff: !expr lubridate::weeks(1)
