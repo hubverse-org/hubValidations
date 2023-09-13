@@ -1,0 +1,97 @@
+---
+title: "Include custom validation functions"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(hubValidations)
+```
+
+
+Custom validation functions can be included and configured within standard `hubValidation` workflows by **including a `validations.yml` file in the `hub-config` directory**. Alternatively, an appropriately structured file can be included at a different location and the path to the file provided through argument `validations_cfg_path`.
+
+`hubValidations` uses the [`config`](https://rstudio.github.io/config/articles/inheritance.html) package to get validation configuration. This allows for configuration inheritance and the ability to include executable R code. 
+See the `confog` package vignette on [inheritance and R expressions](https://rstudio.github.io/config/articles/inheritance.html) for more details.
+
+## `validation.yml` structure
+
+`validation.yml` files should follow the nested structure described below:
+
+### Default configuration
+
+The top of any `validation.yml` file, under the required `default:` top level property, should contain default custom validation configurations that will be executed regardless of round ID.
+
+Within the default configuration, individual checks can be configured for each of the 3 validation functions run as part of `validate_submission()`, using the following structure for each validation function:
+
+- **`<name-of-caller-function>`:** One of `validate_model_data`, `validate_model_metadata` and `validate_model_file` depending on the function the custom check is to be included in.
+    - **`<name-of-check>`:** The name of the check. This is the name of the element containing the result of the check when `hub_validations` is returned (required).
+        - **`fn`:** The name of the check function to be run, as character string (required).
+        - **`pkg`:** The name of the package namespace from which to get check function. Must be supplied if function is distributed as part of a package.
+        - **`source:`** Path to `.R` script containing function code to be sourced. If relative, should be relative to the hub's directory root. Must be supplied if function is not part of a package and only exists as a script.
+        - **`args`:** A yaml dictionary of key/value pairs or arguments to be passed to the custom function. Values can be yaml lists or even executable R code (optional).
+        
+Note that each of the `validate_*()` functions contain a standard objects in their call environment which are passed automatically to any custom check function and therefore do not need including in the `args` configuration. 
+
+- **`validate_model_file`:**
+  - `file_path`
+  - `hub_path`
+  - `round_id`
+  - `file_meta`
+- **`validate_model_data`:** 
+  - `tbl`
+  - `file_path`
+  - `hub_path`
+  - `round_id`
+  - `file_meta`
+  - `round_id_col`
+- **`validate_model_data`:** 
+  - `file_path`
+  - `hub_path`
+  - `round_id`
+
+The `args` configuration can be used to override objects from the caller environment.
+
+
+Here's an example configuration for a single check (`cfg_check_tbl_col_timediff()`) to be run as part of the `validate_model_data()` validation function which checks the content of the model data submission files.
+
+```{r, eval=FALSE, code=readLines(system.file('testhubs/flusight/hub-config/validations.yml', package = 'hubValidations'))}
+
+```
+
+### Round specific configuration
+
+Additional round specific configurations can be included in `validation.yml` that can add to or override default configurations.
+
+For example, in the following `validation.yml`, if the file being validated is being submitted to a round with round ID `"2023-08-15"`, default `col_timediff` check configuration will be overiden by the `2023-08-15` configuration.
+
+```yml
+default:
+    validate_model_data:
+      col_timediff:
+        fn: "cfg_check_tbl_col_timediff"
+        pkg: "hubValidations"
+        args:
+          t0_colname: "forecast_date"
+          t1_colname: "target_end_date"
+          timediff: !expr lubridate::weeks(2)
+
+2023-08-15:
+    validate_model_data:
+      col_timediff:
+        fn: "cfg_check_tbl_col_timediff"
+        pkg: "hubValidations"
+        args:
+          t0_colname: "forecast_date"
+          t1_colname: "target_end_date"
+          timediff: !expr lubridate::weeks(1)
+```
+
+## Managing dependencies of custom sourced functions
+
+TODO

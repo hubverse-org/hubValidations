@@ -9,3 +9,5 @@
 ^pkgdown$
 ^codecov\.yml$
 ^attic$
+^data-raw$
+^vignettes/articles$
