@@ -73,15 +73,22 @@ get_file_round_id_col <- function(file_path, hub_path) {
 
 # Get metadata dile name from submission file path
 get_metadata_file_name <- function(hub_path, file_path,
-                                   ext = c("yml", "yaml", "auto")) {
+                                   ext = c("yml", "yaml", "auto", "both")) {
   ext <- rlang::arg_match(ext)
   model_id <- parse_file_name(file_path)$model_id
 
-  if (ext == "auto") {
-    meta_file_names <- c(
+  if (ext == "both") {
+    return(fs::path(c(
       fs::path(model_id, ext = "yml"),
       fs::path(model_id, ext = "yaml")
-    )
+    )))
+  }
+
+  if (ext == "auto") {
+    meta_file_names <- fs::path(c(
+      fs::path(model_id, ext = "yml"),
+      fs::path(model_id, ext = "yaml")
+    ))
     meta_file_paths <- abs_file_path(
       meta_file_names,
       hub_path,
@@ -89,7 +96,7 @@ get_metadata_file_name <- function(hub_path, file_path,
     )
     exist <- fs::file_exists(meta_file_paths)
     if (any(exist)) {
-      return(fs::path(meta_file_names[exist][1]))
+      return(meta_file_names[exist][1])
     } else {
       cli::cli_abort(
         "Model metadata file name could not be automatically detected for file {.path {file_path}}"
