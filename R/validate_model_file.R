@@ -57,7 +57,7 @@ validate_model_file <- function(hub_path, file_path,
     return(checks)
   }
   
-  checks$metadata_exists <- check_metadata_file_exists_for_output_submission(
+  checks$metadata_exists <- check_submission_metadata_file_exists(
     hub_path = hub_path,
     file_path = file_path
   )

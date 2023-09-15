@@ -1,8 +1,7 @@
 # check_metadata_file_exists works
 
     Code
-      check_metadata_file_exists_for_output_submission(hub_path = hub_path,
-        file_path = "hub-baseline/2022-10-01-hub-baseline.csv")
+      check_submission_metadata_file_exists(hub_path = hub_path, file_path = "hub-baseline/2022-10-01-hub-baseline.csv")
     Output
       <message/check_success>
       Message:
@@ -11,8 +10,7 @@
 ---
 
     Code
-      check_metadata_file_exists_for_output_submission(hub_path = hub_path,
-        file_path = "random-model/2022-10-01-random-model.csv")
+      check_submission_metadata_file_exists(hub_path = hub_path, file_path = "random-model/2022-10-01-random-model.csv")
     Output
       <error/check_error>
       Error:

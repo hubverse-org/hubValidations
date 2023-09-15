@@ -3,7 +3,7 @@
 #' @inherit check_valid_round_id return
 #'
 #' @export
-check_metadata_file_exists_for_output_submission <- function(file_path, hub_path = ".") {
+check_submission_metadata_file_exists <- function(file_path, hub_path = ".") {
     model_id <- parse_file_name(file_path)$model_id
     metadata_file_paths <- paste0(model_id, c(".yml", ".yaml"))
     abs_path <- abs_file_path(metadata_file_paths, hub_path,

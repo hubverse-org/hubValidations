@@ -37,7 +37,7 @@
        $ metadata_exists:List of 4
         ..$ message       : chr "Metadata file exists at path 'model-metadata/team1-goodmodel.yaml'. \n "
         ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
-        ..$ call          : chr "check_metadata_file_exists_for_output_submission"
+        ..$ call          : chr "check_submission_metadata_file_exists"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        - attr(*, "class")= chr [1:2] "hub_validations" "list"
