@@ -72,7 +72,7 @@ get_file_round_id_col <- function(file_path, hub_path) {
 }
 
 # Get metadata dile name from submission file path
-get_metadata_file_name <- function(file_path, hub_path,
+get_metadata_file_name <- function(hub_path, file_path,
                                    ext = c("yml", "yaml", "auto")) {
   ext <- rlang::arg_match(ext)
   model_id <- parse_file_name(file_path)$model_id
