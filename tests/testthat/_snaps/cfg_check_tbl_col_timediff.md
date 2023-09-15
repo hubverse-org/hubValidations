@@ -34,7 +34,7 @@
       cfg_check_tbl_col_timediff(tbl, file_path, hub_path, t0_colname = "forecast_date",
         t1_colname = "target_end_dates", timediff = lubridate::weeks(2))
     Error <simpleError>
-      Assertion on 't1_colname' failed: Must be element of set {'forecast_date','horizon','target','location','output_type','output_type_id','value','target_end_date'}, but is 'target_end_dates'.
+      Assertion on 't1_colname' failed: Must be element of set {'forecast_date','target_end_date','horizon','target','location','output_type','output_type_id','value'}, but is 'target_end_dates'.
 
 ---
 

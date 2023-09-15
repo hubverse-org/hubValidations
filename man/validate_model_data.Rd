@@ -4,7 +4,12 @@
 \alias{validate_model_data}
 \title{Validate a submitted model data file}
 \usage{
-validate_model_data(hub_path, file_path, round_id_col = NULL)
+validate_model_data(
+  hub_path,
+  file_path,
+  round_id_col = NULL,
+  validations_cfg_path = NULL
+)
 }
 \arguments{
 \item{hub_path}{Either a character string path to a local Modeling Hub directory
@@ -23,6 +28,9 @@ the hub's model-output directory.}
 \item{round_id_col}{Character string. The name of the column containing
 \code{round_id}s. Usually, the value of round property \code{round_id} in hub \code{tasks.json}
 config file.}
+
+\item{validations_cfg_path}{Path to \code{validations.yml} file. If \code{NULL}
+defaults to \code{hub-config/validations.yml}.}
 }
 \value{
 An object of class \code{hub_validations}. Each named element contains

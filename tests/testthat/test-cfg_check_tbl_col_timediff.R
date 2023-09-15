@@ -1,19 +1,7 @@
 test_that("cfg_check_tbl_col_timediff works", {
-  hub_path <- system.file("testhubs/flusight", package = "hubUtils")
+  hub_path <- system.file("testhubs/flusight", package = "hubValidations")
   file_path <- "hub-ensemble/2023-05-08-hub-ensemble.parquet"
   tbl <- hubValidations::read_model_out_file(file_path, hub_path)
-  tbl$target_end_date <- tbl$forecast_date + lubridate::weeks(2)
-  schema <- c(
-    forecast_date = "Date", target = "character", horizon = "integer",
-    location = "character", output_type = "character", output_type_id = "character",
-    value = "double", target_end_date = "Date"
-  )
-  mockery::stub(
-    cfg_check_tbl_col_timediff,
-    "hubUtils::create_hub_schema",
-    schema,
-    2
-  )
 
   expect_snapshot(
     cfg_check_tbl_col_timediff(tbl, file_path, hub_path,
@@ -44,21 +32,9 @@ test_that("cfg_check_tbl_col_timediff works", {
 
 
 test_that("cfg_check_tbl_col_timediff fails correctly", {
-  hub_path <- system.file("testhubs/flusight", package = "hubUtils")
+  hub_path <- system.file("testhubs/flusight", package = "hubValidations")
   file_path <- "hub-ensemble/2023-05-08-hub-ensemble.parquet"
   tbl <- hubValidations::read_model_out_file(file_path, hub_path)
-  tbl$target_end_date <- tbl$forecast_date + lubridate::weeks(2)
-  schema <- c(
-    forecast_date = "Date", target = "character", horizon = "integer",
-    location = "character", output_type = "character", output_type_id = "character",
-    value = "double", target_end_date = "Date"
-  )
-  mockery::stub(
-    cfg_check_tbl_col_timediff,
-    "hubUtils::create_hub_schema",
-    schema,
-    2
-  )
 
   expect_snapshot(
     cfg_check_tbl_col_timediff(tbl, file_path, hub_path,

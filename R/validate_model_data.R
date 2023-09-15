@@ -1,6 +1,7 @@
 #' Validate a submitted model data file
 #'
 #' @inheritParams check_tbl_unique_round_id
+#' @inheritParams validate_model_file
 #' @inherit validate_model_file return
 #' @export
 #'
@@ -8,7 +9,8 @@
 #' hub_path <- system.file("testhubs/simple", package = "hubValidations")
 #' file_path <- "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
 #' validate_model_data(hub_path, file_path)
-validate_model_data <- function(hub_path, file_path, round_id_col = NULL) {
+validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
+                                validations_cfg_path = NULL) {
   checks <- list()
   class(checks) <- c("hub_validations", "list")
 
@@ -108,7 +110,11 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL) {
     file_path = file_path
   )
 
-  # TODO: Add custom fn & fn requiring additional arguments section.
+  custom_checks <- execute_custom_checks(
+    validations_cfg_path = validations_cfg_path
+  )
+  checks <- c(checks, custom_checks)
+  class(checks) <- c("hub_validations", "list")
 
-  return(checks)
+  checks
 }
