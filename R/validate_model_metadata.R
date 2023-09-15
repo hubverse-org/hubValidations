@@ -4,10 +4,6 @@
 #' @return An object of class `hub_validations`. Each named element contains
 #' a `hub_check` class object reflecting the result of a given check. Function
 #' will return early if a check returns an error.
-#'
-#' @importFrom yaml read_yaml
-#' @importFrom jsonlite toJSON
-#' @importFrom jsonvalidate json_validate
 #' @export
 #'
 #' @examples
