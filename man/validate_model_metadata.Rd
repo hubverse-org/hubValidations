@@ -4,7 +4,12 @@
 \alias{validate_model_metadata}
 \title{Valid properties of a metadata file.}
 \usage{
-validate_model_metadata(hub_path, file_path, validations_cfg_path = NULL)
+validate_model_metadata(
+  hub_path,
+  file_path,
+  round_id = "default",
+  validations_cfg_path = NULL
+)
 }
 \arguments{
 \item{hub_path}{Either a character string path to a local Modeling Hub directory
@@ -19,6 +24,8 @@ files within the \code{hub-config} directory.}
 
 \item{file_path}{character string. Path to the file being validated relative to
 the hub's model-output directory.}
+
+\item{round_id}{character string. The round identifier. Used primarily to indicate whether the "default" or a round specific configuration should be used for custom validations.}
 
 \item{validations_cfg_path}{Path to \code{validations.yml} file. If \code{NULL}
 defaults to \code{hub-config/validations.yml}.}

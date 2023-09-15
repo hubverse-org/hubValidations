@@ -1,6 +1,7 @@
 #' Valid properties of a metadata file.
 #'
 #' @inheritParams validate_model_file
+#' @param round_id character string. The round identifier. Used primarily to indicate whether the "default" or a round specific configuration should be used for custom validations.
 #' @return An object of class `hub_validations`. Each named element contains
 #' a `hub_check` class object reflecting the result of a given check. Function
 #' will return early if a check returns an error.
@@ -11,13 +12,10 @@
 #' validate_model_file(hub_path,
 #'   file_path = "team1-goodmodel.yml"
 #' )
-validate_model_metadata <- function(hub_path, file_path,
+validate_model_metadata <- function(hub_path, file_path, round_id = "default",
                                     validations_cfg_path = NULL) {
   checks <- list()
   class(checks) <- c("hub_validations", "list")
-
-  file_meta <- parse_file_name(file_path)
-  round_id <- file_meta$round_id
 
   checks$metadata_schema_exists <- check_metadata_schema_exists(hub_path)
   if (is_error(checks$metadata_schema_exists)) {
@@ -33,7 +31,6 @@ validate_model_metadata <- function(hub_path, file_path,
   }
 
   checks$metadata_file_ext <- check_metadata_file_ext(file_path)
-
   checks$metadata_file_location <- check_metadata_file_location(file_path)
   if (is_error(checks$metadata_file_location) ||
       is_error(checks$metadata_file_ext)) {
