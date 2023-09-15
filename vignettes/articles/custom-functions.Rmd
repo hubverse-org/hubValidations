@@ -39,21 +39,22 @@ Within the default configuration, individual checks can be configured for each o
 Note that each of the `validate_*()` functions contain a standard objects in their call environment which are passed automatically to any custom check function and therefore do not need including in the `args` configuration. 
 
 - **`validate_model_file`:**
-  - `file_path`
-  - `hub_path`
-  - `round_id`
-  - `file_meta`
+  - `file_path`: character string of path to file being validated relative to the `model-output` directory.
+  - `hub_path`: character string of path to hub.
+  - `round_id`: character string of `round_id`
+  - `file_meta`: named list containing `round_id`, `team_abbr`, `model_abbr` and `model_id` details.
 - **`validate_model_data`:** 
-  - `tbl`
-  - `file_path`
-  - `hub_path`
-  - `round_id`
-  - `file_meta`
-  - `round_id_col`
-- **`validate_model_data`:** 
-  - `file_path`
-  - `hub_path`
-  - `round_id`
+  - `tbl`: a tibble of the model output data being validated.
+  - `file_path`: character string of path to file being validated relative to the `model-output` directory.
+  - `hub_path`: character string of path to hub.
+  - `round_id`: character string of `round_id`
+  - `file_meta`: named list containing `round_id`, `team_abbr`, `model_abbr` and `model_id` details.
+  - `round_id_col`: character string of name of `tbl` column containing `round_id` information.
+- **`validate_model_metadata`:** 
+  - `file_path`: character string of path to file being validated relative to the `model-output` directory.
+  - `hub_path`: character string of path to hub.
+  - `round_id`: character string of `round_id`
+  - `file_meta`: named list containing `round_id`, `team_abbr`, `model_abbr` and `model_id` details.
 
 The `args` configuration can be used to override objects from the caller environment.
 
