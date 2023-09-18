@@ -1,4 +1,4 @@
-#' Valid properties of a model output file.
+#' Valid file level properties of a submitted model output file.
 #'
 #' @inheritParams check_tbl_colnames
 #' @param validations_cfg_path Path to `validations.yml` file. If `NULL`
@@ -56,7 +56,7 @@ validate_model_file <- function(hub_path, file_path,
   if (is_error(checks$file_format)) {
     return(checks)
   }
-  
+
   checks$metadata_exists <- check_submission_metadata_file_exists(
     hub_path = hub_path,
     file_path = file_path

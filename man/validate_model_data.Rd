@@ -2,7 +2,7 @@
 % Please edit documentation in R/validate_model_data.R
 \name{validate_model_data}
 \alias{validate_model_data}
-\title{Validate a submitted model data file}
+\title{Validate the contents of a submitted model data file}
 \usage{
 validate_model_data(
   hub_path,
@@ -38,7 +38,7 @@ a \code{hub_check} class object reflecting the result of a given check. Function
 will return early if a check returns an error.
 }
 \description{
-Validate a submitted model data file
+Validate the contents of a submitted model data file
 }
 \examples{
 hub_path <- system.file("testhubs/simple", package = "hubValidations")
