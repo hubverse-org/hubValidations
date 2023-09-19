@@ -115,7 +115,7 @@ validation configurations that will be executed regardless of round
 ID.</p>
 <p>Within the default configuration, individual checks can be configured
 for each of the 3 validation functions run as part of
-<code>validate_submission()</code>, using the following structure for
+<code><a href="../reference/validate_submission.html">validate_submission()</a></code>, using the following structure for
 each validation function:</p>
 <ul>
 <li>
@@ -159,29 +159,62 @@ including in the <code>args</code> configuration.</p>
 <li>
 <strong><code>validate_model_file</code>:</strong>
 <ul>
-<li><code>file_path</code></li>
-<li><code>hub_path</code></li>
-<li><code>round_id</code></li>
-<li><code>file_meta</code></li>
+<li>
+<code>file_path</code>: character string of path to file being
+validated relative to the <code>model-output</code> directory.</li>
+<li>
+<code>hub_path</code>: character string of path to hub.</li>
+<li>
+<code>round_id</code>: character string of
+<code>round_id</code>
+</li>
+<li>
+<code>file_meta</code>: named list containing <code>round_id</code>,
+<code>team_abbr</code>, <code>model_abbr</code> and
+<code>model_id</code> details.</li>
 </ul>
 </li>
 <li>
 <strong><code>validate_model_data</code>:</strong>
 <ul>
-<li><code>tbl</code></li>
-<li><code>file_path</code></li>
-<li><code>hub_path</code></li>
-<li><code>round_id</code></li>
-<li><code>file_meta</code></li>
-<li><code>round_id_col</code></li>
+<li>
+<code>tbl</code>: a tibble of the model output data being
+validated.</li>
+<li>
+<code>file_path</code>: character string of path to file being
+validated relative to the <code>model-output</code> directory.</li>
+<li>
+<code>hub_path</code>: character string of path to hub.</li>
+<li>
+<code>round_id</code>: character string of
+<code>round_id</code>
+</li>
+<li>
+<code>file_meta</code>: named list containing <code>round_id</code>,
+<code>team_abbr</code>, <code>model_abbr</code> and
+<code>model_id</code> details.</li>
+<li>
+<code>round_id_col</code>: character string of name of
+<code>tbl</code> column containing <code>round_id</code>
+information.</li>
 </ul>
 </li>
 <li>
-<strong><code>validate_model_data</code>:</strong>
+<strong><code>validate_model_metadata</code>:</strong>
 <ul>
-<li><code>file_path</code></li>
-<li><code>hub_path</code></li>
-<li><code>round_id</code></li>
+<li>
+<code>file_path</code>: character string of path to file being
+validated relative to the <code>model-output</code> directory.</li>
+<li>
+<code>hub_path</code>: character string of path to hub.</li>
+<li>
+<code>round_id</code>: character string of
+<code>round_id</code>
+</li>
+<li>
+<code>file_meta</code>: named list containing <code>round_id</code>,
+<code>team_abbr</code>, <code>model_abbr</code> and
+<code>model_id</code> details.</li>
 </ul>
 </li>
 </ul>

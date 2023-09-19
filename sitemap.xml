@@ -61,6 +61,27 @@
     <loc>https://infectious-disease-modeling-hubs.github.io/hubValidations/reference/check_file_read.html</loc>
   </url>
   <url>
+    <loc>https://infectious-disease-modeling-hubs.github.io/hubValidations/reference/check_metadata_file_exists.html</loc>
+  </url>
+  <url>
+    <loc>https://infectious-disease-modeling-hubs.github.io/hubValidations/reference/check_metadata_file_ext.html</loc>
+  </url>
+  <url>
+    <loc>https://infectious-disease-modeling-hubs.github.io/hubValidations/reference/check_metadata_file_location.html</loc>
+  </url>
+  <url>
+    <loc>https://infectious-disease-modeling-hubs.github.io/hubValidations/reference/check_metadata_file_name.html</loc>
+  </url>
+  <url>
+    <loc>https://infectious-disease-modeling-hubs.github.io/hubValidations/reference/check_metadata_matches_schema.html</loc>
+  </url>
+  <url>
+    <loc>https://infectious-disease-modeling-hubs.github.io/hubValidations/reference/check_metadata_schema_exists.html</loc>
+  </url>
+  <url>
+    <loc>https://infectious-disease-modeling-hubs.github.io/hubValidations/reference/check_submission_metadata_file_exists.html</loc>
+  </url>
+  <url>
     <loc>https://infectious-disease-modeling-hubs.github.io/hubValidations/reference/check_tbl_col_types.html</loc>
   </url>
   <url>
@@ -113,5 +134,11 @@
   </url>
   <url>
     <loc>https://infectious-disease-modeling-hubs.github.io/hubValidations/reference/validate_model_file.html</loc>
+  </url>
+  <url>
+    <loc>https://infectious-disease-modeling-hubs.github.io/hubValidations/reference/validate_model_metadata.html</loc>
+  </url>
+  <url>
+    <loc>https://infectious-disease-modeling-hubs.github.io/hubValidations/reference/validate_submission.html</loc>
   </url>
 </urlset>
