@@ -2,7 +2,7 @@
 % Please edit documentation in R/validate_model_file.R
 \name{validate_model_file}
 \alias{validate_model_file}
-\title{Valid properties of a file.}
+\title{Valid file level properties of a submitted model output file.}
 \usage{
 validate_model_file(hub_path, file_path, validations_cfg_path = NULL)
 }
@@ -29,7 +29,7 @@ a \code{hub_check} class object reflecting the result of a given check. Function
 will return early if a check returns an error.
 }
 \description{
-Valid properties of a file.
+Valid file level properties of a submitted model output file.
 }
 \examples{
 hub_path <- system.file("testhubs/simple", package = "hubValidations")

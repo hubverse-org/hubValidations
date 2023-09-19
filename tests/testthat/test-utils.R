@@ -122,3 +122,47 @@ test_that("get_file_* utils work", {
     )
 
 })
+
+test_that("get_metadata_file_name works", {
+  expect_equal(
+    get_metadata_file_name(
+      hub_path = system.file("testhubs/simple", package = "hubValidations"),
+      file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv",
+    ),
+    fs::path("team1-goodmodel.yml")
+  )
+
+  expect_equal(
+    get_metadata_file_name(
+      hub_path = system.file("testhubs/simple", package = "hubValidations"),
+      file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv",
+      ext = "yaml"
+    ),
+    fs::path("team1-goodmodel.yaml")
+  )
+
+  expect_equal(
+    get_metadata_file_name(
+      hub_path = system.file("testhubs/simple", package = "hubValidations"),
+      file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv",
+      ext = "auto"
+    ),
+    fs::path("team1-goodmodel.yaml")
+  )
+
+  expect_error(
+    get_metadata_file_name(
+      hub_path = system.file("testhubs/simple", package = "hubValidations"),
+      file_path = "team1-goodmodel/2022-10-08-random-goodmodel.csv",
+      ext = "auto"
+    )
+  )
+
+  expect_error(
+    get_metadata_file_name(
+      hub_path = system.file("testhubs/simple", package = "hubValidations"),
+      file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv",
+      ext = "random_extension"
+    )
+  )
+})

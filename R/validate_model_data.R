@@ -1,4 +1,4 @@
-#' Validate a submitted model data file
+#' Validate the contents of a submitted model data file
 #'
 #' @inheritParams check_tbl_unique_round_id
 #' @inheritParams validate_model_file

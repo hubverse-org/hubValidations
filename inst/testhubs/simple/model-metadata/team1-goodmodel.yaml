@@ -17,7 +17,7 @@ model_contributors: [
 website_url: "https://team1goodmodel.website"
 license: "cc-by-4.0"
 include_viz: true
-include_ensemble: true
+include_ensemble: truer
 include_eval: true
 models_details: [
     methods: "this the method description of the model.",
