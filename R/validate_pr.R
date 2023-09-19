@@ -37,12 +37,12 @@ validate_pr <- function(hub_path = ".", gh_repo, pr_number) {
                                                      model_metadata_dir)
             validations <- c(
                 validations,
-                purrr::map(purrr::set_names(model_output_files),
+                purrr::map(model_output_files,
                            ~validate_submission(hub_path, file_path = .x)
-                ),
+                ) %>% purrr::list_flatten(),
                 purrr::map(model_metadata_files,
                            ~validate_model_metadata(hub_path, file_path = .x)
-                )
+                ) %>% purrr::list_flatten()
             )
     },
     error = function(e) {
