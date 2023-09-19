@@ -16,7 +16,8 @@ test_that("validate_submission works", {
     c("hub_validations", "list")
   )
 
-  # File with validation error
+  # File with validation error ----
+  # Missing file
   expect_snapshot(
     str(
       validate_submission(hub_path,
@@ -30,6 +31,22 @@ test_that("validate_submission works", {
     ),
     c("hub_validations", "list")
   )
+
+  # Wrong submission location & missing data column (age_group)
+  expect_snapshot(
+    str(
+      validate_submission(hub_path,
+                          file_path = "team1-goodmodel/2022-10-15-hub-baseline.csv"
+      )
+    )
+  )
+  expect_s3_class(
+    validate_submission(hub_path,
+                        file_path = "team1-goodmodel/2022-10-15-hub-baseline.csv"
+    ),
+    c("hub_validations", "list")
+  )
+
 
   expect_snapshot(
     str(

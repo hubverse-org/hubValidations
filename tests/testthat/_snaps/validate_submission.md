@@ -134,6 +134,75 @@
 ---
 
     Code
+      str(validate_submission(hub_path, file_path = "team1-goodmodel/2022-10-15-hub-baseline.csv"))
+    Output
+      Classes 'hub_validations', 'list'  hidden list of 10
+       $ file_exists       :List of 4
+        ..$ message       : chr "File exists at path 'model-output/team1-goodmodel/2022-10-15-hub-baseline.csv'. \n "
+        ..$ where         : chr "team1-goodmodel/2022-10-15-hub-baseline.csv"
+        ..$ call          : chr "check_file_exists"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ file_name         :List of 4
+        ..$ message       : chr "File name \"2022-10-15-hub-baseline.csv\" is valid. \n "
+        ..$ where         : chr "team1-goodmodel/2022-10-15-hub-baseline.csv"
+        ..$ call          : chr "check_file_name"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ file_location     :List of 4
+        ..$ message       : chr "File directory name must match `model_id`\n                                           metadata in file name. \n"| __truncated__
+        ..$ where         : chr "team1-goodmodel/2022-10-15-hub-baseline.csv"
+        ..$ call          : chr "check_file_location"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_warning" "warning" ...
+       $ round_id_valid    :List of 4
+        ..$ message       : chr "`round_id` is valid. \n "
+        ..$ where         : chr "team1-goodmodel/2022-10-15-hub-baseline.csv"
+        ..$ call          : chr "check_valid_round_id"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ file_format       :List of 4
+        ..$ message       : chr "File is accepted hub format. \n "
+        ..$ where         : chr "team1-goodmodel/2022-10-15-hub-baseline.csv"
+        ..$ call          : chr "check_file_format"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ metadata_exists   :List of 4
+        ..$ message       : chr "Metadata file exists at path 'model-metadata/hub-baseline.yml'. \n "
+        ..$ where         : chr "team1-goodmodel/2022-10-15-hub-baseline.csv"
+        ..$ call          : chr "check_submission_metadata_file_exists"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ file_read         :List of 4
+        ..$ message       : chr "File could be read successfully. \n "
+        ..$ where         : chr "team1-goodmodel/2022-10-15-hub-baseline.csv"
+        ..$ call          : chr "check_file_read"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ valid_round_id_col:List of 4
+        ..$ message       : chr "`round_id_col` name is valid. \n "
+        ..$ where         : chr "team1-goodmodel/2022-10-15-hub-baseline.csv"
+        ..$ call          : chr "check_valid_round_id_col"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ unique_round_id   :List of 4
+        ..$ message       : chr "`round_id` column \"origin_date\" contains a single, unique round ID value. \n "
+        ..$ where         : chr "team1-goodmodel/2022-10-15-hub-baseline.csv"
+        ..$ call          : chr "check_tbl_unique_round_id"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ colnames          :List of 6
+        ..$ message       : chr "Column names must be consistent with expected round task IDs and std column names. \n Expected column \"age_gro"| __truncated__
+        ..$ trace         : NULL
+        ..$ parent        : NULL
+        ..$ where         : chr "team1-goodmodel/2022-10-15-hub-baseline.csv"
+        ..$ call          : chr "check_tbl_colnames"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_error" "hub_check" "rlang_error" "error" ...
+
+---
+
+    Code
       str(validate_submission(hub_path, file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv",
         round_id_col = "random_col"))
     Output
