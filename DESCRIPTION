@@ -31,6 +31,7 @@ Imports:
     config,
     dplyr,
     fs,
+    gh,
     hubUtils (>= 0.0.0.9014),
     jsonlite,
     jsonvalidate,
