@@ -28,17 +28,18 @@ print.hub_validations <- function(x, ...) {
 
 }
 
-#' @export
-combine <- function(...) {
-    UseMethod("combine")
-
-}
 
 #' Concatenate `hub_validations` S3 class objects
 #'
 #' @param ... `hub_validations` S3 class objects to be concatenated.
 #' @return a `hub_validations` S3 class object.
 #'
+#' @export
+combine <- function(...) {
+    UseMethod("combine")
+
+}
+
 #' @export
 combine.hub_validations <- function(...) {
     structure(c(...),
