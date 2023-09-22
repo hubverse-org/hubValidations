@@ -21,6 +21,7 @@ validate_pr <- function(hub_path = ".", gh_repo, pr_number) {
     model_metadata_dir <- "model-metadata"
 
     validations <- list()
+    class(validations) <- c("hub_validations", "list")
 
     tryCatch({
 
@@ -57,8 +58,8 @@ validate_pr <- function(hub_path = ".", gh_repo, pr_number) {
         validations <<- c(validations, list(e))
     })
 
-    class(validations) <- c("hub_validations", "list")
-    return(validations)
+    val_submission_time <- validate_submission_time(hub_path, file_path)
+    return(combine(validations, val_submission_time))
 }
 
 get_pr_dir_files <- function(pr_filenames, dir_name) {
