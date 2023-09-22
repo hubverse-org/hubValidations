@@ -3,7 +3,7 @@
     Code
       str(validate_submission(hub_path, file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv"))
     Output
-      List of 17
+      List of 18
        $ file_exists       :List of 4
         ..$ message       : chr "File exists at path 'model-output/team1-goodmodel/2022-10-08-team1-goodmodel.csv'. \n "
         ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
@@ -56,6 +56,12 @@
         ..$ message       : chr "`round_id` column \"origin_date\" contains a single, unique round ID value. \n "
         ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
         ..$ call          : chr "check_tbl_unique_round_id"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ match_round_id    :List of 4
+        ..$ message       : chr "All `round_id_col` \"origin_date\" values match submission `round_id` from file name. \n "
+        ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+        ..$ call          : chr "check_tbl_match_round_id"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ colnames          :List of 4
@@ -191,12 +197,12 @@
         ..$ call          : chr "check_tbl_unique_round_id"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ colnames          :List of 6
-        ..$ message       : chr "Column names must be consistent with expected round task IDs and std column names. \n Expected column \"age_gro"| __truncated__
+       $ match_round_id    :List of 6
+        ..$ message       : chr "All `round_id_col` \"origin_date\" values must match submission `round_id` from file name. \n `round_id` \n    "| __truncated__
         ..$ trace         : NULL
         ..$ parent        : NULL
         ..$ where         : chr "team1-goodmodel/2022-10-15-hub-baseline.csv"
-        ..$ call          : chr "check_tbl_colnames"
+        ..$ call          : chr "check_tbl_match_round_id"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_error" "hub_check" "rlang_error" "error" ...
 

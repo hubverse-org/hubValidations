@@ -54,6 +54,16 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
     return(checks)
   }
 
+  checks$match_round_id <- check_tbl_match_round_id(
+    tbl,
+    round_id_col = round_id_col,
+    file_path = file_path,
+    hub_path = hub_path
+  )
+  if (is_error(checks$match_round_id)) {
+    return(checks)
+  }
+
   # -- Column level checks ----
   checks$colnames <- check_tbl_colnames(
     tbl,
