@@ -123,8 +123,6 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
   custom_checks <- execute_custom_checks(
     validations_cfg_path = validations_cfg_path
   )
-  checks <- c(checks, custom_checks)
-  class(checks) <- c("hub_validations", "list")
 
-  checks
+  combine(checks, custom_checks)
 }

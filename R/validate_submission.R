@@ -28,8 +28,6 @@ validate_submission <- function(hub_path, file_path, round_id_col = NULL,
     validations_cfg_path = validations_cfg_path
   )
 
-  checks <- c(checks_file, checks_data)
-  class(checks) <- c("hub_validations", "list")
+  combine(checks_file, checks_data)
 
-  checks
 }
