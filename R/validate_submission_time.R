@@ -15,7 +15,8 @@ validate_submission_time <- function(hub_path, file_path) {
     check_submission_time(
       file_path = file_path,
       hub_path = hub_path
-    )
+    ),
+    file_path = file_path
   )
   checks
 }
