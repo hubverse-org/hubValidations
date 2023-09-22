@@ -1,12 +1,13 @@
 #' Wrap check expression to capture check execution errors
 #'
 #' @param expr check function expression to run.
+#' @inheritParams check_tbl_colnames
 #'
 #' @return If `expr` executes correctly, the output of `expr` is returned. If
 # ' execution fails, and object of class `<error/check_exec_error>` is returned.
 #'  The execution error message is attached as attribute `msg`.
 #' @export
-try_check <- function(expr) {
+try_check <- function(expr, file_path) {
   check <- try(expr, silent = TRUE)
   if (inherits(check, "try-error")) {
     return(

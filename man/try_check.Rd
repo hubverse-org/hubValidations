@@ -4,10 +4,13 @@
 \alias{try_check}
 \title{Wrap check expression to capture check execution errors}
 \usage{
-try_check(expr)
+try_check(expr, file_path)
 }
 \arguments{
 \item{expr}{check function expression to run.}
+
+\item{file_path}{character string. Path to the file being validated relative to
+the hub's model-output directory.}
 }
 \value{
 If \code{expr} executes correctly, the output of \code{expr} is returned. If
