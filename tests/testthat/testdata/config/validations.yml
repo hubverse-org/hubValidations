@@ -1,7 +1,7 @@
 default:
     test_custom_checks_caller:
       col_timediff:
-        fn: "cfg_check_tbl_col_timediff"
+        fn: "opt_check_tbl_col_timediff"
         pkg: "hubValidations"
         args:
           t0_colname: "forecast_date"

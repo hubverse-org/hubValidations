@@ -6,7 +6,7 @@
 #' @inherit check_tbl_colnames params
 #' @inherit check_tbl_col_types return
 #' @export
-cfg_check_tbl_col_timediff <- function(tbl, file_path, hub_path,
+opt_check_tbl_col_timediff <- function(tbl, file_path, hub_path,
                                        t0_colname, t1_colname,
                                        timediff = lubridate::weeks(2)) {
 
