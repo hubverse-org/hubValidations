@@ -3,6 +3,8 @@
 #' of the file.
 #'
 #' @inherit validate_model_data return params
+#' @param skip_submit_window_check Logical. Whether to skip the submission window
+#'  check.
 #' @export
 #'
 #' @examples
@@ -10,7 +12,15 @@
 #' file_path <- "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
 #' validate_submission(hub_path, file_path)
 validate_submission <- function(hub_path, file_path, round_id_col = NULL,
-                                validations_cfg_path = NULL) {
+                                validations_cfg_path = NULL,
+                                skip_submit_window_check = FALSE) {
+
+  if (skip_submit_window_check) {
+    checks_submission_time <- NULL
+  } else {
+    checks_submission_time <- validate_submission_time(hub_path, file_path)
+  }
+
   checks_file <- validate_model_file(
     hub_path = hub_path,
     file_path = file_path,
@@ -18,7 +28,9 @@ validate_submission <- function(hub_path, file_path, round_id_col = NULL,
   )
 
   if (any(purrr::map_lgl(checks_file, ~ is_error(.x)))) {
-    return(checks_file)
+    return(
+      combine(checks_file, checks_submission_time)
+    )
   }
 
   checks_data <- validate_model_data(
@@ -28,6 +40,5 @@ validate_submission <- function(hub_path, file_path, round_id_col = NULL,
     validations_cfg_path = validations_cfg_path
   )
 
-  combine(checks_file, checks_data)
-
+  combine(checks_file, checks_data, checks_submission_time)
 }

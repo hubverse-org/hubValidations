@@ -5,13 +5,15 @@ test_that("validate_submission works", {
   expect_snapshot(
     str(
       validate_submission(hub_path,
-        file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+        file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv",
+        skip_submit_window_check = TRUE
       )
     )
   )
   expect_s3_class(
     validate_submission(hub_path,
-      file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+      file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv",
+      skip_submit_window_check = TRUE
     ),
     c("hub_validations", "list")
   )
@@ -21,13 +23,15 @@ test_that("validate_submission works", {
   expect_snapshot(
     str(
       validate_submission(hub_path,
-        file_path = "team1-goodmodel/2022-10-15-team1-goodmodel.csv"
+        file_path = "team1-goodmodel/2022-10-15-team1-goodmodel.csv",
+        skip_submit_window_check = TRUE
       )
     )
   )
   expect_s3_class(
     validate_submission(hub_path,
-      file_path = "team1-goodmodel/2022-10-15-team1-goodmodel.csv"
+      file_path = "team1-goodmodel/2022-10-15-team1-goodmodel.csv",
+      skip_submit_window_check = TRUE
     ),
     c("hub_validations", "list")
   )
@@ -36,13 +40,15 @@ test_that("validate_submission works", {
   expect_snapshot(
     str(
       validate_submission(hub_path,
-                          file_path = "team1-goodmodel/2022-10-15-hub-baseline.csv"
+        file_path = "team1-goodmodel/2022-10-15-hub-baseline.csv",
+        skip_submit_window_check = TRUE
       )
     )
   )
   expect_s3_class(
     validate_submission(hub_path,
-                        file_path = "team1-goodmodel/2022-10-15-hub-baseline.csv"
+      file_path = "team1-goodmodel/2022-10-15-hub-baseline.csv",
+      skip_submit_window_check = TRUE
     ),
     c("hub_validations", "list")
   )
@@ -53,8 +59,45 @@ test_that("validate_submission works", {
       validate_submission(
         hub_path,
         file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv",
-        round_id_col = "random_col"
+        round_id_col = "random_col",
+        skip_submit_window_check = TRUE
       )
+    )
+  )
+})
+
+test_that("validate_submission submission within window works", {
+  hub_path <- system.file("testhubs/simple", package = "hubValidations")
+
+  mockery::stub(
+    check_submission_time,
+    "Sys.time",
+    lubridate::as_datetime("2022-10-08 18:01:00 EEST"),
+    2
+  )
+  expect_snapshot(
+    str(
+      validate_submission(hub_path,
+                          file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+      )[["submission_time"]]
+    )
+  )
+})
+
+test_that("validate_submission submission outside window fails correctly", {
+  hub_path <- system.file("testhubs/simple", package = "hubValidations")
+
+  mockery::stub(
+    check_submission_time,
+    "Sys.time",
+    lubridate::as_datetime("2023-10-08 18:01:00 EEST"),
+    2
+  )
+  expect_snapshot(
+    str(
+      validate_submission(hub_path,
+                          file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+      )[["submission_time"]]
     )
   )
 })

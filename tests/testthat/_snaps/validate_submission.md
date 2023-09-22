@@ -1,7 +1,8 @@
 # validate_submission works
 
     Code
-      str(validate_submission(hub_path, file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv"))
+      str(validate_submission(hub_path, file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv",
+        skip_submit_window_check = TRUE))
     Output
       List of 18
        $ file_exists       :List of 4
@@ -125,7 +126,8 @@
 ---
 
     Code
-      str(validate_submission(hub_path, file_path = "team1-goodmodel/2022-10-15-team1-goodmodel.csv"))
+      str(validate_submission(hub_path, file_path = "team1-goodmodel/2022-10-15-team1-goodmodel.csv",
+        skip_submit_window_check = TRUE))
     Output
       Classes 'hub_validations', 'list'  hidden list of 1
        $ file_exists:List of 6
@@ -140,7 +142,8 @@
 ---
 
     Code
-      str(validate_submission(hub_path, file_path = "team1-goodmodel/2022-10-15-hub-baseline.csv"))
+      str(validate_submission(hub_path, file_path = "team1-goodmodel/2022-10-15-hub-baseline.csv",
+        skip_submit_window_check = TRUE))
     Output
       Classes 'hub_validations', 'list'  hidden list of 10
        $ file_exists       :List of 4
@@ -210,7 +213,7 @@
 
     Code
       str(validate_submission(hub_path, file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv",
-        round_id_col = "random_col"))
+        round_id_col = "random_col", skip_submit_window_check = TRUE))
     Output
       List of 9
        $ file_exists       :List of 4
@@ -268,4 +271,30 @@
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_error" "hub_check" "rlang_warning" "warning" ...
        - attr(*, "class")= chr [1:2] "hub_validations" "list"
+
+# validate_submission submission within window works
+
+    Code
+      str(validate_submission(hub_path, file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv")[[
+        "submission_time"]])
+    Output
+      List of 4
+       $ message       : chr "Submission time is within accepted submission window for round. \n "
+       $ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+       $ call          : chr "check_submission_time"
+       $ use_cli_format: logi TRUE
+       - attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+
+# validate_submission submission outside window fails correctly
+
+    Code
+      str(validate_submission(hub_path, file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv")[[
+        "submission_time"]])
+    Output
+      List of 4
+       $ message       : chr "Submission time must be within accepted submission window for round. \n Current time 2023-10-08 18:01:00 is out"| __truncated__
+       $ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+       $ call          : chr "check_submission_time"
+       $ use_cli_format: logi TRUE
+       - attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_warning" "warning" ...
 
