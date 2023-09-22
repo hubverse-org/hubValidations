@@ -1,9 +1,7 @@
 # check_tbl_unique_round_id works
 
     Code
-      check_tbl_unique_round_id(tbl = arrow::read_csv_arrow(system.file(
-        "files/2022-10-15-team1-goodmodel.csv", package = "hubValidations")),
-      file_path = file_path, hub_path = hub_path)
+      check_tbl_unique_round_id(tbl = tbl, file_path = file_path, hub_path = hub_path)
     Output
       <message/check_success>
       Message:
@@ -12,9 +10,8 @@
 ---
 
     Code
-      check_tbl_unique_round_id(tbl = arrow::read_csv_arrow(system.file(
-        "files/2022-10-15-team1-goodmodel.csv", package = "hubValidations")),
-      file_path = file_path, hub_path = hub_path, round_id_col = "origin_date")
+      check_tbl_unique_round_id(tbl = tbl, file_path = file_path, hub_path = hub_path,
+        round_id_col = "origin_date")
     Output
       <message/check_success>
       Message:
@@ -23,9 +20,8 @@
 ---
 
     Code
-      str(check_tbl_unique_round_id(tbl = arrow::read_csv_arrow(system.file(
-        "files/2022-10-15-team1-goodmodel.csv", package = "hubValidations")),
-      round_id_col = "origin_date", file_path = file_path, hub_path = hub_path))
+      str(check_tbl_unique_round_id(tbl = tbl, round_id_col = "origin_date",
+        file_path = file_path, hub_path = hub_path))
     Output
       List of 4
        $ message       : chr "`round_id` column \"origin_date\" contains a single, unique round ID value. \n "
