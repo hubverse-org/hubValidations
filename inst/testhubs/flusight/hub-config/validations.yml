@@ -1,9 +1,10 @@
 default:
     validate_model_data:
-      col_timediff:
-        fn: "opt_check_tbl_col_timediff"
+      horizon_timediff:
+        fn: "opt_check_tbl_horizon_timediff"
         pkg: "hubValidations"
         args:
           t0_colname: "forecast_date"
           t1_colname: "target_end_date"
-          timediff: !expr lubridate::weeks(2)
+          horizon_colname: "horizon"
+          timediff: !expr lubridate::weeks()

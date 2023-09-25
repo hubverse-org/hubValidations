@@ -56,20 +56,35 @@ Note that each of the `validate_*()` functions contain a standard objects in the
   - `round_id`: character string of `round_id`
   - `file_meta`: named list containing `round_id`, `team_abbr`, `model_abbr` and `model_id` details.
 
-The `args` configuration can be used to override objects from the caller environment.
+The `args` configuration can be used to override objects from the caller environment as well as defaults.
 
 
-Here's an example configuration for a single check (`opt_check_tbl_col_timediff()`) to be run as part of the `validate_model_data()` validation function which checks the content of the model data submission files.
+Here's an example configuration for a single check (`opt_check_tbl_horizon_timediff()`) to be run as part of the `validate_model_data()` validation function which checks the content of the model data submission files.
 
 ```{r, eval=FALSE, code=readLines(system.file('testhubs/flusight/hub-config/validations.yml', package = 'hubValidations'))}
 
+```
+
+The above configuration file relies on default values for arguments `horizon_colname` (`"horizon"`) and `timediff` (`lubridate::weeks()`). We can use the `validation.yml` `args` list to override the default values. Here's an example that includes **executable r code** as the value of an argument.
+
+```
+default:
+    validate_model_data:
+      horizon_timediff:
+        fn: "opt_check_tbl_horizon_timediff"
+        pkg: "hubValidations"
+        args:
+          t0_colname: "forecast_date"
+          t1_colname: "target_end_date"
+          horizon_colname: "horizons"
+          timediff: !expr lubridate::weeks(2)
 ```
 
 ### Round specific configuration
 
 Additional round specific configurations can be included in `validation.yml` that can add to or override default configurations.
 
-For example, in the following `validation.yml`, if the file being validated is being submitted to a round with round ID `"2023-08-15"`, default `col_timediff` check configuration will be overiden by the `2023-08-15` configuration.
+For example, in the following `validation.yml` which deploys the `opt_check_tbl_col_timediff()` optional check, if the file being validated is being submitted to a round with round ID `"2023-08-15"`, default `col_timediff` check configuration will be overridden by the `2023-08-15` configuration.
 
 ```yml
 default:
@@ -80,7 +95,6 @@ default:
         args:
           t0_colname: "forecast_date"
           t1_colname: "target_end_date"
-          timediff: !expr lubridate::weeks(2)
 
 2023-08-15:
     validate_model_data:

@@ -218,22 +218,22 @@
 # validate_model_data with config function works
 
     Code
-      validate_model_data(hub_path, file_path)[["col_timediff"]]
+      validate_model_data(hub_path, file_path)[["horizon_timediff"]]
     Output
       <message/check_success>
       Message:
-      Time differences between t0 var `forecast_date` and t1 var `target_end_date` all match expected period of 14d 0H 0M 0S.
+      Time differences between t0 var `forecast_date` and t1 var `target_end_date` all match expected period of 7d 0H 0M 0S * `horizon`.
 
 ---
 
     Code
       validate_model_data(hub_path, file_path, validations_cfg_path = system.file(
         "testhubs/flusight/hub-config/validations.yml", package = "hubValidations"))[[
-        "col_timediff"]]
+        "horizon_timediff"]]
     Output
       <message/check_success>
       Message:
-      Time differences between t0 var `forecast_date` and t1 var `target_end_date` all match expected period of 14d 0H 0M 0S.
+      Time differences between t0 var `forecast_date` and t1 var `target_end_date` all match expected period of 7d 0H 0M 0S * `horizon`.
 
 # validate_model_data print method work [plain]
 
