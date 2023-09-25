@@ -2,6 +2,8 @@ test_that("opt_check_tbl_col_timediff works", {
   hub_path <- system.file("testhubs/flusight", package = "hubValidations")
   file_path <- "hub-ensemble/2023-05-08-hub-ensemble.parquet"
   tbl <- hubValidations::read_model_out_file(file_path, hub_path)
+  tbl$target_end_date <- tbl$forecast_date + lubridate::weeks(2)
+
 
   expect_snapshot(
     opt_check_tbl_col_timediff(tbl, file_path, hub_path,
@@ -35,6 +37,7 @@ test_that("opt_check_tbl_col_timediff fails correctly", {
   hub_path <- system.file("testhubs/flusight", package = "hubValidations")
   file_path <- "hub-ensemble/2023-05-08-hub-ensemble.parquet"
   tbl <- hubValidations::read_model_out_file(file_path, hub_path)
+  tbl$target_end_date <- tbl$forecast_date + lubridate::weeks(2)
 
   expect_snapshot(
     opt_check_tbl_col_timediff(tbl, file_path, hub_path,
