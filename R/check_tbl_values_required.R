@@ -22,14 +22,13 @@ check_tbl_values_required <- function(tbl, round_id, file_path, hub_path) {
     round_id = round_id,
     required_vals_only = FALSE,
     all_character = TRUE,
-    as_arrow_table = TRUE,
+    as_arrow_table = FALSE,
     bind_model_tasks = FALSE
   )
 
   tbl <- purrr::map(
     full,
-    ~ dplyr::inner_join(.x, tbl, by = names(tbl))[, names(tbl)] %>%
-      tibble::as_tibble()
+    ~ dplyr::inner_join(.x, tbl, by = names(tbl))[, names(tbl)]
   )
 
   missing_df <- purrr::pmap(
@@ -183,7 +182,7 @@ missing_req_rows <- function(opt_cols, x, mask, req, full, split_req = FALSE) {
   # avoids erroneously returning missing required values that are not applicable
   # to a given model task or output type.
   expected_req <- dplyr::inner_join(req,
-    tibble::as_tibble(applicaple_full[, names(req)]),
+    applicaple_full[, names(req)],
     by = names(req)
   ) %>%
     unique()
@@ -200,7 +199,7 @@ missing_req_rows <- function(opt_cols, x, mask, req, full, split_req = FALSE) {
       unique(x[, opt_cols])
     )[, names(x)]
   } else {
-    tibble::as_tibble(full[1, names(x)])[0, ]
+    full[1, names(x)][0, ]
   }
 }
 
