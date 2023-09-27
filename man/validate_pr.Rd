@@ -2,9 +2,16 @@
 % Please edit documentation in R/validate_pr.R
 \name{validate_pr}
 \alias{validate_pr}
-\title{Validate pull request submission}
+\title{Validate Pull Request}
 \usage{
-validate_pr(hub_path = ".", gh_repo, pr_number)
+validate_pr(
+  hub_path = ".",
+  gh_repo,
+  pr_number,
+  round_id_col = NULL,
+  validations_cfg_path = NULL,
+  skip_submit_window_check = FALSE
+)
 }
 \arguments{
 \item{hub_path}{Either a character string path to a local Modeling Hub directory
@@ -20,12 +27,23 @@ files within the \code{hub-config} directory.}
 \item{gh_repo}{GitHub repository address in the format \code{username/repo}}
 
 \item{pr_number}{Number of the pull request to validate}
+
+\item{round_id_col}{Character string. The name of the column containing
+\code{round_id}s. Only required if files contain a column that contains \code{round_id}
+details but has not been configured via \code{round_id_from_variable: true} and
+\verb{round_id:} in in hub \code{tasks.json} config file.}
+
+\item{validations_cfg_path}{Path to \code{validations.yml} file. If \code{NULL}
+defaults to \code{hub-config/validations.yml}.}
+
+\item{skip_submit_window_check}{Logical. Whether to skip the submission window
+check.}
 }
 \value{
 An object of class \code{hub_validations}.
 }
 \description{
-Validate pull request submission
+Validate Pull Request
 }
 \examples{
 \dontrun{

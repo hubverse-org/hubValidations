@@ -1,8 +1,13 @@
-#' Validate pull request submission
+#' Validate Pull Request
 #'
 #' @param gh_repo GitHub repository address in the format `username/repo`
 #' @param pr_number Number of the pull request to validate
+#' @param round_id_col Character string. The name of the column containing
+#' `round_id`s. Only required if files contain a column that contains `round_id`
+#' details but has not been configured via `round_id_from_variable: true` and
+#' `round_id:` in in hub `tasks.json` config file.
 #' @inheritParams validate_model_file
+#' @inheritParams validate_submission
 #'
 #' @return An object of class `hub_validations`.
 #'
@@ -16,12 +21,13 @@
 #'   pr_number = 3
 #' )
 #' }
-validate_pr <- function(hub_path = ".", gh_repo, pr_number) {
+validate_pr <- function(hub_path = ".", gh_repo, pr_number,
+                        round_id_col = NULL, validations_cfg_path = NULL,
+                        skip_submit_window_check = FALSE) {
     model_output_dir <- get_hub_model_output_dir(hub_path)
     model_metadata_dir <- "model-metadata"
 
     validations <- list()
-    class(validations) <- c("hub_validations", "list")
 
     tryCatch({
 
@@ -39,10 +45,15 @@ validate_pr <- function(hub_path = ".", gh_repo, pr_number) {
             validations <- c(
                 validations,
                 purrr::map(model_output_files,
-                           ~validate_submission(hub_path, file_path = .x)
+                           ~validate_submission(
+                               hub_path, file_path = .x,
+                               validations_cfg_path = validations_cfg_path,
+                               skip_submit_window_check = skip_submit_window_check)
                 ) %>% purrr::list_flatten(),
                 purrr::map(model_metadata_files,
-                           ~validate_model_metadata(hub_path, file_path = .x)
+                           ~validate_model_metadata(
+                               hub_path, file_path = .x,
+                               validations_cfg_path = validations_cfg_path)
                 ) %>% purrr::list_flatten()
             )
     },
@@ -58,6 +69,7 @@ validate_pr <- function(hub_path = ".", gh_repo, pr_number) {
         validations <<- c(validations, list(e))
     })
 
+    class(validations) <- c("hub_validations", "list")
     return(validations)
 }
 
