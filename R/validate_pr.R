@@ -29,6 +29,12 @@ validate_pr <- function(hub_path = ".", gh_repo, pr_number,
 
     validations <- list()
 
+    validations$valid_config <- check_config_hub_valid(hub_path)
+    if (not_pass(validations$valid_config)) {
+        class(validations) <- c("hub_validations", "list")
+        return(validations)
+    }
+
     tryCatch({
 
             pr_files <- gh::gh(

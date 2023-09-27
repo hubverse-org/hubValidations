@@ -3,7 +3,13 @@
     Code
       str(checks)
     Output
-      List of 18
+      List of 19
+       $ valid_config      :List of 4
+        ..$ message       : chr "All hub config files are valid. \n "
+        ..$ where         : chr "valid_sb_hub"
+        ..$ call          : chr "check_config_hub_valid"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ file_exists       :List of 4
         ..$ message       : chr "File exists at path 'model-output/team1-goodmodel/2022-10-22-team1-goodmodel.csv'. \n "
         ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
@@ -128,7 +134,13 @@
     Code
       str(checks)
     Output
-      Classes 'hub_validations', 'list'  hidden list of 11
+      Classes 'hub_validations', 'list'  hidden list of 12
+       $ valid_config      :List of 4
+        ..$ message       : chr "All hub config files are valid. \n "
+        ..$ where         : chr "invalid_sb_hub"
+        ..$ call          : chr "check_config_hub_valid"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ file_exists       :List of 4
         ..$ message       : chr "File exists at path 'model-output/hub-baseline/2022-10-22-hub-baseline.parquet'. \n "
         ..$ where         : 'fs_path' chr "hub-baseline/2022-10-22-hub-baseline.parquet"
