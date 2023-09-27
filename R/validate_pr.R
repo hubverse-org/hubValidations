@@ -69,6 +69,16 @@ validate_pr <- function(hub_path = ".", gh_repo, pr_number,
         validations <<- c(validations, list(e))
     })
 
+    validated_files <- c(model_output_files, model_metadata_files)
+    if (length(pr_filenames) != length(validated_files)) {
+        validated_idx <- purrr::map_int(validated_files,
+                                        ~grep(.x, pr_files, fixed = TRUE)
+        )
+        cli::cli_inform(
+          "PR contains commits to additional files which have not been checked:
+          {.val {pr_filenames[-validated_idx]}}.")
+    }
+
     class(validations) <- c("hub_validations", "list")
     return(validations)
 }
