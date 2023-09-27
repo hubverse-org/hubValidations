@@ -45,6 +45,7 @@ Imports:
     yaml
 Suggests: 
     covr,
+    gert,
     mockery,
     rmarkdown,
     testthat (>= 3.0.0),
