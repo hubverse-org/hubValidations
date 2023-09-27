@@ -5,7 +5,7 @@
     Output
       <message/check_success>
       Message:
-      All hub config files are be valid.
+      All hub config files are valid.
 
 ---
 
@@ -14,7 +14,7 @@
     Output
       <message/check_success>
       Message:
-      All hub config files are be valid.
+      All hub config files are valid.
 
 ---
 
@@ -23,5 +23,5 @@
     Output
       <error/check_error>
       Error:
-      ! All hub config files must be be valid.  Config file "tasks" invalid.
+      ! All hub config files must be valid.  Config file "tasks" invalid.
 

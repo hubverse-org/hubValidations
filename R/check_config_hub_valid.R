@@ -22,9 +22,9 @@ check_config_hub_valid <- function(hub_path) {
 
   capture_check_cnd(
     check = check,
-    file_path = hub_path,
+    file_path = basename(hub_path),
     msg_subject = "All hub config files",
-    msg_attribute = "be valid.",
+    msg_attribute = "valid.",
     msg_verbs = c("are", "must be"),
     error = TRUE,
     details = details
