@@ -1,7 +1,7 @@
 #' Check model output data tbl contains valid value combinations
 #'
 #' @inherit check_tbl_colnames params
-#' @inherit check_tbl_col_types return
+#' @inherit check_tbl_colnames return
 #' @export
 check_tbl_values <- function(tbl, round_id, file_path, hub_path) {
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
@@ -43,6 +43,7 @@ check_tbl_values <- function(tbl, round_id, file_path, hub_path) {
     msg_subject = "Data rows",
     msg_attribute = "valid value combinations",
     msg_verbs = c("contain", "do not contain"),
+    error = TRUE,
     details = details
   )
 }

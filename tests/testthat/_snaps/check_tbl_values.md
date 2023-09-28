@@ -14,7 +14,7 @@
       check_tbl_values(tbl = tbl, round_id = round_id, file_path = file_path,
         hub_path = hub_path)
     Output
-      <warning/check_failure>
-      Warning:
-      Data rows do not contain valid value combinations Affected rows: 1
+      <error/check_error>
+      Error:
+      ! Data rows do not contain valid value combinations Affected rows: 1
 
