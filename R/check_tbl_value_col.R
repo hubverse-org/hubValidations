@@ -18,15 +18,14 @@ check_tbl_value_col <- function(tbl, round_id, file_path, hub_path) {
     round_id = round_id,
     required_vals_only = FALSE,
     all_character = TRUE,
-    as_arrow_table = TRUE,
+    as_arrow_table = FALSE,
     bind_model_tasks = FALSE
   )
 
   join_cols <- names(tbl)[names(tbl) != "value"]
   tbl <- purrr::map(
     full,
-    ~ dplyr::inner_join(.x, tbl, by = join_cols) %>%
-      tibble::as_tibble()
+    ~ dplyr::inner_join(.x, tbl, by = join_cols)
   )
 
   round_config <- get_file_round_config(file_path, hub_path)
