@@ -101,15 +101,15 @@ inheritance and the ability to include executable R code. See the
 <code>confog</code> package vignette on <a href="https://rstudio.github.io/config/articles/inheritance.html" class="external-link">inheritance
 and R expressions</a> for more details.</p>
 <div class="section level2">
-<h2 id="validation-yml-structure">
-<code>validation.yml</code> structure<a class="anchor" aria-label="anchor" href="#validation-yml-structure"></a>
+<h2 id="validations-yml-structure">
+<code>validations.yml</code> structure<a class="anchor" aria-label="anchor" href="#validations-yml-structure"></a>
 </h2>
-<p><code>validation.yml</code> files should follow the nested structure
+<p><code>validations.yml</code> files should follow the nested structure
 described below:</p>
 <div class="section level3">
 <h3 id="default-configuration">Default configuration<a class="anchor" aria-label="anchor" href="#default-configuration"></a>
 </h3>
-<p>The top of any <code>validation.yml</code> file, under the required
+<p>The top of any <code>validations.yml</code> file, under the required
 <code>default:</code> top level property, should contain default custom
 validation configurations that will be executed regardless of round
 ID.</p>
@@ -236,7 +236,7 @@ content of the model data submission files.</p>
 <p>The above configuration file relies on default values for arguments
 <code>horizon_colname</code> (<code>"horizon"</code>) and
 <code>timediff</code> (<code><a href="https://lubridate.tidyverse.org/reference/period.html" class="external-link">lubridate::weeks()</a></code>). We can use the
-<code>validation.yml</code> <code>args</code> list to override the
+<code>validations.yml</code> <code>args</code> list to override the
 default values. Here’s an example that includes <strong>executable r
 code</strong> as the value of an argument.</p>
 <pre><code>default:
@@ -254,9 +254,9 @@ code</strong> as the value of an argument.</p>
 <h3 id="round-specific-configuration">Round specific configuration<a class="anchor" aria-label="anchor" href="#round-specific-configuration"></a>
 </h3>
 <p>Additional round specific configurations can be included in
-<code>validation.yml</code> that can add to or override default
+<code>validations.yml</code> that can add to or override default
 configurations.</p>
-<p>For example, in the following <code>validation.yml</code> which
+<p>For example, in the following <code>validations.yml</code> which
 deploys the <code><a href="../reference/opt_check_tbl_col_timediff.html">opt_check_tbl_col_timediff()</a></code> optional check, if
 the file being validated is being submitted to a round with round ID
 <code>"2023-08-15"</code>, default <code>col_timediff</code> check
