@@ -219,20 +219,37 @@ validated relative to the <code>model-output</code> directory.</li>
 </li>
 </ul>
 <p>The <code>args</code> configuration can be used to override objects
-from the caller environment.</p>
+from the caller environment as well as defaults.</p>
 <p>Here’s an example configuration for a single check
-(<code><a href="../reference/cfg_check_tbl_col_timediff.html">cfg_check_tbl_col_timediff()</a></code>) to be run as part of the
+(<code><a href="../reference/opt_check_tbl_horizon_timediff.html">opt_check_tbl_horizon_timediff()</a></code>) to be run as part of the
 <code><a href="../reference/validate_model_data.html">validate_model_data()</a></code> validation function which checks the
 content of the model data submission files.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>default<span class="sc">:</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    validate_model_data<span class="sc">:</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>      col_timediff<span class="sc">:</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>        fn<span class="sc">:</span> <span class="st">"cfg_check_tbl_col_timediff"</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>      horizon_timediff<span class="sc">:</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>        fn<span class="sc">:</span> <span class="st">"opt_check_tbl_horizon_timediff"</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>        pkg<span class="sc">:</span> <span class="st">"hubValidations"</span></span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>        args<span class="sc">:</span></span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>          t0_colname<span class="sc">:</span> <span class="st">"forecast_date"</span></span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>          t1_colname<span class="sc">:</span> <span class="st">"target_end_date"</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>          timediff<span class="sc">:</span> <span class="sc">!</span>expr lubridate<span class="sc">::</span><span class="fu">weeks</span>(<span class="dv">2</span>)</span></code></pre></div>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>          horizon_colname<span class="sc">:</span> <span class="st">"horizon"</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>          timediff<span class="sc">:</span> <span class="sc">!</span>expr lubridate<span class="sc">::</span><span class="fu">weeks</span>()</span></code></pre></div>
+<p>The above configuration file relies on default values for arguments
+<code>horizon_colname</code> (<code>"horizon"</code>) and
+<code>timediff</code> (<code><a href="https://lubridate.tidyverse.org/reference/period.html" class="external-link">lubridate::weeks()</a></code>). We can use the
+<code>validation.yml</code> <code>args</code> list to override the
+default values. Here’s an example that includes <strong>executable r
+code</strong> as the value of an argument.</p>
+<pre><code>default:
+    validate_model_data:
+      horizon_timediff:
+        fn: "opt_check_tbl_horizon_timediff"
+        pkg: "hubValidations"
+        args:
+          t0_colname: "forecast_date"
+          t1_colname: "target_end_date"
+          horizon_colname: "horizons"
+          timediff: !expr lubridate::weeks(2)</code></pre>
 </div>
 <div class="section level3">
 <h3 id="round-specific-configuration">Round specific configuration<a class="anchor" aria-label="anchor" href="#round-specific-configuration"></a>
@@ -240,30 +257,30 @@ content of the model data submission files.</p>
 <p>Additional round specific configurations can be included in
 <code>validation.yml</code> that can add to or override default
 configurations.</p>
-<p>For example, in the following <code>validation.yml</code>, if the
-file being validated is being submitted to a round with round ID
+<p>For example, in the following <code>validation.yml</code> which
+deploys the <code><a href="../reference/opt_check_tbl_col_timediff.html">opt_check_tbl_col_timediff()</a></code> optional check, if
+the file being validated is being submitted to a round with round ID
 <code>"2023-08-15"</code>, default <code>col_timediff</code> check
-configuration will be overiden by the <code>2023-08-15</code>
+configuration will be overridden by the <code>2023-08-15</code>
 configuration.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode yml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">default</span><span class="kw">:</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">validate_model_data</span><span class="kw">:</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">col_timediff</span><span class="kw">:</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">fn</span><span class="kw">:</span><span class="at"> </span><span class="st">"cfg_check_tbl_col_timediff"</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">pkg</span><span class="kw">:</span><span class="at"> </span><span class="st">"hubValidations"</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">args</span><span class="kw">:</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">t0_colname</span><span class="kw">:</span><span class="at"> </span><span class="st">"forecast_date"</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">t1_colname</span><span class="kw">:</span><span class="at"> </span><span class="st">"target_end_date"</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">timediff</span><span class="kw">:</span><span class="at"> !expr lubridate::weeks(2)</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="fu">2023-08-15</span><span class="kw">:</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">validate_model_data</span><span class="kw">:</span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">col_timediff</span><span class="kw">:</span></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">fn</span><span class="kw">:</span><span class="at"> </span><span class="st">"cfg_check_tbl_col_timediff"</span></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">pkg</span><span class="kw">:</span><span class="at"> </span><span class="st">"hubValidations"</span></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">args</span><span class="kw">:</span></span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">t0_colname</span><span class="kw">:</span><span class="at"> </span><span class="st">"forecast_date"</span></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">t1_colname</span><span class="kw">:</span><span class="at"> </span><span class="st">"target_end_date"</span></span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">timediff</span><span class="kw">:</span><span class="at"> !expr lubridate::weeks(1)</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode yml"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">default</span><span class="kw">:</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">validate_model_data</span><span class="kw">:</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">col_timediff</span><span class="kw">:</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">fn</span><span class="kw">:</span><span class="at"> </span><span class="st">"opt_check_tbl_col_timediff"</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">pkg</span><span class="kw">:</span><span class="at"> </span><span class="st">"hubValidations"</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">args</span><span class="kw">:</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">t0_colname</span><span class="kw">:</span><span class="at"> </span><span class="st">"forecast_date"</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">t1_colname</span><span class="kw">:</span><span class="at"> </span><span class="st">"target_end_date"</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="fu">2023-08-15</span><span class="kw">:</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">validate_model_data</span><span class="kw">:</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">col_timediff</span><span class="kw">:</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">fn</span><span class="kw">:</span><span class="at"> </span><span class="st">"opt_check_tbl_col_timediff"</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">pkg</span><span class="kw">:</span><span class="at"> </span><span class="st">"hubValidations"</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">args</span><span class="kw">:</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">t0_colname</span><span class="kw">:</span><span class="at"> </span><span class="st">"forecast_date"</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">t1_colname</span><span class="kw">:</span><span class="at"> </span><span class="st">"target_end_date"</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">timediff</span><span class="kw">:</span><span class="at"> !expr lubridate::weeks(1)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">

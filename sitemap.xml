@@ -43,7 +43,7 @@
     <loc>https://infectious-disease-modeling-hubs.github.io/hubValidations/reference/capture_exec_warning.html</loc>
   </url>
   <url>
-    <loc>https://infectious-disease-modeling-hubs.github.io/hubValidations/reference/cfg_check_tbl_col_timediff.html</loc>
+    <loc>https://infectious-disease-modeling-hubs.github.io/hubValidations/reference/check_config_hub_valid.html</loc>
   </url>
   <url>
     <loc>https://infectious-disease-modeling-hubs.github.io/hubValidations/reference/check_file_exists.html</loc>
@@ -59,6 +59,9 @@
   </url>
   <url>
     <loc>https://infectious-disease-modeling-hubs.github.io/hubValidations/reference/check_file_read.html</loc>
+  </url>
+  <url>
+    <loc>https://infectious-disease-modeling-hubs.github.io/hubValidations/reference/check_for_errors.html</loc>
   </url>
   <url>
     <loc>https://infectious-disease-modeling-hubs.github.io/hubValidations/reference/check_metadata_file_exists.html</loc>
@@ -82,10 +85,16 @@
     <loc>https://infectious-disease-modeling-hubs.github.io/hubValidations/reference/check_submission_metadata_file_exists.html</loc>
   </url>
   <url>
+    <loc>https://infectious-disease-modeling-hubs.github.io/hubValidations/reference/check_submission_time.html</loc>
+  </url>
+  <url>
     <loc>https://infectious-disease-modeling-hubs.github.io/hubValidations/reference/check_tbl_col_types.html</loc>
   </url>
   <url>
     <loc>https://infectious-disease-modeling-hubs.github.io/hubValidations/reference/check_tbl_colnames.html</loc>
+  </url>
+  <url>
+    <loc>https://infectious-disease-modeling-hubs.github.io/hubValidations/reference/check_tbl_match_round_id.html</loc>
   </url>
   <url>
     <loc>https://infectious-disease-modeling-hubs.github.io/hubValidations/reference/check_tbl_rows_unique.html</loc>
@@ -115,10 +124,25 @@
     <loc>https://infectious-disease-modeling-hubs.github.io/hubValidations/reference/check_valid_round_id_col.html</loc>
   </url>
   <url>
+    <loc>https://infectious-disease-modeling-hubs.github.io/hubValidations/reference/combine.html</loc>
+  </url>
+  <url>
     <loc>https://infectious-disease-modeling-hubs.github.io/hubValidations/reference/index.html</loc>
   </url>
   <url>
     <loc>https://infectious-disease-modeling-hubs.github.io/hubValidations/reference/is_success.html</loc>
+  </url>
+  <url>
+    <loc>https://infectious-disease-modeling-hubs.github.io/hubValidations/reference/new_hub_validations.html</loc>
+  </url>
+  <url>
+    <loc>https://infectious-disease-modeling-hubs.github.io/hubValidations/reference/opt_check_tbl_col_timediff.html</loc>
+  </url>
+  <url>
+    <loc>https://infectious-disease-modeling-hubs.github.io/hubValidations/reference/opt_check_tbl_counts_lt_popn.html</loc>
+  </url>
+  <url>
+    <loc>https://infectious-disease-modeling-hubs.github.io/hubValidations/reference/opt_check_tbl_horizon_timediff.html</loc>
   </url>
   <url>
     <loc>https://infectious-disease-modeling-hubs.github.io/hubValidations/reference/pipe.html</loc>
@@ -127,7 +151,13 @@
     <loc>https://infectious-disease-modeling-hubs.github.io/hubValidations/reference/print.hub_validations.html</loc>
   </url>
   <url>
+    <loc>https://infectious-disease-modeling-hubs.github.io/hubValidations/reference/print.pr_hub_validations.html</loc>
+  </url>
+  <url>
     <loc>https://infectious-disease-modeling-hubs.github.io/hubValidations/reference/read_model_out_file.html</loc>
+  </url>
+  <url>
+    <loc>https://infectious-disease-modeling-hubs.github.io/hubValidations/reference/try_check.html</loc>
   </url>
   <url>
     <loc>https://infectious-disease-modeling-hubs.github.io/hubValidations/reference/validate_model_data.html</loc>
@@ -139,6 +169,12 @@
     <loc>https://infectious-disease-modeling-hubs.github.io/hubValidations/reference/validate_model_metadata.html</loc>
   </url>
   <url>
+    <loc>https://infectious-disease-modeling-hubs.github.io/hubValidations/reference/validate_pr.html</loc>
+  </url>
+  <url>
     <loc>https://infectious-disease-modeling-hubs.github.io/hubValidations/reference/validate_submission.html</loc>
+  </url>
+  <url>
+    <loc>https://infectious-disease-modeling-hubs.github.io/hubValidations/reference/validate_submission_time.html</loc>
   </url>
 </urlset>

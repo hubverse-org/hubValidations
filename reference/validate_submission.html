@@ -73,7 +73,9 @@ of the file.</p>
 <span>  <span class="va">hub_path</span>,</span>
 <span>  <span class="va">file_path</span>,</span>
 <span>  round_id_col <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  validations_cfg_path <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  validations_cfg_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  skip_submit_window_check <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  skip_check_config <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -106,6 +108,15 @@ config file.</p></dd>
 <dd><p>Path to <code>validations.yml</code> file. If <code>NULL</code>
 defaults to <code>hub-config/validations.yml</code>.</p></dd>
 
+
+<dt>skip_submit_window_check</dt>
+<dd><p>Logical. Whether to skip the submission window check.</p></dd>
+
+
+<dt>skip_check_config</dt>
+<dd><p>Logical. Whether to skip the hub config validation check.
+check.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -121,7 +132,7 @@ will return early if a check returns an error.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">hub_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"testhubs/simple"</span>, package <span class="op">=</span> <span class="st">"hubValidations"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">file_path</span> <span class="op">&lt;-</span> <span class="st">"team1-goodmodel/2022-10-08-team1-goodmodel.csv"</span></span></span>
 <span class="r-in"><span><span class="fu">validate_submission</span><span class="op">(</span><span class="va">hub_path</span>, <span class="va">file_path</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ::notice ::✔ 2022-10-08-team1-goodmodel.csv: File exists at path%0A  <span style="color: #0000BB;">model-output/team1-goodmodel/2022-10-08-team1-goodmodel.csv</span>.%0A✔ 2022-10-08-team1-goodmodel.csv: File name <span style="color: #0000BB;">"2022-10-08-team1-goodmodel.csv"</span> is%0A  valid.%0A✔ 2022-10-08-team1-goodmodel.csv: File directory name matches `model_id`%0A  metadata in file name.%0A✔ 2022-10-08-team1-goodmodel.csv: `round_id` is valid.%0A✔ 2022-10-08-team1-goodmodel.csv: File is accepted hub format.%0A✔ 2022-10-08-team1-goodmodel.csv: Metadata file exists at path%0A  <span style="color: #0000BB;">model-metadata/team1-goodmodel.yaml</span>.%0A✔ 2022-10-08-team1-goodmodel.csv: File could be read successfully.%0A✔ 2022-10-08-team1-goodmodel.csv: `round_id_col` name is valid.%0A✔ 2022-10-08-team1-goodmodel.csv: `round_id` column <span style="color: #0000BB;">"origin_date"</span> contains a%0A  single, unique round ID value.%0A✔ 2022-10-08-team1-goodmodel.csv: Column names are consistent with expected%0A  round task IDs and std column names.%0A✔ 2022-10-08-team1-goodmodel.csv: Column data types match hub schema.%0A✔ 2022-10-08-team1-goodmodel.csv: Data rows contain valid value combinations%0A✔ 2022-10-08-team1-goodmodel.csv: All combinations of task ID%0A  column/`output_type`/`output_type_id` values are unique.%0A✔ 2022-10-08-team1-goodmodel.csv: Required task ID/output type/output type ID%0A  combinations all present.%0A✔ 2022-10-08-team1-goodmodel.csv: Values in column `value` all valid with%0A  respect to modeling task config.%0A✔ 2022-10-08-team1-goodmodel.csv: Values in `value` column are non-decreasing%0A  as output_type_ids increase for all unique task ID value/output type%0A  combinations of quantile or cdf output types.%0Aℹ 2022-10-08-team1-goodmodel.csv: No pmf output types to check for sum of 1.%0A  Check skipped.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ::notice ::✔ simple: All hub config files are valid.%0A✔ 2022-10-08-team1-goodmodel.csv: File exists at path%0A  <span style="color: #0000BB;">model-output/team1-goodmodel/2022-10-08-team1-goodmodel.csv</span>.%0A✔ 2022-10-08-team1-goodmodel.csv: File name <span style="color: #0000BB;">"2022-10-08-team1-goodmodel.csv"</span> is%0A  valid.%0A✔ 2022-10-08-team1-goodmodel.csv: File directory name matches `model_id`%0A  metadata in file name.%0A✔ 2022-10-08-team1-goodmodel.csv: `round_id` is valid.%0A✔ 2022-10-08-team1-goodmodel.csv: File is accepted hub format.%0A✔ 2022-10-08-team1-goodmodel.csv: Metadata file exists at path%0A  <span style="color: #0000BB;">model-metadata/team1-goodmodel.yaml</span>.%0A✔ 2022-10-08-team1-goodmodel.csv: File could be read successfully.%0A✔ 2022-10-08-team1-goodmodel.csv: `round_id_col` name is valid.%0A✔ 2022-10-08-team1-goodmodel.csv: `round_id` column <span style="color: #0000BB;">"origin_date"</span> contains a%0A  single, unique round ID value.%0A✔ 2022-10-08-team1-goodmodel.csv: All `round_id_col` <span style="color: #0000BB;">"origin_date"</span> values match%0A  submission `round_id` from file name.%0A✔ 2022-10-08-team1-goodmodel.csv: Column names are consistent with expected%0A  round task IDs and std column names.%0A✔ 2022-10-08-team1-goodmodel.csv: Column data types match hub schema.%0A✔ 2022-10-08-team1-goodmodel.csv: Data rows contain valid value combinations%0A✔ 2022-10-08-team1-goodmodel.csv: All combinations of task ID%0A  column/`output_type`/`output_type_id` values are unique.%0A✔ 2022-10-08-team1-goodmodel.csv: Required task ID/output type/output type ID%0A  combinations all present.%0A✔ 2022-10-08-team1-goodmodel.csv: Values in column `value` all valid with%0A  respect to modeling task config.%0A✔ 2022-10-08-team1-goodmodel.csv: Values in `value` column are non-decreasing%0A  as output_type_ids increase for all unique task ID value/output type%0A  combinations of quantile or cdf output types.%0Aℹ 2022-10-08-team1-goodmodel.csv: No pmf output types to check for sum of 1.%0A  Check skipped.%0A! 2022-10-08-team1-goodmodel.csv: Submission time must be within accepted%0A  submission window for round.  Current time <span style="color: #0000BB;">2023-09-28 10:16:59.016544</span> is%0A  outside window <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
