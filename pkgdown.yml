@@ -3,7 +3,7 @@ pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   custom-functions: custom-functions.html
-last_built: 2023-09-28T15:29Z
+last_built: 2023-09-28T15:36Z
 urls:
   reference: https://infectious-disease-modeling-hubs.github.io/hubValidations/reference
   article: https://infectious-disease-modeling-hubs.github.io/hubValidations/articles
