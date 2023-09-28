@@ -6,5 +6,3 @@ default:
         args:
           t0_colname: "forecast_date"
           t1_colname: "target_end_date"
-          horizon_colname: "horizon"
-          timediff: !expr lubridate::weeks()
