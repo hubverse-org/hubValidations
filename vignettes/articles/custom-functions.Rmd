@@ -19,13 +19,13 @@ Custom validation functions can be included and configured within standard `hubV
 `hubValidations` uses the [`config`](https://rstudio.github.io/config/articles/inheritance.html) package to get validation configuration. This allows for configuration inheritance and the ability to include executable R code. 
 See the `confog` package vignette on [inheritance and R expressions](https://rstudio.github.io/config/articles/inheritance.html) for more details.
 
-## `validation.yml` structure
+## `validations.yml` structure
 
-`validation.yml` files should follow the nested structure described below:
+`validations.yml` files should follow the nested structure described below:
 
 ### Default configuration
 
-The top of any `validation.yml` file, under the required `default:` top level property, should contain default custom validation configurations that will be executed regardless of round ID.
+The top of any `validations.yml` file, under the required `default:` top level property, should contain default custom validation configurations that will be executed regardless of round ID.
 
 Within the default configuration, individual checks can be configured for each of the 3 validation functions run as part of `validate_submission()`, using the following structure for each validation function:
 
@@ -65,7 +65,7 @@ Here's an example configuration for a single check (`opt_check_tbl_horizon_timed
 
 ```
 
-The above configuration file relies on default values for arguments `horizon_colname` (`"horizon"`) and `timediff` (`lubridate::weeks()`). We can use the `validation.yml` `args` list to override the default values. Here's an example that includes **executable r code** as the value of an argument.
+The above configuration file relies on default values for arguments `horizon_colname` (`"horizon"`) and `timediff` (`lubridate::weeks()`). We can use the `validations.yml` `args` list to override the default values. Here's an example that includes **executable r code** as the value of an argument.
 
 ```
 default:
@@ -82,9 +82,9 @@ default:
 
 ### Round specific configuration
 
-Additional round specific configurations can be included in `validation.yml` that can add to or override default configurations.
+Additional round specific configurations can be included in `validations.yml` that can add to or override default configurations.
 
-For example, in the following `validation.yml` which deploys the `opt_check_tbl_col_timediff()` optional check, if the file being validated is being submitted to a round with round ID `"2023-08-15"`, default `col_timediff` check configuration will be overridden by the `2023-08-15` configuration.
+For example, in the following `validations.yml` which deploys the `opt_check_tbl_col_timediff()` optional check, if the file being validated is being submitted to a round with round ID `"2023-08-15"`, default `col_timediff` check configuration will be overridden by the `2023-08-15` configuration.
 
 ```yml
 default:
