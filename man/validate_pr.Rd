@@ -47,7 +47,7 @@ Validate Pull Request
 \examples{
 \dontrun{
 validate_pr(
-  hub_path = "."
+  hub_path = ".",
   gh_repo = "Infectious-Disease-Modeling-Hubs/ci-testhub-simple",
   pr_number = 3
 )
