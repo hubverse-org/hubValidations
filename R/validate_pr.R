@@ -118,7 +118,7 @@ inform_unvalidated_files <- function(model_output_files,
   if (length(pr_filenames) != length(validated_files)) {
     validated_idx <- purrr::map_int(
       validated_files,
-      ~ grep(.x, pr_files, fixed = TRUE)
+      ~ grep(.x, pr_filenames, fixed = TRUE)
     )
     cli::cli_inform(
       "PR contains commits to additional files which have not been checked:
