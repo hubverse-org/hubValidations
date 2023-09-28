@@ -6,14 +6,16 @@ test_that("validate_submission works", {
     str(
       validate_submission(hub_path,
         file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv",
-        skip_submit_window_check = TRUE
+        skip_submit_window_check = TRUE,
+        skip_check_config = TRUE
       )
     )
   )
   expect_s3_class(
     validate_submission(hub_path,
       file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv",
-      skip_submit_window_check = TRUE
+      skip_submit_window_check = TRUE,
+      skip_check_config = TRUE
     ),
     c("hub_validations", "list")
   )
@@ -24,14 +26,16 @@ test_that("validate_submission works", {
     str(
       validate_submission(hub_path,
         file_path = "team1-goodmodel/2022-10-15-team1-goodmodel.csv",
-        skip_submit_window_check = TRUE
+        skip_submit_window_check = TRUE,
+        skip_check_config = TRUE
       )
     )
   )
   expect_s3_class(
     validate_submission(hub_path,
       file_path = "team1-goodmodel/2022-10-15-team1-goodmodel.csv",
-      skip_submit_window_check = TRUE
+      skip_submit_window_check = TRUE,
+      skip_check_config = TRUE
     ),
     c("hub_validations", "list")
   )
@@ -41,14 +45,16 @@ test_that("validate_submission works", {
     str(
       validate_submission(hub_path,
         file_path = "team1-goodmodel/2022-10-15-hub-baseline.csv",
-        skip_submit_window_check = TRUE
+        skip_submit_window_check = TRUE,
+        skip_check_config = TRUE
       )
     )
   )
   expect_s3_class(
     validate_submission(hub_path,
       file_path = "team1-goodmodel/2022-10-15-hub-baseline.csv",
-      skip_submit_window_check = TRUE
+      skip_submit_window_check = TRUE,
+      skip_check_config = TRUE
     ),
     c("hub_validations", "list")
   )
@@ -60,9 +66,27 @@ test_that("validate_submission works", {
         hub_path,
         file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv",
         round_id_col = "random_col",
-        skip_submit_window_check = TRUE
+        skip_submit_window_check = TRUE,
+        skip_check_config = TRUE
       )
     )
+  )
+
+  # File that passes validation & checks config
+  expect_snapshot(
+    str(
+      validate_submission(hub_path,
+                          file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv",
+                          skip_submit_window_check = TRUE
+      )
+    )
+  )
+  expect_s3_class(
+    validate_submission(hub_path,
+                        file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv",
+                        skip_submit_window_check = TRUE
+    ),
+    c("hub_validations", "list")
   )
 })
 

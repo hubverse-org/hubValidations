@@ -3,7 +3,8 @@
 #' of the file.
 #'
 #' @inherit validate_model_data return params
-#' @param skip_submit_window_check Logical. Whether to skip the submission window
+#' @param skip_submit_window_check Logical. Whether to skip the submission window check.
+#' @param skip_check_config Logical. Whether to skip the hub config validation check.
 #'  check.
 #' @export
 #'
@@ -13,10 +14,19 @@
 #' validate_submission(hub_path, file_path)
 validate_submission <- function(hub_path, file_path, round_id_col = NULL,
                                 validations_cfg_path = NULL,
-                                skip_submit_window_check = FALSE) {
+                                skip_submit_window_check = FALSE,
+                                skip_check_config = FALSE) {
+
+  check_hub_config <- new_hub_validations()
+  if (!skip_check_config) {
+    check_hub_config$valid_config <- check_config_hub_valid(hub_path)
+    if (not_pass(check_hub_config$valid_config)) {
+      return(check_hub_config)
+    }
+  }
 
   if (skip_submit_window_check) {
-    checks_submission_time <- NULL
+    checks_submission_time <- new_hub_validations()
   } else {
     checks_submission_time <- validate_submission_time(hub_path, file_path)
   }
@@ -27,9 +37,9 @@ validate_submission <- function(hub_path, file_path, round_id_col = NULL,
     validations_cfg_path = validations_cfg_path
   )
 
-  if (any(purrr::map_lgl(checks_file, ~ is_error(.x)))) {
+  if (any(purrr::map_lgl(checks_file, ~ is_any_error(.x)))) {
     return(
-      combine(checks_file, checks_submission_time)
+      combine(check_hub_config, checks_file, checks_submission_time)
     )
   }
 
@@ -40,5 +50,5 @@ validate_submission <- function(hub_path, file_path, round_id_col = NULL,
     validations_cfg_path = validations_cfg_path
   )
 
-  combine(checks_file, checks_data, checks_submission_time)
+  combine(check_hub_config, checks_file, checks_data, checks_submission_time)
 }

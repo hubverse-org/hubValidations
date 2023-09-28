@@ -10,7 +10,6 @@
 #' @inheritParams validate_submission
 #'
 #' @return An object of class `hub_validations`.
-#'
 #' @export
 #'
 #' @examples
@@ -24,43 +23,47 @@
 validate_pr <- function(hub_path = ".", gh_repo, pr_number,
                         round_id_col = NULL, validations_cfg_path = NULL,
                         skip_submit_window_check = FALSE) {
+
     model_output_dir <- get_hub_model_output_dir(hub_path)
     model_metadata_dir <- "model-metadata"
+    validations <- new_hub_validations()
 
-    validations <- list()
-
-    validations$valid_config <- check_config_hub_valid(hub_path)
-    if (not_pass(validations$valid_config)) {
-        class(validations) <- c("hub_validations", "list")
+    validations$valid_config <- try_check(check_config_hub_valid(hub_path),
+                                          file_path = basename(hub_path))
+    if (is_any_error(validations$valid_config)) {
         return(validations)
     }
 
     tryCatch({
-
             pr_files <- gh::gh(
                 "/repos/{gh_repo}/pulls/{pr_number}/files",
                 gh_repo = gh_repo,
                 pr_number = pr_number
             )
-
             pr_filenames <- purrr::map_chr(pr_files, ~.x$filename)
             model_output_files <- get_pr_dir_files(pr_filenames,
                                                    model_output_dir)
             model_metadata_files <- get_pr_dir_files(pr_filenames,
                                                      model_metadata_dir)
-            validations <- c(
+
+            model_output_vals <- purrr::map(model_output_files,
+                                            ~validate_submission(
+                                                hub_path, file_path = .x,
+                                                validations_cfg_path = validations_cfg_path,
+                                                skip_submit_window_check = skip_submit_window_check,
+                                                skip_check_config = TRUE)
+            ) %>% purrr::list_flatten() %>% as_hub_validations()
+
+            model_metadata_vals <- purrr::map(model_metadata_files,
+                       ~validate_model_metadata(
+                           hub_path, file_path = .x,
+                           validations_cfg_path = validations_cfg_path)
+            ) %>% purrr::list_flatten() %>% as_hub_validations()
+
+            validations <- combine(
                 validations,
-                purrr::map(model_output_files,
-                           ~validate_submission(
-                               hub_path, file_path = .x,
-                               validations_cfg_path = validations_cfg_path,
-                               skip_submit_window_check = skip_submit_window_check)
-                ) %>% purrr::list_flatten(),
-                purrr::map(model_metadata_files,
-                           ~validate_model_metadata(
-                               hub_path, file_path = .x,
-                               validations_cfg_path = validations_cfg_path)
-                ) %>% purrr::list_flatten()
+                model_output_vals,
+                model_metadata_vals
             )
     },
     error = function(e) {
@@ -72,20 +75,13 @@ validate_pr <- function(hub_path = ".", gh_repo, pr_number,
             file_path = gh_repo,
             msg = conditionMessage(e)
         )
-        validations <<- c(validations, list(e))
+        validations <<- combine(validations,
+                                new_hub_validations(e))
     })
 
-    validated_files <- c(model_output_files, model_metadata_files)
-    if (length(pr_filenames) != length(validated_files)) {
-        validated_idx <- purrr::map_int(validated_files,
-                                        ~grep(.x, pr_files, fixed = TRUE)
-        )
-        cli::cli_inform(
-          "PR contains commits to additional files which have not been checked:
-          {.val {pr_filenames[-validated_idx]}}.")
-    }
-
-    class(validations) <- c("hub_validations", "list")
+    inform_unvalidated_files(model_output_files,
+                             model_metadata_files,
+                             pr_filenames)
     return(validations)
 }
 
@@ -93,4 +89,18 @@ get_pr_dir_files <- function(pr_filenames, dir_name) {
     pr_filenames[
         fs::path_has_parent(pr_filenames, dir_name)
     ] %>% fs::path_rel(dir_name)
+}
+
+inform_unvalidated_files <- function(model_output_files,
+                                     model_metadata_files,
+                                     pr_filenames) {
+    validated_files <- c(model_output_files, model_metadata_files)
+    if (length(pr_filenames) != length(validated_files)) {
+        validated_idx <- purrr::map_int(validated_files,
+                                        ~grep(.x, pr_files, fixed = TRUE)
+        )
+        cli::cli_inform(
+            "PR contains commits to additional files which have not been checked:
+          {.val {pr_filenames[-validated_idx]}}.")
+    }
 }
