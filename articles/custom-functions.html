@@ -224,16 +224,15 @@ from the caller environment as well as defaults.</p>
 (<code><a href="../reference/opt_check_tbl_horizon_timediff.html">opt_check_tbl_horizon_timediff()</a></code>) to be run as part of the
 <code><a href="../reference/validate_model_data.html">validate_model_data()</a></code> validation function which checks the
 content of the model data submission files.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>default<span class="sc">:</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    validate_model_data<span class="sc">:</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>      horizon_timediff<span class="sc">:</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>        fn<span class="sc">:</span> <span class="st">"opt_check_tbl_horizon_timediff"</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>        pkg<span class="sc">:</span> <span class="st">"hubValidations"</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>        args<span class="sc">:</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>          t0_colname<span class="sc">:</span> <span class="st">"forecast_date"</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>          t1_colname<span class="sc">:</span> <span class="st">"target_end_date"</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>          horizon_colname<span class="sc">:</span> <span class="st">"horizon"</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>          timediff<span class="sc">:</span> <span class="sc">!</span>expr lubridate<span class="sc">::</span><span class="fu">weeks</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">default</span><span class="op">:</span></span>
+<span>    <span class="va">validate_model_data</span><span class="op">:</span></span>
+<span>      <span class="va">horizon_timediff</span><span class="op">:</span></span>
+<span>        <span class="va">fn</span><span class="op">:</span> <span class="st">"opt_check_tbl_horizon_timediff"</span></span>
+<span>        <span class="va">pkg</span><span class="op">:</span> <span class="st">"hubValidations"</span></span>
+<span>        <span class="va">args</span><span class="op">:</span></span>
+<span>          <span class="va">t0_colname</span><span class="op">:</span> <span class="st">"forecast_date"</span></span>
+<span>          <span class="va">t1_colname</span><span class="op">:</span> <span class="st">"target_end_date"</span></span></code></pre></div>
 <p>The above configuration file relies on default values for arguments
 <code>horizon_colname</code> (<code>"horizon"</code>) and
 <code>timediff</code> (<code><a href="https://lubridate.tidyverse.org/reference/period.html" class="external-link">lubridate::weeks()</a></code>). We can use the
