@@ -18,8 +18,7 @@
 #' )
 validate_model_file <- function(hub_path, file_path,
                                 validations_cfg_path = NULL) {
-  checks <- list()
-  class(checks) <- c("hub_validations", "list")
+  checks <- new_hub_validations()
 
   checks$file_exists <- check_file_exists(
     file_path = file_path,
@@ -66,8 +65,7 @@ validate_model_file <- function(hub_path, file_path,
   }
 
   custom_checks <- execute_custom_checks(validations_cfg_path = validations_cfg_path)
-  checks <- c(checks, custom_checks)
-  class(checks) <- c("hub_validations", "list")
+  checks <- combine(checks, custom_checks)
 
   checks
 }

@@ -14,8 +14,7 @@
 #' )
 validate_model_metadata <- function(hub_path, file_path, round_id = "default",
                                     validations_cfg_path = NULL) {
-  checks <- list()
-  class(checks) <- c("hub_validations", "list")
+  checks <- new_hub_validations()
 
   checks$metadata_schema_exists <- check_metadata_schema_exists(hub_path)
   if (is_error(checks$metadata_schema_exists)) {
@@ -52,8 +51,7 @@ validate_model_metadata <- function(hub_path, file_path, round_id = "default",
   }
 
   custom_checks <- execute_custom_checks(validations_cfg_path = validations_cfg_path)
-  checks <- c(checks, custom_checks)
-  class(checks) <- c("hub_validations", "list")
+  checks <- combine(checks, custom_checks)
 
   checks
 }
