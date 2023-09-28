@@ -31,6 +31,7 @@ Imports:
     config,
     dplyr,
     fs,
+    gh,
     hubUtils (>= 0.0.0.9014),
     jsonlite,
     jsonvalidate,
@@ -44,6 +45,7 @@ Imports:
     yaml
 Suggests: 
     covr,
+    gert,
     mockery,
     rmarkdown,
     testthat (>= 3.0.0),

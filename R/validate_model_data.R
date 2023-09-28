@@ -11,8 +11,7 @@
 #' validate_model_data(hub_path, file_path)
 validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
                                 validations_cfg_path = NULL) {
-  checks <- list()
-  class(checks) <- c("hub_validations", "list")
+  checks <- new_hub_validations()
 
   file_meta <- parse_file_name(file_path)
   round_id <- file_meta$round_id
@@ -51,6 +50,16 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
     hub_path = hub_path
   )
   if (is_error(checks$unique_round_id)) {
+    return(checks)
+  }
+
+  checks$match_round_id <- check_tbl_match_round_id(
+    tbl,
+    round_id_col = round_id_col,
+    file_path = file_path,
+    hub_path = hub_path
+  )
+  if (is_error(checks$match_round_id)) {
     return(checks)
   }
 
@@ -113,8 +122,6 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
   custom_checks <- execute_custom_checks(
     validations_cfg_path = validations_cfg_path
   )
-  checks <- c(checks, custom_checks)
-  class(checks) <- c("hub_validations", "list")
 
-  checks
+  combine(checks, custom_checks)
 }

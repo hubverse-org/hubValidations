@@ -36,5 +36,5 @@ execute_custom_checks <- function(validations_cfg_path = NULL) {
   purrr::map(
     purrr::set_names(names(validations_cfg)),
     ~ exec_cfg_check(.x, validations_cfg, caller_env, caller_call)
-  )
+  ) %>% as_hub_validations()
 }

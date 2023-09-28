@@ -39,7 +39,7 @@ test_that("validate_model_data with config function works", {
   hub_path <- system.file("testhubs/flusight", package = "hubValidations")
   file_path <- "hub-ensemble/2023-05-08-hub-ensemble.parquet"
   expect_snapshot(
-    validate_model_data(hub_path, file_path)[["col_timediff"]]
+    validate_model_data(hub_path, file_path)[["horizon_timediff"]]
   )
   expect_snapshot(
     validate_model_data(
@@ -48,7 +48,7 @@ test_that("validate_model_data with config function works", {
         "testhubs/flusight/hub-config/validations.yml",
         package = "hubValidations"
       )
-    )[["col_timediff"]]
+    )[["horizon_timediff"]]
   )
 })
 

@@ -21,6 +21,18 @@ get_hub_model_output_dir <- function(hub_path) {
   if (is.null(model_output_dir)) "model-output" else model_output_dir
 }
 
+get_file_target_metadata <- function(hub_path, file_path) {
+  round_config <- get_file_round_config(file_path, hub_path)
+
+  purrr::map(
+    round_config[["model_tasks"]],
+    ~ .x[["target_metadata"]] %>%
+      purrr::map(~ .x[["target_keys"]])
+  ) %>%
+    unlist(recursive = FALSE) %>%
+    unique()
+}
+
 abs_file_path <- function(file_path, hub_path,
                           subdir = c("model-output", "model-metadata", "hub-config")) {
   subdir <- match.arg(subdir)

@@ -28,3 +28,21 @@ is_info <- function(x) {
 not_pass <- function(x) {
     !inherits(x, "check_success") & !inherits(x, "check_info")
 }
+
+#' @describeIn is_success Is exec error?
+#' @export
+is_exec_error <- function(x) {
+    inherits(x, "check_exec_error")
+}
+
+#' @describeIn is_success Is exec warning?
+#' @export
+is_exec_warn <- function(x) {
+    inherits(x, "check_exec_warn")
+}
+
+#' @describeIn is_success Is error or exec error?
+#' @export
+is_any_error <- function(x) {
+    inherits(x, "check_error") | inherits(x, "check_exec_error")
+}
