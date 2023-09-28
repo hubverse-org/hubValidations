@@ -87,6 +87,9 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
     file_path = file_path,
     hub_path = hub_path
   )
+  if (is_error(checks$valid_vals)) {
+    return(checks)
+  }
 
   checks$rows_unique <- check_tbl_rows_unique(
     tbl,
