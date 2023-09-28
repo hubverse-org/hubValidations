@@ -36,8 +36,7 @@ details but has not been configured via \code{round_id_from_variable: true} and
 \item{validations_cfg_path}{Path to \code{validations.yml} file. If \code{NULL}
 defaults to \code{hub-config/validations.yml}.}
 
-\item{skip_submit_window_check}{Logical. Whether to skip the submission window
-check.}
+\item{skip_submit_window_check}{Logical. Whether to skip the submission window check.}
 }
 \value{
 An object of class \code{hub_validations}.

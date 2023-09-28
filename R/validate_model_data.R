@@ -11,8 +11,7 @@
 #' validate_model_data(hub_path, file_path)
 validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
                                 validations_cfg_path = NULL) {
-  checks <- list()
-  class(checks) <- c("hub_validations", "list")
+  checks <- new_hub_validations()
 
   file_meta <- parse_file_name(file_path)
   round_id <- file_meta$round_id

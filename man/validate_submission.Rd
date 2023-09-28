@@ -11,7 +11,8 @@ validate_submission(
   file_path,
   round_id_col = NULL,
   validations_cfg_path = NULL,
-  skip_submit_window_check = FALSE
+  skip_submit_window_check = FALSE,
+  skip_check_config = FALSE
 )
 }
 \arguments{
@@ -35,7 +36,9 @@ config file.}
 \item{validations_cfg_path}{Path to \code{validations.yml} file. If \code{NULL}
 defaults to \code{hub-config/validations.yml}.}
 
-\item{skip_submit_window_check}{Logical. Whether to skip the submission window
+\item{skip_submit_window_check}{Logical. Whether to skip the submission window check.}
+
+\item{skip_check_config}{Logical. Whether to skip the hub config validation check.
 check.}
 }
 \value{

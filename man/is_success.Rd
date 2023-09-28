@@ -6,6 +6,9 @@
 \alias{is_error}
 \alias{is_info}
 \alias{not_pass}
+\alias{is_exec_error}
+\alias{is_exec_warn}
+\alias{is_any_error}
 \title{Get status of a hub check}
 \usage{
 is_success(x)
@@ -17,6 +20,12 @@ is_error(x)
 is_info(x)
 
 not_pass(x)
+
+is_exec_error(x)
+
+is_exec_warn(x)
+
+is_any_error(x)
 }
 \arguments{
 \item{x}{an object that inherits from class \verb{<hub_check>} to test.}
@@ -38,5 +47,11 @@ Get status of a hub check
 \item \code{is_info()}: Is check info?
 
 \item \code{not_pass()}: Did check not pass?
+
+\item \code{is_exec_error()}: Is exec error?
+
+\item \code{is_exec_warn()}: Is exec warning?
+
+\item \code{is_any_error()}: Is error or exec error?
 
 }}
