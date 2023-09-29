@@ -116,12 +116,12 @@ compare_values_to_config <- function(tbl, output_type, output_type_config) {
 
   if (any(names(config) == "maximum")) {
     value_max <- config[["maximum"]]
-    is_invalid <- values >= value_max
+    is_invalid <- values > value_max
     if (any(is_invalid)) {
       details <- c(
         details,
         cli::format_inline(
-          "{cli::qty(sum(is_invalid))} Value{?s} {.val {values[is_invalid]}}
+          "{cli::qty(sum(is_invalid))} Value{?s} {.val {unique(values[is_invalid])}}
                 {cli::qty(sum(is_invalid))}{?is/are}
                 greater than allowed maximum value {.val {value_max}} for output type
           {.val {output_type}}."
@@ -131,12 +131,12 @@ compare_values_to_config <- function(tbl, output_type, output_type_config) {
   }
   if (any(names(config) == "minimum")) {
     value_min <- config[["minimum"]]
-    is_invalid <- values <= value_min
+    is_invalid <- values < value_min
     if (any(is_invalid)) {
       details <- c(
         details,
         cli::format_inline(
-          "{cli::qty(sum(is_invalid))} Value{?s} {.val {values[is_invalid]}}
+          "{cli::qty(sum(is_invalid))} Value{?s} {.val {unique(values[is_invalid])}}
                 {cli::qty(sum(is_invalid))}{?is/are}
                 smaller than allowed minimum value {.val {value_min}} for output type
           {.val {output_type}}."
