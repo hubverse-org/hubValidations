@@ -23,7 +23,7 @@ exec_cfg_check <- function(check_name, validations_cfg, caller_env, caller_call)
     return(
       capture_exec_error(
         file_path = caller_env_formals$file_path,
-        msg = attr(res, "condition")$message,
+        msg = clean_msg(attr(res, "condition")$message),
         call = check_name
       )
     )

@@ -10,10 +10,12 @@
 try_check <- function(expr, file_path) {
   check <- try(expr, silent = TRUE)
   if (inherits(check, "try-error")) {
+    msg <- clean_msg(attr(check, "condition")$message)
+
     return(
       capture_exec_error(
         file_path = file_path,
-        msg = attr(check, "condition")$message,
+        msg = msg,
         call = get_expr_call_name(expr)
       )
     )
@@ -29,4 +31,10 @@ get_expr_call_name <- function(expr) {
     return(NA)
   }
   call_name
+}
+
+clean_msg <- function(msg) {
+  stringr::str_replace_all(
+    msg, c("\\{" = "[", "\\}" = "]")
+  )
 }
