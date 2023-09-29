@@ -81,7 +81,7 @@ compare_values_to_config <- function(tbl, output_type, output_type_config) {
   config <- output_type_config[[output_type]][["value"]]
 
   # Check and coerce value data type
-  values_type <- json_datatypes[config$type]
+  values_type <- config$type
   values <- coerce_values(values, values_type)
   if (any(is.na(values))) {
     invalid_vals <- tbl$value[is.na(values)]
