@@ -15,7 +15,7 @@ try_check <- function(expr, file_path) {
     return(
       capture_exec_error(
         file_path = file_path,
-        msg = msg,
+        msg = paste("EXEC ERROR:", msg),
         call = get_expr_call_name(expr)
       )
     )

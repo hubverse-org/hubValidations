@@ -16,37 +16,52 @@ validate_model_metadata <- function(hub_path, file_path, round_id = "default",
                                     validations_cfg_path = NULL) {
   checks <- new_hub_validations()
 
-  checks$metadata_schema_exists <- check_metadata_schema_exists(hub_path)
-  if (is_error(checks$metadata_schema_exists)) {
-    return(checks)
-  }
-
-  checks$metadata_file_exists <- check_metadata_file_exists(
-    file_path = file_path,
-    hub_path = hub_path
+  checks$metadata_schema_exists <- try_check(
+    check_metadata_schema_exists(hub_path), file_path
   )
-  if (is_error(checks$metadata_file_exists)) {
+  if (is_any_error(checks$metadata_schema_exists)) {
     return(checks)
   }
 
-  checks$metadata_file_ext <- check_metadata_file_ext(file_path)
-  checks$metadata_file_location <- check_metadata_file_location(file_path)
-  if (is_error(checks$metadata_file_location) ||
-      is_error(checks$metadata_file_ext)) {
+  checks$metadata_file_exists <- try_check(
+    check_metadata_file_exists(
+      file_path = file_path,
+      hub_path = hub_path
+    ), file_path
+  )
+  if (is_any_error(checks$metadata_file_exists)) {
     return(checks)
   }
 
-  checks$metadata_matches_schema <- check_metadata_matches_schema(
-    file_path = file_path,
-    hub_path = hub_path)
-  if (is_error(checks$metadata_matches_schema)) {
+  checks$metadata_file_ext <- try_check(
+    check_metadata_file_ext(file_path), file_path
+  )
+  checks$metadata_file_location <- try_check(
+    check_metadata_file_location(file_path), file_path
+  )
+  if (is_any_error(checks$metadata_file_location) ||
+    is_any_error(checks$metadata_file_ext)) {
+    return(checks)
+  }
+
+  checks$metadata_matches_schema <- try_check(
+    check_metadata_matches_schema(
+      file_path = file_path,
+      hub_path = hub_path
+    ), file_path
+  )
+  if (is_any_error(checks$metadata_matches_schema)) {
     return(checks)
   }
 
   # file name matches model id specified in metadata file
-  checks$metadata_file_name <- check_metadata_file_name(file_path = file_path,
-                                                        hub_path = hub_path)
-  if (is_error(checks$metadata_file_name)) {
+  checks$metadata_file_name <- try_check(
+    check_metadata_file_name(
+      file_path = file_path,
+      hub_path = hub_path
+    ), file_path
+  )
+  if (is_any_error(checks$metadata_file_name)) {
     return(checks)
   }
 

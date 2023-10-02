@@ -28,7 +28,7 @@ check_tbl_unique_round_id <- function(tbl, file_path, hub_path,
   if (is_info(check_round_id_col)) {
     return(check_round_id_col)
   }
-  if (is_failure(check_round_id_col)) {
+  if (is_failure(check_round_id_col) | is_exec_error(check_round_id_col)) {
     class(check_round_id_col)[1] <- "check_error"
     check_round_id_col$call <- rlang::call_name(rlang::current_call())
     return(check_round_id_col)

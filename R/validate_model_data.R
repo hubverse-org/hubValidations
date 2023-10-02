@@ -17,11 +17,13 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
   round_id <- file_meta$round_id
 
   # -- File parsing checks ----
-  checks$file_read <- check_file_read(
-    file_path = file_path,
-    hub_path = hub_path
+  checks$file_read <- try_check(
+    check_file_read(
+      file_path = file_path,
+      hub_path = hub_path
+    ), file_path
   )
-  if (is_error(checks$file_read)) {
+  if (is_any_error(checks$file_read)) {
     return(checks)
   }
 
@@ -33,93 +35,115 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
   # -- File round ID checks ----
   # Will be skipped if round config round_id_from_var is FALSE and no round_id_col
   # value is explicitly specified.
-  checks$valid_round_id_col <- check_valid_round_id_col(
-    tbl,
-    round_id_col = round_id_col,
-    file_path = file_path,
-    hub_path = hub_path
+  checks$valid_round_id_col <- try_check(
+    check_valid_round_id_col(
+      tbl,
+      round_id_col = round_id_col,
+      file_path = file_path,
+      hub_path = hub_path
+    ), file_path
   )
 
   # check_valid_round_id_col is run at the top of this function and if it does
   # not explicitly succeed (i.e. either fails or is is skipped), the output of
   # check_valid_round_id_col() is returned.
-  checks$unique_round_id <- check_tbl_unique_round_id(
-    tbl,
-    round_id_col = round_id_col,
-    file_path = file_path,
-    hub_path = hub_path
+  checks$unique_round_id <- try_check(
+    check_tbl_unique_round_id(
+      tbl,
+      round_id_col = round_id_col,
+      file_path = file_path,
+      hub_path = hub_path
+    ), file_path
   )
-  if (is_error(checks$unique_round_id)) {
+  if (is_any_error(checks$unique_round_id)) {
     return(checks)
   }
 
-  checks$match_round_id <- check_tbl_match_round_id(
-    tbl,
-    round_id_col = round_id_col,
-    file_path = file_path,
-    hub_path = hub_path
+  checks$match_round_id <- try_check(
+    check_tbl_match_round_id(
+      tbl,
+      round_id_col = round_id_col,
+      file_path = file_path,
+      hub_path = hub_path
+    ), file_path
   )
-  if (is_error(checks$match_round_id)) {
+  if (is_any_error(checks$match_round_id)) {
     return(checks)
   }
 
   # -- Column level checks ----
-  checks$colnames <- check_tbl_colnames(
-    tbl,
-    round_id = round_id,
-    file_path = file_path,
-    hub_path = hub_path
+  checks$colnames <- try_check(
+    check_tbl_colnames(
+      tbl,
+      round_id = round_id,
+      file_path = file_path,
+      hub_path = hub_path
+    ), file_path
   )
-  if (is_error(checks$colnames)) {
+  if (is_any_error(checks$colnames)) {
     return(checks)
   }
 
-  checks$col_types <- check_tbl_col_types(
-    tbl,
-    file_path = file_path,
-    hub_path = hub_path
+  checks$col_types <- try_check(
+    check_tbl_col_types(
+      tbl,
+      file_path = file_path,
+      hub_path = hub_path
+    ), file_path
   )
 
   # -- Row level checks ----
-  checks$valid_vals <- check_tbl_values(
-    tbl,
-    round_id = round_id,
-    file_path = file_path,
-    hub_path = hub_path
+  checks$valid_vals <- try_check(
+    check_tbl_values(
+      tbl,
+      round_id = round_id,
+      file_path = file_path,
+      hub_path = hub_path
+    ), file_path
   )
-  if (is_error(checks$valid_vals)) {
+  if (is_any_error(checks$valid_vals)) {
     return(checks)
   }
 
-  checks$rows_unique <- check_tbl_rows_unique(
-    tbl,
-    file_path = file_path,
-    hub_path = hub_path
+  checks$rows_unique <- try_check(
+    check_tbl_rows_unique(
+      tbl,
+      file_path = file_path,
+      hub_path = hub_path
+    ), file_path
   )
 
-  checks$req_vals <- check_tbl_values_required(
-    tbl,
-    round_id = round_id,
-    file_path = file_path,
-    hub_path = hub_path
+  checks$req_vals <- try_check(
+    check_tbl_values_required(
+      tbl,
+      round_id = round_id,
+      file_path = file_path,
+      hub_path = hub_path
+    ), file_path
   )
 
   # -- Value column checks ----
-  checks$value_col_valid <- check_tbl_value_col(
-    tbl,
-    round_id = round_id,
-    file_path = file_path,
-    hub_path = hub_path
+  checks$value_col_valid <- try_check(
+    check_tbl_value_col(
+      tbl,
+      round_id = round_id,
+      file_path = file_path,
+      hub_path = hub_path
+    ), file_path
   )
 
-  checks$value_col_non_desc <- check_tbl_value_col_ascending(
-    tbl,
-    file_path = file_path
+  checks$value_col_non_desc <- try_check(
+    check_tbl_value_col_ascending(
+      tbl,
+      file_path = file_path
+    ), file_path
   )
 
-  checks$value_col_sum1 <- check_tbl_value_col_sum1(
-    tbl,
-    file_path = file_path
+  checks$value_col_sum1 <- try_check(
+    check_tbl_value_col_sum1(
+      tbl,
+      file_path = file_path
+    ), file_path
   )
 
   custom_checks <- execute_custom_checks(
