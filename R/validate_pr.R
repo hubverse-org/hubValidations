@@ -108,21 +108,38 @@ validate_pr <- function(hub_path = ".", gh_repo, pr_number,
 get_pr_dir_files <- function(pr_filenames, dir_name) {
   pr_filenames[
     fs::path_has_parent(pr_filenames, dir_name)
-  ] %>% fs::path_rel(dir_name)
+  ] %>%
+    stringr::str_subset("README", negate = TRUE) %>%
+    fs::path_rel(dir_name)
 }
 
 inform_unvalidated_files <- function(model_output_files,
                                      model_metadata_files,
                                      pr_filenames) {
   validated_files <- c(model_output_files, model_metadata_files)
-  if (length(pr_filenames) != length(validated_files)) {
+  if (length(pr_filenames) == length(validated_files)) {
+    return(invisible(NULL))
+  }
+  if (length(validated_files) == 0L) {
+    unvalidated_files <- pr_filenames
+  } else {
     validated_idx <- purrr::map_int(
       validated_files,
       ~ grep(.x, pr_filenames, fixed = TRUE)
     )
-    cli::cli_inform(
-      "PR contains commits to additional files which have not been checked:
-          {.val {pr_filenames[-validated_idx]}}."
-    )
+    unvalidated_files <- pr_filenames[-validated_idx]
   }
+
+  unvalidated_bullets <- purrr::map_chr(
+    unvalidated_files,
+    ~ paste0("{.val ", .x, "}")
+  ) %>%
+    purrr::set_names(rep("*", length(unvalidated_files)))
+
+  cli::cli_inform(
+    c(
+      "i" = "PR contains commits to additional files which have not been checked:",
+      unvalidated_bullets, "\n"
+    )
+  )
 }
