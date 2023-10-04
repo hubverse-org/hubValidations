@@ -11,8 +11,9 @@ test_that("validate_pr works on valid PR", {
                 skip_submit_window_check = TRUE)
 
    expect_snapshot(str(checks))
-   expect_invisible(check_for_errors(checks))
-
+   expect_invisible(suppressMessages(check_for_errors(checks)))
+   expect_message(check_for_errors(checks),
+                  regexp = "All validation checks have been successful.")
 
 })
 

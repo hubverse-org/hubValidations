@@ -22,5 +22,6 @@ check_for_errors <- function(x) {
         )
     }
 
+    cli::cli_alert_success("All validation checks have been successful.")
     return(invisible(TRUE))
 }

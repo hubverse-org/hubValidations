@@ -10,12 +10,20 @@
 try_check <- function(expr, file_path) {
   check <- try(expr, silent = TRUE)
   if (inherits(check, "try-error")) {
-    msg <- clean_msg(attr(check, "condition")$message)
+    message <- attr(check, "condition")$message
+    parent_msg <- attr(check, "condition")$parent$message
+    if (is.character(parent_msg)) {
+      parent_msg <- paste(parent_msg, collapse = " --> ")
+      msg <- paste(message, parent_msg,  sep = " --> ")
+    } else {
+      msg <- message
+    }
+    msg <- clean_msg(msg)
 
     return(
       capture_exec_error(
         file_path = file_path,
-        msg = msg,
+        msg = paste("EXEC ERROR:", msg),
         call = get_expr_call_name(expr)
       )
     )

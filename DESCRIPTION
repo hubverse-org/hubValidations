@@ -1,6 +1,6 @@
 Package: hubValidations
 Title: Testing framework for hubverse hub validations
-Version: 0.0.0.9000
+Version: 0.0.0.9001
 Authors@R: c(
     person(
         given = "Anna", 
@@ -8,6 +8,11 @@ Authors@R: c(
         email = "annakrystalli@googlemail.com", 
         role = c("aut", "cre"),
         comment = c(ORCID = "0000-0002-2378-4915")),
+    person(
+        given = "Evan", 
+        family = "Ray", 
+        email = "elray@umass.edu", 
+        role = c("aut")),
     person(
         given = "Hugo",
         family = "Gruson",

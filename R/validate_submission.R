@@ -16,10 +16,12 @@ validate_submission <- function(hub_path, file_path, round_id_col = NULL,
                                 validations_cfg_path = NULL,
                                 skip_submit_window_check = FALSE,
                                 skip_check_config = FALSE) {
-
   check_hub_config <- new_hub_validations()
   if (!skip_check_config) {
-    check_hub_config$valid_config <- check_config_hub_valid(hub_path)
+    check_hub_config$valid_config <- try_check(
+      check_config_hub_valid(hub_path),
+      file_path
+    )
     if (not_pass(check_hub_config$valid_config)) {
       return(check_hub_config)
     }
