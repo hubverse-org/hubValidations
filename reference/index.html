@@ -50,9 +50,9 @@
     </div>
 
     <div class="section level2">
-      <h2 id="all-functions">All functions<a class="anchor" aria-label="anchor" href="#all-functions"></a></h2>
+      <h2 id="higher-level-validation-functions">Higher level validation functions<a class="anchor" aria-label="anchor" href="#higher-level-validation-functions"></a></h2>
       
-      
+      <p class="section-desc"></p><p>Functions combining appropriate check unit test used for higher level validations. All return <code>hub_validations</code> S3 class objects.</p>
 
       
     </div><div id="" class="section level2">
@@ -62,25 +62,53 @@
 
       <dl><dt>
           
-          <code><a href="capture_check_cnd.html">capture_check_cnd()</a></code> 
+          <code><a href="validate_model_data.html">validate_model_data()</a></code> 
         </dt>
-        <dd>Capture a condition of the result of validation check.</dd>
+        <dd>Validate the contents of a submitted model data file</dd>
       </dl><dl><dt>
           
-          <code><a href="capture_check_info.html">capture_check_info()</a></code> 
+          <code><a href="validate_model_file.html">validate_model_file()</a></code> 
         </dt>
-        <dd>Capture a simple info message condition</dd>
+        <dd>Valid file level properties of a submitted model output file.</dd>
       </dl><dl><dt>
           
-          <code><a href="capture_exec_error.html">capture_exec_error()</a></code> 
+          <code><a href="validate_model_metadata.html">validate_model_metadata()</a></code> 
         </dt>
-        <dd>Capture an execution error condition</dd>
+        <dd>Valid properties of a metadata file.</dd>
       </dl><dl><dt>
           
-          <code><a href="capture_exec_warning.html">capture_exec_warning()</a></code> 
+          <code><a href="validate_pr.html">validate_pr()</a></code> 
         </dt>
-        <dd>Capture an execution warning condition</dd>
+        <dd>Validate Pull Request</dd>
       </dl><dl><dt>
+          
+          <code><a href="validate_submission.html">validate_submission()</a></code> 
+        </dt>
+        <dd>Validate a submitted model data file. Checks both file level properties like
+file name, extension, location etc as well as model output data, i.e. the contents
+of the file.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="validate_submission_time.html">validate_submission_time()</a></code> 
+        </dt>
+        <dd>Validate a submitted model data file submission time.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="check_for_errors.html">check_for_errors()</a></code> 
+        </dt>
+        <dd>Raise conditions stored in a <code>hub_validations</code> object</dd>
+      </dl></div><div class="section level2">
+      <h2 id="unit-validation-checks">Unit validation checks<a class="anchor" aria-label="anchor" href="#unit-validation-checks"></a></h2>
+      
+      <p class="section-desc"></p><p>Unit validation checks. All return <code>hub_check</code> S3 class objects.</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
           
           <code><a href="check_config_hub_valid.html">check_config_hub_valid()</a></code> 
         </dt>
@@ -219,22 +247,18 @@ in model data.</dd>
         </dt>
         <dd>Check that any round_id_col name provided or extracted from the hub config is
 valid.</dd>
-      </dl><dl><dt>
-          
-          <code><a href="combine.html">combine()</a></code> 
-        </dt>
-        <dd>Concatenate <code>hub_validations</code> S3 class objects</dd>
-      </dl><dl><dt>
-          
-          <code><a href="is_success.html">is_success()</a></code> <code><a href="is_success.html">is_failure()</a></code> <code><a href="is_success.html">is_error()</a></code> <code><a href="is_success.html">is_info()</a></code> <code><a href="is_success.html">not_pass()</a></code> <code><a href="is_success.html">is_exec_error()</a></code> <code><a href="is_success.html">is_exec_warn()</a></code> <code><a href="is_success.html">is_any_error()</a></code> 
-        </dt>
-        <dd>Get status of a hub check</dd>
-      </dl><dl><dt>
-          
-          <code><a href="new_hub_validations.html">new_hub_validations()</a></code> <code><a href="new_hub_validations.html">as_hub_validations()</a></code> 
-        </dt>
-        <dd>Create new or convert list to <code>hub_validations</code> S3 class object</dd>
-      </dl><dl><dt>
+      </dl></div><div class="section level2">
+      <h2 id="optional-unit-validation-checks">Optional unit validation checks<a class="anchor" aria-label="anchor" href="#optional-unit-validation-checks"></a></h2>
+      
+      <p class="section-desc"></p><p>Optional unit validation checks. All return <code>hub_check</code> S3 class objects and need to be deployed via <code>validations.yml</code> file.</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
           
           <code><a href="opt_check_tbl_col_timediff.html">opt_check_tbl_col_timediff()</a></code> 
         </dt>
@@ -249,7 +273,64 @@ valid.</dd>
           <code><a href="opt_check_tbl_horizon_timediff.html">opt_check_tbl_horizon_timediff()</a></code> 
         </dt>
         <dd>Check time difference between values in two date columns equal a defined period.</dd>
+      </dl></div><div class="section level2">
+      <h2 id="lower-level-functions">Lower level functions<a class="anchor" aria-label="anchor" href="#lower-level-functions"></a></h2>
+      
+      <p class="section-desc"></p><p>Lower level functions for assisting users in developing custom unit checks.</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="capture_check_cnd.html">capture_check_cnd()</a></code> 
+        </dt>
+        <dd>Capture a condition of the result of validation check.</dd>
       </dl><dl><dt>
+          
+          <code><a href="capture_check_info.html">capture_check_info()</a></code> 
+        </dt>
+        <dd>Capture a simple info message condition</dd>
+      </dl><dl><dt>
+          
+          <code><a href="capture_exec_error.html">capture_exec_error()</a></code> 
+        </dt>
+        <dd>Capture an execution error condition</dd>
+      </dl><dl><dt>
+          
+          <code><a href="capture_exec_warning.html">capture_exec_warning()</a></code> 
+        </dt>
+        <dd>Capture an execution warning condition</dd>
+      </dl><dl><dt>
+          
+          <code><a href="is_success.html">is_success()</a></code> <code><a href="is_success.html">is_failure()</a></code> <code><a href="is_success.html">is_error()</a></code> <code><a href="is_success.html">is_info()</a></code> <code><a href="is_success.html">not_pass()</a></code> <code><a href="is_success.html">is_exec_error()</a></code> <code><a href="is_success.html">is_exec_warn()</a></code> <code><a href="is_success.html">is_any_error()</a></code> 
+        </dt>
+        <dd>Get status of a hub check</dd>
+      </dl><dl><dt>
+          
+          <code><a href="read_model_out_file.html">read_model_out_file()</a></code> 
+        </dt>
+        <dd>Check file can be read successfully</dd>
+      </dl><dl><dt>
+          
+          <code><a href="try_check.html">try_check()</a></code> 
+        </dt>
+        <dd>Wrap check expression to capture check execution errors</dd>
+      </dl></div><div class="section level2">
+      <h2 id="-methods"><code>&lt;hub_validations&gt;</code> methods<a class="anchor" aria-label="anchor" href="#-methods"></a></h2>
+      
+      <p class="section-desc"></p><p>Methods for <code>&lt;hub_validations&gt;</code> S3 objects.</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
           
           <code><a href="print.hub_validations.html">print(<i>&lt;hub_validations&gt;</i>)</a></code> 
         </dt>
@@ -261,48 +342,17 @@ valid.</dd>
         <dd>Print results of <code><a href="../reference/validate_pr.html">validate_pr()</a></code> function as a bullet list</dd>
       </dl><dl><dt>
           
-          <code><a href="read_model_out_file.html">read_model_out_file()</a></code> 
+          <code><a href="combine.html">combine()</a></code> 
         </dt>
-        <dd>Check file can be read successfully</dd>
+        <dd>Concatenate <code>hub_validations</code> S3 class objects</dd>
       </dl><dl><dt>
           
-          <code><a href="try_check.html">try_check()</a></code> 
+          <code><a href="new_hub_validations.html">new_hub_validations()</a></code> <code><a href="new_hub_validations.html">as_hub_validations()</a></code> 
         </dt>
-        <dd>Wrap check expression to capture check execution errors</dd>
-      </dl><dl><dt>
-          
-          <code><a href="validate_model_data.html">validate_model_data()</a></code> 
-        </dt>
-        <dd>Validate the contents of a submitted model data file</dd>
-      </dl><dl><dt>
-          
-          <code><a href="validate_model_file.html">validate_model_file()</a></code> 
-        </dt>
-        <dd>Valid file level properties of a submitted model output file.</dd>
-      </dl><dl><dt>
-          
-          <code><a href="validate_model_metadata.html">validate_model_metadata()</a></code> 
-        </dt>
-        <dd>Valid properties of a metadata file.</dd>
-      </dl><dl><dt>
-          
-          <code><a href="validate_pr.html">validate_pr()</a></code> 
-        </dt>
-        <dd>Validate Pull Request</dd>
-      </dl><dl><dt>
-          
-          <code><a href="validate_submission.html">validate_submission()</a></code> 
-        </dt>
-        <dd>Validate a submitted model data file. Checks both file level properties like
-file name, extension, location etc as well as model output data, i.e. the contents
-of the file.</dd>
-      </dl><dl><dt>
-          
-          <code><a href="validate_submission_time.html">validate_submission_time()</a></code> 
-        </dt>
-        <dd>Validate a submitted model data file submission time.</dd>
+        <dd>Create new or convert list to <code>hub_validations</code> S3 class object</dd>
       </dl></div>
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
