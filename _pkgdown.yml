@@ -2,3 +2,36 @@ url: https://infectious-disease-modeling-hubs.github.io/hubValidations/
 template:
   bootstrap: 5
 
+reference:
+- title: "Higher level validation functions"
+  desc: "Functions combining appropriate check unit test used for higher level validations. All return `hub_validations` S3 class objects."
+  contents:
+  - starts_with("validate_")
+  - check_for_errors
+
+- title: "Unit validation checks"
+  desc: "Unit validation checks. All return `hub_check` S3 class objects."
+  contents:
+  - starts_with("check_")
+
+- title: "Optional unit validation checks"
+  desc: "Optional unit validation checks. All return `hub_check` S3 class objects and need to be deployed via `validations.yml` file."
+  contents:
+  - starts_with("opt_check_")
+
+
+- title: "Lower level functions"
+  desc: "Lower level functions for assisting users in developing custom unit checks."
+  contents:
+  - starts_with("capture_")
+  - starts_with("is_")
+  - read_model_out_file
+  - try_check
+
+
+- title: "`<hub_validations>` methods"
+  desc: "Methods for `<hub_validations>` S3 objects."
+  contents:
+  - starts_with("print")
+  - starts_with("combine")
+  - contains("hub_validations")
