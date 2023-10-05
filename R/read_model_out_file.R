@@ -1,4 +1,4 @@
-#' Check file can be read successfully
+#' Read a model output file
 #'
 #' @inheritParams check_valid_round_id
 #' @param use_hub_schema Logical. When reading in `csv` files, whether to use

@@ -2,7 +2,7 @@
 % Please edit documentation in R/try_check.R
 \name{try_check}
 \alias{try_check}
-\title{Wrap check expression to capture check execution errors}
+\title{Wrap check expression in try to capture check execution errors}
 \usage{
 try_check(expr, file_path)
 }
@@ -14,8 +14,9 @@ the hub's model-output directory.}
 }
 \value{
 If \code{expr} executes correctly, the output of \code{expr} is returned. If
+execution fails, and object of class \verb{<error/check_exec_error>} is returned.
 The execution error message is attached as attribute \code{msg}.
 }
 \description{
-Wrap check expression to capture check execution errors
+Wrap check expression in try to capture check execution errors
 }
