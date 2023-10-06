@@ -1,3 +1,11 @@
+# hubValidations 0.0.0.9002
+
+This release includes improvements desgined after the first round of sandbox testing on setting up the CDC FluSight hub. Improvements include:
+
+* Export `parse_file_name` function for parsing model output metadata from a model output file name.
+* Issue more specific and informative messaging when `check_tbl_values()` check fails.
+* Adding a `verbose` option to `check_for_errors()` function which prints the results of all checks in addition to the deafult overall result and subset of failed checks.
+
 # hubValidations 0.0.0.9001
 
 * Release of first draft `hubValidations` package
