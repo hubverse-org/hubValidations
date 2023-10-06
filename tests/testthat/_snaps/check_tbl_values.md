@@ -6,7 +6,7 @@
     Output
       <message/check_success>
       Message:
-      Data rows contain valid value combinations
+      `tbl` contains valid values/value combinations.
 
 ---
 
@@ -16,5 +16,5 @@
     Output
       <error/check_error>
       Error:
-      ! Data rows do not contain valid value combinations Affected rows: 1
+      ! `tbl` contains invalid values/value combinations.  Column `horizon` contains invalid value "11".
 

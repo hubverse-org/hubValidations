@@ -77,9 +77,10 @@
         ..$ call          : chr "check_tbl_col_types"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ valid_vals        :List of 4
-        ..$ message       : chr "Data rows contain valid value combinations \n "
+       $ valid_vals        :List of 5
+        ..$ message       : chr "`tbl` contains valid values/value combinations.  \n "
         ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+        ..$ error_tbl     : NULL
         ..$ call          : chr "check_tbl_values"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
@@ -358,9 +359,10 @@
         ..$ call          : chr "check_tbl_col_types"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ valid_vals        :List of 4
-        ..$ message       : chr "Data rows contain valid value combinations \n "
+       $ valid_vals        :List of 5
+        ..$ message       : chr "`tbl` contains valid values/value combinations.  \n "
         ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+        ..$ error_tbl     : NULL
         ..$ call          : chr "check_tbl_values"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...

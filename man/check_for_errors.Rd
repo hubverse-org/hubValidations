@@ -2,12 +2,15 @@
 % Please edit documentation in R/check_for_errors.R
 \name{check_for_errors}
 \alias{check_for_errors}
-\title{Raise conditions stored in a \code{hub_validations} object}
+\title{Raise conditions stored in a \code{hub_validations} S3 object}
 \usage{
-check_for_errors(x)
+check_for_errors(x, verbose = FALSE)
 }
 \arguments{
 \item{x}{A \code{hub_validations} object}
+
+\item{verbose}{Logical. If \code{TRUE}, print the results of all checks prior to
+raising condition and summarising \code{hub_validations} S3 object check results.}
 }
 \value{
 An error if one of the elements of \code{x} is of class \code{check_failure},
@@ -16,5 +19,6 @@ An error if one of the elements of \code{x} is of class \code{check_failure},
 }
 \description{
 This is meant to be used in CI workflows to raise conditions from
-\code{hub_validations} objects.
+\code{hub_validations} objects but can also be useful locally to summarise the
+results of checks contained in a \code{hub_validations} S3 object.
 }

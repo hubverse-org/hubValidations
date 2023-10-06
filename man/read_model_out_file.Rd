@@ -2,7 +2,7 @@
 % Please edit documentation in R/read_model_out_file.R
 \name{read_model_out_file}
 \alias{read_model_out_file}
-\title{Check file can be read successfully}
+\title{Read a model output file}
 \usage{
 read_model_out_file(file_path, hub_path = ".", use_hub_schema = FALSE)
 }
@@ -27,5 +27,5 @@ the hub's schema to specify column data types.}
 a tibble of contents of the model output file.
 }
 \description{
-Check file can be read successfully
+Read a model output file
 }

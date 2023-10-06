@@ -25,6 +25,7 @@ reference:
   contents:
   - starts_with("capture_")
   - starts_with("is_")
+  - parse_file_name
   - read_model_out_file
   - try_check
 
