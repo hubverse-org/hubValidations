@@ -70,8 +70,9 @@
       capture_check_cnd(check = FALSE, file_path = "test/file.csv", msg_subject = "Column names",
         msg_attribute = "consistent with expected round task IDs and std column names.",
         msg_verbs = 1:2)
-    Error <rlang_error>
-      `msg_verbs` must be a character vector of length 2, not class <integer> of length 2
+    Condition
+      Error in `capture_check_cnd()`:
+      ! `msg_verbs` must be a character vector of length 2, not class <integer> of length 2
 
 ---
 
@@ -79,8 +80,9 @@
       capture_check_cnd(check = FALSE, file_path = "test/file.csv", msg_subject = "Column names",
         msg_attribute = "consistent with expected round task IDs and std column names.",
         msg_verbs = c("are"))
-    Error <rlang_error>
-      `msg_verbs` must be a character vector of length 2, not class <character> of length 1
+    Condition
+      Error in `capture_check_cnd()`:
+      ! `msg_verbs` must be a character vector of length 2, not class <character> of length 1
 
 # capture_check_cnd works correctly
 

@@ -52,7 +52,8 @@
 
     Code
       combine(new_hub_validations(), new_hub_validations(), a = 1)
-    Error <rlang_error>
+    Condition
+      Error in `validate_internal_class()`:
       ! All elements must inherit from class <hub_validations>.
       x Element with index 1 does not.
 
@@ -61,7 +62,8 @@
     Code
       combine(new_hub_validations(file_exists = check_file_exists(file_path, hub_path),
       file_name = check_file_name(file_path), a = 10))
-    Error <rlang_error>
+    Condition
+      Error in `validate_internal_class()`:
       ! All elements must inherit from class <hub_check>.
       x Element with index 3 does not.
 
