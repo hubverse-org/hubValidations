@@ -43,6 +43,19 @@
        $ use_cli_format: logi TRUE
        - attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_warning" "warning" ...
 
+---
+
+    Code
+      str(check_tbl_value_col_sum1(tbl, file_path))
+    Output
+      List of 5
+       $ message       : chr "Values in `value` column do sum to 1 for all unique task ID value combination of pmf\n    output types. \n "
+       $ where         : chr "umass_ens/2023-05-08-umass_ens.csv"
+       $ error_tbl     : NULL
+       $ call          : chr "check_tbl_value_col_sum1"
+       $ use_cli_format: logi TRUE
+       - attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+
 # check_tbl_value_col_sum1 skips correctly
 
     Code

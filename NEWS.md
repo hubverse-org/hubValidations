@@ -1,3 +1,9 @@
+# hubValidations 0.0.0.9003
+
+This release includes a number of bug fixes:
+- Deployment of custom/optional functions via `validations.yml` can now be accessed directly form `pkg` namespace, addressing bug which required `pkg` library to be loaded. (#51)
+- Use `all.equal` to check that sums of `pmf` probabilities equal 1. (#52)
+
 # hubValidations 0.0.0.9002
 
 This release includes improvements desgined after the first round of sandbox testing on setting up the CDC FluSight hub. Improvements include:

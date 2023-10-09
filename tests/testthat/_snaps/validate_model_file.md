@@ -61,7 +61,7 @@
 
     Code
       validate_model_file(hub_path, file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv")
-    Message <rlang_message>
+    Message
       v 2022-10-08-team1-goodmodel.csv: File exists at path 'model-output/team1-goodmodel/2022-10-08-team1-goodmodel.csv'.
       v 2022-10-08-team1-goodmodel.csv: File name "2022-10-08-team1-goodmodel.csv" is valid.
       v 2022-10-08-team1-goodmodel.csv: File directory name matches `model_id` metadata in file name.
@@ -73,14 +73,14 @@
 
     Code
       validate_model_file(hub_path, file_path = "team1-goodmodel/2022-10-15-team1-goodmodel.csv")
-    Message <rlang_message>
+    Message
       x 2022-10-15-team1-goodmodel.csv: File does not exist at path 'model-output/team1-goodmodel/2022-10-15-team1-goodmodel.csv'.
 
 ---
 
     Code
       validate_model_file(hub_path, file_path = "team1-goodmodel/2022-10-15-hub-baseline.csv")
-    Message <rlang_message>
+    Message
       v 2022-10-15-hub-baseline.csv: File exists at path 'model-output/team1-goodmodel/2022-10-15-hub-baseline.csv'.
       v 2022-10-15-hub-baseline.csv: File name "2022-10-15-hub-baseline.csv" is valid.
       ! 2022-10-15-hub-baseline.csv: File directory name must match `model_id` metadata in file name.  File should be submitted to directory "hub-baseline" not "team1-goodmodel"
@@ -113,7 +113,7 @@
 
     Code
       validate_model_file(hub_path, file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv")
-    Message <rlang_message>
+    Message
       [1m[22m[32mv[39m 2022-10-08-team1-goodmodel.csv: File exists at path [34mmodel-output/team1-goodmodel/2022-10-08-team1-goodmodel.csv[39m.
       [32mv[39m 2022-10-08-team1-goodmodel.csv: File name [34m"2022-10-08-team1-goodmodel.csv"[39m is valid.
       [32mv[39m 2022-10-08-team1-goodmodel.csv: File directory name matches `model_id` metadata in file name.
@@ -125,14 +125,14 @@
 
     Code
       validate_model_file(hub_path, file_path = "team1-goodmodel/2022-10-15-team1-goodmodel.csv")
-    Message <rlang_message>
+    Message
       [1m[22m[31mx[39m 2022-10-15-team1-goodmodel.csv: File does not exist at path [34mmodel-output/team1-goodmodel/2022-10-15-team1-goodmodel.csv[39m.
 
 ---
 
     Code
       validate_model_file(hub_path, file_path = "team1-goodmodel/2022-10-15-hub-baseline.csv")
-    Message <rlang_message>
+    Message
       [1m[22m[32mv[39m 2022-10-15-hub-baseline.csv: File exists at path [34mmodel-output/team1-goodmodel/2022-10-15-hub-baseline.csv[39m.
       [32mv[39m 2022-10-15-hub-baseline.csv: File name [34m"2022-10-15-hub-baseline.csv"[39m is valid.
       [33m![39m 2022-10-15-hub-baseline.csv: File directory name must match `model_id` metadata in file name.  File should be submitted to directory [34m"hub-baseline"[39m not [34m"team1-goodmodel"[39m
@@ -165,7 +165,7 @@
 
     Code
       validate_model_file(hub_path, file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv")
-    Message <rlang_message>
+    Message
       ✔ 2022-10-08-team1-goodmodel.csv: File exists at path 'model-output/team1-goodmodel/2022-10-08-team1-goodmodel.csv'.
       ✔ 2022-10-08-team1-goodmodel.csv: File name "2022-10-08-team1-goodmodel.csv" is valid.
       ✔ 2022-10-08-team1-goodmodel.csv: File directory name matches `model_id` metadata in file name.
@@ -177,14 +177,14 @@
 
     Code
       validate_model_file(hub_path, file_path = "team1-goodmodel/2022-10-15-team1-goodmodel.csv")
-    Message <rlang_message>
+    Message
       ✖ 2022-10-15-team1-goodmodel.csv: File does not exist at path 'model-output/team1-goodmodel/2022-10-15-team1-goodmodel.csv'.
 
 ---
 
     Code
       validate_model_file(hub_path, file_path = "team1-goodmodel/2022-10-15-hub-baseline.csv")
-    Message <rlang_message>
+    Message
       ✔ 2022-10-15-hub-baseline.csv: File exists at path 'model-output/team1-goodmodel/2022-10-15-hub-baseline.csv'.
       ✔ 2022-10-15-hub-baseline.csv: File name "2022-10-15-hub-baseline.csv" is valid.
       ! 2022-10-15-hub-baseline.csv: File directory name must match `model_id` metadata in file name.  File should be submitted to directory "hub-baseline" not "team1-goodmodel"
@@ -217,7 +217,7 @@
 
     Code
       validate_model_file(hub_path, file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv")
-    Message <rlang_message>
+    Message
       [1m[22m[32m✔[39m 2022-10-08-team1-goodmodel.csv: File exists at path [34mmodel-output/team1-goodmodel/2022-10-08-team1-goodmodel.csv[39m.
       [32m✔[39m 2022-10-08-team1-goodmodel.csv: File name [34m"2022-10-08-team1-goodmodel.csv"[39m is valid.
       [32m✔[39m 2022-10-08-team1-goodmodel.csv: File directory name matches `model_id` metadata in file name.
@@ -229,14 +229,14 @@
 
     Code
       validate_model_file(hub_path, file_path = "team1-goodmodel/2022-10-15-team1-goodmodel.csv")
-    Message <rlang_message>
+    Message
       [1m[22m[31m✖[39m 2022-10-15-team1-goodmodel.csv: File does not exist at path [34mmodel-output/team1-goodmodel/2022-10-15-team1-goodmodel.csv[39m.
 
 ---
 
     Code
       validate_model_file(hub_path, file_path = "team1-goodmodel/2022-10-15-hub-baseline.csv")
-    Message <rlang_message>
+    Message
       [1m[22m[32m✔[39m 2022-10-15-hub-baseline.csv: File exists at path [34mmodel-output/team1-goodmodel/2022-10-15-hub-baseline.csv[39m.
       [32m✔[39m 2022-10-15-hub-baseline.csv: File name [34m"2022-10-15-hub-baseline.csv"[39m is valid.
       [33m![39m 2022-10-15-hub-baseline.csv: File directory name must match `model_id` metadata in file name.  File should be submitted to directory [34m"hub-baseline"[39m not [34m"team1-goodmodel"[39m

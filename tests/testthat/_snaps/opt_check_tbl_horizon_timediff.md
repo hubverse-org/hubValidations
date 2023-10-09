@@ -43,30 +43,34 @@
     Code
       opt_check_tbl_horizon_timediff(tbl, file_path, hub_path, t0_colname = "forecast_date",
         t1_colname = "target_end_dates")
-    Error <simpleError>
-      Assertion on 't1_colname' failed: Must be element of set {'forecast_date','target_end_date','horizon','target','location','output_type','output_type_id','value'}, but is 'target_end_dates'.
+    Condition
+      Error in `opt_check_tbl_horizon_timediff()`:
+      ! Assertion on 't1_colname' failed: Must be element of set {'forecast_date','target_end_date','horizon','target','location','output_type','output_type_id','value'}, but is 'target_end_dates'.
 
 ---
 
     Code
       opt_check_tbl_horizon_timediff(tbl, file_path, hub_path, t0_colname = "forecast_date",
         t1_colname = c("target_end_date", "forecast_date"))
-    Error <simpleError>
-      Assertion on 't1_colname' failed: Must have length 1, but has length 2.
+    Condition
+      Error in `opt_check_tbl_horizon_timediff()`:
+      ! Assertion on 't1_colname' failed: Must have length 1, but has length 2.
 
 ---
 
     Code
       opt_check_tbl_horizon_timediff(tbl, file_path, hub_path, t0_colname = "forecast_date",
         t1_colname = "target_end_date", timediff = 7L)
-    Error <simpleError>
-      Assertion on 'timediff' failed: Must inherit from class 'Period', but has class 'integer'.
+    Condition
+      Error in `opt_check_tbl_horizon_timediff()`:
+      ! Assertion on 'timediff' failed: Must inherit from class 'Period', but has class 'integer'.
 
 ---
 
     Code
       opt_check_tbl_horizon_timediff(tbl, file_path, hub_path, t0_colname = "forecast_date",
         t1_colname = "target_end_date")
-    Error <rlang_error>
-      Column `colname` must be configured as <Date> not <character>.
+    Condition
+      Error in `opt_check_tbl_horizon_timediff()`:
+      ! Column `colname` must be configured as <Date> not <character>.
 
