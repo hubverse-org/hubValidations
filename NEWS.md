@@ -1,3 +1,7 @@
+# hubValidations 0.0.0.9004
+
+This release contains a bug fix for reading in and validating CSV column types correctly. (#54) 
+
 # hubValidations 0.0.0.9003
 
 This release includes a number of bug fixes:
