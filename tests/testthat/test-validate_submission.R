@@ -76,15 +76,15 @@ test_that("validate_submission works", {
   expect_snapshot(
     str(
       validate_submission(hub_path,
-                          file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv",
-                          skip_submit_window_check = TRUE
+        file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv",
+        skip_submit_window_check = TRUE
       )
     )
   )
   expect_s3_class(
     validate_submission(hub_path,
-                        file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv",
-                        skip_submit_window_check = TRUE
+      file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv",
+      skip_submit_window_check = TRUE
     ),
     c("hub_validations", "list")
   )
@@ -102,7 +102,7 @@ test_that("validate_submission submission within window works", {
   expect_snapshot(
     str(
       validate_submission(hub_path,
-                          file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+        file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
       )[["submission_time"]]
     )
   )
@@ -120,8 +120,20 @@ test_that("validate_submission submission outside window fails correctly", {
   expect_snapshot(
     str(
       validate_submission(hub_path,
-                          file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+        file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
       )[["submission_time"]]
+    )
+  )
+})
+
+test_that("validate_submission csv file read in and validated according to schema.", {
+  expect_snapshot(
+    str(
+      validate_submission(
+        hub_path = test_path("testdata/hub"),
+        file_path = "hub-baseline/2023-04-24-hub-baseline.csv",
+        skip_submit_window_check = TRUE
+      )
     )
   )
 })
