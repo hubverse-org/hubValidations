@@ -4,7 +4,7 @@
 \alias{read_model_out_file}
 \title{Read a model output file}
 \usage{
-read_model_out_file(file_path, hub_path = ".", use_hub_schema = FALSE)
+read_model_out_file(file_path, hub_path = ".", use_hub_schema = TRUE)
 }
 \arguments{
 \item{file_path}{character string. Path to the file being validated relative to
