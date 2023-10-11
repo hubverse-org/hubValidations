@@ -45,12 +45,3 @@
        $ output_type_id : chr [1:48] NA NA "0.01" "0.025" ...
        $ value          : num [1:48] 1033 1033 0 0 0 ...
 
-# read_model_out_file errors when file contents cannot be coerced to hub schema.
-
-    Code
-      read_model_out_file(hub_path = test_path("testdata/hub"),
-      "hub-baseline/2023-05-01-hub-baseline.csv")
-    Condition
-      Error:
-      ! Invalid: In CSV column #2: CSV conversion error to int32: invalid value 'horizon 1'
-

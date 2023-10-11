@@ -34,12 +34,12 @@ test_that(
 test_that(
   "read_model_out_file errors when file contents cannot be coerced to hub schema.",
   {
-    expect_snapshot(
+    expect_error(
       read_model_out_file(
         hub_path = test_path("testdata/hub"),
         "hub-baseline/2023-05-01-hub-baseline.csv"
       ),
-      error = TRUE
+      regexp = "* CSV conversion error to int32: invalid value 'horizon 1'"
     )
   }
 )

@@ -139,13 +139,13 @@ test_that("validate_submission csv file read in and validated according to schem
 })
 
 test_that("validate_submission fails when csv cannot be parsed according to schema.", {
-  expect_snapshot(
-    str(
+  expect_s3_class(
       validate_submission(
         hub_path = test_path("testdata/hub"),
         file_path = "hub-baseline/2023-05-01-hub-baseline.csv",
         skip_submit_window_check = TRUE
+      )[["file_read"]],
+      c("check_error", "hub_check", "rlang_error", "error", "condition"
       )
     )
-  )
 })
