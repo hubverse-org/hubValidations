@@ -565,3 +565,61 @@
         ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
        - attr(*, "class")= chr [1:2] "hub_validations" "list"
 
+# validate_submission fails when csv cannot be parsed according to schema.
+
+    Code
+      str(validate_submission(hub_path = test_path("testdata/hub"), file_path = "hub-baseline/2023-05-01-hub-baseline.csv",
+      skip_submit_window_check = TRUE))
+    Output
+      Classes 'hub_validations', 'list'  hidden list of 8
+       $ valid_config   :List of 4
+        ..$ message       : chr "All hub config files are valid. \n "
+        ..$ where         : chr "hub"
+        ..$ call          : chr "check_config_hub_valid"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ file_exists    :List of 4
+        ..$ message       : chr "File exists at path 'forecasts/hub-baseline/2023-05-01-hub-baseline.csv'. \n "
+        ..$ where         : chr "hub-baseline/2023-05-01-hub-baseline.csv"
+        ..$ call          : chr "check_file_exists"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ file_name      :List of 4
+        ..$ message       : chr "File name \"2023-05-01-hub-baseline.csv\" is valid. \n "
+        ..$ where         : chr "hub-baseline/2023-05-01-hub-baseline.csv"
+        ..$ call          : chr "check_file_name"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ file_location  :List of 4
+        ..$ message       : chr "File directory name matches `model_id`\n                                           metadata in file name. \n "
+        ..$ where         : chr "hub-baseline/2023-05-01-hub-baseline.csv"
+        ..$ call          : chr "check_file_location"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ round_id_valid :List of 4
+        ..$ message       : chr "`round_id` is valid. \n "
+        ..$ where         : chr "hub-baseline/2023-05-01-hub-baseline.csv"
+        ..$ call          : chr "check_valid_round_id"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ file_format    :List of 4
+        ..$ message       : chr "File is accepted hub format. \n "
+        ..$ where         : chr "hub-baseline/2023-05-01-hub-baseline.csv"
+        ..$ call          : chr "check_file_format"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ metadata_exists:List of 4
+        ..$ message       : chr "Metadata file exists at path 'model-metadata/hub-baseline.yml'. \n "
+        ..$ where         : chr "hub-baseline/2023-05-01-hub-baseline.csv"
+        ..$ call          : chr "check_submission_metadata_file_exists"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ file_read      :List of 6
+        ..$ message       : chr "File could not be read successfully. \n Invalid: In CSV column #2: CSV conversion error to int32: invalid value"| __truncated__
+        ..$ trace         : NULL
+        ..$ parent        : NULL
+        ..$ where         : chr "hub-baseline/2023-05-01-hub-baseline.csv"
+        ..$ call          : chr "check_file_read"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_error" "hub_check" "rlang_error" "error" ...
+
