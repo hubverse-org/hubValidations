@@ -7,7 +7,8 @@
 check_tbl_values_required <- function(tbl, round_id, file_path, hub_path) {
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
   tbl[["value"]] <- NULL
-  tbl <- hubUtils::coerce_to_character(tbl)
+  tbl <- hubUtils::coerce_to_character(tbl) %>%
+    coerce_num_output_type_ids(file_path, hub_path)
 
   req <- hubUtils::expand_model_out_val_grid(
     config_tasks,

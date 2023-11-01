@@ -11,7 +11,9 @@ check_tbl_values <- function(tbl, round_id, file_path, hub_path) {
   # working with larger files but currently arrow does not match NAs as dplyr
   # does, returning false positives for mean & median rows which contain NA in
   # output type ID column.
-  tbl <- hubUtils::coerce_to_character(tbl)
+  tbl <- hubUtils::coerce_to_character(tbl) %>%
+    coerce_num_output_type_ids(file_path, hub_path)
+
   accepted_vals <- hubUtils::expand_model_out_val_grid(
     config_tasks = config_tasks,
     round_id = round_id,
@@ -104,4 +106,41 @@ summarise_invalid_values <- function(valid_tbl, accepted_vals) {
     msg = paste(invalid_vals_msg, invalid_combs_msg, sep = "\n"),
     invalid_combs_idx = invalid_combs_idx
   )
+}
+
+
+get_numeric_output_type_ids <- function(file_path, hub_path) {
+
+  get_file_round_config(file_path, hub_path)[["model_tasks"]] %>%
+    purrr::map(~ .x[["output_type"]]) %>%
+    unlist(recursive = FALSE) %>%
+    purrr::map(~ purrr::pluck(.x, "output_type_id")) %>%
+    purrr::map_lgl(~is.numeric(unlist(.x))) %>%
+    purrr::keep(isTRUE) %>%
+    names() %>%
+    unique()
+}
+
+
+coerce_num_output_type_ids <- function(tbl, file_path, hub_path) {
+
+  num_output_types <- get_numeric_output_type_ids(
+    file_path = file_path,
+    hub_path = hub_path)
+
+  if (any(tbl[["output_type"]] %in% num_output_types) &&
+      inherits(tbl[["output_type_id"]], "character")) {
+
+    type_coerce <- tbl[["output_type"]] %in% num_output_types
+    num_output_type_id <- suppressWarnings(
+      as.numeric(tbl$output_type_id[type_coerce])
+    )
+    # establish only valid coercions to distinguish between the potential for
+    # two cdf output types in the same round, one numeric and one character.
+    valid <- !is.na(num_output_type_id)
+    tbl$output_type_id[type_coerce][valid] <- as.character(
+      num_output_type_id[valid]
+    )
+  }
+  tbl
 }

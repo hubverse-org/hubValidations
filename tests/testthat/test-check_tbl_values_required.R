@@ -111,3 +111,38 @@ test_that("check_tbl_values_required works with 2 separate model tasks & complet
     str(missing_horizon)
   )
 })
+
+test_that(
+  "check_tbl_values_required correctly matches numeric output type IDs when output type ID col is character.",
+  {
+    hub_path <- test_path("testdata/hub-chr")
+    file_path <- "UMass-gbq/2023-10-28-UMass-gbq.csv"
+    round_id <- "2023-10-28"
+    tbl <- read_model_out_file(
+      file_path = file_path,
+      hub_path = hub_path
+    )
+
+    check <- check_tbl_values_required(
+      tbl = tbl,
+      round_id = round_id,
+      file_path = file_path,
+      hub_path = hub_path
+    )
+
+    expect_s3_class(
+      check,
+      c("check_failure", "hub_check", "rlang_warning", "warning", "condition")
+    )
+
+    # Expect that values for output type IDs "0.1000000000000000055511", "0.150" and
+    #  "0.2" are correctly interpretted and not part of the missing output type IDs.
+    expect_length(
+      intersect(
+        c("0.1", "0.15", "0.2"),
+        check$missing$output_type_id
+      ),
+      0L
+    )
+  }
+)
