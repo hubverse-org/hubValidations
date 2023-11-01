@@ -1,6 +1,6 @@
 Package: hubValidations
 Title: Testing framework for hubverse hub validations
-Version: 0.0.0.9003
+Version: 0.0.0.9005
 Authors@R: c(
     person(
         given = "Anna", 
@@ -53,7 +53,7 @@ Suggests:
     gert,
     mockery,
     rmarkdown,
-    testthat (>= 3.0.0),
+    testthat (>= 3.2.0),
     testthis,
     withr
 Remotes:

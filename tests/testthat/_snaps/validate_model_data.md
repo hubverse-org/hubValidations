@@ -241,7 +241,7 @@
 
     Code
       validate_model_data(hub_path, file_path)
-    Message <rlang_message>
+    Message
       v 2022-10-08-team1-goodmodel.csv: File could be read successfully.
       v 2022-10-08-team1-goodmodel.csv: `round_id_col` name is valid.
       v 2022-10-08-team1-goodmodel.csv: `round_id` column "origin_date" contains a single, unique round ID value.
@@ -266,7 +266,7 @@
 
     Code
       validate_model_data(hub_path, file_path)
-    Message <rlang_message>
+    Message
       [1m[22m[32mv[39m 2022-10-08-team1-goodmodel.csv: File could be read successfully.
       [32mv[39m 2022-10-08-team1-goodmodel.csv: `round_id_col` name is valid.
       [32mv[39m 2022-10-08-team1-goodmodel.csv: `round_id` column [34m"origin_date"[39m contains a single, unique round ID value.
@@ -291,7 +291,7 @@
 
     Code
       validate_model_data(hub_path, file_path)
-    Message <rlang_message>
+    Message
       ✔ 2022-10-08-team1-goodmodel.csv: File could be read successfully.
       ✔ 2022-10-08-team1-goodmodel.csv: `round_id_col` name is valid.
       ✔ 2022-10-08-team1-goodmodel.csv: `round_id` column "origin_date" contains a single, unique round ID value.
@@ -316,7 +316,7 @@
 
     Code
       validate_model_data(hub_path, file_path)
-    Message <rlang_message>
+    Message
       [1m[22m[32m✔[39m 2022-10-08-team1-goodmodel.csv: File could be read successfully.
       [32m✔[39m 2022-10-08-team1-goodmodel.csv: `round_id_col` name is valid.
       [32m✔[39m 2022-10-08-team1-goodmodel.csv: `round_id` column [34m"origin_date"[39m contains a single, unique round ID value.
@@ -341,6 +341,7 @@
 
     Code
       validate_model_data(hub_path, file_path = "random-path.csv")
-    Error <rlang_error>
-      Could not parse file name 'random-path' for submission metadata. Please consult documentation for file name requirements for correct metadata parsing.
+    Condition
+      Error in `parse_file_name()`:
+      ! Could not parse file name 'random-path' for submission metadata. Please consult documentation for file name requirements for correct metadata parsing.
 

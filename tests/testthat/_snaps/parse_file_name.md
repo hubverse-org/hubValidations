@@ -65,6 +65,7 @@
 
     Code
       parse_file_name("model-output/team1-goodmodel/2022-10-08-team1_goodmodel.csv")
-    Error <rlang_error>
-      Could not parse file name '2022-10-08-team1_goodmodel' for submission metadata. Please consult documentation for file name requirements for correct metadata parsing.
+    Condition
+      Error in `parse_file_name()`:
+      ! Could not parse file name '2022-10-08-team1_goodmodel' for submission metadata. Please consult documentation for file name requirements for correct metadata parsing.
 

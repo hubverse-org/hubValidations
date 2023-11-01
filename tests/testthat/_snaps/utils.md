@@ -39,8 +39,9 @@
 
     Code
       get_file_round_id(file_path = "team1-goodmodel/2022-10-08-team-1-goodmodel.csv")
-    Error <rlang_error>
-      Could not parse file name '2022-10-08-team-1-goodmodel' for submission metadata. Please consult documentation for file name requirements for correct metadata parsing.
+    Condition
+      Error in `parse_file_name()`:
+      ! Could not parse file name '2022-10-08-team-1-goodmodel' for submission metadata. Please consult documentation for file name requirements for correct metadata parsing.
 
 # get_file_* utils work
 

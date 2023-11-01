@@ -17,3 +17,29 @@ test_that("read_model_out_file works", {
     )
   )
 })
+
+test_that(
+  "read_model_out_file correctly uses hub schema to read character cols in csvs",
+  {
+    expect_snapshot(
+      str(
+        read_model_out_file(
+          hub_path = test_path("testdata/hub"),
+          "hub-baseline/2023-04-24-hub-baseline.csv"
+        )
+      )
+    )
+  }
+)
+test_that(
+  "read_model_out_file errors when file contents cannot be coerced to hub schema.",
+  {
+    expect_error(
+      read_model_out_file(
+        hub_path = test_path("testdata/hub"),
+        "hub-baseline/2023-05-01-hub-baseline.csv"
+      ),
+      regexp = "* CSV conversion error to int32: invalid value 'horizon 1'"
+    )
+  }
+)

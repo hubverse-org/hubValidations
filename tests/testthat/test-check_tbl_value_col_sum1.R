@@ -26,6 +26,18 @@ test_that("check_tbl_value_col_sum1 errors correctly", {
       check_tbl_value_col_sum1(tbl, file_path)
     )
   )
+
+  tbl$value[1] <- 0.818
+  tbl$value[2] <- 0.180
+  tbl$value[3] <- 0.002
+  expect_snapshot(
+    str(
+      check_tbl_value_col_sum1(tbl, file_path)
+    )
+  )
+
+
+
 })
 
 test_that("check_tbl_value_col_sum1 skips correctly", {
