@@ -146,3 +146,27 @@ test_that(
     )
   }
 )
+
+
+
+test_that(
+  "check_tbl_values_required works when config contains non required modeling task.",
+  {
+    hub_path <- test_path("testdata/hub-it")
+    file_path <- "Tm-Md/2023-11-04-Tm-Md.csv"
+    round_id <- "2023-11-04"
+    tbl <- read_model_out_file(
+      file_path = file_path,
+      hub_path = hub_path
+    )
+    expect_s3_class(
+      check_tbl_values_required(
+        tbl = tbl,
+        round_id = round_id,
+        file_path = file_path,
+        hub_path = hub_path
+      ),
+      c("check_success", "hub_check", "rlang_message", "message", "condition")
+    )
+  }
+)
