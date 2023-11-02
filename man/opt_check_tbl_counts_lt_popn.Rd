@@ -59,6 +59,8 @@ Check that predicted values per location are less than total location population
 \details{
 Should only be applied to rows containing count predictions. Use argument
 \code{targets} to filter \code{tbl} data to appropriate count target rows.
+
+Should be deployed as part of \code{validate_model_data} optional checks.
 }
 \examples{
 hub_path <- system.file("testhubs/flusight", package = "hubValidations")
