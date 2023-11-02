@@ -68,6 +68,23 @@ test_that("check_tbl_values consistent across numeric & character output type id
     c("check_success", "hub_check", "rlang_message", "message", "condition")
   )
 
+  file_path <- "UMass-gbq/2023-11-11-UMass-gbq.csv"
+  # File with only numeric output type ids.
+  round_id <- "2023-11-11"
+  tbl <- read_model_out_file(
+    file_path = file_path,
+    hub_path = hub_path
+  )
+  expect_s3_class(
+    check_tbl_values(
+      tbl = tbl,
+      round_id = round_id,
+      file_path = file_path,
+      hub_path = hub_path
+    ),
+    c("check_error", "hub_check", "rlang_error", "error", "condition")
+  )
+
   # Hub with only numeric output type ids
   hub_path <- test_path("testdata/hub-num")
   # File with only numeric output type ids.
@@ -85,5 +102,23 @@ test_that("check_tbl_values consistent across numeric & character output type id
       hub_path = hub_path
     ),
     c("check_success", "hub_check", "rlang_message", "message", "condition")
+  )
+
+  hub_path <- test_path("testdata/hub-num")
+  # File with only numeric output type ids.
+  file_path <- "UMass-gbq/2023-11-11-UMass-gbq.csv"
+  round_id <- "2023-11-11"
+  tbl <- read_model_out_file(
+    file_path = file_path,
+    hub_path = hub_path
+  )
+  expect_s3_class(
+    check_tbl_values(
+      tbl = tbl,
+      round_id = round_id,
+      file_path = file_path,
+      hub_path = hub_path
+    ),
+    c("check_error", "hub_check", "rlang_error", "error", "condition")
   )
 })
