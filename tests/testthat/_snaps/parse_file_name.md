@@ -61,6 +61,35 @@
       [1] "parquet"
       
 
+---
+
+    Code
+      parse_file_name("hub-baseline.yml", file_type = "model_metadata")
+    Output
+      $round_id
+      [1] NA
+      
+      $team_abbr
+      [1] "hub"
+      
+      $model_abbr
+      [1] "baseline"
+      
+      $model_id
+      [1] "hub-baseline"
+      
+      $ext
+      [1] "yml"
+      
+
+---
+
+    Code
+      parse_file_name("hubBaseline.yml", file_type = "model_metadata")
+    Condition
+      Error in `parse_file_name()`:
+      ! Could not parse file name 'hubBaseline' for submission metadata. Please consult documentation for file name requirements for correct metadata parsing.
+
 # parse_file_name fails correctly
 
     Code
