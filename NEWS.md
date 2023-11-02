@@ -1,6 +1,8 @@
 # hubValidations 0.0.0.9005
 
 * Improved handling of numeric output type IDs (including high precision floating points / values with trailing zeros), especially when overall hub output type ID column is character. This previously lead to a number of bugs and false validation failures (#58 & #54) which are addressed in this version.
+* Bug fixes with respect to handling modelling tasks with no required task ID / output type combinations.
+* Improved capture of error messages when check execution error occurs.
 
 # hubValidations 0.0.0.9004
 
