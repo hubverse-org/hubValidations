@@ -3,8 +3,8 @@
     "name": "US CDC FluSight",
     "maintainer": "US CDC",
     "contact": {
-        "name": "Rebecca Borchering",
-        "email": "xhq2@cdc.gov"
+        "name": "Hub Admin Name",
+        "email": "hub-admin-email@example.com"
     },
     "repository_host": "GitHub",
     "repository_url": "https://github.com/cdcepi/FluSight-forecast-hub",
