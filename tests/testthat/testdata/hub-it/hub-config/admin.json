@@ -3,8 +3,8 @@
     "name": "Influenza Forecasting Hub Europe",
     "maintainer": "ISI Foundation",
     "contact": {
-        "name": "Paolo Milano",
-        "email": "paolo.milano@isi.it"
+        "name": "Hub Admin Name",
+        "email": "hub-admin-email@example.com"
     },
     "repository_url": "https://github.com/european-modelling-hubs/flu-forecast-hub",
     "file_format": ["csv"],
