@@ -1,19 +1,16 @@
 #' Check model output data tbl contains valid value combinations
-#'
+#' @param tbl a tibble/data.frame of the contents of the file being validated. Column types must **all be character**.
 #' @inherit check_tbl_colnames params
 #' @inherit check_tbl_colnames return
 #' @export
 check_tbl_values <- function(tbl, round_id, file_path, hub_path) {
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
 
-  # Coerce both tbl and accepted vals to character for easier comparison of
+  # Coerce accepted vals to character for easier comparison of
   # values. Tried to use arrow tbls for comparisons as more efficient when
   # working with larger files but currently arrow does not match NAs as dplyr
   # does, returning false positives for mean & median rows which contain NA in
   # output type ID column.
-  tbl <- hubUtils::coerce_to_character(tbl) %>%
-    coerce_num_output_type_ids(file_path, hub_path)
-
   accepted_vals <- hubUtils::expand_model_out_val_grid(
     config_tasks = config_tasks,
     round_id = round_id,

@@ -8,7 +8,7 @@ in model data.}
 check_tbl_values_required(tbl, round_id, file_path, hub_path)
 }
 \arguments{
-\item{tbl}{a tibble/data.frame of the contents of the file being validated.}
+\item{tbl}{a tibble/data.frame of the contents of the file being validated. Column types must \strong{all be character}.}
 
 \item{round_id}{character string. The round identifier.}
 

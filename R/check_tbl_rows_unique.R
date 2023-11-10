@@ -3,6 +3,7 @@
 #' Checks that combinations of task ID, output type and output type ID value
 #' combinations are unique, by checking that there are no duplicate rows across
 #' all `tbl` columns excluding the `value` column.
+#' @inheritParams check_tbl_values
 #' @inherit check_tbl_colnames params
 #' @inherit check_tbl_col_types return
 #' @export
