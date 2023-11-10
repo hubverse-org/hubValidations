@@ -1,4 +1,5 @@
 test_that("check_config_hub_valid works", {
+    skip_if_offline()
     expect_snapshot(
         check_config_hub_valid(
             hub_path = system.file("testhubs/simple", package = "hubValidations"))

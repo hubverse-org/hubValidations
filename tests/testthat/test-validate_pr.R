@@ -1,4 +1,5 @@
 test_that("validate_pr works on valid PR", {
+    skip_if_offline()
 
     temp_hub <- fs::path(tempdir(), "valid_sb_hub")
     gert::git_clone(url = "https://github.com/Infectious-Disease-Modeling-Hubs/ci-testhub-simple",
@@ -18,6 +19,7 @@ test_that("validate_pr works on valid PR", {
 })
 
 test_that("validate_pr works on invalid PR", {
+    skip_if_offline()
 
     temp_hub <- fs::path(tempdir(), "invalid_sb_hub")
     gert::git_clone(url = "https://github.com/Infectious-Disease-Modeling-Hubs/ci-testhub-simple",

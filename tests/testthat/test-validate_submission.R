@@ -1,4 +1,6 @@
 test_that("validate_submission works", {
+  skip_if_offline()
+
   hub_path <- system.file("testhubs/simple", package = "hubValidations")
 
   # File that passes validation
@@ -91,6 +93,8 @@ test_that("validate_submission works", {
 })
 
 test_that("validate_submission submission within window works", {
+  skip_if_offline()
+
   hub_path <- system.file("testhubs/simple", package = "hubValidations")
 
   mockery::stub(
@@ -109,6 +113,8 @@ test_that("validate_submission submission within window works", {
 })
 
 test_that("validate_submission submission outside window fails correctly", {
+  skip_if_offline()
+
   hub_path <- system.file("testhubs/simple", package = "hubValidations")
 
   mockery::stub(
@@ -127,6 +133,8 @@ test_that("validate_submission submission outside window fails correctly", {
 })
 
 test_that("validate_submission csv file read in and validated according to schema.", {
+  skip_if_offline()
+
   expect_snapshot(
     str(
       validate_submission(
@@ -139,6 +147,8 @@ test_that("validate_submission csv file read in and validated according to schem
 })
 
 test_that("validate_submission fails when csv cannot be parsed according to schema.", {
+  skip_if_offline()
+
   expect_s3_class(
       validate_submission(
         hub_path = test_path("testdata/hub"),
