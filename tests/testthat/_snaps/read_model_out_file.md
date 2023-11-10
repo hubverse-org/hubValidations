@@ -17,8 +17,7 @@
 
     Code
       str(read_model_out_file(file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv",
-        hub_path = system.file("testhubs/simple", package = "hubValidations"),
-        use_hub_schema = TRUE))
+        hub_path = system.file("testhubs/simple", package = "hubValidations")))
     Output
       tibble [47 x 7] (S3: tbl_df/tbl/data.frame)
        $ origin_date   : Date[1:47], format: "2022-10-08" "2022-10-08" ...

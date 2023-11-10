@@ -4,7 +4,11 @@
 \alias{read_model_out_file}
 \title{Read a model output file}
 \usage{
-read_model_out_file(file_path, hub_path = ".", use_hub_schema = TRUE)
+read_model_out_file(
+  file_path,
+  hub_path = ".",
+  coerce_types = c("hub", "chr", "none")
+)
 }
 \arguments{
 \item{file_path}{character string. Path to the file being validated relative to
@@ -20,8 +24,12 @@ in the \code{arrow} package.
 The hub must be fully configured with valid \code{admin.json} and \code{tasks.json}
 files within the \code{hub-config} directory.}
 
-\item{use_hub_schema}{Logical. When reading in \code{csv} files, whether to use
-the hub's schema to specify column data types.}
+\item{coerce_types}{character. What to coerce column types to on read.
+\itemize{
+\item \code{hub}: read in (\code{csv}) or coerce (\code{parquet}, \code{arrow}) to hub schema.
+\item \code{chr}: read in (\code{csv}) or coerce (\code{parquet}, \code{arrow}) all columns to character.
+\item \code{none}: No coercion. Use \code{arrow} \verb{read_*} function defaults.
+}}
 }
 \value{
 a tibble of contents of the model output file.

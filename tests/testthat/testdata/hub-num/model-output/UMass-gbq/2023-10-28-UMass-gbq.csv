@@ -1,0 +1,4 @@
+reference_date,horizon,target,location,target_end_date,output_type,output_type_id,value
+2023-10-28,0,wk inc flu hosp,1,2023-10-28,quantile,0.1000000000000000000000,4
+2023-10-28,0,wk inc flu hosp,1,2023-10-28,quantile,0.150,5
+2023-10-28,0,wk inc flu hosp,1,2023-10-28,quantile,0.2,6
