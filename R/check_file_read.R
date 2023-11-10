@@ -6,7 +6,21 @@
 #' @export
 check_file_read <- function(file_path, hub_path = ".") {
   try_read <- try(
-    read_model_out_file(file_path, hub_path),
+    {
+      if (fs::path_ext(file_path) == "csv") {
+        tbl <- read_model_out_file(
+          file_path = file_path,
+          hub_path = hub_path,
+          coerce_types = "hub"
+        )
+      } else {
+        tbl <- read_model_out_file(
+          file_path = file_path,
+          hub_path = hub_path,
+          coerce_types = "none"
+        )
+      }
+    },
     silent = TRUE
   )
   check <- !inherits(try_read, "try-error")
@@ -15,7 +29,7 @@ check_file_read <- function(file_path, hub_path = ".") {
     details <- NULL
   } else {
     details <- cli::format_inline(
-        attr(try_read, "condition")$message, "\n",
+      attr(try_read, "condition")$message, "\n",
       "Please check file path is correct and file can be read using {.fn read_model_out_file}"
     )
   }
