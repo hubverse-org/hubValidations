@@ -25,8 +25,7 @@ test_that("check_tbl_col_types works", {
   hub_path <- test_path("testdata/hub")
   file_path <- "hub-baseline/2023-04-24-hub-baseline.csv"
   tbl <- read_model_out_file(file_path,
-    hub_path,
-    use_hub_schema = TRUE
+    hub_path
   )
   expect_snapshot(
     check_tbl_col_types(tbl, file_path, hub_path)

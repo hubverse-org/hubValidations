@@ -27,10 +27,22 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
     return(checks)
   }
 
-  tbl <- read_model_out_file(
-    file_path = file_path,
-    hub_path = hub_path
-  )
+  # If `csv` file, read in using hub schema. Otherwise use file
+  # schema for other file formats.
+  if (fs::path_ext(file_path) == "csv") {
+    tbl <- read_model_out_file(
+      file_path = file_path,
+      hub_path = hub_path,
+      coerce_types = "hub"
+    )
+  } else {
+    tbl <- read_model_out_file(
+      file_path = file_path,
+      hub_path = hub_path,
+      coerce_types = "none"
+    )
+  }
+
 
   # -- File round ID checks ----
   # Will be skipped if round config round_id_from_var is FALSE and no round_id_col
@@ -93,9 +105,14 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
   )
 
   # -- Row level checks ----
+  tbl_chr <- read_model_out_file(
+    file_path = file_path,
+    hub_path = hub_path,
+    coerce_types = "chr"
+  )
   checks$valid_vals <- try_check(
     check_tbl_values(
-      tbl,
+      tbl_chr,
       round_id = round_id,
       file_path = file_path,
       hub_path = hub_path
@@ -107,7 +124,7 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
 
   checks$rows_unique <- try_check(
     check_tbl_rows_unique(
-      tbl,
+      tbl_chr,
       file_path = file_path,
       hub_path = hub_path
     ), file_path
@@ -115,7 +132,7 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
 
   checks$req_vals <- try_check(
     check_tbl_values_required(
-      tbl,
+      tbl_chr,
       round_id = round_id,
       file_path = file_path,
       hub_path = hub_path

@@ -1,6 +1,7 @@
 test_that("try_check works", {
   hub_path <- system.file("testhubs/flusight", package = "hubValidations")
 
+  skip_if_offline()
   expect_snapshot(
     try_check(
       check_config_hub_valid(hub_path),

@@ -3,6 +3,8 @@
 #' @param t0_colname Character string. The name of the time zero date column.
 #' @param t1_colname Character string. The name of the time zero + 1 time step date column.
 #' @param timediff an object of class `lubridate` [`Period-class`] and length 1.
+#' @details
+#' Should be deployed as part of `validate_model_data` optional checks.
 #' @inherit check_tbl_colnames params
 #' @inherit check_tbl_col_types return
 #' @export

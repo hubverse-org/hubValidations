@@ -4,16 +4,20 @@
 \alias{parse_file_name}
 \title{Parse model output file metadata from file name}
 \usage{
-parse_file_name(file_path)
+parse_file_name(file_path, file_type = c("model_output", "model_metadata"))
 }
 \arguments{
 \item{file_path}{Character string. A model output file name.
 Can include parent directories which are ignored.}
+
+\item{file_type}{Character string. Type of file name being parsed. One of \code{"model_output"}
+or \code{"model_metadata"}.}
 }
 \value{
 A list with the following elements:
 \itemize{
-\item \code{round_id}: The round ID the model output is associated with.
+\item \code{round_id}: The round ID the model output is associated with (\code{NA} for
+model metadata files.)
 \item \code{team_abbr}: The team responsible for the model.
 \item \code{model_abbr}: The name of the model.
 \item \code{model_id}: The unique model ID derived from the concatenation of

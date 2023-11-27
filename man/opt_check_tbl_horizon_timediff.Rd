@@ -52,3 +52,6 @@ Returned object also inherits from subclass \verb{<hub_check>}.
 \description{
 Check time difference between values in two date columns equal a defined period.
 }
+\details{
+Should be deployed as part of \code{validate_model_data} optional checks.
+}

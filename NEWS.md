@@ -1,3 +1,9 @@
+# hubValidations 0.0.0.9005
+
+* Improved handling of numeric output type IDs (including high precision floating points / values with trailing zeros), especially when overall hub output type ID column is character. This previously lead to a number of bugs and false validation failures (#58 & #54) which are addressed in this version.
+* Bug fixes with respect to handling modelling tasks with no required task ID / output type combinations.
+* Improved capture of error messages when check execution error occurs.
+
 # hubValidations 0.0.0.9004
 
 This release contains a bug fix for reading in and validating CSV column types correctly. (#54) 
@@ -10,7 +16,7 @@ This release includes a number of bug fixes:
 
 # hubValidations 0.0.0.9002
 
-This release includes improvements desgined after the first round of sandbox testing on setting up the CDC FluSight hub. Improvements include:
+This release includes improvements designed after the first round of sandbox testing on setting up the CDC FluSight hub. Improvements include:
 
 * Export `parse_file_name` function for parsing model output metadata from a model output file name.
 * Issue more specific and informative messaging when `check_tbl_values()` check fails.

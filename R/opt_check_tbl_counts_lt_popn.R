@@ -16,6 +16,8 @@
 #'
 #' @inherit check_tbl_colnames params
 #' @inherit check_tbl_col_types return
+#' @details
+#' Should be deployed as part of `validate_model_data` optional checks.
 #' @export
 #' @examples
 #' hub_path <- system.file("testhubs/flusight", package = "hubValidations")

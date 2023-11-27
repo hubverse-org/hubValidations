@@ -8,6 +8,8 @@
 #' The period of a single horizon. Default to 1 week.
 #' @inherit check_tbl_colnames params
 #' @inherit check_tbl_col_types return
+#' @details
+#' Should be deployed as part of `validate_model_data` optional checks.
 #' @export
 opt_check_tbl_horizon_timediff <- function(tbl, file_path, hub_path, t0_colname,
                                            t1_colname, horizon_colname = "horizon",

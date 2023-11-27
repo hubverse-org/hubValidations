@@ -1,14 +1,13 @@
 #' Check all required task ID/output type/output type ID value combinations present
 #' in model data.
 #'
+#' @inheritParams check_tbl_values
 #' @inherit check_tbl_colnames params
 #' @inherit check_tbl_col_types return
 #' @export
 check_tbl_values_required <- function(tbl, round_id, file_path, hub_path) {
-  config_tasks <- hubUtils::read_config(hub_path, "tasks")
   tbl[["value"]] <- NULL
-  tbl <- hubUtils::coerce_to_character(tbl)
-
+  config_tasks <- hubUtils::read_config(hub_path, "tasks")
   req <- hubUtils::expand_model_out_val_grid(
     config_tasks,
     round_id = round_id,
@@ -32,7 +31,7 @@ check_tbl_values_required <- function(tbl, round_id, file_path, hub_path) {
   )
 
   missing_df <- purrr::pmap(
-    list(tbl, req, full),
+    combine_mt_inputs(tbl, req, full),
     check_modeling_task_values_required
   ) %>%
     purrr::list_rbind()
@@ -322,4 +321,11 @@ split_na_req <- function(req) {
   na_idx <- which(is.na(req), arr.ind = TRUE)
   req[na_idx[, "row"], ] %>%
     split(na_idx[, "col"])
+}
+
+combine_mt_inputs <- function(tbl, req, full) {
+  keep_mt <- purrr::map_lgl(req,  ~nrow(.x) > 0L)
+  list(tbl[keep_mt],
+       req[keep_mt],
+       full[keep_mt])
 }

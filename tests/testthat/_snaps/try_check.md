@@ -14,7 +14,7 @@
     Output
       <error/check_exec_error>
       Error:
-      ! EXEC ERROR: In index: 1. --> Assertion on 'hub_path' failed: Directory 'random_hub' does not exist.
+      ! EXEC ERROR: Error in purrr::map(configs, ~validate_config(hub_path = hub_path, config = .x, : i In index: 1. Caused by error in `validate_config()`: ! Assertion on 'hub_path' failed: Directory 'random_hub' does not exist.
 
 ---
 
@@ -25,5 +25,5 @@
     Output
       <error/check_exec_error>
       Error:
-      ! EXEC ERROR: Assertion on 't0_colname' failed: Must be element of set ['forecast_date','target_end_date','horizon','target','location','output_type','output_type_id','value'], but is 'random_col1'.
+      ! EXEC ERROR: Error in opt_check_tbl_horizon_timediff(tbl, file_path, hub_path, t0_colname = "random_col1", : Assertion on 't0_colname' failed: Must be element of set ['forecast_date','target_end_date','horizon','target','location','output_type','output_type_id','value'], but is 'random_col1'.
 

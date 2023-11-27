@@ -1,0 +1,9 @@
+"reference_date","horizon","target","location","target_end_date","output_type","output_type_id","value"
+2023-10-28,0,"wk flu hosp rate change","01",2023-10-28,"pmf","large_increase",0.1
+2023-10-28,0,"wk flu hosp rate change","01",2023-10-28,"pmf","increase",0.2
+2023-10-28,0,"wk flu hosp rate change","01",2023-10-28,"pmf","stable",0.25
+2023-10-28,0,"wk flu hosp rate change","01",2023-10-28,"pmf","decrease",0.3
+2023-10-28,0,"wk flu hosp rate change","01",2023-10-28,"pmf","large_decrease",0.15
+2023-10-28,0,"wk inc flu hosp","01",2023-10-28,"quantile",0.1000000000000000055511,4
+2023-10-28,0,"wk inc flu hosp","01",2023-10-28,"quantile",0.150,5
+2023-10-28,0,"wk inc flu hosp","01",2023-10-28,"quantile",0.2,6
