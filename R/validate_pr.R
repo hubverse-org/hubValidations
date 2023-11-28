@@ -62,6 +62,7 @@ validate_pr <- function(hub_path = ".", gh_repo, pr_number,
             .default = .data$filename
           )
         )
+      inform_unvalidated_files(pr_df)
 
       model_output_files <- pr_df$rel_path[pr_df$model_output &
         pr_df$status != "removed"]
@@ -105,7 +106,6 @@ validate_pr <- function(hub_path = ".", gh_repo, pr_number,
         model_output_vals,
         model_metadata_vals
       )
-      inform_unvalidated_files(pr_df)
     },
     error = function(e) {
       # This handler is used when an unrecoverable error is thrown. This can
