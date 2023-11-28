@@ -41,15 +41,38 @@ validate_pr <- function(hub_path = ".", gh_repo, pr_number,
         gh_repo = gh_repo,
         pr_number = pr_number
       )
-      pr_filenames <- purrr::map_chr(pr_files, ~ .x$filename)
-      model_output_files <- get_pr_dir_files(
-        pr_filenames,
-        model_output_dir
-      )
-      model_metadata_files <- get_pr_dir_files(
-        pr_filenames,
-        model_metadata_dir
-      )
+      pr_df <- tibble::tibble(
+        filename = purrr::map_chr(pr_files, ~ .x$filename),
+        status = purrr::map_chr(pr_files, ~ .x$status),
+        model_output = purrr::map_lgl(
+          .data$filename,
+          ~ fs::path_has_parent(.x, model_output_dir) &&
+            stringr::str_detect(.x, "README", negate = TRUE)
+        ),
+        model_metadata = purrr::map_lgl(
+          .data$filename,
+          ~ fs::path_has_parent(.x, model_metadata_dir) &&
+            stringr::str_detect(.x, "README", negate = TRUE)
+        ),
+      ) %>%
+        dplyr::mutate(
+          rel_path = dplyr::case_when(
+            .data$model_output ~ fs::path_rel(.data$filename, model_output_dir),
+            .data$model_metadata ~ fs::path_rel(.data$filename, model_metadata_dir),
+            .default = .data$filename
+          )
+        )
+
+      model_output_files <- pr_df$rel_path[pr_df$model_output &
+        pr_df$status != "removed"]
+      model_metadata_files <- pr_df$rel_path[pr_df$model_metadata &
+        pr_df$status != "removed"]
+
+      file_modifications <- purrr::map(
+        c("model_output", "model_metadata"),
+        ~ check_pr_modf_del_files(pr_df, file_type = .x)
+      ) %>%
+        purrr::reduce(combine)
 
       model_output_vals <- purrr::map(
         model_output_files,
@@ -75,11 +98,14 @@ validate_pr <- function(hub_path = ".", gh_repo, pr_number,
         purrr::list_flatten() %>%
         as_hub_validations()
 
+
       validations <- combine(
         validations,
+        file_modifications,
         model_output_vals,
         model_metadata_vals
       )
+      inform_unvalidated_files(pr_df)
     },
     error = function(e) {
       # This handler is used when an unrecoverable error is thrown. This can
@@ -96,38 +122,14 @@ validate_pr <- function(hub_path = ".", gh_repo, pr_number,
       )
     }
   )
-
-  inform_unvalidated_files(
-    model_output_files,
-    model_metadata_files,
-    pr_filenames
-  )
   return(validations)
 }
 
-get_pr_dir_files <- function(pr_filenames, dir_name) {
-  pr_filenames[
-    fs::path_has_parent(pr_filenames, dir_name)
-  ] %>%
-    stringr::str_subset("README", negate = TRUE) %>%
-    fs::path_rel(dir_name)
-}
-
-inform_unvalidated_files <- function(model_output_files,
-                                     model_metadata_files,
-                                     pr_filenames) {
-  validated_files <- c(model_output_files, model_metadata_files)
-  if (length(pr_filenames) == length(validated_files)) {
+# Sends message reporting any files with changes in PR that were not validated.
+inform_unvalidated_files <- function(pr_df) {
+  unvalidated_files <- pr_df[!pr_df$model_output & !pr_df$model_metadata, "filename", drop = TRUE]
+  if (length(unvalidated_files) == 0L) {
     return(invisible(NULL))
-  }
-  if (length(validated_files) == 0L) {
-    unvalidated_files <- pr_filenames
-  } else {
-    validated_idx <- purrr::map_int(
-      validated_files,
-      ~ grep(.x, pr_filenames, fixed = TRUE)
-    )
-    unvalidated_files <- pr_filenames[-validated_idx]
   }
 
   unvalidated_bullets <- purrr::map_chr(
@@ -142,4 +144,38 @@ inform_unvalidated_files <- function(model_output_files,
       unvalidated_bullets, "\n"
     )
   )
+}
+# Checks for model output file modifications and model output & model metadata
+# file deletions. Returns an <error/check_error>⁠ condition class object if any
+# modification or deletion detected.
+check_pr_modf_del_files <- function(pr_df, file_type = c(
+                                      "model_output",
+                                      "model_metadata"
+                                    )) {
+  file_type <- rlang::arg_match(file_type)
+  df <- pr_df[pr_df[[file_type]], ]
+  df <- switch(file_type,
+    model_output = df[df$status %in% c("removed", "modified"), ],
+    model_metadata = df[df$status == "removed", ]
+  )
+
+  purrr::imap(
+    .x = df$rel_path,
+    ~ hubValidations::capture_check_cnd(
+      check = FALSE,
+      file_path = .x,
+      msg_subject = paste(
+        "Previously submitted",
+        stringr::str_replace(file_type, "_", " "),
+        "files"
+      ),
+      msg_verbs = c("were not", "must not be"),
+      msg_attribute = paste0(df$status[.y], "."),
+      details = cli::format_inline(
+        "{.path {df$filename[.y]}} {df$status[.y]}."
+      ),
+      error = TRUE
+    )
+  ) %>%
+    hubValidations::as_hub_validations()
 }
