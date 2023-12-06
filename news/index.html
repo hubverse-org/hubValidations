@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">hubValidations</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9005</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9006</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,6 +50,11 @@
       <small>Source: <a href="https://github.com/Infectious-Disease-Modeling-Hubs/hubValidations/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.0.0.9006" id="hubvalidations-0009006">hubValidations 0.0.0.9006<a class="anchor" aria-label="anchor" href="#hubvalidations-0009006"></a></h2>
+<ul><li>
+<code><a href="../reference/validate_pr.html">validate_pr()</a></code> now checks for deletions of previously submitted model metadata files and modifications or deletions of previously submitted model output files, adding an <code>&lt;error/check_error&gt;</code> class object to the function output for each detected modified/deleted file (<a href="https://github.com/Infectious-Disease-Modeling-Hubs/hubValidations/issues/43" class="external-link">#43</a> &amp; <a href="https://github.com/Infectious-Disease-Modeling-Hubs/hubValidations/issues/44" class="external-link">#44</a>).</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.0.9005" id="hubvalidations-0009005">hubValidations 0.0.0.9005<a class="anchor" aria-label="anchor" href="#hubvalidations-0009005"></a></h2>
 <ul><li>Improved handling of numeric output type IDs (including high precision floating points / values with trailing zeros), especially when overall hub output type ID column is character. This previously lead to a number of bugs and false validation failures (<a href="https://github.com/Infectious-Disease-Modeling-Hubs/hubValidations/issues/58" class="external-link">#58</a> &amp; <a href="https://github.com/Infectious-Disease-Modeling-Hubs/hubValidations/issues/54" class="external-link">#54</a>) which are addressed in this version.</li>
