@@ -87,7 +87,7 @@ of model output files are allowed within their submission windows.
 Note that to establish \strong{relative} submission windows when performing
 modification/deletion checks and \code{allow_submit_window_mods}
 is \code{TRUE}, the \emph{relative to} date is considered as the \code{round_id} extracted from
-the file path (i.e. \code{submit_window_ref_date_from} is always set to \verb{"file_path}).
+the file path (i.e. \code{submit_window_ref_date_from} is always set to \code{"file_path"}).
 This is because we cannot extract dates from columns of deleted
 files. If hub \emph{relative to} dates do not match the round IDs in file paths,
 currently \code{allow_submit_window_mods} will not work correctly and is best set

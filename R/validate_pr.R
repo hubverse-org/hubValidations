@@ -40,7 +40,7 @@
 #' Note that to establish **relative** submission windows when performing
 #' modification/deletion checks and `allow_submit_window_mods`
 #' is `TRUE`, the _relative to_ date is considered as the `round_id` extracted from
-#' the file path (i.e. `submit_window_ref_date_from` is always set to `"file_path`).
+#' the file path (i.e. `submit_window_ref_date_from` is always set to `"file_path"`).
 #' This is because we cannot extract dates from columns of deleted
 #' files. If hub _relative to_ dates do not match the round IDs in file paths,
 #' currently `allow_submit_window_mods` will not work correctly and is best set
