@@ -57,11 +57,14 @@ applicable modified/deleted file.
 \item{allow_submit_window_mods}{Logical. Whether to allow modifications/deletions
 of model output files within their submission windows. Defaults to \code{TRUE}.}
 
-\item{submit_window_ref_date_from}{whether to get the round ID around which relative submission
-windows will be determined from the file's \code{file_path} or the \code{file} contents
-themselves. \code{file} requires that the file can be read.
+\item{submit_window_ref_date_from}{whether to get the reference date around
+which relative submission windows will be determined from the file's
+\code{file_path} round ID or the \code{file} contents themselves.
+\code{file} requires that the file can be read.
 Only applicable when a round is configured to determine the submission
-windows relative to the value in a date column in model output files.}
+windows relative to the value in a date column in model output files.
+Not applicable when explicit submission window start and end dates are
+provided in the hub's config.}
 }
 \value{
 An object of class \code{hub_validations}.
@@ -86,10 +89,10 @@ of model output files are allowed within their submission windows.
 
 Note that to establish \strong{relative} submission windows when performing
 modification/deletion checks and \code{allow_submit_window_mods}
-is \code{TRUE}, the \emph{relative to} date is considered as the \code{round_id} extracted from
+is \code{TRUE}, the reference date is taken as the \code{round_id} extracted from
 the file path (i.e. \code{submit_window_ref_date_from} is always set to \code{"file_path"}).
 This is because we cannot extract dates from columns of deleted
-files. If hub \emph{relative to} dates do not match the round IDs in file paths,
+files. If hub submission window reference dates do not match round IDs in file paths,
 currently \code{allow_submit_window_mods} will not work correctly and is best set
 to \code{FALSE}. This only relates to hubs/rounds where submission windows are
 determined relative to a reference date and not when explicit submission

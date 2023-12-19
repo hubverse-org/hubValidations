@@ -6,11 +6,14 @@
 #' @param skip_submit_window_check Logical. Whether to skip the submission window check.
 #' @param skip_check_config Logical. Whether to skip the hub config validation check.
 #'  check.
-#' @param submit_window_ref_date_from whether to get the round ID around which relative submission
-#' windows will be determined from the file's `file_path` or the `file` contents
-#' themselves. `file` requires that the file can be read.
+#' @param submit_window_ref_date_from whether to get the reference date around
+#' which relative submission windows will be determined from the file's
+#' `file_path` round ID or the `file` contents themselves.
+#' `file` requires that the file can be read.
 #' Only applicable when a round is configured to determine the submission
 #' windows relative to the value in a date column in model output files.
+#' Not applicable when explicit submission window start and end dates are
+#' provided in the hub's config.
 #' @export
 #'
 #' @examples

@@ -24,11 +24,14 @@ files within the \code{hub-config} directory.}
 \item{file_path}{character string. Path to the file being validated relative to
 the hub's model-output directory.}
 
-\item{ref_date_from}{whether to get the round ID around which relative submission
-windows will be determined from the file's \code{file_path} or the \code{file} contents
-themselves. \code{file} requires that the file can be read.
+\item{ref_date_from}{whether to get the reference date around
+which relative submission windows will be determined from the file's
+\code{file_path} round ID or the \code{file} contents themselves.
+\code{file} requires that the file can be read.
 Only applicable when a round is configured to determine the submission
-windows relative to the value in a date column in model output files.}
+windows relative to the value in a date column in model output files.
+Not applicable when explicit submission window start and end dates are
+provided in the hub's config.}
 }
 \value{
 An object of class \code{hub_validations}. Each named element contains

@@ -1,10 +1,13 @@
 #' Checks submission is within the valid submission window for a given round.
 #'
-#' @param ref_date_from whether to get the round ID around which relative submission
-#' windows will be determined from the file's `file_path` or the `file` contents
-#' themselves. `file` requires that the file can be read.
+#' @param ref_date_from whether to get the reference date around
+#' which relative submission windows will be determined from the file's
+#' `file_path` round ID or the `file` contents themselves.
+#' `file` requires that the file can be read.
 #' Only applicable when a round is configured to determine the submission
 #' windows relative to the value in a date column in model output files.
+#' Not applicable when explicit submission window start and end dates are
+#' provided in the hub's config.
 #'
 #' @inherit check_tbl_col_types params return
 #'
