@@ -4,7 +4,11 @@
 \alias{check_submission_time}
 \title{Checks submission is within the valid submission window for a given round.}
 \usage{
-check_submission_time(hub_path, file_path)
+check_submission_time(
+  hub_path,
+  file_path,
+  ref_date_from = c("file", "file_path")
+)
 }
 \arguments{
 \item{hub_path}{Either a character string path to a local Modeling Hub directory
@@ -19,6 +23,12 @@ files within the \code{hub-config} directory.}
 
 \item{file_path}{character string. Path to the file being validated relative to
 the hub's model-output directory.}
+
+\item{ref_date_from}{whether to get the round ID around which relative submission
+windows will be determined from the file's \code{file_path} or the \code{file} contents
+themselves. \code{file} requires that the file can be read.
+Only applicable when a round is configured to determine the submission
+windows relative to the value in a date column in model output files.}
 }
 \value{
 Depending on whether validation has succeeded, one of:

@@ -1,3 +1,10 @@
+# hubValidations 0.0.0.9007
+
+* `validate_pr()` now has arguments for controlling modification/deletions check are performed on model output and model metadata files (#65).
+  - `file_modify_check`, which controls whether modification/deletion checks are performed and what is retuned if modifications/deletions detected.
+  - `allow_submit_window_mods`, which controls whether modifications/deletions of model output files are allowed within their submission windows.
+
+
 # hubValidations 0.0.0.9006
 
 * `validate_pr()` now checks for deletions of previously submitted model metadata files and modifications or deletions of previously submitted model output files, adding an `<error/check_error>` class object to the function output for each detected modified/deleted file (#43 & #44).

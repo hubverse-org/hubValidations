@@ -4,7 +4,11 @@
 \alias{validate_submission_time}
 \title{Validate a submitted model data file submission time.}
 \usage{
-validate_submission_time(hub_path, file_path)
+validate_submission_time(
+  hub_path,
+  file_path,
+  ref_date_from = c("file_path", "file")
+)
 }
 \arguments{
 \item{hub_path}{Either a character string path to a local Modeling Hub directory
@@ -19,6 +23,12 @@ files within the \code{hub-config} directory.}
 
 \item{file_path}{character string. Path to the file being validated relative to
 the hub's model-output directory.}
+
+\item{ref_date_from}{whether to get the round ID around which relative submission
+windows will be determined from the file's \code{file_path} or the \code{file} contents
+themselves. \code{file} requires that the file can be read.
+Only applicable when a round is configured to determine the submission
+windows relative to the value in a date column in model output files.}
 }
 \value{
 An object of class \code{hub_validations}. Each named element contains
