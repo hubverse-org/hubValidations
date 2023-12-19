@@ -33,7 +33,7 @@
 #' and return a `<error/check_error>` condition class object for each
 #' applicable modified/deleted file. This behaviour can be modified through
 #' arguments `file_modify_check`, which controls whether modification/deletion
-#' checks are performed and what is retuned if modifications/deletions detected,
+#' checks are performed and what is retuned if modifications/deletions are detected,
 #' and `allow_submit_window_mods`, which controls whether modifications/deletions
 #' of model output files are allowed within their submission windows.
 #'
