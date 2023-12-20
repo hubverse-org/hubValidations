@@ -203,7 +203,7 @@ inform_unvalidated_files <- function(pr_df) {
   )
 }
 # Checks for model output file modifications and model output & model metadata
-# file deletions. Returns an <error/check_error>⁠ condition class object if any
+# file deletions/renaming. Returns an <error/check_error>⁠ condition class object if any
 # modification or deletion detected.
 check_pr_modf_del_files <- function(pr_df, file_type = c(
                                       "model_output",
@@ -214,8 +214,9 @@ check_pr_modf_del_files <- function(pr_df, file_type = c(
   file_type <- rlang::arg_match(file_type)
   alert <- rlang::arg_match(alert)
 
-  # subset pr_df to the file type beiing checked. We check model output and model
-  # metadata files separately as model metadata files are only check for deletions.
+  # subset pr_df to the file type being checked. We check model output and model
+  # metadata files separately as model metadata files are only checked for
+  # deletions/renaming.
   # Also, they have no submission window so deletions are not affected by
   # allow_submit_window_mods
   df <- pr_df[pr_df[[file_type]], ]
@@ -229,7 +230,7 @@ check_pr_modf_del_files <- function(pr_df, file_type = c(
     return(new_hub_validations())
   }
   # Check whether modifications allowed and return notification object according
-  # to alert for any file that violates allowed mod/del.
+  # to alert for any file that violates allowed mod/del rules.
   out <- purrr::map(
     .x = 1:nrow(df),
     ~ check_pr_modf_del_file(
