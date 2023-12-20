@@ -133,7 +133,7 @@
 # validate_pr works on invalid PR
 
     Code
-      str(checks)
+      str(invalid_checks)
     Output
       Classes 'hub_validations', 'list'  hidden list of 12
        $ valid_config      :List of 4
@@ -214,7 +214,7 @@
 # validate_pr flags modifications and deletions in PR
 
     Code
-      str(checks)
+      str(mod_checks_error)
     Output
       Classes 'hub_validations', 'list'  hidden list of 28
        $ valid_config      :List of 4
@@ -406,7 +406,7 @@
 ---
 
     Code
-      str(checks)
+      str(mod_checks_warn)
     Output
       Classes 'hub_validations', 'list'  hidden list of 28
        $ valid_config      :List of 4
@@ -592,7 +592,7 @@
 ---
 
     Code
-      str(checks)
+      str(mod_checks_message)
     Output
       Classes 'hub_validations', 'list'  hidden list of 28
        $ valid_config      :List of 4
@@ -778,7 +778,7 @@
 ---
 
     Code
-      str(checks)
+      str(mod_checks_none)
     Output
       Classes 'hub_validations', 'list'  hidden list of 25
        $ valid_config      :List of 4
@@ -946,7 +946,7 @@
 ---
 
     Code
-      str(checks)
+      str(mod_checks_in_window)
     Output
       Classes 'hub_validations', 'list'  hidden list of 27
        $ valid_config      :List of 4

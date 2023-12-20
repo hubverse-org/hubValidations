@@ -32,17 +32,17 @@ test_that("validate_pr works on invalid PR", {
     branch = "pr-missing-taskid"
   )
 
-  checks <- validate_pr(
+  invalid_checks <- validate_pr(
     hub_path = temp_hub,
     gh_repo = "Infectious-Disease-Modeling-Hubs/ci-testhub-simple",
     pr_number = 5,
     skip_submit_window_check = TRUE
   )
 
-  expect_snapshot(str(checks))
+  expect_snapshot(str(invalid_checks))
 
   expect_error(
-    suppressMessages(check_for_errors(checks))
+    suppressMessages(check_for_errors(invalid_checks))
   )
 })
 
@@ -56,7 +56,7 @@ test_that("validate_pr flags modifications and deletions in PR", {
     branch = "test-mod-del"
   )
 
-  checks <- suppressMessages(
+  mod_checks_error <- suppressMessages(
     validate_pr(
       hub_path = temp_hub,
       gh_repo = "Infectious-Disease-Modeling-Hubs/ci-testhub-simple",
@@ -65,12 +65,12 @@ test_that("validate_pr flags modifications and deletions in PR", {
     )
   )
 
-  expect_snapshot(str(checks))
+  expect_snapshot(str(mod_checks_error))
   expect_error(
-    suppressMessages(check_for_errors(checks))
+    suppressMessages(check_for_errors(mod_checks_error))
   )
 
-  checks <- suppressMessages(
+  mod_checks_warn <- suppressMessages(
     validate_pr(
       hub_path = temp_hub,
       gh_repo = "Infectious-Disease-Modeling-Hubs/ci-testhub-simple",
@@ -79,12 +79,12 @@ test_that("validate_pr flags modifications and deletions in PR", {
       file_modify_check = "warn"
     )
   )
-  expect_snapshot(str(checks))
+  expect_snapshot(str(mod_checks_warn))
   expect_error(
-    suppressMessages(check_for_errors(checks))
+    suppressMessages(check_for_errors(mod_checks_warn))
   )
 
-  checks <- suppressMessages(
+  mod_checks_message <- suppressMessages(
     validate_pr(
       hub_path = temp_hub,
       gh_repo = "Infectious-Disease-Modeling-Hubs/ci-testhub-simple",
@@ -93,13 +93,13 @@ test_that("validate_pr flags modifications and deletions in PR", {
       file_modify_check = "message"
     )
   )
-  expect_snapshot(str(checks))
+  expect_snapshot(str(mod_checks_message))
   expect_true(
-    suppressMessages(check_for_errors(checks[1:5]))
+    suppressMessages(check_for_errors(mod_checks_message[1:5]))
   )
 
 
-  checks <- suppressMessages(
+  mod_checks_none <- suppressMessages(
     validate_pr(
       hub_path = temp_hub,
       gh_repo = "Infectious-Disease-Modeling-Hubs/ci-testhub-simple",
@@ -108,9 +108,9 @@ test_that("validate_pr flags modifications and deletions in PR", {
       file_modify_check = "none"
     )
   )
-  expect_snapshot(str(checks))
+  expect_snapshot(str(mod_checks_none))
   expect_true(
-    suppressMessages(check_for_errors(checks[1:5]))
+    suppressMessages(check_for_errors(mod_checks_none[1:5]))
   )
 
   mockery::stub(
@@ -119,7 +119,7 @@ test_that("validate_pr flags modifications and deletions in PR", {
     lubridate::as_datetime("2022-10-08 18:01:00 EEST"),
     2
   )
-  checks <- suppressMessages(
+  mod_checks_in_window <- suppressMessages(
     validate_pr(
       hub_path = temp_hub,
       gh_repo = "Infectious-Disease-Modeling-Hubs/ci-testhub-simple",
@@ -128,5 +128,5 @@ test_that("validate_pr flags modifications and deletions in PR", {
       allow_submit_window_mods = TRUE
     )
   )
-  expect_snapshot(str(checks))
+  expect_snapshot(str(mod_checks_in_window))
 })
