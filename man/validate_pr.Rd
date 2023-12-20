@@ -11,7 +11,7 @@ validate_pr(
   round_id_col = NULL,
   validations_cfg_path = NULL,
   skip_submit_window_check = FALSE,
-  file_modify_check = c("error", "warn", "message", "none"),
+  file_modification_check = c("error", "warn", "message", "none"),
   allow_submit_window_mods = TRUE,
   submit_window_ref_date_from = c("file", "file_path")
 )
@@ -41,7 +41,7 @@ defaults to \code{hub-config/validations.yml}.}
 
 \item{skip_submit_window_check}{Logical. Whether to skip the submission window check.}
 
-\item{file_modify_check}{Character string. Whether to perform check and what to
+\item{file_modification_check}{Character string. Whether to perform check and what to
 return when modification/deletion of a previously submitted model output file
 or deletion of a previously submitted model metadata file is detected in PR:
 \itemize{
@@ -78,11 +78,12 @@ Only model output and model metadata files are individually validated using
 files are also validated. Any other files included in the PR are ignored but
 flagged in a message.
 
-By default, modifications and deletions of previously submitted model output
-files and deletions of previously submitted model metadata files are not allowed
+By default, modifications (which include renaming) and deletions of
+previously submitted model output files and deletions or renaming of
+previously submitted model metadata files are not allowed
 and return a \verb{<error/check_error>} condition class object for each
 applicable modified/deleted file. This behaviour can be modified through
-arguments \code{file_modify_check}, which controls whether modification/deletion
+arguments \code{file_modification_check}, which controls whether modification/deletion
 checks are performed and what is returned if modifications/deletions are detected,
 and \code{allow_submit_window_mods}, which controls whether modifications/deletions
 of model output files are allowed within their submission windows.

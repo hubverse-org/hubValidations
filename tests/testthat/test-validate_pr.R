@@ -76,7 +76,7 @@ test_that("validate_pr flags modifications and deletions in PR", {
       gh_repo = "Infectious-Disease-Modeling-Hubs/ci-testhub-simple",
       pr_number = 6,
       skip_submit_window_check = TRUE,
-      file_modify_check = "warn"
+      file_modification_check = "warn"
     )
   )
   expect_snapshot(str(mod_checks_warn))
@@ -90,7 +90,7 @@ test_that("validate_pr flags modifications and deletions in PR", {
       gh_repo = "Infectious-Disease-Modeling-Hubs/ci-testhub-simple",
       pr_number = 6,
       skip_submit_window_check = TRUE,
-      file_modify_check = "message"
+      file_modification_check = "message"
     )
   )
   expect_snapshot(str(mod_checks_message))
@@ -105,7 +105,7 @@ test_that("validate_pr flags modifications and deletions in PR", {
       gh_repo = "Infectious-Disease-Modeling-Hubs/ci-testhub-simple",
       pr_number = 6,
       skip_submit_window_check = TRUE,
-      file_modify_check = "none"
+      file_modification_check = "none"
     )
   )
   expect_snapshot(str(mod_checks_none))

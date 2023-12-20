@@ -8,7 +8,7 @@
 #' `round_id`s. Only required if files contain a column that contains `round_id`
 #' details but has not been configured via `round_id_from_variable: true` and
 #' `round_id:` in in hub `tasks.json` config file.
-#' @param file_modify_check Character string. Whether to perform check and what to
+#' @param file_modification_check Character string. Whether to perform check and what to
 #' return when modification/deletion of a previously submitted model output file
 #' or deletion of a previously submitted model metadata file is detected in PR:
 #' - `"error"`: Appends a `<error/check_error>` condition class object for each
@@ -28,11 +28,12 @@
 #' files are also validated. Any other files included in the PR are ignored but
 #' flagged in a message.
 #'
-#' By default, modifications and deletions of previously submitted model output
-#' files and deletions of previously submitted model metadata files are not allowed
+#' By default, modifications (which include renaming) and deletions of
+#' previously submitted model output files and deletions or renaming of
+#' previously submitted model metadata files are not allowed
 #' and return a `<error/check_error>` condition class object for each
 #' applicable modified/deleted file. This behaviour can be modified through
-#' arguments `file_modify_check`, which controls whether modification/deletion
+#' arguments `file_modification_check`, which controls whether modification/deletion
 #' checks are performed and what is returned if modifications/deletions are detected,
 #' and `allow_submit_window_mods`, which controls whether modifications/deletions
 #' of model output files are allowed within their submission windows.
@@ -61,13 +62,13 @@
 validate_pr <- function(hub_path = ".", gh_repo, pr_number,
                         round_id_col = NULL, validations_cfg_path = NULL,
                         skip_submit_window_check = FALSE,
-                        file_modify_check = c("error", "warn", "message", "none"),
+                        file_modification_check = c("error", "warn", "message", "none"),
                         allow_submit_window_mods = TRUE,
                         submit_window_ref_date_from = c(
                           "file",
                           "file_path"
                         )) {
-  file_modify_check <- rlang::arg_match(file_modify_check)
+  file_modification_check <- rlang::arg_match(file_modification_check)
   model_output_dir <- get_hub_model_output_dir(hub_path)
   model_metadata_dir <- "model-metadata"
   validations <- new_hub_validations()
@@ -115,13 +116,13 @@ validate_pr <- function(hub_path = ".", gh_repo, pr_number,
       model_metadata_files <- pr_df$rel_path[pr_df$model_metadata &
         pr_df$status != "removed"]
 
-      if (file_modify_check != "none") {
+      if (file_modification_check != "none") {
         file_modifications <- purrr::map(
           c("model_output", "model_metadata"),
           ~ check_pr_modf_del_files(
             pr_df,
             file_type = .x,
-            alert = file_modify_check,
+            alert = file_modification_check,
             allow_submit_window_mods = allow_submit_window_mods
           )
         ) %>%
@@ -286,7 +287,7 @@ check_pr_modf_del_file <- function(df_row, file_type, allow_submit_window_mods,
   }
 
   # The type of object returned depends on argument alert, which is passed down
-  # from validate_pr argument file_modify_check
+  # from validate_pr argument file_modification_check
   if (alert == "message") {
     return(
       capture_check_info(
