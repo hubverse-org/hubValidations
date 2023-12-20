@@ -10,7 +10,10 @@ validate_pr(
   pr_number,
   round_id_col = NULL,
   validations_cfg_path = NULL,
-  skip_submit_window_check = FALSE
+  skip_submit_window_check = FALSE,
+  file_modification_check = c("error", "warn", "message", "none"),
+  allow_submit_window_mods = TRUE,
+  submit_window_ref_date_from = c("file", "file_path")
 )
 }
 \arguments{
@@ -37,12 +40,64 @@ details but has not been configured via \code{round_id_from_variable: true} and
 defaults to \code{hub-config/validations.yml}.}
 
 \item{skip_submit_window_check}{Logical. Whether to skip the submission window check.}
+
+\item{file_modification_check}{Character string. Whether to perform check and what to
+return when modification/deletion of a previously submitted model output file
+or deletion of a previously submitted model metadata file is detected in PR:
+\itemize{
+\item \code{"error"}: Appends a \verb{<error/check_error>} condition class object for each
+applicable modified/deleted file.
+\item \code{"warning"}: Appends a \verb{<warning/check_warning>} condition class object for each
+applicable modified/deleted file.
+\item \code{"message"}: Appends a \verb{<message/check_info>} condition class object for each
+applicable modified/deleted file.
+\item \code{"none"}: No modification/deletion checks performed.
+}}
+
+\item{allow_submit_window_mods}{Logical. Whether to allow modifications/deletions
+of model output files within their submission windows. Defaults to \code{TRUE}.}
+
+\item{submit_window_ref_date_from}{whether to get the reference date around
+which relative submission windows will be determined from the file's
+\code{file_path} round ID or the \code{file} contents themselves.
+\code{file} requires that the file can be read.
+Only applicable when a round is configured to determine the submission
+windows relative to the value in a date column in model output files.
+Not applicable when explicit submission window start and end dates are
+provided in the hub's config.}
 }
 \value{
 An object of class \code{hub_validations}.
 }
 \description{
-Validate Pull Request
+Validates model output and model metadata files in a Pull Request.
+}
+\details{
+Only model output and model metadata files are individually validated using
+\code{validate_submission()} with each file although as part of checks, hub config
+files are also validated. Any other files included in the PR are ignored but
+flagged in a message.
+
+By default, modifications (which include renaming) and deletions of
+previously submitted model output files and deletions or renaming of
+previously submitted model metadata files are not allowed
+and return a \verb{<error/check_error>} condition class object for each
+applicable modified/deleted file. This behaviour can be modified through
+arguments \code{file_modification_check}, which controls whether modification/deletion
+checks are performed and what is returned if modifications/deletions are detected,
+and \code{allow_submit_window_mods}, which controls whether modifications/deletions
+of model output files are allowed within their submission windows.
+
+Note that to establish \strong{relative} submission windows when performing
+modification/deletion checks and \code{allow_submit_window_mods}
+is \code{TRUE}, the reference date is taken as the \code{round_id} extracted from
+the file path (i.e. \code{submit_window_ref_date_from} is always set to \code{"file_path"}).
+This is because we cannot extract dates from columns of deleted
+files. If hub submission window reference dates do not match round IDs in file paths,
+currently \code{allow_submit_window_mods} will not work correctly and is best set
+to \code{FALSE}. This only relates to hubs/rounds where submission windows are
+determined relative to a reference date and not when explicit submission
+window start and end dates are provided in the config.
 }
 \examples{
 \dontrun{

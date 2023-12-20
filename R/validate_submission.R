@@ -6,6 +6,14 @@
 #' @param skip_submit_window_check Logical. Whether to skip the submission window check.
 #' @param skip_check_config Logical. Whether to skip the hub config validation check.
 #'  check.
+#' @param submit_window_ref_date_from whether to get the reference date around
+#' which relative submission windows will be determined from the file's
+#' `file_path` round ID or the `file` contents themselves.
+#' `file` requires that the file can be read.
+#' Only applicable when a round is configured to determine the submission
+#' windows relative to the value in a date column in model output files.
+#' Not applicable when explicit submission window start and end dates are
+#' provided in the hub's config.
 #' @export
 #'
 #' @examples
@@ -15,7 +23,11 @@
 validate_submission <- function(hub_path, file_path, round_id_col = NULL,
                                 validations_cfg_path = NULL,
                                 skip_submit_window_check = FALSE,
-                                skip_check_config = FALSE) {
+                                skip_check_config = FALSE,
+                                submit_window_ref_date_from = c(
+                                  "file",
+                                  "file_path"
+                                )) {
   check_hub_config <- new_hub_validations()
   if (!skip_check_config) {
     check_hub_config$valid_config <- try_check(
@@ -30,7 +42,10 @@ validate_submission <- function(hub_path, file_path, round_id_col = NULL,
   if (skip_submit_window_check) {
     checks_submission_time <- new_hub_validations()
   } else {
-    checks_submission_time <- validate_submission_time(hub_path, file_path)
+    checks_submission_time <- validate_submission_time(
+      hub_path, file_path,
+      ref_date_from = submit_window_ref_date_from
+    )
   }
 
   checks_file <- validate_model_file(

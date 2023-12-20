@@ -12,7 +12,8 @@ validate_submission(
   round_id_col = NULL,
   validations_cfg_path = NULL,
   skip_submit_window_check = FALSE,
-  skip_check_config = FALSE
+  skip_check_config = FALSE,
+  submit_window_ref_date_from = c("file", "file_path")
 )
 }
 \arguments{
@@ -40,6 +41,15 @@ defaults to \code{hub-config/validations.yml}.}
 
 \item{skip_check_config}{Logical. Whether to skip the hub config validation check.
 check.}
+
+\item{submit_window_ref_date_from}{whether to get the reference date around
+which relative submission windows will be determined from the file's
+\code{file_path} round ID or the \code{file} contents themselves.
+\code{file} requires that the file can be read.
+Only applicable when a round is configured to determine the submission
+windows relative to the value in a date column in model output files.
+Not applicable when explicit submission window start and end dates are
+provided in the hub's config.}
 }
 \value{
 An object of class \code{hub_validations}. Each named element contains
