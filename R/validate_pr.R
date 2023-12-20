@@ -184,7 +184,9 @@ validate_pr <- function(hub_path = ".", gh_repo, pr_number,
 # Sends message reporting any files with changes in PR that were not validated.
 inform_unvalidated_files <- function(pr_df) {
   unvalidated_files <- pr_df[!pr_df$model_output & !pr_df$model_metadata,
-                             "filename", drop = TRUE]
+    "filename",
+    drop = TRUE
+  ]
   if (length(unvalidated_files) == 0L) {
     return(invisible(NULL))
   }
@@ -217,60 +219,102 @@ check_pr_modf_del_files <- function(pr_df, file_type = c(
   # allow_submit_window_mods
   df <- pr_df[pr_df[[file_type]], ]
 
-  # If mods/dels allowed within submission window, check whether any
-  # files are within their submission windows. Add results as allow_mod column to
-  # df. Else, allow_mod is FALSE for all files.
-  if (allow_submit_window_mods && file_type == "model_output") {
-    df$allow_mod <- purrr::map_lgl(
-      df$rel_path,
-      ~ file_within_submission_window(
-        hub_path = unique(df$hub_path),
-        file_path = .x, ref_date_from = "file_path"
-      )
-    )
-  } else {
-    df$allow_mod <- FALSE
-  }
   # Subset to files whose modification/deletion is not allowed and needs reporting.
   df <- switch(file_type,
-    model_output = df[df$status %in% c("removed", "modified") & !df$allow_mod, ],
-    model_metadata = df[df$status == "removed", ]
+    model_output = df[df$status %in% c("removed", "modified", "renamed"), ],
+    model_metadata = df[df$status %in% c("removed", "renamed"), ]
   )
+  if (nrow(df) == 0L) {
+    return(new_hub_validations())
+  }
+  # Check whether modifications allowed and return notification object according
+  # to alert for any file that violates allowed mod/del.
+  out <- purrr::map(
+    .x = 1:nrow(df),
+    ~ check_pr_modf_del_file(
+      df_row = df[.x, ],
+      file_type = file_type,
+      allow_submit_window_mods = allow_submit_window_mods,
+      alert = alert
+    )
+  ) %>%
+    purrr::compact()
+
+  as_hub_validations(out) %>%
+    purrr::set_names(sprintf("%s_mod_%i", file_type, seq_along(out)))
+}
+
+
+# Check individual file for non-allowed modification/deletion and return appropriate
+# notification object according to alert
+check_pr_modf_del_file <- function(df_row, file_type, allow_submit_window_mods,
+                                   alert) {
+
+  # If mods/dels allowed within submission window and file_type == "model_output",
+  #  try checking whether file is within their submission window.
+  if (allow_submit_window_mods && file_type == "model_output") {
+    allow_mod <- try(
+      file_within_submission_window(
+        hub_path = df_row$hub_path,
+        file_path = df_row$rel_path,
+        ref_date_from = "file_path"
+      ),
+      silent = TRUE
+    )
+    # If check fails return exec error class object
+    if (inherits(allow_mod, "try-error")) {
+      msg <- as.character(allow_mod) %>%
+        cli::ansi_strip() %>%
+        clean_msg()
+      return(
+        capture_exec_error(
+          file_path = df_row$rel_path,
+          msg = cli::format_inline(
+            sprintf(
+              "Could not check submission window for file {.val %s}. EXEC ERROR: %s",
+              df_row$rel_path,
+              msg
+            )
+          )
+        )
+      )
+    }
+    # If within submission window, return NULL
+    if (allow_mod) {
+      return(NULL)
+    }
+  }
 
   # The type of object returned depends on argument alert, which is passed down
   # from validate_pr argument file_modify_check
   if (alert == "message") {
-    out <- purrr::imap(
-      .x = df$rel_path,
-      ~ capture_check_info(
-        file_path = .x,
+    return(
+      capture_check_info(
+        file_path = df_row$rel_path,
         msg = cli::format_inline(
           "Previously submitted {stringr::str_replace(file_type, '_', ' ')} file
-          {.path {df$filename[.y]}} {df$status[.y]}."
+          {.path {df_row$filename}} {df_row$status}."
         )
       )
     )
   } else {
     error <- alert == "error"
-    out <- purrr::imap(
-      .x = df$rel_path,
-      ~ capture_check_cnd(
+    return(
+      capture_check_cnd(
         check = FALSE,
-        file_path = .x,
+        file_path = df_row$rel_path,
         msg_subject = paste(
           "Previously submitted",
           stringr::str_replace(file_type, "_", " "),
           "files"
         ),
         msg_verbs = c("were not", "must not be"),
-        msg_attribute = paste0(df$status[.y], "."),
+        msg_attribute = paste0(df_row$status, "."),
         details = cli::format_inline(
-          "{.path {df$filename[.y]}} {df$status[.y]}."
+          "{.path {df_row$filename}} {df_row$status}."
         ),
         error = error
       )
     )
   }
-  as_hub_validations(out) %>%
-    purrr::set_names(sprintf("%s_mod_%i", file_type, seq_along(out)))
 }

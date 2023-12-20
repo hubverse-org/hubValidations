@@ -83,7 +83,7 @@ files and deletions of previously submitted model metadata files are not allowed
 and return a \verb{<error/check_error>} condition class object for each
 applicable modified/deleted file. This behaviour can be modified through
 arguments \code{file_modify_check}, which controls whether modification/deletion
-checks are performed and what is retuned if modifications/deletions are detected,
+checks are performed and what is returned if modifications/deletions are detected,
 and \code{allow_submit_window_mods}, which controls whether modifications/deletions
 of model output files are allowed within their submission windows.
 

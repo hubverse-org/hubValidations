@@ -130,3 +130,30 @@ test_that("validate_pr flags modifications and deletions in PR", {
   )
   expect_snapshot(str(mod_checks_in_window))
 })
+
+
+
+test_that("validate_pr handles errors in determining submission window & file renaming", {
+  skip_if_offline()
+
+  temp_hub <- fs::path(tempdir(), "mod_exec_error_hub")
+  gert::git_clone(
+    url = "https://github.com/Infectious-Disease-Modeling-Hubs/ci-testhub-simple",
+    path = temp_hub,
+    branch = "test-exec-error-mod-delete"
+  )
+
+  mod_checks_exec_error <- suppressMessages(
+    validate_pr(
+      hub_path = temp_hub,
+      gh_repo = "Infectious-Disease-Modeling-Hubs/ci-testhub-simple",
+      pr_number = 7,
+      skip_submit_window_check = TRUE
+    )
+  )
+  expect_snapshot(str(mod_checks_exec_error[1:5]))
+  expect_error(
+    suppressMessages(check_for_errors(mod_checks_exec_error))
+  )
+
+})
