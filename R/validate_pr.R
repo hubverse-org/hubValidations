@@ -189,10 +189,7 @@ inform_unvalidated_files <- function(pr_df) {
     return(invisible(NULL))
   }
 
-  unvalidated_bullets <- purrr::map_chr(
-    unvalidated_files,
-    ~ paste0("{.val ", .x, "}")
-  ) %>%
+  unvalidated_bullets <- sprintf("{.val %s}", unvalidated_files) %>%
     purrr::set_names(rep("*", length(unvalidated_files)))
 
   cli::cli_inform(
