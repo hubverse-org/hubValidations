@@ -183,7 +183,8 @@ validate_pr <- function(hub_path = ".", gh_repo, pr_number,
 
 # Sends message reporting any files with changes in PR that were not validated.
 inform_unvalidated_files <- function(pr_df) {
-  unvalidated_files <- pr_df[!pr_df$model_output & !pr_df$model_metadata, "filename", drop = TRUE]
+  unvalidated_files <- pr_df[!pr_df$model_output & !pr_df$model_metadata,
+                             "filename", drop = TRUE]
   if (length(unvalidated_files) == 0L) {
     return(invisible(NULL))
   }
@@ -213,7 +214,15 @@ check_pr_modf_del_files <- function(pr_df, file_type = c(
   file_type <- rlang::arg_match(file_type)
   alert <- rlang::arg_match(alert)
 
+  # subset pr_df to the file type beiing checked. We check model output and model
+  # metadata files separately as model metadata files are only check for deletions.
+  # Also, they have no submission window so deletions are not affected by
+  # allow_submit_window_mods
   df <- pr_df[pr_df[[file_type]], ]
+
+  # If mods/dels allowed within submission window, check whether any
+  # files are within their submission windows. Add results as allow_mod column to
+  # df. Else, allow_mod is FALSE for all files.
   if (allow_submit_window_mods && file_type == "model_output") {
     df$allow_mod <- purrr::map_lgl(
       df$rel_path,
@@ -225,11 +234,14 @@ check_pr_modf_del_files <- function(pr_df, file_type = c(
   } else {
     df$allow_mod <- FALSE
   }
+  # Subset to files whose modification/deletion is not allowed and needs reporting.
   df <- switch(file_type,
     model_output = df[df$status %in% c("removed", "modified") & !df$allow_mod, ],
     model_metadata = df[df$status == "removed", ]
   )
 
+  # The type of object returned depends on argument alert, which is passed down
+  # from validate_pr argument file_modify_check
   if (alert == "message") {
     out <- purrr::imap(
       .x = df$rel_path,
