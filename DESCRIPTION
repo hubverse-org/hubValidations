@@ -51,6 +51,7 @@ Imports:
 Suggests: 
     covr,
     gert,
+    kableExtra,
     mockery,
     rmarkdown,
     testthat (>= 3.2.0),
