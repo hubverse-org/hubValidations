@@ -1,0 +1,21 @@
+Name,Check,Early return,Fail output,parent fun,check fun,Extra info
+valid_config,Hub config valid,TRUE,check_error,validate_submission,check_config_hub_valid,
+submission_time,Current time within file submission window,FALSE,check_failure,validate_submission_time,check_submission_time,
+file_exists,File exists at `file_path` provided,TRUE,check_error,validate_model_file,check_file_exists,
+file_name,File name valid,TRUE,check_error,validate_model_file,check_file_name,
+file_location,File located in correct team directory,FALSE,check_failure,validate_model_file,check_file_location,
+round_id_valid,File round ID is valid hub round IDs,TRUE,check_error,validate_model_file,check_valid_round_id,
+file_format,File format is accepted hub/round format,TRUE,check_error,validate_model_file,check_file_format,
+metadata_exists,Model metadata file exists in expected location,TRUE,check_error,validate_model_file,check_submission_metadata_file_exists,
+file_read,File can be read without errors,TRUE,check_error,validate_model_data,check_file_read,
+valid_round_id_col,Round ID var from config exists in data column names. Skipped if `round_id_from_var` is FALSE in config.,FALSE,check_failure,validate_model_data,check_valid_round_id_col,
+unique_round_id,Round ID column contains a single unique round ID. Skipped if `round_id_from_var` is FALSE in config.,TRUE,check_error,validate_model_data,check_tbl_unique_round_id,
+match_round_id,Round ID from file contents matches round ID from file name. Skipped if `round_id_from_var` is FALSE in config.,TRUE,check_error,validate_model_data,check_tbl_match_round_id,
+colnames,File column names match expected column names for round (i.e. task ID names + hub standard column names),TRUE,check_error,validate_model_data,check_tbl_colnames,
+col_types,File column types match expected column types from config. Mainly applicable to parquet & arrow files.,FALSE,check_failure,validate_model_data,check_tbl_col_types,
+valid_vals,Columns (excluding `value` column) contain valid combinations of task ID / output type / output type ID values,TRUE,check_error,validate_model_data,check_tbl_values,error_tbl: table of invalid task ID/output type/output type ID value combinations
+rows_unique,Columns (excluding `value` column) contain unique combinations of task ID / output type / output type ID values,FALSE,check_failure,validate_model_data,check_tbl_rows_unique,
+req_vals,Columns (excluding `value` column) contain all required combinations of task ID / output type / output type ID values,FALSE,check_failure,validate_model_data,check_tbl_values_required,missing_df: table of missing task ID/output type/output type ID value combinations
+value_col_valid,Values in `value` column are coercible to data type configured for each output type,FALSE,check_failure,validate_model_data,check_tbl_value_col,
+value_col_non_desc,Values in `value` column are non-decreasing as output_type_ids increase for all unique task ID /output type value combinations. Applies to `quantile` or `cdf` output types only,FALSE,check_failure,validate_model_data,check_tbl_value_col_ascending,error_tbl: table of rows affected
+value_col_sum1,Values in the `value` column of `pmf` output type data for each unique task ID combination sum to 1.,FALSE,check_failure,validate_model_data,check_tbl_value_col_sum1,error_tbl: table of rows affected
