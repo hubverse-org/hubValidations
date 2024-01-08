@@ -64,9 +64,7 @@ file name, extension, location etc as well as model output data, i.e. the conten
 of the file.
 }
 \details{
-\if{html}{\out{
-<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
-<caption>Details of checks performed by validate_submission()</caption>
+Details of checks performed by \code{validate_submission()}\if{html}{\out{<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">}}\if{html}{\out{
  <thead>
   <tr>
    <th style="text-align:left;"> Name </th>

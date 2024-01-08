@@ -39,9 +39,8 @@ will return early if a check returns an error.
 Valid properties of a metadata file.
 }
 \details{
-\if{html}{\out{
+Details of checks performed by \code{validate_model_metadata()}\if{html}{\out{
 <table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
-<caption>Details of checks performed by validate_model_metadata()</caption>
  <thead>
   <tr>
    <th style="text-align:left;"> Name </th>

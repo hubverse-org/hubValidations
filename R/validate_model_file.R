@@ -12,6 +12,8 @@
 #' see [article on `<hub_validations>` S3 class objects](https://infectious-disease-modeling-hubs.github.io/hubValidations/articles/hub-validations-class.html).
 #' @export
 #' @details
+#'
+#' Details of checks performed by `validate_model_file()`
 #' ```{r, echo = FALSE}
 #' arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")) %>%
 #' dplyr::filter(.data$`parent fun` == "validate_model_file") %>%
@@ -20,7 +22,7 @@
 #'     is.na(.data$`Extra info`) ~ "",
 #'     TRUE ~ .data$`Extra info`
 #'   )) %>%
-#'   knitr::kable(caption = "Details of checks performed by validate_model_file()") %>%
+#'   knitr::kable() %>%
 #'   kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
 #'   kableExtra::column_spec(1, bold = TRUE)
 #' ```

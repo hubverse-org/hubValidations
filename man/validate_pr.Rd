@@ -98,9 +98,9 @@ currently \code{allow_submit_window_mods} will not work correctly and is best se
 to \code{FALSE}. This only relates to hubs/rounds where submission windows are
 determined relative to a reference date and not when explicit submission
 window start and end dates are provided in the config.
-\subsection{Checks on model output files}{\if{html}{\out{
-<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
-<caption>Details of checks performed by validate_submission()</caption>
+\subsection{Checks on model output files}{
+
+Details of checks performed by \code{validate_submission()}\if{html}{\out{<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">}}\if{html}{\out{
  <thead>
   <tr>
    <th style="text-align:left;"> Name </th>
@@ -257,9 +257,9 @@ window start and end dates are provided in the config.
 
 }
 
-\subsection{Checks on model metadata files}{\if{html}{\out{
-<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
-<caption>Details of checks performed by validate_model_metadata()</caption>
+\subsection{Checks on model metadata files}{
+
+Details of checks performed by \code{validate_model_metadata()}\if{html}{\out{<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">}}\if{html}{\out{
  <thead>
   <tr>
    <th style="text-align:left;"> Name </th>

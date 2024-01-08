@@ -6,6 +6,9 @@
 #' a `hub_check` class object reflecting the result of a given check. Function
 #' will return early if a check returns an error.
 #' @details
+#'
+#' Details of checks performed by `validate_model_metadata()`
+#'
 #' ```{r, echo = FALSE}
 #' arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")) %>%
 #' dplyr::filter(.data$`parent fun` == "validate_model_metadata") %>%
@@ -14,7 +17,7 @@
 #'     is.na(.data$`Extra info`) ~ "",
 #'     TRUE ~ .data$`Extra info`
 #'   )) %>%
-#'   knitr::kable(caption = "Details of checks performed by validate_model_metadata()") %>%
+#'   knitr::kable() %>%
 #'   kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
 #'   kableExtra::column_spec(1, bold = TRUE)
 #' ```

@@ -36,9 +36,7 @@ see \href{https://infectious-disease-modeling-hubs.github.io/hubValidations/arti
 Valid file level properties of a submitted model output file.
 }
 \details{
-\if{html}{\out{
-<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
-<caption>Details of checks performed by validate_model_file()</caption>
+Details of checks performed by \code{validate_model_file()}\if{html}{\out{<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">}}\if{html}{\out{
  <thead>
   <tr>
    <th style="text-align:left;"> Name </th>

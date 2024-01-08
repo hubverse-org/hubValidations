@@ -45,9 +45,7 @@ see \href{https://infectious-disease-modeling-hubs.github.io/hubValidations/arti
 Validate the contents of a submitted model data file
 }
 \details{
-\if{html}{\out{
-<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
-<caption>Details of checks performed by validate_model_data()</caption>
+Details of checks performed by \code{validate_model_data()}\if{html}{\out{<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">}}\if{html}{\out{
  <thead>
   <tr>
    <th style="text-align:left;"> Name </th>

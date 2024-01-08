@@ -18,6 +18,7 @@
 #' provided in the hub's config.
 #' @export
 #' @details
+#' Details of checks performed by `validate_submission()`
 #' ```{r, echo = FALSE}
 #' arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")) %>%
 #' dplyr::filter(.data$`parent fun` != "validate_model_metadata") %>%
@@ -26,7 +27,7 @@
 #'     is.na(.data$`Extra info`) ~ "",
 #'     TRUE ~ .data$`Extra info`
 #'   )) %>%
-#'   knitr::kable(caption = "Details of checks performed by validate_submission()") %>%
+#'   knitr::kable() %>%
 #'   kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
 #'   kableExtra::column_spec(1, bold = TRUE)
 #' ```
