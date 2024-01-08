@@ -9,8 +9,11 @@
 #'
 #' @examples
 #' hub_path <- system.file("testhubs/simple", package = "hubValidations")
-#' validate_model_file(hub_path,
-#'   file_path = "team1-goodmodel.yml"
+#' validate_model_metadata(hub_path,
+#'   file_path = "hub-baseline.yml"
+#' )
+#' validate_model_metadata(hub_path,
+#'   file_path = "team1-goodmodel.yaml"
 #' )
 validate_model_metadata <- function(hub_path, file_path, round_id = "default",
                                     validations_cfg_path = NULL) {

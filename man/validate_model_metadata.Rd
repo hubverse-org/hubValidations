@@ -40,7 +40,10 @@ Valid properties of a metadata file.
 }
 \examples{
 hub_path <- system.file("testhubs/simple", package = "hubValidations")
-validate_model_file(hub_path,
-  file_path = "team1-goodmodel.yml"
+validate_model_metadata(hub_path,
+  file_path = "hub-baseline.yml"
+)
+validate_model_metadata(hub_path,
+  file_path = "team1-goodmodel.yaml"
 )
 }
