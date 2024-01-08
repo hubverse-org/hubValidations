@@ -120,7 +120,7 @@ validate_model_metadata(hub_path,
 ```
 
 
-For more details on the structure of `<hub_validations>` objects, see `vignette("hub-validations-class")`.
+For more details on the structure of `<hub_validations>` objects, including how to access more information on individual checks, see `vignette("hub-validations-class")`.
 
 ### `validate_model_metadata` check details
 
