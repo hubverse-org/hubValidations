@@ -1,3 +1,11 @@
+# hubValidations 0.0.0.9008
+
+* Added new articles on:
+    - The structure of `<hub_validations>` class objects.
+    - Validating Pull Requests on Github (for admins).
+    - Validating Submissions locally (for teams).
+* Added tables with details of individual checks performed by each high level `validate_*()` function to documentation.
+
 # hubValidations 0.0.0.9007
 
 * `validate_pr()` now has arguments for controlling modification/deletions check are performed on model output and model metadata files (#65).
