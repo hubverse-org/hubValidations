@@ -1,4 +1,4 @@
-Name,Check,Early return,Fail output,parent fun,check fun,Extra info
+﻿Name,Check,Early return,Fail output,parent fun,check fun,Extra info
 valid_config,Hub config valid,TRUE,check_error,validate_submission,check_config_hub_valid,
 submission_time,Current time within file submission window,FALSE,check_failure,validate_submission_time,check_submission_time,
 file_exists,File exists at `file_path` provided,TRUE,check_error,validate_model_file,check_file_exists,
@@ -19,3 +19,9 @@ req_vals,Columns (excluding `value` column) contain all required combinations of
 value_col_valid,Values in `value` column are coercible to data type configured for each output type,FALSE,check_failure,validate_model_data,check_tbl_value_col,
 value_col_non_desc,Values in `value` column are non-decreasing as output_type_ids increase for all unique task ID /output type value combinations. Applies to `quantile` or `cdf` output types only,FALSE,check_failure,validate_model_data,check_tbl_value_col_ascending,error_tbl: table of rows affected
 value_col_sum1,Values in the `value` column of `pmf` output type data for each unique task ID combination sum to 1.,FALSE,check_failure,validate_model_data,check_tbl_value_col_sum1,error_tbl: table of rows affected
+metadata_schema_exists,A model metadata schema file exists in `hub-config` directory.,TRUE,check_error,validate_model_metadata,check_metadata_schema_exists,
+metadata_file_exists,A file with name provided to argument `file_path` exists at the expected location (the `model-metadata` directory).,TRUE,check_error,validate_model_metadata,check_metadata_file_exists,
+metadata_file_ext,The metadata file has correct extension (yaml or yml).,TRUE,check_error,validate_model_metadata,check_metadata_file_ext,
+metadata_file_location,The metadata file has been saved to correct location.,TRUE,check_failure,validate_model_metadata,check_metadata_file_location,
+metadata_matches_schema,The contents of the metadata file match the hub's model metadata schema,TRUE,check_error,validate_model_metadata,check_metadata_matches_schema,
+metadata_file_name,The metadata filename matches the model ID specified in the contents of the file.,TRUE,check_error,validate_model_metadata,check_metadata_file_name,

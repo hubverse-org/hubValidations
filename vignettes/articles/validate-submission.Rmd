@@ -13,40 +13,35 @@ knitr::opts_chunk$set(
 library(hubValidations)
 ```
 
+## Validating model output files with `validate_submission()`
+
 While most hubs will have automated validation systems set up to check contributions during submission, `hubValidations` also provides functionality for validating files locally before submitting them.
-For this, submitting teams can use `validate_submission()` to validate their model output files prior to submitting.
 
+For this, **submitting teams can use `validate_submission()` to validate their model output files prior to submitting.**
 
-### Structure of `hub_validations` object
-
-
-Each named element contains the result of an individual check and inherits from subclass `<hub_check>`. The name of each element is the name of the check.
+The function takes a relative path, relative to the model output directory, as argument `file_path`, performs a series of validation checks and returns their results in the form of a `hub_validations` S3 class object.
 
 ```{r}
 hub_path <- system.file("testhubs/simple", package = "hubValidations")
+
 validate_submission(hub_path,
   file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
 )
 ```
 
-
-The super class returned depends on the status of the check:
-
-- If a check succeeds, a `<message/check_success>` condition class object is returned.
-
-- If a check is skipped, a `<message/check_info>` condition class object is returned.
-
-- Checks vary with respect to whether they return an `<error/check_error>` or `<warning/check_failure>` condition class object if the check fails. 
-Ultimately, both will cause overall validation to fail and the two classes are used primarily to communicate the severity of a failing check.
+For more details on the structure of `<hub_validations>` objects, including how to access more information on individual checks, see `vignette("hub-validations-class")`.
 
 ### Validation early return
 
-Some checks which are critical to downstream checks will cause validation to stop and return the results of the checks up to and including the critical check that failed early. 
+**Some checks which are critical to downstream checks will cause validation to stop and return the results of the checks up to and including the critical check that failed early.**
+
 They generally return a `<error/check_error>` condition class object.
-Any problems identified will need to be resolved and the function rerun for validation to proceed further.
+Any problems identified will need to be resolved and the function re-run for validation to proceed further.
 
 
 ```{r}
+hub_path <- system.file("testhubs/simple", package = "hubValidations")
+
 validate_submission(hub_path,
   file_path = "team1-goodmodel/2022-10-15-hub-baseline.csv"
 )
@@ -89,49 +84,56 @@ validate_submission(hub_path,
 
 
 
-## Structure of a `<hub_check>` object
-
-Let's look more closely at the structure of the first few elements of the `hub_validations` object retuned by `validate_submission()`
-
-```{r}
-v <- validate_submission(hub_path,
-  file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
-)
-
-str(head(v))
-```
-
-Each `<hub_check>` objects contains the following elements:
-
-- `message`: the result message containing details about the check.
-- `where:`: there the check was performed, usually the model output file name.
-- `call`: the function used to perform the check.
-- `use_cli_format`: whether the message is formatted using cli format, almost always TRUE.
-
-### Extra information
-
-Some `<hub_check>` objects contain extra information about the failing check to help identify affected rows in submissions.
-
-For example, the `<hub_check>` object returned for the `valid_vals` check, which checks that all columns in a model output file (excluding the `value` column) contain valid combinations of task ID / output type / output type ID values contains an additional element called `error_tbl`, with details of the invalid value combinations in the rows affected.
-
-To access `error_tbl` from the output of `validate_submission()` stored in an object `v`, you would use:
-
-```{r, eval=FALSE}
-v$valid_vals$error_tbl
-```
 
 
-## `validate_submission` check details
+### `validate_submission` check details
 
 ```{r, echo=FALSE}
 library(kableExtra)
 arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")) %>%
+  dplyr::filter(.data$`parent fun` != "validate_model_metadata") %>%
   dplyr::select(-"parent fun", -"check fun") %>%
   dplyr::mutate("Extra info" = dplyr::case_when(
     is.na(.data$`Extra info`) ~ "",
     TRUE ~ .data$`Extra info`
   )) %>%
   knitr::kable(caption = "Details of checks performed by `validate_submission()`") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+  column_spec(1, bold = TRUE)
+```
+
+
+## Validating model metadata files with `validate_model_metadata()`
+
+If you want to check a model metadata file before submitting, you can similarly use function `validate_model_metadata()`.
+
+The function takes model metadata file name as argument `file_path`, performs a series of validation checks and returns their results in the form of a `hub_validations` S3 class object.
+
+```{r}
+validate_model_metadata(hub_path,
+  file_path = "hub-baseline.yml"
+)
+
+validate_model_metadata(hub_path,
+  file_path = "team1-goodmodel.yaml"
+)
+```
+
+
+For more details on the structure of `<hub_validations>` objects, see `vignette("hub-validations-class")`.
+
+### `validate_model_metadata` check details
+
+```{r, echo=FALSE}
+library(kableExtra)
+arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")) %>%
+  dplyr::filter(.data$`parent fun` == "validate_model_metadata") %>%
+  dplyr::select(-"parent fun", -"check fun") %>%
+  dplyr::mutate("Extra info" = dplyr::case_when(
+    is.na(.data$`Extra info`) ~ "",
+    TRUE ~ .data$`Extra info`
+  )) %>%
+  knitr::kable(caption = "Details of checks performed by `validate_model_metadata()`") %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
   column_spec(1, bold = TRUE)
 ```
