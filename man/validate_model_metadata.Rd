@@ -38,6 +38,66 @@ will return early if a check returns an error.
 \description{
 Valid properties of a metadata file.
 }
+\details{
+\if{html}{\out{
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<caption>Details of checks performed by validate_model_metadata()</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Name </th>
+   <th style="text-align:left;"> Check </th>
+   <th style="text-align:left;"> Early return </th>
+   <th style="text-align:left;"> Fail output </th>
+   <th style="text-align:left;"> Extra info </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> metadata_schema_exists </td>
+   <td style="text-align:left;"> A model metadata schema file exists in `hub-config` directory. </td>
+   <td style="text-align:left;"> TRUE </td>
+   <td style="text-align:left;"> check_error </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> metadata_file_exists </td>
+   <td style="text-align:left;"> A file with name provided to argument `file_path` exists at the expected location (the `model-metadata` directory). </td>
+   <td style="text-align:left;"> TRUE </td>
+   <td style="text-align:left;"> check_error </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> metadata_file_ext </td>
+   <td style="text-align:left;"> The metadata file has correct extension (yaml or yml). </td>
+   <td style="text-align:left;"> TRUE </td>
+   <td style="text-align:left;"> check_error </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> metadata_file_location </td>
+   <td style="text-align:left;"> The metadata file has been saved to correct location. </td>
+   <td style="text-align:left;"> TRUE </td>
+   <td style="text-align:left;"> check_failure </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> metadata_matches_schema </td>
+   <td style="text-align:left;"> The contents of the metadata file match the hub's model metadata schema </td>
+   <td style="text-align:left;"> TRUE </td>
+   <td style="text-align:left;"> check_error </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> metadata_file_name </td>
+   <td style="text-align:left;"> The metadata filename matches the model ID specified in the contents of the file. </td>
+   <td style="text-align:left;"> TRUE </td>
+   <td style="text-align:left;"> check_error </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+</tbody>
+</table>
+}}
+}
 \examples{
 hub_path <- system.file("testhubs/simple", package = "hubValidations")
 validate_model_metadata(hub_path,

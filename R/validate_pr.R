@@ -24,9 +24,9 @@
 #' @inheritParams validate_submission
 #' @details
 #' Only model output and model metadata files are individually validated using
-#' `validate_submission()` with each file although as part of checks, hub config
-#' files are also validated. Any other files included in the PR are ignored but
-#' flagged in a message.
+#' `validate_submission()` or `validate_model_metadata()` respectively although
+#' as part of checks, hub config files are also validated.
+#' Any other files included in the PR are ignored but flagged in a message.
 #'
 #' By default, modifications (which include renaming) and deletions of
 #' previously submitted model output files and deletions or renaming of
@@ -48,6 +48,36 @@
 #' to `FALSE`. This only relates to hubs/rounds where submission windows are
 #' determined relative to a reference date and not when explicit submission
 #' window start and end dates are provided in the config.
+#'
+#' ### Checks on model output files
+#'
+#' ```{r, echo = FALSE}
+#' arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")) %>%
+#' dplyr::filter(.data$`parent fun` != "validate_model_metadata") %>%
+#'   dplyr::select(-"parent fun", -"check fun") %>%
+#'   dplyr::mutate("Extra info" = dplyr::case_when(
+#'     is.na(.data$`Extra info`) ~ "",
+#'     TRUE ~ .data$`Extra info`
+#'   )) %>%
+#'   knitr::kable(caption = "Details of checks performed by validate_submission()") %>%
+#'   kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+#'   kableExtra::column_spec(1, bold = TRUE)
+#' ```
+#'
+#' ### Checks on model metadata files
+#'
+#' ```{r, echo = FALSE}
+#' arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")) %>%
+#' dplyr::filter(.data$`parent fun` == "validate_model_metadata") %>%
+#'   dplyr::select(-"parent fun", -"check fun") %>%
+#'   dplyr::mutate("Extra info" = dplyr::case_when(
+#'     is.na(.data$`Extra info`) ~ "",
+#'     TRUE ~ .data$`Extra info`
+#'   )) %>%
+#'   knitr::kable(caption = "Details of checks performed by validate_model_metadata()") %>%
+#'   kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+#'   kableExtra::column_spec(1, bold = TRUE)
+#' ```
 #' @return An object of class `hub_validations`.
 #' @export
 #'

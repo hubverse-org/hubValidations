@@ -2,9 +2,7 @@
 % Please edit documentation in R/validate_submission.R
 \name{validate_submission}
 \alias{validate_submission}
-\title{Validate a submitted model data file. Checks both file level properties like
-file name, extension, location etc as well as model output data, i.e. the contents
-of the file.}
+\title{Validate a submitted model data file.}
 \usage{
 validate_submission(
   hub_path,
@@ -55,11 +53,173 @@ provided in the hub's config.}
 An object of class \code{hub_validations}. Each named element contains
 a \code{hub_check} class object reflecting the result of a given check. Function
 will return early if a check returns an error.
+
+For more details on the structure of \verb{<hub_validations>} objects, including
+how to access more information on individual checks,
+see \href{https://infectious-disease-modeling-hubs.github.io/hubValidations/articles/hub-validations-class.html}{article on \verb{<hub_validations>} S3 class objects}.
 }
 \description{
-Validate a submitted model data file. Checks both file level properties like
+Checks both file level properties like
 file name, extension, location etc as well as model output data, i.e. the contents
 of the file.
+}
+\details{
+\if{html}{\out{
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<caption>Details of checks performed by validate_submission()</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Name </th>
+   <th style="text-align:left;"> Check </th>
+   <th style="text-align:left;"> Early return </th>
+   <th style="text-align:left;"> Fail output </th>
+   <th style="text-align:left;"> Extra info </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> valid_config </td>
+   <td style="text-align:left;"> Hub config valid </td>
+   <td style="text-align:left;"> TRUE </td>
+   <td style="text-align:left;"> check_error </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> submission_time </td>
+   <td style="text-align:left;"> Current time within file submission window </td>
+   <td style="text-align:left;"> FALSE </td>
+   <td style="text-align:left;"> check_failure </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> file_exists </td>
+   <td style="text-align:left;"> File exists at `file_path` provided </td>
+   <td style="text-align:left;"> TRUE </td>
+   <td style="text-align:left;"> check_error </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> file_name </td>
+   <td style="text-align:left;"> File name valid </td>
+   <td style="text-align:left;"> TRUE </td>
+   <td style="text-align:left;"> check_error </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> file_location </td>
+   <td style="text-align:left;"> File located in correct team directory </td>
+   <td style="text-align:left;"> FALSE </td>
+   <td style="text-align:left;"> check_failure </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> round_id_valid </td>
+   <td style="text-align:left;"> File round ID is valid hub round IDs </td>
+   <td style="text-align:left;"> TRUE </td>
+   <td style="text-align:left;"> check_error </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> file_format </td>
+   <td style="text-align:left;"> File format is accepted hub/round format </td>
+   <td style="text-align:left;"> TRUE </td>
+   <td style="text-align:left;"> check_error </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> metadata_exists </td>
+   <td style="text-align:left;"> Model metadata file exists in expected location </td>
+   <td style="text-align:left;"> TRUE </td>
+   <td style="text-align:left;"> check_error </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> file_read </td>
+   <td style="text-align:left;"> File can be read without errors </td>
+   <td style="text-align:left;"> TRUE </td>
+   <td style="text-align:left;"> check_error </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> valid_round_id_col </td>
+   <td style="text-align:left;"> Round ID var from config exists in data column names. Skipped if `round_id_from_var` is FALSE in config. </td>
+   <td style="text-align:left;"> FALSE </td>
+   <td style="text-align:left;"> check_failure </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> unique_round_id </td>
+   <td style="text-align:left;"> Round ID column contains a single unique round ID. Skipped if `round_id_from_var` is FALSE in config. </td>
+   <td style="text-align:left;"> TRUE </td>
+   <td style="text-align:left;"> check_error </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> match_round_id </td>
+   <td style="text-align:left;"> Round ID from file contents matches round ID from file name. Skipped if `round_id_from_var` is FALSE in config. </td>
+   <td style="text-align:left;"> TRUE </td>
+   <td style="text-align:left;"> check_error </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> colnames </td>
+   <td style="text-align:left;"> File column names match expected column names for round (i.e. task ID names + hub standard column names) </td>
+   <td style="text-align:left;"> TRUE </td>
+   <td style="text-align:left;"> check_error </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> col_types </td>
+   <td style="text-align:left;"> File column types match expected column types from config. Mainly applicable to parquet &amp; arrow files. </td>
+   <td style="text-align:left;"> FALSE </td>
+   <td style="text-align:left;"> check_failure </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> valid_vals </td>
+   <td style="text-align:left;"> Columns (excluding `value` column) contain valid combinations of task ID / output type / output type ID values </td>
+   <td style="text-align:left;"> TRUE </td>
+   <td style="text-align:left;"> check_error </td>
+   <td style="text-align:left;"> error_tbl: table of invalid task ID/output type/output type ID value combinations </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> rows_unique </td>
+   <td style="text-align:left;"> Columns (excluding `value` column) contain unique combinations of task ID / output type / output type ID values </td>
+   <td style="text-align:left;"> FALSE </td>
+   <td style="text-align:left;"> check_failure </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> req_vals </td>
+   <td style="text-align:left;"> Columns (excluding `value` column) contain all required combinations of task ID / output type / output type ID values </td>
+   <td style="text-align:left;"> FALSE </td>
+   <td style="text-align:left;"> check_failure </td>
+   <td style="text-align:left;"> missing_df: table of missing task ID/output type/output type ID value combinations </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> value_col_valid </td>
+   <td style="text-align:left;"> Values in `value` column are coercible to data type configured for each output type </td>
+   <td style="text-align:left;"> FALSE </td>
+   <td style="text-align:left;"> check_failure </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> value_col_non_desc </td>
+   <td style="text-align:left;"> Values in `value` column are non-decreasing as output_type_ids increase for all unique task ID /output type value combinations. Applies to `quantile` or `cdf` output types only </td>
+   <td style="text-align:left;"> FALSE </td>
+   <td style="text-align:left;"> check_failure </td>
+   <td style="text-align:left;"> error_tbl: table of rows affected </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> value_col_sum1 </td>
+   <td style="text-align:left;"> Values in the `value` column of `pmf` output type data for each unique task ID combination sum to 1. </td>
+   <td style="text-align:left;"> FALSE </td>
+   <td style="text-align:left;"> check_failure </td>
+   <td style="text-align:left;"> error_tbl: table of rows affected </td>
+  </tr>
+</tbody>
+</table>
+}}
 }
 \examples{
 hub_path <- system.file("testhubs/simple", package = "hubValidations")

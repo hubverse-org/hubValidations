@@ -5,6 +5,20 @@
 #' @return An object of class `hub_validations`. Each named element contains
 #' a `hub_check` class object reflecting the result of a given check. Function
 #' will return early if a check returns an error.
+#' @details
+#' ```{r, echo = FALSE}
+#' arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")) %>%
+#' dplyr::filter(.data$`parent fun` == "validate_model_metadata") %>%
+#'   dplyr::select(-"parent fun", -"check fun") %>%
+#'   dplyr::mutate("Extra info" = dplyr::case_when(
+#'     is.na(.data$`Extra info`) ~ "",
+#'     TRUE ~ .data$`Extra info`
+#'   )) %>%
+#'   knitr::kable(caption = "Details of checks performed by validate_model_metadata()") %>%
+#'   kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+#'   kableExtra::column_spec(1, bold = TRUE)
+#' ```
+#'
 #' @export
 #'
 #' @examples

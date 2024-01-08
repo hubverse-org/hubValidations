@@ -4,7 +4,19 @@
 #' @inheritParams validate_model_file
 #' @inherit validate_model_file return
 #' @export
-#'
+#' @details
+#' ```{r, echo = FALSE}
+#' arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")) %>%
+#' dplyr::filter(.data$`parent fun` == "validate_model_data") %>%
+#'   dplyr::select(-"parent fun", -"check fun") %>%
+#'   dplyr::mutate("Extra info" = dplyr::case_when(
+#'     is.na(.data$`Extra info`) ~ "",
+#'     TRUE ~ .data$`Extra info`
+#'   )) %>%
+#'   knitr::kable(caption = "Details of checks performed by validate_model_data()") %>%
+#'   kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+#'   kableExtra::column_spec(1, bold = TRUE)
+#' ```
 #' @examples
 #' hub_path <- system.file("testhubs/simple", package = "hubValidations")
 #' file_path <- "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
