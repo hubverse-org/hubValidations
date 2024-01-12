@@ -67,6 +67,8 @@ jobs:
           # these all default to 'true'
           enable-pull-request-comment: true
           enable-commit-comment: false
+          enable-commit-status: false
+          overwrites-pull-request-comment: false
           fails-without-credentials: true
 
         timeout-minutes: 1
