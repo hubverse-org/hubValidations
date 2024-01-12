@@ -5,6 +5,7 @@
     - Validating Pull Requests on Github (for admins).
     - Validating Submissions locally (for teams).
 * Added tables with details of individual checks performed by each high level `validate_*()` function to documentation.
+* Fixed bug where checks that values in `value` column are non-decreasing as `output_type_id`s increase for all unique task ID /output type value combinations fro `cdf` and `quantile` output types where erroneously returning validation errors if the `output_type_id` column was not ordered. (Thanks @M-7th).
 
 # hubValidations 0.0.0.9007
 
