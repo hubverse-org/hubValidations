@@ -16,6 +16,15 @@
       Message:
       Values in `value` column are non-decreasing as output_type_ids increase for all unique task ID value/output type combinations of quantile or cdf output types.
 
+# check_tbl_value_col_ascending works when output type IDs not ordered
+
+    Code
+      check_tbl_value_col_ascending(tbl, file_path)
+    Output
+      <message/check_success>
+      Message:
+      Values in `value` column are non-decreasing as output_type_ids increase for all unique task ID value/output type combinations of quantile or cdf output types.
+
 # check_tbl_value_col_ascending errors correctly
 
     Code

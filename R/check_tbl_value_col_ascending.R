@@ -58,7 +58,7 @@ check_values_ascending <- function(tbl) {
   tbl[["value"]] <- as.numeric(tbl[["value"]])
 
   check_tbl <- dplyr::group_by(tbl, dplyr::across(dplyr::all_of(group_cols))) %>%
-    dplyr::arrange("output_type_id", .by_group = TRUE) %>%
+    dplyr::arrange(.data$output_type_id, .by_group = TRUE) %>%
     dplyr::summarise(non_asc = any(diff(.data[["value"]]) < 0))
 
   if (!any(check_tbl$non_asc)) {
