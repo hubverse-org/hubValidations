@@ -66,6 +66,8 @@ jobs:
         if: contains(env.isPush, 'false')
         id: netlify-deploy
         uses: nwtgck/actions-netlify@v2
+        permissions:
+          pull-requests: write
         with:
           publish-dir: './docs'
           production-branch: main
@@ -75,5 +77,6 @@ jobs:
           # these all default to 'true'
           enable-pull-request-comment: true
           enable-commit-comment: false
+          fails-without-credentials: true
 
         timeout-minutes: 1
