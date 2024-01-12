@@ -22,3 +22,8 @@ You can install the development version of hubValidations like so:
 ``` r
 remotes::install_github("Infectious-Disease-Modeling-Hubs/hubValidations")
 ```
+
+## Contributing new check functions
+
+If submitting a new check function, please ensure you update
+`inst/check_table.csv` with metadata about the check.

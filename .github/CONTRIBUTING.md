@@ -16,6 +16,10 @@ If you’ve found a bug, please file an issue that illustrates the bug with a mi
 
 Our procedures for contributed bigger changes, code in particular, generally follow those advised by the tidyverse dev team, including following the tidyverse style guide for code and recording user facing changes in `NEWS.md`.
 
+## Submitting new check functions
+
+If submitting a new check function, please ensure you update `inst/check_table.csv` with metadata about the check.
+
 ### Pull request process
 
 *   Fork the package and clone onto your computer. If you haven't done this before, we recommend using `usethis::create_from_github("Infectious-Disease-Modeling-Hubs/hubValidations", fork = TRUE)`.
