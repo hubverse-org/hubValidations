@@ -13,6 +13,8 @@ name: pkgdown-pr-preview
 
 jobs:
   pkgdown:
+    permissions:
+      pull-requests: write
     if: github.event_name == 'push' || github.event.pull_request.head.repo.fork == false
     runs-on: ubuntu-latest
     # Only restrict concurrency for non-PR jobs
@@ -66,8 +68,6 @@ jobs:
         if: contains(env.isPush, 'false')
         id: netlify-deploy
         uses: nwtgck/actions-netlify@v2
-        permissions:
-          pull-requests: write
         with:
           publish-dir: './docs'
           production-branch: main
