@@ -50,6 +50,12 @@ The pertinent section of the workflow is:
 ```
 where `validate_pr()` is called on the contents of the current Pull Request, the results (an S3 `<hub_validations>` class object) is stored in `v` and then `check_for_errors()` used to signal whether overall validations have passed or failed and summarise any validation failures.
 
+Here's an example of what the workflow looks like on GitHub
+
+```{r, echo=FALSE}
+knitr::include_graphics("assets/ga-action-screenshot.png")
+```
+
 
 ### Skipping submission window checks
 
