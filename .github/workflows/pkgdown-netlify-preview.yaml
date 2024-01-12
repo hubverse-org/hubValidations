@@ -13,8 +13,6 @@ name: pkgdown-pr-preview
 
 jobs:
   pkgdown:
-    permissions:
-      pull-requests: write
     if: github.event_name == 'push' || github.event.pull_request.head.repo.fork == false
     runs-on: ubuntu-latest
     # Only restrict concurrency for non-PR jobs
@@ -27,6 +25,7 @@ jobs:
       isPush: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
     permissions:
       contents: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v3
 
