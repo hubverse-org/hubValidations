@@ -2,7 +2,8 @@
 % Please edit documentation in R/opt_check_tbl_horizon_timediff.R
 \name{opt_check_tbl_horizon_timediff}
 \alias{opt_check_tbl_horizon_timediff}
-\title{Check time difference between values in two date columns equal a defined period.}
+\title{Check time difference between values in two date columns equals a defined time
+period defined by values in a horizon column}
 \usage{
 opt_check_tbl_horizon_timediff(
   tbl,
@@ -50,7 +51,8 @@ Depending on whether validation has succeeded, one of:
 Returned object also inherits from subclass \verb{<hub_check>}.
 }
 \description{
-Check time difference between values in two date columns equal a defined period.
+Check time difference between values in two date columns equals a defined time
+period defined by values in a horizon column
 }
 \details{
 Should be deployed as part of \code{validate_model_data} optional checks.
