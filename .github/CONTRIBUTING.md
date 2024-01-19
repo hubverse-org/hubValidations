@@ -18,7 +18,16 @@ Our procedures for contributed bigger changes, code in particular, generally fol
 
 ## Submitting new check functions
 
-If submitting a new check function, please ensure you update `inst/check_table.csv` with metadata about the check.
+If submitting a new check function, please ensure you update `inst/check_table.csv` with metadata about the check. The file records metadata about check functions, both standard and optional and is used primarily in documentation. 
+
+Information required includes:
+- Name of the check (as it will appear in the `hub_validations` object output by the calling function). This field `NA` for optional functions as the name is user defined.
+- Description of the check.
+- Whether it will cause the calling function to return early.
+- Whether it returns a `<check_error>` or `<check_warning>` class object if the check fails.
+- The calling function it is designed to be called from.
+- Any additional information contained by the function output.
+- Whether the check is optional.
 
 ### Pull request process
 
