@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">hubValidations</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9007</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9008</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -24,7 +24,15 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/custom-functions.html">Include custom validation functions</a>
+    <a class="dropdown-item" href="../articles/hub-validations-class.html">Structure of hub_validations class objects</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Validation for hub admins through CI</h6>
+    <a class="dropdown-item" href="../articles/validate-pr.html">Validating Pull Requests on GitHub</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Validation for submitting teams</h6>
+    <a class="dropdown-item" href="../articles/validate-submission.html">Validating submissions locally</a>
+    <div class="dropdown-divider"></div>
+    <a class="dropdown-item" href="../articles/custom-functions.html">Including custom validation functions</a>
   </div>
 </li>
 <li class="active nav-item">
@@ -50,6 +58,16 @@
       <small>Source: <a href="https://github.com/Infectious-Disease-Modeling-Hubs/hubValidations/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.0.0.9008" id="hubvalidations-0009008">hubValidations 0.0.0.9008<a class="anchor" aria-label="anchor" href="#hubvalidations-0009008"></a></h2>
+<ul><li>Added new articles on:
+<ul><li>The structure of <code>&lt;hub_validations&gt;</code> class objects.</li>
+<li>Validating Pull Requests on Github (for admins).</li>
+<li>Validating Submissions locally (for teams).</li>
+</ul></li>
+<li>Added tables with details of individual checks performed by each high level <code>validate_*()</code> function to documentation.</li>
+<li>Fixed bug where check that values in <code>value</code> column are non-decreasing as <code>output_type_id</code>s increase for all unique task ID /output type value combinations for <code>cdf</code> and <code>quantile</code> output types was erroneously returning validation errors if the <code>output_type_id</code> column was not ordered. (Thanks <a href="https://github.com/M-7th" class="external-link">@M-7th</a>).</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.0.9007" id="hubvalidations-0009007">hubValidations 0.0.0.9007<a class="anchor" aria-label="anchor" href="#hubvalidations-0009007"></a></h2>
 <ul><li>

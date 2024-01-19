@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">hubValidations</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9007</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9008</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -24,7 +24,15 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/custom-functions.html">Include custom validation functions</a>
+    <a class="dropdown-item" href="../articles/hub-validations-class.html">Structure of hub_validations class objects</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Validation for hub admins through CI</h6>
+    <a class="dropdown-item" href="../articles/validate-pr.html">Validating Pull Requests on GitHub</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Validation for submitting teams</h6>
+    <a class="dropdown-item" href="../articles/validate-submission.html">Validating submissions locally</a>
+    <div class="dropdown-divider"></div>
+    <a class="dropdown-item" href="../articles/custom-functions.html">Including custom validation functions</a>
   </div>
 </li>
 <li class="nav-item">
@@ -101,6 +109,11 @@ provided in the hub's config.</p></dd>
 <p>An object of class <code>hub_validations</code>. Each named element contains
 a <code>hub_check</code> class object reflecting the result of a given check. Function
 will return early if a check returns an error.</p>
+
+
+<p>For more details on the structure of <code>&lt;hub_validations&gt;</code> objects, including
+how to access more information on individual checks,
+see <a href="https://infectious-disease-modeling-hubs.github.io/hubValidations/articles/hub-validations-class.html">article on <code>&lt;hub_validations&gt;</code> S3 class objects</a>.</p>
     </div>
 
     <div class="section level2">
@@ -108,7 +121,7 @@ will return early if a check returns an error.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">hub_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"testhubs/simple"</span>, package <span class="op">=</span> <span class="st">"hubValidations"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">file_path</span> <span class="op">&lt;-</span> <span class="st">"team1-goodmodel/2022-10-08-team1-goodmodel.csv"</span></span></span>
 <span class="r-in"><span><span class="fu">validate_submission_time</span><span class="op">(</span><span class="va">hub_path</span>, <span class="va">file_path</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ::notice ::! 2022-10-08-team1-goodmodel.csv: Submission time must be within accepted%0A  submission window for round.  Current time <span style="color: #0000BB;">2023-12-20 15:39:31.588408</span> is%0A  outside window <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ::notice ::! 2022-10-08-team1-goodmodel.csv: Submission time must be within accepted%0A  submission window for round.  Current time <span style="color: #0000BB;">2024-01-19 18:10:08.160618</span> is%0A  outside window <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

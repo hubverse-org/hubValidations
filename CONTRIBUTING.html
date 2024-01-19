@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="index.html">hubValidations</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9007</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9008</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -24,7 +24,15 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="articles/custom-functions.html">Include custom validation functions</a>
+    <a class="dropdown-item" href="articles/hub-validations-class.html">Structure of hub_validations class objects</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Validation for hub admins through CI</h6>
+    <a class="dropdown-item" href="articles/validate-pr.html">Validating Pull Requests on GitHub</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Validation for submitting teams</h6>
+    <a class="dropdown-item" href="articles/validate-submission.html">Validating submissions locally</a>
+    <div class="dropdown-divider"></div>
+    <a class="dropdown-item" href="articles/custom-functions.html">Including custom validation functions</a>
   </div>
 </li>
 <li class="nav-item">
@@ -52,14 +60,17 @@
 
 <div id="contributing-to-hubvalidations" class="section level1">
 
-<p>This outlines how to propose a change to hubValidations. For more detailed info about contributing to this, and other tidyverse packages, please see the <a href=""><strong>development contributing guide</strong></a>.</p>
-<blockquote>
-<p>TO DO: Develop and link to contributing guideines based on: <a href="https://rstd.io/tidy-contrib" class="external-link uri">https://rstd.io/tidy-contrib</a> ## Fixing typos</p>
-</blockquote>
+<p>This outlines how to propose a change to hubValidations. For more general info about contributing to this, and other hubverse packages, please see the <a href="https://hubdocs.readthedocs.io/en/latest/overview/contribute.html" class="external-link"><strong>hubverse contributing guide</strong></a>.</p>
 <p>You can fix typos, spelling mistakes, or grammatical errors in the documentation directly using the GitHub web interface, as long as the changes are made in the <em>source</em> file. This generally means you’ll need to edit <a href="https://roxygen2.r-lib.org/articles/roxygen2.html" class="external-link">roxygen2 comments</a> in an <code>.R</code>, not a <code>.Rd</code> file. You can find the <code>.R</code> file that generates the <code>.Rd</code> by reading the comment in the first line.</p>
 <div class="section level2">
 <h2 id="bigger-changes">Bigger changes<a class="anchor" aria-label="anchor" href="#bigger-changes"></a></h2>
 <p>If you want to make a bigger change, it’s a good idea to first file an issue and make sure someone from the team agrees that it’s needed. If you’ve found a bug, please file an issue that illustrates the bug with a minimal <a href="https://www.tidyverse.org/help/#reprex" class="external-link">reprex</a> (this will also help you write a unit test, if needed).</p>
+<p>Our procedures for contributed bigger changes, code in particular, generally follow those advised by the tidyverse dev team, including following the tidyverse style guide for code and recording user facing changes in <code>NEWS.md</code>.</p>
+</div>
+<div class="section level2">
+<h2 id="submitting-new-check-functions">Submitting new check functions<a class="anchor" aria-label="anchor" href="#submitting-new-check-functions"></a></h2>
+<p>If submitting a new check function, please ensure you update <code>inst/check_table.csv</code> with metadata about the check. The file records metadata about check functions, both standard and optional and is used primarily in documentation.</p>
+<p>Information required includes: - Name of the check (as it will appear in the <code>hub_validations</code> object output by the calling function). This field <code>NA</code> for optional functions as the name is user defined. - Description of the check. - Whether it will cause the calling function to return early. - Whether it returns a <code>&lt;check_error&gt;</code> or <code>&lt;check_warning&gt;</code> class object if the check fails. - The calling function it is designed to be called from. - Any additional information contained by the function output. - Whether the check is optional.</p>
 <div class="section level3">
 <h3 id="pull-request-process">Pull request process<a class="anchor" aria-label="anchor" href="#pull-request-process"></a></h3>
 <ul><li><p>Fork the package and clone onto your computer. If you haven’t done this before, we recommend using <code>usethis::create_from_github("Infectious-Disease-Modeling-Hubs/hubValidations", fork = TRUE)</code>.</p></li>

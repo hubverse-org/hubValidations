@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">hubValidations</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9007</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9008</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,7 +48,15 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/custom-functions.html">Include custom validation functions</a>
+    <a class="dropdown-item" href="../articles/hub-validations-class.html">Structure of hub_validations class objects</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Validation for hub admins through CI</h6>
+    <a class="dropdown-item" href="../articles/validate-pr.html">Validating Pull Requests on GitHub</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Validation for submitting teams</h6>
+    <a class="dropdown-item" href="../articles/validate-submission.html">Validating submissions locally</a>
+    <div class="dropdown-divider"></div>
+    <a class="dropdown-item" href="../articles/custom-functions.html">Including custom validation functions</a>
   </div>
 </li>
 <li class="nav-item">
@@ -75,7 +83,7 @@
 
 
 
-
+<script src="custom-functions_files/kePrint-0.0.1/kePrint.js"></script><link href="custom-functions_files/lightable-0.0.1/lightable.css" rel="stylesheet">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Include custom validation functions</h1>
@@ -280,6 +288,138 @@ configuration.</p>
 <span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">t0_colname</span><span class="kw">:</span><span class="at"> </span><span class="st">"forecast_date"</span></span>
 <span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">t1_colname</span><span class="kw">:</span><span class="at"> </span><span class="st">"target_end_date"</span></span>
 <span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">timediff</span><span class="kw">:</span><span class="at"> !expr lubridate::weeks(1)</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="available-optional-functions">Available optional functions<a class="anchor" aria-label="anchor" href="#available-optional-functions"></a>
+</h2>
+<p><code>hubValidations</code> includes a number of optional checks or
+checks that require administrator configuration to be run, detailed
+below.</p>
+<p>For more detail on each function and its configuration parameters,
+consult the function documentation.</p>
+<div class="section level3">
+<h3 id="for-deploying-through-validate_model_data">For deploying through <code>validate_model_data</code><a class="anchor" aria-label="anchor" href="#for-deploying-through-validate_model_data"></a>
+</h3>
+<table class="table table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<caption>
+Details of available optional checks or checks requiring configuration
+for <code><a href="../reference/validate_model_data.html">validate_model_data()</a></code>.
+</caption>
+<thead><tr>
+<th style="text-align:left;">
+check fun
+</th>
+<th style="text-align:left;">
+Check
+</th>
+<th style="text-align:left;">
+Early return
+</th>
+<th style="text-align:left;">
+Fail output
+</th>
+<th style="text-align:left;">
+Extra info
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+opt_check_tbl_col_timediff
+</td>
+<td style="text-align:left;">
+Time difference between values in two date columns equal a defined
+period.
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+check_failure
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+opt_check_tbl_counts_lt_popn
+</td>
+<td style="text-align:left;">
+Predicted values per location are less than total location population.
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+check_failure
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+opt_check_tbl_horizon_timediff
+</td>
+<td style="text-align:left;">
+Time difference between values in two date columns equals a defined time
+period defined by values in a horizon column.
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+check_failure
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level3">
+<h3 id="for-deploying-through-validate_model_metadata">For deploying through <code>validate_model_metadata</code><a class="anchor" aria-label="anchor" href="#for-deploying-through-validate_model_metadata"></a>
+</h3>
+<table class="table table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<caption>
+Details of available optional checks or checks requiring configuration
+for <code><a href="../reference/validate_model_metadata.html">validate_model_metadata()</a></code>.
+</caption>
+<thead><tr>
+<th style="text-align:left;">
+check fun
+</th>
+<th style="text-align:left;">
+Check
+</th>
+<th style="text-align:left;">
+Early return
+</th>
+<th style="text-align:left;">
+Fail output
+</th>
+<th style="text-align:left;">
+Extra info
+</th>
+</tr></thead>
+<tbody><tr>
+<td style="text-align:left;font-weight: bold;">
+opt_check_metadata_team_max_model_n
+</td>
+<td style="text-align:left;">
+The number of metadata files submitted by a single team does not exceed
+the maximum number allowed.
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+check_failure
+</td>
+<td style="text-align:left;">
+</td>
+</tr></tbody>
+</table>
 </div>
 </div>
 <div class="section level2">
