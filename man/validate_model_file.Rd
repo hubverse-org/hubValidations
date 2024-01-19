@@ -27,9 +27,71 @@ defaults to \code{hub-config/validations.yml}.}
 An object of class \code{hub_validations}. Each named element contains
 a \code{hub_check} class object reflecting the result of a given check. Function
 will return early if a check returns an error.
+
+For more details on the structure of \verb{<hub_validations>} objects, including
+how to access more information on individual checks,
+see \href{https://infectious-disease-modeling-hubs.github.io/hubValidations/articles/hub-validations-class.html}{article on \verb{<hub_validations>} S3 class objects}.
 }
 \description{
 Valid file level properties of a submitted model output file.
+}
+\details{
+Details of checks performed by \code{validate_model_file()}\if{html}{\out{<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">}}\if{html}{\out{
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Name </th>
+   <th style="text-align:left;"> Check </th>
+   <th style="text-align:left;"> Early return </th>
+   <th style="text-align:left;"> Fail output </th>
+   <th style="text-align:left;"> Extra info </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> file_exists </td>
+   <td style="text-align:left;"> File exists at `file_path` provided </td>
+   <td style="text-align:left;"> TRUE </td>
+   <td style="text-align:left;"> check_error </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> file_name </td>
+   <td style="text-align:left;"> File name valid </td>
+   <td style="text-align:left;"> TRUE </td>
+   <td style="text-align:left;"> check_error </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> file_location </td>
+   <td style="text-align:left;"> File located in correct team directory </td>
+   <td style="text-align:left;"> FALSE </td>
+   <td style="text-align:left;"> check_failure </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> round_id_valid </td>
+   <td style="text-align:left;"> File round ID is valid hub round IDs </td>
+   <td style="text-align:left;"> TRUE </td>
+   <td style="text-align:left;"> check_error </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> file_format </td>
+   <td style="text-align:left;"> File format is accepted hub/round format </td>
+   <td style="text-align:left;"> TRUE </td>
+   <td style="text-align:left;"> check_error </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> metadata_exists </td>
+   <td style="text-align:left;"> Model metadata file exists in expected location </td>
+   <td style="text-align:left;"> TRUE </td>
+   <td style="text-align:left;"> check_error </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+</tbody>
+</table>
+}}
 }
 \examples{
 hub_path <- system.file("testhubs/simple", package = "hubValidations")

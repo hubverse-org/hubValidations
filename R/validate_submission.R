@@ -1,4 +1,6 @@
-#' Validate a submitted model data file. Checks both file level properties like
+#' Validate a submitted model data file.
+#'
+#' Checks both file level properties like
 #' file name, extension, location etc as well as model output data, i.e. the contents
 #' of the file.
 #'
@@ -15,6 +17,20 @@
 #' Not applicable when explicit submission window start and end dates are
 #' provided in the hub's config.
 #' @export
+#' @details
+#' Details of checks performed by `validate_submission()`
+#' ```{r, echo = FALSE}
+#' arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")) %>%
+#' dplyr::filter(.data$`parent fun` != "validate_model_metadata", !.data$optional) %>%
+#'   dplyr::select(-"parent fun", -"check fun", -"optional") %>%
+#'   dplyr::mutate("Extra info" = dplyr::case_when(
+#'     is.na(.data$`Extra info`) ~ "",
+#'     TRUE ~ .data$`Extra info`
+#'   )) %>%
+#'   knitr::kable() %>%
+#'   kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+#'   kableExtra::column_spec(1, bold = TRUE)
+#' ```
 #'
 #' @examples
 #' hub_path <- system.file("testhubs/simple", package = "hubValidations")

@@ -36,3 +36,24 @@ reference:
   - starts_with("print")
   - starts_with("combine")
   - contains("hub_validations")
+
+
+navbar:
+ components:
+   articles:
+    text: Articles
+    menu:
+    - text: Structure of hub_validations class objects
+      href: articles/hub-validations-class.html
+    - text: -------
+    - text: "Validation for hub admins through CI"
+    - text: Validating Pull Requests on GitHub
+      href: articles/validate-pr.html
+    - text: -------
+    - text: "Validation for submitting teams"
+    - text: Validating submissions locally
+      href: articles/validate-submission.html
+    - text: -------
+    - text: Including custom validation functions
+      href: articles/custom-functions.html
+

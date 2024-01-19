@@ -1,6 +1,6 @@
 Package: hubValidations
 Title: Testing framework for hubverse hub validations
-Version: 0.0.0.9007
+Version: 0.0.0.9008
 Authors@R: c(
     person(
         given = "Anna", 
@@ -51,6 +51,7 @@ Imports:
 Suggests: 
     covr,
     gert,
+    kableExtra,
     mockery,
     rmarkdown,
     testthat (>= 3.2.0),

@@ -37,6 +37,10 @@ provided in the hub's config.}
 An object of class \code{hub_validations}. Each named element contains
 a \code{hub_check} class object reflecting the result of a given check. Function
 will return early if a check returns an error.
+
+For more details on the structure of \verb{<hub_validations>} objects, including
+how to access more information on individual checks,
+see \href{https://infectious-disease-modeling-hubs.github.io/hubValidations/articles/hub-validations-class.html}{article on \verb{<hub_validations>} S3 class objects}.
 }
 \description{
 Validate a submitted model data file submission time.

@@ -1,11 +1,8 @@
 # Contributing to hubValidations
 
 This outlines how to propose a change to hubValidations. 
-For more detailed info about contributing to this, and other tidyverse packages, please see the
-[**development contributing guide**](). 
-
-> TO DO: Develop and link to contributing guideines based on: https://rstd.io/tidy-contrib
-## Fixing typos
+For more general info about contributing to this, and other hubverse packages, please see the
+[**hubverse contributing guide**](https://hubdocs.readthedocs.io/en/latest/overview/contribute.html). 
 
 You can fix typos, spelling mistakes, or grammatical errors in the documentation directly using the GitHub web interface, as long as the changes are made in the _source_ file. 
 This generally means you'll need to edit [roxygen2 comments](https://roxygen2.r-lib.org/articles/roxygen2.html) in an `.R`, not a `.Rd` file. 
@@ -16,6 +13,21 @@ You can find the `.R` file that generates the `.Rd` by reading the comment in th
 If you want to make a bigger change, it's a good idea to first file an issue and make sure someone from the team agrees that it’s needed. 
 If you’ve found a bug, please file an issue that illustrates the bug with a minimal 
 [reprex](https://www.tidyverse.org/help/#reprex) (this will also help you write a unit test, if needed).
+
+Our procedures for contributed bigger changes, code in particular, generally follow those advised by the tidyverse dev team, including following the tidyverse style guide for code and recording user facing changes in `NEWS.md`.
+
+## Submitting new check functions
+
+If submitting a new check function, please ensure you update `inst/check_table.csv` with metadata about the check. The file records metadata about check functions, both standard and optional and is used primarily in documentation. 
+
+Information required includes:
+- Name of the check (as it will appear in the `hub_validations` object output by the calling function). This field `NA` for optional functions as the name is user defined.
+- Description of the check.
+- Whether it will cause the calling function to return early.
+- Whether it returns a `<check_error>` or `<check_warning>` class object if the check fails.
+- The calling function it is designed to be called from.
+- Any additional information contained by the function output.
+- Whether the check is optional.
 
 ### Pull request process
 

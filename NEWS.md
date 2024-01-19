@@ -1,3 +1,12 @@
+# hubValidations 0.0.0.9008
+
+* Added new articles on:
+    - The structure of `<hub_validations>` class objects.
+    - Validating Pull Requests on Github (for admins).
+    - Validating Submissions locally (for teams).
+* Added tables with details of individual checks performed by each high level `validate_*()` function to documentation.
+* Fixed bug where check that values in `value` column are non-decreasing as `output_type_id`s increase for all unique task ID /output type value combinations for `cdf` and `quantile` output types was erroneously returning validation errors if the `output_type_id` column was not ordered. (Thanks @M-7th).
+
 # hubValidations 0.0.0.9007
 
 * `validate_pr()` now has arguments for controlling modification/deletions check are performed on model output and model metadata files (#65).

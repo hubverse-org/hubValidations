@@ -1,4 +1,5 @@
-#' Check time difference between values in two date columns equal a defined period.
+#' Check time difference between values in two date columns equals a defined time
+#' period defined by values in a horizon column
 #'
 #' @param t0_colname Character string. The name of the time zero date column.
 #' @param t1_colname Character string. The name of the time zero + 1 time step date column.

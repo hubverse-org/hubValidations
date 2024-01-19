@@ -107,6 +107,49 @@ default:
           timediff: !expr lubridate::weeks(1)
 ```
 
+## Available optional functions
+
+`hubValidations` includes a number of optional checks or checks that require administrator configuration to be run, detailed below.
+
+For more detail on each function and its configuration parameters, consult the function documentation.
+
+### For deploying through `validate_model_data`
+
+```{r, echo=FALSE}
+library(kableExtra)
+arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")) %>%
+  dplyr::filter(.data$`parent fun` == "validate_model_data",
+                .data$optional) %>%
+  dplyr::select(-"parent fun",  -"optional", -"Name") %>%
+  dplyr::select("check fun", dplyr::everything()) %>%
+  dplyr::mutate("Extra info" = dplyr::case_when(
+    is.na(.data$`Extra info`) ~ "",
+    TRUE ~ .data$`Extra info`
+  )) %>%
+  knitr::kable(caption = "Details of available optional checks or checks requiring configuration for `validate_model_data()`.") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+  column_spec(1, bold = TRUE)
+```
+
+### For deploying through `validate_model_metadata`
+
+```{r, echo=FALSE}
+library(kableExtra)
+arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")) %>%
+  dplyr::filter(.data$`parent fun` == "validate_model_metadata",
+                .data$optional) %>%
+  dplyr::select(-"parent fun",  -"optional", -"Name") %>%
+  dplyr::select("check fun", dplyr::everything()) %>%
+  dplyr::mutate("Extra info" = dplyr::case_when(
+    is.na(.data$`Extra info`) ~ "",
+    TRUE ~ .data$`Extra info`
+  )) %>%
+  knitr::kable(caption = "Details of available optional checks or checks requiring configuration for `validate_model_metadata()`.") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+  column_spec(1, bold = TRUE)
+```
+
+
 ## Managing dependencies of custom sourced functions
 
 TODO

@@ -1,0 +1,89 @@
+---
+title: "Structure of hub_validations class objects"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(hubValidations)
+```
+
+The high level `validate_*()` family of functions all return a `<hub_validations>` S3 class object.
+
+## Structure of `<hub_validations>` object
+
+A `hub_validations` object is effectively a list and represents the collected output of the series of checks performed by a higher level `validate_*()` function.
+
+Each named element of the list contains the result of an individual check and inherits from subclass `<hub_check>`. 
+The name of each element is the name of the check.
+
+Let's examine an example output of a model output file validation using `validate_submission()`.
+
+```{r}
+hub_path <- system.file("testhubs/simple", package = "hubValidations")
+
+v <- validate_submission(hub_path,
+  file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+)
+
+str(v, max.level = 1)
+```
+
+The super class returned in each element depends on the status of the check:
+
+- If a check succeeds, a `<message/check_success>` condition class object is returned.
+
+- If a check is skipped, a `<message/check_info>` condition class object is returned.
+
+- Checks vary with respect to whether they return an `<error/check_error>` or `<warning/check_failure>` condition class object if the check fails. 
+Ultimately, both will cause overall validation to fail and the two classes are used primarily to communicate the severity of a failing check.
+
+## `hub_validations` print method
+
+`hub_validations` objects have their own print method which displays the result, the file name and message of each check:
+
+- `✔` indicates a check was successful (a `<message/check_success>` condition class object was returned)
+- `✖` indicates a high severity check failed (a `<error/check_error>` condition class object was returned)
+- `!` indicates a lower severity check failed (a `<warning/check_failure>` condition class object was returned)
+- `ℹ` indicates a check was skipped (a `<message/check_info>` condition class object was returned)
+
+```{r}
+v
+```
+
+## Structure of a `<hub_check>` object
+
+Let's look more closely at the structure of the first few elements of the `hub_validations` object retuned by `validate_submission()`
+
+```{r}
+v <- validate_submission(hub_path,
+  file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+)
+
+str(head(v))
+```
+
+Each `<hub_check>` objects contains the following elements:
+
+- `message`: the result message containing details about the check.
+- `where:`: there the check was performed, usually the model output file name.
+- `call`: the function used to perform the check.
+- `use_cli_format`: whether the message is formatted using cli format, almost always TRUE.
+
+## Extra information
+
+Some `<hub_check>` objects contain extra information about the failing check to help identify affected rows in submissions.
+
+For example, the `<hub_check>` object returned for the `valid_vals` check, which checks that all columns in a model output file (excluding the `value` column) contain valid combinations of task ID / output type / output type ID values contains an additional element called `error_tbl`, with details of the invalid value combinations in the rows affected.
+
+To access `error_tbl` from the output of `validate_submission()` stored in an object `v`, you would use:
+
+```{r, eval=FALSE}
+v$valid_vals$error_tbl
+```
+

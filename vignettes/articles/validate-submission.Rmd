@@ -1,0 +1,151 @@
+---
+title: "Validating submissions locally"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(hubValidations)
+```
+
+## Validating model output files with `validate_submission()`
+
+While most hubs will have automated validation systems set up to check contributions during submission, `hubValidations` also provides functionality for validating files locally before submitting them.
+
+For this, **submitting teams can use `validate_submission()` to validate their model output files prior to submitting.**
+
+The function takes a relative path, relative to the model output directory, as argument `file_path`, performs a series of standard validation checks and returns their results in the form of a `hub_validations` S3 class object.
+
+```{r}
+hub_path <- system.file("testhubs/simple", package = "hubValidations")
+
+validate_submission(hub_path,
+  file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+)
+```
+
+For more details on the structure of `<hub_validations>` objects, including how to access more information on individual checks, see `vignette("hub-validations-class")`.
+
+### Validation early return
+
+**Some checks which are critical to downstream checks will cause validation to stop and return the results of the checks up to and including the critical check that failed early.**
+
+They generally return a `<error/check_error>` condition class object.
+Any problems identified will need to be resolved and the function re-run for validation to proceed further.
+
+
+```{r}
+hub_path <- system.file("testhubs/simple", package = "hubValidations")
+
+validate_submission(hub_path,
+  file_path = "team1-goodmodel/2022-10-15-hub-baseline.csv"
+)
+```
+
+### Execution Errors
+
+If an execution error occurs in any of the checks, an `<error/check_exec_error>` is returned instead. For validation purposes, this results in the same downstream effects as an `<error/check_error>` object.
+
+
+### Checking for errors with `check_for_errors()`
+
+You can check whether your file will overall pass validation checks by passing the `hub_validations` object to `check_for_errors()`. 
+
+If validation fails, an error will be thrown and the failing checks will be summarised.
+
+```{r, error=TRUE}
+validate_submission(hub_path,
+  file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+) %>% 
+    check_for_errors()
+```
+
+
+
+### Skipping the submission window check
+
+If you are preparing your submission prior to the submission window opening, you might want to skip the submission window check.
+You can so by setting argument `skip_submit_window_check` to `TRUE`. 
+
+This results in the previous valid file (except for failing the validation window check) now passing overall validation.
+
+```{r}
+validate_submission(hub_path,
+  file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv",
+   skip_submit_window_check = TRUE
+) %>% 
+    check_for_errors()
+```
+
+
+
+
+
+### `validate_submission` check details
+
+```{r, echo=FALSE}
+library(kableExtra)
+arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")) %>%
+  dplyr::filter(.data$`parent fun` != "validate_model_metadata",
+                !.data$optional) %>%
+  dplyr::select(-"parent fun", -"check fun", -"optional") %>%
+  dplyr::mutate("Extra info" = dplyr::case_when(
+    is.na(.data$`Extra info`) ~ "",
+    TRUE ~ .data$`Extra info`
+  )) %>%
+  knitr::kable(caption = "Details of checks performed by `validate_submission()`") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+  column_spec(1, bold = TRUE)
+```
+
+
+## Validating model metadata files with `validate_model_metadata()`
+
+If you want to check a model metadata file before submitting, you can similarly use function `validate_model_metadata()`.
+
+The function takes model metadata file name as argument `file_path`, performs a series of validation checks and returns their results in the form of a `hub_validations` S3 class object.
+
+```{r}
+validate_model_metadata(hub_path,
+  file_path = "hub-baseline.yml"
+)
+
+validate_model_metadata(hub_path,
+  file_path = "team1-goodmodel.yaml"
+)
+```
+
+
+For more details on the structure of `<hub_validations>` objects, including how to access more information on individual checks, see `vignette("hub-validations-class")`.
+
+### `validate_model_metadata` check details
+
+```{r, echo=FALSE}
+library(kableExtra)
+arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")) %>%
+  dplyr::filter(.data$`parent fun` == "validate_model_metadata",
+                !.data$optional) %>%
+  dplyr::select(-"parent fun", -"check fun", -"optional") %>%
+  dplyr::mutate("Extra info" = dplyr::case_when(
+    is.na(.data$`Extra info`) ~ "",
+    TRUE ~ .data$`Extra info`
+  )) %>%
+  knitr::kable(caption = "Details of checks performed by `validate_model_metadata()`") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+  column_spec(1, bold = TRUE)
+```
+
+
+<div class="alert alert-info" role="alert">
+
+#### Custom checks
+
+The standard checks discussed here are the checks deployed by default by the `validate_submission` or `validate_model_metadata` functions. 
+For more information on deploying optional/custom functions or functions that require configuration please check the article on [including custom functions](articles/custom-functions.html) (`vignette("custom-functions")`).
+
+</div>

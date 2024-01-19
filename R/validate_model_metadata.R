@@ -5,12 +5,32 @@
 #' @return An object of class `hub_validations`. Each named element contains
 #' a `hub_check` class object reflecting the result of a given check. Function
 #' will return early if a check returns an error.
+#' @details
+#'
+#' Details of checks performed by `validate_model_metadata()`
+#'
+#' ```{r, echo = FALSE}
+#' arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")) %>%
+#' dplyr::filter(.data$`parent fun` == "validate_model_metadata", !.data$optional) %>%
+#'   dplyr::select(-"parent fun", -"check fun", -"optional") %>%
+#'   dplyr::mutate("Extra info" = dplyr::case_when(
+#'     is.na(.data$`Extra info`) ~ "",
+#'     TRUE ~ .data$`Extra info`
+#'   )) %>%
+#'   knitr::kable() %>%
+#'   kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+#'   kableExtra::column_spec(1, bold = TRUE)
+#' ```
+#'
 #' @export
 #'
 #' @examples
 #' hub_path <- system.file("testhubs/simple", package = "hubValidations")
-#' validate_model_file(hub_path,
-#'   file_path = "team1-goodmodel.yml"
+#' validate_model_metadata(hub_path,
+#'   file_path = "hub-baseline.yml"
+#' )
+#' validate_model_metadata(hub_path,
+#'   file_path = "team1-goodmodel.yaml"
 #' )
 validate_model_metadata <- function(hub_path, file_path, round_id = "default",
                                     validations_cfg_path = NULL) {
