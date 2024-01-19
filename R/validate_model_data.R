@@ -8,8 +8,8 @@
 #' Details of checks performed by `validate_model_data()`
 #' ```{r, echo = FALSE}
 #' arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")) %>%
-#' dplyr::filter(.data$`parent fun` == "validate_model_data") %>%
-#'   dplyr::select(-"parent fun", -"check fun") %>%
+#' dplyr::filter(.data$`parent fun` == "validate_model_data", !.data$optional) %>%
+#'   dplyr::select(-"parent fun", -"check fun", -"optional") %>%
 #'   dplyr::mutate("Extra info" = dplyr::case_when(
 #'     is.na(.data$`Extra info`) ~ "",
 #'     TRUE ~ .data$`Extra info`

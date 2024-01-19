@@ -267,6 +267,7 @@ Details of checks performed by \code{validate_model_metadata()}\if{html}{\out{<t
    <th style="text-align:left;"> Early return </th>
    <th style="text-align:left;"> Fail output </th>
    <th style="text-align:left;"> Extra info </th>
+   <th style="text-align:left;"> optional </th>
   </tr>
  </thead>
 <tbody>
@@ -276,6 +277,7 @@ Details of checks performed by \code{validate_model_metadata()}\if{html}{\out{<t
    <td style="text-align:left;"> TRUE </td>
    <td style="text-align:left;"> check_error </td>
    <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> FALSE </td>
   </tr>
   <tr>
    <td style="text-align:left;font-weight: bold;"> metadata_file_exists </td>
@@ -283,6 +285,7 @@ Details of checks performed by \code{validate_model_metadata()}\if{html}{\out{<t
    <td style="text-align:left;"> TRUE </td>
    <td style="text-align:left;"> check_error </td>
    <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> FALSE </td>
   </tr>
   <tr>
    <td style="text-align:left;font-weight: bold;"> metadata_file_ext </td>
@@ -290,6 +293,7 @@ Details of checks performed by \code{validate_model_metadata()}\if{html}{\out{<t
    <td style="text-align:left;"> TRUE </td>
    <td style="text-align:left;"> check_error </td>
    <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> FALSE </td>
   </tr>
   <tr>
    <td style="text-align:left;font-weight: bold;"> metadata_file_location </td>
@@ -297,6 +301,7 @@ Details of checks performed by \code{validate_model_metadata()}\if{html}{\out{<t
    <td style="text-align:left;"> TRUE </td>
    <td style="text-align:left;"> check_failure </td>
    <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> FALSE </td>
   </tr>
   <tr>
    <td style="text-align:left;font-weight: bold;"> metadata_matches_schema </td>
@@ -304,6 +309,7 @@ Details of checks performed by \code{validate_model_metadata()}\if{html}{\out{<t
    <td style="text-align:left;"> TRUE </td>
    <td style="text-align:left;"> check_error </td>
    <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> FALSE </td>
   </tr>
   <tr>
    <td style="text-align:left;font-weight: bold;"> metadata_file_name </td>
@@ -311,6 +317,15 @@ Details of checks performed by \code{validate_model_metadata()}\if{html}{\out{<t
    <td style="text-align:left;"> TRUE </td>
    <td style="text-align:left;"> check_error </td>
    <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> FALSE </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> NA </td>
+   <td style="text-align:left;"> The number of metadata files submitted by a single team does not exceed the maximum number allowed. </td>
+   <td style="text-align:left;"> FALSE </td>
+   <td style="text-align:left;"> check_failure </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> TRUE </td>
   </tr>
 </tbody>
 </table>
