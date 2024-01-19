@@ -19,7 +19,7 @@ While most hubs will have automated validation systems set up to check contribut
 
 For this, **submitting teams can use `validate_submission()` to validate their model output files prior to submitting.**
 
-The function takes a relative path, relative to the model output directory, as argument `file_path`, performs a series of validation checks and returns their results in the form of a `hub_validations` S3 class object.
+The function takes a relative path, relative to the model output directory, as argument `file_path`, performs a series of standard validation checks and returns their results in the form of a `hub_validations` S3 class object.
 
 ```{r}
 hub_path <- system.file("testhubs/simple", package = "hubValidations")
@@ -91,8 +91,9 @@ validate_submission(hub_path,
 ```{r, echo=FALSE}
 library(kableExtra)
 arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")) %>%
-  dplyr::filter(.data$`parent fun` != "validate_model_metadata") %>%
-  dplyr::select(-"parent fun", -"check fun") %>%
+  dplyr::filter(.data$`parent fun` != "validate_model_metadata",
+                !.data$optional) %>%
+  dplyr::select(-"parent fun", -"check fun", -"optional") %>%
   dplyr::mutate("Extra info" = dplyr::case_when(
     is.na(.data$`Extra info`) ~ "",
     TRUE ~ .data$`Extra info`
@@ -127,8 +128,9 @@ For more details on the structure of `<hub_validations>` objects, including how 
 ```{r, echo=FALSE}
 library(kableExtra)
 arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")) %>%
-  dplyr::filter(.data$`parent fun` == "validate_model_metadata") %>%
-  dplyr::select(-"parent fun", -"check fun") %>%
+  dplyr::filter(.data$`parent fun` == "validate_model_metadata",
+                !.data$optional) %>%
+  dplyr::select(-"parent fun", -"check fun", -"optional") %>%
   dplyr::mutate("Extra info" = dplyr::case_when(
     is.na(.data$`Extra info`) ~ "",
     TRUE ~ .data$`Extra info`
@@ -137,3 +139,13 @@ arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")
   kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
   column_spec(1, bold = TRUE)
 ```
+
+
+<div class="alert alert-info" role="alert">
+
+#### Custom checks
+
+The standard checks discussed here are the checks deployed by default by the `validate_submission` or `validate_model_metadata` functions. 
+For more information on deploying optional/custom functions or functions that require configuration please check the article on [including custom functions](articles/custom-functions.html) (`vignette("custom-functions")`).
+
+</div>

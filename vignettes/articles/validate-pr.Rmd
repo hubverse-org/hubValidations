@@ -17,7 +17,7 @@ library(hubValidations)
 
 The `validate_pr()` functions is designed to be used to validate team submissions through Pull Requests on GitHub. 
 Only model output and model metadata files are individually validated using `validate_submission()` or `validate_model_metadata()` respectively on each file according to file type
-(_See the end of this article for details of checks performed on each file_).
+(_See the end of this article for details of the standard checks performed on each file. For more information on deploying optional or custom functions please check the article on [including custom functions Article](articles/custom-functions.html) (`vignette("custom-functions")`)_).
 As part of checks, however, hub config files are also validated. 
 Any other files included in the PR are ignored but flagged in a message.
 
@@ -200,8 +200,9 @@ For details on the structure of `<hub_validations>` objects, including on how to
 ```{r, echo=FALSE}
 library(kableExtra)
 arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")) %>%
-  dplyr::filter(.data$`parent fun` != "validate_model_metadata") %>%
-  dplyr::select(-"parent fun", -"check fun") %>%
+  dplyr::filter(.data$`parent fun` != "validate_model_metadata",
+                !.data$optional) %>%
+  dplyr::select(-"parent fun", -"check fun", -"optional") %>%
   dplyr::mutate("Extra info" = dplyr::case_when(
     is.na(.data$`Extra info`) ~ "",
     TRUE ~ .data$`Extra info`
@@ -216,8 +217,9 @@ arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")
 
 ```{r, echo=FALSE}
 arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")) %>%
-  dplyr::filter(.data$`parent fun` == "validate_model_metadata") %>%
-  dplyr::select(-"parent fun", -"check fun") %>%
+  dplyr::filter(.data$`parent fun` == "validate_model_metadata", 
+                !.data$optional) %>%
+  dplyr::select(-"parent fun", -"check fun", -"optional") %>%
   dplyr::mutate("Extra info" = dplyr::case_when(
     is.na(.data$`Extra info`) ~ "",
     TRUE ~ .data$`Extra info`
@@ -226,3 +228,12 @@ arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")
   kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
   column_spec(1, bold = TRUE)
 ```
+
+
+<div class="alert alert-info" role="alert">
+
+#### Custom checks
+
+The standard checks discussed here are the checks deployed by default by the `validate_pr` function. For more information on deploying optional or custom functions please check the article on [including custom functions Article](articles/custom-functions.html) (`vignette("custom-functions")`).
+
+</div>
