@@ -1,6 +1,7 @@
 url: https://infectious-disease-modeling-hubs.github.io/hubValidations/
 template:
   bootstrap: 5
+  package: hubStyle
 
 reference:
 - title: "Higher level validation functions"
