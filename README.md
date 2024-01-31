@@ -41,3 +41,11 @@ or [how to contribute to hubValidations](.github/CONTRIBUTING.md).
 If submitting a new check function, please ensure you update
 `inst/check_table.csv` with metadata about the check. See our
 [contributing guidelines](.github/CONTRIBUTING.md) for more details.
+
+------------------------------------------------------------------------
+
+PR Documentation Previews powered by [Netlify](https://www.netlify.com)
+
+<a href="https://www.netlify.com">
+<img src="https://www.netlify.com/v3/img/components/netlify-color-accent.svg" alt="Deploys by Netlify" />
+</a>
