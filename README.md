@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# hubValidations <img src="man/figures/logo.png" align="right" />
+# hubValidations <a href="https://infectious-disease-modeling-hubs.github.io/hubValidations/"><img src="man/figures/logo.png" align="right" height="131" alt="hubValidations website" /></a>
 
 <!-- badges: start -->
 
@@ -23,7 +23,29 @@ You can install the development version of hubValidations like so:
 remotes::install_github("Infectious-Disease-Modeling-Hubs/hubValidations")
 ```
 
-## Contributing new check functions
+## Code of Conduct
+
+Please note that the hubValidations package is released with a
+[Contributor Code of Conduct](.github/CODE_OF_CONDUCT.md). By
+contributing to this project, you agree to abide by its terms.
+
+## Contributing
+
+Interested in contributing back to the open-source Hubverse project?
+Learn more about how to [get involved in the Hubverse
+Community](https://hubdocs.readthedocs.io/en/latest/overview/contribute.html)
+or [how to contribute to hubValidations](.github/CONTRIBUTING.md).
+
+### Contributing new check functions
 
 If submitting a new check function, please ensure you update
-`inst/check_table.csv` with metadata about the check.
+`inst/check_table.csv` with metadata about the check. See our
+[contributing guidelines](.github/CONTRIBUTING.md) for more details.
+
+------------------------------------------------------------------------
+
+PR Documentation Previews powered by [Netlify](https://www.netlify.com)
+
+<a href="https://www.netlify.com">
+<img src="https://www.netlify.com/v3/img/components/netlify-color-accent.svg" alt="Deploys by Netlify" />
+</a>
