@@ -11,3 +11,8 @@
 ^attic$
 ^data-raw$
 ^vignettes/articles$
+^\.DS_Store$
+^\.Rhistory$
+^\.Rdata$
+^\.httr-oauth$
+^\.secrets$

@@ -57,4 +57,3 @@ navbar:
     - text: -------
     - text: Including custom validation functions
       href: articles/custom-functions.html
-
