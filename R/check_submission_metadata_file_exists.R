@@ -15,7 +15,7 @@ check_submission_metadata_file_exists <- function(file_path, hub_path = ".") {
   check <- !inherits(metadata_file_path, "try-error")
 
   if (check) {
-    rel_path <- rel_file_path(metadata_file_path,
+    rel_path <- rel_file_path(metadata_file_path, # nolint: object_usage_linter
       hub_path,
       subdir = "model-metadata"
     )
@@ -25,7 +25,7 @@ check_submission_metadata_file_exists <- function(file_path, hub_path = ".") {
       file_path,
       ext = "both"
     )
-    rel_paths <- rel_file_path(metadata_file_paths, hub_path,
+    rel_paths <- rel_file_path(metadata_file_paths, hub_path, # nolint: object_usage_linter
       subdir = "model-metadata"
     )
     msg_attribute <- cli::format_inline("at path {.path {rel_paths[1]}} or

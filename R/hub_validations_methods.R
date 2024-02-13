@@ -53,7 +53,7 @@ combine.hub_validations <- function(...) {
 }
 
 validate_internal_class <- function(x, class = c(
-                                      "hub_check",
+                                      "hub_check", # nolint
                                       "hub_validations"
                                     )) {
   if (length(x) == 0L) {

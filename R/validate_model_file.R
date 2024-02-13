@@ -9,7 +9,8 @@
 #'
 #' For more details on the structure of `<hub_validations>` objects, including
 #' how to access more information on individual checks,
-#' see [article on `<hub_validations>` S3 class objects](https://infectious-disease-modeling-hubs.github.io/hubValidations/articles/hub-validations-class.html).
+#' see [article on `<hub_validations>` S3 class objects](
+#' https://infectious-disease-modeling-hubs.github.io/hubValidations/articles/hub-validations-class.html).
 #' @export
 #' @details
 #'

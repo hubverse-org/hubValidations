@@ -64,7 +64,7 @@ opt_check_tbl_counts_lt_popn <- function(tbl, file_path, hub_path, targets = NUL
   tbl <- dplyr::left_join(tbl, popn, by = location_col)
 
   if (any(is.na(tbl[[popn_col]]))) {
-    invalid_location <- unique(tbl[[location_col]][is.na(tbl[[popn_col]])])
+    invalid_location <- unique(tbl[[location_col]][is.na(tbl[[popn_col]])]) # nolint: object_usage_linter
     cli::cli_abort(
       "No match for {cli::qty(length(invalid_location))} location{?s}
           {.val {invalid_location}} found in {.path {popn_file_path}}"
@@ -80,7 +80,7 @@ opt_check_tbl_counts_lt_popn <- function(tbl, file_path, hub_path, targets = NUL
     details <- cli::format_inline("Affected rows: {.val {tbl$row_id[!compare]}}.")
   }
 
-  n_loc <- length(unique(tbl[[location_col]]))
+  n_loc <- length(unique(tbl[[location_col]])) # nolint: object_usage_linter
 
   capture_check_cnd(
     check = check,
@@ -109,7 +109,7 @@ assert_target_keys <- function(targets, hub_path, file_path) {
   if (single_tk) {
     cli::cli_abort("Target does not match any round target keys.")
   } else {
-    n <- sum(valid_target_keys)
+    n <- sum(valid_target_keys) # nolint: object_usage_linter
     cli::cli_abort("{cli::qty(n)}Target{?s} with ind{?ex/ices}
                        {.val {which(!valid_target_keys)}}
                        {cli::qty(n)} do{?es/} not match any round target keys.")

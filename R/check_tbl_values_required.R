@@ -133,7 +133,7 @@ missing_required <- function(x, mask, req, full) {
 # in columns that contain both required and optional values are checked.
 get_opt_col_list <- function(x, mask, full, req) {
   min_opt_col <- ncol(x) - ncol(req)
-  all_opt_cols <- setdiff(names(x), names(req))
+  all_opt_cols <- setdiff(names(x), names(req)) # nolint: object_usage_linter
 
   opt_vals <- get_opt_vals(x, mask) %>%
     ignore_optional_output_type(x, mask, full, req)

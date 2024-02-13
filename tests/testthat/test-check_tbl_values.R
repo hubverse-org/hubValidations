@@ -28,7 +28,7 @@ test_that("check_tbl_values works", {
 })
 
 
-test_that("check_tbl_values consistent across numeric & character output type id columns & does not ignore trailing zeros", {
+test_that("check_tbl_values consistent across numeric & character output type id columns & does not ignore trailing zeros", { # nolint: line_length_linter
   # Hub with both character & numeric output type ids & trailing zeros in
   # numeric output type id
   hub_path <- test_path("testdata/hub-chr")

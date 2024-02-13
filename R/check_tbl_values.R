@@ -125,7 +125,7 @@ coerce_num_output_type_ids <- function(tbl, file_path, hub_path) {
   )
 
   if (any(tbl[["output_type"]] %in% num_output_types) &&
-    inherits(tbl[["output_type_id"]], "character")) {
+        inherits(tbl[["output_type_id"]], "character")) {
     type_coerce <- tbl[["output_type"]] %in% num_output_types
     num_output_type_id <- suppressWarnings(
       as.numeric(tbl$output_type_id[type_coerce])

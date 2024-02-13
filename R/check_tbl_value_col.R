@@ -22,7 +22,7 @@ check_tbl_value_col <- function(tbl, round_id, file_path, hub_path) {
     bind_model_tasks = FALSE
   )
 
-  join_cols <- names(tbl)[names(tbl) != "value"]
+  join_cols <- names(tbl)[names(tbl) != "value"] # nolint: object_usage_linter
   tbl <- purrr::map(
     full,
     ~ dplyr::inner_join(.x, tbl, by = join_cols)
@@ -84,7 +84,7 @@ compare_values_to_config <- function(tbl, output_type, output_type_config) {
   values_type <- config$type
   values <- coerce_values(values, values_type)
   if (any(is.na(values))) {
-    invalid_vals <- tbl$value[is.na(values)]
+    invalid_vals <- tbl$value[is.na(values)] # nolint: object_usage_linter
     details <- c(
       details,
       cli::format_inline(

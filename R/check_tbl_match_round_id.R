@@ -28,7 +28,7 @@ check_tbl_match_round_id <- function(tbl, file_path, hub_path,
   if (check) {
     details <- NULL
   } else {
-    unmatched_round_ids <- unique(tbl[[round_id_col]][!round_id_match])
+    unmatched_round_ids <- unique(tbl[[round_id_col]][!round_id_match]) # nolint: object_usage_linter
     details <- cli::format_inline(
       "{.var round_id} {cli::qty(length(unmatched_round_ids))}
             value{?s} {.val {unmatched_round_ids}} {?does/do} not match
