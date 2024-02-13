@@ -77,50 +77,49 @@ test_that("rel_file_path works", {
 })
 
 test_that("get_file_round_id works", {
-    expect_equal(
-        get_file_round_id(
-            file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
-        ),
-        "2022-10-08"
-    )
-    expect_snapshot(
-        get_file_round_id(
-            file_path = "team1-goodmodel/2022-10-08-team-1-goodmodel.csv"
-        ),
-        error = TRUE
-    )
+  expect_equal(
+    get_file_round_id(
+      file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+    ),
+    "2022-10-08"
+  )
+  expect_snapshot(
+    get_file_round_id(
+      file_path = "team1-goodmodel/2022-10-08-team-1-goodmodel.csv"
+    ),
+    error = TRUE
+  )
 })
 
 test_that("get_file_* utils work", {
-    expect_equal(
-        get_file_round_idx(
-            file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv",
-            hub_path = system.file("testhubs/simple", package = "hubValidations")
-        ),
-        1L
-    )
-    expect_equal(
-        get_file_round_idx(
-            file_path = "team1-goodmodel/2022-10-15-team1-goodmodel.csv",
-            hub_path = system.file("testhubs/simple", package = "hubValidations")
-        ),
-        2L
-    )
+  expect_equal(
+    get_file_round_idx(
+      file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv",
+      hub_path = system.file("testhubs/simple", package = "hubValidations")
+    ),
+    1L
+  )
+  expect_equal(
+    get_file_round_idx(
+      file_path = "team1-goodmodel/2022-10-15-team1-goodmodel.csv",
+      hub_path = system.file("testhubs/simple", package = "hubValidations")
+    ),
+    2L
+  )
 
-    expect_snapshot(
-        get_file_round_config(
-            file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv",
-            hub_path = system.file("testhubs/simple", package = "hubValidations")
-        )
+  expect_snapshot(
+    get_file_round_config(
+      file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv",
+      hub_path = system.file("testhubs/simple", package = "hubValidations")
     )
+  )
 
-    expect_true(
-        is_round_id_from_variable(
-            file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv",
-            hub_path = system.file("testhubs/simple", package = "hubValidations")
-        )
+  expect_true(
+    is_round_id_from_variable(
+      file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv",
+      hub_path = system.file("testhubs/simple", package = "hubValidations")
     )
-
+  )
 })
 
 test_that("get_metadata_file_name works", {

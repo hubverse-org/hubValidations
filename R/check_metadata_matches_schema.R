@@ -7,9 +7,11 @@ check_metadata_matches_schema <- function(file_path, hub_path = ".") {
   # Adapted from https://github.com/covid19-forecast-hub-europe/HubValidations/blob/main/R/validate_model_metadata.R
   tryCatch(
     {
-      abs_metadata_path <- abs_file_path(hub_path = hub_path,
-                                         subdir = "model-metadata",
-                                         file_path = file_path)
+      abs_metadata_path <- abs_file_path(
+        hub_path = hub_path,
+        subdir = "model-metadata",
+        file_path = file_path
+      )
       metadata <- yaml::read_yaml(abs_metadata_path)
 
       # For some reason, jsonvalidate doesn't like it when we don't unbox
@@ -18,14 +20,17 @@ check_metadata_matches_schema <- function(file_path, hub_path = ".") {
       abs_metadata_schema_path <- abs_file_path(
         hub_path = hub_path,
         subdir = "hub-config",
-        file_path = "model-metadata-schema.json")
+        file_path = "model-metadata-schema.json"
+      )
       schema_json <- jsonlite::read_json(abs_metadata_schema_path,
-                                         auto_unbox = TRUE) %>%
-      jsonlite::toJSON(auto_unbox = TRUE)
+        auto_unbox = TRUE
+      ) %>%
+        jsonlite::toJSON(auto_unbox = TRUE)
 
       valid <- jsonvalidate::json_validate(metadata_json, schema_json,
-                                           engine = "ajv", verbose = TRUE,
-                                           greedy = TRUE)
+        engine = "ajv", verbose = TRUE,
+        greedy = TRUE
+      )
 
       check <- as.logical(unclass(valid))
       if (!valid) {
@@ -35,8 +40,10 @@ check_metadata_matches_schema <- function(file_path, hub_path = ".") {
               .data$keyword == "required" ~ paste("-", .data$message, "."),
               .data$keyword == "additionalProperties" ~ paste0(
                 "- ", .data$message, "; saw unexpected property '",
-                .data$params$additionalProperty, "'."),
-              TRUE ~ paste("-", .data$instancePath, .data$message, "."))
+                .data$params$additionalProperty, "'."
+              ),
+              TRUE ~ paste("-", .data$instancePath, .data$message, ".")
+            )
           ) %>%
           dplyr::pull(.data$m)
       } else {
@@ -51,7 +58,9 @@ check_metadata_matches_schema <- function(file_path, hub_path = ".") {
           msg_attribute = "consistent with schema specifications.",
           msg_verbs = c("are", "must be"),
           details = paste(msgs, collapse = "\n "),
-          error = TRUE))
+          error = TRUE
+        )
+      )
     },
     error = function(e) {
       # This handler is used when an unrecoverable error is thrown. This can
@@ -66,7 +75,9 @@ check_metadata_matches_schema <- function(file_path, hub_path = ".") {
           msg_attribute = "consistent with schema specifications",
           msg_verbs = c("matches", "must match"),
           details = conditionMessage(e),
-          error = TRUE))
+          error = TRUE
+        )
+      )
     }
   )
 }

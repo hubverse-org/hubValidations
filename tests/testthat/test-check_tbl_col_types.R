@@ -24,7 +24,8 @@ test_that("check_tbl_col_types works", {
   # Check "06" location value read and validated correctly
   hub_path <- test_path("testdata/hub")
   file_path <- "hub-baseline/2023-04-24-hub-baseline.csv"
-  tbl <- read_model_out_file(file_path,
+  tbl <- read_model_out_file(
+    file_path,
     hub_path
   )
   expect_snapshot(

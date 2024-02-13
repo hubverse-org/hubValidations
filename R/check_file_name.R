@@ -9,9 +9,9 @@ check_file_name <- function(file_path) {
     "try-error"
   )
   if (check) {
-      details <- NULL
+    details <- NULL
   } else {
-      details <- "Could not correctly parse submission metadata."
+    details <- "Could not correctly parse submission metadata."
   }
   capture_check_cnd(
     check = check,

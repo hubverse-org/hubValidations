@@ -21,9 +21,9 @@
 #' @export
 check_tbl_unique_round_id <- function(tbl, file_path, hub_path,
                                       round_id_col = NULL) {
-
   check_round_id_col <- check_valid_round_id_col(
-    tbl, file_path, hub_path, round_id_col)
+    tbl, file_path, hub_path, round_id_col
+  )
 
   if (is_info(check_round_id_col)) {
     return(check_round_id_col)
@@ -54,7 +54,7 @@ check_tbl_unique_round_id <- function(tbl, file_path, hub_path,
     file_path = file_path,
     msg_subject = cli::format_inline(
       "{.var round_id} column {.val {round_id_col}}"
-      ),
+    ),
     msg_attribute = "a single, unique round ID value.",
     msg_verbs = c("contains", "must contain"),
     error = TRUE,

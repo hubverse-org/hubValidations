@@ -47,15 +47,15 @@ combine.hub_validations <- function(...) {
     purrr::compact() %>%
     validate_internal_class(class = "hub_validations")
 
-    structure(c(...),
+  structure(c(...),
     class = c("hub_validations", "list")
   )
 }
 
 validate_internal_class <- function(x, class = c(
-  "hub_check",
-  "hub_validations"
-)) {
+                                      "hub_check",
+                                      "hub_validations"
+                                    )) {
   if (length(x) == 0L) {
     return(invisible(TRUE))
   }
@@ -74,7 +74,6 @@ validate_internal_class <- function(x, class = c(
 }
 
 summary.hub_validations <- function(x, ...) {
-
   # TODO
   NULL
 }

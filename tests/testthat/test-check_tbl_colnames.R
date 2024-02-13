@@ -29,14 +29,14 @@ test_that("check_tbl_colnames fails on files", {
   round_id <- "2022-10-15"
 
   missing_col <- suppressMessages(
-      testthis::read_testdata(
-          "missing_col",
-          subdir = "files"
-      )
+    testthis::read_testdata(
+      "missing_col",
+      subdir = "files"
+    )
   )
   expect_snapshot(
     check_tbl_colnames(
-      tbl =  missing_col,
+      tbl = missing_col,
       round_id, file_path, hub_path
     )
   )

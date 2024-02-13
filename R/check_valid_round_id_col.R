@@ -22,7 +22,7 @@ check_valid_round_id_col <- function(tbl, file_path, hub_path, round_id_col = NU
       return(
         capture_check_info(
           file_path,
-          msg =  "Check {.code check_tbl_unique_round_id} only applicable when
+          msg = "Check {.code check_tbl_unique_round_id} only applicable when
           {.var round_id_col} provided. Check skipped."
         )
       )

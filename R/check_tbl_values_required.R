@@ -58,7 +58,7 @@ check_tbl_values_required <- function(tbl, round_id, file_path, hub_path) {
 
 check_modeling_task_values_required <- function(tbl, req, full) {
   if (nrow(tbl) == 0L) {
-    if (setequal(names(tbl), names(req))){
+    if (setequal(names(tbl), names(req))) {
       return(req[, names(tbl)])
     } else {
       return(tbl)
@@ -162,8 +162,10 @@ missing_req_rows <- function(opt_cols, x, mask, req, full, split_req = FALSE) {
 
   opt_colnms <- names(x)[opt_cols]
   if (split_req) {
-    opt_full_colnms <- unique(c(opt_colnms,
-                                hubUtils::std_colnames["output_type"]))
+    opt_full_colnms <- unique(c(
+      opt_colnms,
+      hubUtils::std_colnames["output_type"]
+    ))
   } else {
     opt_full_colnms <- opt_colnms
   }
@@ -324,8 +326,10 @@ split_na_req <- function(req) {
 }
 
 combine_mt_inputs <- function(tbl, req, full) {
-  keep_mt <- purrr::map_lgl(req,  ~nrow(.x) > 0L)
-  list(tbl[keep_mt],
-       req[keep_mt],
-       full[keep_mt])
+  keep_mt <- purrr::map_lgl(req, ~ nrow(.x) > 0L)
+  list(
+    tbl[keep_mt],
+    req[keep_mt],
+    full[keep_mt]
+  )
 }

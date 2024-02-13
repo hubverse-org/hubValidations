@@ -3,9 +3,11 @@ test_that("check_tbl_values_required works with 1 model task & completely opt co
   file_path <- "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
   tbl <- read_model_out_file(file_path, hub_path,
-                             coerce_types = "chr")
+    coerce_types = "chr"
+  )
   tbl_hub <- read_model_out_file(file_path, hub_path,
-                             coerce_types = "hub")
+    coerce_types = "hub"
+  )
   round_id <- "2022-10-08"
 
   # Test all required but only optional location for optional output type
@@ -48,9 +50,11 @@ test_that("check_tbl_values_required works with 2 separate model tasks & complet
   round_id <- "2023-05-08"
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
   tbl <- read_model_out_file(file_path, hub_path,
-                             coerce_types = "chr")
+    coerce_types = "chr"
+  )
   tbl_hub <- read_model_out_file(file_path, hub_path,
-                                 coerce_types = "hub")
+    coerce_types = "hub"
+  )
   expect_snapshot(
     check_tbl_values_required(tbl, round_id, file_path, hub_path)
   )

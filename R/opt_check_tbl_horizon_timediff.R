@@ -40,7 +40,7 @@ opt_check_tbl_horizon_timediff <- function(tbl, file_path, hub_path, t0_colname,
     tbl[, t1_colname] <- as.Date(tbl[[t1_colname]])
   }
   if (!is.integer(tbl[[horizon_colname]])) {
-      tbl[, horizon_colname] <- as.integer(tbl[[horizon_colname]])
+    tbl[, horizon_colname] <- as.integer(tbl[[horizon_colname]])
   }
 
   compare <- tbl[[t0_colname]] + (timediff * tbl[[horizon_colname]]) == tbl[[t1_colname]]
@@ -48,10 +48,10 @@ opt_check_tbl_horizon_timediff <- function(tbl, file_path, hub_path, t0_colname,
   if (check) {
     details <- NULL
   } else {
-      invalid_vals <- paste0(
-          tbl[[t1_colname]][!compare],
-          " (horizon = ", tbl[[horizon_colname]][!compare], ")"
-          ) %>% unique()
+    invalid_vals <- paste0(
+      tbl[[t1_colname]][!compare],
+      " (horizon = ", tbl[[horizon_colname]][!compare], ")"
+    ) %>% unique()
 
     details <- cli::format_inline(
       "t1 var value{?s} {.val {invalid_vals}} are invalid."

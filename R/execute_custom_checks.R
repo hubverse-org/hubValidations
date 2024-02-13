@@ -1,4 +1,3 @@
-
 execute_custom_checks <- function(validations_cfg_path = NULL) {
   caller_env <- rlang::caller_env()
   caller_call <- rlang::caller_call()

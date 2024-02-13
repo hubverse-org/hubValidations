@@ -29,7 +29,6 @@ test_that("check_tbl_values works", {
 
 
 test_that("check_tbl_values consistent across numeric & character output type id columns & does not ignore trailing zeros", {
-
   # Hub with both character & numeric output type ids & trailing zeros in
   # numeric output type id
   hub_path <- test_path("testdata/hub-chr")
@@ -52,8 +51,7 @@ test_that("check_tbl_values consistent across numeric & character output type id
       file_path = file_path,
       hub_path = hub_path
     ),
-    c("check_error", "hub_check", "rlang_error", "error", "condition"
-    ),
+    c("check_error", "hub_check", "rlang_error", "error", "condition"),
     exact = TRUE
   )
 
@@ -75,8 +73,7 @@ test_that("check_tbl_values consistent across numeric & character output type id
       file_path = file_path,
       hub_path = hub_path
     ),
-    c("check_error", "hub_check", "rlang_error", "error", "condition"
-    ),
+    c("check_error", "hub_check", "rlang_error", "error", "condition"),
     exact = TRUE
   )
 
@@ -120,8 +117,7 @@ test_that("check_tbl_values consistent across numeric & character output type id
       file_path = file_path,
       hub_path = hub_path
     ),
-    c("check_error", "hub_check", "rlang_error", "error", "condition"
-    ),
+    c("check_error", "hub_check", "rlang_error", "error", "condition"),
     exact = TRUE
   )
 
@@ -145,8 +141,7 @@ test_that("check_tbl_values consistent across numeric & character output type id
       file_path = file_path,
       hub_path = hub_path
     ),
-    c("check_error", "hub_check", "rlang_error", "error", "condition"
-    ),
+    c("check_error", "hub_check", "rlang_error", "error", "condition"),
     exact = TRUE
   )
 

@@ -6,9 +6,11 @@
 #'
 #' @export
 check_metadata_file_name <- function(file_path, hub_path = ".") {
-  abs_metadata_path <- abs_file_path(hub_path = hub_path,
-                                     subdir = "model-metadata",
-                                     file_path = file_path)
+  abs_metadata_path <- abs_file_path(
+    hub_path = hub_path,
+    subdir = "model-metadata",
+    file_path = file_path
+  )
   metadata <- yaml::read_yaml(abs_metadata_path)
 
   if ("model_id" %in% names(metadata)) {
@@ -24,7 +26,9 @@ check_metadata_file_name <- function(file_path, hub_path = ".") {
         msg_attribute = "either a {.var model_id} or both a {.var team_abbr} and {.var model_abbr}.",
         msg_verbs = c("contains", "must contain"),
         details = "There is an error in the set up of the hub's {.val model-metadata-schema.json} config file.",
-        error = TRUE))
+        error = TRUE
+      )
+    )
   }
 
   check <- model_id == fs::path_ext_remove(basename(file_path))
@@ -43,5 +47,7 @@ check_metadata_file_name <- function(file_path, hub_path = ".") {
       msg_attribute = "the {.var model_id} specified within the metadata file.",
       msg_verbs = c("matches", "must match"),
       details = details,
-      error = TRUE))
+      error = TRUE
+    )
+  )
 }

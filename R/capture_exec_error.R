@@ -13,7 +13,7 @@ capture_exec_error <- function(file_path, msg, call = NULL) {
   if (is.null(call)) {
     call <- rlang::caller_call()
     if (!is.null(call)) {
-        call <- rlang::call_name(call)
+      call <- rlang::call_name(call)
     }
   }
 
@@ -37,18 +37,18 @@ capture_exec_error <- function(file_path, msg, call = NULL) {
 #' inherits from subclass `<hub_check>`.
 #' @export
 capture_exec_warning <- function(file_path, msg, call = NULL) {
-    if (is.null(call)) {
-        call <- rlang::caller_call()
-    }
-    if (!is.null(call)) {
-        call <- rlang::call_name(call)
-    }
+  if (is.null(call)) {
+    call <- rlang::caller_call()
+  }
+  if (!is.null(call)) {
+    call <- rlang::call_name(call)
+  }
 
-    rlang::warning_cnd(
-        c("check_exec_warn", "hub_check"),
-        where = file_path,
-        call = call,
-        message = msg,
-        use_cli_format = TRUE
-    )
+  rlang::warning_cnd(
+    c("check_exec_warn", "hub_check"),
+    where = file_path,
+    call = call,
+    message = msg,
+    use_cli_format = TRUE
+  )
 }

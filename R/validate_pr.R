@@ -283,7 +283,6 @@ check_pr_modf_del_files <- function(pr_df, file_type = c(
 # notification object according to alert
 check_pr_modf_del_file <- function(df_row, file_type, allow_submit_window_mods,
                                    alert) {
-
   # If mods/dels allowed within submission window and file_type == "model_output",
   #  try checking whether file is within their submission window.
   if (allow_submit_window_mods && file_type == "model_output") {

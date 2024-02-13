@@ -8,7 +8,8 @@ check_submission_metadata_file_exists <- function(file_path, hub_path = ".") {
     get_metadata_file_name(hub_path,
       file_path,
       ext = "auto"
-    ), silent = TRUE
+    ),
+    silent = TRUE
   )
 
   check <- !inherits(metadata_file_path, "try-error")

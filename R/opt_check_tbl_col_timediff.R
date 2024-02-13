@@ -11,7 +11,6 @@
 opt_check_tbl_col_timediff <- function(tbl, file_path, hub_path,
                                        t0_colname, t1_colname,
                                        timediff = lubridate::weeks(2)) {
-
   checkmate::assert_class(timediff, "Period")
   checkmate::assert_scalar(timediff)
   checkmate::assert_character(t0_colname, len = 1L)

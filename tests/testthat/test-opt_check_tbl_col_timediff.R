@@ -16,18 +16,18 @@ test_that("opt_check_tbl_col_timediff works", {
   tbl_chr <- hubUtils::coerce_to_character(tbl)
   expect_snapshot(
     opt_check_tbl_col_timediff(tbl_chr, file_path, hub_path,
-                               t0_colname = "forecast_date",
-                               t1_colname = "target_end_date",
-                               timediff = lubridate::weeks(2)
+      t0_colname = "forecast_date",
+      t1_colname = "target_end_date",
+      timediff = lubridate::weeks(2)
     )
   )
 
   tbl$target_end_date[1] <- tbl$forecast_date[1] + lubridate::weeks(1)
   expect_snapshot(
     opt_check_tbl_col_timediff(tbl, file_path, hub_path,
-                               t0_colname = "forecast_date",
-                               t1_colname = "target_end_date",
-                               timediff = lubridate::weeks(2)
+      t0_colname = "forecast_date",
+      t1_colname = "target_end_date",
+      timediff = lubridate::weeks(2)
     )
   )
 })
@@ -41,27 +41,27 @@ test_that("opt_check_tbl_col_timediff fails correctly", {
 
   expect_snapshot(
     opt_check_tbl_col_timediff(tbl, file_path, hub_path,
-                               t0_colname = "forecast_date",
-                               t1_colname = "target_end_dates",
-                               timediff = lubridate::weeks(2)
+      t0_colname = "forecast_date",
+      t1_colname = "target_end_dates",
+      timediff = lubridate::weeks(2)
     ),
     error = TRUE
   )
 
   expect_snapshot(
     opt_check_tbl_col_timediff(tbl, file_path, hub_path,
-                               t0_colname = "forecast_date",
-                               t1_colname = c("target_end_date", "forecast_date"),
-                               timediff = lubridate::weeks(2)
+      t0_colname = "forecast_date",
+      t1_colname = c("target_end_date", "forecast_date"),
+      timediff = lubridate::weeks(2)
     ),
     error = TRUE
   )
 
   expect_snapshot(
     opt_check_tbl_col_timediff(tbl, file_path, hub_path,
-                               t0_colname = "forecast_date",
-                               t1_colname = "target_end_date",
-                               timediff = 14L
+      t0_colname = "forecast_date",
+      t1_colname = "target_end_date",
+      timediff = 14L
     ),
     error = TRUE
   )
@@ -79,9 +79,9 @@ test_that("opt_check_tbl_col_timediff fails correctly", {
   )
   expect_snapshot(
     opt_check_tbl_col_timediff(tbl, file_path, hub_path,
-                               t0_colname = "forecast_date",
-                               t1_colname = "target_end_date",
-                               timediff = lubridate::weeks(2)
+      t0_colname = "forecast_date",
+      t1_colname = "target_end_date",
+      timediff = lubridate::weeks(2)
     ),
     error = TRUE
   )

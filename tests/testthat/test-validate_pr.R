@@ -155,5 +155,4 @@ test_that("validate_pr handles errors in determining submission window & file re
   expect_error(
     suppressMessages(check_for_errors(mod_checks_exec_error))
   )
-
 })

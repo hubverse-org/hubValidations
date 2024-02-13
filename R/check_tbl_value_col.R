@@ -156,7 +156,7 @@ detect_invalid_int <- function(original_values, coerced_values) {
   if (!is.integer(coerced_values)) {
     return(list(check = FALSE, vals = NULL))
   }
-  if (!is.null(attr(coerced_values, "na.action"))){
+  if (!is.null(attr(coerced_values, "na.action"))) {
     original_values <- original_values[-attr(coerced_values, "na.action")]
   }
 
