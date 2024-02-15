@@ -23,5 +23,6 @@ check_metadata_file_location <- function(file_path) {
     msg_subject = "Metadata file directory name",
     msg_attribute = cli::format_inline("{.val model-metadata}."),
     msg_verbs = c("matches", "must match"),
-    details = details)
+    details = details
+  )
 }

@@ -75,25 +75,24 @@ It does however allow modifications to model output files within their allowed s
 
 
 ```{r}
-  temp_hub <- fs::path(tempdir(), "mod_del_hub")
-  gert::git_clone(
-    url = "https://github.com/Infectious-Disease-Modeling-Hubs/ci-testhub-simple",
-    path = temp_hub,
-    branch = "test-mod-del"
-  )
+temp_hub <- fs::path(tempdir(), "mod_del_hub")
+gert::git_clone(
+  url = "https://github.com/Infectious-Disease-Modeling-Hubs/ci-testhub-simple",
+  path = temp_hub,
+  branch = "test-mod-del"
+)
 ```
 
 
 ```{r}
 v <- validate_pr(
-      hub_path = temp_hub,
-      gh_repo = "Infectious-Disease-Modeling-Hubs/ci-testhub-simple",
-      pr_number = 6,
-      skip_submit_window_check = TRUE
-  )
+  hub_path = temp_hub,
+  gh_repo = "Infectious-Disease-Modeling-Hubs/ci-testhub-simple",
+  pr_number = 6,
+  skip_submit_window_check = TRUE
+)
 
 v
-
 ```
 
 
@@ -133,20 +132,19 @@ Is ignored when checking model metadata files as well as when `file_modification
 If any elements of the `hub_validations` object contain `<error/check_error>`, `<warning/check_warning>` or `<error/check_exec_error>` condition class objects, the function throws an error and prints the messages from the failing checks.
 
 ```{r, error=TRUE}
-
 temp_hub <- fs::path(tempdir(), "invalid_sb_hub")
-  gert::git_clone(
-    url = "https://github.com/Infectious-Disease-Modeling-Hubs/ci-testhub-simple",
-    path = temp_hub,
-    branch = "pr-missing-taskid"
-  )
+gert::git_clone(
+  url = "https://github.com/Infectious-Disease-Modeling-Hubs/ci-testhub-simple",
+  path = temp_hub,
+  branch = "pr-missing-taskid"
+)
 
 v_fail <- validate_pr(
-    hub_path = temp_hub,
-    gh_repo = "Infectious-Disease-Modeling-Hubs/ci-testhub-simple",
-    pr_number = 5,
-    skip_submit_window_check = TRUE
-  )
+  hub_path = temp_hub,
+  gh_repo = "Infectious-Disease-Modeling-Hubs/ci-testhub-simple",
+  pr_number = 5,
+  skip_submit_window_check = TRUE
+)
 
 check_for_errors(v_fail)
 ```
@@ -161,20 +159,20 @@ If all validations checks pass, `check_for_errors()` returns `TRUE` silently and
 
 ```{r}
 temp_hub <- fs::path(tempdir(), "valid_sb_hub")
-  gert::git_clone(
-    url = "https://github.com/Infectious-Disease-Modeling-Hubs/ci-testhub-simple",
-    path = temp_hub,
-    branch = "pr-valid"
-  )
+gert::git_clone(
+  url = "https://github.com/Infectious-Disease-Modeling-Hubs/ci-testhub-simple",
+  path = temp_hub,
+  branch = "pr-valid"
+)
 
-  v_pass <- validate_pr(
-    hub_path = temp_hub,
-    gh_repo = "Infectious-Disease-Modeling-Hubs/ci-testhub-simple",
-    pr_number = 4,
-    skip_submit_window_check = TRUE
-  )
-  
-  check_for_errors(v_pass)
+v_pass <- validate_pr(
+  hub_path = temp_hub,
+  gh_repo = "Infectious-Disease-Modeling-Hubs/ci-testhub-simple",
+  pr_number = 4,
+  skip_submit_window_check = TRUE
+)
+
+check_for_errors(v_pass)
 ```
 
 
@@ -200,8 +198,10 @@ For details on the structure of `<hub_validations>` objects, including on how to
 ```{r, echo=FALSE}
 library(kableExtra)
 arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")) %>%
-  dplyr::filter(.data$`parent fun` != "validate_model_metadata",
-                !.data$optional) %>%
+  dplyr::filter(
+    .data$`parent fun` != "validate_model_metadata",
+    !.data$optional
+  ) %>%
   dplyr::select(-"parent fun", -"check fun", -"optional") %>%
   dplyr::mutate("Extra info" = dplyr::case_when(
     is.na(.data$`Extra info`) ~ "",
@@ -217,8 +217,10 @@ arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")
 
 ```{r, echo=FALSE}
 arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")) %>%
-  dplyr::filter(.data$`parent fun` == "validate_model_metadata", 
-                !.data$optional) %>%
+  dplyr::filter(
+    .data$`parent fun` == "validate_model_metadata",
+    !.data$optional
+  ) %>%
   dplyr::select(-"parent fun", -"check fun", -"optional") %>%
   dplyr::mutate("Extra info" = dplyr::case_when(
     is.na(.data$`Extra info`) ~ "",

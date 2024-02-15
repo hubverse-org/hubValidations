@@ -101,8 +101,8 @@ validate_pr <- function(hub_path = ".", gh_repo, pr_number,
                           "file_path"
                         )) {
   file_modification_check <- rlang::arg_match(file_modification_check)
-  model_output_dir <- get_hub_model_output_dir(hub_path)
-  model_metadata_dir <- "model-metadata"
+  model_output_dir <- get_hub_model_output_dir(hub_path) # nolint: object_name_linter
+  model_metadata_dir <- "model-metadata" # nolint: object_name_linter
   validations <- new_hub_validations()
 
   validations$valid_config <- try_check(check_config_hub_valid(hub_path),
@@ -143,10 +143,8 @@ validate_pr <- function(hub_path = ".", gh_repo, pr_number,
         )
       inform_unvalidated_files(pr_df)
 
-      model_output_files <- pr_df$rel_path[pr_df$model_output &
-        pr_df$status != "removed"]
-      model_metadata_files <- pr_df$rel_path[pr_df$model_metadata &
-        pr_df$status != "removed"]
+      model_output_files <- pr_df$rel_path[pr_df$model_output & pr_df$status != "removed"]
+      model_metadata_files <- pr_df$rel_path[pr_df$model_metadata & pr_df$status != "removed"]
 
       if (file_modification_check != "none") {
         file_modifications <- purrr::map(
@@ -238,7 +236,7 @@ inform_unvalidated_files <- function(pr_df) {
 # file deletions/renaming. Returns an <error/check_error>⁠ condition class object if any
 # modification or deletion detected.
 check_pr_modf_del_files <- function(pr_df, file_type = c(
-                                      "model_output",
+                                      "model_output", # nolint
                                       "model_metadata"
                                     ),
                                     alert = c("message", "warn", "error"),
@@ -264,7 +262,7 @@ check_pr_modf_del_files <- function(pr_df, file_type = c(
   # Check whether modifications allowed and return notification object according
   # to alert for any file that violates allowed mod/del rules.
   out <- purrr::map(
-    .x = 1:nrow(df),
+    .x = seq_len(nrow(df)),
     ~ check_pr_modf_del_file(
       df_row = df[.x, ],
       file_type = file_type,
@@ -283,7 +281,6 @@ check_pr_modf_del_files <- function(pr_df, file_type = c(
 # notification object according to alert
 check_pr_modf_del_file <- function(df_row, file_type, allow_submit_window_mods,
                                    alert) {
-
   # If mods/dels allowed within submission window and file_type == "model_output",
   #  try checking whether file is within their submission window.
   if (allow_submit_window_mods && file_type == "model_output") {

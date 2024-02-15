@@ -8,7 +8,7 @@ check_file_read <- function(file_path, hub_path = ".") {
   try_read <- try(
     {
       if (fs::path_ext(file_path) == "csv") {
-        tbl <- read_model_out_file(
+        tbl <- read_model_out_file( # nolint: object_usage_linter
           file_path = file_path,
           hub_path = hub_path,
           coerce_types = "hub"

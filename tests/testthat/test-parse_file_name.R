@@ -41,13 +41,12 @@ test_that("parse_file_name works", {
   file_path <- "model-output/team1-goodmodel/round_1-team1-good_model.parquet"
   file_meta <- parse_file_name(file_path)
   expect_equal(
-      basename(file_path),
-      paste(file_meta$round_id, file_meta$team_abbr, file_meta$model_abbr,
-            sep = "-") %>%
-          paste(file_meta$ext, sep = ".")
+    basename(file_path),
+    paste(file_meta$round_id, file_meta$team_abbr, file_meta$model_abbr,
+      sep = "-"
+    ) %>%
+      paste(file_meta$ext, sep = ".")
   )
-
-
 })
 
 test_that("parse_file_name fails correctly", {

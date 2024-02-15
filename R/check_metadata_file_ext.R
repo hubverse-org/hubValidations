@@ -25,5 +25,6 @@ check_metadata_file_ext <- function(file_path) {
     msg_attribute = cli::format_inline("{.val yml} or {.val yaml}."),
     msg_verbs = c("is", "must be"),
     details = details,
-    error = TRUE)
+    error = TRUE
+  )
 }

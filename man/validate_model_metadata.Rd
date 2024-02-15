@@ -25,7 +25,8 @@ files within the \code{hub-config} directory.}
 \item{file_path}{character string. Path to the file being validated relative to
 the hub's model-output directory.}
 
-\item{round_id}{character string. The round identifier. Used primarily to indicate whether the "default" or a round specific configuration should be used for custom validations.}
+\item{round_id}{character string. The round identifier. Used primarily to indicate
+whether the "default" or a round specific configuration should be used for custom validations.}
 
 \item{validations_cfg_path}{Path to \code{validations.yml} file. If \code{NULL}
 defaults to \code{hub-config/validations.yml}.}

@@ -22,7 +22,7 @@ check_valid_round_id_col <- function(tbl, file_path, hub_path, round_id_col = NU
       return(
         capture_check_info(
           file_path,
-          msg =  "Check {.code check_tbl_unique_round_id} only applicable when
+          msg = "Check {.code check_tbl_unique_round_id} only applicable when
           {.var round_id_col} provided. Check skipped."
         )
       )
@@ -41,7 +41,7 @@ check_valid_round_id_col <- function(tbl, file_path, hub_path, round_id_col = NU
     if (check) {
       details <- NULL
     } else {
-      task_id_vars <- names(tbl)[!names(tbl) %in% hubUtils::std_colnames]
+      task_id_vars <- names(tbl)[!names(tbl) %in% hubUtils::std_colnames] # nolint: object_usage_linter
       details <- cli::format_inline("Must be one of
                                       {.val {task_id_vars}} not
                                       {.val {round_id_col}}.")

@@ -4,24 +4,28 @@ test_that("check_metadata_matches_schema works", {
   expect_s3_class(
     check_metadata_matches_schema(
       file_path = "hub-baseline.yml",
-      hub_path = hub_path),
+      hub_path = hub_path
+    ),
     c("check_success", "rlang_message", "message", "condition")
   )
   expect_snapshot(
     check_metadata_matches_schema(
       file_path = "hub-baseline.yml",
-      hub_path = hub_path)
+      hub_path = hub_path
+    )
   )
 
   expect_s3_class(
     check_metadata_matches_schema(
       file_path = "team1-goodmodel.yaml",
-      hub_path = hub_path),
+      hub_path = hub_path
+    ),
     c("check_error", "rlang_message", "message", "condition")
   )
   expect_snapshot(
     check_metadata_matches_schema(
       file_path = "team1-goodmodel.yaml",
-      hub_path = hub_path)
+      hub_path = hub_path
+    )
   )
 })

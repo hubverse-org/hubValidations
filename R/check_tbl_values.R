@@ -107,12 +107,11 @@ summarise_invalid_values <- function(valid_tbl, accepted_vals) {
 
 
 get_numeric_output_type_ids <- function(file_path, hub_path) {
-
   get_file_round_config(file_path, hub_path)[["model_tasks"]] %>%
     purrr::map(~ .x[["output_type"]]) %>%
     unlist(recursive = FALSE) %>%
     purrr::map(~ purrr::pluck(.x, "output_type_id")) %>%
-    purrr::map_lgl(~is.numeric(unlist(.x))) %>%
+    purrr::map_lgl(~ is.numeric(unlist(.x))) %>%
     purrr::keep(isTRUE) %>%
     names() %>%
     unique()
@@ -120,14 +119,13 @@ get_numeric_output_type_ids <- function(file_path, hub_path) {
 
 
 coerce_num_output_type_ids <- function(tbl, file_path, hub_path) {
-
   num_output_types <- get_numeric_output_type_ids(
     file_path = file_path,
-    hub_path = hub_path)
+    hub_path = hub_path
+  )
 
   if (any(tbl[["output_type"]] %in% num_output_types) &&
-      inherits(tbl[["output_type_id"]], "character")) {
-
+        inherits(tbl[["output_type_id"]], "character")) {
     type_coerce <- tbl[["output_type"]] %in% num_output_types
     num_output_type_id <- suppressWarnings(
       as.numeric(tbl$output_type_id[type_coerce])

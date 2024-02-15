@@ -14,22 +14,22 @@
 #'
 #' @export
 check_for_errors <- function(x, verbose = FALSE) {
-    if (verbose) {
-        cli::cli_h2("Individual check results")
-        print(x)
-        cli::cli_h1("Overall validation result")
-    }
-    flag_checks <- x[purrr::map_lgl(x, ~not_pass(.x))]
+  if (verbose) {
+    cli::cli_h2("Individual check results")
+    print(x)
+    cli::cli_h1("Overall validation result")
+  }
+  flag_checks <- x[purrr::map_lgl(x, ~ not_pass(.x))]
 
-    class(flag_checks) <- c("hub_validations", "list")
+  class(flag_checks) <- c("hub_validations", "list")
 
-    if (length(flag_checks) > 0) {
-        print(flag_checks)
-        rlang::abort(
-            "\nThe validation checks produced some failures/errors reported above."
-        )
-    }
+  if (length(flag_checks) > 0) {
+    print(flag_checks)
+    rlang::abort(
+      "\nThe validation checks produced some failures/errors reported above."
+    )
+  }
 
-    cli::cli_alert_success("All validation checks have been successful.")
-    return(invisible(TRUE))
+  cli::cli_alert_success("All validation checks have been successful.")
+  return(invisible(TRUE))
 }

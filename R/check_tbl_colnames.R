@@ -16,35 +16,40 @@
 #' Returned object also inherits from subclass `<hub_check>`.
 #' @export
 check_tbl_colnames <- function(tbl, round_id, file_path, hub_path = ".") {
-    config_tasks <- hubUtils::read_config(hub_path, "tasks")
-    round_cols <- unname(c(
-        hubUtils::get_round_task_id_names(config_tasks, round_id),
-        hubUtils::std_colnames[names(hubUtils::std_colnames) != "model_id"]
-        ))
-    tbl_cols <- names(tbl)
+  config_tasks <- hubUtils::read_config(hub_path, "tasks")
+  round_cols <- unname(c(
+    hubUtils::get_round_task_id_names(config_tasks, round_id),
+    hubUtils::std_colnames[names(hubUtils::std_colnames) != "model_id"]
+  ))
+  tbl_cols <- names(tbl)
 
-    check <- setequal(round_cols, tbl_cols)
+  check <- setequal(round_cols, tbl_cols)
 
-    details <- NULL
+  details <- NULL
 
-    if (!check && any(!round_cols %in% tbl_cols)) {
-        details <- cli::format_inline(
-            "Expected column{?s} {.val {round_cols[!round_cols %in% tbl_cols]}}
-            not present in file.")
-    }
-    if (!check && any(!tbl_cols %in% round_cols)) {
-        details <- paste(details,
-                         cli::format_inline(
-            "Unexpected column{?s} {.val {tbl_cols[!tbl_cols %in% round_cols]}}
-            present in file.")
-        )
-    }
+  if (!check && any(!round_cols %in% tbl_cols)) {
+    details <- cli::format_inline(
+      "Expected column{?s} {.val {round_cols[!round_cols %in% tbl_cols]}}
+            not present in file."
+    )
+  }
+  if (!check && any(!tbl_cols %in% round_cols)) {
+    details <- paste(
+      details,
+      cli::format_inline(
+        "Unexpected column{?s} {.val {tbl_cols[!tbl_cols %in% round_cols]}}
+            present in file."
+      )
+    )
+  }
 
-    capture_check_cnd(check = check,
-                      file_path = file_path,
-                      msg_subject = "Column names",
-                      msg_attribute = "consistent with expected round task IDs and std column names.",
-                      msg_verbs = c("are", "must be"),
-                      details = details,
-                      error = TRUE)
+  capture_check_cnd(
+    check = check,
+    file_path = file_path,
+    msg_subject = "Column names",
+    msg_attribute = "consistent with expected round task IDs and std column names.",
+    msg_verbs = c("are", "must be"),
+    details = details,
+    error = TRUE
+  )
 }

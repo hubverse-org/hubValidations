@@ -72,7 +72,7 @@ test_that("capture_check_cnd works correctly", {
   expect_snapshot(
     capture_check_info(
       file_path = "test/file.csv",
-      msg =  "Check {.code check_tbl_unique_round_id} only applicable to rounds
+      msg = "Check {.code check_tbl_unique_round_id} only applicable to rounds
         where {.code round_id_from_variable} is {.code TRUE}. Check skipped."
     )
   )

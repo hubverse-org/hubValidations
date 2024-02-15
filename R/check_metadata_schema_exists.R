@@ -4,7 +4,9 @@
 #'
 #' @export
 check_metadata_schema_exists <- function(hub_path = ".") {
-  check_file_exists(hub_path = hub_path,
-                    subdir = "hub-config",
-                    file_path = "model-metadata-schema.json")
+  check_file_exists(
+    hub_path = hub_path,
+    subdir = "hub-config",
+    file_path = "model-metadata-schema.json"
+  )
 }

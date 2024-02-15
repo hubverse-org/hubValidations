@@ -14,7 +14,7 @@
 #' @importFrom lubridate %within%
 #' @export
 check_submission_time <- function(hub_path, file_path, ref_date_from = c(
-                                    "file",
+                                    "file", # nolint
                                     "file_path"
                                   )) {
   submission_window <- get_submission_window(hub_path, file_path, ref_date_from)
@@ -38,11 +38,10 @@ check_submission_time <- function(hub_path, file_path, ref_date_from = c(
 }
 
 get_submission_window <- function(hub_path, file_path, ref_date_from = c(
-                                    "file",
+                                    "file",  # nolint
                                     "file_path"
                                   )) {
   ref_date_from <- rlang::arg_match(ref_date_from)
-  config_tasks <- hubUtils::read_config(hub_path, "tasks")
   submission_config <- get_file_round_config(file_path, hub_path)[["submissions_due"]]
   hub_tz <- get_hub_timezone(hub_path)
 
@@ -80,7 +79,7 @@ get_submission_window <- function(hub_path, file_path, ref_date_from = c(
 }
 
 file_within_submission_window <- function(hub_path, file_path, ref_date_from = c(
-                                            "file",
+                                            "file", # nolint
                                             "file_path"
                                           )) {
   submission_window <- get_submission_window(hub_path, file_path, ref_date_from)

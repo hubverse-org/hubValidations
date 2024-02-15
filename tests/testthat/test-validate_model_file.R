@@ -52,12 +52,12 @@ cli::test_that_cli("validate_model_file print method work", {
   # File with validation error
   expect_snapshot(
     validate_model_file(hub_path,
-                        file_path = "team1-goodmodel/2022-10-15-team1-goodmodel.csv"
+      file_path = "team1-goodmodel/2022-10-15-team1-goodmodel.csv"
     )
   )
   expect_snapshot(
     validate_model_file(hub_path,
-                        file_path = "team1-goodmodel/2022-10-15-hub-baseline.csv"
+      file_path = "team1-goodmodel/2022-10-15-hub-baseline.csv"
     )
   )
 
@@ -71,12 +71,12 @@ cli::test_that_cli("validate_model_file print method work", {
   # File with validation error
   expect_snapshot(
     validate_model_file(hub_path,
-                        file_path = "team1-goodmodel/2022-10-15-team1-goodmodel.csv"
+      file_path = "team1-goodmodel/2022-10-15-team1-goodmodel.csv"
     )
   )
   expect_snapshot(
     validate_model_file(hub_path,
-                        file_path = "team1-goodmodel/2022-10-15-hub-baseline.csv"
+      file_path = "team1-goodmodel/2022-10-15-hub-baseline.csv"
     )
   )
   # BELOW: Octolog example of testing GA action error behaviour.

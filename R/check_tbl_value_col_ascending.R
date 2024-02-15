@@ -65,7 +65,7 @@ check_values_ascending <- function(tbl) {
     return(NULL)
   }
 
-  output_type <- unique(tbl["output_type"])
+  output_type <- unique(tbl["output_type"]) # nolint: object_usage_linter
 
   dplyr::filter(check_tbl, .data[["non_asc"]]) %>%
     dplyr::select(-dplyr::all_of("non_asc")) %>%

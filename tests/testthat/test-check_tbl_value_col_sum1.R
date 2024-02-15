@@ -35,9 +35,6 @@ test_that("check_tbl_value_col_sum1 errors correctly", {
       check_tbl_value_col_sum1(tbl, file_path)
     )
   )
-
-
-
 })
 
 test_that("check_tbl_value_col_sum1 skips correctly", {

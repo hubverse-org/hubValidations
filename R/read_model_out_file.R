@@ -13,7 +13,7 @@ read_model_out_file <- function(file_path, hub_path = ".",
   full_path <- abs_file_path(file_path, hub_path)
 
   if (!fs::file_exists(full_path)) {
-    rel_path <- rel_file_path(file_path, hub_path)
+    rel_path <- rel_file_path(file_path, hub_path) # nolint: object_usage_linter
     cli::cli_abort("No file exists at path {.path {rel_path}}")
   }
 
