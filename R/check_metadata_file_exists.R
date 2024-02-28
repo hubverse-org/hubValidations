@@ -2,7 +2,7 @@
 #'
 #' @param file_path character string. Path to the file being validated relative to
 #' the hub's model-metadata directory.
-#' @inheritParams hubUtils::connect_hub
+#' @inheritParams hubData::connect_hub
 #'
 #' @inherit check_valid_round_id return
 #'

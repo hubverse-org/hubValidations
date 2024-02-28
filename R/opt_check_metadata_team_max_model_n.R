@@ -14,7 +14,7 @@ opt_check_metadata_team_max_model_n <- function(file_path, hub_path, n_max = 2L)
     file_path,
     file_type = "model_metadata"
   )$team_abbr
-  all_model_meta <- hubUtils::load_model_metadata(hub_path)
+  all_model_meta <- hubData::load_model_metadata(hub_path)
 
   team_models <- all_model_meta[["model_abbr"]][all_model_meta[["team_abbr"]] == team_abbr]
   n_models <- length(team_models)

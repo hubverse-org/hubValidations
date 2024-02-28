@@ -11,7 +11,7 @@ test_that("opt_check_tbl_horizon_timediff works", {
     )
   )
 
-  tbl_chr <- hubUtils::coerce_to_character(tbl)
+  tbl_chr <- hubData::coerce_to_character(tbl)
   expect_snapshot(
     opt_check_tbl_horizon_timediff(tbl_chr, file_path, hub_path,
       t0_colname = "forecast_date",
@@ -74,7 +74,7 @@ test_that("opt_check_tbl_horizon_timediff fails correctly", {
   )
   mockery::stub(
     opt_check_tbl_horizon_timediff,
-    "hubUtils::create_hub_schema",
+    "hubData::create_hub_schema",
     schema,
     2
   )

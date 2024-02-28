@@ -19,7 +19,7 @@ opt_check_tbl_col_timediff <- function(tbl, file_path, hub_path,
   checkmate::assert_choice(t1_colname, choices = names(tbl))
 
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
-  schema <- hubUtils::create_hub_schema(config_tasks,
+  schema <- hubData::create_hub_schema(config_tasks,
     partitions = NULL,
     r_schema = TRUE
   )

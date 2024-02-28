@@ -9,11 +9,11 @@
 check_tbl_value_col <- function(tbl, round_id, file_path, hub_path) {
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
 
-  tbl[, names(tbl) != "value"] <- hubUtils::coerce_to_character(
+  tbl[, names(tbl) != "value"] <- hubData::coerce_to_character(
     tbl[, names(tbl) != "value"]
   )
 
-  full <- hubUtils::expand_model_out_val_grid(
+  full <- hubData::expand_model_out_val_grid(
     config_tasks,
     round_id = round_id,
     required_vals_only = FALSE,

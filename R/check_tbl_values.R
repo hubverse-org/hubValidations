@@ -11,7 +11,7 @@ check_tbl_values <- function(tbl, round_id, file_path, hub_path) {
   # working with larger files but currently arrow does not match NAs as dplyr
   # does, returning false positives for mean & median rows which contain NA in
   # output type ID column.
-  accepted_vals <- hubUtils::expand_model_out_val_grid(
+  accepted_vals <- hubData::expand_model_out_val_grid(
     config_tasks = config_tasks,
     round_id = round_id,
     all_character = TRUE

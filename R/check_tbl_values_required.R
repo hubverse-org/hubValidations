@@ -8,7 +8,7 @@
 check_tbl_values_required <- function(tbl, round_id, file_path, hub_path) {
   tbl[["value"]] <- NULL
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
-  req <- hubUtils::expand_model_out_val_grid(
+  req <- hubData::expand_model_out_val_grid(
     config_tasks,
     round_id = round_id,
     required_vals_only = TRUE,
@@ -16,7 +16,7 @@ check_tbl_values_required <- function(tbl, round_id, file_path, hub_path) {
     bind_model_tasks = FALSE
   )
 
-  full <- hubUtils::expand_model_out_val_grid(
+  full <- hubData::expand_model_out_val_grid(
     config_tasks,
     round_id = round_id,
     required_vals_only = FALSE,
@@ -41,7 +41,7 @@ check_tbl_values_required <- function(tbl, round_id, file_path, hub_path) {
   if (check) {
     details <- NULL
   } else {
-    missing_df <- hubUtils::coerce_to_hub_schema(missing_df, config_tasks)
+    missing_df <- hubData::coerce_to_hub_schema(missing_df, config_tasks)
     details <- cli::format_inline("See {.var missing} attribute for details.")
   }
 

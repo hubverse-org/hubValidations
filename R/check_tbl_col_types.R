@@ -13,7 +13,7 @@
 check_tbl_col_types <- function(tbl, file_path, hub_path) {
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
 
-  schema <- hubUtils::create_hub_schema(config_tasks,
+  schema <- hubData::create_hub_schema(config_tasks,
     partitions = NULL,
     r_schema = TRUE
   )[names(tbl)]

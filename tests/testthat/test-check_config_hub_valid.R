@@ -14,7 +14,7 @@ test_that("check_config_hub_valid works", {
 
   mockery::stub(
     check_config_hub_valid,
-    "hubUtils::validate_hub_config",
+    "hubAdmin::validate_hub_config",
     list(
       admin = TRUE,
       tasks = FALSE
