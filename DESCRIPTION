@@ -1,6 +1,6 @@
 Package: hubValidations
 Title: Testing framework for hubverse hub validations
-Version: 0.0.0.9008
+Version: 0.0.1
 Authors@R: c(
     person(
         given = "Anna", 
