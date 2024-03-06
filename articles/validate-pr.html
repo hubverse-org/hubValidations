@@ -33,7 +33,7 @@
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/Infectious-Disease-Modeling-Hubs/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubValidations</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9008</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -126,18 +126,18 @@ Action workflows using the <code>hubCI</code> package:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">hubCI</span><span class="fu">::</span><span class="fu">use_hub_github_action</span><span class="op">(</span><span class="st">"validate-submission"</span><span class="op">)</span></span></code></pre></div>
 <p>The pertinent section of the workflow is:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Run validations</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">env</span><span class="kw">:</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">PR_NUMBER</span><span class="kw">:</span><span class="at"> ${{ github.event.number }}</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">        run</span><span class="kw">: </span><span class="ch">|</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>          library("hubValidations")</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>          v &lt;- hubValidations::validate_pr(</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>              gh_repo = Sys.getenv("GITHUB_REPOSITORY"),</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>              pr_number = Sys.getenv("PR_NUMBER"),</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>              skip_submit_window_check = FALSE</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>          )</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>          hubValidations::check_for_errors(v, verbose = TRUE)</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">shell</span><span class="kw">:</span><span class="at"> Rscript {0}</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Run validations</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="at">        </span><span class="fu">env</span><span class="kw">:</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="at">          </span><span class="fu">PR_NUMBER</span><span class="kw">:</span><span class="at"> ${{ github.event.number }}</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="fu">        run</span><span class="kw">: </span><span class="ch">|</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>          library("hubValidations")</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>          v &lt;- hubValidations::validate_pr(</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>              gh_repo = Sys.getenv("GITHUB_REPOSITORY"),</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>              pr_number = Sys.getenv("PR_NUMBER"),</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>              skip_submit_window_check = FALSE</span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>          )</span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>          hubValidations::check_for_errors(v, verbose = TRUE)</span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="at">        </span><span class="fu">shell</span><span class="kw">:</span><span class="at"> Rscript {0}</span></span></code></pre></div>
 <p>where <code><a href="../reference/validate_pr.html">validate_pr()</a></code> is called on the contents of the
 current Pull Request, the results (an S3
 <code>&lt;hub_validations&gt;</code> class object) is stored in
