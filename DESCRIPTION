@@ -60,9 +60,9 @@ Suggests:
     testthis,
     withr
 Remotes:
-    Infectious-Disease-Modeling-Hubs/hubUtils#143,
-    Infectious-Disease-Modeling-Hubs/hubData#1,
-    Infectious-Disease-Modeling-Hubs/hubAdmin#1,
+    Infectious-Disease-Modeling-Hubs/hubUtils,
+    Infectious-Disease-Modeling-Hubs/hubData,
+    Infectious-Disease-Modeling-Hubs/hubAdmin,
     assignUser/octolog
 Config/testthat/edition: 3
 Config/Needs/website: pkgdown, Infectious-Disease-Modeling-Hubs/hubStyle
