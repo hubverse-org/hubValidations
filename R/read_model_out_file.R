@@ -42,12 +42,12 @@ read_model_out_file <- function(file_path, hub_path = ".",
     parquet = {
       if (coerce_types == "hub") {
         arrow::read_parquet(full_path) %>%
-          hubUtils::coerce_to_hub_schema(
+          hubData::coerce_to_hub_schema(
             config_tasks = hubUtils::read_config(hub_path, "tasks")
           )
       } else if (coerce_types == "chr") {
         arrow::read_parquet(full_path) %>%
-          hubUtils::coerce_to_character()
+          hubData::coerce_to_character()
       } else {
         arrow::read_parquet(full_path)
       }
@@ -55,12 +55,12 @@ read_model_out_file <- function(file_path, hub_path = ".",
     arrow = {
       if (coerce_types == "hub") {
         arrow::read_feather(full_path) %>%
-          hubUtils::coerce_to_hub_schema(
+          hubData::coerce_to_hub_schema(
             config_tasks = hubUtils::read_config(hub_path, "tasks")
           )
       } else if (coerce_types == "chr") {
         arrow::read_feather(full_path) %>%
-          hubUtils::coerce_to_character()
+          hubData::coerce_to_character()
       } else {
         arrow::read_feather(full_path)
       }
@@ -72,7 +72,7 @@ read_model_out_file <- function(file_path, hub_path = ".",
 create_model_out_schema <- function(hub_path,
                                     col_types = c("hub", "chr")) {
   col_types <- rlang::arg_match(col_types)
-  schema <- hubUtils::create_hub_schema(
+  schema <- hubData::create_hub_schema(
     config_tasks = hubUtils::read_config(hub_path, "tasks"),
     partitions = NULL
   )

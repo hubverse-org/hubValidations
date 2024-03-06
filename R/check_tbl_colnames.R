@@ -7,7 +7,7 @@
 #' @param round_id character string. The round identifier.
 #' @param file_path character string. Path to the file being validated relative to
 #' the hub's model-output directory.
-#' @inheritParams hubUtils::connect_hub
+#' @inheritParams hubData::connect_hub
 #' @return
 #' Depending on whether validation has succeeded, one of:
 #' - `<message/check_success>` condition class object.

@@ -9,7 +9,7 @@ test_that("check_tbl_col_types works", {
 
   mockery::stub(
     check_tbl_col_types,
-    "hubUtils::create_hub_schema",
+    "hubData::create_hub_schema",
     c(
       origin_date = "character", target = "character", horizon = "double",
       location = "character", age_group = "character", output_type = "character",

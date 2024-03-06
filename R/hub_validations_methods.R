@@ -73,11 +73,6 @@ validate_internal_class <- function(x, class = c(
   invisible(TRUE)
 }
 
-summary.hub_validations <- function(x, ...) {
-  # TODO
-  NULL
-}
-
 # TODO: Code to consider implementing more hierarchical printing of messages.
 # Currently not implemented as pr_hub_validations class not implemented.
 #' Print results of `validate_pr()` function as a bullet list
