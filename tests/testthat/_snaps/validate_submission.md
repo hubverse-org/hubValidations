@@ -426,7 +426,7 @@
         "submission_time"]])
     Output
       List of 4
-       $ message       : chr "Submission time must be within accepted submission window for round. \n Current time 2023-10-08 18:01:00 is out"| __truncated__
+       $ message       : chr "Submission time must be within accepted submission window for round. \n Current time \"2023-10-08 18:01:00 UTC\"| __truncated__
        $ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
        $ call          : chr "check_submission_time"
        $ use_cli_format: logi TRUE

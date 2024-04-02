@@ -24,7 +24,9 @@ check_submission_time <- function(hub_path, file_path, ref_date_from = c(
     details <- NULL
   } else {
     details <- cli::format_inline(
-      "Current time {.val {Sys.time()}} is outside window {.val {submission_window}}."
+      "Current time {.val {format(Sys.time(),
+      format = '%Y-%m-%d %H:%M:%S',
+      usetz = TRUE)}} is outside window {.val {submission_window}}."
     )
   }
 
