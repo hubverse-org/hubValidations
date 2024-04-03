@@ -59,6 +59,12 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.0.1" id="hubvalidations-001">hubValidations 0.0.1<a class="anchor" aria-label="anchor" href="#hubvalidations-001"></a></h2>
+<ul><li>Release stable 0.0.1 version</li>
+<li>Enforce minimum dependence on latest <code>hubData</code> (0.1.0) &amp; <code>hubAdmin</code> (0.1.0). This allows for successful validation of submissions to hubs with multiple model tasks, where a given model task might contain non relevant task IDs and both <code>required</code> and <code>optional</code> properties have been set to <code>null</code> in <code>tasks.json</code> (<a href="https://github.com/Infectious-Disease-Modeling-Hubs/hubValidations/issues/75" class="external-link">#75</a>). See the <a href="https://hubdocs.readthedocs.io/en/latest/quickstart-hub-admin/tasks-config.html#required-and-optional-elements" class="external-link">relevant section in <code>hubDocs</code> documentation</a> for more details.</li>
+<li>Improve formatting of current time print in <code><a href="../reference/validate_submission_time.html">validate_submission_time()</a></code> message by removing decimal seconds and including local time zone.</li>
+</ul></div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.0.9008" id="hubvalidations-0009008">hubValidations 0.0.0.9008<a class="anchor" aria-label="anchor" href="#hubvalidations-0009008"></a></h2>
 <ul><li>Added new articles on:
 <ul><li>The structure of <code>&lt;hub_validations&gt;</code> class objects.</li>
