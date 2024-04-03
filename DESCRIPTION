@@ -63,7 +63,8 @@ Remotes:
     Infectious-Disease-Modeling-Hubs/hubUtils,
     Infectious-Disease-Modeling-Hubs/hubData,
     Infectious-Disease-Modeling-Hubs/hubAdmin,
-    assignUser/octolog
+    assignUser/octolog,
+    apache/arrow/r@apache-arrow-15.0.2
 Config/testthat/edition: 3
 Config/Needs/website: pkgdown, Infectious-Disease-Modeling-Hubs/hubStyle
 Encoding: UTF-8
