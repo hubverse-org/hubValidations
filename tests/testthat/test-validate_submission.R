@@ -158,3 +158,46 @@ test_that("validate_submission fails when csv cannot be parsed according to sche
     c("check_error", "hub_check", "rlang_error", "error", "condition")
   )
 })
+
+test_that("File containing task ID with all null properties validate correctly", {
+  expect_snapshot(
+    str(
+      validate_submission(
+        hub_path = test_path("testdata/hub-null"),
+        file_path = "team-model/2023-11-26-team-model.parquet",
+        skip_submit_window_check = TRUE
+      )
+    )
+  )
+  expect_true(
+    suppressMessages(
+      check_for_errors(
+        validate_submission(
+          hub_path = test_path("testdata/hub-null"),
+          file_path = "team-model/2023-11-26-team-model.parquet",
+          skip_submit_window_check = TRUE
+        )
+      )
+    )
+  )
+  expect_snapshot(
+    str(
+      validate_submission(
+        hub_path = test_path("testdata/hub-null"),
+        file_path = "team-model/2023-11-19-team-model.parquet",
+        skip_submit_window_check = TRUE
+      )
+    )
+  )
+  expect_true(
+    suppressMessages(
+      check_for_errors(
+        validate_submission(
+          hub_path = test_path("testdata/hub-null"),
+          file_path = "team-model/2023-11-19-team-model.parquet",
+          skip_submit_window_check = TRUE
+        )
+      )
+    )
+  )
+})
