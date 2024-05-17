@@ -20,6 +20,11 @@ check_tbl_values <- function(tbl, round_id, file_path, hub_path) {
   # This approach uses dplyr to identify tbl rows that don't have a complete match
   # in accepted_vals.
   accepted_vals$valid <- TRUE
+  if (hubUtils::is_v3_config(config_tasks)) {
+    out_type_ids <- tbl[["output_type_id"]]
+    tbl[tbl$output_type == "sample", "output_type_id"] <- NA
+  }
+
   valid_tbl <- dplyr::left_join(
     tbl, accepted_vals,
     by = names(tbl)[names(tbl) != "value"]
@@ -36,6 +41,9 @@ check_tbl_values <- function(tbl, round_id, file_path, hub_path) {
     if (length(error_summary$invalid_combs_idx) == 0L) {
       error_tbl <- NULL
     } else {
+      if (hubUtils::is_v3_config(config_tasks)) {
+        tbl[["output_type_id"]] <- out_type_ids
+      }
       error_tbl <- tbl[
         error_summary$invalid_combs_idx,
         names(tbl) != "value"
@@ -125,7 +133,7 @@ coerce_num_output_type_ids <- function(tbl, file_path, hub_path) {
   )
 
   if (any(tbl[["output_type"]] %in% num_output_types) &&
-        inherits(tbl[["output_type_id"]], "character")) {
+    inherits(tbl[["output_type_id"]], "character")) {
     type_coerce <- tbl[["output_type"]] %in% num_output_types
     num_output_type_id <- suppressWarnings(
       as.numeric(tbl$output_type_id[type_coerce])
