@@ -60,9 +60,9 @@ Suggests:
     testthis,
     withr
 Remotes:
-    Infectious-Disease-Modeling-Hubs/hubUtils,
-    Infectious-Disease-Modeling-Hubs/hubData,
-    Infectious-Disease-Modeling-Hubs/hubAdmin,
+    Infectious-Disease-Modeling-Hubs/hubUtils@enhancement/v3-utils,
+    Infectious-Disease-Modeling-Hubs/hubData@feature/handle-samples,
+    Infectious-Disease-Modeling-Hubs/hubAdmin@feature/sample-support,
     assignUser/octolog,
     apache/arrow/r@apache-arrow-15.0.2
 Config/testthat/edition: 3
