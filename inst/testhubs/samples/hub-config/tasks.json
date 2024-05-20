@@ -32,10 +32,11 @@
                             "optional": [0, 1, 2, 3]
                         },
                         "location": {
-                            "required": null,
-                            "optional": [
+                            "required": [
                                 "US",
-                                "01",
+                                "01"
+                            ],
+                            "optional": [
                                 "02",
                                 "04",
                                 "05"
@@ -120,10 +121,11 @@
                             "optional": [0, 1, 2, 3]
                         },
                         "location": {
-                            "required": null,
-                            "optional": [
+                            "required": [
                                 "US",
-                                "01",
+                                "01"
+                            ],
+                            "optional": [
                                 "02",
                                 "04",
                                 "05"
