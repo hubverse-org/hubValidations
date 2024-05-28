@@ -3,11 +3,14 @@
     "name": "US CDC FluSight",
     "maintainer": "US CDC",
     "contact": {
-        "name": "Rebecca Borchering",
-        "email": "xhq2@cdc.gov"
+        "name": "Joanna Summers",
+        "email": "sumj@cdc.gov"
     },
-    "repository_host": "GitHub",
-    "repository_url": "https://github.com/cdcepi/FluSight-forecast-hub",
+    "repository": {
+        "host": "github",
+        "owner": "cdcepi",
+        "name": "FluSight-forecast-hub"
+    },
     "file_format": ["csv"],
     "timezone": "US/Eastern",
     "model_output_dir": "model-output"
