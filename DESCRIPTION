@@ -1,6 +1,6 @@
 Package: hubValidations
 Title: Testing framework for hubverse hub validations
-Version: 0.0.1
+Version: 0.1.0
 Authors@R: c(
     person(
         given = "Anna", 
@@ -34,7 +34,7 @@ Imports:
     checkmate,
     cli,
     config,
-    dplyr,
+    dplyr (>= 1.1.0),
     fs,
     gh,
     hubAdmin (>= 0.1.0),
