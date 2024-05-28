@@ -185,7 +185,7 @@ test_that("check_tbl_values works with v3 spec samples", {
     )
   )
 
-  tbl[head(which(tbl$output_type == "sample"), 2), "horizon"] <- c("11", "12")
+  tbl[utils::head(which(tbl$output_type == "sample"), 2), "horizon"] <- c("11", "12")
   expect_snapshot(
     check_tbl_values(
       tbl = tbl,
