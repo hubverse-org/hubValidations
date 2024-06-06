@@ -7,7 +7,8 @@
 #' @details
 #' File names are allowed to contain the following compression extension prefixes:
 #' `r paste0(".", compress_codec)`.
-#' These extension prefixes are removed before parsing the file name.
+#' These extension prefixes are now extracted when parsing the file name
+#' and returned as `compression_ext` element if present.
 #'
 #' @return A list with the following elements:
 #'  - `round_id`: The round ID the model output is associated with (`NA` for
