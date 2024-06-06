@@ -23,11 +23,18 @@ model metadata files.)
 \item \code{model_id}: The unique model ID derived from the concatenation of
 \verb{<team_abbr>-<model_abbr>}.
 \item \code{ext}: The file extension.
+\item \code{compression_ext}: optional. The compression extension if present.
 }
 }
 \description{
 Parse model output file metadata from file name
 }
+\details{
+File names are allowed to contain the following compression extension prefixes:
+.snappy, .gzip, .gz, .brotli, .zstd, .lz4, .lzo, .bz2.
+These extension prefixes are removed before parsing the file name.
+}
 \examples{
 parse_file_name("hub-baseline/2022-10-15-hub-baseline.csv")
+parse_file_name("hub-baseline/2022-10-15-hub-baseline.gzip.parquet")
 }
