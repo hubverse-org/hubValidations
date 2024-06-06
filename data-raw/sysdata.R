@@ -10,6 +10,9 @@ json_datatypes <- c(
   number = "double"
 )
 
-usethis::use_data(valid_ext, json_datatypes,
+## code to prepare compress_codec vector of compression libraries used by arrow write_parquet
+compress_codec <- c("uncompressed", "snappy", "gzip", "gz", "brotli", "zstd", "lz4", "lzo", "bz2")
+
+usethis::use_data(valid_ext, json_datatypes, compress_codec,
   overwrite = TRUE, internal = TRUE
 )
