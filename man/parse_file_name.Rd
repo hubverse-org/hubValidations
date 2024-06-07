@@ -32,7 +32,8 @@ Parse model output file metadata from file name
 \details{
 File names are allowed to contain the following compression extension prefixes:
 .snappy, .gzip, .gz, .brotli, .zstd, .lz4, .lzo, .bz2.
-These extension prefixes are removed before parsing the file name.
+These extension prefixes are now extracted when parsing the file name
+and returned as \code{compression_ext} element if present.
 }
 \examples{
 parse_file_name("hub-baseline/2022-10-15-hub-baseline.csv")
