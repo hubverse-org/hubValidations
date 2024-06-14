@@ -100,25 +100,31 @@ n_mismatch_errors <- function(n_tbl, hash_tbl, tbl) {
 
 
 n_mismatch_details <- function(n_tbl) {
-  cat_msg <- function(compound_idx, n, n_min, n_max, less, more) {
-    type <- c("less", "more")[c(less, more)]
+  cat_msg <- function(compound_idx, type) {
     switch(type,
       less = paste0(
-        "File contains less ({.val ", n,
-        "}) than the minimum required number of samples per task ",
-        "({.val ", n_min, "})  for compound idx {.val ", compound_idx, "}"
+        "File contains less than the minimum required number of samples per task ",
+        "for compound idx{?s} {.val {compound_idx}}"
       ),
       more = paste0(
-        "File contains more ({.val ", n,
-        "}) than the maximum allowed number of samples per task ",
-        "({.val ", n_max, "})  for compound idx {.val ", compound_idx, "}"
+        "File contains more than the maximum required number of samples per task ",
+        "for compound idx{?s} {.val {compound_idx}}"
       )
     ) %>% cli::format_inline()
   }
 
-  n_tbl %>%
-    dplyr::select(-dplyr::all_of(c("mt_id", "out_range"))) %>%
-    purrr::pmap_chr(cat_msg) %>%
+  purrr::map(
+    c("less", "more"),
+    ~ {
+      compound_idx <- n_tbl[n_tbl[[.x]], "compound_idx", drop = TRUE]
+      if (length(compound_idx) == 0L) {
+        return(NULL)
+      } else {
+        cat_msg(compound_idx, .x)
+      }
+    }
+  ) %>%
+    purrr::compact() %>%
     c("See {.var errors} attribute for details.") %>%
     paste(collapse = ". ")
 }
