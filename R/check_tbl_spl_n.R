@@ -91,7 +91,7 @@ n_mismatch_errors <- function(n_tbl, hash_tbl, tbl) {
         compound_idx = .x,
         n = row$n,
         min_samples_per_task = row$n_min,
-        min_samples_per_task = row$n_max,
+        max_samples_per_task = row$n_max,
         compound_idx_tbl = compound_idx_tbl
       )
     }
