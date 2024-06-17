@@ -14,7 +14,7 @@
     Output
       <warning/check_failure>
       Warning:
-      Required samples per compound idx task not present.  File contains less ("99") than the minimum required number of samples per task ("100") for compound idx "2". File contains less ("99") than the minimum required number of samples per task ("100") for compound idx "3". See `errors` attribute for details.
+      Required samples per compound idx task not present.  File contains less than the minimum required number of samples per task for compound idxs "2" and "3". See `errors` attribute for details.
 
 ---
 
@@ -31,7 +31,7 @@
       $`2`$min_samples_per_task
       [1] 100
       
-      $`2`$min_samples_per_task
+      $`2`$max_samples_per_task
       [1] 100
       
       $`2`$compound_idx_tbl
@@ -53,7 +53,7 @@
       $`3`$min_samples_per_task
       [1] 100
       
-      $`3`$min_samples_per_task
+      $`3`$max_samples_per_task
       [1] 100
       
       $`3`$compound_idx_tbl
