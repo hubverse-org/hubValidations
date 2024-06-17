@@ -33,7 +33,9 @@ check_tbl_spl_compound_tid <- function(tbl, round_id, file_path, hub_path) {
       n_tbl, tbl, config_tasks, round_id
     )
     output_type_ids <- purrr::map(errors, ~ .x$output_type_id) %>% # nolint: object_usage_linter
-      purrr::flatten_chr() %>% unique() %>% sort()
+      purrr::flatten_chr() %>%
+      unique() %>%
+      sort()
 
     details <- cli::format_inline(
       "Sample{?s} {.val {output_type_ids}} d{?oes/o} not contain ",
