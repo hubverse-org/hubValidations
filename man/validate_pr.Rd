@@ -252,25 +252,27 @@ Details of checks performed by \code{validate_submission()}\if{html}{\out{<table
    <td style="text-align:left;"> error_tbl: table of rows affected </td>
   </tr>
   <tr>
+   <td style="text-align:left;font-weight: bold;"> spl_compound_tid </td>
+   <td style="text-align:left;"> Samples contain single unique values for each compound task ID within individual samples (v3 and above schema only). </td>
+   <td style="text-align:left;"> TRUE </td>
+   <td style="text-align:left;"> check_error </td>
+   <td style="text-align:left;"> errors: list containing item for each sample failing validation with breakdown of unique values for each compound task ID. </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> spl_non_compound_tid </td>
+   <td style="text-align:left;"> Samples contain single unique combination of non-compound task ID values across all samples (v3 and above schema only). </td>
+   <td style="text-align:left;"> TRUE </td>
+   <td style="text-align:left;"> check_error </td>
+   <td style="text-align:left;"> errors: list containing item for each modeling task with vectors of output type ids of samples failing validation and example table of most prevalent non-compound task ID value combination
+across all samples in the modeling task. </td>
+  </tr>
+  <tr>
    <td style="text-align:left;font-weight: bold;"> spl_n </td>
    <td style="text-align:left;"> Number of samples for a given compound idx falls within accepted compound task range (v3 and above schema only). </td>
    <td style="text-align:left;"> FALSE </td>
    <td style="text-align:left;"> check_failure </td>
-   <td style="text-align:left;"> errors: list of failing sample metadata including information on number of samples per failing compound idx,  expected sample ranges and expected task id value combinations per compound idx. </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;font-weight: bold;"> spl_compound_tid </td>
-   <td style="text-align:left;"> The unique combination of compound task ID values is consistent across compound idx samples (v3 and above schema only). </td>
-   <td style="text-align:left;"> FALSE </td>
-   <td style="text-align:left;"> check_failure </td>
-   <td style="text-align:left;"> errors: list containing vector of affected sample (output type) iIDs and an example of the valid compound task ID value combindations per compound idx </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;font-weight: bold;"> spl_non_compound_tid </td>
-   <td style="text-align:left;"> The unique combinations of non-compound task ID values are consistent across all samples in a given modeling task (v3 and above schema only). </td>
-   <td style="text-align:left;"> FALSE </td>
-   <td style="text-align:left;"> check_failure </td>
-   <td style="text-align:left;"> errors: list containing vector of affected sample (output type) iIDs and an example of the prevalent non-compound task ID value combindations per modeling task </td>
+   <td style="text-align:left;"> errors: list containing item for each compound_idx failing validation with sample count, metadata on expected samples and example table of expected structure for samples belonging to
+the compound idx in question. </td>
   </tr>
 </tbody>
 </table>

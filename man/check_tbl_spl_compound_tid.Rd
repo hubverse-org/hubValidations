@@ -46,6 +46,7 @@ one for each sample failing validation, with the following structure:
 \item \code{output_type_id}: The output type ID of the sample that does not contain a
 single, unique value for each compound task ID.
 \item \code{values}: The unique values of each compound task ID.
-See \href{https://hubverse.io/en/latest/user-guide/sample-output-type.html}{hubverse documentation on samples} for more details.
+See \href{https://hubverse.io/en/latest/user-guide/sample-output-type.html}{hubverse documentation on samples}
+for more details.
 }
 }
