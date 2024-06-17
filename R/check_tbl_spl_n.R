@@ -11,7 +11,8 @@
 #' - `max_samples_per_task`: the maximum number of samples required for the compound idx.
 #' - `compound_idx_tbl`: a tibble of the expected structure for samples belonging to
 #' the compound idx.
-#' See [hubverse documentation on samples](https://hubverse.io/en/latest/user-guide/sample-output-type.html) for more details.
+#' See [hubverse documentation on samples](https://hubverse.io/en/latest/user-guide/sample-output-type.html)
+#' for more details.
 #' @export
 check_tbl_spl_n <- function(tbl, round_id, file_path, hub_path) {
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
@@ -109,7 +110,7 @@ n_mismatch_errors <- function(n_tbl, hash_tbl, tbl) {
 
 
 n_mismatch_details <- function(n_tbl) {
-  cat_msg <- function(compound_idx, type) {
+  cat_msg <- function(compound_idx, type) { # nolint: object_usage_linter
     switch(type,
       less = paste0(
         "File contains less than the minimum required number of samples per task ",

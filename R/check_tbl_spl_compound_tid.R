@@ -9,7 +9,8 @@
 #' - `output_type_id`: The output type ID of the sample that does not contain a
 #' single, unique value for each compound task ID.
 #' - `values`: The unique values of each compound task ID.
-#' See [hubverse documentation on samples](https://hubverse.io/en/latest/user-guide/sample-output-type.html) for more details.
+#' See [hubverse documentation on samples](https://hubverse.io/en/latest/user-guide/sample-output-type.html)
+#' for more details.
 #' @export
 check_tbl_spl_compound_tid <- function(tbl, round_id, file_path, hub_path) {
   config_tasks <- hubUtils::read_config(hub_path, "tasks")

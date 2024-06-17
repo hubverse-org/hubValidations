@@ -12,7 +12,8 @@
 #' samples in the modeling task.
 #' - `prevalent`: The most prevalent non-compound task ID value combination
 #' across all samples in the modeling task.
-#' See [hubverse documentation on samples](https://hubverse.io/en/latest/user-guide/sample-output-type.html) for more details.
+#' See [hubverse documentation on samples](https://hubverse.io/en/latest/user-guide/sample-output-type.html)
+#' for more details.
 #' @export
 check_tbl_spl_non_compound_tid <- function(tbl, round_id, file_path, hub_path) {
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
