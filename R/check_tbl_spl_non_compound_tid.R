@@ -57,7 +57,8 @@ check_tbl_spl_non_compound_tid <- function(tbl, round_id, file_path, hub_path) {
     msg_attribute = "across modeling task samples.",
     msg_verbs = c("consistent", "not consistent"),
     details = details,
-    errors = errors
+    errors = errors,
+    error = TRUE
   )
 }
 

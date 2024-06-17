@@ -2,8 +2,8 @@
 % Please edit documentation in R/check_tbl_spl_compound_tid.R
 \name{check_tbl_spl_compound_tid}
 \alias{check_tbl_spl_compound_tid}
-\title{Check model output data tbl samples contain single unique combination of
-compound task ID values within individual samples}
+\title{Check model output data tbl samples contain single unique values for each
+compound task ID within individual samples}
 \usage{
 check_tbl_spl_compound_tid(tbl, round_id, file_path, hub_path)
 }
@@ -35,8 +35,8 @@ Depending on whether validation has succeeded, one of:
 Returned object also inherits from subclass \verb{<hub_check>}.
 }
 \description{
-Check model output data tbl samples contain single unique combination of
-compound task ID values within individual samples
+Check model output data tbl samples contain single unique values for each
+compound task ID within individual samples
 }
 \details{
 Output of the check includes an \code{errors} element, a list of items,

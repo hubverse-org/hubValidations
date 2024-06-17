@@ -12,9 +12,9 @@
     Code
       check_tbl_spl_non_compound_tid(tbl_error, round_id, file_path, hub_path)
     Output
-      <warning/check_failure>
-      Warning:
-      Task ID combinations of non compound task id values not consistent across modeling task samples.  Samples "1" and "102" do not match most prevalent non compound task ID combination for their modeling task. See `errors` attribute for details.
+      <error/check_error>
+      Error:
+      ! Task ID combinations of non compound task id values not consistent across modeling task samples.  Samples "1" and "102" do not match most prevalent non compound task ID combination for their modeling task. See `errors` attribute for details.
 
 ---
 
@@ -25,7 +25,7 @@
       [[1]]$mt_id
       [1] 2
       
-      [[1]]$mismatches
+      [[1]]$output_type_ids
       [1] "1"   "102"
       
       [[1]]$prevalent

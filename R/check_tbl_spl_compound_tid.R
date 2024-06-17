@@ -1,5 +1,5 @@
-#' Check model output data tbl samples contain single unique combination of
-#' compound task ID values within individual samples
+#' Check model output data tbl samples contain single unique values for each
+#' compound task ID within individual samples
 #' @param tbl a tibble/data.frame of the contents of the file being validated. Column types must **all be character**.
 #' @inherit check_tbl_colnames params
 #' @inherit check_tbl_colnames return
@@ -45,11 +45,12 @@ check_tbl_spl_compound_tid <- function(tbl, round_id, file_path, hub_path) {
   capture_check_cnd(
     check = check,
     file_path = file_path,
-    msg_subject = "Each sample",
-    msg_attribute = "single, unique compound task ID set value combination.",
+    msg_subject = "Each sample compound task ID",
+    msg_attribute = "single, unique value.",
     msg_verbs = c("contains", "does not contain"),
     details = details,
-    errors = errors
+    errors = errors,
+    error = TRUE
   )
 }
 
@@ -69,7 +70,7 @@ comptid_mismatch <- function(n_tbl, tbl, config_tasks, round_id) {
 
       list(
         mt_id = x$mt_id,
-        output_type_ids = x$output_type_id,
+        output_type_id = x$output_type_id,
         values = values
       )
     }

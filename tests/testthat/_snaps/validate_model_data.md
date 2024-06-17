@@ -434,15 +434,8 @@
         ..$ call          : chr "check_tbl_value_col_sum1"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ spl_n               :List of 5
-        ..$ message       : chr "Required samples per compound idx task present.  \n "
-        ..$ where         : chr "Flusight-baseline/2022-10-22-Flusight-baseline.csv"
-        ..$ errors        : NULL
-        ..$ call          : chr "check_tbl_spl_n"
-        ..$ use_cli_format: logi TRUE
-        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ spl_compound_tid    :List of 5
-        ..$ message       : chr "Each sample contains single, unique compound task ID set value combination. \n "
+        ..$ message       : chr "Each sample compound task ID contains single, unique value. \n "
         ..$ where         : chr "Flusight-baseline/2022-10-22-Flusight-baseline.csv"
         ..$ errors        : NULL
         ..$ call          : chr "check_tbl_spl_compound_tid"
@@ -453,6 +446,13 @@
         ..$ where         : chr "Flusight-baseline/2022-10-22-Flusight-baseline.csv"
         ..$ errors        : NULL
         ..$ call          : chr "check_tbl_spl_non_compound_tid"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ spl_n               :List of 5
+        ..$ message       : chr "Required samples per compound idx task present.  \n "
+        ..$ where         : chr "Flusight-baseline/2022-10-22-Flusight-baseline.csv"
+        ..$ errors        : NULL
+        ..$ call          : chr "check_tbl_spl_n"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ horizon_timediff    :List of 6
