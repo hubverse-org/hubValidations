@@ -29,7 +29,7 @@ files within the \code{hub-config} directory.}
 Depending on whether validation has succeeded, one of:
 \itemize{
 \item \verb{<message/check_success>} condition class object.
-\item \verb{<error/check_error>} condition class object.
+\item \verb{<warning/check_failure>} condition class object.
 }
 
 Returned object also inherits from subclass \verb{<hub_check>}.
@@ -37,4 +37,17 @@ Returned object also inherits from subclass \verb{<hub_check>}.
 \description{
 Check model output data tbl samples contain the appropriate number of samples
 for a given compound idx.
+}
+\details{
+Output of the check includes an \code{errors} element, a list of items,
+one for each compound_idx failing validation, with the following structure:
+\itemize{
+\item \code{compound_idx}: the compound idx that failed validation of number of samples.
+\item \code{n}: the number of samples counted for the compound idx.
+\item \code{min_samples_per_task}: the minimum number of samples required for the compound idx.
+\item \code{max_samples_per_task}: the maximum number of samples required for the compound idx.
+\item \code{compound_idx_tbl}: a tibble of the expected structure for samples belonging to
+the compound idxs.
+See \href{https://hubverse.io/en/latest/user-guide/sample-output-type.html}{hubverse documentation on samples} for more details.
+}
 }

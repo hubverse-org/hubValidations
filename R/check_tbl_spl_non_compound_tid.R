@@ -1,8 +1,18 @@
-#' Check model output data tbl samples contain consistent compound task ID
-#' values within individual samples
+#' Check model output data tbl samples contain single unique combination of
+#' non-compound task ID values across all samples
 #' @param tbl a tibble/data.frame of the contents of the file being validated. Column types must **all be character**.
 #' @inherit check_tbl_colnames params
 #' @inherit check_tbl_colnames return
+#' @details Output of the check includes an `errors` element, a list of items,
+#' one for each modeling task containing samples failing validation,
+#' with the following structure:
+#' - `mt_id`: Index identifying the config modeling task the samples are associated with.
+#' - `output_type_ids`: The output type IDs of samples that do not match the most prevalent
+#' non-compound task ID value combination across all
+#' samples in the modeling task.
+#' - `prevalent`: The most prevalent non-compound task ID value combination
+#' across all samples in the modeling task.
+#' See [hubverse documentation on samples](https://hubverse.io/en/latest/user-guide/sample-output-type.html) for more details.
 #' @export
 check_tbl_spl_non_compound_tid <- function(tbl, round_id, file_path, hub_path) {
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
@@ -30,11 +40,11 @@ check_tbl_spl_non_compound_tid <- function(tbl, round_id, file_path, hub_path) {
       mt_ids = n_tbl$mt_id, hash_tbl, tbl,
       config_tasks, round_id
     )
-    mismatches <- purrr::map(errors, ~ .x$mismatches) %>% # nolint: object_usage_linter
+    output_type_ids <- purrr::map(errors, ~ .x$output_type_ids) %>% # nolint: object_usage_linter
       unlist(use.names = FALSE)
 
     details <- cli::format_inline(
-      "Sample{?s} {.val {mismatches}} d{?oes/o} not match most prevalent ",
+      "Sample{?s} {.val {output_type_ids}} d{?oes/o} not match most prevalent ",
       "non compound task ID combination for {?its/their} modeling task. ",
       "See {.var errors} attribute for details."
     )
@@ -77,7 +87,7 @@ non_comptid_mismatch_errors <- function(mt_ids, hash_tbl, tbl,
 
       list(
         mt_id = .x,
-        mismatches = get_hash_out_type_ids(hash_tbl, mt_hashes[-1L]),
+        output_type_ids = get_hash_out_type_ids(hash_tbl, mt_hashes[-1L]),
         prevalent = tbl[
           tbl$output_type_id == spl_id,
           setdiff(round_taskids, mt_compound_taskids)

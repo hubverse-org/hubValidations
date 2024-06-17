@@ -1,8 +1,15 @@
-#' Check model output data tbl samples contain consistent task ID
-#' combinations for a given compound idx.
+#' Check model output data tbl samples contain single unique combination of
+#' compound task ID values within individual samples
 #' @param tbl a tibble/data.frame of the contents of the file being validated. Column types must **all be character**.
 #' @inherit check_tbl_colnames params
 #' @inherit check_tbl_colnames return
+#' @details Output of the check includes an `errors` element, a list of items,
+#' one for each sample failing validation, with the following structure:
+#' - `mt_id`: Index identifying the config modeling task the sample is associated with.
+#' - `output_type_id`: The output type ID of the sample that does not contain a
+#' single, unique value for each compound task ID.
+#' - `values`: The unique values of each compound task ID.
+#' See [hubverse documentation on samples](https://hubverse.io/en/latest/user-guide/sample-output-type.html) for more details.
 #' @export
 check_tbl_spl_compound_tid <- function(tbl, round_id, file_path, hub_path) {
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
@@ -56,13 +63,14 @@ comptid_mismatch <- function(n_tbl, tbl, config_tasks, round_id) {
       spl <- tbl[tbl$output_type_id == x$output_type_id, compound_taskids] %>%
         unique()
 
-      mismatches <- spl[, purrr::map_lgl(spl, ~ length(unique(.x)) > 1L)] %>%
+      values <- spl[, purrr::map_lgl(spl, ~ length(unique(.x)) > 1L)] %>%
         as.list() %>%
         purrr::map(unique)
 
       list(
-        output_type_id = x$output_type_id,
-        mismatches = mismatches
+        mt_id = x$mt_id,
+        output_type_ids = x$output_type_id,
+        values = values
       )
     }
   )

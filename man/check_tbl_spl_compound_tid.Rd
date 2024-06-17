@@ -2,8 +2,8 @@
 % Please edit documentation in R/check_tbl_spl_compound_tid.R
 \name{check_tbl_spl_compound_tid}
 \alias{check_tbl_spl_compound_tid}
-\title{Check model output data tbl samples contain consistent task ID
-combinations for a given compound idx.}
+\title{Check model output data tbl samples contain single unique combination of
+compound task ID values within individual samples}
 \usage{
 check_tbl_spl_compound_tid(tbl, round_id, file_path, hub_path)
 }
@@ -35,6 +35,17 @@ Depending on whether validation has succeeded, one of:
 Returned object also inherits from subclass \verb{<hub_check>}.
 }
 \description{
-Check model output data tbl samples contain consistent task ID
-combinations for a given compound idx.
+Check model output data tbl samples contain single unique combination of
+compound task ID values within individual samples
+}
+\details{
+Output of the check includes an \code{errors} element, a list of items,
+one for each sample failing validation, with the following structure:
+\itemize{
+\item \code{mt_id}: Index identifying the config modeling task the sample is associated with.
+\item \code{output_type_id}: The output type ID of the sample that does not contain a
+single, unique value for each compound task ID.
+\item \code{values}: The unique values of each compound task ID.
+See \href{https://hubverse.io/en/latest/user-guide/sample-output-type.html}{hubverse documentation on samples} for more details.
+}
 }
