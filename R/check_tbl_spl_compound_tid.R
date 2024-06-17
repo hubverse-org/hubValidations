@@ -12,10 +12,9 @@ check_tbl_spl_compound_tid <- function(tbl, round_id, file_path, hub_path) {
   }
 
   hash_tbl <- spl_hash_tbl(tbl, round_id, config_tasks)
-
-  n_tbl <- dplyr::group_by(hash_tbl, .data$compound_idx) %>%
-    dplyr::summarise(n = dplyr::n_distinct(.data$hash_comp_tid)) %>%
-    dplyr::filter(.data$n > 1L)
+  # TODO: Currently, samples must strictly match the compound task ID set expectations
+  # and cannot handle coarser-grained compound task ID sets.
+  n_tbl <- hash_tbl[hash_tbl$n_compound_idx > 1L, ]
 
   check <- nrow(n_tbl) == 0L
 
@@ -24,12 +23,14 @@ check_tbl_spl_compound_tid <- function(tbl, round_id, file_path, hub_path) {
     errors <- NULL
   } else {
     errors <- comptid_mismatch(
-      n_tbl$compound_idx, hash_tbl, tbl
+      n_tbl, tbl, config_tasks, round_id
     )
-    mismatches <- purrr::map_chr(errors, ~ .x$mismatches) # nolint: object_usage_linter
+    output_type_ids <- purrr::map(errors, ~ .x$output_type_id) %>% # nolint: object_usage_linter
+      purrr::flatten_chr() %>% unique() %>% sort()
+
     details <- cli::format_inline(
-      "Sample{?s} {.val {mismatches}} d{?oes/o} not match most prevalent ",
-      "task ID combination for {?its/their} compound idx. ",
+      "Sample{?s} {.val {output_type_ids}} d{?oes/o} not contain ",
+      "unique compound task ID combinations. ",
       "See {.var errors} attribute for details."
     )
   }
@@ -37,43 +38,30 @@ check_tbl_spl_compound_tid <- function(tbl, round_id, file_path, hub_path) {
   capture_check_cnd(
     check = check,
     file_path = file_path,
-    msg_subject = "Task ID combinations across compound idx samples",
-    msg_attribute = NULL,
-    msg_verbs = c("consistent.", "not consistent."),
+    msg_subject = "Each sample",
+    msg_attribute = "single, unique compound task ID set value combination.",
+    msg_verbs = c("contains", "does not contain"),
     details = details,
     errors = errors
   )
 }
 
-comptid_mismatch <- function(x, hash_tbl, tbl) {
+comptid_mismatch <- function(n_tbl, tbl, config_tasks, round_id) {
+  tbl <- tbl[tbl$output_type == "sample", ]
   purrr::map(
-    purrr::set_names(x),
+    seq_along(n_tbl$output_type_id),
     ~ {
-      hash_n <- hash_tbl[
-        hash_tbl$compound_idx == .x,
-        "hash_comp_tid"
-      ] %>%
-        table() %>%
-        sort(decreasing = TRUE) %>%
-        names()
+      x <- n_tbl[.x, ]
+      compound_taskids <- get_round_compound_task_ids(config_tasks, round_id)[[x$mt_id]]
+      spl <- tbl[tbl$output_type_id == x$output_type_id, compound_taskids] %>%
+        unique()
 
-      mismatches <- get_hash_out_type_ids(
-        hash_tbl,
-        hash = hash_n[-1L],
-        hash_type = "hash_comp_tid"
-      )
-      prevalent_hash <- get_hash_out_type_ids(hash_tbl,
-        hash = hash_n[1L],
-        hash_type = "hash_comp_tid",
-        n = 1
-      )
-      prevalent <- tbl[
-        tbl$output_type == "sample" & tbl$output_type_id == prevalent_hash,
-        setdiff(names(tbl), c("output_type_id", "value", "output_type"))
-      ]
+      mismatches <- spl[, purrr::map_lgl(spl, ~ length(unique(.x)) > 1L)] %>%
+        as.list() %>%
+        purrr::map(unique)
+
       list(
-        compound_idx = .x,
-        prevalent_task_ids = prevalent,
+        output_type_id = x$output_type_id,
         mismatches = mismatches
       )
     }

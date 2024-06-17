@@ -71,10 +71,9 @@ get_mt_spl_hash_tbl <- function(spl_grid, compound_taskids, tbl, round_task_ids)
       function(.x, compound_taskids, non_compound_taskids) {
         tibble::tibble(
           compound_idx = names(sort(table(.x$compound_idx), decreasing = TRUE))[1L],
+          n_compound_idx = length(unique(.x$compound_idx)),
           output_type_id = unique(.x$output_type_id),
-          hash_comp_tid = rlang::hash(unique(.x[, compound_taskids])),
-          hash_non_comp_tid = rlang::hash(.x[, non_compound_taskids]),
-          hash_spl_id = rlang::hash(.x)
+          hash_non_comp_tid = rlang::hash(.x[, non_compound_taskids])
         )
       },
       non_compound_taskids = non_compound_taskids,

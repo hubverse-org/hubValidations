@@ -442,7 +442,7 @@
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ spl_compound_tid    :List of 5
-        ..$ message       : chr "Task ID combinations across compound idx samples consistent.  \n "
+        ..$ message       : chr "Each sample contains single, unique compound task ID set value combination. \n "
         ..$ where         : chr "Flusight-baseline/2022-10-22-Flusight-baseline.csv"
         ..$ errors        : NULL
         ..$ call          : chr "check_tbl_spl_compound_tid"
