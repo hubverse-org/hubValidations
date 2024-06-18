@@ -227,7 +227,7 @@ Details of checks performed by \code{validate_submission()}\if{html}{\out{<table
    <td style="text-align:left;"> Samples contain single unique combination of non-compound task ID values across all samples (v3 and above schema only). </td>
    <td style="text-align:left;"> TRUE </td>
    <td style="text-align:left;"> check_error </td>
-   <td style="text-align:left;"> errors: list containing item for each modeling task with vectors of output type ids of samples failing validation and example table of most prevalent non-compound task ID value combination
+   <td style="text-align:left;"> errors: list containing item for each modeling task with vectors of output type ids of samples failing validation and example table of most frequent non-compound task ID value combination
 across all samples in the modeling task. </td>
   </tr>
   <tr>

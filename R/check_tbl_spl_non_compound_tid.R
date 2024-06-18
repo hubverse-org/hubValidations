@@ -7,10 +7,10 @@
 #' one for each modeling task containing samples failing validation,
 #' with the following structure:
 #' - `mt_id`: Index identifying the config modeling task the samples are associated with.
-#' - `output_type_ids`: The output type IDs of samples that do not match the most prevalent
+#' - `output_type_ids`: The output type IDs of samples that do not match the most frequent
 #' non-compound task ID value combination across all
 #' samples in the modeling task.
-#' - `prevalent`: The most prevalent non-compound task ID value combination
+#' - `frequent`: The most frequent non-compound task ID value combination
 #' across all samples in the modeling task to which all samples were compared.
 #' See [hubverse documentation on samples](https://hubverse.io/en/latest/user-guide/sample-output-type.html)
 #' for more details.
@@ -45,7 +45,7 @@ check_tbl_spl_non_compound_tid <- function(tbl, round_id, file_path, hub_path) {
       unlist(use.names = FALSE)
 
     details <- cli::format_inline(
-      "Sample{?s} {.val {output_type_ids}} d{?oes/o} not match most prevalent ",
+      "Sample{?s} {.val {output_type_ids}} d{?oes/o} not match most frequent ",
       "non compound task ID combination for {?its/their} modeling task. ",
       "See {.var errors} attribute for details."
     )
@@ -90,7 +90,7 @@ non_comptid_mismatch_errors <- function(mt_ids, hash_tbl, tbl,
       list(
         mt_id = .x,
         output_type_ids = get_hash_out_type_ids(hash_tbl, mt_hashes[-1L]),
-        prevalent = tbl[
+        frequent = tbl[
           tbl$output_type_id == spl_id,
           setdiff(round_taskids, mt_compound_taskids)
         ]

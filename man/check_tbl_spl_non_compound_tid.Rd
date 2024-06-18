@@ -44,10 +44,10 @@ one for each modeling task containing samples failing validation,
 with the following structure:
 \itemize{
 \item \code{mt_id}: Index identifying the config modeling task the samples are associated with.
-\item \code{output_type_ids}: The output type IDs of samples that do not match the most prevalent
+\item \code{output_type_ids}: The output type IDs of samples that do not match the most frequent
 non-compound task ID value combination across all
 samples in the modeling task.
-\item \code{prevalent}: The most prevalent non-compound task ID value combination
+\item \code{frequent}: The most frequent non-compound task ID value combination
 across all samples in the modeling task to which all samples were compared.
 See \href{https://hubverse.io/en/latest/user-guide/sample-output-type.html}{hubverse documentation on samples}
 for more details.
