@@ -156,3 +156,28 @@ test_that("validate_pr handles errors in determining submission window & file re
     suppressMessages(check_for_errors(mod_checks_exec_error))
   )
 })
+
+
+test_that("validate_pr works on valid PR using v2.0.0 schema and old orgname", {
+  skip_if_offline()
+
+  temp_hub <- fs::path(tempdir(), "valid_sb_hub-old")
+  gert::git_clone(
+    url = "https://github.com/hubverse-org/ci-testhub-simple-old-orgname",
+    path = temp_hub,
+    branch = "pr-valid"
+  )
+
+  checks <- validate_pr(
+    hub_path = temp_hub,
+    gh_repo = "hubverse-org/ci-testhub-simple-old-orgname",
+    pr_number = 4,
+    skip_submit_window_check = TRUE
+  )
+
+  expect_snapshot(str(checks))
+  expect_invisible(suppressMessages(check_for_errors(checks)))
+  expect_message(check_for_errors(checks),
+                 regexp = "All validation checks have been successful."
+  )
+})
