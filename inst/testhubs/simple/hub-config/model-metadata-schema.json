@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "$id": "https://github.com/Infectious-Disease-Modeling-Hubs/hubValidations/blob/main/inst/testhubs/simple/hub-config/model-metadata-schema-v0.0.1.json",
+  "$id": "https://github.com/hubverse-org/hubValidations/blob/main/inst/testhubs/simple/hub-config/model-metadata-schema-v0.0.1.json",
   "title": "ForecastHub model metadata",
   "description": "This is the schema of the model metadata file.",
   "type": "object",
