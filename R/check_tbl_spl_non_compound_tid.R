@@ -11,7 +11,7 @@
 #' non-compound task ID value combination across all
 #' samples in the modeling task.
 #' - `prevalent`: The most prevalent non-compound task ID value combination
-#' across all samples in the modeling task.
+#' across all samples in the modeling task to which all samples were compared.
 #' See [hubverse documentation on samples](https://hubverse.io/en/latest/user-guide/sample-output-type.html)
 #' for more details.
 #' @export

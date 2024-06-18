@@ -48,7 +48,7 @@ with the following structure:
 non-compound task ID value combination across all
 samples in the modeling task.
 \item \code{prevalent}: The most prevalent non-compound task ID value combination
-across all samples in the modeling task.
+across all samples in the modeling task to which all samples were compared.
 See \href{https://hubverse.io/en/latest/user-guide/sample-output-type.html}{hubverse documentation on samples}
 for more details.
 }
