@@ -62,3 +62,28 @@ test_that("parse_file_name fails correctly", {
     )
   )
 })
+
+test_that("parse_file_name ignores compression extensions", {
+  expect_snapshot(
+    parse_file_name(
+      "model-output/team1-goodmodel/2022-10-08-team1-goodmodel.gzip.parquet"
+    )
+  )
+  expect_snapshot(
+    parse_file_name(
+      "model-output/team1-goodmodel/2022-10-08-team1-goodmodel.gz.parquet"
+    )
+  )
+  expect_snapshot(
+    parse_file_name(
+      "model-output/team1-goodmodel/2022-10-08-team1-goodmodel.snappy.parquet"
+    )
+  )
+
+  expect_snapshot(
+    parse_file_name(
+      "model-output/team1-goodmodel/2022-10-08-team1-goodmodel.gzipr.parquet"
+    ),
+    error = TRUE
+  )
+})
