@@ -8,11 +8,13 @@ test_that("validate_pr works on valid PR", {
     branch = "pr-valid"
   )
 
-  checks <- validate_pr(
-    hub_path = temp_hub,
-    gh_repo = "hubverse-org/ci-testhub-simple",
-    pr_number = 4,
-    skip_submit_window_check = TRUE
+  checks <- suppressMessages(
+    validate_pr(
+      hub_path = temp_hub,
+      gh_repo = "hubverse-org/ci-testhub-simple",
+      pr_number = 4,
+      skip_submit_window_check = TRUE
+    )
   )
 
   expect_snapshot(str(checks))
@@ -32,11 +34,13 @@ test_that("validate_pr works on invalid PR", {
     branch = "pr-missing-taskid"
   )
 
-  invalid_checks <- validate_pr(
-    hub_path = temp_hub,
-    gh_repo = "hubverse-org/ci-testhub-simple",
-    pr_number = 5,
-    skip_submit_window_check = TRUE
+  invalid_checks <- suppressMessages(
+    validate_pr(
+      hub_path = temp_hub,
+      gh_repo = "hubverse-org/ci-testhub-simple",
+      pr_number = 5,
+      skip_submit_window_check = TRUE
+    )
   )
 
   expect_snapshot(str(invalid_checks))
@@ -171,13 +175,13 @@ test_that("validate_pr works on valid PR using v2.0.0 schema and old orgname", {
   checks <- validate_pr(
     hub_path = temp_hub,
     gh_repo = "hubverse-org/ci-testhub-simple-old-orgname",
-    pr_number = 4,
+    pr_number = 1,
     skip_submit_window_check = TRUE
   )
 
   expect_snapshot(str(checks))
   expect_invisible(suppressMessages(check_for_errors(checks)))
   expect_message(check_for_errors(checks),
-                 regexp = "All validation checks have been successful."
+    regexp = "All validation checks have been successful."
   )
 })
