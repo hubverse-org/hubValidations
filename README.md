@@ -1,15 +1,15 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# hubValidations <a href="https://infectious-disease-modeling-hubs.github.io/hubValidations/"><img src="man/figures/logo.png" align="right" height="131" alt="hubValidations website" /></a>
+# hubValidations <a href="https://hubverse-org.github.io/hubValidations/"><img src="man/figures/logo.png" align="right" height="131" alt="hubValidations website" /></a>
 
 <!-- badges: start -->
 
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![Codecov test
-coverage](https://codecov.io/gh/Infectious-Disease-Modeling-Hubs/hubValidations/branch/main/graph/badge.svg)](https://app.codecov.io/gh/Infectious-Disease-Modeling-Hubs/hubValidations?branch=main)
-[![R-CMD-check](https://github.com/Infectious-Disease-Modeling-Hubs/hubValidations/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Infectious-Disease-Modeling-Hubs/hubValidations/actions/workflows/R-CMD-check.yaml)
+coverage](https://codecov.io/gh/hubverse-org/hubValidations/branch/main/graph/badge.svg)](https://app.codecov.io/gh/hubverse-org/hubValidations?branch=main)
+[![R-CMD-check](https://github.com/hubverse-org/hubValidations/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/hubverse-org/hubValidations/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The goal of hubValidations is to provide a testing framework for
@@ -20,7 +20,7 @@ performing hubverse hub validations.
 You can install the development version of hubValidations like so:
 
 ``` r
-remotes::install_github("Infectious-Disease-Modeling-Hubs/hubValidations")
+remotes::install_github("hubverse-org/hubValidations")
 ```
 
 > ##### 💡 TIP

@@ -40,7 +40,7 @@ will return early if a check returns an error.
 
 For more details on the structure of \verb{<hub_validations>} objects, including
 how to access more information on individual checks,
-see \href{https://infectious-disease-modeling-hubs.github.io/hubValidations/articles/hub-validations-class.html}{article on \verb{<hub_validations>} S3 class objects}.
+see \href{https://hubverse-org.github.io/hubValidations/articles/hub-validations-class.html}{article on \verb{<hub_validations>} S3 class objects}.
 }
 \description{
 Validate a submitted model data file submission time.

@@ -87,7 +87,7 @@
 #' \dontrun{
 #' validate_pr(
 #'   hub_path = ".",
-#'   gh_repo = "Infectious-Disease-Modeling-Hubs/ci-testhub-simple",
+#'   gh_repo = "hubverse-org/ci-testhub-simple",
 #'   pr_number = 3
 #' )
 #' }
