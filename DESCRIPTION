@@ -60,9 +60,9 @@ Suggests:
     testthis,
     withr
 Remotes:
-    hubverse-org/hubUtils@enhancement/v3-utils,
-    hubverse-org/hubData@feature/handle-samples,
-    hubverse-org/hubAdmin@feature/sample-support,
+    hubverse-org/hubUtils,
+    hubverse-org/hubData,
+    hubverse-org/hubAdmin,
     assignUser/octolog,
     apache/arrow/r@apache-arrow-15.0.2
 Config/testthat/edition: 3
