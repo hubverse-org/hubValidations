@@ -56,7 +56,7 @@ will return early if a check returns an error.
 
 For more details on the structure of \verb{<hub_validations>} objects, including
 how to access more information on individual checks,
-see \href{https://infectious-disease-modeling-hubs.github.io/hubValidations/articles/hub-validations-class.html}{article on \verb{<hub_validations>} S3 class objects}.
+see \href{https://hubverse-org.github.io/hubValidations/articles/hub-validations-class.html}{article on \verb{<hub_validations>} S3 class objects}.
 }
 \description{
 Checks both file level properties like
@@ -214,6 +214,29 @@ Details of checks performed by \code{validate_submission()}\if{html}{\out{<table
    <td style="text-align:left;"> FALSE </td>
    <td style="text-align:left;"> check_failure </td>
    <td style="text-align:left;"> error_tbl: table of rows affected </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> spl_compound_tid </td>
+   <td style="text-align:left;"> Samples contain single unique values for each compound task ID within individual samples (v3 and above schema only). </td>
+   <td style="text-align:left;"> TRUE </td>
+   <td style="text-align:left;"> check_error </td>
+   <td style="text-align:left;"> errors: list containing item for each sample failing validation with breakdown of unique values for each compound task ID. </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> spl_non_compound_tid </td>
+   <td style="text-align:left;"> Samples contain single unique combination of non-compound task ID values across all samples (v3 and above schema only). </td>
+   <td style="text-align:left;"> TRUE </td>
+   <td style="text-align:left;"> check_error </td>
+   <td style="text-align:left;"> errors: list containing item for each modeling task with vectors of output type ids of samples failing validation and example table of most frequent non-compound task ID value combination
+across all samples in the modeling task. </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> spl_n </td>
+   <td style="text-align:left;"> Number of samples for a given compound idx falls within accepted compound task range (v3 and above schema only). </td>
+   <td style="text-align:left;"> FALSE </td>
+   <td style="text-align:left;"> check_failure </td>
+   <td style="text-align:left;"> errors: list containing item for each compound_idx failing validation with sample count, metadata on expected samples and example table of expected structure for samples belonging to
+the compound idx in question. </td>
   </tr>
 </tbody>
 </table>

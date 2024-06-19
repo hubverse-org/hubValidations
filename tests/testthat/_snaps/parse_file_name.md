@@ -98,3 +98,87 @@
       Error in `parse_file_name()`:
       ! Could not parse file name '2022-10-08-team1_goodmodel' for submission metadata. Please consult documentation for file name requirements for correct metadata parsing.
 
+# parse_file_name ignores compression extensions
+
+    Code
+      parse_file_name(
+        "model-output/team1-goodmodel/2022-10-08-team1-goodmodel.gzip.parquet")
+    Output
+      $round_id
+      [1] "2022-10-08"
+      
+      $team_abbr
+      [1] "team1"
+      
+      $model_abbr
+      [1] "goodmodel"
+      
+      $model_id
+      [1] "team1-goodmodel"
+      
+      $ext
+      [1] "parquet"
+      
+      $compression_ext
+      [1] "gzip"
+      
+
+---
+
+    Code
+      parse_file_name(
+        "model-output/team1-goodmodel/2022-10-08-team1-goodmodel.gz.parquet")
+    Output
+      $round_id
+      [1] "2022-10-08"
+      
+      $team_abbr
+      [1] "team1"
+      
+      $model_abbr
+      [1] "goodmodel"
+      
+      $model_id
+      [1] "team1-goodmodel"
+      
+      $ext
+      [1] "parquet"
+      
+      $compression_ext
+      [1] "gz"
+      
+
+---
+
+    Code
+      parse_file_name(
+        "model-output/team1-goodmodel/2022-10-08-team1-goodmodel.snappy.parquet")
+    Output
+      $round_id
+      [1] "2022-10-08"
+      
+      $team_abbr
+      [1] "team1"
+      
+      $model_abbr
+      [1] "goodmodel"
+      
+      $model_id
+      [1] "team1-goodmodel"
+      
+      $ext
+      [1] "parquet"
+      
+      $compression_ext
+      [1] "snappy"
+      
+
+---
+
+    Code
+      parse_file_name(
+        "model-output/team1-goodmodel/2022-10-08-team1-goodmodel.gzipr.parquet")
+    Condition
+      Error in `parse_file_name()`:
+      ! Could not parse file name '2022-10-08-team1-goodmodel.gzipr' for submission metadata. Please consult documentation for file name requirements for correct metadata parsing.
+

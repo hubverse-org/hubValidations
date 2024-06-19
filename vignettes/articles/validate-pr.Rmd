@@ -24,7 +24,7 @@ Any other files included in the PR are ignored but flagged in a message.
 ### Deploying `validate_pr()` though a GitHub Action workflow
 
 The most common way to deploy `validate_pr()` is through a GitHub Action that triggers when a pull request containing changes to model output or model metadata files is opened. 
-The hubverse maintains the [**`validate-submission.yaml`**](https://github.com/Infectious-Disease-Modeling-Hubs/hubverse-actions/tree/main/validate-submission) GitHub Action workflow template for deploying `validate_pr()`.
+The hubverse maintains the [**`validate-submission.yaml`**](https://github.com/hubverse-org/hubverse-actions/tree/main/validate-submission) GitHub Action workflow template for deploying `validate_pr()`.
 
 The latest release of the workflow can be added to hub's GitHub Action workflows using the `hubCI` package:
 ```{r, eval = FALSE}
@@ -77,7 +77,7 @@ It does however allow modifications to model output files within their allowed s
 ```{r}
 temp_hub <- fs::path(tempdir(), "mod_del_hub")
 gert::git_clone(
-  url = "https://github.com/Infectious-Disease-Modeling-Hubs/ci-testhub-simple",
+  url = "https://github.com/hubverse-org/ci-testhub-simple",
   path = temp_hub,
   branch = "test-mod-del"
 )
@@ -87,7 +87,7 @@ gert::git_clone(
 ```{r}
 v <- validate_pr(
   hub_path = temp_hub,
-  gh_repo = "Infectious-Disease-Modeling-Hubs/ci-testhub-simple",
+  gh_repo = "hubverse-org/ci-testhub-simple",
   pr_number = 6,
   skip_submit_window_check = TRUE
 )
@@ -134,14 +134,14 @@ If any elements of the `hub_validations` object contain `<error/check_error>`, `
 ```{r, error=TRUE}
 temp_hub <- fs::path(tempdir(), "invalid_sb_hub")
 gert::git_clone(
-  url = "https://github.com/Infectious-Disease-Modeling-Hubs/ci-testhub-simple",
+  url = "https://github.com/hubverse-org/ci-testhub-simple",
   path = temp_hub,
   branch = "pr-missing-taskid"
 )
 
 v_fail <- validate_pr(
   hub_path = temp_hub,
-  gh_repo = "Infectious-Disease-Modeling-Hubs/ci-testhub-simple",
+  gh_repo = "hubverse-org/ci-testhub-simple",
   pr_number = 5,
   skip_submit_window_check = TRUE
 )
@@ -160,14 +160,14 @@ If all validations checks pass, `check_for_errors()` returns `TRUE` silently and
 ```{r}
 temp_hub <- fs::path(tempdir(), "valid_sb_hub")
 gert::git_clone(
-  url = "https://github.com/Infectious-Disease-Modeling-Hubs/ci-testhub-simple",
+  url = "https://github.com/hubverse-org/ci-testhub-simple",
   path = temp_hub,
   branch = "pr-valid"
 )
 
 v_pass <- validate_pr(
   hub_path = temp_hub,
-  gh_repo = "Infectious-Disease-Modeling-Hubs/ci-testhub-simple",
+  gh_repo = "hubverse-org/ci-testhub-simple",
   pr_number = 4,
   skip_submit_window_check = TRUE
 )

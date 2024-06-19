@@ -181,3 +181,46 @@ test_that(
     )
   }
 )
+
+test_that("check_tbl_values_required works with v3 spec samples", {
+  hub_path <- system.file("testhubs/samples", package = "hubValidations")
+  file_path <- "Flusight-baseline/2022-10-22-Flusight-baseline.csv"
+  round_id <- "2022-10-22"
+  tbl <- read_model_out_file(
+    file_path = file_path,
+    hub_path = hub_path,
+    coerce_types = "chr"
+  )
+  expect_snapshot(
+    check_tbl_values_required(
+      tbl = tbl,
+      round_id = round_id,
+      file_path = file_path,
+      hub_path = hub_path
+    )
+  )
+  # Remove US location to test missing required values identified and reported
+  # correctly.
+  tbl <- tbl[tbl$location != "US", ]
+  expect_snapshot(
+    check_tbl_values_required(
+      tbl = tbl,
+      round_id = round_id,
+      file_path = file_path,
+      hub_path = hub_path
+    )
+  )
+  missing <- check_tbl_values_required(
+    tbl = tbl,
+    round_id = round_id,
+    file_path = file_path,
+    hub_path = hub_path
+  )$missing
+  expect_snapshot(missing)
+  expect_equal(
+    unique(missing$output_type),
+    c("pmf", "sample", "mean", "median")
+  )
+  expect_true(all(missing$location == "US"))
+
+})

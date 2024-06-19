@@ -163,7 +163,7 @@ test_that("File containing task ID with all null properties validate correctly",
   expect_snapshot(
     str(
       validate_submission(
-        hub_path = test_path("testdata/hub-null"),
+        hub_path = test_path("testdata/hub-nul"),
         file_path = "team-model/2023-11-26-team-model.parquet",
         skip_submit_window_check = TRUE
       )
@@ -173,7 +173,7 @@ test_that("File containing task ID with all null properties validate correctly",
     suppressMessages(
       check_for_errors(
         validate_submission(
-          hub_path = test_path("testdata/hub-null"),
+          hub_path = test_path("testdata/hub-nul"),
           file_path = "team-model/2023-11-26-team-model.parquet",
           skip_submit_window_check = TRUE
         )
@@ -183,7 +183,7 @@ test_that("File containing task ID with all null properties validate correctly",
   expect_snapshot(
     str(
       validate_submission(
-        hub_path = test_path("testdata/hub-null"),
+        hub_path = test_path("testdata/hub-nul"),
         file_path = "team-model/2023-11-19-team-model.parquet",
         skip_submit_window_check = TRUE
       )
@@ -193,7 +193,7 @@ test_that("File containing task ID with all null properties validate correctly",
     suppressMessages(
       check_for_errors(
         validate_submission(
-          hub_path = test_path("testdata/hub-null"),
+          hub_path = test_path("testdata/hub-nul"),
           file_path = "team-model/2023-11-19-team-model.parquet",
           skip_submit_window_check = TRUE
         )

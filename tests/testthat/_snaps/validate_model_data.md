@@ -345,3 +345,122 @@
       Error in `parse_file_name()`:
       ! Could not parse file name 'random-path' for submission metadata. Please consult documentation for file name requirements for correct metadata parsing.
 
+# validate_model_data with v3 sample data works
+
+    Code
+      str(validate_model_data(hub_path, file_path, validations_cfg_path = system.file(
+        "testhubs/flusight/hub-config/validations.yml", package = "hubValidations")))
+    Output
+      Classes 'hub_validations', 'list'  hidden list of 16
+       $ file_read           :List of 4
+        ..$ message       : chr "File could be read successfully. \n "
+        ..$ where         : chr "Flusight-baseline/2022-10-22-Flusight-baseline.csv"
+        ..$ call          : chr "check_file_read"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ valid_round_id_col  :List of 4
+        ..$ message       : chr "`round_id_col` name is valid. \n "
+        ..$ where         : chr "Flusight-baseline/2022-10-22-Flusight-baseline.csv"
+        ..$ call          : chr "check_valid_round_id_col"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ unique_round_id     :List of 4
+        ..$ message       : chr "`round_id` column \"reference_date\" contains a single, unique round ID value. \n "
+        ..$ where         : chr "Flusight-baseline/2022-10-22-Flusight-baseline.csv"
+        ..$ call          : chr "check_tbl_unique_round_id"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ match_round_id      :List of 4
+        ..$ message       : chr "All `round_id_col` \"reference_date\" values match submission `round_id` from file name. \n "
+        ..$ where         : chr "Flusight-baseline/2022-10-22-Flusight-baseline.csv"
+        ..$ call          : chr "check_tbl_match_round_id"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ colnames            :List of 4
+        ..$ message       : chr "Column names are consistent with expected round task IDs and std column names. \n "
+        ..$ where         : chr "Flusight-baseline/2022-10-22-Flusight-baseline.csv"
+        ..$ call          : chr "check_tbl_colnames"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ col_types           :List of 4
+        ..$ message       : chr "Column data types match hub schema. \n "
+        ..$ where         : chr "Flusight-baseline/2022-10-22-Flusight-baseline.csv"
+        ..$ call          : chr "check_tbl_col_types"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ valid_vals          :List of 5
+        ..$ message       : chr "`tbl` contains valid values/value combinations.  \n "
+        ..$ where         : chr "Flusight-baseline/2022-10-22-Flusight-baseline.csv"
+        ..$ error_tbl     : NULL
+        ..$ call          : chr "check_tbl_values"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ rows_unique         :List of 4
+        ..$ message       : chr "All combinations of task ID column/`output_type`/`output_type_id` values are unique. \n "
+        ..$ where         : chr "Flusight-baseline/2022-10-22-Flusight-baseline.csv"
+        ..$ call          : chr "check_tbl_rows_unique"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ req_vals            :List of 5
+        ..$ message       : chr "Required task ID/output type/output type ID combinations all present.  \n "
+        ..$ where         : chr "Flusight-baseline/2022-10-22-Flusight-baseline.csv"
+        ..$ missing       : tibble [0 x 7] (S3: tbl_df/tbl/data.frame)
+        .. ..$ location       : chr(0) 
+        .. ..$ reference_date : chr(0) 
+        .. ..$ horizon        : chr(0) 
+        .. ..$ target_end_date: chr(0) 
+        .. ..$ target         : chr(0) 
+        .. ..$ output_type    : chr(0) 
+        .. ..$ output_type_id : chr(0) 
+        ..$ call          : chr "check_tbl_values_required"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ value_col_valid     :List of 4
+        ..$ message       : chr "Values in column `value` all valid with respect to modeling task config. \n "
+        ..$ where         : chr "Flusight-baseline/2022-10-22-Flusight-baseline.csv"
+        ..$ call          : chr "check_tbl_value_col"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ value_col_non_desc  :List of 4
+        ..$ message       : chr "No quantile or cdf output types to check for non-descending values.\n        Check skipped."
+        ..$ where         : chr "Flusight-baseline/2022-10-22-Flusight-baseline.csv"
+        ..$ call          : chr "check_tbl_value_col_ascending"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
+       $ value_col_sum1      :List of 5
+        ..$ message       : chr "Values in `value` column do sum to 1 for all unique task ID value combination of pmf\n    output types. \n "
+        ..$ where         : chr "Flusight-baseline/2022-10-22-Flusight-baseline.csv"
+        ..$ error_tbl     : NULL
+        ..$ call          : chr "check_tbl_value_col_sum1"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ spl_compound_tid    :List of 5
+        ..$ message       : chr "Each sample compound task ID contains single, unique value. \n "
+        ..$ where         : chr "Flusight-baseline/2022-10-22-Flusight-baseline.csv"
+        ..$ errors        : NULL
+        ..$ call          : chr "check_tbl_spl_compound_tid"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ spl_non_compound_tid:List of 5
+        ..$ message       : chr "Task ID combinations of non compound task id values consistent across modeling task samples. \n "
+        ..$ where         : chr "Flusight-baseline/2022-10-22-Flusight-baseline.csv"
+        ..$ errors        : NULL
+        ..$ call          : chr "check_tbl_spl_non_compound_tid"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ spl_n               :List of 5
+        ..$ message       : chr "Required samples per compound idx task present.  \n "
+        ..$ where         : chr "Flusight-baseline/2022-10-22-Flusight-baseline.csv"
+        ..$ errors        : NULL
+        ..$ call          : chr "check_tbl_spl_n"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ horizon_timediff    :List of 6
+        ..$ message       : chr "Assertion on 't0_colname' failed: Must be element of set ['location','reference_date','horizon','target_end_dat"| __truncated__
+        ..$ trace         : NULL
+        ..$ parent        : NULL
+        ..$ where         : chr "Flusight-baseline/2022-10-22-Flusight-baseline.csv"
+        ..$ call          : chr "horizon_timediff"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_exec_error" "hub_check" "rlang_error" "error" ...
+

@@ -1,4 +1,4 @@
-﻿Name,Check,Early return,Fail output,parent fun,check fun,Extra info,optional
+Name,Check,Early return,Fail output,parent fun,check fun,Extra info,optional
 valid_config,Hub config valid,TRUE,check_error,validate_submission,check_config_hub_valid,,FALSE
 submission_time,Current time within file submission window,FALSE,check_failure,validate_submission_time,check_submission_time,,FALSE
 file_exists,File exists at `file_path` provided,TRUE,check_error,validate_model_file,check_file_exists,,FALSE
@@ -19,6 +19,11 @@ req_vals,Columns (excluding `value` column) contain all required combinations of
 value_col_valid,Values in `value` column are coercible to data type configured for each output type,FALSE,check_failure,validate_model_data,check_tbl_value_col,,FALSE
 value_col_non_desc,Values in `value` column are non-decreasing as output_type_ids increase for all unique task ID /output type value combinations. Applies to `quantile` or `cdf` output types only,FALSE,check_failure,validate_model_data,check_tbl_value_col_ascending,error_tbl: table of rows affected,FALSE
 value_col_sum1,Values in the `value` column of `pmf` output type data for each unique task ID combination sum to 1.,FALSE,check_failure,validate_model_data,check_tbl_value_col_sum1,error_tbl: table of rows affected,FALSE
+spl_compound_tid,Samples contain single unique values for each compound task ID within individual samples (v3 and above schema only).,TRUE,check_error,validate_model_data,check_tbl_spl_compound_tid,errors: list containing item for each sample failing validation with breakdown of unique values for each compound task ID.,FALSE
+spl_non_compound_tid,Samples contain single unique combination of non-compound task ID values across all samples (v3 and above schema only).,TRUE,check_error,validate_model_data,check_tbl_spl_non_compound_tid,"errors: list containing item for each modeling task with vectors of output type ids of samples failing validation and example table of most frequent non-compound task ID value combination
+across all samples in the modeling task.",FALSE
+spl_n,Number of samples for a given compound idx falls within accepted compound task range (v3 and above schema only).,FALSE,check_failure,validate_model_data,check_tbl_spl_n,"errors: list containing item for each compound_idx failing validation with sample count, metadata on expected samples and example table of expected structure for samples belonging to
+the compound idx in question.",FALSE
 metadata_schema_exists,A model metadata schema file exists in `hub-config` directory.,TRUE,check_error,validate_model_metadata,check_metadata_schema_exists,,FALSE
 metadata_file_exists,A file with name provided to argument `file_path` exists at the expected location (the `model-metadata` directory).,TRUE,check_error,validate_model_metadata,check_metadata_file_exists,,FALSE
 metadata_file_ext,The metadata file has correct extension (yaml or yml).,TRUE,check_error,validate_model_metadata,check_metadata_file_ext,,FALSE

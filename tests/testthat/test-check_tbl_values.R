@@ -166,3 +166,32 @@ test_that("check_tbl_values consistent across numeric & character output type id
     exact = TRUE
   )
 })
+
+test_that("check_tbl_values works with v3 spec samples", {
+  hub_path <- system.file("testhubs/samples", package = "hubValidations")
+  file_path <- "Flusight-baseline/2022-10-22-Flusight-baseline.csv"
+  round_id <- "2022-10-22"
+  tbl <- read_model_out_file(
+    file_path = file_path,
+    hub_path = hub_path,
+    coerce_types = "chr"
+  )
+  expect_snapshot(
+    check_tbl_values(
+      tbl = tbl,
+      round_id = round_id,
+      file_path = file_path,
+      hub_path = hub_path
+    )
+  )
+
+  tbl[utils::head(which(tbl$output_type == "sample"), 2), "horizon"] <- c("11", "12")
+  expect_snapshot(
+    check_tbl_values(
+      tbl = tbl,
+      round_id = round_id,
+      file_path = file_path,
+      hub_path = hub_path
+    )
+  )
+})

@@ -130,3 +130,44 @@
        $ use_cli_format: logi TRUE
        - attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_warning" "warning" ...
 
+# check_tbl_values_required works with v3 spec samples
+
+    Code
+      check_tbl_values_required(tbl = tbl, round_id = round_id, file_path = file_path,
+        hub_path = hub_path)
+    Output
+      <message/check_success>
+      Message:
+      Required task ID/output type/output type ID combinations all present.
+
+---
+
+    Code
+      check_tbl_values_required(tbl = tbl, round_id = round_id, file_path = file_path,
+        hub_path = hub_path)
+    Output
+      <warning/check_failure>
+      Warning:
+      Required task ID/output type/output type ID combinations missing.  See `missing` attribute for details.
+
+---
+
+    Code
+      missing
+    Output
+      # A tibble: 21 x 7
+         location reference_date horizon target_end_date target            output_type
+         <chr>    <date>           <int> <date>          <chr>             <chr>      
+       1 US       2022-10-22           0 2022-10-22      wk flu hosp rate~ pmf        
+       2 US       2022-10-22           0 2022-10-22      wk flu hosp rate~ pmf        
+       3 US       2022-10-22           0 2022-10-22      wk flu hosp rate~ pmf        
+       4 US       2022-10-22           0 2022-10-22      wk flu hosp rate~ pmf        
+       5 US       2022-10-22           1 2022-10-29      wk flu hosp rate~ pmf        
+       6 US       2022-10-22           1 2022-10-29      wk flu hosp rate~ pmf        
+       7 US       2022-10-22           1 2022-10-29      wk flu hosp rate~ pmf        
+       8 US       2022-10-22           1 2022-10-29      wk flu hosp rate~ pmf        
+       9 US       2022-10-22           2 2022-11-05      wk flu hosp rate~ pmf        
+      10 US       2022-10-22           2 2022-11-05      wk flu hosp rate~ pmf        
+      # i 11 more rows
+      # i 1 more variable: output_type_id <chr>
+

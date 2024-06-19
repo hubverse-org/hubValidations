@@ -90,3 +90,19 @@ test_that("validate_model_data errors correctly", {
     error = TRUE
   )
 })
+
+test_that("validate_model_data with v3 sample data works", {
+  hub_path <- system.file("testhubs/samples", package = "hubValidations")
+  file_path <- "Flusight-baseline/2022-10-22-Flusight-baseline.csv"
+  expect_snapshot(
+    str(
+      validate_model_data(
+        hub_path, file_path,
+        validations_cfg_path = system.file(
+          "testhubs/flusight/hub-config/validations.yml",
+          package = "hubValidations"
+        )
+      )
+    )
+  )
+})

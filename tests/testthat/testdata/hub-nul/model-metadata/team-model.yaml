@@ -1,4 +1,4 @@
-schema_version: "https://raw.githubusercontent.com/Infectious-Disease-Modeling-Hubs/schemas/main/v2.0.0/admin-schema.json"
+schema_version: "https://raw.githubusercontent.com/hubverse-org/schemas/main/v2.0.0/admin-schema.json"
 team_name: "Team Sam"
 team_abbr: "team"
 model_name: "Model Ple"

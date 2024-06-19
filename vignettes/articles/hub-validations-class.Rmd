@@ -65,7 +65,7 @@ v <- validate_submission(hub_path,
   file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
 )
 
-str(head(v))
+str(utils::head(v))
 ```
 
 Each `<hub_check>` objects contains the following elements:
