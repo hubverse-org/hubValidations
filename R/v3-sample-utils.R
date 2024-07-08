@@ -9,7 +9,7 @@
 spl_hash_tbl <- function(tbl, round_id, config_tasks) {
   tbl <- tbl[tbl$output_type == "sample", names(tbl) != "value"]
 
-  mt_spl_grid <- hubData::expand_model_out_val_grid(
+  mt_spl_grid <- expand_model_out_grid(
     config_tasks = config_tasks,
     round_id = round_id,
     all_character = TRUE,

@@ -11,7 +11,7 @@ check_tbl_values_required <- function(tbl, round_id, file_path, hub_path) {
   if (hubUtils::is_v3_config(config_tasks)) {
     tbl[tbl$output_type == "sample", "output_type_id"] <- NA
   }
-  req <- hubData::expand_model_out_val_grid(
+  req <- expand_model_out_grid(
     config_tasks,
     round_id = round_id,
     required_vals_only = TRUE,
@@ -19,7 +19,7 @@ check_tbl_values_required <- function(tbl, round_id, file_path, hub_path) {
     bind_model_tasks = FALSE
   )
 
-  full <- hubData::expand_model_out_val_grid(
+  full <- expand_model_out_grid(
     config_tasks,
     round_id = round_id,
     required_vals_only = FALSE,
