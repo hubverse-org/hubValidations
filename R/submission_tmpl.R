@@ -82,20 +82,20 @@
 #'   round_id = "2022-12-26"
 #' )
 submission_tmpl <- function(hub_con, config_tasks, round_id,
-                                         required_vals_only = FALSE,
-                                         complete_cases_only = TRUE) {
+                            required_vals_only = FALSE,
+                            complete_cases_only = TRUE) {
   switch(rlang::check_exclusive(hub_con, config_tasks),
-         hub_con = {
-           checkmate::assert_class(hub_con, classes = "hub_connection")
-           config_tasks <- attr(hub_con, "config_tasks")
-         },
-         config_tasks = checkmate::assert_list(config_tasks)
+    hub_con = {
+      checkmate::assert_class(hub_con, classes = "hub_connection")
+      config_tasks <- attr(hub_con, "config_tasks")
+    },
+    config_tasks = checkmate::assert_list(config_tasks)
   )
 
   tmpl_df <- expand_model_out_grid(config_tasks,
-                                       round_id = round_id,
-                                       required_vals_only = required_vals_only,
-                                       include_sample_ids = TRUE
+    round_id = round_id,
+    required_vals_only = required_vals_only,
+    include_sample_ids = TRUE
   )
 
   tmpl_cols <- c(

@@ -6,7 +6,7 @@ test_that("expand_model_out_grid works correctly", {
 
   expect_snapshot(str(
     expand_model_out_grid(config_tasks,
-                              round_id = "2023-01-02"
+      round_id = "2023-01-02"
     )
   ))
   expect_snapshot(str(
@@ -161,48 +161,48 @@ test_that("expand_model_out_grid output controls work correctly", {
 
   expect_snapshot(str(
     expand_model_out_grid(config_tasks,
-                              round_id = "2023-01-02",
-                              all_character = TRUE
+      round_id = "2023-01-02",
+      all_character = TRUE
     )
   ))
   expect_snapshot(
     expand_model_out_grid(config_tasks,
-                              round_id = "2023-01-02",
-                              all_character = TRUE,
-                              as_arrow_table = TRUE
+      round_id = "2023-01-02",
+      all_character = TRUE,
+      as_arrow_table = TRUE
     )
   )
   expect_snapshot(str(
     expand_model_out_grid(config_tasks,
-                              round_id = "2023-01-02",
-                              required_vals_only = TRUE,
-                              all_character = TRUE
+      round_id = "2023-01-02",
+      required_vals_only = TRUE,
+      all_character = TRUE
     )
   ))
   expect_snapshot(
     expand_model_out_grid(config_tasks,
-                              round_id = "2023-01-02",
-                              required_vals_only = TRUE,
-                              all_character = TRUE,
-                              as_arrow_table = TRUE
+      round_id = "2023-01-02",
+      required_vals_only = TRUE,
+      all_character = TRUE,
+      as_arrow_table = TRUE
     )
   )
   expect_snapshot(str(
     expand_model_out_grid(config_tasks,
-                              round_id = "2023-01-02",
-                              required_vals_only = TRUE,
-                              all_character = TRUE,
-                              as_arrow_table = FALSE,
-                              bind_model_tasks = FALSE
+      round_id = "2023-01-02",
+      required_vals_only = TRUE,
+      all_character = TRUE,
+      as_arrow_table = FALSE,
+      bind_model_tasks = FALSE
     )
   ))
   expect_snapshot(
     expand_model_out_grid(config_tasks,
-                              round_id = "2023-01-02",
-                              required_vals_only = TRUE,
-                              all_character = TRUE,
-                              as_arrow_table = TRUE,
-                              bind_model_tasks = FALSE
+      round_id = "2023-01-02",
+      required_vals_only = TRUE,
+      all_character = TRUE,
+      as_arrow_table = TRUE,
+      bind_model_tasks = FALSE
     )
   )
 })
@@ -211,56 +211,56 @@ test_that("expand_model_out_grid output controls work correctly", {
 test_that("expand_model_out_grid output controls with samples work correctly", {
   # Hub with sample output type
   config_tasks <- hubUtils::read_config_file(system.file("config", "tasks.json",
-                                                         package = "hubValidations"
+    package = "hubValidations"
   ))
 
 
   expect_snapshot(
     expand_model_out_grid(config_tasks,
-                              round_id = "2022-12-26"
+      round_id = "2022-12-26"
     )
   )
   expect_snapshot(
     expand_model_out_grid(config_tasks,
-                              round_id = "2022-12-26",
-                              include_sample_ids = TRUE
+      round_id = "2022-12-26",
+      include_sample_ids = TRUE
     ) %>%
       dplyr::filter(.data$output_type == "sample")
   )
   expect_snapshot(
     expand_model_out_grid(config_tasks,
-                              round_id = "2022-12-26",
-                              include_sample_ids = TRUE,
-                              required_vals_only = TRUE,
-                              all_character = TRUE
+      round_id = "2022-12-26",
+      include_sample_ids = TRUE,
+      required_vals_only = TRUE,
+      all_character = TRUE
     )
   )
   expect_snapshot(
     expand_model_out_grid(config_tasks,
-                              round_id = "2022-12-26",
-                              include_sample_ids = TRUE,
-                              required_vals_only = TRUE,
-                              as_arrow_table = TRUE
+      round_id = "2022-12-26",
+      include_sample_ids = TRUE,
+      required_vals_only = TRUE,
+      as_arrow_table = TRUE
     )
   )
   # Hub with sample output type and compound task ID structure
   config_tasks <- hubUtils::read_config_file(
     system.file("config", "tasks-comp-tid.json",
-                package = "hubValidations"
+      package = "hubValidations"
     )
   )
   expect_snapshot(
     expand_model_out_grid(config_tasks,
-                              round_id = "2022-12-26",
-                              include_sample_ids = TRUE,
-                              bind_model_tasks = FALSE
+      round_id = "2022-12-26",
+      include_sample_ids = TRUE,
+      bind_model_tasks = FALSE
     )
   )
   expect_snapshot(
     expand_model_out_grid(config_tasks,
-                              round_id = "2022-12-26",
-                              include_sample_ids = TRUE,
-                              required_vals_only = TRUE
+      round_id = "2022-12-26",
+      include_sample_ids = TRUE,
+      required_vals_only = TRUE
     )
   )
   # Check back-compatibility on older sample specification
@@ -269,21 +269,21 @@ test_that("expand_model_out_grid output controls with samples work correctly", {
   )
   expect_snapshot(
     expand_model_out_grid(config_tasks,
-                              round_id = "2022-12-26"
+      round_id = "2022-12-26"
     )
   )
   # check that included sample IDs are not generated for older versions
   # of the sample specification
   expect_equal(
     expand_model_out_grid(config_tasks,
-                              round_id = "2022-12-26",
-                              include_sample_ids = TRUE,
-                              bind_model_tasks = FALSE
+      round_id = "2022-12-26",
+      include_sample_ids = TRUE,
+      bind_model_tasks = FALSE
     )[[1]],
     expand_model_out_grid(config_tasks,
-                              round_id = "2022-12-26",
-                              include_sample_ids = FALSE,
-                              bind_model_tasks = FALSE
+      round_id = "2022-12-26",
+      include_sample_ids = FALSE,
+      bind_model_tasks = FALSE
     )[[1]]
   )
 

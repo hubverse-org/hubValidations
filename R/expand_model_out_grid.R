@@ -92,12 +92,12 @@
 #'   include_sample_ids = TRUE
 #' )
 expand_model_out_grid <- function(config_tasks,
-                                      round_id,
-                                      required_vals_only = FALSE,
-                                      all_character = FALSE,
-                                      as_arrow_table = FALSE,
-                                      bind_model_tasks = TRUE,
-                                      include_sample_ids = FALSE) {
+                                  round_id,
+                                  required_vals_only = FALSE,
+                                  all_character = FALSE,
+                                  as_arrow_table = FALSE,
+                                  bind_model_tasks = TRUE,
+                                  include_sample_ids = FALSE) {
   round_idx <- hubUtils::get_round_idx(config_tasks, round_id)
 
   round_config <- purrr::pluck(
@@ -191,7 +191,7 @@ expand_output_type_grid <- function(task_id_values,
 fix_round_id <- function(x, round_id, round_config, round_ids) {
   if (round_config[["round_id_from_variable"]] && !is.null(round_id)) {
     round_id <- rlang::arg_match(round_id,
-                                 values = round_ids
+      values = round_ids
     )
     round_id_var <- round_config[["round_id"]]
     purrr::map(
@@ -292,11 +292,11 @@ null_taskids_to_na <- function(model_task) {
     model_task, ~ all(purrr::map_lgl(.x, is.null))
   )
   purrr::modify_if(model_task,
-                   .p = to_na,
-                   ~ list(
-                     required = NA,
-                     optional = NULL
-                   )
+    .p = to_na,
+    ~ list(
+      required = NA,
+      optional = NULL
+    )
   )
 }
 
