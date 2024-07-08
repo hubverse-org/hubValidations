@@ -4,6 +4,12 @@ template:
   package: hubStyle
 
 reference:
+- title: "Utilities for submitting teams"
+  desc: "Functions to help teams create valid submission model output files."
+  contents:
+  - validate_submission
+  - submission_tmpl
+
 - title: "Higher level validation functions"
   desc: "Functions combining appropriate check unit test used for higher level validations. All return `hub_validations` S3 class objects."
   contents:
@@ -29,6 +35,7 @@ reference:
   - parse_file_name
   - read_model_out_file
   - try_check
+  - expand_model_out_grid
 
 
 - title: "`<hub_validations>` methods"
@@ -37,7 +44,6 @@ reference:
   - starts_with("print")
   - starts_with("combine")
   - contains("hub_validations")
-
 
 navbar:
  components:
