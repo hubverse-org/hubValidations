@@ -13,7 +13,7 @@ check_tbl_value_col <- function(tbl, round_id, file_path, hub_path) {
     tbl[, names(tbl) != "value"]
   )
 
-  full <- hubData::expand_model_out_val_grid(
+  full <- expand_model_out_grid(
     config_tasks,
     round_id = round_id,
     required_vals_only = FALSE,

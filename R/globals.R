@@ -1,1 +1,1 @@
-utils::globalVariables(c(".data", ".env"))
+utils::globalVariables(c(".data", ".env", "."))

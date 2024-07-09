@@ -1,3 +1,13 @@
+# hubValidations 0.2.0
+
+* Move and rename the following `hubData` functions to `hubValidations`:
+ - `hubData::expand_model_out_val_grid` to `expand_model_out_grid`.
+ - `hubData::create_model_out_submit_tmpl` to `submission_tmpl`.
+
+# hubValidations 0.1.0
+
+* Support validation of v3 schema sample submissions.
+
 # hubValidations 0.0.1
 
 * Release stable 0.0.1 version
