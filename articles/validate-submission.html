@@ -5,7 +5,6 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="hubValidations">
 <title>Validating submissions locally • hubValidations</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
@@ -15,68 +14,52 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js" integrity="sha512-7O5pXpc0oCRrxk8RUfDYFgn0nO1t+jLuIOQdOMRp4APB7uZ4vSjspzp5y6YDtDs4VzUSTbWzBFZ/LKJhnyFOKw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Validating submissions locally">
-<meta property="og:description" content="hubValidations">
-<meta property="og:image" content="https://hubverse-org.github.io/hubValidations/logo.png">
-<!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]-->
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Validating submissions locally">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
-    
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
+
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/hubverse-org/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubValidations</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
-    
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"></ul>
-<form class="form-inline my-2 my-lg-0" role="search">
-        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
-</form>
-
-      <ul class="navbar-nav">
-<li class="nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
-</li>
+<ul class="navbar-nav">
+<li class="nav-item"><form class="form-inline" role="search">
+ <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
+</form></li>
+<li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="active nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/hub-validations-class.html">Structure of hub_validations class objects</a>
-    <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>Validation for hub admins through CI</h6>
-    <a class="dropdown-item" href="../articles/validate-pr.html">Validating Pull Requests on GitHub</a>
-    <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>Validation for submitting teams</h6>
-    <a class="dropdown-item" href="../articles/validate-submission.html">Validating submissions locally</a>
-    <div class="dropdown-divider"></div>
-    <a class="dropdown-item" href="../articles/custom-functions.html">Including custom validation functions</a>
-  </div>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-articles">
+<li><a class="dropdown-item" href="../articles/hub-validations-class.html">Structure of hub_validations class objects</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Validation for hub admins through CI</h6></li>
+    <li><a class="dropdown-item" href="../articles/validate-pr.html">Validating Pull Requests on GitHub</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Validation for submitting teams</h6></li>
+    <li><a class="dropdown-item" href="../articles/validate-submission.html">Validating submissions locally</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/custom-functions.html">Including custom validation functions</a></li>
+  </ul>
 </li>
-<li class="nav-item">
-  <a class="nav-link" href="../news/index.html">Changelog</a>
-</li>
-<li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/hubverse-org/hubValidations/" aria-label="github">
-    <span class="fab fa fab fa-github fa-lg"></span>
-     
-  </a>
-</li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/hubverse-org/hubValidations/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
-    
+
   </div>
 </nav><div class="container template-article">
 
@@ -88,7 +71,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Validating submissions locally</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/hubverse-org/hubValidations/blob/HEAD/vignettes/articles/validate-submission.Rmd" class="external-link"><code>vignettes/articles/validate-submission.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/hubverse-org/hubValidations/blob/main/vignettes/articles/validate-submission.Rmd" class="external-link"><code>vignettes/articles/validate-submission.Rmd</code></a></small>
       <div class="d-none name"><code>validate-submission.Rmd</code></div>
     </div>
 
@@ -117,11 +100,11 @@ standard validation checks and returns their results in the form of a
 <span><span class="fu"><a href="../reference/validate_submission.html">validate_submission</a></span><span class="op">(</span><span class="va">hub_path</span>,</span>
 <span>  file_path <span class="op">=</span> <span class="st">"team1-goodmodel/2022-10-08-team1-goodmodel.csv"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; ::notice ::✔ simple: All hub config files are valid.%0A✔ 2022-10-08-team1-goodmodel.csv: File exists at path%0A  <span style="color: #0000BB;">model-output/team1-goodmodel/2022-10-08-team1-goodmodel.csv</span>.%0A✔ 2022-10-08-team1-goodmodel.csv: File name <span style="color: #0000BB;">"2022-10-08-team1-goodmodel.csv"</span> is%0A  valid.%0A✔ 2022-10-08-team1-goodmodel.csv: File directory name matches `model_id`%0A  metadata in file name.%0A✔ 2022-10-08-team1-goodmodel.csv: `round_id` is valid.%0A✔ 2022-10-08-team1-goodmodel.csv: File is accepted hub format.%0A✔ 2022-10-08-team1-goodmodel.csv: Metadata file exists at path%0A  <span style="color: #0000BB;">model-metadata/team1-goodmodel.yaml</span>.%0A✔ 2022-10-08-team1-goodmodel.csv: File could be read successfully.%0A✔ 2022-10-08-team1-goodmodel.csv: `round_id_col` name is valid.%0A✔ 2022-10-08-team1-goodmodel.csv: `round_id` column <span style="color: #0000BB;">"origin_date"</span> contains a%0A  single, unique round ID value.%0A✔ 2022-10-08-team1-goodmodel.csv: All `round_id_col` <span style="color: #0000BB;">"origin_date"</span> values match%0A  submission `round_id` from file name.%0A✔ 2022-10-08-team1-goodmodel.csv: Column names are consistent with expected%0A  round task IDs and std column names.%0A✔ 2022-10-08-team1-goodmodel.csv: Column data types match hub schema.%0A✔ 2022-10-08-team1-goodmodel.csv: `tbl` contains valid values/value%0A  combinations.%0A✔ 2022-10-08-team1-goodmodel.csv: All combinations of task ID%0A  column/`output_type`/`output_type_id` values are unique.%0A✔ 2022-10-08-team1-goodmodel.csv: Required task ID/output type/output type ID%0A  combinations all present.%0A✔ 2022-10-08-team1-goodmodel.csv: Values in column `value` all valid with%0A  respect to modeling task config.%0A✔ 2022-10-08-team1-goodmodel.csv: Values in `value` column are non-decreasing%0A  as output_type_ids increase for all unique task ID value/output type%0A  combinations of quantile or cdf output types.%0Aℹ 2022-10-08-team1-goodmodel.csv: No pmf output types to check for sum of 1.%0A  Check skipped.%0A! 2022-10-08-team1-goodmodel.csv: Submission time must be within accepted%0A  submission window for round.  Current time <span style="color: #0000BB;">"2024-06-19 07:22:49 UTC"</span> is%0A  outside window <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span></span></code></pre></div>
+<span><span class="co">#&gt; ::notice ::✔ simple: All hub config files are valid.%0A✔ 2022-10-08-team1-goodmodel.csv: File exists at path%0A  <span style="color: #0000BB;">model-output/team1-goodmodel/2022-10-08-team1-goodmodel.csv</span>.%0A✔ 2022-10-08-team1-goodmodel.csv: File name <span style="color: #0000BB;">"2022-10-08-team1-goodmodel.csv"</span> is%0A  valid.%0A✔ 2022-10-08-team1-goodmodel.csv: File directory name matches `model_id`%0A  metadata in file name.%0A✔ 2022-10-08-team1-goodmodel.csv: `round_id` is valid.%0A✔ 2022-10-08-team1-goodmodel.csv: File is accepted hub format.%0A✔ 2022-10-08-team1-goodmodel.csv: Metadata file exists at path%0A  <span style="color: #0000BB;">model-metadata/team1-goodmodel.yaml</span>.%0A✔ 2022-10-08-team1-goodmodel.csv: File could be read successfully.%0A✔ 2022-10-08-team1-goodmodel.csv: `round_id_col` name is valid.%0A✔ 2022-10-08-team1-goodmodel.csv: `round_id` column <span style="color: #0000BB;">"origin_date"</span> contains a%0A  single, unique round ID value.%0A✔ 2022-10-08-team1-goodmodel.csv: All `round_id_col` <span style="color: #0000BB;">"origin_date"</span> values match%0A  submission `round_id` from file name.%0A✔ 2022-10-08-team1-goodmodel.csv: Column names are consistent with expected%0A  round task IDs and std column names.%0A✔ 2022-10-08-team1-goodmodel.csv: Column data types match hub schema.%0A✔ 2022-10-08-team1-goodmodel.csv: `tbl` contains valid values/value%0A  combinations.%0A✔ 2022-10-08-team1-goodmodel.csv: All combinations of task ID%0A  column/`output_type`/`output_type_id` values are unique.%0A✔ 2022-10-08-team1-goodmodel.csv: Required task ID/output type/output type ID%0A  combinations all present.%0A✔ 2022-10-08-team1-goodmodel.csv: Values in column `value` all valid with%0A  respect to modeling task config.%0A✔ 2022-10-08-team1-goodmodel.csv: Values in `value` column are non-decreasing%0A  as output_type_ids increase for all unique task ID value/output type%0A  combinations of quantile or cdf output types.%0Aℹ 2022-10-08-team1-goodmodel.csv: No pmf output types to check for sum of 1.%0A  Check skipped.%0A! 2022-10-08-team1-goodmodel.csv: Submission time must be within accepted%0A  submission window for round.  Current time <span style="color: #0000BB;">"2024-07-09 06:55:23 UTC"</span> is%0A  outside window <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span></span></code></pre></div>
 <p>For more details on the structure of
 <code>&lt;hub_validations&gt;</code> objects, including how to access
 more information on individual checks, see
-<code><a href="../articles/hub-validations-class.html">vignette("hub-validations-class")</a></code>.</p>
+<code>vignette("hub-validations-class")</code>.</p>
 <div class="section level3">
 <h3 id="validation-early-return">Validation early return<a class="anchor" aria-label="anchor" href="#validation-early-return"></a>
 </h3>
@@ -137,7 +120,7 @@ and the function re-run for validation to proceed further.</p>
 <span><span class="fu"><a href="../reference/validate_submission.html">validate_submission</a></span><span class="op">(</span><span class="va">hub_path</span>,</span>
 <span>  file_path <span class="op">=</span> <span class="st">"team1-goodmodel/2022-10-15-hub-baseline.csv"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; ::notice ::✔ simple: All hub config files are valid.%0A✔ 2022-10-15-hub-baseline.csv: File exists at path%0A  <span style="color: #0000BB;">model-output/team1-goodmodel/2022-10-15-hub-baseline.csv</span>.%0A✔ 2022-10-15-hub-baseline.csv: File name <span style="color: #0000BB;">"2022-10-15-hub-baseline.csv"</span> is%0A  valid.%0A! 2022-10-15-hub-baseline.csv: File directory name must match `model_id`%0A  metadata in file name.  File should be submitted to directory <span style="color: #0000BB;">"hub-baseline"</span>%0A  not <span style="color: #0000BB;">"team1-goodmodel"</span>%0A✔ 2022-10-15-hub-baseline.csv: `round_id` is valid.%0A✔ 2022-10-15-hub-baseline.csv: File is accepted hub format.%0A✔ 2022-10-15-hub-baseline.csv: Metadata file exists at path%0A  <span style="color: #0000BB;">model-metadata/hub-baseline.yml</span>.%0A✔ 2022-10-15-hub-baseline.csv: File could be read successfully.%0A✔ 2022-10-15-hub-baseline.csv: `round_id_col` name is valid.%0A✔ 2022-10-15-hub-baseline.csv: `round_id` column <span style="color: #0000BB;">"origin_date"</span> contains a%0A  single, unique round ID value.%0A✖ 2022-10-15-hub-baseline.csv: All `round_id_col` <span style="color: #0000BB;">"origin_date"</span> values must%0A  match submission `round_id` from file name.  `round_id` value <span style="color: #0000BB;">2022-10-08</span> does%0A  not match submission `round_id` <span style="color: #0000BB;">"2022-10-15"</span>%0A! 2022-10-15-hub-baseline.csv: Submission time must be within accepted%0A  submission window for round.  Current time <span style="color: #0000BB;">"2024-06-19 07:22:50 UTC"</span> is%0A  outside window <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span></span></code></pre></div>
+<span><span class="co">#&gt; ::notice ::✔ simple: All hub config files are valid.%0A✔ 2022-10-15-hub-baseline.csv: File exists at path%0A  <span style="color: #0000BB;">model-output/team1-goodmodel/2022-10-15-hub-baseline.csv</span>.%0A✔ 2022-10-15-hub-baseline.csv: File name <span style="color: #0000BB;">"2022-10-15-hub-baseline.csv"</span> is%0A  valid.%0A! 2022-10-15-hub-baseline.csv: File directory name must match `model_id`%0A  metadata in file name.  File should be submitted to directory <span style="color: #0000BB;">"hub-baseline"</span>%0A  not <span style="color: #0000BB;">"team1-goodmodel"</span>%0A✔ 2022-10-15-hub-baseline.csv: `round_id` is valid.%0A✔ 2022-10-15-hub-baseline.csv: File is accepted hub format.%0A✔ 2022-10-15-hub-baseline.csv: Metadata file exists at path%0A  <span style="color: #0000BB;">model-metadata/hub-baseline.yml</span>.%0A✔ 2022-10-15-hub-baseline.csv: File could be read successfully.%0A✔ 2022-10-15-hub-baseline.csv: `round_id_col` name is valid.%0A✔ 2022-10-15-hub-baseline.csv: `round_id` column <span style="color: #0000BB;">"origin_date"</span> contains a%0A  single, unique round ID value.%0A✖ 2022-10-15-hub-baseline.csv: All `round_id_col` <span style="color: #0000BB;">"origin_date"</span> values must%0A  match submission `round_id` from file name.  `round_id` value <span style="color: #0000BB;">2022-10-08</span> does%0A  not match submission `round_id` <span style="color: #0000BB;">"2022-10-15"</span>%0A! 2022-10-15-hub-baseline.csv: Submission time must be within accepted%0A  submission window for round.  Current time <span style="color: #0000BB;">"2024-07-09 06:55:24 UTC"</span> is%0A  outside window <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="execution-errors">Execution Errors<a class="anchor" aria-label="anchor" href="#execution-errors"></a>
@@ -160,7 +143,7 @@ will be summarised.</p>
 <span>  file_path <span class="op">=</span> <span class="st">"team1-goodmodel/2022-10-08-team1-goodmodel.csv"</span></span>
 <span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/check_for_errors.html">check_for_errors</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; ::notice ::! 2022-10-08-team1-goodmodel.csv: Submission time must be within accepted%0A  submission window for round.  Current time <span style="color: #0000BB;">"2024-06-19 07:22:50 UTC"</span> is%0A  outside window <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span></span>
+<span><span class="co">#&gt; ::notice ::! 2022-10-08-team1-goodmodel.csv: Submission time must be within accepted%0A  submission window for round.  Current time <span style="color: #0000BB;">"2024-07-09 06:55:25 UTC"</span> is%0A  outside window <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `check_for_errors()`:</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> </span></span>
 <span><span class="co">#&gt; The validation checks produced some failures/errors reported above.</span></span></code></pre></div>
@@ -626,9 +609,8 @@ class object.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/validate_model_metadata.html">validate_model_metadata</a></span><span class="op">(</span><span class="va">hub_path</span>,</span>
 <span>  file_path <span class="op">=</span> <span class="st">"hub-baseline.yml"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; ::notice ::✔ model-metadata-schema.json: File exists at path%0A  <span style="color: #0000BB;">hub-config/model-metadata-schema.json</span>.%0A✔ hub-baseline.yml: File exists at path <span style="color: #0000BB;">model-metadata/hub-baseline.yml</span>.%0A✔ hub-baseline.yml: Metadata file extension is <span style="color: #0000BB;">"yml"</span> or <span style="color: #0000BB;">"yaml"</span>.%0A✔ hub-baseline.yml: Metadata file directory name matches <span style="color: #0000BB;">"model-metadata"</span>.%0A✔ hub-baseline.yml: Metadata file contents are consistent with schema%0A  specifications.%0A✔ hub-baseline.yml: Metadata file name matches the `model_id` specified within%0A  the metadata file.</span></span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
+<span><span class="co">#&gt; ::notice ::✔ model-metadata-schema.json: File exists at path%0A  <span style="color: #0000BB;">hub-config/model-metadata-schema.json</span>.%0A✔ hub-baseline.yml: File exists at path <span style="color: #0000BB;">model-metadata/hub-baseline.yml</span>.%0A✔ hub-baseline.yml: Metadata file extension is <span style="color: #0000BB;">"yml"</span> or <span style="color: #0000BB;">"yaml"</span>.%0A✔ hub-baseline.yml: Metadata file directory name matches <span style="color: #0000BB;">"model-metadata"</span>.%0A✔ hub-baseline.yml: Metadata file contents are consistent with schema%0A  specifications.%0A✔ hub-baseline.yml: Metadata file name matches the `model_id` specified within%0A  the metadata file.</span></span>
+<span></span>
 <span><span class="fu"><a href="../reference/validate_model_metadata.html">validate_model_metadata</a></span><span class="op">(</span><span class="va">hub_path</span>,</span>
 <span>  file_path <span class="op">=</span> <span class="st">"team1-goodmodel.yaml"</span></span>
 <span><span class="op">)</span></span>
@@ -636,7 +618,7 @@ class object.</p>
 <p>For more details on the structure of
 <code>&lt;hub_validations&gt;</code> objects, including how to access
 more information on individual checks, see
-<code><a href="../articles/hub-validations-class.html">vignette("hub-validations-class")</a></code>.</p>
+<code>vignette("hub-validations-class")</code>.</p>
 <div class="section level3">
 <h3 id="validate_model_metadata-check-details">
 <code>validate_model_metadata</code> check details<a class="anchor" aria-label="anchor" href="#validate_model_metadata-check-details"></a>
@@ -772,11 +754,11 @@ by the <code>validate_submission</code> or
 <code>validate_model_metadata</code> functions. For more information on
 deploying optional/custom functions or functions that require
 configuration please check the article on <a href="articles/custom-functions.html">including custom functions</a>
-(<code><a href="../articles/custom-functions.html">vignette("custom-functions")</a></code>).</p>
+(<code>vignette("custom-functions")</code>).</p>
 </div>
 </div>
 </div>
-  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>
 
@@ -787,15 +769,15 @@ configuration please check the article on <a href="articles/custom-functions.htm
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9. PR Previews built by <a href="https://www.netlify.com" class="external-link">Netlify</a>. Provided without <strong>any warranty</strong>.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0. PR Previews built by <a href="https://www.netlify.com" class="external-link">Netlify</a>. Provided without <strong>any warranty</strong>.</p>
 </div>
 
     </footer>
 </div>
 
-  
 
-  
+
+
 
   </body>
 </html>
