@@ -71,6 +71,6 @@ compile_errors <- function(x) {
 compile_msg <- function(x) {
   purrr::map(x, ~ attr(.x, "msg")) |>
     purrr::compact() |>
-  purrr::imap_chr(~glue::glue("mt {.y}: {.x}")) |>
+  purrr::imap_chr(~ paste0("mt ", .y, ": ", .x)) |>
     paste(collapse = ". ")
 }
