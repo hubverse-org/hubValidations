@@ -32,7 +32,6 @@
 #' for more details.
 #' @export
 check_tbl_spl_compound_taskid_set <- function(tbl, round_id, file_path, hub_path) {
-
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
 
   if (isFALSE(has_spls_tbl(tbl)) || isFALSE(hubUtils::is_v3_config(config_tasks))) {
@@ -40,9 +39,11 @@ check_tbl_spl_compound_taskid_set <- function(tbl, round_id, file_path, hub_path
   }
 
   compound_taskid_set <- get_tbl_compound_taskid_set(tbl, config_tasks, round_id,
-                              compact = TRUE, error = FALSE)
+    compact = TRUE, error = FALSE
+  )
 
-  check <- purrr::map_lgl(compound_taskid_set,
+  check <- purrr::map_lgl(
+    compound_taskid_set,
     ~ is.null(attr(.x, "errors"))
   ) |> all()
 
@@ -71,6 +72,6 @@ compile_errors <- function(x) {
 compile_msg <- function(x) {
   purrr::map(x, ~ attr(.x, "msg")) |>
     purrr::compact() |>
-  purrr::imap_chr(~ paste0("mt ", .y, ": ", .x)) |>
+    purrr::imap_chr(~ paste0("mt ", .y, ": ", .x)) |>
     paste(collapse = ". ")
 }
