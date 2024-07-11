@@ -14,7 +14,7 @@ the relative path to the hub's \code{model-output} (or equivalent) directory.}
 formatted by \code{\link[cli:format_inline]{cli::format_inline()}}.}
 
 \item{call}{The defused call of the function that generated the message.
-Use to override default which returns the caller function name. See \link[rlang:stack]{rlang::stack}
+Use to override default which uses the caller call. See \link[rlang:stack]{rlang::stack}
 for more details.}
 }
 \value{
