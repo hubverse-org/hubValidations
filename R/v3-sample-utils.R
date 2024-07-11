@@ -143,6 +143,7 @@ has_spls_mt_grid <- function(grid_l) {
 skip_v3_spl_check <- function(file_path, call = rlang::caller_call()) {
   capture_check_info(
     file_path = file_path,
-    msg = "No v3 samples found in model output data to check. Skipping {.code {call}} check."
+    msg = "No v3 samples found in model output data to check. Skipping {.code {call}} check.",
+    call = call
   )
 }
