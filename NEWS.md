@@ -1,3 +1,7 @@
+# hubValidations 0.3.0
+
+- Add new `check_tbl_spl_compound_taskid_set()` check function to `validate_model_data()` that ensures that sample compound task id sets for each modeling task match or are coarser than the expected set defined in `tasks.json` config.
+
 # hubValidations 0.2.0
 
 * Move and rename the following `hubData` functions to `hubValidations`:
