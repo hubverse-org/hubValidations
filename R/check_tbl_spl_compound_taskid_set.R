@@ -60,8 +60,12 @@ check_tbl_spl_compound_taskid_set <- function(tbl, round_id, file_path, hub_path
 }
 
 compile_errors <- function(x) {
-  purrr::map(x, ~ attr(.x, "errors")) |>
+  out <- purrr::map(x, ~ attr(.x, "errors")) |>
     purrr::compact()
+  if (length(out) == 0L) {
+    return(NULL)
+  }
+  out
 }
 
 compile_msg <- function(x) {

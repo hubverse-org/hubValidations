@@ -437,7 +437,7 @@
        $ spl_compound_taskid_set:List of 5
         ..$ message       : chr "All samples in a model task conform to single, unique compound task ID set that matches or is\n    coarser than"| __truncated__
         ..$ where         : chr "Flusight-baseline/2022-10-22-Flusight-baseline.csv"
-        ..$ errors        : Named list()
+        ..$ errors        : NULL
         ..$ call          : chr "check_tbl_spl_compound_taskid_set"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
