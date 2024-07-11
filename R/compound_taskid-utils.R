@@ -66,7 +66,6 @@ get_mt_compound_taskid_set <- function(tbl, config_comp_tids, config_tasks,
   }
 
   if (nrow(tbl) == 0L) {
-    cli::cli_alert_info("No samples found in the file.")
     return(NULL)
   }
   if (is.null(call)) call <- rlang::current_env()
