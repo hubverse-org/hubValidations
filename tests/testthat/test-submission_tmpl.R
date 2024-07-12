@@ -114,24 +114,35 @@ test_that("submission_tmpl works correctly", {
   )
 
   # Hub with sample output type and compound task ID structure
+  config_tasks <- hubUtils::read_config_file(
+    system.file("config", "tasks-comp-tid.json",
+      package = "hubValidations"
+    )
+  )
   expect_snapshot(
     submission_tmpl(
-      config_tasks = hubUtils::read_config_file(system.file("config", "tasks-comp-tid.json",
-        package = "hubValidations"
-      )),
+      config_tasks = config_tasks,
       round_id = "2022-12-26"
     )
   )
   expect_snapshot(
     submission_tmpl(
-      config_tasks = hubUtils::read_config_file(
-        system.file("config", "tasks-comp-tid.json",
-          package = "hubValidations"
-        )
-      ),
+      config_tasks = config_tasks,
       round_id = "2022-12-26"
     ) %>%
       dplyr::filter(.data$output_type == "sample")
+  )
+
+  # Override config compound task ID structure
+  expect_snapshot(
+    submission_tmpl(
+      config_tasks = config_tasks,
+      round_id = "2022-12-26",
+      compound_taskid_set = list(
+        c("forecast_date", "target"),
+        NULL
+      )
+    )
   )
 })
 
@@ -161,6 +172,23 @@ test_that("submission_tmpl errors correctly", {
 
   expect_snapshot(
     submission_tmpl(list()),
+    error = TRUE
+  )
+
+  config_tasks <- hubUtils::read_config_file(
+    system.file("config", "tasks-comp-tid.json",
+      package = "hubValidations"
+    )
+  )
+  expect_snapshot(
+    submission_tmpl(
+      config_tasks = config_tasks,
+      round_id = "2022-12-26",
+      compound_taskid_set = list(
+        c("forecast_date", "target", "random_var"),
+        NULL
+      )
+    ),
     error = TRUE
   )
 })
