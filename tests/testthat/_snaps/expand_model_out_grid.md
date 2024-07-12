@@ -414,6 +414,50 @@
       11 2022-12-26    wk ahead inc flu d~       1 01       sample                   4
       12 2022-12-26    wk ahead inc flu d~       1 02       sample                   4
 
+---
+
+    Code
+      expand_model_out_grid(config_tasks, round_id = "2022-12-26",
+        include_sample_ids = TRUE, compound_taskid_set = list(c("forecast_date",
+          "target"), NULL))
+    Output
+      # A tibble: 42 x 6
+         forecast_date target              horizon location output_type output_type_id
+         <date>        <chr>                 <int> <chr>    <chr>       <chr>         
+       1 2022-12-26    wk ahead inc flu h~       2 US       mean        <NA>          
+       2 2022-12-26    wk ahead inc flu h~       1 US       mean        <NA>          
+       3 2022-12-26    wk ahead inc flu h~       2 01       mean        <NA>          
+       4 2022-12-26    wk ahead inc flu h~       1 01       mean        <NA>          
+       5 2022-12-26    wk ahead inc flu h~       2 02       mean        <NA>          
+       6 2022-12-26    wk ahead inc flu h~       1 02       mean        <NA>          
+       7 2022-12-26    wk ahead inc flu h~       2 US       sample      1             
+       8 2022-12-26    wk ahead inc flu h~       1 US       sample      1             
+       9 2022-12-26    wk ahead inc flu h~       2 01       sample      1             
+      10 2022-12-26    wk ahead inc flu h~       1 01       sample      1             
+      # i 32 more rows
+
+---
+
+    Code
+      expand_model_out_grid(config_tasks, round_id = "2022-12-26",
+        include_sample_ids = TRUE, compound_taskid_set = list(c("forecast_date",
+          "target", "horizon", "location"), NULL))
+    Output
+      # A tibble: 42 x 6
+         forecast_date target              horizon location output_type output_type_id
+         <date>        <chr>                 <int> <chr>    <chr>       <chr>         
+       1 2022-12-26    wk ahead inc flu h~       2 US       mean        <NA>          
+       2 2022-12-26    wk ahead inc flu h~       1 US       mean        <NA>          
+       3 2022-12-26    wk ahead inc flu h~       2 01       mean        <NA>          
+       4 2022-12-26    wk ahead inc flu h~       1 01       mean        <NA>          
+       5 2022-12-26    wk ahead inc flu h~       2 02       mean        <NA>          
+       6 2022-12-26    wk ahead inc flu h~       1 02       mean        <NA>          
+       7 2022-12-26    wk ahead inc flu h~       2 US       sample      1             
+       8 2022-12-26    wk ahead inc flu h~       1 US       sample      2             
+       9 2022-12-26    wk ahead inc flu h~       2 01       sample      3             
+      10 2022-12-26    wk ahead inc flu h~       1 01       sample      4             
+      # i 32 more rows
+
 # expand_model_out_grid errors correctly
 
     Code
@@ -450,4 +494,25 @@
       i With name: horizon.
       Caused by error:
       ! horizon must be a DataType, not NULL
+
+---
+
+    Code
+      expand_model_out_grid(config_tasks, round_id = "2022-12-26",
+        include_sample_ids = TRUE, compound_taskid_set = list(c("forecast_date",
+          "target", "random_var"), NULL))
+    Condition
+      Error in `expand_model_out_grid()`:
+      x "random_var" is not valid task ID.
+      i The `compound_taskid_set` must be a subset of "forecast_date", "target", "horizon", and "location".
+
+---
+
+    Code
+      expand_model_out_grid(config_tasks, round_id = "2022-12-26",
+        include_sample_ids = TRUE, compound_taskid_set = list(c("forecast_date",
+          "target")))
+    Condition
+      Error in `expand_model_out_grid()`:
+      x The length of `compound_taskid_set` (1) must match the number of modeling tasks (2) in the round.
 

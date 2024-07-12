@@ -16,6 +16,9 @@
 #' return a list.
 #' @param include_sample_ids Logical. Whether to include sample identifiers in
 #' the `output_type_id` column.
+#' @param compound_taskid_set List of character vectors, one for each modeling task
+#' in the round. Can be used to override the compound task ID set defined in the
+#' config.
 #'
 #' @return If `bind_model_tasks = TRUE` (default) a tibble or arrow table
 #' containing all possible task ID and related output type ID
@@ -91,14 +94,27 @@
 #'   round_id = "2022-12-26",
 #'   include_sample_ids = TRUE
 #' )
+#' # Override config compound task ID set
+#' # Create coarser compound task ID set for the first modeling task which contains
+#' # samples
+#' expand_model_out_grid(config_tasks,
+#'   round_id = "2022-12-26",
+#'   include_sample_ids = TRUE,
+#'   compound_taskid_set = list(
+#'     c("forecast_date", "target"),
+#'     NULL
+#'   )
+#' )
 expand_model_out_grid <- function(config_tasks,
                                   round_id,
                                   required_vals_only = FALSE,
                                   all_character = FALSE,
                                   as_arrow_table = FALSE,
                                   bind_model_tasks = TRUE,
-                                  include_sample_ids = FALSE) {
+                                  include_sample_ids = FALSE,
+                                  compound_taskid_set = NULL) {
   round_idx <- hubUtils::get_round_idx(config_tasks, round_id)
+  checkmate::assert_list(compound_taskid_set, null.ok = TRUE)
 
   round_config <- purrr::pluck(
     config_tasks,
@@ -148,7 +164,7 @@ expand_model_out_grid <- function(config_tasks,
   )
 
   if (include_sample_ids) {
-    grid <- add_sample_idx(grid, round_config, config_tid)
+    grid <- add_sample_idx(grid, round_config, config_tid, compound_taskid_set)
   }
 
   process_mt_grid_outputs(
@@ -303,7 +319,17 @@ null_taskids_to_na <- function(model_task) {
 # Adds example sample ids to the output type id column which are unique
 # across multiple modeling task groups. Only apply to v3 and above sample output
 # type configurations.
-add_sample_idx <- function(x, round_config, config_tid) {
+add_sample_idx <- function(x, round_config, config_tid, compound_taskid_set = NULL) {
+  if (!is.null(compound_taskid_set) && length(compound_taskid_set) != length(x)) {
+    cli::cli_abort(
+      c("x" = "The length of {.var compound_taskid_set}
+      ({.val {length(compound_taskid_set)}})
+      must match the number of modeling tasks ({.val {length(x)}})
+        in the round."),
+      call = rlang::caller_call()
+    )
+  }
+
   spl_idx_0 <- 0L
   for (i in seq_along(x)) {
     # Check that the modeling task config has a v3 sample configuration
@@ -322,7 +348,8 @@ add_sample_idx <- function(x, round_config, config_tid) {
         x = x[[i]],
         config = round_config[["model_tasks"]][[i]],
         start_idx = spl_idx_0,
-        config_tid
+        config_tid,
+        comp_tids = compound_taskid_set[[i]]
       )
       spl_idx_0 <- spl_idx_0 + get_sample_n(x[[i]], config_tid)
     }
@@ -332,21 +359,35 @@ add_sample_idx <- function(x, round_config, config_tid) {
 
 # Add sample index to output type data frame of a single modeling task group
 # according the the compound task ID set.
-add_mt_sample_idx <- function(x, config, start_idx = 0L, config_tid) {
+add_mt_sample_idx <- function(x, config, start_idx = 0L, config_tid, comp_tids = NULL,
+                              call = rlang::caller_call(2)) {
   x_names <- names(x)
+  task_ids <- setdiff(names(x), hubUtils::std_colnames)
 
   spl <- x[
     x[["output_type"]] == "sample",
-    setdiff(names(x), hubUtils::std_colnames)
+    task_ids
   ]
 
-  comp_tids <- purrr::pluck(
-    config,
-    "output_type",
-    "sample",
-    "output_type_id_params",
-    "compound_taskid_set"
-  )
+  if (is.null(comp_tids)) {
+    comp_tids <- purrr::pluck(
+      config,
+      "output_type",
+      "sample",
+      "output_type_id_params",
+      "compound_taskid_set"
+    )
+  } else {
+    if (isFALSE(all(comp_tids %in% task_ids))) {
+      cli::cli_abort(
+        c(
+          "x" = "{.val {setdiff(comp_tids, task_ids)}} {?is/are} not valid task ID{?s}.",
+          "i" = "The {.var compound_taskid_set} must be a subset of {.val {task_ids}}."
+        ),
+        call = call
+      )
+    }
+  }
 
   type <- purrr::pluck(
     config,

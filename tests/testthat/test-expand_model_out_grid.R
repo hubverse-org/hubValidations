@@ -298,6 +298,35 @@ test_that("expand_model_out_grid output controls with samples work correctly", {
     ) %>%
       dplyr::filter(.data$output_type == "sample")
   )
+
+  # Override config compound_taskid_set
+  config_tasks <- hubUtils::read_config_file(
+    system.file("config", "tasks-comp-tid.json",
+      package = "hubValidations"
+    )
+  )
+  # Create coarser samples
+  expect_snapshot(
+    expand_model_out_grid(config_tasks,
+      round_id = "2022-12-26",
+      include_sample_ids = TRUE,
+      compound_taskid_set = list(
+        c("forecast_date", "target"),
+        NULL
+      )
+    )
+  )
+  # Create finer samples
+  expect_snapshot(
+    expand_model_out_grid(config_tasks,
+      round_id = "2022-12-26",
+      include_sample_ids = TRUE,
+      compound_taskid_set = list(
+        c("forecast_date", "target", "horizon", "location"),
+        NULL
+      )
+    )
+  )
 })
 
 test_that("expand_model_out_grid errors correctly", {
@@ -346,6 +375,37 @@ test_that("expand_model_out_grid errors correctly", {
         round_id = "2023-11-26"
       ) %>%
         dplyr::filter(is.na(horizon))
+    ),
+    error = TRUE
+  )
+
+
+  config_tasks <- hubUtils::read_config_file(
+    system.file("config", "tasks-comp-tid.json",
+      package = "hubValidations"
+    )
+  )
+  expect_snapshot(
+    expand_model_out_grid(
+      config_tasks,
+      round_id = "2022-12-26",
+      include_sample_ids = TRUE,
+      compound_taskid_set = list(
+        c("forecast_date", "target", "random_var"),
+        NULL
+      )
+    ),
+    error = TRUE
+  )
+
+  expect_snapshot(
+    expand_model_out_grid(
+      config_tasks,
+      round_id = "2022-12-26",
+      include_sample_ids = TRUE,
+      compound_taskid_set = list(
+        c("forecast_date", "target")
+      )
     ),
     error = TRUE
   )
