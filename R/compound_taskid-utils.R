@@ -30,6 +30,10 @@
 #'
 get_tbl_compound_taskid_set <- function(tbl, config_tasks, round_id,
                                         compact = TRUE, error = TRUE) {
+  if (!inherits(tbl, "tbl_df")) {
+    tbl <- dplyr::as_tibble(tbl)
+  }
+
   tbl <- tbl[tbl$output_type == "sample", names(tbl) != "value"]
   out_tid <- hubUtils::std_colnames["output_type_id"]
 
@@ -189,7 +193,7 @@ get_mt_compound_taskid_set <- function(tbl, config_comp_tids, config_tasks,
 # Extract the names of the columns that are TRUE in each row
 true_to_names_vector <- function(x, cols = NULL, unique = TRUE) {
   if (!is.null(cols)) {
-    x <- x[, cols]
+    x <- x[, cols, drop = FALSE]
   }
   if (unique) {
     x <- unique(x)
