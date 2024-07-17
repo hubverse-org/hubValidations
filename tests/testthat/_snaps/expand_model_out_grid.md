@@ -543,3 +543,12 @@
       Error in `expand_model_out_grid()`:
       x The length of `compound_taskid_set` (1) must match the number of modeling tasks (2) in the round.
 
+---
+
+    Code
+      expand_model_out_grid(config_tasks, round_id = "2022-12-26",
+        include_sample_ids = TRUE, compound_taskid_set = list())
+    Condition
+      Error in `expand_model_out_grid()`:
+      x The length of `compound_taskid_set` (0) must match the number of modeling tasks (2) in the round.
+

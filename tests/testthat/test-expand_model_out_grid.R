@@ -330,12 +330,12 @@ test_that("expand_model_out_grid output controls with samples work correctly", {
   # Create samples with full compound_taskid_set
   expect_snapshot(
     expand_model_out_grid(config_tasks,
-                          round_id = "2022-12-26",
-                          include_sample_ids = TRUE,
-                          compound_taskid_set = list(
-                            NULL,
-                            NULL
-                          )
+      round_id = "2022-12-26",
+      include_sample_ids = TRUE,
+      compound_taskid_set = list(
+        NULL,
+        NULL
+      )
     )
   )
 })
@@ -417,6 +417,16 @@ test_that("expand_model_out_grid errors correctly", {
       compound_taskid_set = list(
         c("forecast_date", "target")
       )
+    ),
+    error = TRUE
+  )
+
+  expect_snapshot(
+    expand_model_out_grid(
+      config_tasks,
+      round_id = "2022-12-26",
+      include_sample_ids = TRUE,
+      compound_taskid_set = list()
     ),
     error = TRUE
   )
