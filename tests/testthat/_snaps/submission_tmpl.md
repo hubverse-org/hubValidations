@@ -227,6 +227,27 @@
       10 2022-12-26    wk ahead inc~       1 01       sample      1                 NA
       # i 32 more rows
 
+---
+
+    Code
+      submission_tmpl(config_tasks = config_tasks, round_id = "2022-12-26",
+        compound_taskid_set = list(NULL, NULL))
+    Output
+      # A tibble: 42 x 7
+         forecast_date target        horizon location output_type output_type_id value
+         <date>        <chr>           <int> <chr>    <chr>       <chr>          <dbl>
+       1 2022-12-26    wk ahead inc~       2 US       mean        <NA>              NA
+       2 2022-12-26    wk ahead inc~       1 US       mean        <NA>              NA
+       3 2022-12-26    wk ahead inc~       2 01       mean        <NA>              NA
+       4 2022-12-26    wk ahead inc~       1 01       mean        <NA>              NA
+       5 2022-12-26    wk ahead inc~       2 02       mean        <NA>              NA
+       6 2022-12-26    wk ahead inc~       1 02       mean        <NA>              NA
+       7 2022-12-26    wk ahead inc~       2 US       sample      1                 NA
+       8 2022-12-26    wk ahead inc~       1 US       sample      2                 NA
+       9 2022-12-26    wk ahead inc~       2 01       sample      3                 NA
+      10 2022-12-26    wk ahead inc~       1 01       sample      4                 NA
+      # i 32 more rows
+
 # submission_tmpl errors correctly
 
     Code

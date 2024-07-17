@@ -42,7 +42,8 @@ the \code{output_type_id} column.}
 
 \item{compound_taskid_set}{List of character vectors, one for each modeling task
 in the round. Can be used to override the compound task ID set defined in the
-config.}
+config. If \code{NULL} is provided for a given modeling task, a compound task ID set of
+all task IDs is used.}
 }
 \value{
 If \code{bind_model_tasks = TRUE} (default) a tibble or arrow table
@@ -129,6 +130,14 @@ expand_model_out_grid(config_tasks,
   include_sample_ids = TRUE,
   compound_taskid_set = list(
     c("forecast_date", "target"),
+    NULL
+  )
+)
+expand_model_out_grid(config_tasks,
+  round_id = "2022-12-26",
+  include_sample_ids = TRUE,
+  compound_taskid_set = list(
+    NULL,
     NULL
   )
 )

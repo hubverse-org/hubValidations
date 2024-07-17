@@ -18,7 +18,8 @@
 #' the `output_type_id` column.
 #' @param compound_taskid_set List of character vectors, one for each modeling task
 #' in the round. Can be used to override the compound task ID set defined in the
-#' config.
+#' config. If `NULL` is provided for a given modeling task, a compound task ID set of
+#' all task IDs is used.
 #'
 #' @return If `bind_model_tasks = TRUE` (default) a tibble or arrow table
 #' containing all possible task ID and related output type ID
@@ -105,6 +106,14 @@
 #'     NULL
 #'   )
 #' )
+#' expand_model_out_grid(config_tasks,
+#'   round_id = "2022-12-26",
+#'   include_sample_ids = TRUE,
+#'   compound_taskid_set = list(
+#'     NULL,
+#'     NULL
+#'   )
+#' )
 expand_model_out_grid <- function(config_tasks,
                                   round_id,
                                   required_vals_only = FALSE,
@@ -164,6 +173,9 @@ expand_model_out_grid <- function(config_tasks,
   )
 
   if (include_sample_ids) {
+    if (is.null(compound_taskid_set)) {
+      compound_taskid_set <- get_round_compound_task_ids(config_tasks, round_id)
+    }
     grid <- add_sample_idx(grid, round_config, config_tid, compound_taskid_set)
   }
 
@@ -370,19 +382,15 @@ add_mt_sample_idx <- function(x, config, start_idx = 0L, config_tid, comp_tids =
   ]
 
   if (is.null(comp_tids)) {
-    comp_tids <- purrr::pluck(
-      config,
-      "output_type",
-      "sample",
-      "output_type_id_params",
-      "compound_taskid_set"
-    )
+    # If the comp_tids are still NULL, then we assume that all compound task IDs
+    # are being set as compound task ids.
+    comp_tids <- task_ids
   } else {
-    if (isFALSE(all(comp_tids %in% task_ids))) {
+    if (isFALSE(all(comp_tids %in% names(config$task_ids)))) {
       cli::cli_abort(
         c(
-          "x" = "{.val {setdiff(comp_tids, task_ids)}} {?is/are} not valid task ID{?s}.",
-          "i" = "The {.var compound_taskid_set} must be a subset of {.val {task_ids}}."
+          "x" = "{.val {setdiff(comp_tids, names(config$task_ids))}} {?is/are} not valid task ID{?s}.",
+          "i" = "The {.var compound_taskid_set} must be a subset of {.val {names(config$task_ids)}}."
         ),
         call = call
       )

@@ -145,12 +145,26 @@ test_that("submission_tmpl works correctly", {
     )
   )
 
+  # Check that everything works with a single compound_taskid_set column
   expect_snapshot(
     submission_tmpl(
       config_tasks = config_tasks,
       round_id = "2022-12-26",
       compound_taskid_set = list(
         c("forecast_date"),
+        NULL
+      )
+    )
+  )
+
+  # Check that a list with `NULL` compound_taskid_set specification results in
+  # all task ids being included in the compound_taskid_set
+  expect_snapshot(
+    submission_tmpl(
+      config_tasks = config_tasks,
+      round_id = "2022-12-26",
+      compound_taskid_set = list(
+        NULL,
         NULL
       )
     )

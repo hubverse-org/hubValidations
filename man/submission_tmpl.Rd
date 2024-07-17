@@ -36,7 +36,8 @@ are included in the output.}
 
 \item{compound_taskid_set}{List of character vectors, one for each modeling task
 in the round. Can be used to override the compound task ID set defined in the
-config.}
+config. If \code{NULL} is provided for a given modeling task, a compound task ID set of
+all task IDs is used.}
 }
 \value{
 a tibble template containing an expanded grid of valid task ID and
