@@ -1,7 +1,10 @@
 # hubValidations 0.3.0
 
 - Add new `check_tbl_spl_compound_taskid_set()` check function to `validate_model_data()` that ensures that sample compound task id sets for each modeling task match or are coarser than the expected set defined in `tasks.json` config.
+- Add new `get_tbl_compound_taskid_set()` for detecting sample compound task ID set from submission data.
 - Add argument `compound_taskid_set` to `expand_model_out_grid()` and `submission_tmpl()` that allows users to override the compound task ID set when creating sample indices in the `output_type_id` column of samples.
+
+
 
 # hubValidations 0.2.0
 
