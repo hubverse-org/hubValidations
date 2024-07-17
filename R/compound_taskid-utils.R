@@ -12,7 +12,22 @@
 #' @return A list of vectors of compound task IDs detected in the tbl, one for each
 #' modeling task in the round. If `compact` is TRUE, modeling tasks returning NULL
 #' elements will be removed.
-#' @noRd
+#' @export
+#' @examples
+#' hub_path <- system.file("testhubs/samples", package = "hubValidations")
+#' file_path <- "Flusight-baseline/2022-10-22-Flusight-baseline.csv"
+#' round_id <- "2022-10-22"
+#' tbl <- read_model_out_file(
+#'   file_path = file_path,
+#'   hub_path = hub_path,
+#'   coerce_types = "chr"
+#' )
+#' config_tasks <- hubUtils::read_config(hub_path, "tasks")
+#' get_tbl_compound_taskid_set(tbl, config_tasks, round_id)
+#' get_tbl_compound_taskid_set(tbl, config_tasks, round_id,
+#'   compact = FALSE
+#' )
+#'
 get_tbl_compound_taskid_set <- function(tbl, config_tasks, round_id,
                                         compact = TRUE, error = TRUE) {
   tbl <- tbl[tbl$output_type == "sample", names(tbl) != "value"]
