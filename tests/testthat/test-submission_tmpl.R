@@ -144,6 +144,17 @@ test_that("submission_tmpl works correctly", {
       )
     )
   )
+
+  expect_snapshot(
+    submission_tmpl(
+      config_tasks = config_tasks,
+      round_id = "2022-12-26",
+      compound_taskid_set = list(
+        c("forecast_date"),
+        NULL
+      )
+    )
+  )
 })
 
 test_that("submission_tmpl errors correctly", {

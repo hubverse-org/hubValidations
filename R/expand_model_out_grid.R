@@ -414,7 +414,7 @@ add_mt_sample_idx <- function(x, config, start_idx = 0L, config_tid, comp_tids =
     comp_tids <- intersect(comp_tids, names(spl))
   }
 
-  spl <- unique(spl[, comp_tids]) %>%
+  spl <- unique(spl[, comp_tids, drop = FALSE]) %>%
     dplyr::mutate(
       output_type = "sample",
       output_type_id = seq_len(nrow(.)) + start_idx
@@ -426,7 +426,7 @@ add_mt_sample_idx <- function(x, config, start_idx = 0L, config_tid, comp_tids =
   }
 
   x[x[["output_type"]] != "sample", ] %>%
-    rbind(spl[, x_names])
+    rbind(spl[, x_names, drop = FALSE])
 }
 
 get_sample_n <- function(x, config_tid) {
