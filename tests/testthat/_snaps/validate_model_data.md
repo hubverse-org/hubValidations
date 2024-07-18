@@ -434,12 +434,15 @@
         ..$ call          : chr "check_tbl_value_col_sum1"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ spl_compound_taskid_set:List of 5
-        ..$ message       : chr "All samples in a model task conform to single, unique compound task ID set that matches or is\n    coarser than"| __truncated__
-        ..$ where         : chr "Flusight-baseline/2022-10-22-Flusight-baseline.csv"
-        ..$ errors        : NULL
-        ..$ call          : chr "check_tbl_spl_compound_taskid_set"
-        ..$ use_cli_format: logi TRUE
+       $ spl_compound_taskid_set:List of 6
+        ..$ message            : chr "All samples in a model task conform to single, unique compound task ID set that matches or is\n    coarser than"| __truncated__
+        ..$ where              : chr "Flusight-baseline/2022-10-22-Flusight-baseline.csv"
+        ..$ errors             : NULL
+        ..$ compound_taskid_set:List of 2
+        .. ..$ 1: NULL
+        .. ..$ 2: chr [1:2] "reference_date" "location"
+        ..$ call               : chr "check_tbl_spl_compound_taskid_set"
+        ..$ use_cli_format     : logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ spl_compound_tid       :List of 5
         ..$ message       : chr "Each sample compound task ID contains single, unique value. \n "
