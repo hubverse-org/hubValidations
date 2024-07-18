@@ -22,6 +22,12 @@ check_tbl_spl_compound_tid <- function(tbl, round_id, file_path, hub_path,
     cli::cli_abort("Valid {.var compound_taskid_set} must be provided.")
   }
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
+  if (is.null(compound_taskid_set)) {
+    compound_taskid_set <- get_round_compound_task_ids(
+      config_tasks,
+      round_id
+    )
+  }
 
   if (isFALSE(has_spls_tbl(tbl)) || isFALSE(hubUtils::is_v3_config(config_tasks))) {
     return(skip_v3_spl_check(file_path))
@@ -39,7 +45,7 @@ check_tbl_spl_compound_tid <- function(tbl, round_id, file_path, hub_path,
     errors <- NULL
   } else {
     errors <- comptid_mismatch(
-      n_tbl, tbl, config_tasks, round_id
+      n_tbl, tbl, config_tasks, round_id, compound_taskid_set
     )
     output_type_ids <- purrr::map(errors, ~ .x$output_type_id) %>% # nolint: object_usage_linter
       purrr::flatten_chr() %>%
@@ -65,13 +71,13 @@ check_tbl_spl_compound_tid <- function(tbl, round_id, file_path, hub_path,
   )
 }
 
-comptid_mismatch <- function(n_tbl, tbl, config_tasks, round_id) {
+comptid_mismatch <- function(n_tbl, tbl, config_tasks, round_id, compound_taskid_set) {
   tbl <- tbl[tbl$output_type == "sample", ]
   purrr::map(
     seq_along(n_tbl$output_type_id),
     ~ {
       x <- n_tbl[.x, ]
-      compound_taskids <- get_round_compound_task_ids(config_tasks, round_id)[[x$mt_id]]
+      compound_taskids <- compound_taskid_set[[x$mt_id]]
       spl <- tbl[tbl$output_type_id == x$output_type_id, compound_taskids] %>%
         unique()
 
