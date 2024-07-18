@@ -152,8 +152,7 @@
 ---
 
     Code
-      submission_tmpl(config_tasks = hubUtils::read_config_file(system.file("config",
-        "tasks-comp-tid.json", package = "hubValidations")), round_id = "2022-12-26")
+      submission_tmpl(config_tasks = config_tasks, round_id = "2022-12-26")
     Output
       # A tibble: 42 x 7
          forecast_date target        horizon location output_type output_type_id value
@@ -173,8 +172,7 @@
 ---
 
     Code
-      submission_tmpl(config_tasks = hubUtils::read_config_file(system.file("config",
-        "tasks-comp-tid.json", package = "hubValidations")), round_id = "2022-12-26") %>%
+      submission_tmpl(config_tasks = config_tasks, round_id = "2022-12-26") %>%
         dplyr::filter(.data$output_type == "sample")
     Output
       # A tibble: 6 x 7
@@ -186,6 +184,69 @@
       4 2022-12-26    wk ahead inc ~       1 US       sample      2                 NA
       5 2022-12-26    wk ahead inc ~       1 01       sample      2                 NA
       6 2022-12-26    wk ahead inc ~       1 02       sample      2                 NA
+
+---
+
+    Code
+      submission_tmpl(config_tasks = config_tasks, round_id = "2022-12-26",
+        compound_taskid_set = list(c("forecast_date", "target"), NULL))
+    Output
+      # A tibble: 42 x 7
+         forecast_date target        horizon location output_type output_type_id value
+         <date>        <chr>           <int> <chr>    <chr>       <chr>          <dbl>
+       1 2022-12-26    wk ahead inc~       2 US       mean        <NA>              NA
+       2 2022-12-26    wk ahead inc~       1 US       mean        <NA>              NA
+       3 2022-12-26    wk ahead inc~       2 01       mean        <NA>              NA
+       4 2022-12-26    wk ahead inc~       1 01       mean        <NA>              NA
+       5 2022-12-26    wk ahead inc~       2 02       mean        <NA>              NA
+       6 2022-12-26    wk ahead inc~       1 02       mean        <NA>              NA
+       7 2022-12-26    wk ahead inc~       2 US       sample      1                 NA
+       8 2022-12-26    wk ahead inc~       1 US       sample      1                 NA
+       9 2022-12-26    wk ahead inc~       2 01       sample      1                 NA
+      10 2022-12-26    wk ahead inc~       1 01       sample      1                 NA
+      # i 32 more rows
+
+---
+
+    Code
+      submission_tmpl(config_tasks = config_tasks, round_id = "2022-12-26",
+        compound_taskid_set = list(c("forecast_date"), NULL))
+    Output
+      # A tibble: 42 x 7
+         forecast_date target        horizon location output_type output_type_id value
+         <date>        <chr>           <int> <chr>    <chr>       <chr>          <dbl>
+       1 2022-12-26    wk ahead inc~       2 US       mean        <NA>              NA
+       2 2022-12-26    wk ahead inc~       1 US       mean        <NA>              NA
+       3 2022-12-26    wk ahead inc~       2 01       mean        <NA>              NA
+       4 2022-12-26    wk ahead inc~       1 01       mean        <NA>              NA
+       5 2022-12-26    wk ahead inc~       2 02       mean        <NA>              NA
+       6 2022-12-26    wk ahead inc~       1 02       mean        <NA>              NA
+       7 2022-12-26    wk ahead inc~       2 US       sample      1                 NA
+       8 2022-12-26    wk ahead inc~       1 US       sample      1                 NA
+       9 2022-12-26    wk ahead inc~       2 01       sample      1                 NA
+      10 2022-12-26    wk ahead inc~       1 01       sample      1                 NA
+      # i 32 more rows
+
+---
+
+    Code
+      submission_tmpl(config_tasks = config_tasks, round_id = "2022-12-26",
+        compound_taskid_set = list(NULL, NULL))
+    Output
+      # A tibble: 42 x 7
+         forecast_date target        horizon location output_type output_type_id value
+         <date>        <chr>           <int> <chr>    <chr>       <chr>          <dbl>
+       1 2022-12-26    wk ahead inc~       2 US       mean        <NA>              NA
+       2 2022-12-26    wk ahead inc~       1 US       mean        <NA>              NA
+       3 2022-12-26    wk ahead inc~       2 01       mean        <NA>              NA
+       4 2022-12-26    wk ahead inc~       1 01       mean        <NA>              NA
+       5 2022-12-26    wk ahead inc~       2 02       mean        <NA>              NA
+       6 2022-12-26    wk ahead inc~       1 02       mean        <NA>              NA
+       7 2022-12-26    wk ahead inc~       2 US       sample      1                 NA
+       8 2022-12-26    wk ahead inc~       1 US       sample      2                 NA
+       9 2022-12-26    wk ahead inc~       2 01       sample      3                 NA
+      10 2022-12-26    wk ahead inc~       1 01       sample      4                 NA
+      # i 32 more rows
 
 # submission_tmpl errors correctly
 
@@ -218,4 +279,14 @@
     Condition
       Error in `submission_tmpl()`:
       ! Assertion on 'hub_con' failed: Must inherit from class 'hub_connection', but has class 'list'.
+
+---
+
+    Code
+      submission_tmpl(config_tasks = config_tasks, round_id = "2022-12-26",
+        compound_taskid_set = list(c("forecast_date", "target", "random_var"), NULL))
+    Condition
+      Error in `expand_model_out_grid()`:
+      x "random_var" is not valid task ID.
+      i The `compound_taskid_set` must be a subset of "forecast_date", "target", "horizon", and "location".
 

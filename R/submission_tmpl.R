@@ -81,9 +81,21 @@
 #'   config_tasks = config_tasks,
 #'   round_id = "2022-12-26"
 #' )
+#' # Override config compound task ID set
+#' # Create coarser compound task ID set for the first modeling task which contains
+#' # samples
+#' submission_tmpl(
+#'   config_tasks = config_tasks,
+#'   round_id = "2022-12-26",
+#'   compound_taskid_set = list(
+#'     c("forecast_date", "target"),
+#'     NULL
+#'   )
+#' )
 submission_tmpl <- function(hub_con, config_tasks, round_id,
                             required_vals_only = FALSE,
-                            complete_cases_only = TRUE) {
+                            complete_cases_only = TRUE,
+                            compound_taskid_set = NULL) {
   switch(rlang::check_exclusive(hub_con, config_tasks),
     hub_con = {
       checkmate::assert_class(hub_con, classes = "hub_connection")
@@ -95,7 +107,8 @@ submission_tmpl <- function(hub_con, config_tasks, round_id,
   tmpl_df <- expand_model_out_grid(config_tasks,
     round_id = round_id,
     required_vals_only = required_vals_only,
-    include_sample_ids = TRUE
+    include_sample_ids = TRUE,
+    compound_taskid_set = compound_taskid_set
   )
 
   tmpl_cols <- c(

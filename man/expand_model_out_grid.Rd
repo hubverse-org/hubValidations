@@ -11,7 +11,8 @@ expand_model_out_grid(
   all_character = FALSE,
   as_arrow_table = FALSE,
   bind_model_tasks = TRUE,
-  include_sample_ids = FALSE
+  include_sample_ids = FALSE,
+  compound_taskid_set = NULL
 )
 }
 \arguments{
@@ -38,6 +39,11 @@ return a list.}
 
 \item{include_sample_ids}{Logical. Whether to include sample identifiers in
 the \code{output_type_id} column.}
+
+\item{compound_taskid_set}{List of character vectors, one for each modeling task
+in the round. Can be used to override the compound task ID set defined in the
+config. If \code{NULL} is provided for a given modeling task, a compound task ID set of
+all task IDs is used.}
 }
 \value{
 If \code{bind_model_tasks = TRUE} (default) a tibble or arrow table
@@ -115,5 +121,24 @@ config_tasks <- hubUtils::read_config_file(system.file("config", "tasks-comp-tid
 expand_model_out_grid(config_tasks,
   round_id = "2022-12-26",
   include_sample_ids = TRUE
+)
+# Override config compound task ID set
+# Create coarser compound task ID set for the first modeling task which contains
+# samples
+expand_model_out_grid(config_tasks,
+  round_id = "2022-12-26",
+  include_sample_ids = TRUE,
+  compound_taskid_set = list(
+    c("forecast_date", "target"),
+    NULL
+  )
+)
+expand_model_out_grid(config_tasks,
+  round_id = "2022-12-26",
+  include_sample_ids = TRUE,
+  compound_taskid_set = list(
+    NULL,
+    NULL
+  )
 )
 }
