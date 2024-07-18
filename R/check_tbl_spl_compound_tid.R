@@ -4,6 +4,9 @@
 #' @param tbl a tibble/data.frame of the contents of the file being validated. Column types must **all be character**.
 #' @inherit check_tbl_colnames params
 #' @inherit check_tbl_colnames return
+#' @param compound_taskid_set a list of `compound_taskid_set`s (characters vector of compound task IDs),
+#' one for each modeling task. Used to override the compound task ID set in the config file,
+#' for example, when validating coarser samples.
 #' @details Output of the check includes an `errors` element, a list of items,
 #' one for each sample failing validation, with the following structure:
 #' - `mt_id`: Index identifying the config modeling task the sample is associated with.
@@ -13,14 +16,18 @@
 #' See [hubverse documentation on samples](https://hubverse.io/en/latest/user-guide/sample-output-type.html)
 #' for more details.
 #' @export
-check_tbl_spl_compound_tid <- function(tbl, round_id, file_path, hub_path) {
+check_tbl_spl_compound_tid <- function(tbl, round_id, file_path, hub_path,
+                                       compound_taskid_set = NULL) {
+  if (is.na(compound_taskid_set)){
+    cli::cli_abort("Valid {.var compound_taskid_set} must be provided.")
+  }
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
 
   if (isFALSE(has_spls_tbl(tbl)) || isFALSE(hubUtils::is_v3_config(config_tasks))) {
     return(skip_v3_spl_check(file_path))
   }
 
-  hash_tbl <- spl_hash_tbl(tbl, round_id, config_tasks)
+  hash_tbl <- spl_hash_tbl(tbl, round_id, config_tasks, compound_taskid_set)
   # TODO: Currently, samples must strictly match the compound task ID set expectations
   # and cannot handle coarser-grained compound task ID sets.
   n_tbl <- hash_tbl[hash_tbl$n_compound_idx > 1L, ]
