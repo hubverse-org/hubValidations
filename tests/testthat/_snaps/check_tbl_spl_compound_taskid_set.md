@@ -178,3 +178,50 @@
       
       
 
+# Different compound_taskid_sets work
+
+    Code
+      str(check_tbl_spl_compound_taskid_set(tbl_coarse, round_id, file_path, hub_path))
+    Output
+      List of 6
+       $ message            : chr "All samples in a model task conform to single, unique compound task ID set that matches or is\n    coarser than"| __truncated__
+       $ where              : chr "Flusight-baseline/2022-10-22-Flusight-baseline.csv"
+       $ errors             : NULL
+       $ compound_taskid_set:List of 2
+        ..$ 1: NULL
+        ..$ 2: chr [1:2] "reference_date" "horizon"
+       $ call               : chr "check_tbl_spl_compound_taskid_set"
+       $ use_cli_format     : logi TRUE
+       - attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+
+---
+
+    Code
+      check_tbl_spl_compound_taskid_set(tbl_fine, round_id, file_path, hub_path)
+    Output
+      <error/check_error>
+      Error:
+      ! All samples in a model task do not conform to single, unique compound task ID set that matches or is coarser than the configured `compound_taksid_set`.  mt 2: Finer `compound_taskid_set` than allowed detected. "target_end_date" identified as compound task ID in file but not allowed in config. Compound task IDs should be one of "reference_date", "horizon", "location", and "variant".
+
+---
+
+    Code
+      str(check_tbl_spl_compound_taskid_set(tbl_fine, round_id, file_path, hub_path))
+    Output
+      List of 8
+       $ message            : chr "All samples in a model task do not conform to single, unique compound task ID set that matches or is\n    coars"| __truncated__
+       $ trace              : NULL
+       $ parent             : NULL
+       $ where              : chr "Flusight-baseline/2022-10-22-Flusight-baseline.csv"
+       $ errors             :List of 1
+        ..$ 2:List of 1
+        .. ..$ :List of 4
+        .. .. ..$ config_comp_tids     : chr [1:4] "reference_date" "horizon" "location" "variant"
+        .. .. ..$ invalid_tbl_comp_tids: chr "target_end_date"
+        .. .. ..$ tbl_comp_tids        : chr [1:5] "reference_date" "horizon" "location" "variant" ...
+        .. .. ..$ output_type_ids      : chr [1:400] "1" "10" "100" "101" ...
+       $ compound_taskid_set: logi NA
+       $ call               : chr "check_tbl_spl_compound_taskid_set"
+       $ use_cli_format     : logi TRUE
+       - attr(*, "class")= chr [1:5] "check_error" "hub_check" "rlang_error" "error" ...
+

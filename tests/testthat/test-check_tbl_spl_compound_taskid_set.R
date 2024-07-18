@@ -56,5 +56,49 @@ test_that("check_tbl_spl_compound_taskid_set works", {
     tbl_error_dups, round_id, file_path, hub_path
   )
   expect_snapshot(error_dup_check$errors)
+})
 
+test_that("Different compound_taskid_sets work", {
+  hub_path <- test_path("testdata/hub-spl")
+  file_path <- "Flusight-baseline/2022-10-22-Flusight-baseline.csv"
+  round_id <- "2022-10-22"
+  config_task <- hubUtils::read_config_file(
+    fs::path(hub_path, "hub-config", "tasks.json")
+  )
+  compound_taskid_set <- list(
+    NULL,
+    c("reference_date", "horizon")
+  )
+  tbl_coarse <- submission_tmpl(
+    config_task = config_task,
+    round_id = round_id,
+    compound_taskid_set = compound_taskid_set
+  ) |>
+    dplyr::filter(.data$output_type == "sample") |>
+    hubData::coerce_to_character()
+
+  tbl_fine <- submission_tmpl(
+    config_task = config_task,
+    round_id = round_id,
+    compound_taskid_set = list(NULL, NULL)
+  ) |>
+    dplyr::filter(.data$output_type == "sample") |>
+    hubData::coerce_to_character()
+
+  # Validation of coarser compound_taskid_set works
+  expect_snapshot(
+    str(
+      check_tbl_spl_compound_taskid_set(tbl_coarse, round_id, file_path, hub_path)
+    )
+  )
+
+  # Validation of finer compound_taskid_set fails
+  expect_snapshot(
+    check_tbl_spl_compound_taskid_set(tbl_fine, round_id, file_path, hub_path)
+  )
+  expect_snapshot(
+    str(
+      check_tbl_spl_compound_taskid_set(tbl_fine, round_id, file_path, hub_path)
+    )
+  )
 })
