@@ -18,7 +18,7 @@
 #' @export
 check_tbl_spl_compound_tid <- function(tbl, round_id, file_path, hub_path,
                                        compound_taskid_set = NULL) {
-  if (is.na(compound_taskid_set)){
+  if (!is.null(compound_taskid_set) && isTRUE(is.na(compound_taskid_set))) {
     cli::cli_abort("Valid {.var compound_taskid_set} must be provided.")
   }
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
