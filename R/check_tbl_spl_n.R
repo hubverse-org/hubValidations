@@ -39,7 +39,32 @@ check_tbl_spl_n <- function(tbl, round_id, file_path, hub_path,
     dplyr::summarise(
       n = dplyr::n_distinct(.data$output_type_id),
       mt_id = unique(.data$mt_id)
-    ) %>%
+    )
+
+  # First check that all compound_idx have the same number of samples
+  # If not, return check failure.
+  check <- dplyr::n_distinct(n_tbl$n) == 1L
+  if (isFALSE(check)) {
+    return(
+      capture_check_cnd(
+        check = check,
+        file_path = file_path,
+        msg_subject = "Number of samples per compound idx ",
+        msg_attribute = NULL,
+        msg_verbs = c("consistent.", "not consistent."),
+        details = cli::format_inline(
+          "Sample numbers supplied per compound idx vary between
+          {.val {unique(n_tbl$n)}}.
+          See {.var errors} attribute for details."
+        ),
+        errors = n_tbl
+      )
+    )
+  }
+
+  # Next check that all compound_idx have a number of samples within the
+  # range required by the sample config.
+  n_tbl <- n_tbl %>%
     dplyr::left_join(n_ranges, by = "mt_id") %>%
     dplyr::mutate(
       less = .data$n < .data$n_min,
