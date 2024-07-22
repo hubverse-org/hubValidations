@@ -5,6 +5,7 @@
 #' of the file.
 #'
 #' @inherit validate_model_data return params
+#' @inheritParams hubData::create_hub_schema
 #' @param skip_submit_window_check Logical. Whether to skip the submission window check.
 #' @param skip_check_config Logical. Whether to skip the hub config validation check.
 #'  check.
@@ -38,6 +39,11 @@
 #' validate_submission(hub_path, file_path)
 validate_submission <- function(hub_path, file_path, round_id_col = NULL,
                                 validations_cfg_path = NULL,
+                                output_type_id_datatype = c(
+                                  "from_config", "auto", "character",
+                                  "double", "integer",
+                                  "logical", "Date"
+                                ),
                                 skip_submit_window_check = FALSE,
                                 skip_check_config = FALSE,
                                 submit_window_ref_date_from = c(
@@ -45,6 +51,8 @@ validate_submission <- function(hub_path, file_path, round_id_col = NULL,
                                   "file_path"
                                 )) {
   check_hub_config <- new_hub_validations()
+  output_type_id_datatype <- rlang::arg_match(output_type_id_datatype)
+
   if (!skip_check_config) {
     check_hub_config$valid_config <- try_check(
       check_config_hub_valid(hub_path),
@@ -80,6 +88,7 @@ validate_submission <- function(hub_path, file_path, round_id_col = NULL,
     hub_path = hub_path,
     file_path = file_path,
     round_id_col = round_id_col,
+    output_type_id_datatype = output_type_id_datatype,
     validations_cfg_path = validations_cfg_path
   )
 

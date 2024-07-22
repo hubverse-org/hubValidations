@@ -27,7 +27,7 @@
 #' character which can be faster when large expanded grids are expected.
 #' If `required_vals_only = TRUE`, values are limited to the combinations of required
 #' values only.
-#' @inheritParams hubData::coerce_to_hub_schema
+#' @inheritParams hubData::create_hub_schema
 #' @details
 #' When a round is set to `round_id_from_variable: true`,
 #' the value of the task ID from which round IDs are derived (i.e. the task ID
@@ -95,10 +95,16 @@ expand_model_out_grid <- function(config_tasks,
                                   round_id,
                                   required_vals_only = FALSE,
                                   all_character = FALSE,
+                                  output_type_id_datatype = c(
+                                    "from_config", "auto", "character",
+                                    "double", "integer",
+                                    "logical", "Date"
+                                  ),
                                   as_arrow_table = FALSE,
                                   bind_model_tasks = TRUE,
                                   include_sample_ids = FALSE) {
   round_idx <- hubUtils::get_round_idx(config_tasks, round_id)
+  output_type_id_datatype <- rlang::arg_match(output_type_id_datatype)
 
   round_config <- purrr::pluck(
     config_tasks,
@@ -156,7 +162,8 @@ expand_model_out_grid <- function(config_tasks,
     config_tasks,
     all_character = all_character,
     as_arrow_table = as_arrow_table,
-    bind_model_tasks = bind_model_tasks
+    bind_model_tasks = bind_model_tasks,
+    output_type_id_datatype = output_type_id_datatype
   )
 }
 
@@ -221,7 +228,9 @@ fix_round_id <- function(x, round_id, round_config, round_ids) {
 # - binding multiple modeling task grids together.
 process_mt_grid_outputs <- function(x, config_tasks, all_character,
                                     as_arrow_table = TRUE,
-                                    bind_model_tasks = TRUE) {
+                                    bind_model_tasks = TRUE,
+                                    output_type_id_datatype = output_type_id_datatype) {
+
   if (bind_model_tasks) {
     # To bind multiple modeling task grids together, we need to ensure they contain
     # the same columns. Any missing columns are padded with NAs.
@@ -232,7 +241,8 @@ process_mt_grid_outputs <- function(x, config_tasks, all_character,
     schema_cols <- names(
       hubData::create_hub_schema(
         config_tasks,
-        partitions = NULL
+        partitions = NULL,
+        output_type_id_datatype = output_type_id_datatype
       )
     )
     all_cols <- schema_cols[schema_cols %in% all_cols]
@@ -252,7 +262,8 @@ process_mt_grid_outputs <- function(x, config_tasks, all_character,
       ~ hubData::coerce_to_hub_schema(
         .x,
         config_tasks,
-        as_arrow_table = as_arrow_table
+        as_arrow_table = as_arrow_table,
+        output_type_id_datatype = output_type_id_datatype
       )
     )
   }

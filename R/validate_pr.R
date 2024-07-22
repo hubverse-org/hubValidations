@@ -92,15 +92,24 @@
 #' )
 #' }
 validate_pr <- function(hub_path = ".", gh_repo, pr_number,
-                        round_id_col = NULL, validations_cfg_path = NULL,
+                        round_id_col = NULL,
+                        output_type_id_datatype = c(
+                          "from_config", "auto", "character",
+                          "double", "integer",
+                          "logical", "Date"
+                        ), validations_cfg_path = NULL,
                         skip_submit_window_check = FALSE,
-                        file_modification_check = c("error", "warn", "message", "none"),
+                        file_modification_check = c(
+                          "error", "warn",
+                          "message", "none"
+                        ),
                         allow_submit_window_mods = TRUE,
                         submit_window_ref_date_from = c(
                           "file",
                           "file_path"
                         )) {
   file_modification_check <- rlang::arg_match(file_modification_check)
+  output_type_id_datatype <- rlang::arg_match(output_type_id_datatype)
   model_output_dir <- get_hub_model_output_dir(hub_path) # nolint: object_name_linter
   model_metadata_dir <- "model-metadata" # nolint: object_name_linter
   validations <- new_hub_validations()
@@ -167,6 +176,7 @@ validate_pr <- function(hub_path = ".", gh_repo, pr_number,
         ~ validate_submission(
           hub_path,
           file_path = .x,
+          output_type_id_datatype = output_type_id_datatype,
           validations_cfg_path = validations_cfg_path,
           skip_submit_window_check = skip_submit_window_check,
           skip_check_config = TRUE
