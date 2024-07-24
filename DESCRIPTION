@@ -38,7 +38,7 @@ Imports:
     fs,
     gh,
     hubAdmin (>= 1.0.0),
-    hubData (>= 1.0.0),
+    hubData (>= 1.1.0),
     hubUtils (>= 0.1.0),
     jsonlite,
     jsonvalidate,
@@ -61,7 +61,7 @@ Suggests:
     withr
 Remotes:
     hubverse-org/hubUtils,
-    hubverse-org/hubData,
+    hubverse-org/hubData@44/out-type-id-type-from-config,
     hubverse-org/hubAdmin,
     assignUser/octolog,
     apache/arrow/r@apache-arrow-15.0.2
