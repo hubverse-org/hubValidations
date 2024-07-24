@@ -11,7 +11,7 @@
         "owner": "cdcepi",
         "name": "FluSight-forecast-hub"
     },
-    "file_format": ["csv"],
+    "file_format": ["csv", "parquet"],
     "timezone": "US/Eastern",
     "model_output_dir": "model-output"
 }
