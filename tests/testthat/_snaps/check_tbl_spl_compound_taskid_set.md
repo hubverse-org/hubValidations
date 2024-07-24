@@ -181,15 +181,16 @@
 # Different compound_taskid_sets work
 
     Code
-      str(check_tbl_spl_compound_taskid_set(tbl_coarse, round_id, file_path, hub_path))
+      str(check_tbl_spl_compound_taskid_set(tbl_coarse_location, "2022-10-29",
+        create_file_path("2022-10-29"), hub_path))
     Output
       List of 6
        $ message            : chr "All samples in a model task conform to single, unique compound task ID set that matches or is\n    coarser than"| __truncated__
-       $ where              : chr "Flusight-baseline/2022-10-22-Flusight-baseline.csv"
+       $ where              : 'fs_path' chr "Flusight-baseline/2022-10-29-Flusight-baseline.parquet"
        $ errors             : NULL
        $ compound_taskid_set:List of 2
         ..$ 1: NULL
-        ..$ 2: chr [1:2] "reference_date" "horizon"
+        ..$ 2: chr [1:2] "reference_date" "location"
        $ call               : chr "check_tbl_spl_compound_taskid_set"
        $ use_cli_format     : logi TRUE
        - attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
@@ -197,7 +198,48 @@
 ---
 
     Code
-      check_tbl_spl_compound_taskid_set(tbl_fine, round_id, file_path, hub_path)
+      str(check_tbl_spl_compound_taskid_set(tbl_coarse_horizon, "2022-11-05",
+        create_file_path("2022-11-05"), hub_path))
+    Output
+      List of 8
+       $ message            : chr "All samples in a model task do not conform to single, unique compound task ID set that matches or is\n    coars"| __truncated__
+       $ trace              : NULL
+       $ parent             : NULL
+       $ where              : 'fs_path' chr "Flusight-baseline/2022-11-05-Flusight-baseline.parquet"
+       $ errors             :List of 1
+        ..$ 2:List of 1
+        .. ..$ :List of 4
+        .. .. ..$ config_comp_tids     : chr [1:4] "reference_date" "horizon" "location" "variant"
+        .. .. ..$ invalid_tbl_comp_tids: chr "target_end_date"
+        .. .. ..$ tbl_comp_tids        : chr [1:3] "reference_date" "horizon" "target_end_date"
+        .. .. ..$ output_type_ids      : chr [1:400] "1" "10" "100" "101" ...
+       $ compound_taskid_set: logi NA
+       $ call               : chr "check_tbl_spl_compound_taskid_set"
+       $ use_cli_format     : logi TRUE
+       - attr(*, "class")= chr [1:5] "check_error" "hub_check" "rlang_error" "error" ...
+
+---
+
+    Code
+      str(check_tbl_spl_compound_taskid_set(tbl_coarse_horizon, "2022-11-05",
+        create_file_path("2022-11-05"), hub_path))
+    Output
+      List of 6
+       $ message            : chr "All samples in a model task conform to single, unique compound task ID set that matches or is\n    coarser than"| __truncated__
+       $ where              : 'fs_path' chr "Flusight-baseline/2022-11-05-Flusight-baseline.parquet"
+       $ errors             : NULL
+       $ compound_taskid_set:List of 2
+        ..$ 1: NULL
+        ..$ 2: chr [1:3] "reference_date" "horizon" "target_end_date"
+       $ call               : chr "check_tbl_spl_compound_taskid_set"
+       $ use_cli_format     : logi TRUE
+       - attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+
+# Finer compound_taskid_sets work
+
+    Code
+      check_tbl_spl_compound_taskid_set(tbl_fine, "2022-10-22", create_file_path(
+        "2022-10-22"), test_path("testdata/hub-spl"))
     Output
       <error/check_error>
       Error:
@@ -206,20 +248,21 @@
 ---
 
     Code
-      str(check_tbl_spl_compound_taskid_set(tbl_fine, round_id, file_path, hub_path))
+      str(check_tbl_spl_compound_taskid_set(tbl_fine, "2022-10-22", create_file_path(
+        "2022-10-22"), test_path("testdata/hub-spl")))
     Output
       List of 8
        $ message            : chr "All samples in a model task do not conform to single, unique compound task ID set that matches or is\n    coars"| __truncated__
        $ trace              : NULL
        $ parent             : NULL
-       $ where              : chr "Flusight-baseline/2022-10-22-Flusight-baseline.csv"
+       $ where              : 'fs_path' chr "Flusight-baseline/2022-10-22-Flusight-baseline.parquet"
        $ errors             :List of 1
         ..$ 2:List of 1
         .. ..$ :List of 4
         .. .. ..$ config_comp_tids     : chr [1:4] "reference_date" "horizon" "location" "variant"
         .. .. ..$ invalid_tbl_comp_tids: chr "target_end_date"
         .. .. ..$ tbl_comp_tids        : chr [1:5] "reference_date" "horizon" "location" "variant" ...
-        .. .. ..$ output_type_ids      : chr [1:400] "1" "10" "100" "101" ...
+        .. .. ..$ output_type_ids      : chr [1:8000] "1" "10" "100" "1000" ...
        $ compound_taskid_set: logi NA
        $ call               : chr "check_tbl_spl_compound_taskid_set"
        $ use_cli_format     : logi TRUE

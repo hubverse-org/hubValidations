@@ -60,45 +60,97 @@ test_that("check_tbl_spl_compound_taskid_set works", {
 
 test_that("Different compound_taskid_sets work", {
   hub_path <- test_path("testdata/hub-spl")
-  file_path <- "Flusight-baseline/2022-10-22-Flusight-baseline.csv"
-  round_id <- "2022-10-22"
-  config_task <- hubUtils::read_config_file(
-    fs::path(hub_path, "hub-config", "tasks.json")
-  )
-  compound_taskid_set <- list(
-    NULL,
-    c("reference_date", "horizon")
-  )
-  tbl_coarse <- submission_tmpl(
-    config_task = config_task,
-    round_id = round_id,
-    compound_taskid_set = compound_taskid_set
-  ) |>
-    dplyr::filter(.data$output_type == "sample") |>
-    hubData::coerce_to_character()
 
-  tbl_fine <- submission_tmpl(
-    config_task = config_task,
-    round_id = round_id,
-    compound_taskid_set = list(NULL, NULL)
-  ) |>
-    dplyr::filter(.data$output_type == "sample") |>
-    hubData::coerce_to_character()
+  # Read in test files
+  tbl_coarse_location <- read_model_out_file(
+    file_path = create_file_path("2022-10-29"),
+    hub_path = hub_path, coerce_types = "chr"
+  )
+  tbl_coarse_horizon <- read_model_out_file(
+    file_path = create_file_path("2022-11-05"),
+    hub_path = hub_path, coerce_types = "chr"
+  )
+
 
   # Validation of coarser compound_taskid_set works
+  # Coarser samples with all task ids a derived task id depends on as compound_taskids works
   expect_snapshot(
     str(
-      check_tbl_spl_compound_taskid_set(tbl_coarse, round_id, file_path, hub_path)
+      check_tbl_spl_compound_taskid_set(
+        tbl_coarse_location, "2022-10-29",
+        create_file_path("2022-10-29"), hub_path
+      )
     )
+  )
+  # Coarser samples with all task ids a derived task id depends on as compound_taskids
+  # fails
+  expect_snapshot(
+    str(
+      check_tbl_spl_compound_taskid_set(
+        tbl_coarse_horizon,
+        "2022-11-05", create_file_path("2022-11-05"), hub_path
+      )
+    )
+  )
+  ## Add test that should pass when derived task IDs handled properly
+  expect_s3_class(
+    check_tbl_spl_compound_taskid_set(
+      tbl_coarse_horizon,
+      "2022-11-05", create_file_path("2022-11-05"), hub_path
+    ),
+    "check_success"
+  )
+
+  # Mock the config file to include all task ids in the compound_taskid_set
+    config_tasks_full_ctids <- purrr::modify_in(
+      hubUtils::read_config_file(
+        fs::path(hub_path, "hub-config", "tasks.json")
+      ),
+      list(
+        "rounds", 1, "model_tasks", 2,
+        "output_type", "sample",
+        "output_type_id_params", "compound_taskid_set"
+      ),
+      ~ c("reference_date", "horizon", "location", "variant", "target_end_date")
+    )
+
+  mockery::stub(
+    check_tbl_spl_compound_taskid_set,
+    "hubUtils::read_config",
+    config_tasks_full_ctids,
+    2
+  )
+  expect_snapshot(
+    str(
+      check_tbl_spl_compound_taskid_set(
+        tbl_coarse_horizon,
+        "2022-11-05", create_file_path("2022-11-05"), hub_path
+      )
+    )
+  )
+})
+
+test_that("Finer compound_taskid_sets work", {
+  tbl_fine <- create_spl_file("2022-10-22",
+    compound_taskid_set = list(NULL, NULL),
+    write = FALSE, out_datatype = "chr"
   )
 
   # Validation of finer compound_taskid_set fails
   expect_snapshot(
-    check_tbl_spl_compound_taskid_set(tbl_fine, round_id, file_path, hub_path)
+    check_tbl_spl_compound_taskid_set(
+      tbl_fine, "2022-10-22",
+      create_file_path("2022-10-22"),
+      test_path("testdata/hub-spl")
+    )
   )
   expect_snapshot(
     str(
-      check_tbl_spl_compound_taskid_set(tbl_fine, round_id, file_path, hub_path)
+      check_tbl_spl_compound_taskid_set(
+        tbl_fine, "2022-10-22",
+        create_file_path("2022-10-22"),
+        test_path("testdata/hub-spl")
+      )
     )
   )
 })
