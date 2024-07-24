@@ -27,7 +27,7 @@
 #' character which can be faster when large expanded grids are expected.
 #' If `required_vals_only = TRUE`, values are limited to the combinations of required
 #' values only.
-#' @inheritParams hubData::create_hub_schema
+#' @inheritParams hubData::coerce_to_hub_schema
 #' @details
 #' When a round is set to `round_id_from_variable: true`,
 #' the value of the task ID from which round IDs are derived (i.e. the task ID

@@ -46,6 +46,8 @@ not valid for the data (e.g. trying to coerce\code{"character"} values to
 \code{"double"}) will likely result in an error or potentially unexpected
 behaviour so use with care.}
 
+\item{as_arrow_table}{Logical. Whether to return an arrow table. Defaults to \code{FALSE}.}
+
 \item{bind_model_tasks}{Logical. Whether to bind expanded grids of
 values from multiple modeling tasks into a single tibble/arrow table or
 return a list.}
