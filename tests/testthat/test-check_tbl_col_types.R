@@ -23,7 +23,8 @@ test_that("check_tbl_col_types works", {
 })
 
 test_that(
-  "Check '06' location value validated correctly in check_tbl_col_types", {
+  "Check '06' location value validated correctly in check_tbl_col_types",
+  {
     hub_path <- test_path("testdata/hub")
     file_path <- "hub-baseline/2023-04-24-hub-baseline.csv"
     tbl <- read_model_out_file(
@@ -33,4 +34,5 @@ test_that(
     expect_snapshot(
       check_tbl_col_types(tbl, file_path, hub_path)
     )
-})
+  }
+)
