@@ -254,5 +254,6 @@
                 "end": 0
             }
         }
-    ]
+    ],
+    "output_type_id_datatype": "character"
 }

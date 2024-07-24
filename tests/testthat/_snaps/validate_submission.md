@@ -835,6 +835,16 @@
 
     Code
       validate_submission(hub_path = test_path("testdata/hub-it"), file_path = "Tm-Md/2023-11-11-Tm-Md.parquet",
+      skip_submit_window_check = TRUE)[["col_types"]]
+    Output
+      <warning/check_failure>
+      Warning:
+      Column data types do not match hub schema.  `output_type_id` should be "character" not "double".
+
+---
+
+    Code
+      validate_submission(hub_path = test_path("testdata/hub-it"), file_path = "Tm-Md/2023-11-11-Tm-Md.parquet",
       skip_submit_window_check = TRUE, output_type_id_datatype = "double")[[
         "col_types"]]
     Output
@@ -863,6 +873,16 @@
       <warning/check_failure>
       Warning:
       Column data types do not match hub schema.  `output_type_id` should be "character" not "double".
+
+---
+
+    Code
+      validate_submission(hub_path = test_path("testdata/hub-it"), file_path = "Tm-Md/2023-11-18-Tm-Md.parquet",
+      skip_submit_window_check = TRUE)[["col_types"]]
+    Output
+      <message/check_success>
+      Message:
+      Column data types match hub schema.
 
 ---
 

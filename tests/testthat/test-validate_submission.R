@@ -208,6 +208,14 @@ test_that("validate_submission handles overriding output type id data type corre
   skip_if_offline()
 
   # Test with double output type id data type on parquet file
+  # Getting character setting from config should pass
+  expect_snapshot(
+    validate_submission(
+      hub_path = test_path("testdata/hub-it"),
+      file_path = "Tm-Md/2023-11-11-Tm-Md.parquet",
+      skip_submit_window_check = TRUE
+    )[["col_types"]]
+  )
   # Should pass
   expect_snapshot(
     validate_submission(
@@ -236,7 +244,15 @@ test_that("validate_submission handles overriding output type id data type corre
     )[["col_types"]]
   )
 
-  # Test with double output type id data type on parquet file
+  # Test with character output type id data type on parquet file
+  # Getting character setting from config should pass
+  expect_snapshot(
+    validate_submission(
+      hub_path = test_path("testdata/hub-it"),
+      file_path = "Tm-Md/2023-11-18-Tm-Md.parquet",
+      skip_submit_window_check = TRUE
+    )[["col_types"]]
+  )
   # Should fail with warning
   expect_snapshot(
     validate_submission(
