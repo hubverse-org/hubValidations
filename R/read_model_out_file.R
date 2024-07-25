@@ -3,7 +3,8 @@
 #' @inheritParams check_valid_round_id
 #' @inheritParams hubData::create_hub_schema
 #' @param coerce_types character. What to coerce column types to on read.
-#' - `hub`: read in (`csv`) or coerce (`parquet`, `arrow`) to hub schema.
+#' - `hub`: (default) read in (`csv`) or coerce (`parquet`, `arrow`) to hub
+#'  schema.
 #' When coercing data types using the `hub` schema, the `output_type_id_datatype`
 #' can also be used to set the `output_type_id` column data type manually.
 #' - `chr`: read in (`csv`) or coerce (`parquet`, `arrow`) all columns to character.

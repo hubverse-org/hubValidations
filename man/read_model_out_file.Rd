@@ -28,7 +28,8 @@ files within the \code{hub-config} directory.}
 
 \item{coerce_types}{character. What to coerce column types to on read.
 \itemize{
-\item \code{hub}: read in (\code{csv}) or coerce (\code{parquet}, \code{arrow}) to hub schema.
+\item \code{hub}: (default) read in (\code{csv}) or coerce (\code{parquet}, \code{arrow}) to hub
+schema.
 When coercing data types using the \code{hub} schema, the \code{output_type_id_datatype}
 can also be used to set the \code{output_type_id} column data type manually.
 \item \code{chr}: read in (\code{csv}) or coerce (\code{parquet}, \code{arrow}) all columns to character.
