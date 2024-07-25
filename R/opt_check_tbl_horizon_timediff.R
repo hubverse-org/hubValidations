@@ -9,12 +9,18 @@
 #' The period of a single horizon. Default to 1 week.
 #' @inherit check_tbl_colnames params
 #' @inherit check_tbl_col_types return
+#' @inheritParams hubData::create_hub_schema
 #' @details
 #' Should be deployed as part of `validate_model_data` optional checks.
 #' @export
 opt_check_tbl_horizon_timediff <- function(tbl, file_path, hub_path, t0_colname,
                                            t1_colname, horizon_colname = "horizon",
-                                           timediff = lubridate::weeks()) {
+                                           timediff = lubridate::weeks(),
+                                           output_type_id_datatype = c(
+                                             "from_config", "auto", "character",
+                                             "double", "integer",
+                                             "logical", "Date"
+                                           )) {
   checkmate::assert_class(timediff, "Period")
   checkmate::assert_scalar(timediff)
   checkmate::assert_character(t0_colname, len = 1L)
@@ -25,9 +31,11 @@ opt_check_tbl_horizon_timediff <- function(tbl, file_path, hub_path, t0_colname,
   checkmate::assert_choice(horizon_colname, choices = names(tbl))
 
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
+  output_type_id_datatype <- rlang::arg_match(output_type_id_datatype)
   schema <- hubData::create_hub_schema(config_tasks,
     partitions = NULL,
-    r_schema = TRUE
+    r_schema = TRUE,
+    output_type_id_datatype = output_type_id_datatype
   )
   assert_column_date(t0_colname, schema)
   assert_column_date(t1_colname, schema)
