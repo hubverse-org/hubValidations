@@ -9,6 +9,8 @@ validate_pr(
   gh_repo,
   pr_number,
   round_id_col = NULL,
+  output_type_id_datatype = c("from_config", "auto", "character", "double", "integer",
+    "logical", "Date"),
   validations_cfg_path = NULL,
   skip_submit_window_check = FALSE,
   file_modification_check = c("error", "warn", "message", "none"),
@@ -35,6 +37,20 @@ files within the \code{hub-config} directory.}
 \code{round_id}s. Only required if files contain a column that contains \code{round_id}
 details but has not been configured via \code{round_id_from_variable: true} and
 \verb{round_id:} in in hub \code{tasks.json} config file.}
+
+\item{output_type_id_datatype}{character string. One of \code{"from_config"}, \code{"auto"},
+\code{"character"}, \code{"double"}, \code{"integer"}, \code{"logical"}, \code{"Date"}.
+Defaults to \code{"from_config"} which uses the setting in the \code{output_type_id_datatype}
+property in the \code{tasks.json} config file if available. If the property is
+not set in the config, the argument falls back to \code{"auto"} which determines
+the  \code{output_type_id} data type automatically from the \code{tasks.json}
+config file as the simplest data type required to represent all output
+type ID values across all output types in the hub.
+Other data type values can be used to override automatic determination.
+Note that attempting to coerce \code{output_type_id} to a data type that is
+not valid for the data (e.g. trying to coerce\code{"character"} values to
+\code{"double"}) will likely result in an error or potentially unexpected
+behaviour so use with care.}
 
 \item{validations_cfg_path}{Path to \code{validations.yml} file. If \code{NULL}
 defaults to \code{hub-config/validations.yml}.}

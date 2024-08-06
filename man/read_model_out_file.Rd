@@ -7,7 +7,9 @@
 read_model_out_file(
   file_path,
   hub_path = ".",
-  coerce_types = c("hub", "chr", "none")
+  coerce_types = c("hub", "chr", "none"),
+  output_type_id_datatype = c("from_config", "auto", "character", "double", "integer",
+    "logical", "Date")
 )
 }
 \arguments{
@@ -26,10 +28,27 @@ files within the \code{hub-config} directory.}
 
 \item{coerce_types}{character. What to coerce column types to on read.
 \itemize{
-\item \code{hub}: read in (\code{csv}) or coerce (\code{parquet}, \code{arrow}) to hub schema.
+\item \code{hub}: (default) read in (\code{csv}) or coerce (\code{parquet}, \code{arrow}) to hub
+schema.
+When coercing data types using the \code{hub} schema, the \code{output_type_id_datatype}
+can also be used to set the \code{output_type_id} column data type manually.
 \item \code{chr}: read in (\code{csv}) or coerce (\code{parquet}, \code{arrow}) all columns to character.
 \item \code{none}: No coercion. Use \code{arrow} \verb{read_*} function defaults.
 }}
+
+\item{output_type_id_datatype}{character string. One of \code{"from_config"}, \code{"auto"},
+\code{"character"}, \code{"double"}, \code{"integer"}, \code{"logical"}, \code{"Date"}.
+Defaults to \code{"from_config"} which uses the setting in the \code{output_type_id_datatype}
+property in the \code{tasks.json} config file if available. If the property is
+not set in the config, the argument falls back to \code{"auto"} which determines
+the  \code{output_type_id} data type automatically from the \code{tasks.json}
+config file as the simplest data type required to represent all output
+type ID values across all output types in the hub.
+Other data type values can be used to override automatic determination.
+Note that attempting to coerce \code{output_type_id} to a data type that is
+not valid for the data (e.g. trying to coerce\code{"character"} values to
+\code{"double"}) will likely result in an error or potentially unexpected
+behaviour so use with care.}
 }
 \value{
 a tibble of contents of the model output file.

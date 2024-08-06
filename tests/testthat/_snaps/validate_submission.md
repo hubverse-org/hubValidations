@@ -831,6 +831,7 @@
         ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
        - attr(*, "class")= chr [1:2] "hub_validations" "list"
 
+
 # validate_submission works with v3 samples.
 
     Code
@@ -843,7 +844,6 @@
       [1] "reference_date"  "horizon"         "location"        "variant"        
       [5] "target_end_date"
       
-
 ---
 
     Code
@@ -853,9 +853,8 @@
       NULL
       
       $`2`
-      [1] "reference_date" "location"      
+      [1] "reference_date" "location"   
       
-
 ---
 
     Code
@@ -866,5 +865,80 @@
       
       $`2`
       [1] "reference_date"  "horizon"         "target_end_date"
-      
+     
+     
+# validate_submission handles overriding output type id data type correctly.
+
+    Code
+      validate_submission(hub_path = test_path("testdata/hub-it"), file_path = "Tm-Md/2023-11-11-Tm-Md.parquet",
+      skip_submit_window_check = TRUE)[["col_types"]]
+    Output
+      <warning/check_failure>
+      Warning:
+      Column data types do not match hub schema.  `output_type_id` should be "character" not "double".   
+
+---
+
+    Code
+      validate_submission(hub_path = test_path("testdata/hub-it"), file_path = "Tm-Md/2023-11-11-Tm-Md.parquet",
+      skip_submit_window_check = TRUE, output_type_id_datatype = "double")[[
+        "col_types"]]
+    Output
+      <message/check_success>
+      Message:
+      Column data types match hub schema.
+ 
+---
+
+    Code
+      validate_submission(hub_path = test_path("testdata/hub-it"), file_path = "Tm-Md/2023-11-11-Tm-Md.parquet",
+      skip_submit_window_check = TRUE, output_type_id_datatype = "auto")[[
+        "col_types"]]
+    Output
+      <message/check_success>
+      Message:
+      Column data types match hub schema.
+
+---
+
+    Code
+      validate_submission(hub_path = test_path("testdata/hub-it"), file_path = "Tm-Md/2023-11-11-Tm-Md.parquet",
+      skip_submit_window_check = TRUE, output_type_id_datatype = "character")[[
+        "col_types"]]
+    Output
+      <warning/check_failure>
+      Warning:
+      Column data types do not match hub schema.  `output_type_id` should be "character" not "double".
+
+---
+
+    Code
+      validate_submission(hub_path = test_path("testdata/hub-it"), file_path = "Tm-Md/2023-11-18-Tm-Md.parquet",
+      skip_submit_window_check = TRUE)[["col_types"]]
+    Output
+      <message/check_success>
+      Message:
+      Column data types match hub schema.
+
+---
+
+    Code
+      validate_submission(hub_path = test_path("testdata/hub-it"), file_path = "Tm-Md/2023-11-18-Tm-Md.parquet",
+      skip_submit_window_check = TRUE, output_type_id_datatype = "double")[[
+        "col_types"]]
+    Output
+      <warning/check_failure>
+      Warning:
+      Column data types do not match hub schema.  `output_type_id` should be "double" not "character".
+
+---
+
+    Code
+      validate_submission(hub_path = test_path("testdata/hub-it"), file_path = "Tm-Md/2023-11-18-Tm-Md.parquet",
+      skip_submit_window_check = TRUE, output_type_id_datatype = "character")[[
+        "col_types"]]
+    Output
+      <message/check_success>
+      Message:
+      Column data types match hub schema.
 

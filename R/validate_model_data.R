@@ -2,6 +2,7 @@
 #'
 #' @inheritParams check_tbl_unique_round_id
 #' @inheritParams validate_model_file
+#' @inheritParams hubData::create_hub_schema
 #' @inherit validate_model_file return
 #' @export
 #' @details
@@ -23,11 +24,17 @@
 #' file_path <- "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
 #' validate_model_data(hub_path, file_path)
 validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
+                                output_type_id_datatype = c(
+                                  "from_config", "auto", "character",
+                                  "double", "integer",
+                                  "logical", "Date"
+                                ),
                                 validations_cfg_path = NULL) {
   checks <- new_hub_validations()
 
   file_meta <- parse_file_name(file_path)
   round_id <- file_meta$round_id
+  output_type_id_datatype <- rlang::arg_match(output_type_id_datatype)
 
   # -- File parsing checks ----
   checks$file_read <- try_check(
@@ -113,7 +120,8 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
     check_tbl_col_types(
       tbl,
       file_path = file_path,
-      hub_path = hub_path
+      hub_path = hub_path,
+      output_type_id_datatype = output_type_id_datatype
     ), file_path
   )
 

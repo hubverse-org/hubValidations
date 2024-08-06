@@ -165,7 +165,7 @@
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ col_types         :List of 4
-        ..$ message       : chr "Column data types do not match hub schema. \n `output_type_id ` should be \"character \" not \"double \""
+        ..$ message       : chr "Column data types do not match hub schema. \n `output_type_id` should be \"character\" not \"double\"."
         ..$ where         : chr "hub-ensemble/2023-05-08-hub-ensemble.parquet"
         ..$ call          : chr "check_tbl_col_types"
         ..$ use_cli_format: logi TRUE

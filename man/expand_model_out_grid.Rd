@@ -9,6 +9,8 @@ expand_model_out_grid(
   round_id,
   required_vals_only = FALSE,
   all_character = FALSE,
+  output_type_id_datatype = c("from_config", "auto", "character", "double", "integer",
+    "logical", "Date"),
   as_arrow_table = FALSE,
   bind_model_tasks = TRUE,
   include_sample_ids = FALSE,
@@ -30,6 +32,20 @@ contains only a single round.}
 Task ID and related output type ID required values.}
 
 \item{all_character}{Logical. Whether to return all character column.}
+
+\item{output_type_id_datatype}{character string. One of \code{"from_config"}, \code{"auto"},
+\code{"character"}, \code{"double"}, \code{"integer"}, \code{"logical"}, \code{"Date"}.
+Defaults to \code{"from_config"} which uses the setting in the \code{output_type_id_datatype}
+property in the \code{tasks.json} config file if available. If the property is
+not set in the config, the argument falls back to \code{"auto"} which determines
+the  \code{output_type_id} data type automatically from the \code{tasks.json}
+config file as the simplest data type required to represent all output
+type ID values across all output types in the hub.
+Other data type values can be used to override automatic determination.
+Note that attempting to coerce \code{output_type_id} to a data type that is
+not valid for the data (e.g. trying to coerce\code{"character"} values to
+\code{"double"}) will likely result in an error or potentially unexpected
+behaviour so use with care.}
 
 \item{as_arrow_table}{Logical. Whether to return an arrow table. Defaults to \code{FALSE}.}
 
