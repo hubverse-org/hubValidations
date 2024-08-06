@@ -1,5 +1,6 @@
 #' Check model output data tbl samples contain single unique values for each
 #' compound task ID within individual samples
+#'
 #' @param tbl a tibble/data.frame of the contents of the file being validated. Column types must **all be character**.
 #' @inherit check_tbl_colnames params
 #' @inherit check_tbl_colnames return

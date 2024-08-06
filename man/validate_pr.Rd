@@ -268,6 +268,13 @@ Details of checks performed by \code{validate_submission()}\if{html}{\out{<table
    <td style="text-align:left;"> error_tbl: table of rows affected </td>
   </tr>
   <tr>
+   <td style="text-align:left;font-weight: bold;"> spl_compound_taskid_set </td>
+   <td style="text-align:left;"> Sample compound task id sets for each modeling task match or are coarser than the expected set defined in tasks.json config. </td>
+   <td style="text-align:left;"> TRUE </td>
+   <td style="text-align:left;"> check_error </td>
+   <td style="text-align:left;"> errors: list containing item for each failing modeling task. Exact structure dependent on type of validation failure. See check function documentation for more details. </td>
+  </tr>
+  <tr>
    <td style="text-align:left;font-weight: bold;"> spl_compound_tid </td>
    <td style="text-align:left;"> Samples contain single unique values for each compound task ID within individual samples (v3 and above schema only). </td>
    <td style="text-align:left;"> TRUE </td>

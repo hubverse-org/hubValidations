@@ -4,7 +4,7 @@
 \alias{capture_check_info}
 \title{Capture a simple info message condition}
 \usage{
-capture_check_info(file_path, msg)
+capture_check_info(file_path, msg, call = rlang::caller_call())
 }
 \arguments{
 \item{file_path}{character string. Path to the file being validated. Must be
@@ -12,6 +12,10 @@ the relative path to the hub's \code{model-output} (or equivalent) directory.}
 
 \item{msg}{Character string. Accepts text that can interpreted and
 formatted by \code{\link[cli:format_inline]{cli::format_inline()}}.}
+
+\item{call}{The defused call of the function that generated the message.
+Use to override default which uses the caller call. See \link[rlang:stack]{rlang::stack}
+for more details.}
 }
 \value{
 A \verb{<message/check_info>} condition class object. Returned object also

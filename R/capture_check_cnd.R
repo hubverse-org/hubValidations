@@ -102,12 +102,14 @@ capture_check_cnd <- function(check, file_path, msg_subject, msg_attribute,
 #' @inheritParams capture_check_cnd
 #' @param msg Character string. Accepts text that can interpreted and
 #' formatted by [cli::format_inline()].
+#' @param call The defused call of the function that generated the message.
+#' Use to override default which uses the caller call. See [rlang::stack]
+#' for more details.
 #'
 #' @return A `<message/check_info>` condition class object. Returned object also
 #' inherits from subclass `<hub_check>`.
 #' @export
-capture_check_info <- function(file_path, msg) {
-  call <- rlang::caller_call()
+capture_check_info <- function(file_path, msg, call = rlang::caller_call()) {
   if (!is.null(call)) {
     call <- rlang::call_name(call)
   }
