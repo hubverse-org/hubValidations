@@ -831,7 +831,6 @@
         ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
        - attr(*, "class")= chr [1:2] "hub_validations" "list"
 
-
 # validate_submission works with v3 samples.
 
     Code
@@ -844,6 +843,7 @@
       [1] "reference_date"  "horizon"         "location"        "variant"        
       [5] "target_end_date"
       
+
 ---
 
     Code
@@ -853,8 +853,9 @@
       NULL
       
       $`2`
-      [1] "reference_date" "location"   
+      [1] "reference_date" "location"      
       
+
 ---
 
     Code
@@ -865,8 +866,8 @@
       
       $`2`
       [1] "reference_date"  "horizon"         "target_end_date"
-     
-     
+      
+
 # validate_submission handles overriding output type id data type correctly.
 
     Code
@@ -875,7 +876,7 @@
     Output
       <warning/check_failure>
       Warning:
-      Column data types do not match hub schema.  `output_type_id` should be "character" not "double".   
+      Column data types do not match hub schema.  `output_type_id` should be "character" not "double".
 
 ---
 
@@ -887,7 +888,7 @@
       <message/check_success>
       Message:
       Column data types match hub schema.
- 
+
 ---
 
     Code
