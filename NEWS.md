@@ -1,9 +1,12 @@
-# hubValidations 0.3.0
+# hubValidations 0.4.0
 
 - Add new `check_tbl_spl_compound_taskid_set()` check function to `validate_model_data()` that ensures that sample compound task id sets for each modeling task match or are coarser than the expected set defined in `tasks.json` config.
 - Add new `get_tbl_compound_taskid_set()` for detecting sample compound task ID set from submission data.
 - Add argument `compound_taskid_set` to `expand_model_out_grid()` and `submission_tmpl()` that allows users to override the compound task ID set when creating sample indices in the `output_type_id` column of samples.
 
+# hubValidations 0.3.0
+
+* Introduce an `output_type_id_datatype` argument to `validate_pr()`, `validate_submission()`, `validate_model_data()` and `expand_model_out_grid()` and set default value to `"from_config"`. This default means the data type specified in the `output_type_id_datatype` property in `tasks.json` (introduced in schema version `v3.0.1`) is used to cast the hub level `output_type_id` column data type. If not set in the config, the functions fall back to `"auto"` which detects the simplest data type that can represent all output type id values across all output types and rounds. The argument also allows hub administrators to override this setting manually during validation.
 
 
 # hubValidations 0.2.0
@@ -19,7 +22,7 @@
 # hubValidations 0.0.1
 
 * Release stable 0.0.1 version
-* Enforce minimum dependence on latest `hubData` (0.1.0) & `hubAdmin` (0.1.0). This allows for successful validation of submissions to hubs with multiple model tasks, where a given model task might contain non relevant task IDs and both `required` and `optional` properties have been set to `null` in `tasks.json` (#75). See the [relevant section in `hubDocs` documentation](https://hubdocs.readthedocs.io/en/latest/quickstart-hub-admin/tasks-config.html#required-and-optional-elements) for more details.
+* Enforce minimum dependence on latest `hubData` (0.1.0) & `hubAdmin` (0.1.0). This allows for successful validation of submissions to hubs with multiple model tasks, where a given model task might contain non relevant task IDs and both `required` and `optional` properties have been set to `null` in `tasks.json` (#75). See the [relevant section in `hubDocs` documentation](https://hubverse.io/en/latest/quickstart-hub-admin/tasks-config.html#required-and-optional-elements) for more details.
 * Improve formatting of current time print in `validate_submission_time()` message by removing decimal seconds and including local time zone.
 
 

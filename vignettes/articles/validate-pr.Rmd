@@ -59,7 +59,7 @@ knitr::include_graphics("assets/ga-action-screenshot.png")
 
 ### Skipping submission window checks
 
-Most hubs require that model output files for a given round are submitted within a submission window [defined in the `"submission_due"` property of the `tasks.json` hub config file](https://hubdocs.readthedocs.io/en/latest/quickstart-hub-admin/tasks-config.html#setting-up-submissions-due). 
+Most hubs require that model output files for a given round are submitted within a submission window [defined in the `"submission_due"` property of the `tasks.json` hub config file](https://hubverse.io/en/latest/quickstart-hub-admin/tasks-config.html#setting-up-submissions-due). 
 
 `validate_pr()` includes submission window checks for model output files and returns a `<warning/check_failure>` condition class object if a file is submitted outside the accepted submission window.
 
@@ -118,7 +118,7 @@ Is ignored when checking model metadata files as well as when `file_modification
  If hub submission window reference dates do not match round IDs in file paths, currently `allow_submit_window_mods` will not work correctly and is best set to `FALSE`. 
  This only relates to hubs/rounds where submission windows are determined relative to a reference date and not when explicit submission window start and end dates are provided in the config. 
  
- For more details on submission window config see [Setting up `"submission_due"`](https://hubdocs.readthedocs.io/en/latest/quickstart-hub-admin/tasks-config.html#setting-up-submissions-due) in the hubverse hubDocs.
+ For more details on submission window config see [Setting up `"submission_due"`](https://hubverse.io/en/latest/quickstart-hub-admin/tasks-config.html#setting-up-submissions-due) in the hubverse hubDocs.
 
 </div>
 

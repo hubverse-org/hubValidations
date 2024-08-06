@@ -1,17 +1,16 @@
 {
-    "schema_version": "https://raw.githubusercontent.com/hubverse-org/schemas/main/v2.0.0/admin-schema.json",
+    "schema_version": "https://raw.githubusercontent.com/hubverse-org/schemas/main/v3.0.1/admin-schema.json",
     "name": "Influenza Forecasting Hub Europe",
     "maintainer": "ISI Foundation",
     "contact": {
         "name": "Hub Admin Name",
         "email": "hub-admin-email@example.com"
     },
-    "repository_url": "https://github.com/european-modelling-hubs/flu-forecast-hub",
-    "file_format": ["csv"],
-    "hub_models": [{
-        "team_abbr": "ECDC",
-        "model_abbr": "TBD",
-        "model_type": "ensemble"
-    }],
+    "repository": {
+        "host": "github",
+        "owner": "european-modelling-hubs",
+        "name": "flu-forecast-hub"
+    },
+    "file_format": ["csv", "parquet"],
     "timezone": "Europe/Stockholm"
 }
