@@ -149,8 +149,8 @@
                             "output_type_id_params": {
                                 "is_required": true,
                                 "type": "integer",
-                                "min_samples_per_task": 90,
-                                "max_samples_per_task": 100,
+                                "min_samples_per_task": 9,
+                                "max_samples_per_task": 10,
                                 "compound_taskid_set" : ["reference_date", "horizon", "location", "variant", "target_end_date"]
                             },
                             "value": {

@@ -229,7 +229,7 @@
         .. .. ..$ config_comp_tids     : chr [1:4] "reference_date" "horizon" "location" "variant"
         .. .. ..$ invalid_tbl_comp_tids: chr "target_end_date"
         .. .. ..$ tbl_comp_tids        : chr [1:3] "reference_date" "horizon" "target_end_date"
-        .. .. ..$ output_type_ids      : chr [1:400] "1" "10" "100" "101" ...
+        .. .. ..$ output_type_ids      : chr [1:40] "1" "10" "11" "12" ...
        $ compound_taskid_set: logi NA
        $ call               : chr "check_tbl_spl_compound_taskid_set"
        $ use_cli_format     : logi TRUE
@@ -262,7 +262,7 @@
         .. .. ..$ config_comp_tids     : chr [1:4] "reference_date" "horizon" "location" "target_end_date"
         .. .. ..$ invalid_tbl_comp_tids: chr "variant"
         .. .. ..$ tbl_comp_tids        : chr [1:5] "reference_date" "horizon" "location" "variant" ...
-        .. .. ..$ output_type_ids      : chr [1:8000] "1" "10" "100" "1000" ...
+        .. .. ..$ output_type_ids      : chr [1:800] "1" "10" "100" "101" ...
        $ compound_taskid_set: logi NA
        $ call               : chr "check_tbl_spl_compound_taskid_set"
        $ use_cli_format     : logi TRUE

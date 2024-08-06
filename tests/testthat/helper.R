@@ -5,7 +5,8 @@ suppressPackageStartupMessages({
 create_spl_file <- function(round_id, compound_taskid_set = NULL,
                             hub_path = test_path("testdata/hub-spl"),
                             write = TRUE, ext = "parquet",
-                            out_datatype = c("schema", "chr")) {
+                            out_datatype = c("schema", "chr"),
+                            n_samples = 10L) {
   out_datatype <- match.arg(out_datatype)
   file_path <- create_file_path(round_id = round_id, ext = ext)
 
@@ -26,32 +27,33 @@ create_spl_file <- function(round_id, compound_taskid_set = NULL,
   recode_spl_ids <- seq_along(uniq_spl_ids) |> as.character()
 
   tbl <- dplyr::mutate(tbl, output_type_id = dplyr::recode(
-    output_type_id, !!!setNames(recode_spl_ids, uniq_spl_ids))
-    )
+    output_type_id, !!!setNames(recode_spl_ids, uniq_spl_ids)
+  ))
 
-  rows_spl <- tbl |>
-    dplyr::group_by(output_type_id) |>
-    dplyr::count() |>
-    dplyr::pull(n) |>
-    unique()
-  n <- nrow(tbl) / rows_spl
+  if (n_samples > 1L) {
+    rows_spl <- tbl |>
+      dplyr::group_by(output_type_id) |>
+      dplyr::count() |>
+      dplyr::pull(n) |>
+      unique()
+    n <- nrow(tbl) / rows_spl
 
-  tbl <- purrr::map(
-    seq(0, (100 - 1) * n, by = n),
-    function(.x) {
-      tbl$output_type_id <- as.character(
-        as.integer(tbl$output_type_id) + .x
-      )
-      tbl
-    }
-  ) |>
-    purrr::list_rbind()
-
-  if (write){
+    tbl <- purrr::map(
+      seq(0, (n_samples - 1) * n, by = n),
+      function(.x) {
+        tbl$output_type_id <- as.character(
+          as.integer(tbl$output_type_id) + .x
+        )
+        tbl
+      }
+    ) |>
+      purrr::list_rbind()
+  }
+  if (write) {
     out_path <- fs::path(hub_path, "model-output", file_path)
-    switch (ext,
-            csv = readr::write_csv(tbl, out_path),
-            parquet = arrow::write_parquet(tbl, out_path)
+    switch(ext,
+      csv = readr::write_csv(tbl, out_path),
+      parquet = arrow::write_parquet(tbl, out_path)
     )
   }
   if (out_datatype == "chr") {

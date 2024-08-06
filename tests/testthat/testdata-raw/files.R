@@ -45,3 +45,4 @@ create_spl_file("2022-11-05",
     c("reference_date", "horizon")
   )
 )
+

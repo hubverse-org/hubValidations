@@ -167,8 +167,8 @@
         ..$ 1  :List of 5
         .. ..$ compound_idx        : chr "1"
         .. ..$ n                   : int 1
-        .. ..$ min_samples_per_task: int 90
-        .. ..$ max_samples_per_task: int 100
+        .. ..$ min_samples_per_task: int 9
+        .. ..$ max_samples_per_task: int 10
         .. ..$ compound_idx_tbl    : tibble [20 x 6] (S3: tbl_df/tbl/data.frame)
         .. .. ..$ reference_date : chr [1:20] "2022-10-22" "2022-10-22" "2022-10-22" "2022-10-22" ...
         .. .. ..$ target         : chr [1:20] "wk inc flu hosp" "wk inc flu hosp" "wk inc flu hosp" "wk inc flu hosp" ...
@@ -179,8 +179,8 @@
         ..$ 102:List of 5
         .. ..$ compound_idx        : chr "102"
         .. ..$ n                   : int 1
-        .. ..$ min_samples_per_task: int 90
-        .. ..$ max_samples_per_task: int 100
+        .. ..$ min_samples_per_task: int 9
+        .. ..$ max_samples_per_task: int 10
         .. ..$ compound_idx_tbl    : tibble [20 x 6] (S3: tbl_df/tbl/data.frame)
         .. .. ..$ reference_date : chr [1:20] "2022-10-22" "2022-10-22" "2022-10-22" "2022-10-22" ...
         .. .. ..$ target         : chr [1:20] "wk inc flu hosp" "wk inc flu hosp" "wk inc flu hosp" "wk inc flu hosp" ...
@@ -191,8 +191,8 @@
         ..$ 163:List of 5
         .. ..$ compound_idx        : chr "163"
         .. ..$ n                   : int 1
-        .. ..$ min_samples_per_task: int 90
-        .. ..$ max_samples_per_task: int 100
+        .. ..$ min_samples_per_task: int 9
+        .. ..$ max_samples_per_task: int 10
         .. ..$ compound_idx_tbl    : tibble [20 x 6] (S3: tbl_df/tbl/data.frame)
         .. .. ..$ reference_date : chr [1:20] "2022-10-22" "2022-10-22" "2022-10-22" "2022-10-22" ...
         .. .. ..$ target         : chr [1:20] "wk inc flu hosp" "wk inc flu hosp" "wk inc flu hosp" "wk inc flu hosp" ...
@@ -203,8 +203,8 @@
         ..$ 244:List of 5
         .. ..$ compound_idx        : chr "244"
         .. ..$ n                   : int 1
-        .. ..$ min_samples_per_task: int 90
-        .. ..$ max_samples_per_task: int 100
+        .. ..$ min_samples_per_task: int 9
+        .. ..$ max_samples_per_task: int 10
         .. ..$ compound_idx_tbl    : tibble [20 x 6] (S3: tbl_df/tbl/data.frame)
         .. .. ..$ reference_date : chr [1:20] "2022-10-22" "2022-10-22" "2022-10-22" "2022-10-22" ...
         .. .. ..$ target         : chr [1:20] "wk inc flu hosp" "wk inc flu hosp" "wk inc flu hosp" "wk inc flu hosp" ...
@@ -242,5 +242,5 @@
     Output
       <warning/check_failure>
       Warning:
-      Number of samples per compound idx not consistent.  Sample numbers supplied per compound idx vary between 99 and 100.  See `errors` attribute for details.
+      Number of samples per compound idx not consistent.  Sample numbers supplied per compound idx vary between 9 and 10.  See `errors` attribute for details.
 
