@@ -348,10 +348,12 @@
 # validate_model_data with v3 sample data works
 
     Code
-      str(validate_model_data(hub_path, file_path, validations_cfg_path = system.file(
-        "testhubs/flusight/hub-config/validations.yml", package = "hubValidations")))
+      str(validate_model_data(hub_path = system.file("testhubs/samples", package = "hubValidations"),
+      file_path = "Flusight-baseline/2022-10-22-Flusight-baseline.csv",
+      validations_cfg_path = system.file(
+        "testhubs/samples/hub-config/validations.yml", package = "hubValidations")))
     Output
-      Classes 'hub_validations', 'list'  hidden list of 17
+      List of 17
        $ file_read              :List of 4
         ..$ message       : chr "File could be read successfully. \n "
         ..$ where         : chr "Flusight-baseline/2022-10-22-Flusight-baseline.csv"
@@ -465,12 +467,11 @@
         ..$ call          : chr "check_tbl_spl_n"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ horizon_timediff       :List of 6
-        ..$ message       : chr "Assertion on 't0_colname' failed: Must be element of set ['location','reference_date','horizon','target_end_dat"| __truncated__
-        ..$ trace         : NULL
-        ..$ parent        : NULL
+       $ horizon_timediff       :List of 4
+        ..$ message       : chr "Time differences between t0 var `reference_date` and t1 var\n        `target_end_date` all match expected perio"| __truncated__
         ..$ where         : chr "Flusight-baseline/2022-10-22-Flusight-baseline.csv"
-        ..$ call          : chr "horizon_timediff"
+        ..$ call          : NULL
         ..$ use_cli_format: logi TRUE
-        ..- attr(*, "class")= chr [1:5] "check_exec_error" "hub_check" "rlang_error" "error" ...
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       - attr(*, "class")= chr [1:2] "hub_validations" "list"
 
