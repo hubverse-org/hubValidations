@@ -831,3 +831,40 @@
         ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
        - attr(*, "class")= chr [1:2] "hub_validations" "list"
 
+# validate_submission works with v3 samples.
+
+    Code
+      v$spl_compound_taskid_set$compound_taskid_set
+    Output
+      $`1`
+      NULL
+      
+      $`2`
+      [1] "reference_date"  "horizon"         "location"        "variant"        
+      [5] "target_end_date"
+      
+
+---
+
+    Code
+      v_rl$spl_compound_taskid_set$compound_taskid_set
+    Output
+      $`1`
+      NULL
+      
+      $`2`
+      [1] "reference_date" "location"      
+      
+
+---
+
+    Code
+      v_rh$spl_compound_taskid_set$compound_taskid_set
+    Output
+      $`1`
+      NULL
+      
+      $`2`
+      [1] "reference_date"  "horizon"         "target_end_date"
+      
+
