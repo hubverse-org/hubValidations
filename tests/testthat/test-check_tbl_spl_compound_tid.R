@@ -49,13 +49,14 @@ test_that("Overriding compound_taskid_set in check_tbl_spl_compound_tid works", 
     NULL,
     c("reference_date", "horizon")
   )
-  tbl_coarse <- submission_tmpl(
-    config_task = config_task,
-    round_id = round_id,
-    compound_taskid_set = compound_taskid_set
-  ) |>
-    dplyr::filter(.data$output_type == "sample") |>
-    hubData::coerce_to_character()
+  tbl_coarse <- create_spl_file("2022-10-22",
+                                compound_taskid_set = compound_taskid_set,
+                                write = FALSE,
+                                out_datatype = "chr",
+                                n_samples = 1L
+  )
+
+
 
   # Normal validation should return check failure
   expect_snapshot(

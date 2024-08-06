@@ -76,13 +76,12 @@ test_that("Overriding compound_taskid_set in check_tbl_spl_compound_tid works", 
     NULL,
     c("reference_date", "horizon")
   )
-  tbl_coarse <- submission_tmpl(
-    config_task = config_task,
-    round_id = round_id,
-    compound_taskid_set = compound_taskid_set
-  ) |>
-    dplyr::filter(.data$output_type == "sample") |>
-    hubData::coerce_to_character()
+  tbl_coarse <- create_spl_file("2022-10-22",
+                                compound_taskid_set = compound_taskid_set,
+                                write = FALSE,
+                                out_datatype = "chr",
+                                n_samples = 1L
+  )
 
   # Validation of coarser files should return check failure.
   # Also, because there is a mismatch in compound taskid set, the compound_idx
@@ -104,15 +103,11 @@ test_that("Overriding compound_taskid_set in check_tbl_spl_compound_tid works", 
   )
 
   # Create 100 spls of each compound idx
-  tbl_full <- purrr::map(
-    seq(0, 396, by = 4),
-    function(.x) {
-      tbl_coarse$output_type_id <- as.character(
-        as.integer(tbl_coarse$output_type_id) + .x
-      )
-      tbl_coarse
-    }
-  ) |> purrr::list_rbind()
+  tbl_full <- create_spl_file("2022-10-22",
+                              compound_taskid_set = compound_taskid_set,
+                              write = FALSE,
+                              out_datatype = "chr"
+  )
 
   # This succeeds!
   expect_snapshot(

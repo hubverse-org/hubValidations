@@ -73,7 +73,6 @@ test_that("Different compound_taskid_sets work", {
 
 
   # Validation of coarser compound_taskid_set works
-  # Coarser samples with all task ids a derived task id depends on as compound_taskids works
   expect_snapshot(
     str(
       check_tbl_spl_compound_taskid_set(
@@ -82,8 +81,6 @@ test_that("Different compound_taskid_sets work", {
       )
     )
   )
-  # Coarser samples with all task ids a derived task id depends on as compound_taskids
-  # fails
   expect_snapshot(
     str(
       check_tbl_spl_compound_taskid_set(
@@ -92,16 +89,10 @@ test_that("Different compound_taskid_sets work", {
       )
     )
   )
-  ## Add test that should pass when derived task IDs handled properly
-  expect_s3_class(
-    check_tbl_spl_compound_taskid_set(
-      tbl_coarse_horizon,
-      "2022-11-05", create_file_path("2022-11-05"), hub_path
-    ),
-    "check_success"
-  )
 
-  # Mock the config file to include all task ids in the compound_taskid_set
+  # Mock the config file to include all task ids a derived task id depends on
+  #  in the compound_taskid_set but exclude the derived task id itself.
+  #  Currently will fail
     config_tasks_full_ctids <- purrr::modify_in(
       hubUtils::read_config_file(
         fs::path(hub_path, "hub-config", "tasks.json")
@@ -111,7 +102,7 @@ test_that("Different compound_taskid_sets work", {
         "output_type", "sample",
         "output_type_id_params", "compound_taskid_set"
       ),
-      ~ c("reference_date", "horizon", "location", "variant", "target_end_date")
+      ~ c("reference_date", "horizon", "location", "variant")
     )
 
   mockery::stub(
@@ -131,6 +122,29 @@ test_that("Different compound_taskid_sets work", {
 })
 
 test_that("Finer compound_taskid_sets work", {
+  hub_path <- test_path("testdata/hub-spl")
+  # Mock the config file to remove variant from compound_taskid_set
+  # Then test against file created with full compound_taskid_set (i.e. finest
+  # sample structure possible). Test should fail
+  config_tasks_no_variant <- purrr::modify_in(
+    hubUtils::read_config_file(
+      fs::path(hub_path, "hub-config", "tasks.json")
+    ),
+    list(
+      "rounds", 1, "model_tasks", 2,
+      "output_type", "sample",
+      "output_type_id_params", "compound_taskid_set"
+    ),
+    ~ c("reference_date", "horizon", "location", "target_end_date")
+  )
+
+  mockery::stub(
+    check_tbl_spl_compound_taskid_set,
+    "hubUtils::read_config",
+    config_tasks_no_variant,
+    2
+  )
+
   tbl_fine <- create_spl_file("2022-10-22",
     compound_taskid_set = list(NULL, NULL),
     write = FALSE, out_datatype = "chr"
