@@ -186,7 +186,7 @@
     Output
       List of 6
        $ message            : chr "All samples in a model task conform to single, unique compound task ID set that matches or is\n    coarser than"| __truncated__
-       $ where              : 'fs_path' chr "Flusight-baseline/2022-10-29-Flusight-baseline.parquet"
+       $ where              : 'fs_path' chr "flu-base/2022-10-29-flu-base.parquet"
        $ errors             : NULL
        $ compound_taskid_set:List of 2
         ..$ 1: NULL
@@ -203,7 +203,7 @@
     Output
       List of 6
        $ message            : chr "All samples in a model task conform to single, unique compound task ID set that matches or is\n    coarser than"| __truncated__
-       $ where              : 'fs_path' chr "Flusight-baseline/2022-11-05-Flusight-baseline.parquet"
+       $ where              : 'fs_path' chr "flu-base/2022-11-05-flu-base.parquet"
        $ errors             : NULL
        $ compound_taskid_set:List of 2
         ..$ 1: NULL
@@ -222,7 +222,7 @@
        $ message            : chr "All samples in a model task do not conform to single, unique compound task ID set that matches or is\n    coars"| __truncated__
        $ trace              : NULL
        $ parent             : NULL
-       $ where              : 'fs_path' chr "Flusight-baseline/2022-11-05-Flusight-baseline.parquet"
+       $ where              : 'fs_path' chr "flu-base/2022-11-05-flu-base.parquet"
        $ errors             :List of 1
         ..$ 2:List of 1
         .. ..$ :List of 4
@@ -255,7 +255,7 @@
        $ message            : chr "All samples in a model task do not conform to single, unique compound task ID set that matches or is\n    coars"| __truncated__
        $ trace              : NULL
        $ parent             : NULL
-       $ where              : 'fs_path' chr "Flusight-baseline/2022-10-22-Flusight-baseline.parquet"
+       $ where              : 'fs_path' chr "flu-base/2022-10-22-flu-base.parquet"
        $ errors             :List of 1
         ..$ 2:List of 1
         .. ..$ :List of 4

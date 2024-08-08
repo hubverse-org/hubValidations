@@ -63,10 +63,9 @@ create_spl_file <- function(round_id, compound_taskid_set = NULL,
   tbl
 }
 
-create_file_path <- function(round_id, model_id = "Flusight-baseline",
+create_file_path <- function(round_id, model_id = "flu-base",
                              ext = "parquet") {
-  fs::path(
-    glue::glue("{model_id}/{round_id}-{model_id}"),
+  fs::path(model_id, paste0(round_id, "-", model_id),
     ext = ext
   )
 }

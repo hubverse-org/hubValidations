@@ -96,7 +96,7 @@ test_that("validate_model_data with v3 sample data works", {
     str(
       validate_model_data(
         hub_path = system.file("testhubs/samples", package = "hubValidations"),
-        file_path = "Flusight-baseline/2022-10-22-Flusight-baseline.csv",
+        file_path = "flu-base/2022-10-22-flu-base.csv",
         validations_cfg_path = system.file(
           "testhubs/samples/hub-config/validations.yml",
           package = "hubValidations"

@@ -1,24 +1,16 @@
 team_name: "Flusight"
-team_abbr: "Flusight"
+team_abbr: "flu"
 model_name: "Baseline model using reported weekly admissions"
-model_abbr: "baseline"
+model_abbr: "base"
 model_version: "1.0"
 model_contributors: [
   {
-    "name": "Evan L. Ray",
+    "name": "Joe Bliggs",
     "affiliation": "University of Massachusetts, Amherst",
-    "email": "elray@umass.edu"
-  },
-  {
-    "name": "Nutcha Wattanachit",
-    "affiliation": "University of Massachusetts, Amherst"
-  },
-  {
-    "name": "Ryan Tibshirani",
-    "affiliation": "UC Berkeley"
+    "email": "jbligg@umass.edu"
   }
 ]
-website_url: "https://github.com/cdcepi/Flusight-baseline"
+website_url: "https://github.com/cdcepi/flu-base"
 license: "CC-BY-4.0"
 team_funding: "This model's development is funded by the US CDC grant number U01IP001122. The content is solely the responsibility of the authors and does not necessarily represent the official views of NIGMS or the National Institutes of Health."
 designated_model: true
