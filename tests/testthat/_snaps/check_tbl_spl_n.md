@@ -162,7 +162,7 @@
     Output
       List of 5
        $ message       : chr "Required samples per compound idx task not present.  \n File contains less than the minimum required number of "| __truncated__
-       $ where         : chr "Flusight-baseline/2022-10-22-Flusight-baseline.csv"
+       $ where         : chr "flu-base/2022-10-22-flu-base.csv"
        $ errors        :List of 4
         ..$ 1  :List of 5
         .. ..$ compound_idx        : chr "1"

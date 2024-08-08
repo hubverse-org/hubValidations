@@ -44,7 +44,7 @@
        $ message       : chr "Each sample compound task ID does not contain single, unique value. \n Samples \"1\", \"2\", \"3\", and \"4\" d"| __truncated__
        $ trace         : NULL
        $ parent        : NULL
-       $ where         : chr "Flusight-baseline/2022-10-22-Flusight-baseline.csv"
+       $ where         : chr "flu-base/2022-10-22-flu-base.csv"
        $ errors        :List of 4
         ..$ :List of 3
         .. ..$ mt_id         : int 2

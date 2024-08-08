@@ -45,7 +45,7 @@
     Output
       List of 5
        $ message       : chr "Task ID combinations of non compound task id values consistent across modeling task samples. \n "
-       $ where         : chr "Flusight-baseline/2022-10-22-Flusight-baseline.csv"
+       $ where         : chr "flu-base/2022-10-22-flu-base.csv"
        $ errors        : NULL
        $ call          : chr "check_tbl_spl_non_compound_tid"
        $ use_cli_format: logi TRUE
