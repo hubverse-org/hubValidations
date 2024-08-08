@@ -55,6 +55,7 @@ Suggests:
     gert,
     kableExtra,
     mockery,
+    readr,
     rmarkdown,
     testthat (>= 3.2.0),
     testthis,
