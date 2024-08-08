@@ -485,6 +485,106 @@
       10 2022-12-26    wk ahead inc flu h~       1 01       sample      4             
       # i 32 more rows
 
+# expand_model_out_grid output type subsetting works
+
+    Code
+      expand_model_out_grid(config_tasks, round_id = "2022-12-26",
+        include_sample_ids = TRUE, bind_model_tasks = FALSE, output_types = c("pmf",
+          "sample"), )
+    Output
+      [[1]]
+      # A tibble: 6 x 6
+        forecast_date target               horizon location output_type output_type_id
+        <date>        <chr>                  <int> <chr>    <chr>       <chr>         
+      1 2022-12-26    wk ahead inc flu ho~       2 US       sample      1             
+      2 2022-12-26    wk ahead inc flu ho~       2 01       sample      1             
+      3 2022-12-26    wk ahead inc flu ho~       2 02       sample      1             
+      4 2022-12-26    wk ahead inc flu ho~       1 US       sample      2             
+      5 2022-12-26    wk ahead inc flu ho~       1 01       sample      2             
+      6 2022-12-26    wk ahead inc flu ho~       1 02       sample      2             
+      
+      [[2]]
+      # A tibble: 30 x 6
+         forecast_date target              horizon location output_type output_type_id
+         <date>        <chr>                 <int> <chr>    <chr>       <chr>         
+       1 2022-12-26    wk flu hosp rate c~       2 US       pmf         large_decrease
+       2 2022-12-26    wk flu hosp rate c~       1 US       pmf         large_decrease
+       3 2022-12-26    wk flu hosp rate c~       2 01       pmf         large_decrease
+       4 2022-12-26    wk flu hosp rate c~       1 01       pmf         large_decrease
+       5 2022-12-26    wk flu hosp rate c~       2 02       pmf         large_decrease
+       6 2022-12-26    wk flu hosp rate c~       1 02       pmf         large_decrease
+       7 2022-12-26    wk flu hosp rate c~       2 US       pmf         decrease      
+       8 2022-12-26    wk flu hosp rate c~       1 US       pmf         decrease      
+       9 2022-12-26    wk flu hosp rate c~       2 01       pmf         decrease      
+      10 2022-12-26    wk flu hosp rate c~       1 01       pmf         decrease      
+      # i 20 more rows
+      
+
+---
+
+    Code
+      expand_model_out_grid(config_tasks, round_id = "2022-12-26",
+        include_sample_ids = TRUE, bind_model_tasks = FALSE, output_types = "sample", )
+    Output
+      [[1]]
+      # A tibble: 6 x 6
+        forecast_date target               horizon location output_type output_type_id
+        <date>        <chr>                  <int> <chr>    <chr>       <chr>         
+      1 2022-12-26    wk ahead inc flu ho~       2 US       sample      1             
+      2 2022-12-26    wk ahead inc flu ho~       2 01       sample      1             
+      3 2022-12-26    wk ahead inc flu ho~       2 02       sample      1             
+      4 2022-12-26    wk ahead inc flu ho~       1 US       sample      2             
+      5 2022-12-26    wk ahead inc flu ho~       1 01       sample      2             
+      6 2022-12-26    wk ahead inc flu ho~       1 02       sample      2             
+      
+      [[2]]
+      # A tibble: 0 x 0
+      
+
+---
+
+    Code
+      expand_model_out_grid(config_tasks, round_id = "2022-12-26",
+        include_sample_ids = TRUE, bind_model_tasks = TRUE, output_types = "sample", )
+    Output
+      # A tibble: 6 x 6
+        forecast_date target               horizon location output_type output_type_id
+        <date>        <chr>                  <int> <chr>    <chr>       <chr>         
+      1 2022-12-26    wk ahead inc flu ho~       2 US       sample      1             
+      2 2022-12-26    wk ahead inc flu ho~       2 01       sample      1             
+      3 2022-12-26    wk ahead inc flu ho~       2 02       sample      1             
+      4 2022-12-26    wk ahead inc flu ho~       1 US       sample      2             
+      5 2022-12-26    wk ahead inc flu ho~       1 01       sample      2             
+      6 2022-12-26    wk ahead inc flu ho~       1 02       sample      2             
+
+---
+
+    Code
+      expand_model_out_grid(config_tasks, round_id = "2022-12-26",
+        include_sample_ids = FALSE, bind_model_tasks = TRUE, output_types = c(
+          "random", "sample"), )
+    Output
+      # A tibble: 6 x 6
+        forecast_date target               horizon location output_type output_type_id
+        <date>        <chr>                  <int> <chr>    <chr>       <chr>         
+      1 2022-12-26    wk ahead inc flu ho~       2 US       sample      <NA>          
+      2 2022-12-26    wk ahead inc flu ho~       1 US       sample      <NA>          
+      3 2022-12-26    wk ahead inc flu ho~       2 01       sample      <NA>          
+      4 2022-12-26    wk ahead inc flu ho~       1 01       sample      <NA>          
+      5 2022-12-26    wk ahead inc flu ho~       2 02       sample      <NA>          
+      6 2022-12-26    wk ahead inc flu ho~       1 02       sample      <NA>          
+
+---
+
+    Code
+      expand_model_out_grid(config_tasks, round_id = "2022-12-26",
+        include_sample_ids = FALSE, bind_model_tasks = FALSE, output_types = c(
+          "random"), )
+    Condition
+      Error in `expand_model_out_grid()`:
+      x "random" is not valid output type.
+      i `output_types` must be members of: "sample", "mean", and "pmf"
+
 # expand_model_out_grid errors correctly
 
     Code

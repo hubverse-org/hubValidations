@@ -126,10 +126,12 @@ expand_model_out_grid <- function(config_tasks,
                                   as_arrow_table = FALSE,
                                   bind_model_tasks = TRUE,
                                   include_sample_ids = FALSE,
-                                  compound_taskid_set = NULL) {
+                                  compound_taskid_set = NULL,
+                                  output_types = NULL) {
   round_idx <- hubUtils::get_round_idx(config_tasks, round_id)
   checkmate::assert_list(compound_taskid_set, null.ok = TRUE)
   output_type_id_datatype <- rlang::arg_match(output_type_id_datatype)
+  output_types <- validate_output_types(output_types, config_tasks, round_id)
 
   round_config <- purrr::pluck(
     config_tasks,
@@ -158,7 +160,13 @@ expand_model_out_grid <- function(config_tasks,
   output_type_l <- purrr::map(
     round_config[["model_tasks"]],
     function(.x) {
-      .x[["output_type"]]
+      out <- .x[["output_type"]]
+      if (is.null(output_types)) {
+        out
+      } else {
+        mt_output_types <- output_types[output_types %in% names(out)]
+        out[mt_output_types]
+      }
     }
   ) %>%
     purrr::map(
@@ -304,6 +312,7 @@ process_mt_grid_outputs <- function(x, config_tasks, all_character,
 
 # Pad any columns in all_cols missing in x of with new NA columns
 pad_missing_cols <- function(x, all_cols) {
+  if (ncol(x) == 0L) {return(x)}
   if (inherits(x, "data.frame")) {
     x[, all_cols[!all_cols %in% names(x)]] <- NA
     return(x[, all_cols])
@@ -471,4 +480,55 @@ extract_mt_output_type_ids <- function(x, config_tid) {
       }
     }
   )
+}
+
+
+get_round_config <- function(config_tasks, round_id) {
+  round_idx <- hubUtils::get_round_idx(config_tasks, round_id)
+  purrr::pluck(
+    config_tasks,
+    "rounds",
+    round_idx
+  )
+}
+
+get_round_output_types <- function(config_tasks, round_id) {
+  round_config <- get_round_config(config_tasks, round_id)
+  purrr::map(
+    round_config[["model_tasks"]],
+    ~ .x[["output_type"]]
+  )
+}
+
+get_round_output_type_names <- function(config_tasks, round_id,
+                                        collapse = TRUE) {
+  out <- get_round_output_types(config_tasks, round_id) %>%
+    purrr::map(names)
+
+    if (collapse) {
+      purrr::flatten_chr(out) %>%
+        unique()
+    } else {
+      out
+    }
+}
+
+validate_output_types <- function(output_types, config_tasks, round_id,
+                                  call = rlang::caller_call()) {
+  checkmate::assert_character(output_types, null.ok = TRUE)
+  if (is.null(output_types)) {
+    return(NULL)
+  }
+  round_output_types <- get_round_output_type_names(config_tasks, round_id)
+  valid_output_types <- intersect(output_types, round_output_types)
+  if (length(valid_output_types) == 0L) {
+    cli::cli_abort(
+      c(
+        "x" = "{.val {output_types}} {?is/are} not valid output type{?s}.",
+        "i" = "{.arg output_types} must be members of: {.val {round_output_types}}"
+      ),
+      call = call
+    )
+  }
+  valid_output_types
 }
