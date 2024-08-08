@@ -128,16 +128,10 @@ expand_model_out_grid <- function(config_tasks,
                                   include_sample_ids = FALSE,
                                   compound_taskid_set = NULL,
                                   output_types = NULL) {
-  round_idx <- hubUtils::get_round_idx(config_tasks, round_id)
   checkmate::assert_list(compound_taskid_set, null.ok = TRUE)
   output_type_id_datatype <- rlang::arg_match(output_type_id_datatype)
   output_types <- validate_output_types(output_types, config_tasks, round_id)
-
-  round_config <- purrr::pluck(
-    config_tasks,
-    "rounds",
-    round_idx
-  )
+  round_config <- get_round_config(config_tasks, round_id)
 
   task_id_l <- purrr::map(
     round_config[["model_tasks"]],
