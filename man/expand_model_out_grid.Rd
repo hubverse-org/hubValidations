@@ -14,7 +14,8 @@ expand_model_out_grid(
   as_arrow_table = FALSE,
   bind_model_tasks = TRUE,
   include_sample_ids = FALSE,
-  compound_taskid_set = NULL
+  compound_taskid_set = NULL,
+  output_types = NULL
 )
 }
 \arguments{
@@ -60,6 +61,9 @@ the \code{output_type_id} column.}
 in the round. Can be used to override the compound task ID set defined in the
 config. If \code{NULL} is provided for a given modeling task, a compound task ID set of
 all task IDs is used.}
+
+\item{output_types}{character vector of output type names to include.
+Use to subset for grids for specific output types.}
 }
 \value{
 If \code{bind_model_tasks = TRUE} (default) a tibble or arrow table

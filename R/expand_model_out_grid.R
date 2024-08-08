@@ -20,6 +20,8 @@
 #' in the round. Can be used to override the compound task ID set defined in the
 #' config. If `NULL` is provided for a given modeling task, a compound task ID set of
 #' all task IDs is used.
+#' @param output_types character vector of output type names to include.
+#' Use to subset for grids for specific output types.
 #'
 #' @return If `bind_model_tasks = TRUE` (default) a tibble or arrow table
 #' containing all possible task ID and related output type ID
