@@ -5,7 +5,7 @@
 \title{Check model output data tbl samples contain the appropriate number of samples
 for a given compound idx.}
 \usage{
-check_tbl_spl_n(tbl, round_id, file_path, hub_path)
+check_tbl_spl_n(tbl, round_id, file_path, hub_path, compound_taskid_set = NULL)
 }
 \arguments{
 \item{tbl}{a tibble/data.frame of the contents of the file being validated. Column types must \strong{all be character}.}
@@ -24,6 +24,10 @@ For more details consult the
 in the \code{arrow} package.
 The hub must be fully configured with valid \code{admin.json} and \code{tasks.json}
 files within the \code{hub-config} directory.}
+
+\item{compound_taskid_set}{a list of \code{compound_taskid_set}s (characters vector of compound task IDs),
+one for each modeling task. Used to override the compound task ID set in the config file,
+for example, when validating coarser samples.}
 }
 \value{
 Depending on whether validation has succeeded, one of:

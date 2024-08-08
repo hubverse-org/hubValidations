@@ -3,6 +3,7 @@
 #' @param tbl a tibble/data.frame of the contents of the file being validated. Column types must **all be character**.
 #' @inherit check_tbl_colnames params
 #' @inherit check_tbl_col_types return
+#' @inheritParams check_tbl_spl_compound_tid
 #' @details Output of the check includes an `errors` element, a list of items,
 #' one for each compound_idx failing validation, with the following structure:
 #' - `compound_idx`: the compound idx that failed validation of number of samples.
@@ -14,21 +15,56 @@
 #' See [hubverse documentation on samples](https://hubverse.io/en/latest/user-guide/sample-output-type.html)
 #' for more details.
 #' @export
-check_tbl_spl_n <- function(tbl, round_id, file_path, hub_path) {
+check_tbl_spl_n <- function(tbl, round_id, file_path, hub_path,
+                            compound_taskid_set = NULL) {
+  if (!is.null(compound_taskid_set) && isTRUE(is.na(compound_taskid_set))) {
+    cli::cli_abort("Valid {.var compound_taskid_set} must be provided.")
+  }
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
+  if (is.null(compound_taskid_set)) {
+    compound_taskid_set <- get_round_compound_task_ids(
+      config_tasks,
+      round_id
+    )
+  }
 
   if (isFALSE(has_spls_tbl(tbl)) || isFALSE(hubUtils::is_v3_config(config_tasks))) {
     return(skip_v3_spl_check(file_path))
   }
 
-  hash_tbl <- spl_hash_tbl(tbl, round_id, config_tasks)
+  hash_tbl <- spl_hash_tbl(tbl, round_id, config_tasks, compound_taskid_set)
   n_ranges <- get_round_spl_n_ranges(config_tasks, round_id)
 
   n_tbl <- dplyr::group_by(hash_tbl, .data$compound_idx) %>%
     dplyr::summarise(
       n = dplyr::n_distinct(.data$output_type_id),
       mt_id = unique(.data$mt_id)
-    ) %>%
+    )
+
+  # First check that all compound_idx have the same number of samples
+  # If not, return check failure.
+  check <- dplyr::n_distinct(n_tbl$n) == 1L
+  if (isFALSE(check)) {
+    return(
+      capture_check_cnd(
+        check = check,
+        file_path = file_path,
+        msg_subject = "Number of samples per compound idx ",
+        msg_attribute = NULL,
+        msg_verbs = c("consistent.", "not consistent."),
+        details = cli::format_inline(
+          "Sample numbers supplied per compound idx vary between
+          {.val {unique(n_tbl$n)}}.
+          See {.var errors} attribute for details."
+        ),
+        errors = n_tbl
+      )
+    )
+  }
+
+  # Next check that all compound_idx have a number of samples within the
+  # range required by the sample config.
+  n_tbl <- n_tbl %>%
     dplyr::left_join(n_ranges, by = "mt_id") %>%
     dplyr::mutate(
       less = .data$n < .data$n_min,

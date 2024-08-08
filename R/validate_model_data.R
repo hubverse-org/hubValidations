@@ -196,13 +196,16 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
     )
     if (is_any_error(checks$spl_compound_taskid_set)) {
       return(checks)
+    } else {
+      compound_taskid_set <- checks$spl_compound_taskid_set$compound_taskid_set
     }
     checks$spl_compound_tid <- try_check(
       check_tbl_spl_compound_tid(
         tbl_chr,
         round_id = round_id,
         file_path = file_path,
-        hub_path = hub_path
+        hub_path = hub_path,
+        compound_taskid_set = compound_taskid_set
       ), file_path
     )
     if (is_any_error(checks$spl_compound_tid)) {
@@ -213,7 +216,8 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
         tbl_chr,
         round_id = round_id,
         file_path = file_path,
-        hub_path = hub_path
+        hub_path = hub_path,
+        compound_taskid_set = compound_taskid_set
       ), file_path
     )
     if (is_any_error(checks$spl_non_compound_tid)) {
@@ -224,7 +228,8 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
         tbl_chr,
         round_id = round_id,
         file_path = file_path,
-        hub_path = hub_path
+        hub_path = hub_path,
+        compound_taskid_set = compound_taskid_set
       ), file_path
     )
   }

@@ -169,7 +169,7 @@ test_that("check_tbl_values consistent across numeric & character output type id
 
 test_that("check_tbl_values works with v3 spec samples", {
   hub_path <- system.file("testhubs/samples", package = "hubValidations")
-  file_path <- "Flusight-baseline/2022-10-22-Flusight-baseline.csv"
+  file_path <- "flu-base/2022-10-22-flu-base.csv"
   round_id <- "2022-10-22"
   tbl <- read_model_out_file(
     file_path = file_path,

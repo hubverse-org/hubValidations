@@ -38,3 +38,26 @@
       
       
 
+# Overriding compound_taskid_set in check_tbl_spl_compound_tid works
+
+    Code
+      str(check_tbl_spl_non_compound_tid(tbl_coarse, round_id, file_path, hub_path))
+    Output
+      List of 5
+       $ message       : chr "Task ID combinations of non compound task id values consistent across modeling task samples. \n "
+       $ where         : chr "flu-base/2022-10-22-flu-base.csv"
+       $ errors        : NULL
+       $ call          : chr "check_tbl_spl_non_compound_tid"
+       $ use_cli_format: logi TRUE
+       - attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+
+---
+
+    Code
+      check_tbl_spl_non_compound_tid(tbl_coarse, round_id, file_path, hub_path,
+        compound_taskid_set = compound_taskid_set)
+    Output
+      <message/check_success>
+      Message:
+      Task ID combinations of non compound task id values consistent across modeling task samples.
+

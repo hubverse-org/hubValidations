@@ -39,13 +39,15 @@ check_tbl_spl_compound_taskid_set <- function(tbl, round_id, file_path, hub_path
   }
 
   compound_taskid_set <- get_tbl_compound_taskid_set(tbl, config_tasks, round_id,
-    compact = TRUE, error = FALSE
+    compact = FALSE, error = FALSE
   )
 
   check <- purrr::map_lgl(
     compound_taskid_set,
     ~ is.null(attr(.x, "errors"))
   ) |> all()
+
+
 
   capture_check_cnd(
     check = check,
@@ -56,7 +58,8 @@ check_tbl_spl_compound_taskid_set <- function(tbl, round_id, file_path, hub_path
     msg_verbs = c("conform", "do not conform"),
     details = compile_msg(compound_taskid_set),
     errors = compile_errors(compound_taskid_set),
-    error = TRUE
+    error = TRUE,
+    compound_taskid_set = if (check) { compound_taskid_set } else { NA }
   )
 }
 

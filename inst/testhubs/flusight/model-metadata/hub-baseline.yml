@@ -5,27 +5,12 @@ model_abbr: "baseline"
 model_version: "1.0"
 model_contributors: [
   {
-    "name": "Nutcha Wattanachit",
-    "affiliation": "UMass Amherst",
-    "email": "nwattanachit@schoolph.umass.edu"
-  },
-  {
-    "name": "Aaron Gerding",
-    "affiliation": "UMass Amherst",
-    "email": "agerding@umass.edu"
-  },
-  {
-    "name": "Nick Reich",
-    "affiliation": "UMass Amherst",
-    "email": "nick@umass.edu"
-  },
-  {
-    "name": "Evan Ray",
-    "affiliation": "UMass Amherst",
-    "email": "elray@umass.edu"
+    "name": "Jane Does",
+    "affiliation": "ACME University",
+    "email": "j.doe@acme.edu"
   }
 ]
-website_url: "https://github.com/reichlab/flu-hosp-models-2021-2022"
+website_url: "https://github.com/examplelab/flu-hosp-models-2021-2022"
 license: "CC-BY-4.0"
 citation: "citation"
 team_funding: "funding"

@@ -6,7 +6,7 @@
 # compound task id sets across modeling tasks). This is achieved by using a full
 # join between tbl sample data and the model output data sample grid for each
 # modeling task. This means that only valid task id combinations are considered.
-spl_hash_tbl <- function(tbl, round_id, config_tasks) {
+spl_hash_tbl <- function(tbl, round_id, config_tasks, compound_taskid_set = NULL) {
   tbl <- tbl[tbl$output_type == "sample", names(tbl) != "value"]
 
   mt_spl_grid <- expand_model_out_grid(
@@ -14,50 +14,67 @@ spl_hash_tbl <- function(tbl, round_id, config_tasks) {
     round_id = round_id,
     all_character = TRUE,
     include_sample_ids = TRUE,
-    bind_model_tasks = FALSE
+    bind_model_tasks = FALSE,
+    compound_taskid_set = compound_taskid_set
+  ) %>%
+    stats::setNames(seq_along(.))
+
+  mt_tbls <- purrr::map(
+    mt_spl_grid,
+    function(.x) {
+      if (is.null(.x) || !has_spls_tbl(.x)) {
+        NULL
+      } else {
+        dplyr::filter(
+          .x, .data$output_type == "sample"
+        ) %>%
+          dplyr::rename(compound_idx = "output_type_id") %>%
+          dplyr::inner_join(tbl, .,
+            by = setdiff(
+              names(tbl),
+              c("output_type_id", "compound_idx")
+            )
+          )
+      }
+    }
   )
 
-  spl_mts <- has_spls_mt_grid(mt_spl_grid)
-
-  mt_ids <- seq_along(mt_spl_grid)[spl_mts]
-  mt_spl_grid <- mt_spl_grid[spl_mts] # remove non-sample grids
-  mt_compound_taskids <- get_round_compound_task_ids(
-    config_tasks,
-    round_id
-  )[spl_mts]
+  if (is.null(compound_taskid_set)) {
+    mt_compound_taskids <- get_round_compound_task_ids(
+      config_tasks,
+      round_id
+    )
+  } else {
+    mt_compound_taskids <- compound_taskid_set
+  }
 
   purrr::map2(
-    mt_spl_grid, mt_compound_taskids,
+    mt_tbls, mt_compound_taskids,
     ~ get_mt_spl_hash_tbl(
-      spl_grid = .x, compound_taskids = .y,
-      tbl = tbl,
+      tbl = .x, compound_taskids = .y,
       round_task_ids = hubUtils::get_round_task_id_names(
         config_tasks,
         round_id
       )
     )
   ) %>%
-    purrr::map2(.y = mt_ids, ~ dplyr::mutate(.x, mt_id = .y)) %>% # add mt_id
+    purrr::compact() %>%
+    purrr::imap( ~ dplyr::mutate(.x, mt_id = as.integer(.y))) %>% # add mt_id
     purrr::list_rbind()
 }
 
-get_mt_spl_hash_tbl <- function(spl_grid, compound_taskids, tbl, round_task_ids) {
-  spl_grid <- dplyr::filter(
-    spl_grid, .data$output_type == "sample"
-  ) %>%
-    dplyr::rename(compound_idx = "output_type_id")
+get_mt_spl_hash_tbl <- function(tbl, compound_taskids, round_task_ids) {
+
+  if (is.null(tbl)) {
+    return(NULL)
+  }
 
   non_compound_taskids <- setdiff(
     round_task_ids,
     compound_taskids
   )
 
-  tbl <- dplyr::inner_join(tbl, spl_grid,
-    by = setdiff(
-      names(tbl),
-      c("output_type_id", "compound_idx")
-    )
-  ) %>%
+  tbl <- tbl %>%
     dplyr::group_by(
       .data$output_type_id
     ) %>%

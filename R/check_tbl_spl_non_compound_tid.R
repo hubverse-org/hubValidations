@@ -2,6 +2,7 @@
 #' non-compound task ID values across all samples
 #' @param tbl a tibble/data.frame of the contents of the file being validated. Column types must **all be character**.
 #' @inherit check_tbl_colnames params
+#' @inheritParams check_tbl_spl_compound_tid
 #' @inherit check_tbl_colnames return
 #' @details Output of the check includes an `errors` element, a list of items,
 #' one for each modeling task containing samples failing validation,
@@ -15,14 +16,24 @@
 #' See [hubverse documentation on samples](https://hubverse.io/en/latest/user-guide/sample-output-type.html)
 #' for more details.
 #' @export
-check_tbl_spl_non_compound_tid <- function(tbl, round_id, file_path, hub_path) {
+check_tbl_spl_non_compound_tid <- function(tbl, round_id, file_path, hub_path,
+                                           compound_taskid_set = NULL) {
+  if (!is.null(compound_taskid_set) && isTRUE(is.na(compound_taskid_set))) {
+    cli::cli_abort("Valid {.var compound_taskid_set} must be provided.")
+  }
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
+  if (is.null(compound_taskid_set)) {
+    compound_taskid_set <- get_round_compound_task_ids(
+      config_tasks,
+      round_id
+    )
+  }
 
   if (isFALSE(has_spls_tbl(tbl)) || isFALSE(hubUtils::is_v3_config(config_tasks))) {
     return(skip_v3_spl_check(file_path))
   }
 
-  hash_tbl <- spl_hash_tbl(tbl, round_id, config_tasks)
+  hash_tbl <- spl_hash_tbl(tbl, round_id, config_tasks, compound_taskid_set)
 
   n_tbl <- dplyr::summarise(
     hash_tbl,
@@ -39,7 +50,7 @@ check_tbl_spl_non_compound_tid <- function(tbl, round_id, file_path, hub_path) {
   } else {
     errors <- non_comptid_mismatch_errors(
       mt_ids = n_tbl$mt_id, hash_tbl, tbl,
-      config_tasks, round_id
+      config_tasks, round_id, compound_taskid_set
     )
     output_type_ids <- purrr::map(errors, ~ .x$output_type_ids) %>% # nolint: object_usage_linter
       unlist(use.names = FALSE)
@@ -64,9 +75,10 @@ check_tbl_spl_non_compound_tid <- function(tbl, round_id, file_path, hub_path) {
 }
 
 non_comptid_mismatch_errors <- function(mt_ids, hash_tbl, tbl,
-                                        config_tasks, round_id) {
+                                        config_tasks, round_id,
+                                        compound_taskid_set) {
   tbl <- tbl[tbl$output_type == "sample", names(tbl) != "value"]
-  compound_taskids_l <- get_round_compound_task_ids(config_tasks, round_id)
+
   round_taskids <- hubUtils::get_round_task_id_names(
     config_tasks,
     round_id
@@ -74,7 +86,7 @@ non_comptid_mismatch_errors <- function(mt_ids, hash_tbl, tbl,
 
   purrr::map(
     mt_ids,
-    function(.x, hash_tbl, tbl, compound_taskids_l) {
+    function(.x, hash_tbl, tbl, compound_taskid_set) {
       mt_hashes <- hash_tbl$hash_non_comp_tid[hash_tbl$mt_id == .x] %>%
         table() %>%
         sort(decreasing = TRUE) %>%
@@ -85,18 +97,18 @@ non_comptid_mismatch_errors <- function(mt_ids, hash_tbl, tbl,
         hash = utils::head(mt_hashes, 1L),
         n = 1L
       )
-      mt_compound_taskids <- compound_taskids_l[[.x]]
+      mt_compound_taskid_set <- compound_taskid_set[[.x]]
 
       list(
         mt_id = .x,
         output_type_ids = get_hash_out_type_ids(hash_tbl, mt_hashes[-1L]),
         frequent = tbl[
           tbl$output_type_id == spl_id,
-          setdiff(round_taskids, mt_compound_taskids)
+          setdiff(round_taskids, mt_compound_taskid_set)
         ]
       )
     },
     hash_tbl = hash_tbl, tbl = tbl,
-    compound_taskids_l = compound_taskids_l
+    compound_taskid_set = compound_taskid_set
   )
 }

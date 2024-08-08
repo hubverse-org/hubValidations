@@ -1,6 +1,6 @@
 test_that("get_tbl_compound_taskid_set works", {
   hub_path <- system.file("testhubs/samples", package = "hubValidations")
-  file_path <- "Flusight-baseline/2022-10-22-Flusight-baseline.csv"
+  file_path <- "flu-base/2022-10-22-flu-base.csv"
   round_id <- "2022-10-22"
   tbl <- read_model_out_file(
     file_path = file_path,
@@ -25,7 +25,7 @@ test_that("get_tbl_compound_taskid_set works", {
 
 test_that("get_tbl_compound_taskid_set errors correctly", {
   hub_path <- system.file("testhubs/samples", package = "hubValidations")
-  file_path <- "Flusight-baseline/2022-10-22-Flusight-baseline.csv"
+  file_path <- "flu-base/2022-10-22-flu-base.csv"
   round_id <- "2022-10-22"
   tbl_error_dups <- read_model_out_file(
     file_path = file_path,
