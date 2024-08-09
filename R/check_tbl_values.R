@@ -1,34 +1,24 @@
 #' Check model output data tbl contains valid value combinations
 #' @param tbl a tibble/data.frame of the contents of the file being validated. Column types must **all be character**.
 #' @inherit check_tbl_colnames params
+#' @inheritParams expand_model_out_grid
 #' @inherit check_tbl_colnames return
 #' @export
-check_tbl_values <- function(tbl, round_id, file_path, hub_path) {
+check_tbl_values <- function(tbl, round_id, file_path, hub_path,
+                             derived_task_ids = NULL) {
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
-
-  # Coerce accepted vals to character for easier comparison of
-  # values. Tried to use arrow tbls for comparisons as more efficient when
-  # working with larger files but currently arrow does not match NAs as dplyr
-  # does, returning false positives for mean & median rows which contain NA in
-  # output type ID column.
-  accepted_vals <- expand_model_out_grid(
-    config_tasks = config_tasks,
-    round_id = round_id,
-    all_character = TRUE
-  )
-
-  # This approach uses dplyr to identify tbl rows that don't have a complete match
-  # in accepted_vals.
-  accepted_vals$valid <- TRUE
-  if (hubUtils::is_v3_config(config_tasks)) {
-    out_type_ids <- tbl[["output_type_id"]]
-    tbl[tbl$output_type == "sample", "output_type_id"] <- NA
+  if (!is.null(derived_task_ids)) {
+    tbl[, derived_task_ids] <- NA_character_
   }
 
-  valid_tbl <- dplyr::left_join(
-    tbl, accepted_vals,
-    by = names(tbl)[names(tbl) != "value"]
-  )
+  valid_tbl <- tbl %>%
+    split(f = tbl$output_type) %>%
+    purrr::imap(
+      ~ check_values_by_output_type(tbl = .x, output_type = .y,
+                                 config_tasks = config_tasks,
+                                 round_id = round_id,
+                                 derived_task_ids = derived_task_ids)
+    ) %>% purrr::list_rbind()
 
   check <- !any(is.na(valid_tbl$valid))
 
@@ -36,7 +26,8 @@ check_tbl_values <- function(tbl, round_id, file_path, hub_path) {
     details <- NULL
     error_tbl <- NULL
   } else {
-    error_summary <- summarise_invalid_values(valid_tbl, accepted_vals)
+    error_summary <- summarise_invalid_values(valid_tbl, config_tasks, round_id,
+                                              derived_task_ids)
     details <- error_summary$msg
     if (length(error_summary$invalid_combs_idx) == 0L) {
       error_tbl <- NULL
@@ -66,10 +57,43 @@ check_tbl_values <- function(tbl, round_id, file_path, hub_path) {
   )
 }
 
-summarise_invalid_values <- function(valid_tbl, accepted_vals) {
+check_values_by_output_type <- function(tbl, output_type, config_tasks, round_id,
+                                     derived_task_ids = NULL) {
+
+  # Coerce accepted vals to character for easier comparison of
+  # values. Tried to use arrow tbls for comparisons as more efficient when
+  # working with larger files but currently arrow does not match NAs as dplyr
+  # does, returning false positives for mean & median rows which contain NA in
+  # output type ID column.
+  accepted_vals <- expand_model_out_grid(
+    config_tasks = config_tasks,
+    round_id = round_id,
+    all_character = TRUE,
+    output_types = output_type,
+    derived_task_ids = derived_task_ids
+  )
+
+  # This approach uses dplyr to identify tbl rows that don't have a complete match
+  # in accepted_vals.
+  accepted_vals$valid <- TRUE
+  if (hubUtils::is_v3_config(config_tasks)) {
+    out_type_ids <- tbl[["output_type_id"]]
+    tbl[tbl$output_type == "sample", "output_type_id"] <- NA
+  }
+
+  valid_tbl <- dplyr::left_join(
+    tbl, accepted_vals,
+    by = names(tbl)[names(tbl) != "value"]
+  )
+
+}
+
+summarise_invalid_values <- function(valid_tbl, config_tasks, round_id,
+                                     derived_task_ids) {
   cols <- names(valid_tbl)[!names(valid_tbl) %in% c("value", "valid")]
   uniq_tbl <- purrr::map(valid_tbl[cols], unique)
-  uniq_config <- purrr::map(accepted_vals[cols], unique)
+  uniq_config <- get_round_config_values(config_tasks, round_id,
+                                         derived_task_ids)[cols]
 
   invalid_vals <- purrr::map2(
     uniq_tbl, uniq_config,

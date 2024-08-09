@@ -3,6 +3,7 @@
 #' @inheritParams check_tbl_unique_round_id
 #' @inheritParams validate_model_file
 #' @inheritParams hubData::create_hub_schema
+#' @inheritParams expand_model_out_grid
 #' @inherit validate_model_file return
 #' @export
 #' @details
@@ -29,7 +30,8 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
                                   "double", "integer",
                                   "logical", "Date"
                                 ),
-                                validations_cfg_path = NULL) {
+                                validations_cfg_path = NULL,
+                                derived_task_ids = NULL) {
   checks <- new_hub_validations()
 
   file_meta <- parse_file_name(file_path)
@@ -136,7 +138,8 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
       tbl_chr,
       round_id = round_id,
       file_path = file_path,
-      hub_path = hub_path
+      hub_path = hub_path,
+      derived_task_ids = derived_task_ids
     ), file_path
   )
   if (is_any_error(checks$valid_vals)) {
