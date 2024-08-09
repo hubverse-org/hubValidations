@@ -395,6 +395,43 @@ test_that("expand_model_out_grid output type subsetting works", {
 
 })
 
+test_that("expand_model_out_grid derived_task_ids ignoring works", {
+  config_tasks <- hubUtils::read_config(test_path("testdata", "hub-spl"))
+
+  expect_snapshot(
+    expand_model_out_grid(config_tasks,
+                          round_id = "2022-10-22",
+                          include_sample_ids = FALSE,
+                          bind_model_tasks = TRUE,
+                          output_types = "sample",
+                          derived_task_ids = "target_end_date"
+    )
+  )
+  expect_snapshot(
+    expand_model_out_grid(config_tasks,
+                          round_id = "2022-10-22",
+                          include_sample_ids = TRUE,
+                          bind_model_tasks = TRUE,
+                          output_types = "sample",
+                          derived_task_ids = "target_end_date",
+                          required_vals_only = TRUE
+    )
+  )
+
+  expect_snapshot(
+    expand_model_out_grid(config_tasks,
+                          round_id = "2022-10-22",
+                          include_sample_ids = FALSE,
+                          bind_model_tasks = FALSE,
+                          output_types = "sample",
+                          derived_task_ids = c("location", "variant")
+    ),
+    error = TRUE
+  )
+})
+
+
+
 test_that("expand_model_out_grid errors correctly", {
   # Specifying a round in a hub with multiple rounds
   hub_con <- hubData::connect_hub(

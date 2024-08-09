@@ -253,7 +253,7 @@
     Code
       submission_tmpl(hub_con, round_id = "random_round_id")
     Condition
-      Error in `hubUtils::get_round_idx()`:
+      Error in `get_round_idx()`:
       ! `round_id` must be one of "2022-10-01", "2022-10-08", "2022-10-15", "2022-10-22", or "2022-10-29", not "random_round_id".
 
 ---
