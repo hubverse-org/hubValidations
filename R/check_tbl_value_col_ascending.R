@@ -57,8 +57,16 @@ check_values_ascending <- function(tbl) {
   group_cols <- names(tbl)[!names(tbl) %in% hubUtils::std_colnames]
   tbl[["value"]] <- as.numeric(tbl[["value"]])
 
+  # group by all of the target columns
   check_tbl <- dplyr::group_by(tbl, dplyr::across(dplyr::all_of(group_cols))) %>%
-    dplyr::arrange(.data$output_type_id, .by_group = TRUE) %>%
+    # FIX for <https://github.com/hubverse-org/hubValidations/issues/78>
+    # output_type_ids are grouped together and we want to make sure the numeric
+    # ids are sorted correctly. To do this, we need to create a separate column
+    # for numeric IDs and sort by that first and then the recorded value of
+    # output_type_id second. This way, we can ensure that numeric values are
+    # not sorted by character.
+    dplyr::mutate(num_id = suppressWarnings(as.numeric(.data$output_type_id))) %>%
+    dplyr::arrange(.data$num_id, .data$output_type_id, .by_group = TRUE) %>%
     dplyr::summarise(non_asc = any(diff(.data[["value"]]) < 0))
 
   if (!any(check_tbl$non_asc)) {
