@@ -77,7 +77,7 @@ test_that("(#78) check_tbl_value_col_ascending handle cdf char values", {
   file_path <- test_path("testdata/files/2024-08-12-cdf-ascent.csv")
   ex <- arrow::read_csv_arrow(file_path)
 
-  res <- hubValidations:::check_tbl_value_col_ascending(ex, file_path = "")
+  res <- check_tbl_value_col_ascending(ex, file_path = "")
   expect_s3_class(res, "check_success")
   expect_null(res$error_tbl)
 })
