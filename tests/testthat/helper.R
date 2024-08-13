@@ -1,6 +1,3 @@
-suppressPackageStartupMessages({
-  library(dplyr)
-})
 # Function to create a valid sample submission for the testdata/hub-spl hub
 create_spl_file <- function(round_id, compound_taskid_set = NULL,
                             hub_path = test_path("testdata/hub-spl"),
