@@ -11,7 +11,20 @@
 #' @inherit check_tbl_colnames params
 #' @inherit check_tbl_col_types return
 #' @export
-check_tbl_value_col_ascending <- function(tbl, file_path) {
+check_tbl_value_col_ascending <- function(tbl, file_path, hub_path, round_id) {
+
+  config_tasks <- hubUtils::read_config(hub_path, "tasks")
+
+  # Coerce accepted vals to character for easier comparison of
+  # values. Tried to use arrow tbls for comparisons as more efficient when
+  # working with larger files but currently arrow does not match NAs as dplyr
+  # does, returning false positives for mean & median rows which contain NA in
+  # output type ID column.
+  accepted_vals <- expand_model_out_grid(
+    config_tasks = config_tasks,
+    round_id = round_id,
+    all_character = TRUE 
+  )
   if (all(!c("cdf", "quantile") %in% tbl[["output_type"]])) {
     return(
       capture_check_info(
@@ -22,8 +35,10 @@ check_tbl_value_col_ascending <- function(tbl, file_path) {
     )
   }
 
-  output_type_tbl <- split(tbl, tbl[["output_type"]])[c("cdf", "quantile")] %>%
-    purrr::compact()
+  
+  # sort the table by config by merging from config ----------------
+  tbl_sorted <- order_output_type_ids(tbl, accepted_vals, c("cdf", "quantile"))
+  output_type_tbl <- split_cdf_quantile(tbl_sorted)
 
   error_tbl <- purrr::map(
     output_type_tbl,
@@ -65,8 +80,8 @@ check_values_ascending <- function(tbl) {
     # for numeric IDs and sort by that first and then the recorded value of
     # output_type_id second. This way, we can ensure that numeric values are
     # not sorted by character.
-    dplyr::mutate(num_id = suppressWarnings(as.numeric(.data$output_type_id))) %>%
-    dplyr::arrange(.data$num_id, .data$output_type_id, .by_group = TRUE) %>%
+    # dplyr::mutate(num_id = suppressWarnings(as.numeric(.data$output_type_id))) %>%
+    # dplyr::arrange(.data$num_id, .data$output_type_id, .by_group = TRUE) %>%
     dplyr::summarise(non_asc = any(diff(.data[["value"]]) < 0))
 
   if (!any(check_tbl$non_asc)) {
@@ -79,4 +94,22 @@ check_values_ascending <- function(tbl) {
     dplyr::select(-dplyr::all_of("non_asc")) %>%
     dplyr::ungroup() %>%
     dplyr::mutate(.env$output_type)
+}
+
+split_cdf_quantile <- function(tbl) {
+  split(tbl, tbl[["output_type"]])[c("cdf", "quantile")] %>%
+    purrr::compact()
+}
+
+order_output_type_ids <- function(tbl, config, types = c("cdf", "quantile")) {
+  # reduce config to two column
+  order_ref <- config[c("output_type", "output_type_id")]
+  # filter the rows to the specified output types
+  cdf_and_quantile <- order_ref$output_type %in% types
+  order_ref <- order_ref[cdf_and_quantile, , drop = FALSE]
+  # return a lookup table
+  order_ref <- unique(order_ref)
+  # convert output_type_id to character so that we can join good
+  tbl$output_type_id <- as.character(tbl$output_type_id)
+  dplyr::inner_join(order_ref, tbl, by = c("output_type", "output_type_id"))
 }
