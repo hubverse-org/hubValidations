@@ -35,6 +35,7 @@ check_tbl_value_col_ascending <- function(tbl, file_path, hub_path, round_id) {
     )
   }
 
+  # FIX for <https://github.com/hubverse-org/hubValidations/issues/78>
   # sort the table by config by merging from config ----------------
   tbl_sorted <- order_output_type_ids(tbl, accepted_vals, c("cdf", "quantile"))
   output_type_tbl <- split_cdf_quantile(tbl_sorted)
@@ -73,14 +74,6 @@ check_values_ascending <- function(tbl) {
 
   # group by all of the target columns
   check_tbl <- dplyr::group_by(tbl, dplyr::across(dplyr::all_of(group_cols))) %>%
-    # FIX for <https://github.com/hubverse-org/hubValidations/issues/78>
-    # output_type_ids are grouped together and we want to make sure the numeric
-    # ids are sorted correctly. To do this, we need to create a separate column
-    # for numeric IDs and sort by that first and then the recorded value of
-    # output_type_id second. This way, we can ensure that numeric values are
-    # not sorted by character.
-    # dplyr::mutate(num_id = suppressWarnings(as.numeric(.data$output_type_id))) %>%
-    # dplyr::arrange(.data$num_id, .data$output_type_id, .by_group = TRUE) %>%
     dplyr::summarise(non_asc = any(diff(.data[["value"]]) < 0))
 
   if (!any(check_tbl$non_asc)) {
