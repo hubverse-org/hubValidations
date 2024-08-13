@@ -36,6 +36,7 @@ reference:
   - read_model_out_file
   - try_check
   - expand_model_out_grid
+  - get_tbl_compound_taskid_set
 
 
 - title: "`<hub_validations>` methods"

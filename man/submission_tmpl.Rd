@@ -9,7 +9,8 @@ submission_tmpl(
   config_tasks,
   round_id,
   required_vals_only = FALSE,
-  complete_cases_only = TRUE
+  complete_cases_only = TRUE,
+  compound_taskid_set = NULL
 )
 }
 \arguments{
@@ -32,6 +33,11 @@ Task ID and related output type ID required values.}
 only rows with complete cases of combinations of required values are returned.
 If \code{FALSE}, rows with incomplete cases of combinations of required values
 are included in the output.}
+
+\item{compound_taskid_set}{List of character vectors, one for each modeling task
+in the round. Can be used to override the compound task ID set defined in the
+config. If \code{NULL} is provided for a given modeling task, a compound task ID set of
+all task IDs is used.}
 }
 \value{
 a tibble template containing an expanded grid of valid task ID and
@@ -109,5 +115,16 @@ config_tasks <- hubUtils::read_config_file(system.file("config", "tasks-comp-tid
 submission_tmpl(
   config_tasks = config_tasks,
   round_id = "2022-12-26"
+)
+# Override config compound task ID set
+# Create coarser compound task ID set for the first modeling task which contains
+# samples
+submission_tmpl(
+  config_tasks = config_tasks,
+  round_id = "2022-12-26",
+  compound_taskid_set = list(
+    c("forecast_date", "target"),
+    NULL
+  )
 )
 }

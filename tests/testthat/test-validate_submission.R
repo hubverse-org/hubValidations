@@ -204,6 +204,53 @@ test_that("File containing task ID with all null properties validate correctly",
   )
 })
 
+test_that("validate_submission works with v3 samples.", {
+  skip_if_offline()
+  set.seed(123)
+  expect_true(
+    suppressMessages(
+      check_for_errors(
+        validate_submission(
+          hub_path = test_path("testdata/hub-spl"),
+          create_file_path("2022-10-22"),
+          skip_submit_window_check = TRUE
+        )
+      )
+    )
+  )
+
+  v <- validate_submission(
+    hub_path = test_path("testdata/hub-spl"),
+    create_file_path("2022-10-22"),
+    skip_submit_window_check = TRUE
+  )
+  expect_snapshot(
+    v$spl_compound_taskid_set$compound_taskid_set
+  )
+  expect_true(suppressMessages(check_for_errors(v)))
+  # Coarser files validate successfully ----
+  # compound_taskid_set = c("reference_date", "location")
+  v_rl <- validate_submission(
+    hub_path = test_path("testdata/hub-spl"),
+    create_file_path("2022-10-29"),
+    skip_submit_window_check = TRUE
+  )
+  expect_snapshot(
+    v_rl$spl_compound_taskid_set$compound_taskid_set
+  )
+  expect_true(suppressMessages(check_for_errors(v_rl)))
+  # compound_taskid_set = c("reference_date", "horizon")
+  v_rh <- validate_submission(
+    hub_path = test_path("testdata/hub-spl"),
+    create_file_path("2022-11-05"),
+    skip_submit_window_check = TRUE
+  )
+  expect_snapshot(
+    v_rh$spl_compound_taskid_set$compound_taskid_set
+  )
+  expect_true(suppressMessages(check_for_errors(v_rh)))
+})
+
 test_that("validate_submission handles overriding output type id data type correctly.", {
   skip_if_offline()
 

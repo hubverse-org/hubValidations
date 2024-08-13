@@ -24,3 +24,24 @@ df <- tibble::add_column(df, age_group = "65+", .before = "output_type")
 multiple_rids <- df
 multiple_rids$origin_date[1:3] <- "2022-10-15"
 testthis::use_testdata(multiple_rids, subdir = "files", overwrite = TRUE)
+
+
+## CREATE hub-spl test files
+## Create files ----
+set.seed(123)
+create_spl_file("2022-10-22")
+
+# Coarser samples ----
+create_spl_file("2022-10-29",
+  compound_taskid_set = list(
+    NULL,
+    c("reference_date", "location")
+  )
+)
+
+create_spl_file("2022-11-05",
+  compound_taskid_set = list(
+    NULL,
+    c("reference_date", "horizon")
+  )
+)
