@@ -68,6 +68,7 @@ test_that("Overriding compound_taskid_set in check_tbl_spl_compound_tid works", 
   # also succeeds.
   expect_snapshot(
     check_tbl_spl_non_compound_tid(tbl_coarse, round_id, file_path, hub_path,
-                               compound_taskid_set = compound_taskid_set)
+      compound_taskid_set = compound_taskid_set
+    )
   )
 })

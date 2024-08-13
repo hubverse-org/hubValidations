@@ -77,10 +77,10 @@ test_that("Overriding compound_taskid_set in check_tbl_spl_compound_tid works", 
     c("reference_date", "horizon")
   )
   tbl_coarse <- create_spl_file("2022-10-22",
-                                compound_taskid_set = compound_taskid_set,
-                                write = FALSE,
-                                out_datatype = "chr",
-                                n_samples = 1L
+    compound_taskid_set = compound_taskid_set,
+    write = FALSE,
+    out_datatype = "chr",
+    n_samples = 1L
   )
 
   # Validation of coarser files should return check failure.
@@ -104,9 +104,9 @@ test_that("Overriding compound_taskid_set in check_tbl_spl_compound_tid works", 
 
   # Create 100 spls of each compound idx
   tbl_full <- create_spl_file("2022-10-22",
-                              compound_taskid_set = compound_taskid_set,
-                              write = FALSE,
-                              out_datatype = "chr"
+    compound_taskid_set = compound_taskid_set,
+    write = FALSE,
+    out_datatype = "chr"
   )
 
   # This succeeds!

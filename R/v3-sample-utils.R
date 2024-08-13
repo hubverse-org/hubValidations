@@ -59,7 +59,7 @@ spl_hash_tbl <- function(tbl, round_id, config_tasks, compound_taskid_set = NULL
     )
   ) %>%
     purrr::compact() %>%
-    purrr::imap( ~ dplyr::mutate(.x, mt_id = as.integer(.y))) %>% # add mt_id
+    purrr::imap(~dplyr::mutate(.x, mt_id = as.integer(.y))) %>% # add mt_id
     purrr::list_rbind()
 }
 
