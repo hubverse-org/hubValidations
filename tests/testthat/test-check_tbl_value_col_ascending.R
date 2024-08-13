@@ -82,17 +82,51 @@ test_that("check_tbl_value_col_ascending skips correctly", {
 })
 
 
-test_that("(#78) check_tbl_value_col_ascending handle cdf char values", {
-  skip("needs refactoring with dang hub")
+test_that("(#78) check_tbl_value_col_ascending will sort even if the data doesn't naturally sort", {
+  # In this situaton, I am duplicating the simple testhub and modifying it in
+  # one way:
+  #
+  # I am replacing the `quantile` model task with `cdf` and adding a cumulative
+  # sum so that we can get unsortable numbers.
+  make_unsortable <- function(x) suppressWarnings(x + 1:23)
+
+  # Duplicating the simple test hub ---------------------------------------
   hub_path <- withr::local_tempdir()
   fs::dir_copy(system.file("testhubs/simple", package = "hubValidations"),
-    hub_path
+    hub_path,
+    overwrite = TRUE
   )
 
-  file_path <- test_path("testdata/files/2024-08-12-cdf-ascent.csv")
-  ex <- arrow::read_csv_arrow(file_path)
+  # Creating the CFG output -----------------------------------------------
+  cfg <- attr(hubData::connect_hub(hub_path), "config_tasks")
+  outputs <- cfg$rounds[[1]]$model_tasks[[1]]$output_type
+  outputs$cfg <- outputs$quantile
+  outputs$quantile <- NULL
+  otid <- outputs$cfg$output_type_id$required
+  outputs$cfg$output_type_id$required <- make_unsortable(otid)
+  cfg$rounds[[1]]$model_tasks[[1]]$output_type <- outputs
+  jsonlite::toJSON(cfg) %>%
+    jsonlite::prettify() %>%
+    writeLines(fs::path(hub_path, "hub-config", "tasks.json"))
 
-  res <- check_tbl_value_col_ascending(ex, file_path = "")
+  # Updating the data to match the config --------------------------------
+  file_path <- "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+  file_meta <- parse_file_name(file_path)
+  tbl <- hubValidations::read_model_out_file(file_path, hub_path)
+  tbl$output_type_id <- make_unsortable(tbl$output_type_id)
+
+  # validating when it is sorted -----------------------------------------
+  res <- check_tbl_value_col_ascending(tbl, file_path, hub_path, file_meta$round_id)
   expect_s3_class(res, "check_success")
   expect_null(res$error_tbl)
+
+  # validating when it is unsorted ---------------------------------------
+  res_unordered <- check_tbl_value_col_ascending(
+    tbl[sample(nrow(tbl)), ],
+    file_path,
+    hub_path,
+    file_meta$round_id
+  )
+  expect_s3_class(res_unordered, "check_success")
+  expect_null(res_unordered$error_tbl)
 })
