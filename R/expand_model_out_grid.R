@@ -262,7 +262,6 @@ process_mt_grid_outputs <- function(x, config_tasks, all_character,
                                     as_arrow_table = TRUE,
                                     bind_model_tasks = TRUE,
                                     output_type_id_datatype = output_type_id_datatype) {
-
   if (bind_model_tasks) {
     # To bind multiple modeling task grids together, we need to ensure they contain
     # the same columns. Any missing columns are padded with NAs.
@@ -308,7 +307,9 @@ process_mt_grid_outputs <- function(x, config_tasks, all_character,
 
 # Pad any columns in all_cols missing in x of with new NA columns
 pad_missing_cols <- function(x, all_cols) {
-  if (ncol(x) == 0L) {return(x)}
+  if (ncol(x) == 0L) {
+    return(x)
+  }
   if (inherits(x, "data.frame")) {
     x[, all_cols[!all_cols %in% names(x)]] <- NA
     return(x[, all_cols])
@@ -501,12 +502,12 @@ get_round_output_type_names <- function(config_tasks, round_id,
   out <- get_round_output_types(config_tasks, round_id) %>%
     purrr::map(names)
 
-    if (collapse) {
-      purrr::flatten_chr(out) %>%
-        unique()
-    } else {
-      out
-    }
+  if (collapse) {
+    purrr::flatten_chr(out) %>%
+      unique()
+  } else {
+    out
+  }
 }
 
 validate_output_types <- function(output_types, config_tasks, round_id,

@@ -344,57 +344,56 @@ test_that("expand_model_out_grid output controls with samples work correctly", {
 test_that("expand_model_out_grid output type subsetting works", {
   config_tasks <- hubUtils::read_config_file(
     system.file("config", "tasks-comp-tid.json",
-                package = "hubValidations"
+      package = "hubValidations"
     )
   )
   expect_snapshot(
     expand_model_out_grid(config_tasks,
-                          round_id = "2022-12-26",
-                          include_sample_ids = TRUE,
-                          bind_model_tasks = FALSE,
-                          output_types = c("pmf", "sample"),
-    )
-  )
-
-  expect_snapshot(
-    expand_model_out_grid(config_tasks,
-                          round_id = "2022-12-26",
-                          include_sample_ids = TRUE,
-                          bind_model_tasks = FALSE,
-                          output_types = "sample",
+      round_id = "2022-12-26",
+      include_sample_ids = TRUE,
+      bind_model_tasks = FALSE,
+      output_types = c("pmf", "sample"),
     )
   )
 
   expect_snapshot(
     expand_model_out_grid(config_tasks,
-                          round_id = "2022-12-26",
-                          include_sample_ids = TRUE,
-                          bind_model_tasks = TRUE,
-                          output_types = "sample",
+      round_id = "2022-12-26",
+      include_sample_ids = TRUE,
+      bind_model_tasks = FALSE,
+      output_types = "sample",
+    )
+  )
+
+  expect_snapshot(
+    expand_model_out_grid(config_tasks,
+      round_id = "2022-12-26",
+      include_sample_ids = TRUE,
+      bind_model_tasks = TRUE,
+      output_types = "sample",
     )
   )
 
   # If a valid output type is provided, invalid ones just ignored
   expect_snapshot(
     expand_model_out_grid(config_tasks,
-                          round_id = "2022-12-26",
-                          include_sample_ids = FALSE,
-                          bind_model_tasks = TRUE,
-                          output_types = c("random", "sample"),
+      round_id = "2022-12-26",
+      include_sample_ids = FALSE,
+      bind_model_tasks = TRUE,
+      output_types = c("random", "sample"),
     )
   )
 
   # If no valid output type provided, errors
   expect_snapshot(
     expand_model_out_grid(config_tasks,
-                          round_id = "2022-12-26",
-                          include_sample_ids = FALSE,
-                          bind_model_tasks = FALSE,
-                          output_types = c("random"),
+      round_id = "2022-12-26",
+      include_sample_ids = FALSE,
+      bind_model_tasks = FALSE,
+      output_types = c("random"),
     ),
     error = TRUE
   )
-
 })
 
 test_that("expand_model_out_grid errors correctly", {
