@@ -59,7 +59,11 @@ check_tbl_spl_compound_taskid_set <- function(tbl, round_id, file_path, hub_path
     details = compile_msg(compound_taskid_set),
     errors = compile_errors(compound_taskid_set),
     error = TRUE,
-    compound_taskid_set = if (check) { compound_taskid_set } else { NA }
+    compound_taskid_set = if (check) {
+      compound_taskid_set
+    } else {
+      NA
+    }
   )
 }
 

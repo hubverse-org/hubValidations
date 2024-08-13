@@ -93,17 +93,17 @@ test_that("Different compound_taskid_sets work", {
   # Mock the config file to include all task ids a derived task id depends on
   #  in the compound_taskid_set but exclude the derived task id itself.
   #  Currently will fail
-    config_tasks_full_ctids <- purrr::modify_in(
-      hubUtils::read_config_file(
-        fs::path(hub_path, "hub-config", "tasks.json")
-      ),
-      list(
-        "rounds", 1, "model_tasks", 2,
-        "output_type", "sample",
-        "output_type_id_params", "compound_taskid_set"
-      ),
-      ~ c("reference_date", "horizon", "location", "variant")
-    )
+  config_tasks_full_ctids <- purrr::modify_in(
+    hubUtils::read_config_file(
+      fs::path(hub_path, "hub-config", "tasks.json")
+    ),
+    list(
+      "rounds", 1, "model_tasks", 2,
+      "output_type", "sample",
+      "output_type_id_params", "compound_taskid_set"
+    ),
+    ~ c("reference_date", "horizon", "location", "variant")
+  )
 
   mockery::stub(
     check_tbl_spl_compound_taskid_set,
