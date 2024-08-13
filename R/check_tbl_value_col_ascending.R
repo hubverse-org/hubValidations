@@ -23,7 +23,7 @@ check_tbl_value_col_ascending <- function(tbl, file_path, hub_path, round_id) {
   accepted_vals <- expand_model_out_grid(
     config_tasks = config_tasks,
     round_id = round_id,
-    all_character = TRUE 
+    all_character = TRUE
   )
   if (all(!c("cdf", "quantile") %in% tbl[["output_type"]])) {
     return(
@@ -35,7 +35,6 @@ check_tbl_value_col_ascending <- function(tbl, file_path, hub_path, round_id) {
     )
   }
 
-  
   # sort the table by config by merging from config ----------------
   tbl_sorted <- order_output_type_ids(tbl, accepted_vals, c("cdf", "quantile"))
   output_type_tbl <- split_cdf_quantile(tbl_sorted)
