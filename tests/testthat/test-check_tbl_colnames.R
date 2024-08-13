@@ -24,7 +24,6 @@ test_that("check_tbl_colnames validates correct files", {
 })
 
 test_that("check_tbl_colnames fails on files", {
-  skip_if_not_installed("testthis")
   hub_path <- system.file("testhubs/simple", package = "hubValidations")
   file_path <- "test/file.csv"
   round_id <- "2022-10-15"

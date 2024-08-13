@@ -31,7 +31,6 @@ test_that("check_tbl_unique_round_id works", {
 
 
 test_that("check_tbl_unique_round_id fails correctly", {
-  skip_if_not_installed("testthis")
   hub_path <- system.file("testhubs/simple", package = "hubValidations")
   file_path <- "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
   multiple_rids <- suppressMessages(
