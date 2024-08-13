@@ -85,8 +85,7 @@ test_that("check_tbl_value_col_ascending skips correctly", {
 test_that("(#78) check_tbl_value_col_ascending handle cdf char values", {
   skip("needs refactoring with dang hub")
   hub_path <- withr::local_tempdir()
-  
-  fs::dir_copy(system.file("testhubs/simple", package = "hubValidations"), 
+  fs::dir_copy(system.file("testhubs/simple", package = "hubValidations"),
     hub_path
   )
 
