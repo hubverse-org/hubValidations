@@ -7,18 +7,19 @@
 check_tbl_values <- function(tbl, round_id, file_path, hub_path,
                              derived_task_ids = NULL) {
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
-  if (!is.null(derived_task_ids)) {
-    tbl[, derived_task_ids] <- NA_character_
-  }
 
   valid_tbl <- tbl %>%
+    tibble::rowid_to_column() %>%
     split(f = tbl$output_type) %>%
     purrr::imap(
-      ~ check_values_by_output_type(tbl = .x, output_type = .y,
-                                 config_tasks = config_tasks,
-                                 round_id = round_id,
-                                 derived_task_ids = derived_task_ids)
-    ) %>% purrr::list_rbind()
+      ~ check_values_by_output_type(
+        tbl = .x, output_type = .y,
+        config_tasks = config_tasks,
+        round_id = round_id,
+        derived_task_ids = derived_task_ids
+      )
+    ) %>%
+    purrr::list_rbind()
 
   check <- !any(is.na(valid_tbl$valid))
 
@@ -26,15 +27,14 @@ check_tbl_values <- function(tbl, round_id, file_path, hub_path,
     details <- NULL
     error_tbl <- NULL
   } else {
-    error_summary <- summarise_invalid_values(valid_tbl, config_tasks, round_id,
-                                              derived_task_ids)
+    error_summary <- summarise_invalid_values(
+      valid_tbl, config_tasks, round_id,
+      derived_task_ids
+    )
     details <- error_summary$msg
     if (length(error_summary$invalid_combs_idx) == 0L) {
       error_tbl <- NULL
     } else {
-      if (hubUtils::is_v3_config(config_tasks)) {
-        tbl[["output_type_id"]] <- out_type_ids
-      }
       error_tbl <- tbl[
         error_summary$invalid_combs_idx,
         names(tbl) != "value"
@@ -58,7 +58,10 @@ check_tbl_values <- function(tbl, round_id, file_path, hub_path,
 }
 
 check_values_by_output_type <- function(tbl, output_type, config_tasks, round_id,
-                                     derived_task_ids = NULL) {
+                                        derived_task_ids = NULL) {
+  if (!is.null(derived_task_ids)) {
+    tbl[, derived_task_ids] <- NA_character_
+  }
 
   # Coerce accepted vals to character for easier comparison of
   # values. Tried to use arrow tbls for comparisons as more efficient when
@@ -76,24 +79,24 @@ check_values_by_output_type <- function(tbl, output_type, config_tasks, round_id
   # This approach uses dplyr to identify tbl rows that don't have a complete match
   # in accepted_vals.
   accepted_vals$valid <- TRUE
-  if (hubUtils::is_v3_config(config_tasks)) {
-    out_type_ids <- tbl[["output_type_id"]]
+  if (hubUtils::is_v3_config(config_tasks) && output_type == "sample") {
     tbl[tbl$output_type == "sample", "output_type_id"] <- NA
   }
 
-  valid_tbl <- dplyr::left_join(
+  dplyr::left_join(
     tbl, accepted_vals,
-    by = names(tbl)[names(tbl) != "value"]
+    by = setdiff(names(tbl), c("value", "rowid"))
   )
-
 }
 
 summarise_invalid_values <- function(valid_tbl, config_tasks, round_id,
                                      derived_task_ids) {
-  cols <- names(valid_tbl)[!names(valid_tbl) %in% c("value", "valid")]
+  cols <- setdiff(names(valid_tbl), c("value", "valid", "rowid"))
   uniq_tbl <- purrr::map(valid_tbl[cols], unique)
-  uniq_config <- get_round_config_values(config_tasks, round_id,
-                                         derived_task_ids)[cols]
+  uniq_config <- get_round_config_values(
+    config_tasks, round_id,
+    derived_task_ids
+  )[cols]
 
   invalid_vals <- purrr::map2(
     uniq_tbl, uniq_config,
@@ -121,13 +124,15 @@ summarise_invalid_values <- function(valid_tbl, config_tasks, round_id,
     unlist(use.names = FALSE) %>%
     unique()
   invalid_row_idx <- which(is.na(valid_tbl$valid))
-  invalid_combs_idx <- setdiff(invalid_val_idx, invalid_row_idx)
+  invalid_combs_idx <- setdiff(invalid_row_idx, invalid_val_idx)
   if (length(invalid_combs_idx) == 0L) {
     invalid_combs_msg <- NULL
   } else {
+    invalid_combs_idx <- valid_tbl$rowid[invalid_combs_idx]
     invalid_combs_msg <- cli::format_inline(
-      "Additionally row{?s} {.val {invalid_combs_idx}} contain invalid
-      combinations of valid values.
+      "Additionally {cli::qty(length(invalid_combs_idx))} row{?s}
+      {.val {invalid_combs_idx}} {cli::qty(length(invalid_combs_idx))}
+      {?contains/contain} invalid combinations of valid values.
       See {.var error_tbl} for details."
     )
   }

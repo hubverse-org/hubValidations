@@ -195,3 +195,33 @@ test_that("check_tbl_values works with v3 spec samples", {
     )
   )
 })
+
+
+test_that("Ignoring derived_task_ids in check_tbl_values works", {
+  hub_path <- system.file("testhubs/samples", package = "hubValidations")
+  file_path <- "flu-base/2022-10-22-flu-base.csv"
+  round_id <- "2022-10-22"
+  tbl <- read_model_out_file(
+    file_path = file_path,
+    hub_path = hub_path,
+    coerce_types = "chr"
+  )
+  expect_snapshot(
+    check_tbl_values(tbl, round_id, file_path, hub_path,
+                    derived_task_ids = "target_end_date"
+    )
+  )
+
+  tbl[1, "horizon"] <- "9"
+  tbl[2, "output_type"] <- "pmf"
+  expect_snapshot(
+    check_tbl_values(tbl, round_id, file_path, hub_path,
+                     derived_task_ids = "target_end_date"
+    )
+  )
+  expect_snapshot(
+    check_tbl_values(tbl, round_id, file_path, hub_path,
+                     derived_task_ids = "target_end_date"
+    )$error_tbl
+  )
+})
