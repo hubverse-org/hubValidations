@@ -13,7 +13,8 @@ validate_submission(
     "logical", "Date"),
   skip_submit_window_check = FALSE,
   skip_check_config = FALSE,
-  submit_window_ref_date_from = c("file", "file_path")
+  submit_window_ref_date_from = c("file", "file_path"),
+  derived_task_ids = NULL
 )
 }
 \arguments{
@@ -64,6 +65,10 @@ Only applicable when a round is configured to determine the submission
 windows relative to the value in a date column in model output files.
 Not applicable when explicit submission window start and end dates are
 provided in the hub's config.}
+
+\item{derived_task_ids}{Character vector of derived task ID names (task IDs whose
+values depend on other task IDs) to ignore. Columns for such task ids will
+contain \code{NA}s.}
 }
 \value{
 An object of class \code{hub_validations}. Each named element contains

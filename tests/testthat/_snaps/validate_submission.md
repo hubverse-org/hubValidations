@@ -943,3 +943,174 @@
       Message:
       Column data types match hub schema.
 
+# Ignoring derived_task_ids in validate_submission works
+
+    Code
+      str(validate_submission(hub_path = system.file("testhubs/samples", package = "hubValidations"),
+      file_path = "flu-base/2022-10-22-flu-base.csv", skip_submit_window_check = TRUE,
+      derived_task_ids = "target_end_date"))
+    Output
+      List of 24
+       $ valid_config           :List of 4
+        ..$ message       : chr "All hub config files are valid. \n "
+        ..$ where         : chr "samples"
+        ..$ call          : chr "check_config_hub_valid"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ file_exists            :List of 4
+        ..$ message       : chr "File exists at path 'model-output/flu-base/2022-10-22-flu-base.csv'. \n "
+        ..$ where         : chr "flu-base/2022-10-22-flu-base.csv"
+        ..$ call          : chr "check_file_exists"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ file_name              :List of 4
+        ..$ message       : chr "File name \"2022-10-22-flu-base.csv\" is valid. \n "
+        ..$ where         : chr "flu-base/2022-10-22-flu-base.csv"
+        ..$ call          : chr "check_file_name"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ file_location          :List of 4
+        ..$ message       : chr "File directory name matches `model_id`\n                                           metadata in file name. \n "
+        ..$ where         : chr "flu-base/2022-10-22-flu-base.csv"
+        ..$ call          : chr "check_file_location"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ round_id_valid         :List of 4
+        ..$ message       : chr "`round_id` is valid. \n "
+        ..$ where         : chr "flu-base/2022-10-22-flu-base.csv"
+        ..$ call          : chr "check_valid_round_id"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ file_format            :List of 4
+        ..$ message       : chr "File is accepted hub format. \n "
+        ..$ where         : chr "flu-base/2022-10-22-flu-base.csv"
+        ..$ call          : chr "check_file_format"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ metadata_exists        :List of 4
+        ..$ message       : chr "Metadata file exists at path 'model-metadata/flu-base.yml'. \n "
+        ..$ where         : chr "flu-base/2022-10-22-flu-base.csv"
+        ..$ call          : chr "check_submission_metadata_file_exists"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ file_read              :List of 4
+        ..$ message       : chr "File could be read successfully. \n "
+        ..$ where         : chr "flu-base/2022-10-22-flu-base.csv"
+        ..$ call          : chr "check_file_read"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ valid_round_id_col     :List of 4
+        ..$ message       : chr "`round_id_col` name is valid. \n "
+        ..$ where         : chr "flu-base/2022-10-22-flu-base.csv"
+        ..$ call          : chr "check_valid_round_id_col"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ unique_round_id        :List of 4
+        ..$ message       : chr "`round_id` column \"reference_date\" contains a single, unique round ID value. \n "
+        ..$ where         : chr "flu-base/2022-10-22-flu-base.csv"
+        ..$ call          : chr "check_tbl_unique_round_id"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ match_round_id         :List of 4
+        ..$ message       : chr "All `round_id_col` \"reference_date\" values match submission `round_id` from file name. \n "
+        ..$ where         : chr "flu-base/2022-10-22-flu-base.csv"
+        ..$ call          : chr "check_tbl_match_round_id"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ colnames               :List of 4
+        ..$ message       : chr "Column names are consistent with expected round task IDs and std column names. \n "
+        ..$ where         : chr "flu-base/2022-10-22-flu-base.csv"
+        ..$ call          : chr "check_tbl_colnames"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ col_types              :List of 4
+        ..$ message       : chr "Column data types match hub schema. \n "
+        ..$ where         : chr "flu-base/2022-10-22-flu-base.csv"
+        ..$ call          : chr "check_tbl_col_types"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ valid_vals             :List of 5
+        ..$ message       : chr "`tbl` contains valid values/value combinations.  \n "
+        ..$ where         : chr "flu-base/2022-10-22-flu-base.csv"
+        ..$ error_tbl     : NULL
+        ..$ call          : chr "check_tbl_values"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ rows_unique            :List of 4
+        ..$ message       : chr "All combinations of task ID column/`output_type`/`output_type_id` values are unique. \n "
+        ..$ where         : chr "flu-base/2022-10-22-flu-base.csv"
+        ..$ call          : chr "check_tbl_rows_unique"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ req_vals               :List of 5
+        ..$ message       : chr "Required task ID/output type/output type ID combinations all present.  \n "
+        ..$ where         : chr "flu-base/2022-10-22-flu-base.csv"
+        ..$ missing       : tibble [0 x 7] (S3: tbl_df/tbl/data.frame)
+        .. ..$ location       : chr(0) 
+        .. ..$ reference_date : chr(0) 
+        .. ..$ horizon        : chr(0) 
+        .. ..$ target_end_date: chr(0) 
+        .. ..$ target         : chr(0) 
+        .. ..$ output_type    : chr(0) 
+        .. ..$ output_type_id : chr(0) 
+        ..$ call          : chr "check_tbl_values_required"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ value_col_valid        :List of 4
+        ..$ message       : chr "Values in column `value` all valid with respect to modeling task config. \n "
+        ..$ where         : chr "flu-base/2022-10-22-flu-base.csv"
+        ..$ call          : chr "check_tbl_value_col"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ value_col_non_desc     :List of 4
+        ..$ message       : chr "No quantile or cdf output types to check for non-descending values.\n        Check skipped."
+        ..$ where         : chr "flu-base/2022-10-22-flu-base.csv"
+        ..$ call          : chr "check_tbl_value_col_ascending"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
+       $ value_col_sum1         :List of 5
+        ..$ message       : chr "Values in `value` column do sum to 1 for all unique task ID value combination of pmf\n    output types. \n "
+        ..$ where         : chr "flu-base/2022-10-22-flu-base.csv"
+        ..$ error_tbl     : NULL
+        ..$ call          : chr "check_tbl_value_col_sum1"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ spl_compound_taskid_set:List of 6
+        ..$ message            : chr "All samples in a model task conform to single, unique compound task ID set that matches or is\n    coarser than"| __truncated__
+        ..$ where              : chr "flu-base/2022-10-22-flu-base.csv"
+        ..$ errors             : NULL
+        ..$ compound_taskid_set:List of 2
+        .. ..$ 1: NULL
+        .. ..$ 2: chr [1:2] "reference_date" "location"
+        ..$ call               : chr "check_tbl_spl_compound_taskid_set"
+        ..$ use_cli_format     : logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ spl_compound_tid       :List of 5
+        ..$ message       : chr "Each sample compound task ID contains single, unique value. \n "
+        ..$ where         : chr "flu-base/2022-10-22-flu-base.csv"
+        ..$ errors        : NULL
+        ..$ call          : chr "check_tbl_spl_compound_tid"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ spl_non_compound_tid   :List of 5
+        ..$ message       : chr "Task ID combinations of non compound task id values consistent across modeling task samples. \n "
+        ..$ where         : chr "flu-base/2022-10-22-flu-base.csv"
+        ..$ errors        : NULL
+        ..$ call          : chr "check_tbl_spl_non_compound_tid"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ spl_n                  :List of 5
+        ..$ message       : chr "Required samples per compound idx task present.  \n "
+        ..$ where         : chr "flu-base/2022-10-22-flu-base.csv"
+        ..$ errors        : NULL
+        ..$ call          : chr "check_tbl_spl_n"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ horizon_timediff       :List of 4
+        ..$ message       : chr "Time differences between t0 var `reference_date` and t1 var\n        `target_end_date` all match expected perio"| __truncated__
+        ..$ where         : chr "flu-base/2022-10-22-flu-base.csv"
+        ..$ call          : NULL
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       - attr(*, "class")= chr [1:2] "hub_validations" "list"
+

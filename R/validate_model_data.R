@@ -159,7 +159,8 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
       tbl_chr,
       round_id = round_id,
       file_path = file_path,
-      hub_path = hub_path
+      hub_path = hub_path,
+      derived_task_ids = derived_task_ids
     ), file_path
   )
 
@@ -169,7 +170,8 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
       tbl,
       round_id = round_id,
       file_path = file_path,
-      hub_path = hub_path
+      hub_path = hub_path,
+      derived_task_ids = derived_task_ids
     ), file_path
   )
 
@@ -194,7 +196,8 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
         tbl_chr,
         round_id = round_id,
         file_path = file_path,
-        hub_path = hub_path
+        hub_path = hub_path,
+        derived_task_ids = derived_task_ids
       ), file_path
     )
     if (is_any_error(checks$spl_compound_taskid_set)) {
@@ -208,7 +211,8 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
         round_id = round_id,
         file_path = file_path,
         hub_path = hub_path,
-        compound_taskid_set = compound_taskid_set
+        compound_taskid_set = compound_taskid_set,
+        derived_task_ids = derived_task_ids
       ), file_path
     )
     if (is_any_error(checks$spl_compound_tid)) {
@@ -220,7 +224,8 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
         round_id = round_id,
         file_path = file_path,
         hub_path = hub_path,
-        compound_taskid_set = compound_taskid_set
+        compound_taskid_set = compound_taskid_set,
+        derived_task_ids = derived_task_ids
       ), file_path
     )
     if (is_any_error(checks$spl_non_compound_tid)) {
@@ -232,7 +237,8 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
         round_id = round_id,
         file_path = file_path,
         hub_path = hub_path,
-        compound_taskid_set = compound_taskid_set
+        compound_taskid_set = compound_taskid_set,
+        derived_task_ids = derived_task_ids
       ), file_path
     )
   }

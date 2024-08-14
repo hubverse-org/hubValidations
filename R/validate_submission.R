@@ -6,6 +6,7 @@
 #'
 #' @inherit validate_model_data return params
 #' @inheritParams hubData::create_hub_schema
+#' @inheritParams expand_model_out_grid
 #' @param skip_submit_window_check Logical. Whether to skip the submission window check.
 #' @param skip_check_config Logical. Whether to skip the hub config validation check.
 #'  check.
@@ -49,7 +50,8 @@ validate_submission <- function(hub_path, file_path, round_id_col = NULL,
                                 submit_window_ref_date_from = c(
                                   "file",
                                   "file_path"
-                                )) {
+                                ),
+                                derived_task_ids = NULL) {
   check_hub_config <- new_hub_validations()
   output_type_id_datatype <- rlang::arg_match(output_type_id_datatype)
 
@@ -89,7 +91,8 @@ validate_submission <- function(hub_path, file_path, round_id_col = NULL,
     file_path = file_path,
     round_id_col = round_id_col,
     output_type_id_datatype = output_type_id_datatype,
-    validations_cfg_path = validations_cfg_path
+    validations_cfg_path = validations_cfg_path,
+    derived_task_ids = derived_task_ids
   )
 
   combine(check_hub_config, checks_file, checks_data, checks_submission_time)

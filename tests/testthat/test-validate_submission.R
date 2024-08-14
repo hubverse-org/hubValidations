@@ -319,3 +319,31 @@ test_that("validate_submission handles overriding output type id data type corre
     )[["col_types"]]
   )
 })
+
+test_that("Ignoring derived_task_ids in validate_submission works", {
+  # Validation passes
+  expect_snapshot(
+    str(
+      validate_submission(
+        hub_path = system.file("testhubs/samples", package = "hubValidations"),
+        file_path = "flu-base/2022-10-22-flu-base.csv",
+        skip_submit_window_check = TRUE,
+        derived_task_ids = "target_end_date"
+      )
+    )
+  )
+  # Results of validation the same
+  expect_equal(
+    validate_submission(
+      hub_path = system.file("testhubs/samples", package = "hubValidations"),
+      file_path = "flu-base/2022-10-22-flu-base.csv",
+      skip_submit_window_check = TRUE,
+      derived_task_ids = "target_end_date"
+    ),
+    validate_submission(
+      hub_path = system.file("testhubs/samples", package = "hubValidations"),
+      file_path = "flu-base/2022-10-22-flu-base.csv",
+      skip_submit_window_check = TRUE
+    )
+  )
+})
