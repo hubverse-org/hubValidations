@@ -50,10 +50,10 @@ test_that("Overriding compound_taskid_set in check_tbl_spl_compound_tid works", 
     c("reference_date", "horizon")
   )
   tbl_coarse <- create_spl_file("2022-10-22",
-                                compound_taskid_set = compound_taskid_set,
-                                write = FALSE,
-                                out_datatype = "chr",
-                                n_samples = 1L
+    compound_taskid_set = compound_taskid_set,
+    write = FALSE,
+    out_datatype = "chr",
+    n_samples = 1L
   )
 
 
@@ -65,9 +65,10 @@ test_that("Overriding compound_taskid_set in check_tbl_spl_compound_tid works", 
     )
   )
 
- # Validation providing coarser compound taskid set succeeds
+  # Validation providing coarser compound taskid set succeeds
   expect_snapshot(
     check_tbl_spl_compound_tid(tbl_coarse, round_id, file_path, hub_path,
-                               compound_taskid_set = compound_taskid_set)
+      compound_taskid_set = compound_taskid_set
+    )
   )
 })
