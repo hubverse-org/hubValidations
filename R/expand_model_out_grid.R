@@ -571,7 +571,8 @@ validate_derived_task_ids <- function(derived_task_ids, config_tasks, round_id) 
       purrr::map_lgl(
         ~ !is.null(.x$required)
       )
-  ) %>% purrr::reduce(`|`)
+  ) %>%
+    purrr::reduce(`|`)
   if (any(has_required)) {
     cli::cli_abort(
       c(

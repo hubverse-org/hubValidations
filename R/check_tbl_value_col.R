@@ -20,12 +20,14 @@ check_tbl_value_col <- function(tbl, round_id, file_path, hub_path,
 
   details <- split(tbl, f = tbl$output_type) %>%
     purrr::imap(
-      ~ check_value_col_by_output_type(
-        tbl = .x, output_type = .y,
-        config_tasks = config_tasks,
-        round_id = round_id,
-        derived_task_ids = derived_task_ids
-      )
+      \(.x, .y) {
+        check_value_col_by_output_type(
+          tbl = .x, output_type = .y,
+          config_tasks = config_tasks,
+          round_id = round_id,
+          derived_task_ids = derived_task_ids
+        )
+      }
     ) %>%
     unlist(use.names = TRUE)
 
@@ -50,9 +52,11 @@ check_value_col_by_output_type <- function(tbl, output_type,
       derived_task_ids = derived_task_ids
     ),
     .y = get_round_output_types(config_tasks, round_id),
-    \(.x, .y) compare_values_to_config(
-      tbl = .x, output_type_config = .y, output_type = output_type
-    )
+    \(.x, .y) {
+      compare_values_to_config(
+        tbl = .x, output_type_config = .y, output_type = output_type
+      )
+    }
   ) %>%
     unlist(use.names = TRUE)
 }

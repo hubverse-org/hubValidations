@@ -208,7 +208,7 @@ test_that("Ignoring derived_task_ids in check_tbl_values works", {
   )
   expect_snapshot(
     check_tbl_values(tbl, round_id, file_path, hub_path,
-                    derived_task_ids = "target_end_date"
+      derived_task_ids = "target_end_date"
     )
   )
 
@@ -216,12 +216,12 @@ test_that("Ignoring derived_task_ids in check_tbl_values works", {
   tbl[2, "output_type"] <- "pmf"
   expect_snapshot(
     check_tbl_values(tbl, round_id, file_path, hub_path,
-                     derived_task_ids = "target_end_date"
+      derived_task_ids = "target_end_date"
     )
   )
   expect_snapshot(
     check_tbl_values(tbl, round_id, file_path, hub_path,
-                     derived_task_ids = "target_end_date"
+      derived_task_ids = "target_end_date"
     )$error_tbl
   )
 })
