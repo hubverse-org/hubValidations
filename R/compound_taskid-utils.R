@@ -8,6 +8,7 @@
 #' @param error Logical. If TRUE, an error will be thrown if the compound task ID set is not valid.
 #' If FALSE and an error is detected, the detected compound task ID set will be
 #' returned with error attributes attached.
+#' @inheritParams expand_model_out_grid
 #'
 #' @return A list of vectors of compound task IDs detected in the tbl, one for each
 #' modeling task in the round. If `compact` is TRUE, modeling tasks returning NULL
@@ -29,11 +30,14 @@
 #' )
 #'
 get_tbl_compound_taskid_set <- function(tbl, config_tasks, round_id,
-                                        compact = TRUE, error = TRUE) {
+                                        compact = TRUE, error = TRUE,
+                                        derived_task_ids = NULL) {
   if (!inherits(tbl, "tbl_df")) {
     tbl <- dplyr::as_tibble(tbl)
   }
-
+  if (!is.null(derived_task_ids)) {
+    tbl[, derived_task_ids] <- NA_character_
+  }
   tbl <- tbl[tbl$output_type == "sample", names(tbl) != "value"]
   out_tid <- hubUtils::std_colnames["output_type_id"]
 
@@ -48,10 +52,12 @@ get_tbl_compound_taskid_set <- function(tbl, config_tasks, round_id,
       round_id = round_id,
       all_character = TRUE,
       include_sample_ids = FALSE,
-      bind_model_tasks = FALSE
+      bind_model_tasks = FALSE,
+      output_types = "sample",
+      derived_task_ids = derived_task_ids
     ),
     function(.x) {
-      if (!has_spls_tbl(.x)) {
+      if (nrow(.x) == 0L) {
         return(NULL)
       }
       dplyr::inner_join(tbl, .x[, names(.x) != out_tid],

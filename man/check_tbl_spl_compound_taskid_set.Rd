@@ -5,7 +5,13 @@
 \title{Check model output data tbl sample compound task id sets for each modeling task
 match or are coarser than the expected set defined in the config.}
 \usage{
-check_tbl_spl_compound_taskid_set(tbl, round_id, file_path, hub_path)
+check_tbl_spl_compound_taskid_set(
+  tbl,
+  round_id,
+  file_path,
+  hub_path,
+  derived_task_ids = NULL
+)
 }
 \arguments{
 \item{tbl}{a tibble/data.frame of the contents of the file being validated.
@@ -25,6 +31,10 @@ For more details consult the
 in the \code{arrow} package.
 The hub must be fully configured with valid \code{admin.json} and \code{tasks.json}
 files within the \code{hub-config} directory.}
+
+\item{derived_task_ids}{Character vector of derived task ID names (task IDs whose
+values depend on other task IDs) to ignore. Columns for such task ids will
+contain \code{NA}s.}
 }
 \value{
 Depending on whether validation has succeeded, one of:

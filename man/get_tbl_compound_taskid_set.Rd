@@ -9,7 +9,8 @@ get_tbl_compound_taskid_set(
   config_tasks,
   round_id,
   compact = TRUE,
-  error = TRUE
+  error = TRUE,
+  derived_task_ids = NULL
 )
 }
 \arguments{
@@ -25,6 +26,10 @@ Column types must \strong{all be character}.}
 \item{error}{Logical. If TRUE, an error will be thrown if the compound task ID set is not valid.
 If FALSE and an error is detected, the detected compound task ID set will be
 returned with error attributes attached.}
+
+\item{derived_task_ids}{Character vector of derived task ID names (task IDs whose
+values depend on other task IDs) to ignore. Columns for such task ids will
+contain \code{NA}s.}
 }
 \value{
 A list of vectors of compound task IDs detected in the tbl, one for each

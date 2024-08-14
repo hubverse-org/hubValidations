@@ -168,3 +168,19 @@ test_that("Finer compound_taskid_sets work", {
     )
   )
 })
+
+test_that("Ignoring derived_task_ids in check_tbl_spl_compound_taskid_set works", {
+  hub_path <- system.file("testhubs/samples", package = "hubValidations")
+  file_path <- "flu-base/2022-10-22-flu-base.csv"
+  round_id <- "2022-10-22"
+  tbl <- read_model_out_file(
+    file_path = file_path,
+    hub_path = hub_path,
+    coerce_types = "chr"
+  )
+  expect_snapshot(
+    check_tbl_spl_compound_taskid_set(tbl, round_id, file_path, hub_path,
+                               derived_task_ids = "target_end_date"
+    )
+  )
+})

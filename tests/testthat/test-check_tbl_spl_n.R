@@ -65,7 +65,7 @@ test_that("check_tbl_spl_n works", {
 })
 
 
-test_that("Overriding compound_taskid_set in check_tbl_spl_compound_tid works", {
+test_that("Overriding compound_taskid_set in check_tbl_spl_n works", {
   hub_path <- test_path("testdata/hub-spl")
   file_path <- "flu-base/2022-10-22-flu-base.csv"
   round_id <- "2022-10-22"
@@ -77,10 +77,10 @@ test_that("Overriding compound_taskid_set in check_tbl_spl_compound_tid works", 
     c("reference_date", "horizon")
   )
   tbl_coarse <- create_spl_file("2022-10-22",
-                                compound_taskid_set = compound_taskid_set,
-                                write = FALSE,
-                                out_datatype = "chr",
-                                n_samples = 1L
+    compound_taskid_set = compound_taskid_set,
+    write = FALSE,
+    out_datatype = "chr",
+    n_samples = 1L
   )
 
   # Validation of coarser files should return check failure.
@@ -104,9 +104,9 @@ test_that("Overriding compound_taskid_set in check_tbl_spl_compound_tid works", 
 
   # Create 100 spls of each compound idx
   tbl_full <- create_spl_file("2022-10-22",
-                              compound_taskid_set = compound_taskid_set,
-                              write = FALSE,
-                              out_datatype = "chr"
+    compound_taskid_set = compound_taskid_set,
+    write = FALSE,
+    out_datatype = "chr"
   )
 
   # This succeeds!
@@ -125,6 +125,23 @@ test_that("Overriding compound_taskid_set in check_tbl_spl_compound_tid works", 
   expect_snapshot(
     check_tbl_spl_n(tbl_minus_1, round_id, file_path, hub_path,
       compound_taskid_set = compound_taskid_set
+    )
+  )
+})
+
+
+test_that("Ignoring derived_task_ids in check_tbl_spl_n works", {
+  hub_path <- system.file("testhubs/samples", package = "hubValidations")
+  file_path <- "flu-base/2022-10-22-flu-base.csv"
+  round_id <- "2022-10-22"
+  tbl <- read_model_out_file(
+    file_path = file_path,
+    hub_path = hub_path,
+    coerce_types = "chr"
+  )
+  expect_snapshot(
+    check_tbl_spl_n(tbl, round_id, file_path, hub_path,
+      derived_task_ids = "target_end_date"
     )
   )
 })

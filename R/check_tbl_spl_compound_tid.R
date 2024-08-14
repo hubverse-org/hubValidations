@@ -4,6 +4,7 @@
 #' @param tbl a tibble/data.frame of the contents of the file being validated. Column types must **all be character**.
 #' @inherit check_tbl_colnames params
 #' @inherit check_tbl_colnames return
+#' @inheritParams expand_model_out_grid
 #' @param compound_taskid_set a list of `compound_taskid_set`s (characters vector of compound task IDs),
 #' one for each modeling task. Used to override the compound task ID set in the config file,
 #' for example, when validating coarser samples.
@@ -17,7 +18,8 @@
 #' for more details.
 #' @export
 check_tbl_spl_compound_tid <- function(tbl, round_id, file_path, hub_path,
-                                       compound_taskid_set = NULL) {
+                                       compound_taskid_set = NULL,
+                                       derived_task_ids = NULL) {
   if (!is.null(compound_taskid_set) && isTRUE(is.na(compound_taskid_set))) {
     cli::cli_abort("Valid {.var compound_taskid_set} must be provided.")
   }
@@ -33,7 +35,9 @@ check_tbl_spl_compound_tid <- function(tbl, round_id, file_path, hub_path,
     return(skip_v3_spl_check(file_path))
   }
 
-  hash_tbl <- spl_hash_tbl(tbl, round_id, config_tasks, compound_taskid_set)
+  hash_tbl <- spl_hash_tbl(tbl, round_id, config_tasks, compound_taskid_set,
+    derived_task_ids = derived_task_ids
+  )
   # TODO: Currently, samples must strictly match the compound task ID set expectations
   # and cannot handle coarser-grained compound task ID sets.
   n_tbl <- hash_tbl[hash_tbl$n_compound_idx > 1L, ]
