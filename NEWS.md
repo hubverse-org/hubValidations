@@ -2,8 +2,10 @@
 
 This release introduces significant improvements in the performance of submission validation via the following changes:
 * Add ability to sub-set expanded valid value grids by output type through `output_type` argument in `expand_model_out_grid()` (#98).
-* Add ability to ignore the values of derived task IDsin expanded valid value grids through argument `derived_task_ids` in `expand_model_out_grid()`.
-Both of these changes allow for the creation of smaller, more focused valid value grids that can be used to validate submissions more efficiently.
+* Add ability to ignore the values of derived task IDs in expanded valid value grids through argument `derived_task_ids` in `expand_model_out_grid()`. 
+* Use sub-setting and batching of model output data validation by output type in appropriate lower level checks and add ability to ignore derived task IDs in `validate_model_data()`, `validate_submission()` and `validate_pr()`. 
+
+Both of these changes allow for the creation of smaller, more focused expanded valid value grids, significantly reducing pressure on memory when working with large, complex hub configs and making submission validation much more efficient.
 
 Additional useful functionality:
 * Add new exported function `match_tbl_to_model_task()` that matches the rows in a `tbl` of model output data to a model task of a given round (as defined in `tasks.json`).
