@@ -10,7 +10,9 @@ submission_tmpl(
   round_id,
   required_vals_only = FALSE,
   complete_cases_only = TRUE,
-  compound_taskid_set = NULL
+  compound_taskid_set = NULL,
+  output_types = NULL,
+  derived_task_ids = NULL
 )
 }
 \arguments{
@@ -38,6 +40,13 @@ are included in the output.}
 in the round. Can be used to override the compound task ID set defined in the
 config. If \code{NULL} is provided for a given modeling task, a compound task ID set of
 all task IDs is used.}
+
+\item{output_types}{Character vector of output type names to include.
+Use to subset for grids for specific output types.}
+
+\item{derived_task_ids}{Character vector of derived task ID names (task IDs whose
+values depend on other task IDs) to ignore. Columns for such task ids will
+contain \code{NA}s.}
 }
 \value{
 a tibble template containing an expanded grid of valid task ID and
@@ -126,5 +135,20 @@ submission_tmpl(
     c("forecast_date", "target"),
     NULL
   )
+)
+# Subsetting for a single output type
+submission_tmpl(
+  config_tasks = config_tasks,
+  round_id = "2022-12-26",
+  output_types = "sample"
+)
+# Derive a template for a derived task ID
+config_tasks <- hubUtils::read_config(test_path("testdata", "hub-spl"))
+submission_tmpl(
+  config_tasks = config_tasks,
+  round_id = "2022-10-22",
+  output_types = "sample",
+  derived_task_ids = "target_end_date",
+  complete_cases_only = FALSE
 )
 }

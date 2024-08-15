@@ -92,10 +92,27 @@
 #'     NULL
 #'   )
 #' )
+#' # Subsetting for a single output type
+#' submission_tmpl(
+#'   config_tasks = config_tasks,
+#'   round_id = "2022-12-26",
+#'   output_types = "sample"
+#' )
+#' # Derive a template for a derived task ID
+#' config_tasks <- hubUtils::read_config(test_path("testdata", "hub-spl"))
+#' submission_tmpl(
+#'   config_tasks = config_tasks,
+#'   round_id = "2022-10-22",
+#'   output_types = "sample",
+#'   derived_task_ids = "target_end_date",
+#'   complete_cases_only = FALSE
+#' )
 submission_tmpl <- function(hub_con, config_tasks, round_id,
                             required_vals_only = FALSE,
                             complete_cases_only = TRUE,
-                            compound_taskid_set = NULL) {
+                            compound_taskid_set = NULL,
+                            output_types = NULL,
+                            derived_task_ids = NULL) {
   switch(rlang::check_exclusive(hub_con, config_tasks),
     hub_con = {
       checkmate::assert_class(hub_con, classes = "hub_connection")
@@ -108,7 +125,9 @@ submission_tmpl <- function(hub_con, config_tasks, round_id,
     round_id = round_id,
     required_vals_only = required_vals_only,
     include_sample_ids = TRUE,
-    compound_taskid_set = compound_taskid_set
+    compound_taskid_set = compound_taskid_set,
+    output_types = output_types,
+    derived_task_ids = derived_task_ids
   )
 
   tmpl_cols <- c(

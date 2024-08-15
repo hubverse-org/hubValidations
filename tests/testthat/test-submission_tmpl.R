@@ -217,3 +217,41 @@ test_that("submission_tmpl errors correctly", {
     error = TRUE
   )
 })
+
+test_that("submission_tmpl output type subsetting works", {
+  config_tasks <- hubUtils::read_config_file(system.file("config", "tasks-comp-tid.json",
+    package = "hubValidations"
+  ))
+
+  # Subsetting for a single output type
+  expect_snapshot(
+    submission_tmpl(
+      config_tasks = config_tasks,
+      round_id = "2022-12-26",
+      output_types = "sample"
+    )
+  )
+
+  # Subsetting for a two output types
+  expect_snapshot(
+    submission_tmpl(
+      config_tasks = config_tasks,
+      round_id = "2022-12-26",
+      output_types = c("mean", "sample")
+    )
+  )
+})
+
+test_that("submission_tmpl ignoring derived task ids works", {
+  config_tasks <- hubUtils::read_config(test_path("testdata", "hub-spl"))
+
+  expect_snapshot(
+    submission_tmpl(
+      config_tasks = config_tasks,
+      round_id = "2022-10-22",
+      output_types = "sample",
+      derived_task_ids = "target_end_date",
+      complete_cases_only = FALSE
+    )
+  )
+})
