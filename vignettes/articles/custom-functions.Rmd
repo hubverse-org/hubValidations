@@ -36,7 +36,7 @@ Within the default configuration, individual checks can be configured for each o
         - **`source:`** Path to `.R` script containing function code to be sourced. If relative, should be relative to the hub's directory root. Must be supplied if function is not part of a package and only exists as a script.
         - **`args`:** A yaml dictionary of key/value pairs or arguments to be passed to the custom function. Values can be yaml lists or even executable R code (optional).
         
-Note that each of the `validate_*()` functions contain a standard objects in their call environment which are passed automatically to any custom check function and therefore do not need including in the `args` configuration. 
+Note that each of the `validate_*()` functions contain standard objects in their call environment which are passed to any custom check function and assigned automatically to any argument with the same name. They therefore do not need explicit inclusion in the `args` configuration. Alternatively, they are also available to be passed to any argument explicitly in the validation config file if required.
 
 - **`validate_model_file`:**
   - `file_path`: character string of path to file being validated relative to the `model-output` directory.
@@ -45,11 +45,15 @@ Note that each of the `validate_*()` functions contain a standard objects in the
   - `file_meta`: named list containing `round_id`, `team_abbr`, `model_abbr` and `model_id` details.
 - **`validate_model_data`:** 
   - `tbl`: a tibble of the model output data being validated.
+  - `tbl_chr` an all character version of `tbl`.
   - `file_path`: character string of path to file being validated relative to the `model-output` directory.
   - `hub_path`: character string of path to hub.
   - `round_id`: character string of `round_id`
   - `file_meta`: named list containing `round_id`, `team_abbr`, `model_abbr` and `model_id` details.
   - `round_id_col`: character string of name of `tbl` column containing `round_id` information.
+  - `output_type_id_datatype`: character string of the data type of the `output_type_id` column in the `tbl`.
+  - `derived_task_ids`: `NULL` or character vector of derived task IDs names.
+  - `compound_taskid_set`: named list of `compound_taskid_set`, one element for each model task, as detected by `get_tbl_compound_taskid_set()` from `tbl`. 
 - **`validate_model_metadata`:** 
   - `file_path`: character string of path to file being validated relative to the `model-output` directory.
   - `hub_path`: character string of path to hub.
