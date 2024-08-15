@@ -38,8 +38,6 @@ check_tbl_spl_compound_tid <- function(tbl, round_id, file_path, hub_path,
   hash_tbl <- spl_hash_tbl(tbl, round_id, config_tasks, compound_taskid_set,
     derived_task_ids = derived_task_ids
   )
-  # TODO: Currently, samples must strictly match the compound task ID set expectations
-  # and cannot handle coarser-grained compound task ID sets.
   n_tbl <- hash_tbl[hash_tbl$n_compound_idx > 1L, ]
 
   check <- nrow(n_tbl) == 0L

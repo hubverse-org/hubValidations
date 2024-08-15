@@ -635,14 +635,14 @@
     Condition
       Error in `expand_model_out_grid()`:
       x Derived task IDs cannot have required task ID values.
-      ! "location" and "variant" have required task ID values.
+      ! "location" and "variant" have required task ID values. Ignored.
 
 # expand_model_out_grid errors correctly
 
     Code
       expand_model_out_grid(config_tasks, round_id = "random_round_id")
     Condition
-      Error in `get_round_idx()`:
+      Error in `hubUtils::get_round_idx()`:
       ! `round_id` must be one of "2022-10-01", "2022-10-08", "2022-10-15", "2022-10-22", or "2022-10-29", not "random_round_id".
 
 ---

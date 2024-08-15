@@ -4,3 +4,6 @@ linters: linters_with_defaults(
     object_length_linter = object_length_linter(length = 50L),
     cyclocomp_linter = cyclocomp_linter(complexity_limit = 20L)
   )
+exclusions: list(
+    "tests/testthat/helper.R"
+  )

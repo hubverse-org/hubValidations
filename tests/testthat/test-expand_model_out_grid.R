@@ -374,6 +374,7 @@ test_that("expand_model_out_grid output type subsetting works", {
     )
   )
 
+  # If a valid output type is provided, invalid ones just ignored
   expect_snapshot(
     expand_model_out_grid(config_tasks,
       round_id = "2022-12-26",
@@ -383,6 +384,7 @@ test_that("expand_model_out_grid output type subsetting works", {
     )
   )
 
+  # If no valid output type provided, errors
   expect_snapshot(
     expand_model_out_grid(config_tasks,
       round_id = "2022-12-26",
