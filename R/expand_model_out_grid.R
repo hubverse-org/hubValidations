@@ -380,7 +380,7 @@ null_taskids_to_na <- function(model_task) {
 
 # Set derived task_ids to all NULL values.
 derived_taskids_to_na <- function(model_task, derived_task_ids) {
-  if (!is.null(derived_task_ids) || length(derived_task_ids) > 0L) {
+  if (!is.null(derived_task_ids)) {
     purrr::modify_at(
       model_task,
       .at = derived_task_ids,
