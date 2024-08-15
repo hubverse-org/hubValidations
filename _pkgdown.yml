@@ -37,6 +37,7 @@ reference:
   - try_check
   - expand_model_out_grid
   - get_tbl_compound_taskid_set
+  - match_tbl_to_model_task
 
 
 - title: "`<hub_validations>` methods"
