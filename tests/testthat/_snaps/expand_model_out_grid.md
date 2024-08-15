@@ -585,6 +585,58 @@
       x "random" is not valid output type.
       i `output_types` must be members of: "sample", "mean", and "pmf"
 
+# expand_model_out_grid derived_task_ids ignoring works
+
+    Code
+      expand_model_out_grid(config_tasks, round_id = "2022-10-22",
+        include_sample_ids = FALSE, bind_model_tasks = TRUE, output_types = "sample",
+        derived_task_ids = "target_end_date")
+    Output
+      # A tibble: 80 x 8
+         reference_date target    horizon location variant target_end_date output_type
+         <date>         <chr>       <int> <chr>    <chr>   <date>          <chr>      
+       1 2022-10-22     wk inc f~       0 US       AA      NA              sample     
+       2 2022-10-22     wk inc f~       1 US       AA      NA              sample     
+       3 2022-10-22     wk inc f~       2 US       AA      NA              sample     
+       4 2022-10-22     wk inc f~       3 US       AA      NA              sample     
+       5 2022-10-22     wk inc f~       0 01       AA      NA              sample     
+       6 2022-10-22     wk inc f~       1 01       AA      NA              sample     
+       7 2022-10-22     wk inc f~       2 01       AA      NA              sample     
+       8 2022-10-22     wk inc f~       3 01       AA      NA              sample     
+       9 2022-10-22     wk inc f~       0 02       AA      NA              sample     
+      10 2022-10-22     wk inc f~       1 02       AA      NA              sample     
+      # i 70 more rows
+      # i 1 more variable: output_type_id <chr>
+
+---
+
+    Code
+      expand_model_out_grid(config_tasks, round_id = "2022-10-22",
+        include_sample_ids = TRUE, bind_model_tasks = TRUE, output_types = "sample",
+        derived_task_ids = "target_end_date", required_vals_only = TRUE)
+    Condition
+      Warning:
+      The compound task IDs horizon and target_end_date have all optional values. Representation of compound sample modeling tasks is not fully specified.
+    Output
+      # A tibble: 4 x 5
+        reference_date location variant output_type output_type_id
+        <date>         <chr>    <chr>   <chr>       <chr>         
+      1 2022-10-22     US       AA      sample      1             
+      2 2022-10-22     01       AA      sample      2             
+      3 2022-10-22     US       BB      sample      3             
+      4 2022-10-22     01       BB      sample      4             
+
+---
+
+    Code
+      expand_model_out_grid(config_tasks, round_id = "2022-10-22",
+        include_sample_ids = FALSE, bind_model_tasks = FALSE, output_types = "sample",
+        derived_task_ids = c("location", "variant"))
+    Condition
+      Error in `expand_model_out_grid()`:
+      x Derived task IDs cannot have required task ID values.
+      ! "location" and "variant" have required task ID values. Ignored.
+
 # expand_model_out_grid errors correctly
 
     Code

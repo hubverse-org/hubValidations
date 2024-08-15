@@ -20,8 +20,11 @@
 #' in the round. Can be used to override the compound task ID set defined in the
 #' config. If `NULL` is provided for a given modeling task, a compound task ID set of
 #' all task IDs is used.
-#' @param output_types character vector of output type names to include.
+#' @param output_types Character vector of output type names to include.
 #' Use to subset for grids for specific output types.
+#' @param derived_task_ids Character vector of derived task ID names (task IDs whose
+#' values depend on other task IDs) to ignore. Columns for such task ids will
+#' contain `NA`s.
 #'
 #' @return If `bind_model_tasks = TRUE` (default) a tibble or arrow table
 #' containing all possible task ID and related output type ID
@@ -90,9 +93,9 @@
 #'   include_sample_ids = TRUE
 #' )
 #' # Hub with sample output type and compound task ID structure
-#' config_tasks <- hubUtils::read_config_file(system.file("config", "tasks-comp-tid.json",
-#'   package = "hubValidations"
-#' ))
+#' config_tasks <- hubUtils::read_config_file(
+#'   system.file("config", "tasks-comp-tid.json", package = "hubValidations")
+#' )
 #' expand_model_out_grid(config_tasks,
 #'   round_id = "2022-12-26",
 #'   include_sample_ids = TRUE
@@ -116,6 +119,30 @@
 #'     NULL
 #'   )
 #' )
+#' # Subset output types
+#' config_tasks <- hubUtils::read_config(
+#'   system.file("testhubs", "samples", package = "hubValidations")
+#' )
+#' expand_model_out_grid(config_tasks,
+#'   round_id = "2022-10-29",
+#'   include_sample_ids = TRUE,
+#'   bind_model_tasks = FALSE,
+#'   output_types = c("sample", "pmf"),
+#' )
+#' expand_model_out_grid(config_tasks,
+#'   round_id = "2022-10-29",
+#'   include_sample_ids = TRUE,
+#'   bind_model_tasks = TRUE,
+#'   output_types = "sample",
+#' )
+#' # Ignore derived task IDs
+#' expand_model_out_grid(config_tasks,
+#'   round_id = "2022-10-29",
+#'   include_sample_ids = TRUE,
+#'   bind_model_tasks = FALSE,
+#'   output_types = "sample",
+#'   derived_task_ids = "target_end_date"
+#' )
 expand_model_out_grid <- function(config_tasks,
                                   round_id,
                                   required_vals_only = FALSE,
@@ -129,15 +156,21 @@ expand_model_out_grid <- function(config_tasks,
                                   bind_model_tasks = TRUE,
                                   include_sample_ids = FALSE,
                                   compound_taskid_set = NULL,
-                                  output_types = NULL) {
+                                  output_types = NULL,
+                                  derived_task_ids = NULL) {
   checkmate::assert_list(compound_taskid_set, null.ok = TRUE)
   output_type_id_datatype <- rlang::arg_match(output_type_id_datatype)
   output_types <- validate_output_types(output_types, config_tasks, round_id)
+  derived_task_ids <- validate_derived_task_ids(
+    derived_task_ids,
+    config_tasks, round_id
+  )
   round_config <- get_round_config(config_tasks, round_id)
 
   task_id_l <- purrr::map(
     round_config[["model_tasks"]],
     ~ .x[["task_ids"]] %>%
+      derived_taskids_to_na(derived_task_ids) %>%
       null_taskids_to_na()
   ) %>%
     # Fix round_id value to current round_id in round_id variable column
@@ -345,6 +378,22 @@ null_taskids_to_na <- function(model_task) {
   )
 }
 
+# Set derived task_ids to all NULL values.
+derived_taskids_to_na <- function(model_task, derived_task_ids) {
+  if (!is.null(derived_task_ids)) {
+    purrr::modify_at(
+      model_task,
+      .at = derived_task_ids,
+      .f = ~ list(
+        required = NULL,
+        optional = NA
+      )
+    )
+  } else {
+    model_task
+  }
+}
+
 # Adds example sample ids to the output type id column which are unique
 # across multiple modeling task groups. Only apply to v3 and above sample output
 # type configurations.
@@ -479,37 +528,6 @@ extract_mt_output_type_ids <- function(x, config_tid) {
   )
 }
 
-
-get_round_config <- function(config_tasks, round_id) {
-  round_idx <- hubUtils::get_round_idx(config_tasks, round_id)
-  purrr::pluck(
-    config_tasks,
-    "rounds",
-    round_idx
-  )
-}
-
-get_round_output_types <- function(config_tasks, round_id) {
-  round_config <- get_round_config(config_tasks, round_id)
-  purrr::map(
-    round_config[["model_tasks"]],
-    ~ .x[["output_type"]]
-  )
-}
-
-get_round_output_type_names <- function(config_tasks, round_id,
-                                        collapse = TRUE) {
-  out <- get_round_output_types(config_tasks, round_id) %>%
-    purrr::map(names)
-
-  if (collapse) {
-    purrr::flatten_chr(out) %>%
-      unique()
-  } else {
-    out
-  }
-}
-
 validate_output_types <- function(output_types, config_tasks, round_id,
                                   call = rlang::caller_call()) {
   checkmate::assert_character(output_types, null.ok = TRUE)
@@ -528,4 +546,49 @@ validate_output_types <- function(output_types, config_tasks, round_id,
     )
   }
   valid_output_types
+}
+
+validate_derived_task_ids <- function(derived_task_ids, config_tasks, round_id) {
+  checkmate::assert_character(derived_task_ids, null.ok = TRUE)
+  if (is.null(derived_task_ids)) {
+    return(NULL)
+  }
+  round_task_ids <- hubUtils::get_round_task_id_names(config_tasks, round_id)
+  valid_task_ids <- intersect(derived_task_ids, round_task_ids)
+  if (length(valid_task_ids) < length(derived_task_ids)) {
+    cli::cli_warn(
+      c(
+        "x" = "{.val {setdiff(derived_task_ids, round_task_ids)}}
+        {?is/are} not valid task ID{?s}. Ignored.",
+        "i" = "{.arg derived_task_ids} must be a member of: {.val {round_task_ids}}"
+      ),
+      call = rlang::caller_call()
+    )
+  }
+  model_tasks <- hubUtils::get_round_model_tasks(config_tasks, round_id)
+  has_required <- purrr::map(
+    model_tasks,
+    ~ .x[["task_ids"]][valid_task_ids] %>%
+      purrr::map_lgl(
+        ~ !is.null(.x$required)
+      )
+  ) %>% purrr::reduce(`|`)
+  if (any(has_required)) {
+    cli::cli_abort(
+      c(
+        "x" = "Derived task IDs cannot have required task ID values.",
+        "!" = "{.val {names(has_required)[has_required]}} ha{?s/ve}
+          required task ID values. Ignored."
+      ),
+      call = rlang::caller_call()
+    )
+  }
+  valid_task_ids <- intersect(
+    valid_task_ids,
+    names(has_required)[!has_required]
+  )
+  if (length(valid_task_ids) == 0L) {
+    return(NULL)
+  }
+  valid_task_ids
 }
