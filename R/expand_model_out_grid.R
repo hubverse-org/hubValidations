@@ -578,7 +578,7 @@ validate_derived_task_ids <- function(derived_task_ids, config_tasks, round_id) 
       c(
         "x" = "Derived task IDs cannot have required task ID values.",
         "!" = "{.val {names(has_required)[has_required]}} ha{?s/ve}
-          required task ID values."
+          required task ID values. Ignored."
       ),
       call = rlang::caller_call()
     )

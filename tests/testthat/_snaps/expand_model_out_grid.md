@@ -635,7 +635,7 @@
     Condition
       Error in `expand_model_out_grid()`:
       x Derived task IDs cannot have required task ID values.
-      ! "location" and "variant" have required task ID values.
+      ! "location" and "variant" have required task ID values. Ignored.
 
 # expand_model_out_grid errors correctly
 
