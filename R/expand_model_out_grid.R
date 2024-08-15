@@ -535,17 +535,17 @@ validate_output_types <- function(output_types, config_tasks, round_id,
     return(NULL)
   }
   round_output_types <- get_round_output_type_names(config_tasks, round_id)
-  valid_output_types <- intersect(output_types, round_output_types)
-  if (length(valid_output_types) == 0L) {
+  invalid_output_types <- setdiff(output_types, round_output_types)
+  if (length(invalid_output_types) > 0L) {
     cli::cli_abort(
       c(
-        "x" = "{.val {output_types}} {?is/are} not valid output type{?s}.",
+        "x" = "{.val {invalid_output_types}} {?is/are} not valid output type{?s}.",
         "i" = "{.arg output_types} must be members of: {.val {round_output_types}}"
       ),
       call = call
     )
   }
-  valid_output_types
+  output_types
 }
 
 validate_derived_task_ids <- function(derived_task_ids, config_tasks, round_id) {

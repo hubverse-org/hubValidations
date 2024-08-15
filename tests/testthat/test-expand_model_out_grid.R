@@ -381,7 +381,8 @@ test_that("expand_model_out_grid output type subsetting works", {
       include_sample_ids = FALSE,
       bind_model_tasks = TRUE,
       output_types = c("random", "sample"),
-    )
+    ),
+    error = TRUE
   )
 
   # If no valid output type provided, errors
