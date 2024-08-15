@@ -1,7 +1,7 @@
 test_that("opt_check_tbl_counts_lt_popn works", {
   hub_path <- system.file("testhubs/flusight", package = "hubValidations")
   file_path <- "hub-ensemble/2023-05-08-hub-ensemble.parquet"
-  tbl <- hubValidations::read_model_out_file(file_path, hub_path)
+  tbl <- read_model_out_file(file_path, hub_path)
   targets <- list("target" = "wk ahead inc flu hosp")
 
   expect_snapshot(
@@ -22,7 +22,7 @@ test_that("opt_check_tbl_counts_lt_popn works", {
 test_that("opt_check_tbl_counts_lt_popn fails correctly", {
   hub_path <- system.file("testhubs/flusight", package = "hubValidations")
   file_path <- "hub-ensemble/2023-05-08-hub-ensemble.parquet"
-  tbl <- hubValidations::read_model_out_file(file_path, hub_path)
+  tbl <- read_model_out_file(file_path, hub_path)
   targets <- list("target" = "random target")
 
   expect_snapshot(
@@ -53,7 +53,7 @@ test_that("opt_check_tbl_counts_lt_popn fails correctly", {
 test_that("filter_targets works", {
   hub_path <- system.file("testhubs/flusight", package = "hubValidations")
   file_path <- "hub-ensemble/2023-05-08-hub-ensemble.parquet"
-  tbl <- hubValidations::read_model_out_file(file_path, hub_path)
+  tbl <- read_model_out_file(file_path, hub_path)
 
   target <- list(target = "wk ahead inc flu hosp")
   # Test more complex target with two sets of target keys and target keys

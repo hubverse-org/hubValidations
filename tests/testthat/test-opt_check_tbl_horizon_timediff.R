@@ -1,7 +1,7 @@
 test_that("opt_check_tbl_horizon_timediff works", {
   hub_path <- system.file("testhubs/flusight", package = "hubValidations")
   file_path <- "hub-ensemble/2023-05-08-hub-ensemble.parquet"
-  tbl <- hubValidations::read_model_out_file(file_path, hub_path)
+  tbl <- read_model_out_file(file_path, hub_path)
 
 
   expect_snapshot(
@@ -40,7 +40,7 @@ test_that("opt_check_tbl_horizon_timediff works", {
 test_that("opt_check_tbl_horizon_timediff fails correctly", {
   hub_path <- system.file("testhubs/flusight", package = "hubValidations")
   file_path <- "hub-ensemble/2023-05-08-hub-ensemble.parquet"
-  tbl <- hubValidations::read_model_out_file(file_path, hub_path)
+  tbl <- read_model_out_file(file_path, hub_path)
 
   expect_snapshot(
     opt_check_tbl_horizon_timediff(tbl, file_path, hub_path,
