@@ -551,6 +551,7 @@ validate_output_types <- function(output_types, config_tasks, round_id,
 validate_derived_task_ids <- function(derived_task_ids, config_tasks, round_id) {
   checkmate::assert_character(derived_task_ids, null.ok = TRUE)
   if (is.null(derived_task_ids)) {
+    return(NULL)
   }
   round_task_ids <- hubUtils::get_round_task_id_names(config_tasks, round_id)
   valid_task_ids <- intersect(derived_task_ids, round_task_ids)
