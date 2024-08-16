@@ -142,12 +142,15 @@ submission_tmpl(
   round_id = "2022-12-26",
   output_types = "sample"
 )
-# Derive a template for a derived task ID
-config_tasks <- hubUtils::read_config(test_path("testdata", "hub-spl"))
+# Derive a template with ignored derived task ID. Useful to avoid creating
+# a template with invalid derived task ID value combinations.
+config_tasks <- hubUtils::read_config(
+  system.file("testhubs", "flusight", package = "hubValidations")
+)
 submission_tmpl(
   config_tasks = config_tasks,
-  round_id = "2022-10-22",
-  output_types = "sample",
+  round_id = "2022-12-12",
+  output_types = "pmf",
   derived_task_ids = "target_end_date",
   complete_cases_only = FALSE
 )
