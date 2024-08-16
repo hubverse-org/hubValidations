@@ -8,6 +8,7 @@
 #' Column types must **all be character**.
 #' @inherit check_tbl_colnames params
 #' @inherit check_tbl_colnames return
+#' @inheritParams expand_model_out_grid
 #' @details If the check fails, the output of the check includes an `errors` element,
 #' a list of items, one for each modeling task failing validation.
 #' The structure depends on the reason the check failed.
@@ -31,23 +32,24 @@
 #' See [hubverse documentation on samples](https://hubverse.io/en/latest/user-guide/sample-output-type.html)
 #' for more details.
 #' @export
-check_tbl_spl_compound_taskid_set <- function(tbl, round_id, file_path, hub_path) {
+check_tbl_spl_compound_taskid_set <- function(tbl, round_id, file_path, hub_path,
+                                              derived_task_ids = NULL) {
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
 
   if (isFALSE(has_spls_tbl(tbl)) || isFALSE(hubUtils::is_v3_config(config_tasks))) {
     return(skip_v3_spl_check(file_path))
   }
 
-  compound_taskid_set <- get_tbl_compound_taskid_set(tbl, config_tasks, round_id,
-    compact = FALSE, error = FALSE
+  compound_taskid_set <- get_tbl_compound_taskid_set(
+    tbl, config_tasks, round_id,
+    compact = FALSE, error = FALSE,
+    derived_task_ids = NULL
   )
 
   check <- purrr::map_lgl(
     compound_taskid_set,
     ~ is.null(attr(.x, "errors"))
   ) |> all()
-
-
 
   capture_check_cnd(
     check = check,

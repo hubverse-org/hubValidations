@@ -268,3 +268,13 @@
        $ use_cli_format     : logi TRUE
        - attr(*, "class")= chr [1:5] "check_error" "hub_check" "rlang_error" "error" ...
 
+# Ignoring derived_task_ids in check_tbl_spl_compound_taskid_set works
+
+    Code
+      check_tbl_spl_compound_taskid_set(tbl, round_id, file_path, hub_path,
+        derived_task_ids = "target_end_date")
+    Output
+      <message/check_success>
+      Message:
+      All samples in a model task conform to single, unique compound task ID set that matches or is coarser than the configured `compound_taksid_set`.
+

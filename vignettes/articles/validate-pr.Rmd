@@ -56,6 +56,29 @@ Here's an example of what the workflow looks like on GitHub:
 knitr::include_graphics("assets/ga-action-screenshot.png")
 ```
 
+### Ignoring derived task IDs to improve performance
+
+Argument **`derived_task_ids`** allows for the specification of **task IDs that are derived from other task IDs** to be ignored, which **can often lead to a significant improvement in validation performance**.
+
+#### What are derived task IDs?
+
+Derived task IDs are a class of task ID whose values depend on the values of other task IDs. As such, the **validity of derived task ID values is dependent on the values of the task IDs they are derived from** and the validity of value combinations of derived and other task IDs is much more restricted. A common example of a derived task ID is `target_end_date` which is most often derived from the `reference_date` or `origin_date` and `horizon` task ids. 
+
+#### Implications of derived task IDs on validation performance
+
+With standard validation, derived task IDs like `target_end_date` tend to pollute the expanded grid used to validate valid value combination with invalid combinations. That's because, while a given combination of `reference_date` and `horizon` values will only have a single valid `target_end_date` value, the `target_end_date` property in the config will contain all possible valid values for all combinations of `reference_date` and `horizon`. Because its the values in the config used to create the expanded valid values grid, the sizes these grids can reach as function of config complexity can often put excessive strain on the system's memory, affecting overall performance of PR validation. 
+
+#### How to ignore derived task IDs
+
+Supplying the names of derived task IDs to argument `derived_task_ids` will ignore them during validation checks and, depending on config complexity, this **can lead to a significant improvement in validation performance**.
+ 
+<div class="alert alert-warning" role="alert">
+
+#### Warning
+  
+Ignoring derived task IDs means that the validity of derived task ID value combinations will not be check. It is therefore **important to ensure that the values of derived task IDs are correctly derived from other task IDs through custom checks**. For example, the values of `target_end_date` can be checked by deploying optional check `opt_check_tbl_horizon_timediff()`. See the article on [including custom functions](articles/custom-functions.html) for more information.
+
+</div>
 
 ### Skipping submission window checks
 
@@ -107,6 +130,7 @@ These settings can be modified if required though the use of arguments `file_mod
 
 - **`allow_submit_window_mods`** controls whether modifications/deletions of model output files are allowed within their submission windows. Is set to `TRUE` by default but can be set to `FALSE` if modifications/deletions are not allowed, regardless of timing. 
 Is ignored when checking model metadata files as well as when `file_modification_check` is set to `"none"`.
+
 
 
 <div class="alert alert-warning" role="alert">

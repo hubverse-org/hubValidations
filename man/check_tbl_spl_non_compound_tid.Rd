@@ -10,7 +10,8 @@ check_tbl_spl_non_compound_tid(
   round_id,
   file_path,
   hub_path,
-  compound_taskid_set = NULL
+  compound_taskid_set = NULL,
+  derived_task_ids = NULL
 )
 }
 \arguments{
@@ -34,6 +35,10 @@ files within the \code{hub-config} directory.}
 \item{compound_taskid_set}{a list of \code{compound_taskid_set}s (characters vector of compound task IDs),
 one for each modeling task. Used to override the compound task ID set in the config file,
 for example, when validating coarser samples.}
+
+\item{derived_task_ids}{Character vector of derived task ID names (task IDs whose
+values depend on other task IDs) to ignore. Columns for such task ids will
+contain \code{NA}s.}
 }
 \value{
 Depending on whether validation has succeeded, one of:

@@ -14,7 +14,9 @@ expand_model_out_grid(
   as_arrow_table = FALSE,
   bind_model_tasks = TRUE,
   include_sample_ids = FALSE,
-  compound_taskid_set = NULL
+  compound_taskid_set = NULL,
+  output_types = NULL,
+  derived_task_ids = NULL
 )
 }
 \arguments{
@@ -60,6 +62,13 @@ the \code{output_type_id} column.}
 in the round. Can be used to override the compound task ID set defined in the
 config. If \code{NULL} is provided for a given modeling task, a compound task ID set of
 all task IDs is used.}
+
+\item{output_types}{Character vector of output type names to include.
+Use to subset for grids for specific output types.}
+
+\item{derived_task_ids}{Character vector of derived task ID names (task IDs whose
+values depend on other task IDs) to ignore. Columns for such task ids will
+contain \code{NA}s.}
 }
 \value{
 If \code{bind_model_tasks = TRUE} (default) a tibble or arrow table
@@ -131,9 +140,9 @@ expand_model_out_grid(config_tasks,
   include_sample_ids = TRUE
 )
 # Hub with sample output type and compound task ID structure
-config_tasks <- hubUtils::read_config_file(system.file("config", "tasks-comp-tid.json",
-  package = "hubValidations"
-))
+config_tasks <- hubUtils::read_config_file(
+  system.file("config", "tasks-comp-tid.json", package = "hubValidations")
+)
 expand_model_out_grid(config_tasks,
   round_id = "2022-12-26",
   include_sample_ids = TRUE
@@ -156,5 +165,29 @@ expand_model_out_grid(config_tasks,
     NULL,
     NULL
   )
+)
+# Subset output types
+config_tasks <- hubUtils::read_config(
+  system.file("testhubs", "samples", package = "hubValidations")
+)
+expand_model_out_grid(config_tasks,
+  round_id = "2022-10-29",
+  include_sample_ids = TRUE,
+  bind_model_tasks = FALSE,
+  output_types = c("sample", "pmf"),
+)
+expand_model_out_grid(config_tasks,
+  round_id = "2022-10-29",
+  include_sample_ids = TRUE,
+  bind_model_tasks = TRUE,
+  output_types = "sample",
+)
+# Ignore derived task IDs
+expand_model_out_grid(config_tasks,
+  round_id = "2022-10-29",
+  include_sample_ids = TRUE,
+  bind_model_tasks = FALSE,
+  output_types = "sample",
+  derived_task_ids = "target_end_date"
 )
 }

@@ -10,7 +10,8 @@ validate_model_data(
   round_id_col = NULL,
   output_type_id_datatype = c("from_config", "auto", "character", "double", "integer",
     "logical", "Date"),
-  validations_cfg_path = NULL
+  validations_cfg_path = NULL,
+  derived_task_ids = NULL
 )
 }
 \arguments{
@@ -47,6 +48,10 @@ behaviour so use with care.}
 
 \item{validations_cfg_path}{Path to \code{validations.yml} file. If \code{NULL}
 defaults to \code{hub-config/validations.yml}.}
+
+\item{derived_task_ids}{Character vector of derived task ID names (task IDs whose
+values depend on other task IDs) to ignore. Columns for such task ids will
+contain \code{NA}s.}
 }
 \value{
 An object of class \code{hub_validations}. Each named element contains

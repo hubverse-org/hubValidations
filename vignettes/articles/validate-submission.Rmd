@@ -82,8 +82,21 @@ validate_submission(hub_path,
   check_for_errors()
 ```
 
+### Ignoring derived task IDs to improve validation performance
 
+Argument **`derived_task_ids`** allows for the specification of **task IDs that are derived from other task IDs** to be ignored, which **can often lead to a significant improvement in validation performance**.
 
+#### What are derived task IDs?
+
+Derived task IDs are a class of task ID whose values depend on the values of other task IDs. As such, the **validity of derived task ID values is dependent on the values of the task IDs they are derived from** and the validity of value combinations of derived and other task IDs is much more restricted. A common example of a derived task ID is `target_end_date` which is most often derived from the `reference_date` or `origin_date` and `horizon` task ids. 
+
+#### Implications of derived task IDs on validation performance
+
+With standard validation, derived task IDs like `target_end_date` tend to pollute the expanded grid used to validate valid value combination with invalid combinations. That's because, while a given combination of `reference_date` and `horizon` values will only have a single valid `target_end_date` value, the `target_end_date` property in the config will contain all possible valid values for all combinations of `reference_date` and `horizon`. Because its the values in the config used to create the expanded valid values grid, the sizes these grids can reach as function of config complexity can often put excessive strain on the system's memory, affecting overall performance of submission validation. 
+
+#### How to ignore derived task IDs
+
+Supplying the names of derived task IDs to argument `derived_task_ids` will ignore them during validation checks and, depending on config complexity, this **can lead to a significant improvement in validation performance**.
 
 
 ### `validate_submission` check details

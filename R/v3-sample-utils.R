@@ -6,8 +6,12 @@
 # compound task id sets across modeling tasks). This is achieved by using a full
 # join between tbl sample data and the model output data sample grid for each
 # modeling task. This means that only valid task id combinations are considered.
-spl_hash_tbl <- function(tbl, round_id, config_tasks, compound_taskid_set = NULL) {
+spl_hash_tbl <- function(tbl, round_id, config_tasks, compound_taskid_set = NULL,
+                         derived_task_ids = NULL) {
   tbl <- tbl[tbl$output_type == "sample", names(tbl) != "value"]
+  if (!is.null(derived_task_ids)) {
+    tbl[, derived_task_ids] <- NA_character_
+  }
 
   mt_spl_grid <- expand_model_out_grid(
     config_tasks = config_tasks,
@@ -15,20 +19,19 @@ spl_hash_tbl <- function(tbl, round_id, config_tasks, compound_taskid_set = NULL
     all_character = TRUE,
     include_sample_ids = TRUE,
     bind_model_tasks = FALSE,
-    compound_taskid_set = compound_taskid_set
+    compound_taskid_set = compound_taskid_set,
+    output_types = "sample",
+    derived_task_ids = derived_task_ids
   ) %>%
     stats::setNames(seq_along(.))
 
   mt_tbls <- purrr::map(
     mt_spl_grid,
     function(.x) {
-      if (is.null(.x) || !has_spls_tbl(.x)) {
+      if (nrow(.x) == 0L) {
         NULL
       } else {
-        dplyr::filter(
-          .x, .data$output_type == "sample"
-        ) %>%
-          dplyr::rename(compound_idx = "output_type_id") %>%
+        dplyr::rename(.x, compound_idx = "output_type_id") %>%
           dplyr::inner_join(tbl, .,
             by = setdiff(
               names(tbl),
@@ -64,7 +67,6 @@ spl_hash_tbl <- function(tbl, round_id, config_tasks, compound_taskid_set = NULL
 }
 
 get_mt_spl_hash_tbl <- function(tbl, compound_taskids, round_task_ids) {
-
   if (is.null(tbl)) {
     return(NULL)
   }
