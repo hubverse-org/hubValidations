@@ -7,7 +7,7 @@
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/hubverse-org/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubValidations</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,6 +43,17 @@
       <small>Source: <a href="https://github.com/hubverse-org/hubValidations/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.5.0" id="hubvalidations-050">hubValidations 0.5.0<a class="anchor" aria-label="anchor" href="#hubvalidations-050"></a></h2>
+<p>This release introduces <strong>significant improvements in the performance of submission validation</strong> via the following changes:</p>
+<ul><li>Add ability to sub-set expanded valid value grids by output type through <code>output_type</code> argument in <code><a href="../reference/expand_model_out_grid.html">expand_model_out_grid()</a></code> (<a href="https://github.com/hubverse-org/hubValidations/issues/98" class="external-link">#98</a>).</li>
+<li>Add ability to ignore the values of derived task IDs in expanded valid value grids through argument <code>derived_task_ids</code> in <code><a href="../reference/expand_model_out_grid.html">expand_model_out_grid()</a></code>.</li>
+<li>Use sub-setting and batching of model output data validation by output type in appropriate lower level checks and add ability to ignore derived task IDs in <code><a href="../reference/validate_model_data.html">validate_model_data()</a></code>, <code><a href="../reference/validate_submission.html">validate_submission()</a></code> and <code><a href="../reference/validate_pr.html">validate_pr()</a></code>.</li>
+</ul><p>Both of these changes <strong>allow for the creation of smaller, more focused expanded valid value grids, significantly reducing pressure on memory</strong> when working with large, complex hub configs and making submission validation much more efficient.</p>
+<p>Additional useful functionality:</p>
+<ul><li>Add ability to subset by output type and ignore derived task IDs to <code><a href="../reference/submission_tmpl.html">submission_tmpl()</a></code>. Ignoring derived task ids can be particularly useful to avoid creating templates with invalid derived task ID value combinations.</li>
+<li>Add new exported function <code><a href="../reference/match_tbl_to_model_task.html">match_tbl_to_model_task()</a></code> that matches the rows in a <code>tbl</code> of model output data to a model task of a given round (as defined in <code>tasks.json</code>).</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.0" id="hubvalidations-040">hubValidations 0.4.0<a class="anchor" aria-label="anchor" href="#hubvalidations-040"></a></h2>
 <ul><li>Add new <code><a href="../reference/check_tbl_spl_compound_taskid_set.html">check_tbl_spl_compound_taskid_set()</a></code> check function to <code><a href="../reference/validate_model_data.html">validate_model_data()</a></code> that ensures that sample compound task id sets for each modeling task match or are coarser than the expected set defined in <code>tasks.json</code> config.</li>

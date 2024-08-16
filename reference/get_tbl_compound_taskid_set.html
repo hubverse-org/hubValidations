@@ -7,7 +7,7 @@
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/hubverse-org/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubValidations</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,7 +55,8 @@
 <span>  <span class="va">config_tasks</span>,</span>
 <span>  <span class="va">round_id</span>,</span>
 <span>  compact <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  error <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  error <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  derived_task_ids <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -84,6 +85,12 @@ Column types must <strong>all be character</strong>.</p></dd>
 <dd><p>Logical. If TRUE, an error will be thrown if the compound task ID set is not valid.
 If FALSE and an error is detected, the detected compound task ID set will be
 returned with error attributes attached.</p></dd>
+
+
+<dt id="arg-derived-task-ids">derived_task_ids<a class="anchor" aria-label="anchor" href="#arg-derived-task-ids"></a></dt>
+<dd><p>Character vector of derived task ID names (task IDs whose
+values depend on other task IDs) to ignore. Columns for such task ids will
+contain <code>NA</code>s.</p></dd>
 
 </dl></div>
     <div class="section level2">

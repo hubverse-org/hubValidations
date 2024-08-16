@@ -7,7 +7,7 @@
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/hubverse-org/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubValidations</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,7 +60,9 @@
 <span>  as_arrow_table <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  bind_model_tasks <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  include_sample_ids <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  compound_taskid_set <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  compound_taskid_set <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  output_types <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  derived_task_ids <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -127,6 +129,17 @@ the <code>output_type_id</code> column.</p></dd>
 in the round. Can be used to override the compound task ID set defined in the
 config. If <code>NULL</code> is provided for a given modeling task, a compound task ID set of
 all task IDs is used.</p></dd>
+
+
+<dt id="arg-output-types">output_types<a class="anchor" aria-label="anchor" href="#arg-output-types"></a></dt>
+<dd><p>Character vector of output type names to include.
+Use to subset for grids for specific output types.</p></dd>
+
+
+<dt id="arg-derived-task-ids">derived_task_ids<a class="anchor" aria-label="anchor" href="#arg-derived-task-ids"></a></dt>
+<dd><p>Character vector of derived task ID names (task IDs whose
+values depend on other task IDs) to ignore. Columns for such task ids will
+contain <code>NA</code>s.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -305,9 +318,9 @@ represent individual samples.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2022-12-26    wk ahead inc flu h…       1 01       sample      s4            </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 32 more rows</span></span>
 <span class="r-in"><span><span class="co"># Hub with sample output type and compound task ID structure</span></span></span>
-<span class="r-in"><span><span class="va">config_tasks</span> <span class="op">&lt;-</span> <span class="fu">hubUtils</span><span class="fu">::</span><span class="fu"><a href="https://hubverse-org.github.io/hubUtils/reference/read_config_file.html" class="external-link">read_config_file</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"config"</span>, <span class="st">"tasks-comp-tid.json"</span>,</span></span>
-<span class="r-in"><span>  package <span class="op">=</span> <span class="st">"hubValidations"</span></span></span>
-<span class="r-in"><span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">config_tasks</span> <span class="op">&lt;-</span> <span class="fu">hubUtils</span><span class="fu">::</span><span class="fu"><a href="https://hubverse-org.github.io/hubUtils/reference/read_config_file.html" class="external-link">read_config_file</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"config"</span>, <span class="st">"tasks-comp-tid.json"</span>, package <span class="op">=</span> <span class="st">"hubValidations"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">expand_model_out_grid</span><span class="op">(</span><span class="va">config_tasks</span>,</span></span>
 <span class="r-in"><span>  round_id <span class="op">=</span> <span class="st">"2022-12-26"</span>,</span></span>
 <span class="r-in"><span>  include_sample_ids <span class="op">=</span> <span class="cn">TRUE</span></span></span>
@@ -373,6 +386,108 @@ represent individual samples.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2022-12-26    wk ahead inc flu h…       2 01       sample      3             </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2022-12-26    wk ahead inc flu h…       1 01       sample      4             </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 32 more rows</span></span>
+<span class="r-in"><span><span class="co"># Subset output types</span></span></span>
+<span class="r-in"><span><span class="va">config_tasks</span> <span class="op">&lt;-</span> <span class="fu">hubUtils</span><span class="fu">::</span><span class="fu"><a href="https://hubverse-org.github.io/hubUtils/reference/read_config.html" class="external-link">read_config</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"testhubs"</span>, <span class="st">"samples"</span>, package <span class="op">=</span> <span class="st">"hubValidations"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">expand_model_out_grid</span><span class="op">(</span><span class="va">config_tasks</span>,</span></span>
+<span class="r-in"><span>  round_id <span class="op">=</span> <span class="st">"2022-10-29"</span>,</span></span>
+<span class="r-in"><span>  include_sample_ids <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>  bind_model_tasks <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
+<span class="r-in"><span>  output_types <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sample"</span>, <span class="st">"pmf"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2,560 × 7</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    reference_date target            horizon location target_end_date output_type</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2022-10-29     wk flu hosp rate…       0 US       2022-10-22      pmf        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2022-10-29     wk flu hosp rate…       1 US       2022-10-22      pmf        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2022-10-29     wk flu hosp rate…       2 US       2022-10-22      pmf        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2022-10-29     wk flu hosp rate…       3 US       2022-10-22      pmf        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2022-10-29     wk flu hosp rate…       0 01       2022-10-22      pmf        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2022-10-29     wk flu hosp rate…       1 01       2022-10-22      pmf        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2022-10-29     wk flu hosp rate…       2 01       2022-10-22      pmf        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2022-10-29     wk flu hosp rate…       3 01       2022-10-22      pmf        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2022-10-29     wk flu hosp rate…       0 02       2022-10-22      pmf        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2022-10-29     wk flu hosp rate…       1 02       2022-10-22      pmf        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 2,550 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 1 more variable: output_type_id &lt;chr&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 640 × 7</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    reference_date target          horizon location target_end_date output_type</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2022-10-29     wk inc flu hosp       0 US       2022-10-22      sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2022-10-29     wk inc flu hosp       1 US       2022-10-22      sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2022-10-29     wk inc flu hosp       2 US       2022-10-22      sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2022-10-29     wk inc flu hosp       3 US       2022-10-22      sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2022-10-29     wk inc flu hosp       0 US       2022-10-29      sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2022-10-29     wk inc flu hosp       1 US       2022-10-29      sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2022-10-29     wk inc flu hosp       2 US       2022-10-29      sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2022-10-29     wk inc flu hosp       3 US       2022-10-29      sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2022-10-29     wk inc flu hosp       0 US       2022-11-05      sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2022-10-29     wk inc flu hosp       1 US       2022-11-05      sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 630 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 1 more variable: output_type_id &lt;chr&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="fu">expand_model_out_grid</span><span class="op">(</span><span class="va">config_tasks</span>,</span></span>
+<span class="r-in"><span>  round_id <span class="op">=</span> <span class="st">"2022-10-29"</span>,</span></span>
+<span class="r-in"><span>  include_sample_ids <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>  bind_model_tasks <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>  output_types <span class="op">=</span> <span class="st">"sample"</span>,</span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 640 × 7</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    reference_date target          horizon location target_end_date output_type</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2022-10-29     wk inc flu hosp       0 US       2022-10-22      sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2022-10-29     wk inc flu hosp       1 US       2022-10-22      sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2022-10-29     wk inc flu hosp       2 US       2022-10-22      sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2022-10-29     wk inc flu hosp       3 US       2022-10-22      sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2022-10-29     wk inc flu hosp       0 US       2022-10-29      sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2022-10-29     wk inc flu hosp       1 US       2022-10-29      sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2022-10-29     wk inc flu hosp       2 US       2022-10-29      sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2022-10-29     wk inc flu hosp       3 US       2022-10-29      sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2022-10-29     wk inc flu hosp       0 US       2022-11-05      sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2022-10-29     wk inc flu hosp       1 US       2022-11-05      sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 630 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 1 more variable: output_type_id &lt;chr&gt;</span></span>
+<span class="r-in"><span><span class="co"># Ignore derived task IDs</span></span></span>
+<span class="r-in"><span><span class="fu">expand_model_out_grid</span><span class="op">(</span><span class="va">config_tasks</span>,</span></span>
+<span class="r-in"><span>  round_id <span class="op">=</span> <span class="st">"2022-10-29"</span>,</span></span>
+<span class="r-in"><span>  include_sample_ids <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>  bind_model_tasks <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
+<span class="r-in"><span>  output_types <span class="op">=</span> <span class="st">"sample"</span>,</span></span>
+<span class="r-in"><span>  derived_task_ids <span class="op">=</span> <span class="st">"target_end_date"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 0 × 0</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 20 × 7</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    reference_date target          horizon location target_end_date output_type</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2022-10-29     wk inc flu hosp       0 US       <span style="color: #BB0000;">NA</span>              sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2022-10-29     wk inc flu hosp       1 US       <span style="color: #BB0000;">NA</span>              sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2022-10-29     wk inc flu hosp       2 US       <span style="color: #BB0000;">NA</span>              sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2022-10-29     wk inc flu hosp       3 US       <span style="color: #BB0000;">NA</span>              sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2022-10-29     wk inc flu hosp       0 01       <span style="color: #BB0000;">NA</span>              sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2022-10-29     wk inc flu hosp       1 01       <span style="color: #BB0000;">NA</span>              sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2022-10-29     wk inc flu hosp       2 01       <span style="color: #BB0000;">NA</span>              sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2022-10-29     wk inc flu hosp       3 01       <span style="color: #BB0000;">NA</span>              sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2022-10-29     wk inc flu hosp       0 02       <span style="color: #BB0000;">NA</span>              sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2022-10-29     wk inc flu hosp       1 02       <span style="color: #BB0000;">NA</span>              sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span> 2022-10-29     wk inc flu hosp       2 02       <span style="color: #BB0000;">NA</span>              sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span> 2022-10-29     wk inc flu hosp       3 02       <span style="color: #BB0000;">NA</span>              sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">13</span> 2022-10-29     wk inc flu hosp       0 04       <span style="color: #BB0000;">NA</span>              sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">14</span> 2022-10-29     wk inc flu hosp       1 04       <span style="color: #BB0000;">NA</span>              sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">15</span> 2022-10-29     wk inc flu hosp       2 04       <span style="color: #BB0000;">NA</span>              sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">16</span> 2022-10-29     wk inc flu hosp       3 04       <span style="color: #BB0000;">NA</span>              sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">17</span> 2022-10-29     wk inc flu hosp       0 05       <span style="color: #BB0000;">NA</span>              sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">18</span> 2022-10-29     wk inc flu hosp       1 05       <span style="color: #BB0000;">NA</span>              sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">19</span> 2022-10-29     wk inc flu hosp       2 05       <span style="color: #BB0000;">NA</span>              sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">20</span> 2022-10-29     wk inc flu hosp       3 05       <span style="color: #BB0000;">NA</span>              sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 1 more variable: output_type_id &lt;chr&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

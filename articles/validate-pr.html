@@ -26,7 +26,7 @@
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/hubverse-org/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubValidations</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -131,6 +131,62 @@ validation failures.</p>
 <p><img src="assets/ga-action-screenshot.png"><!-- --></p>
 </div>
 <div class="section level3">
+<h3 id="ignoring-derived-task-ids-to-improve-performance">Ignoring derived task IDs to improve performance<a class="anchor" aria-label="anchor" href="#ignoring-derived-task-ids-to-improve-performance"></a>
+</h3>
+<p>Argument <strong><code>derived_task_ids</code></strong> allows for
+the specification of <strong>task IDs that are derived from other task
+IDs</strong> to be ignored, which <strong>can often lead to a
+significant improvement in validation performance</strong>.</p>
+<div class="section level4">
+<h4 id="what-are-derived-task-ids">What are derived task IDs?<a class="anchor" aria-label="anchor" href="#what-are-derived-task-ids"></a>
+</h4>
+<p>Derived task IDs are a class of task ID whose values depend on the
+values of other task IDs. As such, the <strong>validity of derived task
+ID values is dependent on the values of the task IDs they are derived
+from</strong> and the validity of value combinations of derived and
+other task IDs is much more restricted. A common example of a derived
+task ID is <code>target_end_date</code> which is most often derived from
+the <code>reference_date</code> or <code>origin_date</code> and
+<code>horizon</code> task ids.</p>
+</div>
+<div class="section level4">
+<h4 id="implications-of-derived-task-ids-on-validation-performance">Implications of derived task IDs on validation performance<a class="anchor" aria-label="anchor" href="#implications-of-derived-task-ids-on-validation-performance"></a>
+</h4>
+<p>With standard validation, derived task IDs like
+<code>target_end_date</code> tend to pollute the expanded grid used to
+validate valid value combination with invalid combinations. That’s
+because, while a given combination of <code>reference_date</code> and
+<code>horizon</code> values will only have a single valid
+<code>target_end_date</code> value, the <code>target_end_date</code>
+property in the config will contain all possible valid values for all
+combinations of <code>reference_date</code> and <code>horizon</code>.
+Because its the values in the config used to create the expanded valid
+values grid, the sizes these grids can reach as function of config
+complexity can often put excessive strain on the system’s memory,
+affecting overall performance of PR validation.</p>
+</div>
+<div class="section level4">
+<h4 id="how-to-ignore-derived-task-ids">How to ignore derived task IDs<a class="anchor" aria-label="anchor" href="#how-to-ignore-derived-task-ids"></a>
+</h4>
+<p>Supplying the names of derived task IDs to argument
+<code>derived_task_ids</code> will ignore them during validation checks
+and, depending on config complexity, this <strong>can lead to a
+significant improvement in validation performance</strong>.</p>
+</div>
+<div class="section level4 alert alert-warning" role="alert">
+<h4 id="warning">Warning<a class="anchor" aria-label="anchor" href="#warning"></a>
+</h4>
+<p>Ignoring derived task IDs means that the validity of derived task ID
+value combinations will not be check. It is therefore <strong>important
+to ensure that the values of derived task IDs are correctly derived from
+other task IDs through custom checks</strong>. For example, the values
+of <code>target_end_date</code> can be checked by deploying optional
+check <code><a href="../reference/opt_check_tbl_horizon_timediff.html">opt_check_tbl_horizon_timediff()</a></code>. See the article on
+<a href="articles/custom-functions.html">including custom functions</a>
+for more information.</p>
+</div>
+</div>
+<div class="section level3">
 <h3 id="skipping-submission-window-checks">Skipping submission window checks<a class="anchor" aria-label="anchor" href="#skipping-submission-window-checks"></a>
 </h3>
 <p>Most hubs require that model output files for a given round are
@@ -228,7 +284,7 @@ well as when <code>file_modification_check</code> is set to
 <code>"none"</code>.</p></li>
 </ul>
 <div class="section level4 alert alert-warning" role="alert">
-<h4 id="warning">Warning<a class="anchor" aria-label="anchor" href="#warning"></a>
+<h4 id="warning-1">Warning<a class="anchor" aria-label="anchor" href="#warning-1"></a>
 </h4>
 <p>Note that to establish <strong>relative</strong> submission windows
 when performing modification/deletion checks and
