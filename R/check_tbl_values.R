@@ -93,7 +93,7 @@ check_values_by_output_type <- function(tbl, output_type, config_tasks, round_id
 # messages and extracting the rowids of invalid value combinations with respect
 # to the row order in the original tbl.
 # Problems are summarised in two parts:
-# First we report any invalid values in the tbl that so not match any values in the
+# First we report any invalid values in the tbl that do not match any values in the
 # config. Second we report any rows that contain valid values but in invalid
 # combinations.
 summarise_invalid_values <- function(valid_tbl, config_tasks, round_id,
