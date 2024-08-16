@@ -89,8 +89,16 @@ check_values_by_output_type <- function(tbl, output_type, config_tasks, round_id
   )
 }
 
+# Summarise results of check for invalid values by creating appropriate
+# messages and extracting the rowids of invalid value combinations with respect
+# to the row order in the original tbl.
+# Problems are summarised in two parts:
+# First we report any invalid values in the tbl that so not match any values in the
+# config. Second we report any rows that contain valid values but in invalid
+# combinations.
 summarise_invalid_values <- function(valid_tbl, config_tasks, round_id,
                                      derived_task_ids) {
+  # Chack for invalid values
   cols <- setdiff(names(valid_tbl), c("value", "valid", "rowid"))
   uniq_tbl <- purrr::map(valid_tbl[cols], unique)
   uniq_config <- get_round_config_values(
@@ -117,6 +125,7 @@ summarise_invalid_values <- function(valid_tbl, config_tasks, round_id,
     invalid_vals_msg <- NULL
   }
 
+  # Get rowids of invalid value combinations
   invalid_val_idx <- purrr::imap(
     invalid_vals,
     ~ which(valid_tbl[[.y]] %in% .x)
@@ -124,10 +133,15 @@ summarise_invalid_values <- function(valid_tbl, config_tasks, round_id,
     unlist(use.names = FALSE) %>%
     unique()
   invalid_row_idx <- which(is.na(valid_tbl$valid))
+  # Ignore rows which have already been reported for invalid values
   invalid_combs_idx <- setdiff(invalid_row_idx, invalid_val_idx)
   if (length(invalid_combs_idx) == 0L) {
     invalid_combs_msg <- NULL
   } else {
+    # invalid_combs_idx indicates invalid value combinations in the table joined
+    # to expanded valid value grid. This changes the row order of the table, so
+    # to return rowids with respect to the original tbl row order we use
+    # invalid_combs_idx to extract values from the rowid column of the valid_tbl.
     invalid_combs_idx <- valid_tbl$rowid[invalid_combs_idx]
     invalid_combs_msg <- cli::format_inline(
       "Additionally {cli::qty(length(invalid_combs_idx))} row{?s}
