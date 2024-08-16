@@ -4,7 +4,13 @@
 \alias{check_tbl_value_col}
 \title{Check output type values of model output data against config}
 \usage{
-check_tbl_value_col(tbl, round_id, file_path, hub_path)
+check_tbl_value_col(
+  tbl,
+  round_id,
+  file_path,
+  hub_path,
+  derived_task_ids = NULL
+)
 }
 \arguments{
 \item{tbl}{a tibble/data.frame of the contents of the file being validated.}
@@ -23,6 +29,10 @@ For more details consult the
 in the \code{arrow} package.
 The hub must be fully configured with valid \code{admin.json} and \code{tasks.json}
 files within the \code{hub-config} directory.}
+
+\item{derived_task_ids}{Character vector of derived task ID names (task IDs whose
+values depend on other task IDs) to ignore. Columns for such task ids will
+contain \code{NA}s.}
 }
 \value{
 Depending on whether validation has succeeded, one of:

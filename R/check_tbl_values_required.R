@@ -5,18 +5,23 @@
 #' @inherit check_tbl_colnames params
 #' @inherit check_tbl_col_types return
 #' @export
-check_tbl_values_required <- function(tbl, round_id, file_path, hub_path) {
+check_tbl_values_required <- function(tbl, round_id, file_path, hub_path,
+                                      derived_task_ids = NULL) {
   tbl[["value"]] <- NULL
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
   if (hubUtils::is_v3_config(config_tasks)) {
     tbl[tbl$output_type == "sample", "output_type_id"] <- NA
+  }
+  if (!is.null(derived_task_ids)) {
+    tbl[, derived_task_ids] <- NA_character_
   }
   req <- expand_model_out_grid(
     config_tasks,
     round_id = round_id,
     required_vals_only = TRUE,
     all_character = TRUE,
-    bind_model_tasks = FALSE
+    bind_model_tasks = FALSE,
+    derived_task_ids = derived_task_ids
   )
 
   full <- expand_model_out_grid(
@@ -25,7 +30,8 @@ check_tbl_values_required <- function(tbl, round_id, file_path, hub_path) {
     required_vals_only = FALSE,
     all_character = TRUE,
     as_arrow_table = FALSE,
-    bind_model_tasks = FALSE
+    bind_model_tasks = FALSE,
+    derived_task_ids = derived_task_ids
   )
 
   tbl <- purrr::map(

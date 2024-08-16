@@ -381,7 +381,8 @@ test_that("expand_model_out_grid output type subsetting works", {
       include_sample_ids = FALSE,
       bind_model_tasks = TRUE,
       output_types = c("random", "sample"),
-    )
+    ),
+    error = TRUE
   )
 
   # If no valid output type provided, errors
@@ -401,31 +402,31 @@ test_that("expand_model_out_grid derived_task_ids ignoring works", {
 
   expect_snapshot(
     expand_model_out_grid(config_tasks,
-                          round_id = "2022-10-22",
-                          include_sample_ids = FALSE,
-                          bind_model_tasks = TRUE,
-                          output_types = "sample",
-                          derived_task_ids = "target_end_date"
+      round_id = "2022-10-22",
+      include_sample_ids = FALSE,
+      bind_model_tasks = TRUE,
+      output_types = "sample",
+      derived_task_ids = "target_end_date"
     )
   )
   expect_snapshot(
     expand_model_out_grid(config_tasks,
-                          round_id = "2022-10-22",
-                          include_sample_ids = TRUE,
-                          bind_model_tasks = TRUE,
-                          output_types = "sample",
-                          derived_task_ids = "target_end_date",
-                          required_vals_only = TRUE
+      round_id = "2022-10-22",
+      include_sample_ids = TRUE,
+      bind_model_tasks = TRUE,
+      output_types = "sample",
+      derived_task_ids = "target_end_date",
+      required_vals_only = TRUE
     )
   )
 
   expect_snapshot(
     expand_model_out_grid(config_tasks,
-                          round_id = "2022-10-22",
-                          include_sample_ids = FALSE,
-                          bind_model_tasks = FALSE,
-                          output_types = "sample",
-                          derived_task_ids = c("location", "variant")
+      round_id = "2022-10-22",
+      include_sample_ids = FALSE,
+      bind_model_tasks = FALSE,
+      output_types = "sample",
+      derived_task_ids = c("location", "variant")
     ),
     error = TRUE
   )

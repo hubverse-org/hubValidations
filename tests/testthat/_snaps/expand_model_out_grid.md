@@ -563,16 +563,10 @@
       expand_model_out_grid(config_tasks, round_id = "2022-12-26",
         include_sample_ids = FALSE, bind_model_tasks = TRUE, output_types = c(
           "random", "sample"), )
-    Output
-      # A tibble: 6 x 6
-        forecast_date target               horizon location output_type output_type_id
-        <date>        <chr>                  <int> <chr>    <chr>       <chr>         
-      1 2022-12-26    wk ahead inc flu ho~       2 US       sample      <NA>          
-      2 2022-12-26    wk ahead inc flu ho~       1 US       sample      <NA>          
-      3 2022-12-26    wk ahead inc flu ho~       2 01       sample      <NA>          
-      4 2022-12-26    wk ahead inc flu ho~       1 01       sample      <NA>          
-      5 2022-12-26    wk ahead inc flu ho~       2 02       sample      <NA>          
-      6 2022-12-26    wk ahead inc flu ho~       1 02       sample      <NA>          
+    Condition
+      Error in `expand_model_out_grid()`:
+      x "random" is not valid output type.
+      i `output_types` must be members of: "sample", "mean", and "pmf"
 
 ---
 

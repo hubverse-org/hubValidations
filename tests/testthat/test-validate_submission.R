@@ -319,3 +319,63 @@ test_that("validate_submission handles overriding output type id data type corre
     )[["col_types"]]
   )
 })
+
+test_that("Ignoring derived_task_ids in validate_submission works", {
+  # Validation passes
+  expect_snapshot(
+    str(
+      validate_submission(
+        hub_path = system.file("testhubs/samples", package = "hubValidations"),
+        file_path = "flu-base/2022-10-22-flu-base.csv",
+        skip_submit_window_check = TRUE,
+        derived_task_ids = "target_end_date"
+      )
+    )
+  )
+  # Results of validation the same
+  expect_equal(
+    validate_submission(
+      hub_path = system.file("testhubs/samples", package = "hubValidations"),
+      file_path = "flu-base/2022-10-22-flu-base.csv",
+      skip_submit_window_check = TRUE,
+      derived_task_ids = "target_end_date"
+    ),
+    validate_submission(
+      hub_path = system.file("testhubs/samples", package = "hubValidations"),
+      file_path = "flu-base/2022-10-22-flu-base.csv",
+      skip_submit_window_check = TRUE
+    )
+  )
+
+  # Ensure derived_task_ids values are ignored in validate submission by introducing
+  # deliberate error in derived_task_ids through mocking.
+  # This should not impact successful validation of affected checks
+  tbl_mod <- read_model_out_file(
+    file_path = "flu-base/2022-10-22-flu-base.csv",
+    hub_path = system.file("testhubs/samples", package = "hubValidations"),
+    coerce_types = "chr"
+  )
+  tbl_mod[1, "target_end_date"] <- "2092-10-22"
+  mockery::stub(
+    validate_submission,
+    "read_model_out_file",
+    tbl_mod,
+    2
+  )
+  expect_snapshot(
+    validate_submission(
+      hub_path = system.file("testhubs/samples", package = "hubValidations"),
+      file_path = "flu-base/2022-10-22-flu-base.csv",
+      skip_submit_window_check = TRUE,
+      derived_task_ids = "target_end_date"
+    )[c(
+      "valid_vals",
+      "req_vals",
+      "value_col_valid",
+      "spl_n",
+      "spl_compound_taskid_set",
+      "spl_compound_tid",
+      "spl_non_compound_tid"
+    )]
+  )
+})

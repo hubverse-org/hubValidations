@@ -61,3 +61,13 @@
       Message:
       Task ID combinations of non compound task id values consistent across modeling task samples.
 
+# Ignoring derived_task_ids in check_tbl_spl_compound_tid works
+
+    Code
+      check_tbl_spl_non_compound_tid(tbl, round_id, file_path, hub_path,
+        derived_task_ids = "target_end_date")
+    Output
+      <message/check_success>
+      Message:
+      Task ID combinations of non compound task id values consistent across modeling task samples.
+

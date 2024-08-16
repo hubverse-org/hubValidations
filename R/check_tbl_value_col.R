@@ -5,53 +5,33 @@
 #' type of the appropriate model task.
 #' @inherit check_tbl_colnames params
 #' @inherit check_tbl_col_types return
+#' @inheritParams expand_model_out_grid
 #' @export
-check_tbl_value_col <- function(tbl, round_id, file_path, hub_path) {
+check_tbl_value_col <- function(tbl, round_id, file_path, hub_path,
+                                derived_task_ids = NULL) {
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
 
   tbl[, names(tbl) != "value"] <- hubData::coerce_to_character(
     tbl[, names(tbl) != "value"]
   )
+  if (!is.null(derived_task_ids)) {
+    tbl[, derived_task_ids] <- NA_character_
+  }
 
-  full <- expand_model_out_grid(
-    config_tasks,
-    round_id = round_id,
-    required_vals_only = FALSE,
-    all_character = TRUE,
-    as_arrow_table = FALSE,
-    bind_model_tasks = FALSE
-  )
-
-  join_cols <- names(tbl)[names(tbl) != "value"] # nolint: object_usage_linter
-  tbl <- purrr::map(
-    full,
-    ~ dplyr::inner_join(.x, tbl, by = join_cols)
-  )
-
-  round_config <- get_file_round_config(file_path, hub_path)
-  output_type_config <- round_config[["model_tasks"]] %>%
-    purrr::map(~ .x[["output_type"]])
-
-
-  details <- purrr::map2(
-    tbl, output_type_config,
-    check_modeling_task_value_col
-  ) %>%
+  details <- split(tbl, f = tbl$output_type) %>%
+    purrr::imap(
+      \(.x, .y) {
+        check_value_col_by_output_type(
+          tbl = .x, output_type = .y,
+          config_tasks = config_tasks,
+          round_id = round_id,
+          derived_task_ids = derived_task_ids
+        )
+      }
+    ) %>%
     unlist(use.names = TRUE)
 
   check <- is.null(details)
-
-  ## Example code for attempting bullets of details. Needs more experimentation
-  ## but parking for now.
-  # if (!check) {
-  #     details_bullets_div <- function(details) {
-  #         cli::cli_div()
-  #         cli::format_bullets_raw(
-  #             stats::setNames(details, rep("*", length(details)))
-  #         )
-  #     }
-  #     details <- details_bullets_div(details)
-  # }
 
   capture_check_cnd(
     check = check,
@@ -63,19 +43,28 @@ check_tbl_value_col <- function(tbl, round_id, file_path, hub_path) {
   )
 }
 
-
-check_modeling_task_value_col <- function(tbl, output_type_config) {
-  purrr::imap(
-    split(tbl, tbl[["output_type"]]),
-    ~ compare_values_to_config(
-      tbl = .x, output_type = .y,
-      output_type_config
-    )
+check_value_col_by_output_type <- function(tbl, output_type,
+                                           config_tasks, round_id,
+                                           derived_task_ids = NULL) {
+  purrr::map2(
+    .x = match_tbl_to_model_task(tbl, config_tasks,
+      round_id, output_type,
+      derived_task_ids = derived_task_ids
+    ),
+    .y = get_round_output_types(config_tasks, round_id),
+    \(.x, .y) {
+      compare_values_to_config(
+        tbl = .x, output_type_config = .y, output_type = output_type
+      )
+    }
   ) %>%
     unlist(use.names = TRUE)
 }
 
 compare_values_to_config <- function(tbl, output_type, output_type_config) {
+  if (any(is.null(tbl), is.null(output_type_config))) {
+    return(NULL)
+  }
   details <- NULL
   values <- tbl$value
   config <- output_type_config[[output_type]][["value"]]

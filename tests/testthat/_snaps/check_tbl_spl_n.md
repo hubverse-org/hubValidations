@@ -155,7 +155,7 @@
       
       
 
-# Overriding compound_taskid_set in check_tbl_spl_compound_tid works
+# Overriding compound_taskid_set in check_tbl_spl_n works
 
     Code
       str(check_tbl_spl_n(tbl_coarse, round_id, file_path, hub_path))
@@ -243,4 +243,13 @@
       <warning/check_failure>
       Warning:
       Number of samples per compound idx not consistent.  Sample numbers supplied per compound idx vary between 9 and 10.  See `errors` attribute for details.
+
+# Ignoring derived_task_ids in check_tbl_spl_n works
+
+    Code
+      check_tbl_spl_n(tbl, round_id, file_path, hub_path, derived_task_ids = "target_end_date")
+    Output
+      <message/check_success>
+      Message:
+      Required samples per compound idx task present.
 

@@ -107,7 +107,8 @@ validate_pr <- function(hub_path = ".", gh_repo, pr_number,
                         submit_window_ref_date_from = c(
                           "file",
                           "file_path"
-                        )) {
+                        ),
+                        derived_task_ids = NULL) {
   file_modification_check <- rlang::arg_match(file_modification_check)
   output_type_id_datatype <- rlang::arg_match(output_type_id_datatype)
   model_output_dir <- get_hub_model_output_dir(hub_path) # nolint: object_name_linter
@@ -179,6 +180,7 @@ validate_pr <- function(hub_path = ".", gh_repo, pr_number,
           output_type_id_datatype = output_type_id_datatype,
           validations_cfg_path = validations_cfg_path,
           skip_submit_window_check = skip_submit_window_check,
+          derived_task_ids = derived_task_ids,
           skip_check_config = TRUE
         )
       ) %>%

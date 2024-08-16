@@ -195,3 +195,56 @@ test_that("check_tbl_values works with v3 spec samples", {
     )
   )
 })
+
+
+test_that("Ignoring derived_task_ids in check_tbl_values works", {
+  hub_path <- system.file("testhubs/samples", package = "hubValidations")
+  file_path <- "flu-base/2022-10-22-flu-base.csv"
+  round_id <- "2022-10-22"
+  tbl <- tbl_orig <- read_model_out_file(
+    file_path = file_path,
+    hub_path = hub_path,
+    coerce_types = "chr"
+  )
+  # Introduce invalid value to derived task id that should be ignored when using
+  # `derived_task_ids`.
+  tbl[1, "target_end_date"] <- "random_date"
+  expect_snapshot(
+    check_tbl_values(tbl, round_id, file_path, hub_path,
+      derived_task_ids = "target_end_date"
+    )
+  )
+  # Check that ignoring derived task ids returns same result as not ignoring.
+  expect_equal(
+    check_tbl_values(tbl, round_id, file_path, hub_path,
+      derived_task_ids = "target_end_date"
+    ),
+    check_tbl_values(tbl_orig, round_id, file_path, hub_path,
+      derived_task_ids = "target_end_date"
+    )
+  )
+
+  # Trigger invalid value error
+  tbl[1, "horizon"] <- tbl_orig[1, "horizon"] <- "9"
+  # Trigger invalid value combination error
+  tbl[2, "output_type"] <- tbl_orig[2, "output_type"] <- "pmf"
+  expect_snapshot(
+    check_tbl_values(tbl, round_id, file_path, hub_path,
+      derived_task_ids = "target_end_date"
+    )
+  )
+  expect_snapshot(
+    check_tbl_values(tbl, round_id, file_path, hub_path,
+      derived_task_ids = "target_end_date"
+    )$error_tbl
+  )
+
+  expect_equal(
+    check_tbl_values(tbl, round_id, file_path, hub_path,
+      derived_task_ids = "target_end_date"
+    ),
+    check_tbl_values(tbl_orig, round_id, file_path, hub_path,
+      derived_task_ids = "target_end_date"
+    )
+  )
+})

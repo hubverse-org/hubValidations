@@ -1,34 +1,25 @@
 #' Check model output data tbl contains valid value combinations
 #' @param tbl a tibble/data.frame of the contents of the file being validated. Column types must **all be character**.
 #' @inherit check_tbl_colnames params
+#' @inheritParams expand_model_out_grid
 #' @inherit check_tbl_colnames return
 #' @export
-check_tbl_values <- function(tbl, round_id, file_path, hub_path) {
+check_tbl_values <- function(tbl, round_id, file_path, hub_path,
+                             derived_task_ids = NULL) {
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
 
-  # Coerce accepted vals to character for easier comparison of
-  # values. Tried to use arrow tbls for comparisons as more efficient when
-  # working with larger files but currently arrow does not match NAs as dplyr
-  # does, returning false positives for mean & median rows which contain NA in
-  # output type ID column.
-  accepted_vals <- expand_model_out_grid(
-    config_tasks = config_tasks,
-    round_id = round_id,
-    all_character = TRUE
-  )
-
-  # This approach uses dplyr to identify tbl rows that don't have a complete match
-  # in accepted_vals.
-  accepted_vals$valid <- TRUE
-  if (hubUtils::is_v3_config(config_tasks)) {
-    out_type_ids <- tbl[["output_type_id"]]
-    tbl[tbl$output_type == "sample", "output_type_id"] <- NA
-  }
-
-  valid_tbl <- dplyr::left_join(
-    tbl, accepted_vals,
-    by = names(tbl)[names(tbl) != "value"]
-  )
+  valid_tbl <- tbl %>%
+    tibble::rowid_to_column() %>%
+    split(f = tbl$output_type) %>%
+    purrr::imap(
+      ~ check_values_by_output_type(
+        tbl = .x, output_type = .y,
+        config_tasks = config_tasks,
+        round_id = round_id,
+        derived_task_ids = derived_task_ids
+      )
+    ) %>%
+    purrr::list_rbind()
 
   check <- !any(is.na(valid_tbl$valid))
 
@@ -36,14 +27,14 @@ check_tbl_values <- function(tbl, round_id, file_path, hub_path) {
     details <- NULL
     error_tbl <- NULL
   } else {
-    error_summary <- summarise_invalid_values(valid_tbl, accepted_vals)
+    error_summary <- summarise_invalid_values(
+      valid_tbl, config_tasks, round_id,
+      derived_task_ids
+    )
     details <- error_summary$msg
     if (length(error_summary$invalid_combs_idx) == 0L) {
       error_tbl <- NULL
     } else {
-      if (hubUtils::is_v3_config(config_tasks)) {
-        tbl[["output_type_id"]] <- out_type_ids
-      }
       error_tbl <- tbl[
         error_summary$invalid_combs_idx,
         names(tbl) != "value"
@@ -66,10 +57,54 @@ check_tbl_values <- function(tbl, round_id, file_path, hub_path) {
   )
 }
 
-summarise_invalid_values <- function(valid_tbl, accepted_vals) {
-  cols <- names(valid_tbl)[!names(valid_tbl) %in% c("value", "valid")]
+check_values_by_output_type <- function(tbl, output_type, config_tasks, round_id,
+                                        derived_task_ids = NULL) {
+  if (!is.null(derived_task_ids)) {
+    tbl[, derived_task_ids] <- NA_character_
+  }
+
+  # Coerce accepted vals to character for easier comparison of
+  # values. Tried to use arrow tbls for comparisons as more efficient when
+  # working with larger files but currently arrow does not match NAs as dplyr
+  # does, returning false positives for mean & median rows which contain NA in
+  # output type ID column.
+  accepted_vals <- expand_model_out_grid(
+    config_tasks = config_tasks,
+    round_id = round_id,
+    all_character = TRUE,
+    output_types = output_type,
+    derived_task_ids = derived_task_ids
+  )
+
+  # This approach uses dplyr to identify tbl rows that don't have a complete match
+  # in accepted_vals.
+  accepted_vals$valid <- TRUE
+  if (hubUtils::is_v3_config(config_tasks) && output_type == "sample") {
+    tbl[tbl$output_type == "sample", "output_type_id"] <- NA
+  }
+
+  dplyr::left_join(
+    tbl, accepted_vals,
+    by = setdiff(names(tbl), c("value", "rowid"))
+  )
+}
+
+# Summarise results of check for invalid values by creating appropriate
+# messages and extracting the rowids of invalid value combinations with respect
+# to the row order in the original tbl.
+# Problems are summarised in two parts:
+# First we report any invalid values in the tbl that do not match any values in the
+# config. Second we report any rows that contain valid values but in invalid
+# combinations.
+summarise_invalid_values <- function(valid_tbl, config_tasks, round_id,
+                                     derived_task_ids) {
+  # Chack for invalid values
+  cols <- setdiff(names(valid_tbl), c("value", "valid", "rowid"))
   uniq_tbl <- purrr::map(valid_tbl[cols], unique)
-  uniq_config <- purrr::map(accepted_vals[cols], unique)
+  uniq_config <- get_round_config_values(
+    config_tasks, round_id,
+    derived_task_ids
+  )[cols]
 
   invalid_vals <- purrr::map2(
     uniq_tbl, uniq_config,
@@ -90,6 +125,7 @@ summarise_invalid_values <- function(valid_tbl, accepted_vals) {
     invalid_vals_msg <- NULL
   }
 
+  # Get rowids of invalid value combinations
   invalid_val_idx <- purrr::imap(
     invalid_vals,
     ~ which(valid_tbl[[.y]] %in% .x)
@@ -97,13 +133,20 @@ summarise_invalid_values <- function(valid_tbl, accepted_vals) {
     unlist(use.names = FALSE) %>%
     unique()
   invalid_row_idx <- which(is.na(valid_tbl$valid))
-  invalid_combs_idx <- setdiff(invalid_val_idx, invalid_row_idx)
+  # Ignore rows which have already been reported for invalid values
+  invalid_combs_idx <- setdiff(invalid_row_idx, invalid_val_idx)
   if (length(invalid_combs_idx) == 0L) {
     invalid_combs_msg <- NULL
   } else {
+    # invalid_combs_idx indicates invalid value combinations in the table joined
+    # to expanded valid value grid. This changes the row order of the table, so
+    # to return rowids with respect to the original tbl row order we use
+    # invalid_combs_idx to extract values from the rowid column of the valid_tbl.
+    invalid_combs_idx <- valid_tbl$rowid[invalid_combs_idx]
     invalid_combs_msg <- cli::format_inline(
-      "Additionally row{?s} {.val {invalid_combs_idx}} contain invalid
-      combinations of valid values.
+      "Additionally {cli::qty(length(invalid_combs_idx))} row{?s}
+      {.val {invalid_combs_idx}} {cli::qty(length(invalid_combs_idx))}
+      {?contains/contain} invalid combinations of valid values.
       See {.var error_tbl} for details."
     )
   }
@@ -111,41 +154,4 @@ summarise_invalid_values <- function(valid_tbl, accepted_vals) {
     msg = paste(invalid_vals_msg, invalid_combs_msg, sep = "\n"),
     invalid_combs_idx = invalid_combs_idx
   )
-}
-
-
-get_numeric_output_type_ids <- function(file_path, hub_path) {
-  get_file_round_config(file_path, hub_path)[["model_tasks"]] %>%
-    purrr::map(~ .x[["output_type"]]) %>%
-    unlist(recursive = FALSE) %>%
-    purrr::map(~ purrr::pluck(.x, "output_type_id")) %>%
-    purrr::map_lgl(~ is.numeric(unlist(.x))) %>%
-    purrr::keep(isTRUE) %>%
-    names() %>%
-    unique()
-}
-
-
-coerce_num_output_type_ids <- function(tbl, file_path, hub_path) {
-  num_output_types <- get_numeric_output_type_ids(
-    file_path = file_path,
-    hub_path = hub_path
-  )
-
-  if (
-    any(tbl[["output_type"]] %in% num_output_types) &&
-      inherits(tbl[["output_type_id"]], "character")
-  ) {
-    type_coerce <- tbl[["output_type"]] %in% num_output_types
-    num_output_type_id <- suppressWarnings(
-      as.numeric(tbl$output_type_id[type_coerce])
-    )
-    # establish only valid coercions to distinguish between the potential for
-    # two cdf output types in the same round, one numeric and one character.
-    valid <- !is.na(num_output_type_id)
-    tbl$output_type_id[type_coerce][valid] <- as.character(
-      num_output_type_id[valid]
-    )
-  }
-  tbl
 }

@@ -171,3 +171,12 @@
       # i 11 more rows
       # i 1 more variable: output_type_id <chr>
 
+# Ignoring derived_task_ids in check_tbl_values_required works
+
+    Code
+      check_tbl_values_required(tbl, round_id, file_path, hub_path, derived_task_ids = "target_end_date")
+    Output
+      <message/check_success>
+      Message:
+      Required task ID/output type/output type ID combinations all present.
+
