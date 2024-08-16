@@ -1114,3 +1114,48 @@
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        - attr(*, "class")= chr [1:2] "hub_validations" "list"
 
+---
+
+    Code
+      validate_submission(hub_path = system.file("testhubs/samples", package = "hubValidations"),
+      file_path = "flu-base/2022-10-22-flu-base.csv", skip_submit_window_check = TRUE,
+      derived_task_ids = "target_end_date")[c("valid_vals", "req_vals",
+        "value_col_valid", "spl_n", "spl_compound_taskid_set", "spl_compound_tid",
+        "spl_non_compound_tid")]
+    Output
+      $valid_vals
+      <message/check_success>
+      Message:
+      `tbl` contains valid values/value combinations.
+      
+      $req_vals
+      <message/check_success>
+      Message:
+      Required task ID/output type/output type ID combinations all present.
+      
+      $value_col_valid
+      <message/check_success>
+      Message:
+      Values in column `value` all valid with respect to modeling task config.
+      
+      $spl_n
+      <message/check_success>
+      Message:
+      Required samples per compound idx task present.
+      
+      $spl_compound_taskid_set
+      <message/check_success>
+      Message:
+      All samples in a model task conform to single, unique compound task ID set that matches or is coarser than the configured `compound_taksid_set`.
+      
+      $spl_compound_tid
+      <message/check_success>
+      Message:
+      Each sample compound task ID contains single, unique value.
+      
+      $spl_non_compound_tid
+      <message/check_success>
+      Message:
+      Task ID combinations of non compound task id values consistent across modeling task samples.
+      
+
