@@ -1,3 +1,8 @@
+# hubValidations 0.5.1
+
+* Remove dependency on development version of `arrow` package and bump required version to 17.0.0.
+
+
 # hubValidations 0.5.0
 
 This release introduces **significant improvements in the performance of submission validation** via the following changes:
