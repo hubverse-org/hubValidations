@@ -5,6 +5,7 @@
   - `ⓧ` : `check_error` class object. This also indicates early termination of the validation process.
   - `☒` : `check_exec_error` class object. This indicates an error in the execution of a check function.
 * `octolog` dependency removed. This removes the annotation of validation results onto GitHub Action workflow logs (#113).
+
 # hubValidations 0.5.1
 
 * Remove dependency on development version of `arrow` package and bump required version to 17.0.0.
