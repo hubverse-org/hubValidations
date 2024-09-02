@@ -14,9 +14,9 @@
       capture_check_cnd(check = FALSE, file_path = "test/file.csv", msg_subject = "{.var round_id}",
         msg_attribute = "valid.", error = FALSE, details = "Must be one of {.val {c('A', 'B')}}, not {.val C}")
     Output
-      <warning/check_failure>
-      Warning:
-      `round_id` must be valid.  Must be one of "A" and "B", not "C"
+      <error/check_failure>
+      Error:
+      ! `round_id` must be valid.  Must be one of "A" and "B", not "C"
 
 ---
 
@@ -46,9 +46,9 @@
         msg_attribute = "consistent with expected round task IDs and std column names.",
         msg_verbs = c("are", "must always be"))
     Output
-      <warning/check_failure>
-      Warning:
-      Column names must always be consistent with expected round task IDs and std column names.
+      <error/check_failure>
+      Error:
+      ! Column names must always be consistent with expected round task IDs and std column names.
 
 ---
 
@@ -57,12 +57,14 @@
         msg_attribute = "consistent with expected round task IDs and std column names.",
         msg_verbs = c("are", "must always be")))
     Output
-      List of 4
+      List of 6
        $ message       : chr "Column names must always be consistent with expected round task IDs and std column names. \n "
+       $ trace         : NULL
+       $ parent        : NULL
        $ where         : chr "test/file.csv"
        $ call          : chr "eval"
        $ use_cli_format: logi TRUE
-       - attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_warning" "warning" ...
+       - attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_error" "error" ...
 
 # capture_check_cnd fails correctly
 

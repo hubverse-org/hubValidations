@@ -38,7 +38,7 @@ contain \code{NA}s.}
 Depending on whether validation has succeeded, one of:
 \itemize{
 \item \verb{<message/check_success>} condition class object.
-\item \verb{<warning/check_failure>} condition class object.
+\item \verb{<error/check_failure>} condition class object.
 }
 
 Returned object also inherits from subclass \verb{<hub_check>}.

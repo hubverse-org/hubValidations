@@ -40,7 +40,7 @@ The super class returned in each element depends on the status of the check:
 
 - If a check is skipped, a `<message/check_info>` condition class object is returned.
 
-- Checks vary with respect to whether they return an `<error/check_error>` or `<warning/check_failure>` condition class object if the check fails. 
+- Checks vary with respect to whether they return an `<error/check_error>` or `<error/check_failure>` condition class object if the check fails. 
 Ultimately, both will cause overall validation to fail and the two classes are used primarily to communicate the severity of a failing check.
 
 ## `hub_validations` print method
@@ -49,7 +49,7 @@ Ultimately, both will cause overall validation to fail and the two classes are u
 
 - `✔` indicates a check was successful (a `<message/check_success>` condition class object was returned)
 - `✖` indicates a high severity check failed (a `<error/check_error>` condition class object was returned)
-- `!` indicates a lower severity check failed (a `<warning/check_failure>` condition class object was returned)
+- `!` indicates a lower severity check failed (a `<error/check_failure>` condition class object was returned)
 - `ℹ` indicates a check was skipped (a `<message/check_info>` condition class object was returned)
 
 ```{r}

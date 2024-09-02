@@ -107,26 +107,29 @@
     Code
       str(validate_model_data(hub_path, file_path, round_id_col = "random_col"))
     Output
-      List of 3
+      Classes 'hub_validations', 'list'  hidden list of 3
        $ file_read         :List of 4
         ..$ message       : chr "File could be read successfully. \n "
         ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
         ..$ call          : chr "check_file_read"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ valid_round_id_col:List of 4
+       $ valid_round_id_col:List of 6
         ..$ message       : chr "`round_id_col` name must be valid. \n Must be one of\n                                      \"origin_date\", \""| __truncated__
+        ..$ trace         : NULL
+        ..$ parent        : NULL
         ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
         ..$ call          : chr "check_valid_round_id_col"
         ..$ use_cli_format: logi TRUE
-        ..- attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_warning" "warning" ...
-       $ unique_round_id   :List of 4
+        ..- attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_error" "error" ...
+       $ unique_round_id   :List of 6
         ..$ message       : chr "`round_id_col` name must be valid. \n Must be one of\n                                      \"origin_date\", \""| __truncated__
+        ..$ trace         : NULL
+        ..$ parent        : NULL
         ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
         ..$ call          : chr "check_tbl_unique_round_id"
         ..$ use_cli_format: logi TRUE
-        ..- attr(*, "class")= chr [1:5] "check_error" "hub_check" "rlang_warning" "warning" ...
-       - attr(*, "class")= chr [1:2] "hub_validations" "list"
+        ..- attr(*, "class")= chr [1:5] "check_error" "hub_check" "rlang_error" "error" ...
 
 ---
 
@@ -164,12 +167,14 @@
         ..$ call          : chr "check_tbl_colnames"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ col_types         :List of 4
+       $ col_types         :List of 6
         ..$ message       : chr "Column data types do not match hub schema. \n `output_type_id` should be \"character\" not \"double\"."
+        ..$ trace         : NULL
+        ..$ parent        : NULL
         ..$ where         : chr "hub-ensemble/2023-05-08-hub-ensemble.parquet"
         ..$ call          : chr "check_tbl_col_types"
         ..$ use_cli_format: logi TRUE
-        ..- attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_warning" "warning" ...
+        ..- attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_error" "error" ...
        $ valid_vals        :List of 5
         ..$ message       : chr "`tbl` contains valid values/value combinations.  \n "
         ..$ where         : chr "hub-ensemble/2023-05-08-hub-ensemble.parquet"
@@ -196,12 +201,14 @@
         ..$ call          : chr "check_tbl_values_required"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ value_col_valid   :List of 4
+       $ value_col_valid   :List of 6
         ..$ message       : chr "Values in column `value` are not all valid with respect to modeling task config. \n  Values 196.83, 367.89, 244"| __truncated__
+        ..$ trace         : NULL
+        ..$ parent        : NULL
         ..$ where         : chr "hub-ensemble/2023-05-08-hub-ensemble.parquet"
         ..$ call          : chr "check_tbl_value_col"
         ..$ use_cli_format: logi TRUE
-        ..- attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_warning" "warning" ...
+        ..- attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_error" "error" ...
        $ value_col_non_desc:List of 5
         ..$ message       : chr "Values in `value` column are non-decreasing as output_type_ids increase for all unique task ID\n    value/outpu"| __truncated__
         ..$ where         : chr "hub-ensemble/2023-05-08-hub-ensemble.parquet"

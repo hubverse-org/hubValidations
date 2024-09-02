@@ -12,8 +12,10 @@
     Code
       str(check_tbl_value_col_sum1(tbl, file_path))
     Output
-      List of 5
+      List of 7
        $ message       : chr "Values in `value` column do not sum to 1 for all unique task ID value combination of pmf\n    output types. \n "| __truncated__
+       $ trace         : NULL
+       $ parent        : NULL
        $ where         : chr "umass_ens/2023-05-08-umass_ens.csv"
        $ error_tbl     : tibble [1 x 5] (S3: tbl_df/tbl/data.frame)
         ..$ forecast_date: Date[1:1], format: "2023-05-08"
@@ -23,15 +25,17 @@
         ..$ output_type  : chr "pmf"
        $ call          : chr "check_tbl_value_col_sum1"
        $ use_cli_format: logi TRUE
-       - attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_warning" "warning" ...
+       - attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_error" "error" ...
 
 ---
 
     Code
       str(check_tbl_value_col_sum1(tbl, file_path))
     Output
-      List of 5
+      List of 7
        $ message       : chr "Values in `value` column do not sum to 1 for all unique task ID value combination of pmf\n    output types. \n "| __truncated__
+       $ trace         : NULL
+       $ parent        : NULL
        $ where         : chr "umass_ens/2023-05-08-umass_ens.csv"
        $ error_tbl     : tibble [1 x 5] (S3: tbl_df/tbl/data.frame)
         ..$ forecast_date: Date[1:1], format: "2023-05-08"
@@ -41,7 +45,7 @@
         ..$ output_type  : chr "pmf"
        $ call          : chr "check_tbl_value_col_sum1"
        $ use_cli_format: logi TRUE
-       - attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_warning" "warning" ...
+       - attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_error" "error" ...
 
 ---
 

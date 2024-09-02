@@ -24,9 +24,9 @@
       opt_check_tbl_col_timediff(tbl, file_path, hub_path, t0_colname = "forecast_date",
         t1_colname = "target_end_date", timediff = lubridate::weeks(2))
     Output
-      <warning/check_failure>
-      Warning:
-      Time differences between t0 var `forecast_date` and t1 var `target_end_date` do not all match expected period of 14d 0H 0M 0S.  t1 var value 2023-05-15 invalid.
+      <error/check_failure>
+      Error:
+      ! Time differences between t0 var `forecast_date` and t1 var `target_end_date` do not all match expected period of 14d 0H 0M 0S.  t1 var value 2023-05-15 invalid.
 
 # opt_check_tbl_col_timediff fails correctly
 

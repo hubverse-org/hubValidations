@@ -12,9 +12,9 @@
     Code
       check_tbl_col_types(tbl, file_path, hub_path)
     Output
-      <warning/check_failure>
-      Warning:
-      Column data types do not match hub schema.  `origin_date` should be "character" not "Date", `horizon` should be "double" not "integer".
+      <error/check_failure>
+      Error:
+      ! Column data types do not match hub schema.  `origin_date` should be "character" not "Date", `horizon` should be "double" not "integer".
 
 # Check '06' location value validated correctly in check_tbl_col_types
 

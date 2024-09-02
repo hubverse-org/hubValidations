@@ -24,9 +24,9 @@
       opt_check_tbl_horizon_timediff(tbl, file_path, hub_path, t0_colname = "forecast_date",
         t1_colname = "target_end_date")
     Output
-      <warning/check_failure>
-      Warning:
-      Time differences between t0 var `forecast_date` and t1 var `target_end_date` do not all match expected period of 7d 0H 0M 0S * `horizon`.  t1 var value "2023-05-22 (horizon = 1)" are invalid.
+      <error/check_failure>
+      Error:
+      ! Time differences between t0 var `forecast_date` and t1 var `target_end_date` do not all match expected period of 7d 0H 0M 0S * `horizon`.  t1 var value "2023-05-22 (horizon = 1)" are invalid.
 
 ---
 
@@ -34,9 +34,9 @@
       opt_check_tbl_horizon_timediff(tbl, file_path, hub_path, t0_colname = "forecast_date",
         t1_colname = "target_end_date", timediff = lubridate::weeks(2))
     Output
-      <warning/check_failure>
-      Warning:
-      Time differences between t0 var `forecast_date` and t1 var `target_end_date` do not all match expected period of 14d 0H 0M 0S * `horizon`.  t1 var values "2023-05-15 (horizon = 1)" and "2023-05-22 (horizon = 2)" are invalid.
+      <error/check_failure>
+      Error:
+      ! Time differences between t0 var `forecast_date` and t1 var `target_end_date` do not all match expected period of 14d 0H 0M 0S * `horizon`.  t1 var values "2023-05-15 (horizon = 1)" and "2023-05-22 (horizon = 2)" are invalid.
 
 # opt_check_tbl_horizon_timediff fails correctly
 

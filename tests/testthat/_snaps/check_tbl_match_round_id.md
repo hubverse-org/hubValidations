@@ -45,9 +45,9 @@
       check_tbl_match_round_id(tbl = tbl, file_path = file_path, hub_path = hub_path,
         round_id_col = "random_column")
     Output
-      <warning/check_error>
-      Warning:
-      `round_id_col` name must be valid.  Must be one of "origin_date", "target", "horizon", and "location" not "random_column".
+      <error/check_error>
+      Error:
+      ! `round_id_col` name must be valid.  Must be one of "origin_date", "target", "horizon", and "location" not "random_column".
 
 ---
 
@@ -55,10 +55,12 @@
       str(check_tbl_match_round_id(tbl = tbl, file_path = file_path, hub_path = hub_path,
         round_id_col = "random_column"))
     Output
-      List of 4
+      List of 6
        $ message       : chr "`round_id_col` name must be valid. \n Must be one of\n                                      \"origin_date\", \""| __truncated__
+       $ trace         : NULL
+       $ parent        : NULL
        $ where         : chr "hub-baseline/2022-10-01-hub-baseline.csv"
        $ call          : chr "check_tbl_match_round_id"
        $ use_cli_format: logi TRUE
-       - attr(*, "class")= chr [1:5] "check_error" "hub_check" "rlang_warning" "warning" ...
+       - attr(*, "class")= chr [1:5] "check_error" "hub_check" "rlang_error" "error" ...
 

@@ -463,24 +463,30 @@
         ..$ call          : chr "check_config_hub_valid"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ model_output_mod_1     :List of 4
+       $ model_output_mod_1     :List of 6
         ..$ message       : chr "Previously submitted model output files must not be modified. \n 'model-output/hub-baseline/2022-10-08-hub-base"| __truncated__
+        ..$ trace         : NULL
+        ..$ parent        : NULL
         ..$ where         : 'fs_path' chr "hub-baseline/2022-10-08-hub-baseline.csv"
         ..$ call          : chr "check_pr_modf_del_file"
         ..$ use_cli_format: logi TRUE
-        ..- attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_warning" "warning" ...
-       $ model_output_mod_2     :List of 4
+        ..- attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_error" "error" ...
+       $ model_output_mod_2     :List of 6
         ..$ message       : chr "Previously submitted model output files must not be removed. \n 'model-output/team1-goodmodel/2022-10-15-team1-"| __truncated__
+        ..$ trace         : NULL
+        ..$ parent        : NULL
         ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-15-team1-goodmodel.csv"
         ..$ call          : chr "check_pr_modf_del_file"
         ..$ use_cli_format: logi TRUE
-        ..- attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_warning" "warning" ...
-       $ model_metadata_mod_1   :List of 4
+        ..- attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_error" "error" ...
+       $ model_metadata_mod_1   :List of 6
         ..$ message       : chr "Previously submitted model metadata files must not be removed. \n 'model-metadata/team1-goodmodel.yaml' removed."
+        ..$ trace         : NULL
+        ..$ parent        : NULL
         ..$ where         : 'fs_path' chr "team1-goodmodel.yaml"
         ..$ call          : chr "check_pr_modf_del_file"
         ..$ use_cli_format: logi TRUE
-        ..- attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_warning" "warning" ...
+        ..- attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_error" "error" ...
        $ file_exists            :List of 4
         ..$ message       : chr "File exists at path 'model-output/hub-baseline/2022-10-08-hub-baseline.csv'. \n "
         ..$ where         : 'fs_path' chr "hub-baseline/2022-10-08-hub-baseline.csv"

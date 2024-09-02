@@ -12,8 +12,10 @@
     Code
       str(missing_req_block)
     Output
-      List of 5
+      List of 7
        $ message       : chr "Required task ID/output type/output type ID combinations missing.  \n See `missing` attribute for details."
+       $ trace         : NULL
+       $ parent        : NULL
        $ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
        $ missing       : tibble [23 x 6] (S3: tbl_df/tbl/data.frame)
         ..$ origin_date   : Date[1:23], format: "2022-10-08" "2022-10-08" ...
@@ -24,15 +26,17 @@
         ..$ output_type_id: num [1:23] 0.01 0.025 0.05 0.1 0.15 0.2 0.25 0.3 0.35 0.4 ...
        $ call          : chr "check_tbl_values_required"
        $ use_cli_format: logi TRUE
-       - attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_warning" "warning" ...
+       - attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_error" "error" ...
 
 ---
 
     Code
       str(res_missing_otid)
     Output
-      List of 5
+      List of 7
        $ message       : chr "Required task ID/output type/output type ID combinations missing.  \n See `missing` attribute for details."
+       $ trace         : NULL
+       $ parent        : NULL
        $ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
        $ missing       : tibble [3 x 6] (S3: tbl_df/tbl/data.frame)
         ..$ origin_date   : Date[1:3], format: "2022-10-08" "2022-10-08" ...
@@ -43,7 +47,7 @@
         ..$ output_type_id: num [1:3] 0.01 0.025 0.05
        $ call          : chr "check_tbl_values_required"
        $ use_cli_format: logi TRUE
-       - attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_warning" "warning" ...
+       - attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_error" "error" ...
 
 # check_tbl_values_required works with 2 separate model tasks & completely missing cols
 
@@ -59,8 +63,10 @@
     Code
       str(missing_required)
     Output
-      List of 5
+      List of 7
        $ message       : chr "Required task ID/output type/output type ID combinations missing.  \n See `missing` attribute for details."
+       $ trace         : NULL
+       $ parent        : NULL
        $ where         : chr "hub-ensemble/2023-05-08-hub-ensemble.parquet"
        $ missing       : tibble [2 x 6] (S3: tbl_df/tbl/data.frame)
         ..$ forecast_date : Date[1:2], format: "2023-05-08" "2023-05-08"
@@ -71,15 +77,17 @@
         ..$ output_type_id: chr [1:2] "0.01" "0.025"
        $ call          : chr "check_tbl_values_required"
        $ use_cli_format: logi TRUE
-       - attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_warning" "warning" ...
+       - attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_error" "error" ...
 
 ---
 
     Code
       str(missing_opt_otid)
     Output
-      List of 5
+      List of 7
        $ message       : chr "Required task ID/output type/output type ID combinations missing.  \n See `missing` attribute for details."
+       $ trace         : NULL
+       $ parent        : NULL
        $ where         : chr "hub-ensemble/2023-05-08-hub-ensemble.parquet"
        $ missing       : tibble [2 x 6] (S3: tbl_df/tbl/data.frame)
         ..$ forecast_date : Date[1:2], format: "2023-05-08" "2023-05-08"
@@ -90,15 +98,17 @@
         ..$ output_type_id: chr [1:2] "0.01" "0.025"
        $ call          : chr "check_tbl_values_required"
        $ use_cli_format: logi TRUE
-       - attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_warning" "warning" ...
+       - attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_error" "error" ...
 
 ---
 
     Code
       str(missing_pmf)
     Output
-      List of 5
+      List of 7
        $ message       : chr "Required task ID/output type/output type ID combinations missing.  \n See `missing` attribute for details."
+       $ trace         : NULL
+       $ parent        : NULL
        $ where         : chr "hub-ensemble/2023-05-08-hub-ensemble.parquet"
        $ missing       : tibble [4 x 6] (S3: tbl_df/tbl/data.frame)
         ..$ forecast_date : Date[1:4], format: "2023-05-08" "2023-05-08" ...
@@ -109,15 +119,17 @@
         ..$ output_type_id: chr [1:4] "decrease" "stable" "increase" "large_increase"
        $ call          : chr "check_tbl_values_required"
        $ use_cli_format: logi TRUE
-       - attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_warning" "warning" ...
+       - attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_error" "error" ...
 
 ---
 
     Code
       str(missing_horizon)
     Output
-      List of 5
+      List of 7
        $ message       : chr "Required task ID/output type/output type ID combinations missing.  \n See `missing` attribute for details."
+       $ trace         : NULL
+       $ parent        : NULL
        $ where         : chr "hub-ensemble/2023-05-08-hub-ensemble.parquet"
        $ missing       : tibble [9 x 6] (S3: tbl_df/tbl/data.frame)
         ..$ forecast_date : Date[1:9], format: "2023-05-08" "2023-05-08" ...
@@ -128,7 +140,7 @@
         ..$ output_type_id: chr [1:9] "decrease" "stable" "increase" "large_increase" ...
        $ call          : chr "check_tbl_values_required"
        $ use_cli_format: logi TRUE
-       - attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_warning" "warning" ...
+       - attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_error" "error" ...
 
 # check_tbl_values_required works with v3 spec samples
 
@@ -146,9 +158,9 @@
       check_tbl_values_required(tbl = tbl, round_id = round_id, file_path = file_path,
         hub_path = hub_path)
     Output
-      <warning/check_failure>
-      Warning:
-      Required task ID/output type/output type ID combinations missing.  See `missing` attribute for details.
+      <error/check_failure>
+      Error:
+      ! Required task ID/output type/output type ID combinations missing.  See `missing` attribute for details.
 
 ---
 

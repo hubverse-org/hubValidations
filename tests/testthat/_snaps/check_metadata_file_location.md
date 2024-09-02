@@ -12,7 +12,7 @@
     Code
       check_metadata_file_location("random_folder/hub-baseline.yml")
     Output
-      <warning/check_failure>
-      Warning:
-      Metadata file directory name must match "model-metadata".  Metadata files should be submitted to directory "model-metadata", not "model-metadata/random_folder".
+      <error/check_failure>
+      Error:
+      ! Metadata file directory name must match "model-metadata".  Metadata files should be submitted to directory "model-metadata", not "model-metadata/random_folder".
 

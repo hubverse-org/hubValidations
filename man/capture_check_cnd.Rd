@@ -32,7 +32,7 @@ the state when validation succeeds, the second element, when validation fails.}
 
 \item{error}{logical. In the case of validation failure, whether the function
 should return an object of class \verb{<error/check_error>} (\code{TRUE}) or
-\verb{<warning/check_failure>} (\code{FALSE}, default).}
+\verb{<error/check_failure>} (\code{FALSE}, default).}
 
 \item{details}{further details to be appended to the output message.}
 
@@ -44,7 +44,7 @@ Depending on whether validation has succeeded and the value
 of the \code{error} argument, one of:
 \itemize{
 \item \verb{<message/check_success>} condition class object.
-\item \verb{<warning/check_failure>} condition class object.
+\item \verb{<error/check_failure>} condition class object.
 \item \verb{<error/check_error>} condition class object.
 }
 

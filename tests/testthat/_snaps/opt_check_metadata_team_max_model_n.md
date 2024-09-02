@@ -13,7 +13,7 @@
       opt_check_metadata_team_max_model_n(hub_path = hub_path, file_path = "hub-baseline.yml",
         n_max = 1L)
     Output
-      <warning/check_failure>
-      Warning:
-      Maximum number of models per team (1) exceeded.  Team "hub" has submitted valid metadata for 2 models: "baseline" and "ensemble".
+      <error/check_failure>
+      Error:
+      ! Maximum number of models per team (1) exceeded.  Team "hub" has submitted valid metadata for 2 models: "baseline" and "ensemble".
 
