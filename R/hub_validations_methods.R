@@ -17,17 +17,18 @@ print.hub_validations <- function(x, ...) {
       ),
       dplyr::case_when(
         purrr::map_lgl(x, ~ rlang::inherits_any(.x, "check_success")) ~ "v",
-        purrr::map_lgl(x, ~ rlang::inherits_any(.x, "check_failure")) ~ "!",
+        purrr::map_lgl(x, ~ rlang::inherits_any(.x, "check_failure")) ~ "x",
         purrr::map_lgl(x, ~ rlang::inherits_any(.x, "check_exec_warn")) ~ "!",
-        purrr::map_lgl(x, ~ rlang::inherits_any(.x, "check_error")) ~ "x",
-        purrr::map_lgl(x, ~ rlang::inherits_any(.x, "check_exec_error")) ~ "x",
+        purrr::map_lgl(x, ~ rlang::inherits_any(.x, "check_error")) ~ "circle_cross",
+        purrr::map_lgl(x, ~ rlang::inherits_any(.x, "check_exec_error")) ~ "lower_block_8",
         purrr::map_lgl(x, ~ rlang::inherits_any(.x, "check_info")) ~ "i",
         TRUE ~ "*"
       )
     )
   }
-
-  octolog::octo_inform(msg)
+  cli::cli_div(class = "hub_validations", theme = hub_validation_theme)
+  cli::cli_inform(msg)
+  cli::cli_end()
 }
 
 
@@ -85,3 +86,21 @@ validate_internal_class <- function(x, class = c(
 print.pr_hub_validations <- function(x, ...) {
   purrr::map(x, print)
 }
+
+
+# cli theme for hub_validations objects that add a circle cross to be applied
+# to check_error objects
+hub_validation_theme <- list(
+  ".bullets .bullet-circle_cross" = list(
+    "before" = function(x) {
+      paste0(cli::col_red(cli::symbol$circle_cross), " ")
+    },
+    "text-exdent" = 2L
+  ),
+  ".bullets .bullet-checkbox_on" = list(
+    "before" = function(x) {
+      paste0(cli::col_red(cli::symbol$checkbox_on), " ")
+    },
+    "text-exdent" = 2L
+  )
+)

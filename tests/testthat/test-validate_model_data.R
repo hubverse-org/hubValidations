@@ -54,15 +54,8 @@ test_that("validate_model_data with config function works", {
 
 
 cli::test_that_cli("validate_model_data print method work", {
-  mockery::stub(
-    octolog:::signal_github_condition,
-    "get_location_string",
-    "file=test-validate_model_data.R,line=57,endLine=61,col=3,endCol=3",
-    2
-  )
   hub_path <- system.file("testhubs/simple", package = "hubValidations")
   file_path <- "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
-  withr::local_envvar(GITHUB_ACTIONS = "false")
 
   # File that passes validation
   expect_snapshot(
@@ -71,13 +64,6 @@ cli::test_that_cli("validate_model_data print method work", {
   # File with validation error
   validate_model_data(hub_path, file_path, round_id_col = "random_col")
 
-  withr::local_envvar(GITHUB_ACTIONS = "true")
-  # File that passes validation
-  expect_snapshot(
-    validate_model_data(hub_path, file_path)
-  )
-  # File with validation error
-  validate_model_data(hub_path, file_path, round_id_col = "random_col")
 })
 
 
