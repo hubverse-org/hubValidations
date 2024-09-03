@@ -51,8 +51,8 @@ Ultimately, both will cause overall validation to fail. The `<error/check_error>
 `hub_validations` objects have their own print method which displays the result, the file name and message of each check:
 
 - `✔` indicates a check was successful (a `<message/check_success>` condition class object was returned)
-- `ⓧ` indicates a check that downstream checks depend on failed causing early return. (a `<error/check_error>` condition class object was returned)
-- `✖` indicates a check failed but does not affect downstream checks so validation was able to proceed (a `<error/check_failure>` condition class object was returned)
+- `✖` indicates a check failed but, because it does not affect downstream checks, validation was able to proceed (a `<error/check_failure>` condition class object was returned)
+- `ⓧ` indicates a check that downstream checks depend on failed, causing early return of the validation process (a `<error/check_error>` condition class object was returned)
 - `☒` indicates an execution error occured and the check was not able to complete (a `<error/check_exec_error>` condition class object was returned). Will cause early return if expected check failure output was a `<error/check_error>`. 
 - `ℹ` indicates a check was skipped (a `<message/check_info>` condition class object was returned)
 
