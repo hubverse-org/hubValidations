@@ -44,7 +44,7 @@ The super class returned in each element depends on the status of the check:
   - **`<error/check_error>` ** class objects indicate early termination of the validation process because of failure of a check downstream checks depend on.
   - **`<error/check_failure>`** class objects indicate a check that failed but the failure does not affect downstream checks so validation was able to proceed.
   
-Ultimately, both will cause overall validation to fail and the two classes are used primarily to communicate early termination.
+Ultimately, both will cause overall validation to fail. The `<error/check_error>` class exists to alert you to the fact that _there may be more errors not yet reported_ due to early termination of the check process.
 
 ## `hub_validations` print method
 
