@@ -249,72 +249,84 @@
     Code
       validate_model_data(hub_path, file_path)
     Message
-      v 2022-10-08-team1-goodmodel.csv: File could be read successfully.
-      v 2022-10-08-team1-goodmodel.csv: `round_id_col` name is valid.
-      v 2022-10-08-team1-goodmodel.csv: `round_id` column "origin_date" contains a single, unique round ID value.
-      v 2022-10-08-team1-goodmodel.csv: All `round_id_col` "origin_date" values match submission `round_id` from file name.
-      v 2022-10-08-team1-goodmodel.csv: Column names are consistent with expected round task IDs and std column names.
-      v 2022-10-08-team1-goodmodel.csv: Column data types match hub schema.
-      v 2022-10-08-team1-goodmodel.csv: `tbl` contains valid values/value combinations.
-      v 2022-10-08-team1-goodmodel.csv: All combinations of task ID column/`output_type`/`output_type_id` values are unique.
-      v 2022-10-08-team1-goodmodel.csv: Required task ID/output type/output type ID combinations all present.
-      v 2022-10-08-team1-goodmodel.csv: Values in column `value` all valid with respect to modeling task config.
-      v 2022-10-08-team1-goodmodel.csv: Values in `value` column are non-decreasing as output_type_ids increase for all unique task ID value/output type combinations of quantile or cdf output types.
-      i 2022-10-08-team1-goodmodel.csv: No pmf output types to check for sum of 1. Check skipped.
+      
+      -- 2022-10-08-team1-goodmodel.csv ----
+      
+      v [file_read]: File could be read successfully.
+      v [valid_round_id_col]: `round_id_col` name is valid.
+      v [unique_round_id]: `round_id` column "origin_date" contains a single, unique round ID value.
+      v [match_round_id]: All `round_id_col` "origin_date" values match submission `round_id` from file name.
+      v [colnames]: Column names are consistent with expected round task IDs and std column names.
+      v [col_types]: Column data types match hub schema.
+      v [valid_vals]: `tbl` contains valid values/value combinations.
+      v [rows_unique]: All combinations of task ID column/`output_type`/`output_type_id` values are unique.
+      v [req_vals]: Required task ID/output type/output type ID combinations all present.
+      v [value_col_valid]: Values in column `value` all valid with respect to modeling task config.
+      v [value_col_non_desc]: Values in `value` column are non-decreasing as output_type_ids increase for all unique task ID value/output type combinations of quantile or cdf output types.
+      i [value_col_sum1]: No pmf output types to check for sum of 1. Check skipped.
 
 # validate_model_data print method work [ansi]
 
     Code
       validate_model_data(hub_path, file_path)
     Message
-      [1m[22m[32mv[39m 2022-10-08-team1-goodmodel.csv: File could be read successfully.
-      [32mv[39m 2022-10-08-team1-goodmodel.csv: `round_id_col` name is valid.
-      [32mv[39m 2022-10-08-team1-goodmodel.csv: `round_id` column [34m"origin_date"[39m contains a single, unique round ID value.
-      [32mv[39m 2022-10-08-team1-goodmodel.csv: All `round_id_col` [34m"origin_date"[39m values match submission `round_id` from file name.
-      [32mv[39m 2022-10-08-team1-goodmodel.csv: Column names are consistent with expected round task IDs and std column names.
-      [32mv[39m 2022-10-08-team1-goodmodel.csv: Column data types match hub schema.
-      [32mv[39m 2022-10-08-team1-goodmodel.csv: `tbl` contains valid values/value combinations.
-      [32mv[39m 2022-10-08-team1-goodmodel.csv: All combinations of task ID column/`output_type`/`output_type_id` values are unique.
-      [32mv[39m 2022-10-08-team1-goodmodel.csv: Required task ID/output type/output type ID combinations all present.
-      [32mv[39m 2022-10-08-team1-goodmodel.csv: Values in column `value` all valid with respect to modeling task config.
-      [32mv[39m 2022-10-08-team1-goodmodel.csv: Values in `value` column are non-decreasing as output_type_ids increase for all unique task ID value/output type combinations of quantile or cdf output types.
-      [36mi[39m 2022-10-08-team1-goodmodel.csv: No pmf output types to check for sum of 1. Check skipped.
+      
+      [96m-- [4m[1m2022-10-08-team1-goodmodel.csv[22m[24m ----[39m
+      
+      [1m[22m[32mv[39m [90m[file_read][39m: File could be read successfully.
+      [32mv[39m [90m[valid_round_id_col][39m: `round_id_col` name is valid.
+      [32mv[39m [90m[unique_round_id][39m: `round_id` column [34m"origin_date"[39m contains a single, unique round ID value.
+      [32mv[39m [90m[match_round_id][39m: All `round_id_col` [34m"origin_date"[39m values match submission `round_id` from file name.
+      [32mv[39m [90m[colnames][39m: Column names are consistent with expected round task IDs and std column names.
+      [32mv[39m [90m[col_types][39m: Column data types match hub schema.
+      [32mv[39m [90m[valid_vals][39m: `tbl` contains valid values/value combinations.
+      [32mv[39m [90m[rows_unique][39m: All combinations of task ID column/`output_type`/`output_type_id` values are unique.
+      [32mv[39m [90m[req_vals][39m: Required task ID/output type/output type ID combinations all present.
+      [32mv[39m [90m[value_col_valid][39m: Values in column `value` all valid with respect to modeling task config.
+      [32mv[39m [90m[value_col_non_desc][39m: Values in `value` column are non-decreasing as output_type_ids increase for all unique task ID value/output type combinations of quantile or cdf output types.
+      [36mi[39m [90m[value_col_sum1][39m: No pmf output types to check for sum of 1. Check skipped.
 
 # validate_model_data print method work [unicode]
 
     Code
       validate_model_data(hub_path, file_path)
     Message
-      ✔ 2022-10-08-team1-goodmodel.csv: File could be read successfully.
-      ✔ 2022-10-08-team1-goodmodel.csv: `round_id_col` name is valid.
-      ✔ 2022-10-08-team1-goodmodel.csv: `round_id` column "origin_date" contains a single, unique round ID value.
-      ✔ 2022-10-08-team1-goodmodel.csv: All `round_id_col` "origin_date" values match submission `round_id` from file name.
-      ✔ 2022-10-08-team1-goodmodel.csv: Column names are consistent with expected round task IDs and std column names.
-      ✔ 2022-10-08-team1-goodmodel.csv: Column data types match hub schema.
-      ✔ 2022-10-08-team1-goodmodel.csv: `tbl` contains valid values/value combinations.
-      ✔ 2022-10-08-team1-goodmodel.csv: All combinations of task ID column/`output_type`/`output_type_id` values are unique.
-      ✔ 2022-10-08-team1-goodmodel.csv: Required task ID/output type/output type ID combinations all present.
-      ✔ 2022-10-08-team1-goodmodel.csv: Values in column `value` all valid with respect to modeling task config.
-      ✔ 2022-10-08-team1-goodmodel.csv: Values in `value` column are non-decreasing as output_type_ids increase for all unique task ID value/output type combinations of quantile or cdf output types.
-      ℹ 2022-10-08-team1-goodmodel.csv: No pmf output types to check for sum of 1. Check skipped.
+      
+      ── 2022-10-08-team1-goodmodel.csv ────
+      
+      ✔ [file_read]: File could be read successfully.
+      ✔ [valid_round_id_col]: `round_id_col` name is valid.
+      ✔ [unique_round_id]: `round_id` column "origin_date" contains a single, unique round ID value.
+      ✔ [match_round_id]: All `round_id_col` "origin_date" values match submission `round_id` from file name.
+      ✔ [colnames]: Column names are consistent with expected round task IDs and std column names.
+      ✔ [col_types]: Column data types match hub schema.
+      ✔ [valid_vals]: `tbl` contains valid values/value combinations.
+      ✔ [rows_unique]: All combinations of task ID column/`output_type`/`output_type_id` values are unique.
+      ✔ [req_vals]: Required task ID/output type/output type ID combinations all present.
+      ✔ [value_col_valid]: Values in column `value` all valid with respect to modeling task config.
+      ✔ [value_col_non_desc]: Values in `value` column are non-decreasing as output_type_ids increase for all unique task ID value/output type combinations of quantile or cdf output types.
+      ℹ [value_col_sum1]: No pmf output types to check for sum of 1. Check skipped.
 
 # validate_model_data print method work [fancy]
 
     Code
       validate_model_data(hub_path, file_path)
     Message
-      [1m[22m[32m✔[39m 2022-10-08-team1-goodmodel.csv: File could be read successfully.
-      [32m✔[39m 2022-10-08-team1-goodmodel.csv: `round_id_col` name is valid.
-      [32m✔[39m 2022-10-08-team1-goodmodel.csv: `round_id` column [34m"origin_date"[39m contains a single, unique round ID value.
-      [32m✔[39m 2022-10-08-team1-goodmodel.csv: All `round_id_col` [34m"origin_date"[39m values match submission `round_id` from file name.
-      [32m✔[39m 2022-10-08-team1-goodmodel.csv: Column names are consistent with expected round task IDs and std column names.
-      [32m✔[39m 2022-10-08-team1-goodmodel.csv: Column data types match hub schema.
-      [32m✔[39m 2022-10-08-team1-goodmodel.csv: `tbl` contains valid values/value combinations.
-      [32m✔[39m 2022-10-08-team1-goodmodel.csv: All combinations of task ID column/`output_type`/`output_type_id` values are unique.
-      [32m✔[39m 2022-10-08-team1-goodmodel.csv: Required task ID/output type/output type ID combinations all present.
-      [32m✔[39m 2022-10-08-team1-goodmodel.csv: Values in column `value` all valid with respect to modeling task config.
-      [32m✔[39m 2022-10-08-team1-goodmodel.csv: Values in `value` column are non-decreasing as output_type_ids increase for all unique task ID value/output type combinations of quantile or cdf output types.
-      [36mℹ[39m 2022-10-08-team1-goodmodel.csv: No pmf output types to check for sum of 1. Check skipped.
+      
+      [96m── [4m[1m2022-10-08-team1-goodmodel.csv[22m[24m ────[39m
+      
+      [1m[22m[32m✔[39m [90m[file_read][39m: File could be read successfully.
+      [32m✔[39m [90m[valid_round_id_col][39m: `round_id_col` name is valid.
+      [32m✔[39m [90m[unique_round_id][39m: `round_id` column [34m"origin_date"[39m contains a single, unique round ID value.
+      [32m✔[39m [90m[match_round_id][39m: All `round_id_col` [34m"origin_date"[39m values match submission `round_id` from file name.
+      [32m✔[39m [90m[colnames][39m: Column names are consistent with expected round task IDs and std column names.
+      [32m✔[39m [90m[col_types][39m: Column data types match hub schema.
+      [32m✔[39m [90m[valid_vals][39m: `tbl` contains valid values/value combinations.
+      [32m✔[39m [90m[rows_unique][39m: All combinations of task ID column/`output_type`/`output_type_id` values are unique.
+      [32m✔[39m [90m[req_vals][39m: Required task ID/output type/output type ID combinations all present.
+      [32m✔[39m [90m[value_col_valid][39m: Values in column `value` all valid with respect to modeling task config.
+      [32m✔[39m [90m[value_col_non_desc][39m: Values in `value` column are non-decreasing as output_type_ids increase for all unique task ID value/output type combinations of quantile or cdf output types.
+      [36mℹ[39m [90m[value_col_sum1][39m: No pmf output types to check for sum of 1. Check skipped.
 
 # validate_model_data errors correctly
 
