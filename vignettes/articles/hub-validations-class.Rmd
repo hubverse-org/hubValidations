@@ -40,9 +40,9 @@ The super class returned in each element depends on the status of the check:
 
 - If a check is skipped, a `<message/check_info>` condition class object is returned.
 
-- Checks vary with respect to whether they return an `<error/check_error>` or `<error/check_failure>` condition class object if the check fails. 
+- Checks vary with respect to whether they return an `<error/check_failure>` or `<error/check_error>` condition class object if the check fails.  
+  - **`<error/check_failure>`** class objects indicate a check that failed but does not affect downstream checks so validation was able to proceed.
   - **`<error/check_error>` ** class objects indicate early termination of the validation process because of failure of a check downstream checks depend on.
-  - **`<error/check_failure>`** class objects indicate a check that failed but the failure does not affect downstream checks so validation was able to proceed.
   
 Ultimately, both will cause overall validation to fail. The `<error/check_error>` class exists to alert you to the fact that _there may be more errors not yet reported_ due to early termination of the check process.
 
