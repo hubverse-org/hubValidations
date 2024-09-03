@@ -33,6 +33,7 @@ print.hub_validations <- function(x, ...) {
       cli::cli_inform(msg)
       cli::cli_end()
     }
+
     purrr::walk(
       .x = get_filenames(x, unique = TRUE),
       ~ print_file(.x, x)
