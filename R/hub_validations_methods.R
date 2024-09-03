@@ -36,7 +36,8 @@ print.hub_validations <- function(x, ...) {
 
     purrr::walk(
       .x = get_filenames(x, unique = TRUE),
-      ~ print_file(.x, x)
+      .f = function(file_name, x) print_file(file_name, x),
+      x = x
     )
   }
 }
@@ -144,7 +145,8 @@ apply_cli_span_class <- function(x, class = "check_name") {
   paste0("{.", class, " ", x, "}")
 }
 
-is_check_class <- function(x, class = c(
+is_check_class <- function(x,
+                           class = c(
                              "check_success", "check_failure",
                              "check_exec_warn", "check_error",
                              "check_exec_error", "check_info"
