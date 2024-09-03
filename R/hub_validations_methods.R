@@ -8,6 +8,7 @@
 print.hub_validations <- function(x, ...) {
   if (length(x) == 0L) {
     msg <- cli::format_inline("Empty {.cls hub_validations}")
+    cli::cli_inform(msg)
   } else {
     print_file <- function(file_name, x) {
       x <- x[get_filenames(x) == file_name]
