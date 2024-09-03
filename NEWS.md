@@ -7,7 +7,7 @@
 * `hub_validations` class object `combine()` method now ensures that check names are made unique across all `hub_validations` objects being combined.
 * Additional improvements to `hub_validations` class object `print()` method. 
   - Check results for each file validated are now split and printed under file name header. 
-  - The check name that can be used to access the check result from the `hub_validations` object is now included as the prefix to the check result message instead of the file name (#70).
+  - The check name that can be used to access the check result from the `hub_validations` object is now included as the prefix to the check result message instead of the file name (#76).
 * `octolog` dependency removed. This removes the annotation of validation results onto GitHub Action workflow logs (#113).
 
 # hubValidations 0.5.1
