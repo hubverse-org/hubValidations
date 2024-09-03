@@ -285,7 +285,7 @@ check_pr_modf_del_files <- function(pr_df, file_type = c(
     purrr::compact()
 
   as_hub_validations(out) %>%
-    purrr::set_names(sprintf("%s_mod_%i", file_type, seq_along(out)))
+    purrr::set_names(sprintf("%s_mod", file_type))
 }
 
 

@@ -57,8 +57,16 @@ combine.hub_validations <- function(...) {
     purrr::compact() %>%
     validate_internal_class(class = "hub_validations")
 
-  structure(c(...),
-    class = c("hub_validations", "list")
+  combined <- c(...)
+  if (is.null(names(combined))) {
+    combined_names <- NULL
+  } else {
+    combined_names <- make.unique(names(combined), sep = "_")
+  }
+  structure(
+    combined,
+    class = c("hub_validations", "list"),
+    names = combined_names
   )
 }
 
