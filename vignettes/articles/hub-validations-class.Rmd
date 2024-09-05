@@ -48,7 +48,7 @@ Ultimately, both will cause overall validation to fail. The `<error/check_error>
 
 ## `hub_validations` print method
 
-`hub_validations` objects have their own print method which displays the result, the file name and message of each check:
+`hub_validations` objects have their own print method which displays the result, the check name and message of each check:
 
 - `✔` indicates a check was successful (a `<message/check_success>` condition class object was returned)
 - `✖` indicates a check failed but, because it does not affect downstream checks, validation was able to proceed (a `<error/check_failure>` condition class object was returned)
