@@ -12,9 +12,9 @@
     Code
       check_tbl_spl_n(tbl_const_error, round_id, file_path, hub_path)
     Output
-      <warning/check_failure>
-      Warning:
-      Number of samples per compound idx not consistent.  Sample numbers supplied per compound idx vary between 100 and 99.  See `errors` attribute for details.
+      <error/check_failure>
+      Error:
+      ! Number of samples per compound idx not consistent.  Sample numbers supplied per compound idx vary between 100 and 99.  See `errors` attribute for details.
 
 ---
 
@@ -35,9 +35,9 @@
     Code
       check_tbl_spl_n(tbl_min_error, round_id, file_path, hub_path)
     Output
-      <warning/check_failure>
-      Warning:
-      Required samples per compound idx task not present.  File contains less than the minimum required number of samples per task for compound idxs "1", "2", "3", "4", and "5". See `errors` attribute for details.
+      <error/check_failure>
+      Error:
+      ! Required samples per compound idx task not present.  File contains less than the minimum required number of samples per task for compound idxs "1", "2", "3", "4", and "5". See `errors` attribute for details.
 
 ---
 
@@ -160,8 +160,10 @@
     Code
       str(check_tbl_spl_n(tbl_coarse, round_id, file_path, hub_path))
     Output
-      List of 5
+      List of 7
        $ message       : chr "Required samples per compound idx task not present.  \n File contains less than the minimum required number of "| __truncated__
+       $ trace         : NULL
+       $ parent        : NULL
        $ where         : chr "flu-base/2022-10-22-flu-base.csv"
        $ errors        :List of 4
         ..$ 1  :List of 5
@@ -214,16 +216,16 @@
         .. .. ..$ target_end_date: chr [1:20] "2022-11-12" "2022-11-12" "2022-11-12" "2022-11-12" ...
        $ call          : chr "check_tbl_spl_n"
        $ use_cli_format: logi TRUE
-       - attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_warning" "warning" ...
+       - attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_error" "error" ...
 
 ---
 
     Code
       check_tbl_spl_n(tbl_coarse, round_id, file_path, hub_path, compound_taskid_set = compound_taskid_set)
     Output
-      <warning/check_failure>
-      Warning:
-      Required samples per compound idx task not present.  File contains less than the minimum required number of samples per task for compound idxs "1", "2", "3", and "4". See `errors` attribute for details.
+      <error/check_failure>
+      Error:
+      ! Required samples per compound idx task not present.  File contains less than the minimum required number of samples per task for compound idxs "1", "2", "3", and "4". See `errors` attribute for details.
 
 ---
 
@@ -240,9 +242,9 @@
       check_tbl_spl_n(tbl_minus_1, round_id, file_path, hub_path,
         compound_taskid_set = compound_taskid_set)
     Output
-      <warning/check_failure>
-      Warning:
-      Number of samples per compound idx not consistent.  Sample numbers supplied per compound idx vary between 9 and 10.  See `errors` attribute for details.
+      <error/check_failure>
+      Error:
+      ! Number of samples per compound idx not consistent.  Sample numbers supplied per compound idx vary between 9 and 10.  See `errors` attribute for details.
 
 # Ignoring derived_task_ids in check_tbl_spl_n works
 

@@ -159,12 +159,14 @@
         ..$ call          : chr "check_file_name"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ file_location     :List of 4
+       $ file_location     :List of 6
         ..$ message       : chr "File directory name must match `model_id`\n                                           metadata in file name. \n"| __truncated__
+        ..$ trace         : NULL
+        ..$ parent        : NULL
         ..$ where         : chr "team1-goodmodel/2022-10-15-hub-baseline.csv"
         ..$ call          : chr "check_file_location"
         ..$ use_cli_format: logi TRUE
-        ..- attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_warning" "warning" ...
+        ..- attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_error" "error" ...
        $ round_id_valid    :List of 4
         ..$ message       : chr "`round_id` is valid. \n "
         ..$ where         : chr "team1-goodmodel/2022-10-15-hub-baseline.csv"
@@ -217,7 +219,7 @@
         round_id_col = "random_col", skip_submit_window_check = TRUE,
         skip_check_config = TRUE))
     Output
-      List of 9
+      Classes 'hub_validations', 'list'  hidden list of 9
        $ file_exists       :List of 4
         ..$ message       : chr "File exists at path 'model-output/team1-goodmodel/2022-10-08-team1-goodmodel.csv'. \n "
         ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
@@ -260,19 +262,22 @@
         ..$ call          : chr "check_file_read"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ valid_round_id_col:List of 4
+       $ valid_round_id_col:List of 6
         ..$ message       : chr "`round_id_col` name must be valid. \n Must be one of\n                                      \"origin_date\", \""| __truncated__
+        ..$ trace         : NULL
+        ..$ parent        : NULL
         ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
         ..$ call          : chr "check_valid_round_id_col"
         ..$ use_cli_format: logi TRUE
-        ..- attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_warning" "warning" ...
-       $ unique_round_id   :List of 4
+        ..- attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_error" "error" ...
+       $ unique_round_id   :List of 6
         ..$ message       : chr "`round_id_col` name must be valid. \n Must be one of\n                                      \"origin_date\", \""| __truncated__
+        ..$ trace         : NULL
+        ..$ parent        : NULL
         ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
         ..$ call          : chr "check_tbl_unique_round_id"
         ..$ use_cli_format: logi TRUE
-        ..- attr(*, "class")= chr [1:5] "check_error" "hub_check" "rlang_warning" "warning" ...
-       - attr(*, "class")= chr [1:2] "hub_validations" "list"
+        ..- attr(*, "class")= chr [1:5] "check_error" "hub_check" "rlang_error" "error" ...
 
 ---
 
@@ -425,12 +430,14 @@
       str(validate_submission(hub_path, file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv")[[
         "submission_time"]])
     Output
-      List of 4
+      List of 6
        $ message       : chr "Submission time must be within accepted submission window for round. \n Current time \"2023-10-08 18:01:00 UTC\"| __truncated__
+       $ trace         : NULL
+       $ parent        : NULL
        $ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
        $ call          : chr "check_submission_time"
        $ use_cli_format: logi TRUE
-       - attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_warning" "warning" ...
+       - attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_error" "error" ...
 
 # validate_submission csv file read in and validated according to schema.
 
@@ -874,9 +881,9 @@
       validate_submission(hub_path = test_path("testdata/hub-it"), file_path = "Tm-Md/2023-11-11-Tm-Md.parquet",
       skip_submit_window_check = TRUE)[["col_types"]]
     Output
-      <warning/check_failure>
-      Warning:
-      Column data types do not match hub schema.  `output_type_id` should be "character" not "double".
+      <error/check_failure>
+      Error:
+      ! Column data types do not match hub schema.  `output_type_id` should be "character" not "double".
 
 ---
 
@@ -907,9 +914,9 @@
       skip_submit_window_check = TRUE, output_type_id_datatype = "character")[[
         "col_types"]]
     Output
-      <warning/check_failure>
-      Warning:
-      Column data types do not match hub schema.  `output_type_id` should be "character" not "double".
+      <error/check_failure>
+      Error:
+      ! Column data types do not match hub schema.  `output_type_id` should be "character" not "double".
 
 ---
 
@@ -928,9 +935,9 @@
       skip_submit_window_check = TRUE, output_type_id_datatype = "double")[[
         "col_types"]]
     Output
-      <warning/check_failure>
-      Warning:
-      Column data types do not match hub schema.  `output_type_id` should be "double" not "character".
+      <error/check_failure>
+      Error:
+      ! Column data types do not match hub schema.  `output_type_id` should be "double" not "character".
 
 ---
 

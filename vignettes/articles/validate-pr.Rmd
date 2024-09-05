@@ -84,7 +84,7 @@ Ignoring derived task IDs means that the validity of derived task ID value combi
 
 Most hubs require that model output files for a given round are submitted within a submission window [defined in the `"submission_due"` property of the `tasks.json` hub config file](https://hubverse.io/en/latest/quickstart-hub-admin/tasks-config.html#setting-up-submissions-due). 
 
-`validate_pr()` includes submission window checks for model output files and returns a `<warning/check_failure>` condition class object if a file is submitted outside the accepted submission window.
+`validate_pr()` includes submission window checks for model output files and returns a `<error/check_failure>` condition class object if a file is submitted outside the accepted submission window.
 
 To disable submission window checks, argument `skip_submit_window_check` can be set to `TRUE`.
 

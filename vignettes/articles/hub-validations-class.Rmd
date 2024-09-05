@@ -40,21 +40,27 @@ The super class returned in each element depends on the status of the check:
 
 - If a check is skipped, a `<message/check_info>` condition class object is returned.
 
-- Checks vary with respect to whether they return an `<error/check_error>` or `<warning/check_failure>` condition class object if the check fails. 
-Ultimately, both will cause overall validation to fail and the two classes are used primarily to communicate the severity of a failing check.
+- Checks vary with respect to whether they return an `<error/check_failure>` or `<error/check_error>` condition class object if the check fails.  
+  - **`<error/check_failure>`** class objects indicate a check that failed but does not affect downstream checks so validation was able to proceed.
+  - **`<error/check_error>` ** class objects indicate early termination of the validation process because of failure of a check downstream checks depend on.
+  
+Ultimately, both will cause overall validation to fail. The `<error/check_error>` class exists to alert you to the fact that _there may be more errors not yet reported_ due to early termination of the check process.
 
 ## `hub_validations` print method
 
-`hub_validations` objects have their own print method which displays the result, the file name and message of each check:
+`hub_validations` objects have their own print method which displays the result, the check name and message of each check:
 
 - `✔` indicates a check was successful (a `<message/check_success>` condition class object was returned)
-- `✖` indicates a high severity check failed (a `<error/check_error>` condition class object was returned)
-- `!` indicates a lower severity check failed (a `<warning/check_failure>` condition class object was returned)
+- `✖` indicates a check failed but, because it does not affect downstream checks, validation was able to proceed (a `<error/check_failure>` condition class object was returned)
+- `ⓧ` indicates a check that downstream checks depend on failed, causing early return of the validation process (a `<error/check_error>` condition class object was returned)
+- `☒` indicates an execution error occured and the check was not able to complete (a `<error/check_exec_error>` condition class object was returned). Will cause early return if expected check failure output was a `<error/check_error>`. 
 - `ℹ` indicates a check was skipped (a `<message/check_info>` condition class object was returned)
 
 ```{r}
 v
 ```
+
+Note that the submission window check is always performed and reported last.
 
 ## Structure of a `<hub_check>` object
 

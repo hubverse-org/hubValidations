@@ -12,9 +12,9 @@
     Code
       opt_check_tbl_counts_lt_popn(tbl, file_path, hub_path, targets = targets)
     Output
-      <warning/check_failure>
-      Warning:
-      Target counts must be less than location population size.  Affected rows: 1 and 2.
+      <error/check_failure>
+      Error:
+      ! Target counts must be less than location population size.  Affected rows: 1 and 2.
 
 # opt_check_tbl_counts_lt_popn fails correctly
 

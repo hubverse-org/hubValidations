@@ -11,7 +11,7 @@
 #' the state when validation succeeds, the second element, when validation fails.
 #' @param error logical. In the case of validation failure, whether the function
 #' should return an object of class `<error/check_error>` (`TRUE`) or
-#' `<warning/check_failure>` (`FALSE`, default).
+#' `<error/check_failure>` (`FALSE`, default).
 #' @param details further details to be appended to the output message.
 #' @inheritParams rlang::error_cnd
 #'
@@ -22,7 +22,7 @@
 #' @return Depending on whether validation has succeeded and the value
 #' of the `error` argument, one of:
 #' - `<message/check_success>` condition class object.
-#' - `<warning/check_failure>` condition class object.
+#' - `<error/check_failure>` condition class object.
 #' - `<error/check_error>` condition class object.
 #'
 #' Returned object also inherits from subclass `<hub_check>`.
@@ -82,7 +82,7 @@ capture_check_cnd <- function(check, file_path, msg_subject, msg_attribute,
         use_cli_format = TRUE
       )
     } else {
-      res <- rlang::warning_cnd(
+      res <- rlang::error_cnd(
         c("check_failure", "hub_check"),
         where = file_path,
         ...,

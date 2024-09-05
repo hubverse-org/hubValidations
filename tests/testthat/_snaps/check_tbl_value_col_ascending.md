@@ -30,8 +30,10 @@
     Code
       str(check_tbl_value_col_ascending(tbl, file_path))
     Output
-      List of 5
+      List of 7
        $ message       : chr "Values in `value` column are not non-decreasing as output_type_ids increase for all unique task ID\n    value/o"| __truncated__
+       $ trace         : NULL
+       $ parent        : NULL
        $ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
        $ error_tbl     : tibble [1 x 5] (S3: tbl_df/tbl/data.frame)
         ..$ origin_date: Date[1:1], format: "2022-10-08"
@@ -41,15 +43,17 @@
         ..$ output_type: chr "quantile"
        $ call          : chr "check_tbl_value_col_ascending"
        $ use_cli_format: logi TRUE
-       - attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_warning" "warning" ...
+       - attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_error" "error" ...
 
 ---
 
     Code
       str(check_tbl_value_col_ascending(tbl_error, file_path))
     Output
-      List of 5
+      List of 7
        $ message       : chr "Values in `value` column are not non-decreasing as output_type_ids increase for all unique task ID\n    value/o"| __truncated__
+       $ trace         : NULL
+       $ parent        : NULL
        $ where         : chr "hub-ensemble/2023-05-08-hub-ensemble.parquet"
        $ error_tbl     : tibble [1 x 5] (S3: tbl_df/tbl/data.frame)
         ..$ forecast_date: Date[1:1], format: "2023-05-08"
@@ -59,15 +63,17 @@
         ..$ output_type  : chr "quantile"
        $ call          : chr "check_tbl_value_col_ascending"
        $ use_cli_format: logi TRUE
-       - attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_warning" "warning" ...
+       - attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_error" "error" ...
 
 ---
 
     Code
       str(check_tbl_value_col_ascending(rbind(tbl, tbl_error), file_path))
     Output
-      List of 5
+      List of 7
        $ message       : chr "Values in `value` column are not non-decreasing as output_type_ids increase for all unique task ID\n    value/o"| __truncated__
+       $ trace         : NULL
+       $ parent        : NULL
        $ where         : chr "hub-ensemble/2023-05-08-hub-ensemble.parquet"
        $ error_tbl     : tibble [1 x 5] (S3: tbl_df/tbl/data.frame)
         ..$ forecast_date: Date[1:1], format: "2023-05-08"
@@ -77,7 +83,7 @@
         ..$ output_type  : chr "quantile"
        $ call          : chr "check_tbl_value_col_ascending"
        $ use_cli_format: logi TRUE
-       - attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_warning" "warning" ...
+       - attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_error" "error" ...
 
 # check_tbl_value_col_ascending skips correctly
 

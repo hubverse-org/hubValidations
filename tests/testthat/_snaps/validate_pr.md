@@ -247,7 +247,7 @@
         ..$ call          : chr "check_config_hub_valid"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ model_output_mod_1     :List of 6
+       $ model_output_mod       :List of 6
         ..$ message       : chr "Previously submitted model output files must not be modified. \n 'model-output/hub-baseline/2022-10-08-hub-base"| __truncated__
         ..$ trace         : NULL
         ..$ parent        : NULL
@@ -255,7 +255,7 @@
         ..$ call          : chr "check_pr_modf_del_file"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_error" "hub_check" "rlang_error" "error" ...
-       $ model_output_mod_2     :List of 6
+       $ model_output_mod_1     :List of 6
         ..$ message       : chr "Previously submitted model output files must not be removed. \n 'model-output/team1-goodmodel/2022-10-15-team1-"| __truncated__
         ..$ trace         : NULL
         ..$ parent        : NULL
@@ -263,7 +263,7 @@
         ..$ call          : chr "check_pr_modf_del_file"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_error" "hub_check" "rlang_error" "error" ...
-       $ model_metadata_mod_1   :List of 6
+       $ model_metadata_mod     :List of 6
         ..$ message       : chr "Previously submitted model metadata files must not be removed. \n 'model-metadata/team1-goodmodel.yaml' removed."
         ..$ trace         : NULL
         ..$ parent        : NULL
@@ -412,37 +412,37 @@
         ..$ call          : chr "check_tbl_spl_n"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
-       $ file_exists            :List of 4
+       $ file_exists_1          :List of 4
         ..$ message       : chr "File exists at path 'model-output/team1-goodmodel/2022-10-22-team1-goodmodel.csv'. \n "
         ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
         ..$ call          : chr "check_file_exists"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ file_name              :List of 4
+       $ file_name_1            :List of 4
         ..$ message       : chr "File name \"2022-10-22-team1-goodmodel.csv\" is valid. \n "
         ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
         ..$ call          : chr "check_file_name"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ file_location          :List of 4
+       $ file_location_1        :List of 4
         ..$ message       : chr "File directory name matches `model_id`\n                                           metadata in file name. \n "
         ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
         ..$ call          : chr "check_file_location"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ round_id_valid         :List of 4
+       $ round_id_valid_1       :List of 4
         ..$ message       : chr "`round_id` is valid. \n "
         ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
         ..$ call          : chr "check_valid_round_id"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ file_format            :List of 4
+       $ file_format_1          :List of 4
         ..$ message       : chr "File is accepted hub format. \n "
         ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
         ..$ call          : chr "check_file_format"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ metadata_exists        :List of 6
+       $ metadata_exists_1      :List of 6
         ..$ message       : chr "Metadata file does not exist at path 'model-metadata/team1-goodmodel.yml' or\n                                 "| __truncated__
         ..$ trace         : NULL
         ..$ parent        : NULL
@@ -463,24 +463,30 @@
         ..$ call          : chr "check_config_hub_valid"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ model_output_mod_1     :List of 4
+       $ model_output_mod       :List of 6
         ..$ message       : chr "Previously submitted model output files must not be modified. \n 'model-output/hub-baseline/2022-10-08-hub-base"| __truncated__
+        ..$ trace         : NULL
+        ..$ parent        : NULL
         ..$ where         : 'fs_path' chr "hub-baseline/2022-10-08-hub-baseline.csv"
         ..$ call          : chr "check_pr_modf_del_file"
         ..$ use_cli_format: logi TRUE
-        ..- attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_warning" "warning" ...
-       $ model_output_mod_2     :List of 4
+        ..- attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_error" "error" ...
+       $ model_output_mod_1     :List of 6
         ..$ message       : chr "Previously submitted model output files must not be removed. \n 'model-output/team1-goodmodel/2022-10-15-team1-"| __truncated__
+        ..$ trace         : NULL
+        ..$ parent        : NULL
         ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-15-team1-goodmodel.csv"
         ..$ call          : chr "check_pr_modf_del_file"
         ..$ use_cli_format: logi TRUE
-        ..- attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_warning" "warning" ...
-       $ model_metadata_mod_1   :List of 4
+        ..- attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_error" "error" ...
+       $ model_metadata_mod     :List of 6
         ..$ message       : chr "Previously submitted model metadata files must not be removed. \n 'model-metadata/team1-goodmodel.yaml' removed."
+        ..$ trace         : NULL
+        ..$ parent        : NULL
         ..$ where         : 'fs_path' chr "team1-goodmodel.yaml"
         ..$ call          : chr "check_pr_modf_del_file"
         ..$ use_cli_format: logi TRUE
-        ..- attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_warning" "warning" ...
+        ..- attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_error" "error" ...
        $ file_exists            :List of 4
         ..$ message       : chr "File exists at path 'model-output/hub-baseline/2022-10-08-hub-baseline.csv'. \n "
         ..$ where         : 'fs_path' chr "hub-baseline/2022-10-08-hub-baseline.csv"
@@ -622,37 +628,37 @@
         ..$ call          : chr "check_tbl_spl_n"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
-       $ file_exists            :List of 4
+       $ file_exists_1          :List of 4
         ..$ message       : chr "File exists at path 'model-output/team1-goodmodel/2022-10-22-team1-goodmodel.csv'. \n "
         ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
         ..$ call          : chr "check_file_exists"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ file_name              :List of 4
+       $ file_name_1            :List of 4
         ..$ message       : chr "File name \"2022-10-22-team1-goodmodel.csv\" is valid. \n "
         ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
         ..$ call          : chr "check_file_name"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ file_location          :List of 4
+       $ file_location_1        :List of 4
         ..$ message       : chr "File directory name matches `model_id`\n                                           metadata in file name. \n "
         ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
         ..$ call          : chr "check_file_location"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ round_id_valid         :List of 4
+       $ round_id_valid_1       :List of 4
         ..$ message       : chr "`round_id` is valid. \n "
         ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
         ..$ call          : chr "check_valid_round_id"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ file_format            :List of 4
+       $ file_format_1          :List of 4
         ..$ message       : chr "File is accepted hub format. \n "
         ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
         ..$ call          : chr "check_file_format"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ metadata_exists        :List of 6
+       $ metadata_exists_1      :List of 6
         ..$ message       : chr "Metadata file does not exist at path 'model-metadata/team1-goodmodel.yml' or\n                                 "| __truncated__
         ..$ trace         : NULL
         ..$ parent        : NULL
@@ -673,19 +679,19 @@
         ..$ call          : chr "check_config_hub_valid"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ model_output_mod_1     :List of 4
+       $ model_output_mod       :List of 4
         ..$ message       : chr "Previously submitted model output file\n          'model-output/hub-baseline/2022-10-08-hub-baseline.csv' modified."
         ..$ where         : 'fs_path' chr "hub-baseline/2022-10-08-hub-baseline.csv"
         ..$ call          : chr "check_pr_modf_del_file"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
-       $ model_output_mod_2     :List of 4
+       $ model_output_mod_1     :List of 4
         ..$ message       : chr "Previously submitted model output file\n          'model-output/team1-goodmodel/2022-10-15-team1-goodmodel.csv' removed."
         ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-15-team1-goodmodel.csv"
         ..$ call          : chr "check_pr_modf_del_file"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
-       $ model_metadata_mod_1   :List of 4
+       $ model_metadata_mod     :List of 4
         ..$ message       : chr "Previously submitted model metadata file\n          'model-metadata/team1-goodmodel.yaml' removed."
         ..$ where         : 'fs_path' chr "team1-goodmodel.yaml"
         ..$ call          : chr "check_pr_modf_del_file"
@@ -832,37 +838,37 @@
         ..$ call          : chr "check_tbl_spl_n"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
-       $ file_exists            :List of 4
+       $ file_exists_1          :List of 4
         ..$ message       : chr "File exists at path 'model-output/team1-goodmodel/2022-10-22-team1-goodmodel.csv'. \n "
         ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
         ..$ call          : chr "check_file_exists"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ file_name              :List of 4
+       $ file_name_1            :List of 4
         ..$ message       : chr "File name \"2022-10-22-team1-goodmodel.csv\" is valid. \n "
         ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
         ..$ call          : chr "check_file_name"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ file_location          :List of 4
+       $ file_location_1        :List of 4
         ..$ message       : chr "File directory name matches `model_id`\n                                           metadata in file name. \n "
         ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
         ..$ call          : chr "check_file_location"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ round_id_valid         :List of 4
+       $ round_id_valid_1       :List of 4
         ..$ message       : chr "`round_id` is valid. \n "
         ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
         ..$ call          : chr "check_valid_round_id"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ file_format            :List of 4
+       $ file_format_1          :List of 4
         ..$ message       : chr "File is accepted hub format. \n "
         ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
         ..$ call          : chr "check_file_format"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ metadata_exists        :List of 6
+       $ metadata_exists_1      :List of 6
         ..$ message       : chr "Metadata file does not exist at path 'model-metadata/team1-goodmodel.yml' or\n                                 "| __truncated__
         ..$ trace         : NULL
         ..$ parent        : NULL
@@ -1024,37 +1030,37 @@
         ..$ call          : chr "check_tbl_spl_n"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
-       $ file_exists            :List of 4
+       $ file_exists_1          :List of 4
         ..$ message       : chr "File exists at path 'model-output/team1-goodmodel/2022-10-22-team1-goodmodel.csv'. \n "
         ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
         ..$ call          : chr "check_file_exists"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ file_name              :List of 4
+       $ file_name_1            :List of 4
         ..$ message       : chr "File name \"2022-10-22-team1-goodmodel.csv\" is valid. \n "
         ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
         ..$ call          : chr "check_file_name"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ file_location          :List of 4
+       $ file_location_1        :List of 4
         ..$ message       : chr "File directory name matches `model_id`\n                                           metadata in file name. \n "
         ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
         ..$ call          : chr "check_file_location"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ round_id_valid         :List of 4
+       $ round_id_valid_1       :List of 4
         ..$ message       : chr "`round_id` is valid. \n "
         ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
         ..$ call          : chr "check_valid_round_id"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ file_format            :List of 4
+       $ file_format_1          :List of 4
         ..$ message       : chr "File is accepted hub format. \n "
         ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
         ..$ call          : chr "check_file_format"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ metadata_exists        :List of 6
+       $ metadata_exists_1      :List of 6
         ..$ message       : chr "Metadata file does not exist at path 'model-metadata/team1-goodmodel.yml' or\n                                 "| __truncated__
         ..$ trace         : NULL
         ..$ parent        : NULL
@@ -1075,7 +1081,7 @@
         ..$ call          : chr "check_config_hub_valid"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ model_output_mod_1     :List of 6
+       $ model_output_mod       :List of 6
         ..$ message       : chr "Previously submitted model output files must not be removed. \n 'model-output/team1-goodmodel/2022-10-15-team1-"| __truncated__
         ..$ trace         : NULL
         ..$ parent        : NULL
@@ -1083,7 +1089,7 @@
         ..$ call          : chr "check_pr_modf_del_file"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_error" "hub_check" "rlang_error" "error" ...
-       $ model_metadata_mod_1   :List of 6
+       $ model_metadata_mod     :List of 6
         ..$ message       : chr "Previously submitted model metadata files must not be removed. \n 'model-metadata/team1-goodmodel.yaml' removed."
         ..$ trace         : NULL
         ..$ parent        : NULL
@@ -1232,37 +1238,37 @@
         ..$ call          : chr "check_tbl_spl_n"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
-       $ file_exists            :List of 4
+       $ file_exists_1          :List of 4
         ..$ message       : chr "File exists at path 'model-output/team1-goodmodel/2022-10-22-team1-goodmodel.csv'. \n "
         ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
         ..$ call          : chr "check_file_exists"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ file_name              :List of 4
+       $ file_name_1            :List of 4
         ..$ message       : chr "File name \"2022-10-22-team1-goodmodel.csv\" is valid. \n "
         ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
         ..$ call          : chr "check_file_name"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ file_location          :List of 4
+       $ file_location_1        :List of 4
         ..$ message       : chr "File directory name matches `model_id`\n                                           metadata in file name. \n "
         ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
         ..$ call          : chr "check_file_location"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ round_id_valid         :List of 4
+       $ round_id_valid_1       :List of 4
         ..$ message       : chr "`round_id` is valid. \n "
         ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
         ..$ call          : chr "check_valid_round_id"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ file_format            :List of 4
+       $ file_format_1          :List of 4
         ..$ message       : chr "File is accepted hub format. \n "
         ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
         ..$ call          : chr "check_file_format"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ metadata_exists        :List of 6
+       $ metadata_exists_1      :List of 6
         ..$ message       : chr "Metadata file does not exist at path 'model-metadata/team1-goodmodel.yml' or\n                                 "| __truncated__
         ..$ trace         : NULL
         ..$ parent        : NULL
@@ -1277,13 +1283,13 @@
       str(mod_checks_exec_error[1:5])
     Output
       List of 5
-       $ valid_config      :List of 4
+       $ valid_config    :List of 4
         ..$ message       : chr "All hub config files are valid. \n "
         ..$ where         : chr "mod_exec_error_hub"
         ..$ call          : chr "check_config_hub_valid"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ model_output_mod_1:List of 6
+       $ model_output_mod:List of 6
         ..$ message       : chr "Could not check submission window for file \"team1-goodmodel/2022-10-team1-goodmodel.csv\". EXEC ERROR: Error i"| __truncated__
         ..$ trace         : NULL
         ..$ parent        : NULL
@@ -1291,19 +1297,19 @@
         ..$ call          : chr "check_pr_modf_del_file"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_exec_error" "hub_check" "rlang_error" "error" ...
-       $ file_exists       :List of 4
+       $ file_exists     :List of 4
         ..$ message       : chr "File exists at path 'model-output/team1-goodmodel/2022-10-22-team1-goodmodel.csv'. \n "
         ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
         ..$ call          : chr "check_file_exists"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ file_name         :List of 4
+       $ file_name       :List of 4
         ..$ message       : chr "File name \"2022-10-22-team1-goodmodel.csv\" is valid. \n "
         ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
         ..$ call          : chr "check_file_name"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ file_location     :List of 4
+       $ file_location   :List of 4
         ..$ message       : chr "File directory name matches `model_id`\n                                           metadata in file name. \n "
         ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
         ..$ call          : chr "check_file_location"

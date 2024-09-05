@@ -12,7 +12,7 @@
     Code
       check_tbl_rows_unique(rbind(tbl, tbl[c(5, 9), ]), file_path, hub_path)
     Output
-      <warning/check_failure>
-      Warning:
-      All combinations of task ID column/`output_type`/`output_type_id` values must be unique.  Rows containing duplicate combinations: 48 and 49
+      <error/check_failure>
+      Error:
+      ! All combinations of task ID column/`output_type`/`output_type_id` values must be unique.  Rows containing duplicate combinations: 48 and 49
 

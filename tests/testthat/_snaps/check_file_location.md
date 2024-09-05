@@ -12,7 +12,7 @@
     Code
       check_file_location("team1-goodmodel/2022-10-08-team2-goodmodel.csv")
     Output
-      <warning/check_failure>
-      Warning:
-      File directory name must match `model_id` metadata in file name.  File should be submitted to directory "team2-goodmodel" not "team1-goodmodel"
+      <error/check_failure>
+      Error:
+      ! File directory name must match `model_id` metadata in file name.  File should be submitted to directory "team2-goodmodel" not "team1-goodmodel"
 

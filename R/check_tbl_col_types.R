@@ -7,7 +7,7 @@
 #' @return
 #' Depending on whether validation has succeeded, one of:
 #' - `<message/check_success>` condition class object.
-#' - `<warning/check_failure>` condition class object.
+#' - `<error/check_failure>` condition class object.
 #'
 #' Returned object also inherits from subclass `<hub_check>`.
 #' @export

@@ -1,3 +1,15 @@
+# hubValidations 0.6.0
+
+* To make clearer that all checks resulting in `check_failure` are required to pass for files to be considered valid, `check_failure` class objects are elevated to errors (#111). Also, to make it easier for users to identify errors from visually scanning the printed output, the following custom bullets have been assigned.
+  - `✖` : `check_failure` class object.  This indicates an error that does not impact the validation process. 
+  - `ⓧ` : `check_error` class object. This also indicates early termination of the validation process.
+  - `☒` : `check_exec_error` class object. This indicates an error in the execution of a check function.
+* `hub_validations` class object `combine()` method now ensures that check names are made unique across all `hub_validations` objects being combined.
+* Additional improvements to `hub_validations` class object `print()` method. 
+  - Check results for each file validated are now split and printed under file name header. 
+  - The check name that can be used to access the check result from the `hub_validations` object is now included as the prefix to the check result message instead of the file name (#76).
+* `octolog` dependency removed. This removes the annotation of validation results onto GitHub Action workflow logs (#113).
+
 # hubValidations 0.5.1
 
 * Remove dependency on development version of `arrow` package and bump required version to 17.0.0.
