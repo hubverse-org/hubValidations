@@ -7,7 +7,7 @@
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/hubverse-org/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubValidations</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -87,7 +87,7 @@ config file.</p></dd>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>Depending on whether validation has succeeded, one of:</p><ul><li><p><code>&lt;message/check_success&gt;</code> condition class object.</p></li>
-<li><p><code>&lt;warning/check_error&gt;</code> condition class object.</p></li>
+<li><p><code>&lt;error/check_error&gt;</code> condition class object.</p></li>
 </ul><p>If <code>round_id_from_variable: false</code> and no <code>round_id_col</code> name is provided,
 check is skipped and a <code>&lt;message/check_info&gt;</code> condition class object is
 returned. If no valid <code>round_id_col</code> name is provided or can extracted from

@@ -7,7 +7,7 @@
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/hubverse-org/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubValidations</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -93,7 +93,7 @@ the state when validation succeeds, the second element, when validation fails.</
 <dt id="arg-error">error<a class="anchor" aria-label="anchor" href="#arg-error"></a></dt>
 <dd><p>logical. In the case of validation failure, whether the function
 should return an object of class <code>&lt;error/check_error&gt;</code> (<code>TRUE</code>) or
-<code>&lt;warning/check_failure&gt;</code> (<code>FALSE</code>, default).</p></dd>
+<code>&lt;error/check_failure&gt;</code> (<code>FALSE</code>, default).</p></dd>
 
 
 <dt id="arg-details">details<a class="anchor" aria-label="anchor" href="#arg-details"></a></dt>
@@ -109,7 +109,7 @@ the condition object.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>Depending on whether validation has succeeded and the value
 of the <code>error</code> argument, one of:</p><ul><li><p><code>&lt;message/check_success&gt;</code> condition class object.</p></li>
-<li><p><code>&lt;warning/check_failure&gt;</code> condition class object.</p></li>
+<li><p><code>&lt;error/check_failure&gt;</code> condition class object.</p></li>
 <li><p><code>&lt;error/check_error&gt;</code> condition class object.</p></li>
 </ul><p>Returned object also inherits from subclass <code>&lt;hub_check&gt;</code>.</p>
     </div>
@@ -133,9 +133,9 @@ accept text that can interpreted and formatted by <code><a href="https://cli.r-l
 <span class="r-in"><span>  msg_subject <span class="op">=</span> <span class="st">"{.var round_id}"</span>, msg_attribute <span class="op">=</span> <span class="st">"valid."</span>, error <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
 <span class="r-in"><span>  details <span class="op">=</span> <span class="st">"Must be one of 'A' or 'B', not 'C'"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB; font-weight: bold;">&lt;warning/check_failure&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00; font-weight: bold;">Warning</span><span style="font-weight: bold;">:</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> `round_id` must be valid.  Must be one of 'A' or 'B', not 'C'</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB; font-weight: bold;">&lt;error/check_failure&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;">:</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> `round_id` must be valid.  Must be one of 'A' or 'B', not 'C'</span>
 <span class="r-in"><span><span class="fu">capture_check_cnd</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  check <span class="op">=</span> <span class="cn">FALSE</span>, file_path <span class="op">=</span> <span class="st">"test/file.csv"</span>,</span></span>
 <span class="r-in"><span>  msg_subject <span class="op">=</span> <span class="st">"{.var round_id}"</span>, msg_attribute <span class="op">=</span> <span class="st">"valid."</span>, error <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
