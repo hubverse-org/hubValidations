@@ -271,7 +271,7 @@
       validate_model_data(hub_path, file_path)
     Message
       
-      [96m-- [4m[1m2022-10-08-team1-goodmodel.csv[22m[24m ----[39m
+      [35m-- [4m[1m2022-10-08-team1-goodmodel.csv[22m[24m ----[39m
       
       [1m[22m[32mv[39m [90m[file_read][39m: File could be read successfully.
       [32mv[39m [90m[valid_round_id_col][39m: `round_id_col` name is valid.
@@ -313,7 +313,7 @@
       validate_model_data(hub_path, file_path)
     Message
       
-      [96m── [4m[1m2022-10-08-team1-goodmodel.csv[22m[24m ────[39m
+      [35m── [4m[1m2022-10-08-team1-goodmodel.csv[22m[24m ────[39m
       
       [1m[22m[32m✔[39m [90m[file_read][39m: File could be read successfully.
       [32m✔[39m [90m[valid_round_id_col][39m: `round_id_col` name is valid.

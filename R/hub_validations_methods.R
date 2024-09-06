@@ -130,7 +130,7 @@ hub_validation_theme <- list(
   ),
   "h2" = list(
     fmt = function(x) {
-      cli::col_br_cyan(
+      cli::col_magenta(
         paste0(
           cli::symbol$line, cli::symbol$line,
           " ", cli::style_underline(x), " ",
