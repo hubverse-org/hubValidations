@@ -13,7 +13,7 @@ validate_pr(
     "logical", "Date"),
   validations_cfg_path = NULL,
   skip_submit_window_check = FALSE,
-  file_modification_check = c("error", "warn", "message", "none"),
+  file_modification_check = c("error", "failure", "warn", "message", "none"),
   allow_submit_window_mods = TRUE,
   submit_window_ref_date_from = c("file", "file_path"),
   derived_task_ids = NULL
@@ -64,7 +64,7 @@ or deletion of a previously submitted model metadata file is detected in PR:
 \itemize{
 \item \code{"error"}: Appends a \verb{<error/check_error>} condition class object for each
 applicable modified/deleted file.
-\item \code{"warning"}: Appends a \verb{<warning/check_warning>} condition class object for each
+\item \code{"warning"}: Appends a \verb{<error/check_failure>} condition class object for each
 applicable modified/deleted file.
 \item \code{"message"}: Appends a \verb{<message/check_info>} condition class object for each
 applicable modified/deleted file.

@@ -124,7 +124,7 @@ These settings can be modified if required though the use of arguments `file_mod
 - **`file_modification_check`** controls whether modification/deletion checks are performed, what is returned if modifications/deletions are detected and accepts one of the following values: 
 
   - **`"error"`**: Appends a `<error/check_error>` condition class object for each applicable modified/deleted file. Will result in validation workflow failure.
-  - **`"warning"`**: Appends a `<warning/check_warning>` condition class object for each applicable modified/deleted file. Will result in validation workflow failure.
+  - **`"failure"`**: Appends a `<error/check_failure>` condition class object for each applicable modified/deleted file. Will result in validation workflow failure.
   - **`"message"`**: Appends a `<message/check_info>` condition class object for each applicable modified/deleted file. Will not result in validation workflow failure.
   - **`"none"`**: No modification/deletion checks performed.
 
