@@ -13,7 +13,7 @@
 #' or deletion of a previously submitted model metadata file is detected in PR:
 #' - `"error"`: Appends a `<error/check_error>` condition class object for each
 #' applicable modified/deleted file.
-#' - `"warning"`: Appends a `<warning/check_warning>` condition class object for each
+#' - `"warning"`: Appends a `<error/check_failure>` condition class object for each
 #' applicable modified/deleted file.
 #' - `"message"`: Appends a `<message/check_info>` condition class object for each
 #' applicable modified/deleted file.
@@ -100,7 +100,7 @@ validate_pr <- function(hub_path = ".", gh_repo, pr_number,
                         ), validations_cfg_path = NULL,
                         skip_submit_window_check = FALSE,
                         file_modification_check = c(
-                          "error", "warn",
+                          "error", "failure", "warn",
                           "message", "none"
                         ),
                         allow_submit_window_mods = TRUE,
@@ -110,6 +110,14 @@ validate_pr <- function(hub_path = ".", gh_repo, pr_number,
                         ),
                         derived_task_ids = NULL) {
   file_modification_check <- rlang::arg_match(file_modification_check)
+  if (file_modification_check == "warn") {
+    lifecycle::deprecate_warn(
+      "0.6.1",
+      "validate_pr(file_modification_check = 'will not accept option `warn` in
+      future versions. Use `failure` instead')"
+    )
+    file_modification_check <- "failure"
+  }
   output_type_id_datatype <- rlang::arg_match(output_type_id_datatype)
   model_output_dir <- get_hub_model_output_dir(hub_path) # nolint: object_name_linter
   model_metadata_dir <- "model-metadata" # nolint: object_name_linter
@@ -251,7 +259,7 @@ check_pr_modf_del_files <- function(pr_df, file_type = c(
                                       "model_output", # nolint
                                       "model_metadata"
                                     ),
-                                    alert = c("message", "warn", "error"),
+                                    alert = c("message", "failure", "error"),
                                     allow_submit_window_mods = TRUE) {
   file_type <- rlang::arg_match(file_type)
   alert <- rlang::arg_match(alert)

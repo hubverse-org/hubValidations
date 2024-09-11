@@ -77,13 +77,26 @@ test_that("validate_pr flags modifications and deletions in PR", {
     suppressMessages(check_for_errors(mod_checks_error))
   )
 
+  # capture file_modification_check deprecation warning
+  expect_warning(
+    suppressMessages(
+      validate_pr(
+        hub_path = temp_hub,
+        gh_repo = "hubverse-org/ci-testhub-simple",
+        pr_number = 6,
+        skip_submit_window_check = TRUE,
+        file_modification_check = "warn"
+      )
+    )
+  )
+
   mod_checks_warn <- suppressMessages(
     validate_pr(
       hub_path = temp_hub,
       gh_repo = "hubverse-org/ci-testhub-simple",
       pr_number = 6,
       skip_submit_window_check = TRUE,
-      file_modification_check = "warn"
+      file_modification_check = "failure"
     )
   )
   expect_snapshot(str(mod_checks_warn))

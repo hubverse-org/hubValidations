@@ -1,3 +1,8 @@
+# hubValidations 0.6.1
+
+* Changed file name header colour in `hub_validations` object `print()` method to make more visible on lighter backgrounds.
+* Soft deprecated `file_modification_check` argument `"warn"` option and replaced it with `"failure"` in `validate_pr()` function. 
+
 # hubValidations 0.6.0
 
 * To make clearer that all checks resulting in `check_failure` are required to pass for files to be considered valid, `check_failure` class objects are elevated to errors (#111). Also, to make it easier for users to identify errors from visually scanning the printed output, the following custom bullets have been assigned.

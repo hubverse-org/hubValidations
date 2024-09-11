@@ -31,7 +31,7 @@ config file.}
 Depending on whether validation has succeeded, one of:
 \itemize{
 \item \verb{<message/check_success>} condition class object.
-\item \verb{<warning/check_warning>} condition class object.
+\item \verb{<error/check_failure>} condition class object.
 }
 
 If \code{round_id_from_variable: false} and no \code{round_id_col} name is provided,
