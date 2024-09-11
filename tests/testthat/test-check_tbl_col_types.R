@@ -36,3 +36,15 @@ test_that(
     )
   }
 )
+
+test_that("check_tbl_col_types on datetimes doesn't cause exec error", {
+  hub_path <- system.file("testhubs/simple", package = "hubValidations")
+  file_path <- "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+  tbl <- read_model_out_file(file_path, hub_path)
+  tbl$origin_date <- as.POSIXct(tbl$origin_date)
+
+  # Should return a check_failure not an exec error
+  expect_snapshot(
+    check_tbl_col_types(tbl, file_path, hub_path)
+  )
+})

@@ -1,3 +1,7 @@
+# hubValidations 0.6.2
+
+* Fixed bug in `check_tbl_col_types()` where columns in model output data with more than one class were causing an EXEC error (#118). Thanks for the bug report @ruarai!
+
 # hubValidations 0.6.1
 
 * Changed file name header colour in `hub_validations` object `print()` method to make more visible on lighter backgrounds.
