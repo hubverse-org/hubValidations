@@ -7,7 +7,7 @@
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/hubverse-org/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubValidations</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,6 +43,11 @@
       <small>Source: <a href="https://github.com/hubverse-org/hubValidations/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.6.1" id="hubvalidations-061">hubValidations 0.6.1<a class="anchor" aria-label="anchor" href="#hubvalidations-061"></a></h2>
+<ul><li>Changed file name header colour in <code>hub_validations</code> object <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> method to make more visible on lighter backgrounds.</li>
+<li>Soft deprecated <code>file_modification_check</code> argument <code>"warn"</code> option and replaced it with <code>"failure"</code> in <code><a href="../reference/validate_pr.html">validate_pr()</a></code> function.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.6.0" id="hubvalidations-060">hubValidations 0.6.0<a class="anchor" aria-label="anchor" href="#hubvalidations-060"></a></h2>
 <ul><li>To make clearer that all checks resulting in <code>check_failure</code> are required to pass for files to be considered valid, <code>check_failure</code> class objects are elevated to errors (<a href="https://github.com/hubverse-org/hubValidations/issues/111" class="external-link">#111</a>). Also, to make it easier for users to identify errors from visually scanning the printed output, the following custom bullets have been assigned.
