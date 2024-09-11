@@ -25,3 +25,12 @@
       Message:
       Column data types match hub schema.
 
+# check_tbl_col_types on datetimes doesn't cause exec error
+
+    Code
+      check_tbl_col_types(tbl, file_path, hub_path)
+    Output
+      <error/check_failure>
+      Error:
+      ! Column data types do not match hub schema.  `origin_date` should be "Date" not "POSIXct/POSIXt".
+
