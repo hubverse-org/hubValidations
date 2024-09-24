@@ -10,6 +10,7 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 [![Codecov test
 coverage](https://codecov.io/gh/hubverse-org/hubValidations/branch/main/graph/badge.svg)](https://app.codecov.io/gh/hubverse-org/hubValidations?branch=main)
 [![R-CMD-check](https://github.com/hubverse-org/hubValidations/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/hubverse-org/hubValidations/actions/workflows/R-CMD-check.yaml)
+
 <!-- badges: end -->
 
 The goal of hubValidations is to provide a testing framework for
@@ -17,13 +18,26 @@ performing hubverse hub validations.
 
 ## Installation
 
-You can install the development version of hubValidations like so:
+### Latest
+
+You can install the [latest version of hubValidations from the
+R-universe](https://hubverse-org.r-universe.dev/hubValidations):
+
+``` r
+install.packages("hubValidations", repos = c("https://hubverse-org.r-universe.dev", "https://cloud.r-project.org"))
+```
+
+### Development
+
+If you want to test out new features that have not yet been released,
+you can install the development version of hubValidations from
+[GitHub](https://github.com/) with:
 
 ``` r
 remotes::install_github("hubverse-org/hubValidations")
 ```
 
-> ##### 💡 TIP
+> \[!NOTE\]
 >
 > `hubValidations` has a dependency on the `arrow` package. For
 > troubleshooting `arrow` installation problems, please consult the
@@ -49,8 +63,8 @@ contributing to this project, you agree to abide by its terms.
 
 Interested in contributing back to the open-source Hubverse project?
 Learn more about how to [get involved in the Hubverse
-Community](https://hubverse.io/en/latest/overview/contribute.html)
-or [how to contribute to hubValidations](.github/CONTRIBUTING.md).
+Community](https://hubverse.io/en/latest/overview/contribute.html) or
+[how to contribute to hubValidations](.github/CONTRIBUTING.md).
 
 ### Contributing new check functions
 
