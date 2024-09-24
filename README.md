@@ -21,7 +21,7 @@ performing hubverse hub validations.
 ### Latest
 
 You can install the [latest version of hubValidations from the
-R-universe](https://hubverse-org.r-universe.dev/hubAdmin):
+R-universe](https://hubverse-org.r-universe.dev/hubValidations):
 
 ``` r
 install.packages("hubValidations", repos = c("https://hubverse-org.r-universe.dev", "https://cloud.r-project.org"))
