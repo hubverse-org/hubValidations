@@ -52,6 +52,10 @@ Invisible \code{TRUE} if the custom check function file is created successfully.
 \description{
 Create a custom validation check function template file.
 }
+\details{
+See the article on \href{https://hubverse-org.github.io/hubValidations/articles/writing-custom-fns.html}{writing custom check functions}
+for more.
+}
 \examples{
 withr::with_tempdir({
   # Create the custom check file with default settings.

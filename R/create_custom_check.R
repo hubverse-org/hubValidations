@@ -24,6 +24,10 @@
 #' @param overwrite Logical. If `TRUE`, the function will overwrite an existing
 #'
 #' @return Invisible `TRUE` if the custom check function file is created successfully.
+#' @details
+#' See the article on [writing custom check functions](
+#' https://hubverse-org.github.io/hubValidations/articles/writing-custom-fns.html)
+#' for more.
 #' @export
 #'
 #' @examples
