@@ -1,0 +1,51 @@
+{{name}} <- function(tbl, file_path{{#extra_args}}, extra_arg = NULL{{/extra_args}}) {
+{{#extra_args}}
+  # If provide additional custom arguments, make sure to include input checks
+  # at the top of your function. `checkmate` package provides a simple interface
+  # for many useful basic checks and is available through hubValidations.
+  # The following example checks that `extra_arg` is a single character string.
+  checkmate::assert_character(extra_arg, len = 1L, null.ok)
+
+{{/extra_args}}
+{{#conditional}}
+  if (!condition) {
+    return(
+      capture_check_info(
+        file_path,
+        "Condition for running this check was not met. Skipped."
+      )
+    )
+  }
+
+{{/conditional}}
+  # Here you can write your custom check logic
+  # Assign the result as `TRUE` or `FALSE` to object called `check`.
+  # If `check` is `TRUE`, the check will pass.
+
+  check <- condition_to_be_TRUE_for_check_to_pass
+
+if (check) {
+    details <- NULL
+{{#error_object}}
+    error_object <- NULL
+{{/error_object}}
+  } else {
+{{#error_object}}
+    details <- cli::format_inline("See {.var error_object} attribute for details.")
+{{/error_object}}
+{{^error_object}}
+    details <- cli::format_inline("{.var round_id} value {.val invalid} is invalid.")
+{{/error_object}}
+  }
+
+  capture_check_cnd(
+    check = check,
+    file_path = file_path,
+    msg_subject = "{.var round_id}",
+    msg_attribute = "valid.",
+{{#error_object}}
+    error_object = error_object,
+{{/error_object}}
+    details = details
+  )
+}

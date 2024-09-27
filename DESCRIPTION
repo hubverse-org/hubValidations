@@ -49,6 +49,7 @@ Imports:
     rlang,
     stringr,
     tibble,
+    whisker,
     yaml
 Suggests: 
     covr,
