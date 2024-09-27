@@ -100,7 +100,8 @@ create_custom_check <- function(name, hub_path = ".",
 }
 
 # Much of the following functionality is heavily based on usethis function `use_template()`
-# licensed under MIT License. See
+# licensed under MIT License.
+# See https://github.com/r-lib/usethis/blob/2cc9e5a4e5e3034399fafb65d871eec352d83a15/R/template.R#L10
 create_template_fn <- function(data) {
   template_path <- system.file("templates/custom_check_template",
     package = "hubValidations"
