@@ -2,7 +2,8 @@
 #'
 #' @param name Character string. Name of the custom check function. We recommend
 #' following the hubValidations package naming convention. For more details, consult the
-#' article on [writing custom check functions](https://hubverse-org.github.io/hubValidations/articles/writing-custom-fns.html).
+#' article on [writing custom check functions](
+#' https://hubverse-org.github.io/hubValidations/articles/writing-custom-fns.html).
 #' @param hub_path Character string. Path to the hub directory. Default is the
 #' current working directory.
 #' @param r_dir Character string. Path (relative to `hub_path`) to the directory
