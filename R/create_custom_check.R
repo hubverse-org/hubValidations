@@ -55,6 +55,7 @@ create_custom_check <- function(name, hub_path = ".",
                                 overwrite = FALSE) {
   checkmate::assert_character(name, len = 1L)
   checkmate::assert_scalar(hub_path)
+  checkmate::assert_directory_exists(hub_path)
   checkmate::assert_scalar(r_dir)
   checkmate::assert_logical(error, len = 1L)
   checkmate::assert_logical(conditional, len = 1L)

@@ -53,6 +53,7 @@ test_that("file content with non-default locations matches snapshot", {
     # Set a non-default path for r_dir and hub
     non_default_r_dir <- "custom_validations/R"
     hub_path <- "path_to_hub"
+    fs::dir_create(hub_path)
 
     # Create the custom check file with non-default locations
     suppressMessages(
@@ -91,6 +92,13 @@ test_that("create_custom_check fails with invalid hub_path", {
   expect_error(
     create_custom_check("check", hub_path = c("path1", "path2")),
     "Assertion on 'hub_path' failed: Must have length 1"
+  )
+})
+
+test_that("create_custom_check fails with non-existent hub_path", {
+  expect_error(
+    create_custom_check("check", hub_path = "random_hub_path"),
+    "Assertion on 'hub_path' failed: Directory 'random_hub_path' does not exist."
   )
 })
 
