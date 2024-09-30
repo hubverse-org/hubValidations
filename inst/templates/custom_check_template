@@ -24,7 +24,7 @@
 
   check <- condition_to_be_TRUE_for_check_to_pass
 
-if (check) {
+  if (check) {
     details <- NULL
 {{#error_object}}
     error_object <- NULL
