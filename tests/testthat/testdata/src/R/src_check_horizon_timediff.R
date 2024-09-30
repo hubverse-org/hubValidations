@@ -44,14 +44,14 @@ src_check_horizon_timediff <- function(tbl, file_path, hub_path, t0_colname,
     invalid_vals <- paste0( # nolint: object_usage_linter
       tbl[[t1_colname]][!compare],
       " (horizon = ", tbl[[horizon_colname]][!compare], ")"
-    ) %>% unique()
+    ) |> unique()
 
     details <- cli::format_inline(
       "t1 var value{?s} {.val {invalid_vals}} are invalid."
     )
   }
 
-  capture_check_cnd(
+  hubValidations::capture_check_cnd(
     check = check,
     file_path = file_path,
     error = TRUE,
