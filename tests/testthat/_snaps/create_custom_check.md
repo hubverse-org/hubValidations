@@ -25,7 +25,7 @@
           details <- NULL
         } else {
           # You can use details messages to pass on helpful information to users about
-          what caused the validation failure and how to locate affected data.
+          # what caused the validation failure and how to locate affected data.
           details <- cli::format_inline("{.var round_id} value {.val invalid} is invalid.")
         }
       
@@ -34,6 +34,7 @@
           file_path = file_path,
           msg_subject = "{.var round_id}",
           msg_attribute = "valid.",
+          error = FALSE,
           details = details
         )
       }
@@ -43,12 +44,14 @@
     Code
       cat(file_contents, sep = "\n")
     Output
-      check_full <- function(tbl, file_path, extra_arg = NULL) {
-        # If provide additional custom arguments, make sure to include input checks
+      check_full <- function(tbl, file_path, hub_path, extra_arg = NULL) {
+        # If you're providing additional custom arguments, make sure to include input checks
         # at the top of your function. `checkmate` package provides a simple interface
         # for many useful basic checks and is available through hubValidations.
         # The following example checks that `extra_arg` is a single character string.
         checkmate::assert_character(extra_arg, len = 1L, null.ok)
+      
+        config_tasks <- hubUtils::read_config(hub_path)
       
         if (!condition) {
           return(
@@ -83,6 +86,7 @@
           file_path = file_path,
           msg_subject = "{.var round_id}",
           msg_attribute = "valid.",
+          error = TRUE,
           error_object = error_object,
           details = details
         )
@@ -94,7 +98,7 @@
       cat(file_contents, sep = "\n")
     Output
       check_non_default <- function(tbl, file_path, extra_arg = NULL) {
-        # If provide additional custom arguments, make sure to include input checks
+        # If you're providing additional custom arguments, make sure to include input checks
         # at the top of your function. `checkmate` package provides a simple interface
         # for many useful basic checks and is available through hubValidations.
         # The following example checks that `extra_arg` is a single character string.
@@ -119,7 +123,7 @@
           details <- NULL
         } else {
           # You can use details messages to pass on helpful information to users about
-          what caused the validation failure and how to locate affected data.
+          # what caused the validation failure and how to locate affected data.
           details <- cli::format_inline("{.var round_id} value {.val invalid} is invalid.")
         }
       
@@ -128,6 +132,7 @@
           file_path = file_path,
           msg_subject = "{.var round_id}",
           msg_attribute = "valid.",
+          error = FALSE,
           details = details
         )
       }
@@ -148,7 +153,7 @@
           details <- NULL
         } else {
           # You can use details messages to pass on helpful information to users about
-          what caused the validation failure and how to locate affected data.
+          # what caused the validation failure and how to locate affected data.
           details <- cli::format_inline("{.var round_id} value {.val invalid} is invalid.")
         }
       
@@ -157,6 +162,7 @@
           file_path = file_path,
           msg_subject = "{.var round_id}",
           msg_attribute = "valid.",
+          error = FALSE,
           details = details
         )
       }

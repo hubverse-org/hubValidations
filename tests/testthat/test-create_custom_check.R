@@ -29,7 +29,8 @@ test_that("Fully featured file content matches snapshot", {
     suppressMessages(
       create_custom_check("check_full",
         error = TRUE, conditional = TRUE,
-        error_object = TRUE, extra_args = TRUE
+        error_object = TRUE, config = TRUE,
+        extra_args = TRUE
       )
     )
 
