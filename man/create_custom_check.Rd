@@ -30,8 +30,10 @@ which is the recommended directory for storing custom check functions.}
 \item{error}{Logical. Defaults to \code{FALSE}, which will return a
 \verb{<error/check_failure>} class object in the case of a failed check.
 Set this to \code{TRUE} if your custom check function is required to pass for
-other custom checks to be performed; the custom check function will then return a
-\verb{<error/check_error>} class object in the case of a failed check instead.}
+other custom checks to be performed; in the case of a failed check, the custom check
+function will then return an \verb{<error/check_error>} class object and cause custom
+validations to return early. Note that in the case of custom validations, executions
+errors in custom functions will also result in custom validations returning early.}
 
 \item{conditional}{Logical. If \code{TRUE}, the custom check function template will
 include a block of code to check a condition before running the check. This is useful

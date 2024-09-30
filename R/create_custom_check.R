@@ -12,8 +12,10 @@
 #' @param error Logical. Defaults to `FALSE`, which will return a
 #' `<error/check_failure>` class object in the case of a failed check.
 #' Set this to `TRUE` if your custom check function is required to pass for
-#' other custom checks to be performed; the custom check function will then return a
-#' `<error/check_error>` class object in the case of a failed check instead.
+#' other custom checks to be performed; in the case of a failed check, the custom check
+#' function will then return an `<error/check_error>` class object and cause custom
+#' validations to return early. Note that in the case of custom validations, executions
+#' errors in custom functions will also result in custom validations returning early.
 #' @param conditional Logical. If `TRUE`, the custom check function template will
 #' include a block of code to check a condition before running the check. This is useful
 #' when a check may need to be skipped based on a condition.
