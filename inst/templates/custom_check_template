@@ -38,7 +38,7 @@
 {{/error_object}}
   }
 
-  capture_check_cnd(
+  hubValidations::capture_check_cnd(
     check = check,
     file_path = file_path,
     msg_subject = "{.var round_id}",
