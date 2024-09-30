@@ -21,13 +21,13 @@
       
         check <- condition_to_be_TRUE_for_check_to_pass
       
-      if (check) {
+        if (check) {
           details <- NULL
         } else {
           details <- cli::format_inline("{.var round_id} value {.val invalid} is invalid.")
         }
       
-        capture_check_cnd(
+        hubValidations::capture_check_cnd(
           check = check,
           file_path = file_path,
           msg_subject = "{.var round_id}",
@@ -63,14 +63,14 @@
       
         check <- condition_to_be_TRUE_for_check_to_pass
       
-      if (check) {
+        if (check) {
           details <- NULL
           error_object <- NULL
         } else {
           details <- cli::format_inline("See {.var error_object} attribute for details.")
         }
       
-        capture_check_cnd(
+        hubValidations::capture_check_cnd(
           check = check,
           file_path = file_path,
           msg_subject = "{.var round_id}",
@@ -107,13 +107,13 @@
       
         check <- condition_to_be_TRUE_for_check_to_pass
       
-      if (check) {
+        if (check) {
           details <- NULL
         } else {
           details <- cli::format_inline("{.var round_id} value {.val invalid} is invalid.")
         }
       
-        capture_check_cnd(
+        hubValidations::capture_check_cnd(
           check = check,
           file_path = file_path,
           msg_subject = "{.var round_id}",
@@ -134,13 +134,13 @@
       
         check <- condition_to_be_TRUE_for_check_to_pass
       
-      if (check) {
+        if (check) {
           details <- NULL
         } else {
           details <- cli::format_inline("{.var round_id} value {.val invalid} is invalid.")
         }
       
-        capture_check_cnd(
+        hubValidations::capture_check_cnd(
           check = check,
           file_path = file_path,
           msg_subject = "{.var round_id}",

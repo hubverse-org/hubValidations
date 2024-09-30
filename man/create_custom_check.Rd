@@ -27,9 +27,11 @@ current working directory.}
 the custom check function file will be written to. Default is \code{src/validations/R}
 which is the recommended directory for storing custom check functions.}
 
-\item{error}{Logical. If \code{TRUE}, the custom check function will return a
-\verb{<error/check_error>} class object in the case of a failed check instead of the
-default \verb{<error/check_failure>}.}
+\item{error}{Logical. Defaults to \code{FALSE}, which will return a
+\verb{<error/check_failure>} class object in the case of a failed check.
+Set this to \code{TRUE} if your custom check function is required to pass for
+other custom checks to be performed; the custom check function will then return a
+\verb{<error/check_error>} class object in the case of a failed check instead.}
 
 \item{conditional}{Logical. If \code{TRUE}, the custom check function template will
 include a block of code to check a condition before running the check. This is useful
@@ -62,7 +64,7 @@ withr::with_tempdir({
   create_custom_check("check_default")
   cat(readLines("src/validations/R/check_default.R"), sep = "\n")
 
- # Create fully featured custom check file.
+  # Create fully featured custom check file.
   create_custom_check("check_full",
     error = TRUE, conditional = TRUE,
     error_object = TRUE, extra_args = TRUE

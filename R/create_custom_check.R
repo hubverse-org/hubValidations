@@ -9,10 +9,10 @@
 #' @param r_dir Character string. Path (relative to `hub_path`) to the directory
 #' the custom check function file will be written to. Default is `src/validations/R`
 #' which is the recommended directory for storing custom check functions.
-#' @param error Logical. Defaults to `FALSE`, which will return a 
-#' `<error/check_failure>` class object in the case of a failed check. 
-#' Set this to `TRUE` if your custom check function is required to pass for 
-#' other checks to be performed; the custom check function will then return a
+#' @param error Logical. Defaults to `FALSE`, which will return a
+#' `<error/check_failure>` class object in the case of a failed check.
+#' Set this to `TRUE` if your custom check function is required to pass for
+#' other custom checks to be performed; the custom check function will then return a
 #' `<error/check_error>` class object in the case of a failed check instead.
 #' @param conditional Logical. If `TRUE`, the custom check function template will
 #' include a block of code to check a condition before running the check. This is useful
@@ -39,7 +39,7 @@
 #'   create_custom_check("check_default")
 #'   cat(readLines("src/validations/R/check_default.R"), sep = "\n")
 #'
-#'  # Create fully featured custom check file.
+#'   # Create fully featured custom check file.
 #'   create_custom_check("check_full",
 #'     error = TRUE, conditional = TRUE,
 #'     error_object = TRUE, extra_args = TRUE
