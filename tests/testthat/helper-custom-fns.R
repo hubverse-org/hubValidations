@@ -1,4 +1,5 @@
 test_custom_checks_caller <- function(
+    # nolint start
     hub_path = system.file("testhubs/flusight", package = "hubValidations"),
     file_path = "hub-ensemble/2023-05-08-hub-ensemble.parquet",
     validations_cfg_path = NULL) {
@@ -7,5 +8,6 @@ test_custom_checks_caller <- function(
     file_path = file_path,
     hub_path = hub_path
   )
+  # nolint end
   execute_custom_checks(validations_cfg_path = validations_cfg_path)
 }

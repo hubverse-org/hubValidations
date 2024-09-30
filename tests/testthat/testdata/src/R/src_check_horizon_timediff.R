@@ -1,11 +1,11 @@
 src_check_horizon_timediff <- function(tbl, file_path, hub_path, t0_colname,
-                                           t1_colname, horizon_colname = "horizon",
-                                           timediff = lubridate::weeks(),
-                                           output_type_id_datatype = c(
-                                             "from_config", "auto", "character",
-                                             "double", "integer",
-                                             "logical", "Date"
-                                           )) {
+                                       t1_colname, horizon_colname = "horizon",
+                                       timediff = lubridate::weeks(),
+                                       output_type_id_datatype = c(
+                                         "from_config", "auto", "character",
+                                         "double", "integer",
+                                         "logical", "Date"
+                                       )) {
   checkmate::assert_class(timediff, "Period")
   checkmate::assert_scalar(timediff)
   checkmate::assert_character(t0_colname, len = 1L)
@@ -18,9 +18,9 @@ src_check_horizon_timediff <- function(tbl, file_path, hub_path, t0_colname,
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
   output_type_id_datatype <- rlang::arg_match(output_type_id_datatype)
   schema <- hubData::create_hub_schema(config_tasks,
-                                       partitions = NULL,
-                                       r_schema = TRUE,
-                                       output_type_id_datatype = output_type_id_datatype
+    partitions = NULL,
+    r_schema = TRUE,
+    output_type_id_datatype = output_type_id_datatype
   )
   assert_column_date(t0_colname, schema)
   assert_column_date(t1_colname, schema)
@@ -69,6 +69,16 @@ assert_column_integer <- function(colname, schema) {
   if (schema[colname] != "integer") {
     cli::cli_abort(
       "Column {.arg colname} must be configured as {.cls integer} not
+      {.cls {schema[colname]}}.",
+      call = rlang::caller_call()
+    )
+  }
+}
+
+assert_column_date <- function(colname, schema) {
+  if (schema[colname] != "Date") {
+    cli::cli_abort(
+      "Column {.arg colname} must be configured as {.cls Date} not
       {.cls {schema[colname]}}.",
       call = rlang::caller_call()
     )
