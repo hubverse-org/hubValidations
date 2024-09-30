@@ -24,6 +24,8 @@
         if (check) {
           details <- NULL
         } else {
+          # You can use details messages to pass on helpful information to users about
+          what caused the validation failure and how to locate affected data.
           details <- cli::format_inline("{.var round_id} value {.val invalid} is invalid.")
         }
       
@@ -67,6 +69,12 @@
           details <- NULL
           error_object <- NULL
         } else {
+          # You can use details messages and any type of R object to pass on helpful
+          # information to users about what caused the validation failure and how to
+          # locate affected data.
+          error_object <- list(
+            invalid_rows = which(tbl$example_task_id == "invalid")
+          )
           details <- cli::format_inline("See {.var error_object} attribute for details.")
         }
       
@@ -110,6 +118,8 @@
         if (check) {
           details <- NULL
         } else {
+          # You can use details messages to pass on helpful information to users about
+          what caused the validation failure and how to locate affected data.
           details <- cli::format_inline("{.var round_id} value {.val invalid} is invalid.")
         }
       
@@ -137,6 +147,8 @@
         if (check) {
           details <- NULL
         } else {
+          # You can use details messages to pass on helpful information to users about
+          what caused the validation failure and how to locate affected data.
           details <- cli::format_inline("{.var round_id} value {.val invalid} is invalid.")
         }
       
