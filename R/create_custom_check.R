@@ -64,6 +64,7 @@ create_custom_check <- function(name, hub_path = ".",
   checkmate::assert_logical(error, len = 1L)
   checkmate::assert_logical(conditional, len = 1L)
   checkmate::assert_logical(error_object, len = 1L)
+  checkmate::assert_logical(config, len = 1L)
   checkmate::assert_logical(extra_args, len = 1L)
   checkmate::assert_logical(overwrite, len = 1L)
 
