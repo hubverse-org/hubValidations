@@ -1,18 +1,4 @@
 test_that("execute_custom_checks works", {
-  test_custom_checks_caller <- function(hub_path = system.file("testhubs/flusight", package = "hubValidations"),
-                                        file_path = "hub-ensemble/2023-05-08-hub-ensemble.parquet",
-                                        validations_cfg_path = NULL) {
-    round_id <- parse_file_name(file_path)$round_id
-    tbl <- read_model_out_file(
-      file_path = file_path,
-      hub_path = hub_path
-    )
-
-    custom_checks <- execute_custom_checks(validations_cfg_path = validations_cfg_path)
-    class(custom_checks) <- c("hub_validations", "list")
-    custom_checks
-  }
-
   expect_snapshot(
     str(
       test_custom_checks_caller(
@@ -36,4 +22,46 @@ test_that("execute_custom_checks works", {
       )
     )
   )
+})
+
+test_that("execute_custom_checks sourcing functions from scripts works", {
+
+  expect_snapshot(
+    test_custom_checks_caller(
+      validations_cfg_path = testthat::test_path(
+        "testdata",
+        "config",
+        "validations-src.yml"
+      )
+    )
+  )
+})
+
+test_that("execute_custom_checks return early when appropriate", {
+  # When the first custom check returns an check_error class object, custom check
+  # execution should return early
+  early_ret_custom <- test_custom_checks_caller(
+    validations_cfg_path = testthat::test_path(
+      "testdata",
+      "config",
+      "validations-early-ret.yml"
+    )
+  )
+  expect_snapshot(early_ret_custom)
+  expect_length(early_ret_custom, 1L)
+  expect_false("horizon_timediff_shouldnt_run" %in% names(early_ret_custom))
+
+
+  # When the first custom check returns an check_failure class object, custom check
+  # execution should proceed
+  no_early_ret_custom <- test_custom_checks_caller(
+    validations_cfg_path = testthat::test_path(
+      "testdata",
+      "config",
+      "validations-no-early-ret.yml"
+    )
+  )
+  expect_snapshot(no_early_ret_custom)
+  expect_length(no_early_ret_custom, 2L)
+  expect_true("horizon_timediff_should_run" %in% names(no_early_ret_custom))
 })

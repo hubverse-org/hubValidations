@@ -321,6 +321,7 @@ test_that("validate_submission handles overriding output type id data type corre
 })
 
 test_that("Ignoring derived_task_ids in validate_submission works", {
+  skip_if_offline()
   # Validation passes
   expect_snapshot(
     str(
