@@ -117,7 +117,5 @@ create_template_fn <- function(data) {
     package = "hubValidations"
   )
   readLines(template_path, encoding = "UTF-8", warn = FALSE) |>
-    whisker::whisker.render(data) |>
-    strsplit("\n") |>
-    unlist()
+    whisker::whisker.render(data)
 }
