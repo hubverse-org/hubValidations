@@ -51,6 +51,7 @@
     file_path = file_path,
     msg_subject = "{.var round_id}",
     msg_attribute = "valid.",
+    error = {{error}},
 {{#error_object}}
     error_object = error_object,
 {{/error_object}}
