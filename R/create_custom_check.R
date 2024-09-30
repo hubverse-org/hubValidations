@@ -23,9 +23,12 @@
 #' include an error object that can be used to store additional information about the
 #' properties of the object being checked that caused check failure. For example,
 #' it could store the index of rows in a `tbl` that caused a check failure.
+#' @param config Logical. If `TRUE`, the custom check function template will
+#' include `hub_path` as a function argument and a block of code for reading in
+#' the hub `tasks.json` config file.
 #' @param extra_args Logical. If `TRUE`, the custom check function template will
-#' include an `extra_arg` template argument and template block of code to check
-#' the input arguments of the custom check function.
+#' include an `extra_arg` template function argument and template block of code
+#' to check the input arguments of the custom check function.
 #' @param overwrite Logical. If `TRUE`, the function will overwrite an existing
 #'
 #' @return Invisible `TRUE` if the custom check function file is created successfully.
@@ -44,15 +47,16 @@
 #'   # Create fully featured custom check file.
 #'   create_custom_check("check_full",
 #'     error = TRUE, conditional = TRUE,
-#'     error_object = TRUE, extra_args = TRUE
+#'     error_object = TRUE, config = TRUE,
+#'     extra_args = TRUE
 #'   )
 #'   cat(readLines("src/validations/R/check_full.R"), sep = "\n")
 #' })
 create_custom_check <- function(name, hub_path = ".",
                                 r_dir = "src/validations/R",
                                 error = FALSE, conditional = FALSE,
-                                error_object = FALSE, extra_args = FALSE,
-                                overwrite = FALSE) {
+                                error_object = FALSE, config = FALSE,
+                                extra_args = FALSE, overwrite = FALSE) {
   checkmate::assert_character(name, len = 1L)
   checkmate::assert_scalar(hub_path)
   checkmate::assert_directory_exists(hub_path)
@@ -86,6 +90,7 @@ create_custom_check <- function(name, hub_path = ".",
     error = error,
     conditional = conditional,
     error_object = error_object,
+    config = config,
     extra_args = extra_args
   )
 

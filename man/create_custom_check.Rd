@@ -11,6 +11,7 @@ create_custom_check(
   error = FALSE,
   conditional = FALSE,
   error_object = FALSE,
+  config = FALSE,
   extra_args = FALSE,
   overwrite = FALSE
 )
@@ -44,9 +45,13 @@ include an error object that can be used to store additional information about t
 properties of the object being checked that caused check failure. For example,
 it could store the index of rows in a \code{tbl} that caused a check failure.}
 
+\item{config}{Logical. If \code{TRUE}, the custom check function template will
+include \code{hub_path} as a function argument and a block of code for reading in
+the hub \code{tasks.json} config file.}
+
 \item{extra_args}{Logical. If \code{TRUE}, the custom check function template will
-include an \code{extra_arg} template argument and template block of code to check
-the input arguments of the custom check function.}
+include an \code{extra_arg} template function argument and template block of code
+to check the input arguments of the custom check function.}
 
 \item{overwrite}{Logical. If \code{TRUE}, the function will overwrite an existing}
 }
@@ -69,7 +74,8 @@ withr::with_tempdir({
   # Create fully featured custom check file.
   create_custom_check("check_full",
     error = TRUE, conditional = TRUE,
-    error_object = TRUE, extra_args = TRUE
+    error_object = TRUE, config = TRUE,
+    extra_args = TRUE
   )
   cat(readLines("src/validations/R/check_full.R"), sep = "\n")
 })
