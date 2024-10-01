@@ -48,7 +48,7 @@
       
       -- 2023-05-08-hub-ensemble.parquet ----
       
-      (x) [horizon_timediff]: Time differences between t0 var `forecast_date` and t1 var `target_end_date` do not all match expected period of 14d 0H 0M 0S * `horizon`.  t1 var values "2023-05-15 (horizon = 1)" and "2023-05-22 (horizon = 2)" are invalid.
+      (x) [example]: Check failed !  Early return
 
 ---
 
@@ -58,6 +58,6 @@
       
       -- 2023-05-08-hub-ensemble.parquet ----
       
-      x [horizon_timediff]: Time differences between t0 var `forecast_date` and t1 var `target_end_date` do not all match expected period of 14d 0H 0M 0S * `horizon`.  t1 var values "2023-05-15 (horizon = 1)" and "2023-05-22 (horizon = 2)" are invalid.
-      v [horizon_timediff_should_run]: Time differences between t0 var `forecast_date` and t1 var `target_end_date` all match expected period of 7d 0H 0M 0S * `horizon`.
+      x [example]: Check failed !
+      v [example_should_run]: Check passed !
 
