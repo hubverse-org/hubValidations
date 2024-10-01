@@ -48,7 +48,17 @@
       
       -- 2023-05-08-hub-ensemble.parquet ----
       
-      (x) [example]: Check failed !  Early return
+      (x) [check_1]: Check failed !  Early return
+
+---
+
+    Code
+      early_ret_exec_error
+    Message
+      
+      -- 2023-05-08-hub-ensemble.parquet ----
+      
+      [check_1]: Stop! Early return because of exec error.
 
 ---
 
@@ -58,6 +68,6 @@
       
       -- 2023-05-08-hub-ensemble.parquet ----
       
-      x [example]: Check failed !
-      v [example_should_run]: Check passed !
+      x [check_1]: Check failed !
+      v [check_2]: Check passed !
 
