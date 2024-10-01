@@ -36,7 +36,7 @@ exec_cfg_check <- function(check_name, validations_cfg, caller_env, caller_call)
 get_caller_env_formals <- function(fn, caller_env, cfg_args) {
   caller_env_fmls <- rlang::fn_fmls_names(fn)[
     rlang::fn_fmls_names(fn) %in% rlang::env_names(caller_env) &
-      !rlang::fn_fmls_names(fn) %in% cfg_args
+      !rlang::fn_fmls_names(fn) %in% names(cfg_args)
   ]
   rlang::env_get_list(caller_env, nms = caller_env_fmls, default = NULL)
 }

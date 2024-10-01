@@ -29,3 +29,45 @@
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_error" "error" ...
 
+# execute_custom_checks sourcing functions from scripts works
+
+    Code
+      test_custom_checks_caller(validations_cfg_path = testthat::test_path("testdata",
+        "config", "validations-src.yml"))
+    Message
+      
+      -- 2023-05-08-hub-ensemble.parquet ----
+      
+      i [src_check_works]: Sourcing custom functions WORKS! Also "Extra arguments passed"!!
+
+# execute_custom_checks return early when appropriate
+
+    Code
+      early_ret_custom
+    Message
+      
+      -- 2023-05-08-hub-ensemble.parquet ----
+      
+      (x) [check_1]: Check failed !  Early return
+
+---
+
+    Code
+      early_ret_exec_error
+    Message
+      
+      -- 2023-05-08-hub-ensemble.parquet ----
+      
+      [check_1]: Stop! Early return because of exec error.
+
+---
+
+    Code
+      no_early_ret_custom
+    Message
+      
+      -- 2023-05-08-hub-ensemble.parquet ----
+      
+      x [check_1]: Check failed !
+      v [check_2]: Check passed !
+

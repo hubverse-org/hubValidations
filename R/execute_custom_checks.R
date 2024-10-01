@@ -32,8 +32,21 @@ execute_custom_checks <- function(validations_cfg_path = NULL) {
   if (is.null(validations_cfg)) {
     return(NULL)
   }
-  purrr::map(
-    purrr::set_names(names(validations_cfg)),
-    ~ exec_cfg_check(.x, validations_cfg, caller_env, caller_call)
-  ) %>% as_hub_validations()
+
+  out <- vector("list", length(validations_cfg)) |>
+    stats::setNames(names(validations_cfg))
+
+  for (check_name in names(out)) {
+    out[[check_name]] <- exec_cfg_check(
+      check_name,
+      validations_cfg,
+      caller_env,
+      caller_call
+    )
+
+    if (is_any_error(out[[check_name]])) {
+      break
+    }
+  }
+  purrr::compact(out) |> as_hub_validations()
 }

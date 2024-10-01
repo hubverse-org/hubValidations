@@ -1,3 +1,7 @@
+# hubValidations (development version)
+
+* Added function `create_custom_check()` for creating custom validation check function files from templates (#121).
+
 # hubValidations 0.6.2
 
 * Fixed bug in `check_tbl_col_types()` where columns in model output data with more than one class were causing an EXEC error (#118). Thanks for the bug report @ruarai!

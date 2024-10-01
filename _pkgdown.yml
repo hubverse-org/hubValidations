@@ -26,6 +26,10 @@ reference:
   contents:
   - starts_with("opt_check_")
 
+- title: "Custom unit validation checks"
+  desc: "Functions to support creation and deployment of custom unit validation checks"
+  contents:
+  - create_custom_check
 
 - title: "Lower level functions"
   desc: "Lower level functions for assisting users in developing custom unit checks."
