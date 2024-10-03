@@ -53,9 +53,11 @@ Imports:
     yaml
 Suggests: 
     covr,
+    DT,
     gert,
     kableExtra,
     mockery,
+    pak,
     readr,
     rmarkdown,
     testthat (>= 3.2.0),
