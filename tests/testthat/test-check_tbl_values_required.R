@@ -251,3 +251,33 @@ test_that("Ignoring derived_task_ids in check_tbl_values_required works", {
     )
   )
 })
+
+test_that("(#123) check_tbl_values_required works with all optional output types", {
+  skip_if_offline()
+
+  hub_path <- test_path("testdata", "hub-now")
+  file_path <- "UMass-HMLR/2024-10-02-UMass-HMLR.parquet"
+  round_id <- "2024-10-02"
+  tbl <- read_model_out_file(
+    hub_path = hub_path, file_path = file_path,
+    coerce_types = "chr"
+  )
+
+  opt_output_type_ids_result <- check_tbl_values_required(
+    tbl, round_id, file_path, hub_path
+  )
+  # Check output correct
+  expect_snapshot(opt_output_type_ids_result)
+  # Missing output structure correct
+  expect_snapshot(opt_output_type_ids_result$missing)
+  # Missing clades identified correctly
+  expect_equal(
+    unique(opt_output_type_ids_result$missing$clade),
+    c("24A", "24B")
+  )
+  # Ensure that req_vals check is the only one that fails
+  expect_snapshot(
+    check_for_errors(validate_submission(hub_path, file_path)),
+    error = TRUE
+  )
+})
