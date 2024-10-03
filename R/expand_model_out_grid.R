@@ -246,6 +246,15 @@ process_grid_inputs <- function(x, required_vals_only = FALSE) {
 # values into a grid and combines them into a single tibble.
 expand_output_type_grid <- function(task_id_values,
                                     output_type_values) {
+  if (length(output_type_values) == 0) {
+    return(
+      expand.grid(
+        purrr::compact(task_id_values),
+        stringsAsFactors = FALSE
+      )
+    )
+  }
+
   purrr::imap(
     output_type_values,
     ~ c(task_id_values, list(
