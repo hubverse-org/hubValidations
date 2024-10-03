@@ -192,7 +192,7 @@
       Message:
       Required task ID/output type/output type ID combinations all present.
 
-# check_tbl_values_required works with all optional output types
+# (#123) check_tbl_values_required works with all optional output types
 
     Code
       opt_output_type_ids_result
