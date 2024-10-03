@@ -525,3 +525,31 @@ test_that("expand_model_out_grid errors correctly", {
     error = TRUE
   )
 })
+
+test_that("(#123) expand_output_type_grid() returns expected outputs with optional output_type_id", {
+  tasks <- list(
+    nowcast_date = "2024-10-02",
+    target_date = NULL,
+    clade = c("24A", "24B", "recombinant", "other"),
+    other_task = 1:2,
+    location = NULL
+  )
+  # If specific output type subset is requested
+  i_have_no_rows <- expand_output_type_grid(
+    task_id_values = tasks,
+    output_type_values = list(),
+    all_output_types = FALSE
+  )
+  expect_equal(nrow(i_have_no_rows), 0)
+  expect_equal(ncol(i_have_no_rows), 0)
+
+  # When no specific output_type subset is requested
+  i_have_eight_rows <- expand_output_type_grid(
+    task_id_values = tasks,
+    output_type_values = list(),
+    all_output_types = TRUE
+  )
+  expect_equal(nrow(i_have_eight_rows), 8)
+  expect_equal(ncol(i_have_eight_rows), 3)
+
+})
