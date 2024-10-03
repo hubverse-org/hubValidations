@@ -67,7 +67,10 @@ navbar:
     - text: Validating submissions locally
       href: articles/validate-submission.html
     - text: -------
-    - text: Including custom validation functions
+    - text: "Custom validation checks"
+    - text: Writing custom validation functions
+      href: articles/writing-custom-fns.html
+    - text: Deploying custom validation functions
       href: articles/custom-functions.html
 development:
   mode: auto
