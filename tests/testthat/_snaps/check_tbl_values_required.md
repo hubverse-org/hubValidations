@@ -192,3 +192,46 @@
       Message:
       Required task ID/output type/output type ID combinations all present.
 
+# check_tbl_values_required works with all optional output types
+
+    Code
+      opt_output_type_ids_result
+    Output
+      <error/check_failure>
+      Error:
+      ! Required task ID/output type/output type ID combinations missing.  See `missing` attribute for details.
+
+---
+
+    Code
+      opt_output_type_ids_result$missing
+    Output
+      # A tibble: 168 x 6
+         nowcast_date target_date clade location output_type output_type_id
+         <date>       <date>      <chr> <chr>    <chr>       <chr>         
+       1 2024-10-02   2024-09-01  24A   AL       sample      <NA>          
+       2 2024-10-02   2024-09-01  24B   AL       sample      <NA>          
+       3 2024-10-02   2024-09-01  24A   CA       sample      <NA>          
+       4 2024-10-02   2024-09-01  24B   CA       sample      <NA>          
+       5 2024-10-02   2024-09-02  24A   AL       sample      <NA>          
+       6 2024-10-02   2024-09-02  24B   AL       sample      <NA>          
+       7 2024-10-02   2024-09-02  24A   CA       sample      <NA>          
+       8 2024-10-02   2024-09-02  24B   CA       sample      <NA>          
+       9 2024-10-02   2024-09-03  24A   AL       sample      <NA>          
+      10 2024-10-02   2024-09-03  24B   AL       sample      <NA>          
+      # i 158 more rows
+
+---
+
+    Code
+      check_for_errors(validate_submission(hub_path, file_path))
+    Message
+      
+      -- 2024-10-02-UMass-HMLR.parquet ----
+      
+      x [req_vals]: Required task ID/output type/output type ID combinations missing.  See `missing` attribute for details.
+    Condition
+      Error in `check_for_errors()`:
+      ! 
+      The validation checks produced some failures/errors reported above.
+
