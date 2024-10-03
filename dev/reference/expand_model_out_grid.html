@@ -7,7 +7,7 @@
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/hubverse-org/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubValidations</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.6.2.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.6.2.9001</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -153,6 +153,10 @@ unless <code>all_character = TRUE</code>. If <code>all_character = TRUE</code>, 
 character which can be faster when large expanded grids are expected.
 If <code>required_vals_only = TRUE</code>, values are limited to the combinations of required
 values only.</p>
+<p>Note that if <code>required_vals_only = TRUE</code> and an optional output type is
+requested through <code>output_types</code>, a zero row grid will be returned.
+If all output types are requested however (i.e. when <code>output_types = NULL</code>) and
+they are all optional, a grid of required task ID values only will be returned.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
