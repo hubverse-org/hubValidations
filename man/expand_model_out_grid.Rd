@@ -81,6 +81,11 @@ unless \code{all_character = TRUE}. If \code{all_character = TRUE}, all columns 
 character which can be faster when large expanded grids are expected.
 If \code{required_vals_only = TRUE}, values are limited to the combinations of required
 values only.
+
+Note that if \code{required_vals_only = TRUE} and an optional output type is
+requested through \code{output_types}, a zero row grid will be returned.
+If all output types are requested however (i.e. when \code{output_types = NULL}) and
+they are all optional, a grid of required task ID values only will be returned.
 }
 \description{
 Create expanded grid of valid task ID and output type value combinations

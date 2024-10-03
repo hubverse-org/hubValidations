@@ -36,6 +36,11 @@
 #' character which can be faster when large expanded grids are expected.
 #' If `required_vals_only = TRUE`, values are limited to the combinations of required
 #' values only.
+#'
+#' Note that if `required_vals_only = TRUE` and an optional output type is
+#' requested through `output_types`, a zero row grid will be returned.
+#' If all output types are requested however (i.e. when `output_types = NULL`) and
+#' they are all optional, a grid of required task ID values only will be returned.
 #' @inheritParams hubData::coerce_to_hub_schema
 #' @details
 #' When a round is set to `round_id_from_variable: true`,
