@@ -252,7 +252,7 @@ test_that("Ignoring derived_task_ids in check_tbl_values_required works", {
   )
 })
 
-test_that("check_tbl_values_required works with all optional output types", {
+test_that("(#123) check_tbl_values_required works with all optional output types", {
   skip_if_offline()
 
   hub_path <- test_path("testdata", "hub-now")
