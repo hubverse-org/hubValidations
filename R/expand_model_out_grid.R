@@ -173,7 +173,7 @@ expand_model_out_grid <- function(config_tasks,
   round_config <- get_round_config(config_tasks, round_id)
   # Create a logical variable to control what is returned by expand_output_type_grid.
   # See not in fn for details.
-  all_output_types <- is.null(output_types)
+  all_output_types <- is.null(output_types) # nolint: object_usage_linter
 
   task_id_l <- purrr::map(
     round_config[["model_tasks"]],
