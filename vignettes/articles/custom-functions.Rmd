@@ -1,5 +1,5 @@
 ---
-title: "Include custom validation functions"
+title: "Deploying custom validation functions"
 ---
 
 ```{r, include = FALSE}
@@ -36,27 +36,9 @@ Within the default configuration, individual checks can be configured for each o
         - **`source:`** Path to `.R` script containing function code to be sourced. If relative, should be relative to the hub's directory root. Must be supplied if function is not part of a package and only exists as a script.
         - **`args`:** A yaml dictionary of key/value pairs or arguments to be passed to the custom function. Values can be yaml lists or even executable R code (optional).
         
-Note that each of the `validate_*()` functions contain a standard objects in their call environment which are passed automatically to any custom check function and therefore do not need including in the `args` configuration. 
 
-- **`validate_model_file`:**
-  - `file_path`: character string of path to file being validated relative to the `model-output` directory.
-  - `hub_path`: character string of path to hub.
-  - `round_id`: character string of `round_id`
-  - `file_meta`: named list containing `round_id`, `team_abbr`, `model_abbr` and `model_id` details.
-- **`validate_model_data`:** 
-  - `tbl`: a tibble of the model output data being validated.
-  - `file_path`: character string of path to file being validated relative to the `model-output` directory.
-  - `hub_path`: character string of path to hub.
-  - `round_id`: character string of `round_id`
-  - `file_meta`: named list containing `round_id`, `team_abbr`, `model_abbr` and `model_id` details.
-  - `round_id_col`: character string of name of `tbl` column containing `round_id` information.
-- **`validate_model_metadata`:** 
-  - `file_path`: character string of path to file being validated relative to the `model-output` directory.
-  - `hub_path`: character string of path to hub.
-  - `round_id`: character string of `round_id`
-  - `file_meta`: named list containing `round_id`, `team_abbr`, `model_abbr` and `model_id` details.
-
-The `args` configuration can be used to override objects from the caller environment as well as defaults.
+```{r child="children/_custom-fn-available-args.Rmd", echo=FALSE, results="asis"}
+```
 
 
 Here's an example configuration for a single check (`opt_check_tbl_horizon_timediff()`) to be run as part of the `validate_model_data()` validation function which checks the content of the model data submission files.
