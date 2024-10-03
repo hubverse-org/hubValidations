@@ -166,6 +166,9 @@ expand_model_out_grid <- function(config_tasks,
     config_tasks, round_id
   )
   round_config <- get_round_config(config_tasks, round_id)
+  # Create a logical variable to control what is returned by expand_output_type_grid.
+  # See not in fn for details.
+  all_output_types <- is.null(output_types)
 
   task_id_l <- purrr::map(
     round_config[["model_tasks"]],
@@ -211,7 +214,8 @@ expand_model_out_grid <- function(config_tasks,
     task_id_l, output_type_l,
     ~ expand_output_type_grid(
       task_id_values = .x,
-      output_type_values = .y
+      output_type_values = .y,
+      all_output_types = all_output_types
     )
   )
 
@@ -245,8 +249,19 @@ process_grid_inputs <- function(x, required_vals_only = FALSE) {
 # Function that expands modeling task level lists of task IDs and output type
 # values into a grid and combines them into a single tibble.
 expand_output_type_grid <- function(task_id_values,
-                                    output_type_values) {
-  if (length(output_type_values) == 0) {
+                                    output_type_values,
+                                    all_output_types = TRUE) {
+  # Return a grid of only task IDs if no output type values are provided but
+  # only if a specific output type subset is not requested.
+  # Otherwise return a zero row grid.
+  # No output type values can either be the result of all optional output types
+  # when required values only are requested or as a result of output type sub-setting.
+  # When requesting required values only for an entire rounds (i.e. all output types),
+  # we want required task ID values to be returned, even is all output types are
+  # optional. However, it does not make sense to return required values for an
+  # optional output type when a user is specifically requesting required values
+  # for an output type. In that situation it's more appropriate to return a zero row grid.
+  if (length(output_type_values) == 0 && all_output_types) {
     return(
       expand.grid(
         purrr::compact(task_id_values),
