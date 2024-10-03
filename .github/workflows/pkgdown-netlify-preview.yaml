@@ -54,12 +54,18 @@ jobs:
           branch: gh-pages
           folder: docs
 
+      - id: deploy-dir
+        run: |
+          if [[ $(grep -c -E 'sion. ([0-9]*\.){3}' ${{ github.workspace }}/DESCRIPTION) == 1 ]]; then
+            echo 'dir=./docs/dev' >> $GITHUB_OUTPUT
+          else
+            echo 'dir=./docs' >> $GITHUB_OUTPUT
       - name: Deploy PR preview to Netlify
         if: contains(env.isPush, 'false')
         id: netlify-deploy
         uses: nwtgck/actions-netlify@v2
         with:
-          publish-dir: './docs'
+          publish-dir: '${{ steps.deploy-dir.outputs.dir }}'
           production-branch: main
           github-token: ${{ secrets.GITHUB_TOKEN }}
           deploy-message:
