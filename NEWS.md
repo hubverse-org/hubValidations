@@ -1,6 +1,7 @@
 # hubValidations (development version)
 
 * Added function `create_custom_check()` for creating custom validation check function files from templates (#121).
+* Fixed bug in `check_tbl_values_required()` causing required missing values to not be identified correctly when all output types were optional (#123)
 
 # hubValidations 0.6.2
 
