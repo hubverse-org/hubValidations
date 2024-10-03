@@ -1,14 +1,14 @@
 {
     "schema_version": "https://raw.githubusercontent.com/Infectious-Disease-Modeling-Hubs/schemas/main/v3.0.1/admin-schema.json",
     "name": "SARS-CoV-2 Variant Nowcast Hub",
-    "maintainer": "Reich Lab @ UMass-Amherst",
+    "maintainer": "jbloggs @ UMass-Amherst",
     "contact": {
-        "name": "Nick Reich",
-        "email": "nick@umass.edu"
+        "name": "Joe blogss",
+        "email": "jbloggs@umass.edu"
     },
     "repository": {
         "host": "github",
-        "owner": "reichlab",
+        "owner": "jbloggs",
         "name": "variant-nowcast-hub"
     },
     "file_format": ["parquet"],
