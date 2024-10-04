@@ -27,6 +27,20 @@ While more details about deploying custom check functions during validation work
 
 While source code of existing `hubValidations` `check_*()` functions can be a good place to start when writing custom check functions, it is important to understand the structure of a check function, particularly the expected inputs and outputs.
 
+At it's most basic, a custom check function should:
+
+- evaluate whether a condition is met
+- return an appropriate check condition object
+
+In addition, if the check condition is not met, it's also helpful to capture any details that can guide users towards specifics of the failure and how to fix it
+
+In general, `hubValidations` check functions evaluate conditions with respect to one or more of the following:
+
+- Model output submission files
+- Model output submission file content (i.e data)
+- Model metadata files
+
+
 ## `create_custom_check()` for creating custom check function templates
 
 To help you get started on the right path, we also provide function `create_custom_check()` for creating a basic custom check function from a template. 
@@ -52,12 +66,6 @@ The contents of the created file at `src/validations/R/cstm_check_tbl_basic.R` a
 ```{r, code=readLines(r_path(hub_path, "cstm_check_tbl_basic")), eval=FALSE}
 ```
 
-At it's most basic, a custom check function should:
-
-- evaluate whether a condition is met
-- return an appropriate check condition object
-
-In addition, if the check condition is not met, it's also helpful to capture any details that can guide users towards specifics of the failure and how to fix it
 
 <div class="alert alert-info">
 
@@ -112,11 +120,9 @@ create_custom_check("cstm_check_tbl_args",
 ```
 
 This adds an extra argument `extra_arg` to the custom check function formals as well as an example input check.
-
-
+s
 ```{r, code=readLines(r_path(hub_path, "cstm_check_tbl_args")), eval=FALSE}
 ```
-
 
 
 ## Function output
@@ -187,9 +193,9 @@ create_custom_check("cstm_check_tbl_skip",
 
 Many check conditions against information stored in hub configuration files and these are often read in at the start of the custom check function.
 
-The easiest way to make the hub config available within your function is to pass in the `hub_path` caller environment object by specifying it as a function argument and then use `hubUtils::read_config(hub_path)` to read in the `tasks.json` configuration file.
+The easiest way to make hub configuration information available within your function is to pass the `hub_path` caller environment object by specifying it as a function argument and then use `hubUtils::read_config(hub_path)` to read in the `tasks.json` configuration file.
 
-You can add a `config = TRUE` argument when creating the custom check function with `create_custom_check()` to include the `hub_path` argument and read in the hub configuration file in you custom check function skeleton.
+You can add a `config = TRUE` argument when creating the custom check function with `create_custom_check()` to include the `hub_path` argument and insert a code snippet in you custom check function skeleton that reads in the `tasks.json` hub configuration file.
 
 
 ```{r}
