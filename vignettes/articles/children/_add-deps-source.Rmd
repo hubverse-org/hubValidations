@@ -8,7 +8,7 @@ get_deps <- function(pkg) {
   suppressMessages(pak::pkg_deps(pkg))
 }
 memoise_pkg_deps <- memoise::memoise(get_deps)
-pkgs <- memoise_pkg_deps(".")[,c("package", "version")]
+pkgs <- memoise_pkg_deps(".")[, c("package", "version")]
 ```
 
 In addition, **functions in packages from the `hubValidations` dependency tree are also generally available**, both locally (once `hubValidations` is installed) and in the hubverse `validate-submission` GitHub Action.
