@@ -163,6 +163,6 @@ arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")
 #### Custom checks
 
 The standard checks discussed here are the checks deployed by default by the `validate_submission` or `validate_model_metadata` functions. 
-For more information on deploying optional/custom functions or functions that require configuration please check the article on [including custom functions](articles/custom-functions.html) (`vignette("custom-functions")`).
+For more information on deploying optional/custom functions or functions that require configuration please check the article on [including custom functions](articles/deploying-custom-functions.html) (`vignette("deploying-custom-functions")`).
 
 </div>

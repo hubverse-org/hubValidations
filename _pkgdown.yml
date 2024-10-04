@@ -71,7 +71,7 @@ navbar:
     - text: Writing custom validation functions
       href: articles/writing-custom-fns.html
     - text: Deploying custom validation functions
-      href: articles/custom-functions.html
+      href: articles/deploying-custom-functions.html
 development:
   mode: auto
 

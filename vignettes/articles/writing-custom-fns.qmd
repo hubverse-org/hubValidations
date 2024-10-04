@@ -21,7 +21,7 @@ While `hubValidations` provides a wide range of validation `check_*()` functions
 
 This guide will help you understand how to write custom check functions and what tools are available in `hubValidations` to help. 
 
-While more details about deploying custom check functions during validation workflows are available in **`vignette("custom-functions")`**, it's useful to mention here that custom functions are configured through the `validations.yml` file and executed as part of `validate_model_data()`, `validate_model_metadata()` and `validate_model_file()` functions.
+While more details about deploying custom check functions during validation workflows are available in **`vignette("deploying-custom-functions")`**, it's useful to mention here that custom functions are configured through the `validations.yml` file and executed as part of `validate_model_data()`, `validate_model_metadata()` and `validate_model_file()` functions.
 
 # Anatomy of a check function
 
