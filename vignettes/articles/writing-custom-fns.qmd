@@ -183,34 +183,56 @@ create_custom_check("cstm_check_tbl_skip",
 ```
 
 
-# Dependencies
+## Loading config files
 
-When writing your functions you might want to use functions from other packages. All `hubValidations` exported functions are available for use in your custom check functions. 
+Many check conditions against information stored in hub configuration files and these are often read in at the start of the custom check function.
 
-## Available dependencies
+The easiest way to make the hub config available within your function is to pass in the `hub_path` caller environment object by specifying it as a function argument and then use `hubUtils::read_config(hub_path)` to read in the `tasks.json` configuration file.
 
-In addition, functions from the following `hubValidation` dependencies are also generally available, both locally and in the hubverse `validate-submission` GitHub Action (once `hubValidations` is installed).
+You can add a `config = TRUE` argument when creating the custom check function with `create_custom_check()` to include the `hub_path` argument and read in the hub configuration file in you custom check function skeleton.
 
-```{r, echo=FALSE}
-pkgs <- suppressMessages(pak::pkg_deps(".")[,c("package", "version")])
+
+```{r}
+create_custom_check("cstm_check_tbl_config",
+  hub_path = hub_path,
+  config = TRUE
+)
 ```
 
-```{r, echo=FALSE}
-pkgs[order(pkgs$package), ] |>
-  DT::datatable()
+
+```{r, code=readLines(r_path(hub_path, "cstm_check_tbl_config")), eval=FALSE}
 ```
 
-## Additional dependencies
 
-If your custom check function requires additional packages, the easiest way to ensure they are available is to make sure they are installed in the `hubverse/validate-submission` GitHub Action workflow is to add them to the packages list in the `setup-r-dependencies` step.
+# Custom function dependencies
 
-In the following pseudo exam
+When writing your functions you might want to use functions from other packages. 
 
-```yaml
-      - uses: r-lib/actions/setup-r-dependencies@v2
-        with:
-          packages: |
-            any::hubValidations
-            any::sessioninfo
-            any::additionalPackage
+
+```{r child="children/_add-deps-source.Rmd", echo=FALSE, results="asis"}
 ```
+
+ 
+# Managing custom check functions as a package
+
+The simplest way to manage custom check functions is to store them as scripts in the `src/validations/R` directory in the root of the hub and source them during validation by specifying the path to a custom functions file via the `source:` property in `validations.yml`.
+
+Alternatively, you could **manage your custom functions as a package**. 
+
+You can easily [turn the contents of `src/validations` into a local `validations` R package](https://r-pkgs.org/whole-game.html#create_package) with:
+
+```{r, eval=FALSE}
+usethis::create_package("src/validations", open = FALSE)
+```
+
+This would allow you to:
+
+- Make your functions available locally by users who could use `pak::local_install("src/validations")` in the hub root to install the `validations` package.
+- [Manage additional dependencies](https://r-pkgs.org/description.html#sec-description-imports-suggests) required by your custom functions formally through the `DESCRIPTION` file.
+- [Formally test your custom functions](https://r-pkgs.org/testing-basics.html) using `testthat` tests in the `tests/testthat` directory.
+
+
+```{r child="children/_add-deps-pkg.Rmd", echo=FALSE, results="asis"}
+```
+
+If you want to share custom functions across multiple hubs, you could even consider separating them into a standalone package and hosting them on GitHub.

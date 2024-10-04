@@ -40,8 +40,9 @@ Within the default configuration, individual checks can be configured for each o
 ```{r child="children/_custom-fn-available-args.Rmd", echo=FALSE, results="asis"}
 ```
 
+#### Deploying optional `hubValidations` functions
 
-Here's an example configuration for a single check (`opt_check_tbl_horizon_timediff()`) to be run as part of the `validate_model_data()` validation function which checks the content of the model data submission files.
+Here's an example configuration for a single optional `hubValidations` check (`opt_check_tbl_horizon_timediff()`) to be run as part of the `validate_model_data()` validation function which checks the content of the model data submission files.
 
 ```{r, eval=FALSE, code=readLines(system.file('testhubs/flusight/hub-config/validations.yml', package = 'hubValidations'))}
 ```
@@ -60,6 +61,19 @@ default:
           horizon_colname: "horizons"
           timediff: !expr lubridate::weeks(2)
 ```
+
+#### Deploying custom functions
+
+The above example involved an optional `hubValidation` function. To deploy a custom function that is not part of the `hubValidations` package, you should store the script containing the function in `src/validations/R/` and include the path to the script in the `source` argument in the configuration file.
+
+```
+default:
+    validate_model_data:
+      custom_check:
+        fn: "cstm_check_tbl_example"
+        source: "src/validations/R/cstm_check_tbl_example.R"
+```
+
 
 ### Round specific configuration
 
@@ -141,6 +155,12 @@ arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")
 ```
 
 
-## Managing dependencies of custom sourced functions
+# Managing dependencies of custom functions
 
-TODO
+If any custom functions you are deploying depend on additional packages, you will need to ensure these packages are available during validation. 
+
+```{r child="children/_add-deps-source.Rmd", echo=FALSE, results="asis"}
+```
+
+```{r child="children/_add-deps-pkg.Rmd", echo=FALSE, results="asis"}
+```
