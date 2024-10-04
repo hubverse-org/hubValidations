@@ -49,7 +49,19 @@ test_that("execute_custom_checks return early when appropriate", {
   )
   expect_snapshot(early_ret_custom)
   expect_length(early_ret_custom, 1L)
-  expect_false("horizon_timediff_shouldnt_run" %in% names(early_ret_custom))
+  expect_false("check_2" %in% names(early_ret_custom))
+
+  # Same when the first custom check returns an exec_error class object
+  early_ret_exec_error <- test_custom_checks_caller(
+    validations_cfg_path = testthat::test_path(
+      "testdata",
+      "config",
+      "validations-exec-error.yml"
+    )
+  )
+  expect_snapshot(early_ret_exec_error)
+  expect_length(early_ret_exec_error, 1L)
+  expect_false("check_2" %in% names(early_ret_exec_error))
 
 
   # When the first custom check returns an check_failure class object, custom check
@@ -63,5 +75,5 @@ test_that("execute_custom_checks return early when appropriate", {
   )
   expect_snapshot(no_early_ret_custom)
   expect_length(no_early_ret_custom, 2L)
-  expect_true("horizon_timediff_should_run" %in% names(no_early_ret_custom))
+  expect_true("check_2" %in% names(no_early_ret_custom))
 })

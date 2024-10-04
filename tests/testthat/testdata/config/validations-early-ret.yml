@@ -1,15 +1,14 @@
 default:
     test_custom_checks_caller:
-      horizon_timediff:
-        fn: "src_check_horizon_timediff"
-        source: !expr testthat::test_path("testdata/src/R/src_check_horizon_timediff.R")
+      check_1:
+        fn: "simple_example_check"
+        source: !expr testthat::test_path("testdata/src/R/src_simple_example_check.R")
         args:
-          t0_colname: "forecast_date"
-          t1_colname: "target_end_date"
-          timediff: !expr lubridate::weeks(2)
-      horizon_timediff_shouldnt_run:
-        fn: "opt_check_tbl_horizon_timediff"
-        pkg: "hubValidations"
+          check: FALSE
+          error: TRUE
+      check_2:
+        fn: "simple_example_check"
+        source: !expr testthat::test_path("testdata/src/R/src_simple_example_check.R")
         args:
-          t0_colname: "forecast_date"
-          t1_colname: "target_end_date"
+          check: TRUE
+          error: FALSE

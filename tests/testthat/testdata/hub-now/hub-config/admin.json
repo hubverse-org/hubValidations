@@ -1,0 +1,24 @@
+{
+    "schema_version": "https://raw.githubusercontent.com/Infectious-Disease-Modeling-Hubs/schemas/main/v3.0.1/admin-schema.json",
+    "name": "SARS-CoV-2 Variant Nowcast Hub",
+    "maintainer": "jbloggs @ UMass-Amherst",
+    "contact": {
+        "name": "Joe blogss",
+        "email": "jbloggs@umass.edu"
+    },
+    "repository": {
+        "host": "github",
+        "owner": "jbloggs",
+        "name": "variant-nowcast-hub"
+    },
+    "file_format": ["parquet"],
+    "timezone": "US/Eastern",
+    "cloud": {
+        "enabled": false,
+        "host": {
+            "name": "aws",
+            "storage_service": "s3",
+            "storage_location": "variant-nowcast-hub"
+        }
+    }
+}
