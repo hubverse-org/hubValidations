@@ -224,7 +224,7 @@
 ---
 
     Code
-      check_for_errors(validate_submission(hub_path, file_path))
+      check_for_errors(val)
     Message
       
       -- 2024-10-02-UMass-HMLR.parquet ----
