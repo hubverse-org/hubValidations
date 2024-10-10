@@ -72,7 +72,7 @@ The contents of the created file at `src/validations/R/cstm_check_tbl_basic.R` a
 
 ### **Function naming conventions**
 
-While not necessary for deploying custom functions, we recommend following the naming conventions used in `hubValidations`.
+We recommend following the naming conventions used in `hubValidations`.
 
 - `check_file_*` for checks that operate on model output files (e.g. file location, name etc).
 - `check_tbl_*` for checks that operate on a tibble of model output data (i.e. the contents of a file).
