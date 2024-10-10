@@ -191,7 +191,7 @@ create_custom_check("cstm_check_tbl_skip",
 
 ## Loading config files
 
-Many check conditions against information stored in hub configuration files and these are often read in at the start of the custom check function.
+Many checks are conditioned against information stored in hub configuration files and these are often read in at the start of the custom check function.
 
 The easiest way to make hub configuration information available within your function is to pass the `hub_path` caller environment object by specifying it as a function argument and then use `hubUtils::read_config(hub_path)` to read in the `tasks.json` configuration file.
 
