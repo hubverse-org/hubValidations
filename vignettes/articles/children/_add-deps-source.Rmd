@@ -17,7 +17,7 @@ Functions from these packages can be used in your custom checks without specifyi
 
 ```{r, echo=FALSE}
 pkgs[order(pkgs$package), ] |>
-  DT::datatable()
+  DT::datatable(rownames = FALSE)
 ```
 
 
