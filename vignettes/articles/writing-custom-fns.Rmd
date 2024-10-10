@@ -21,7 +21,7 @@ While `hubValidations` provides a wide range of validation `check_*()` functions
 
 This guide will help you understand how to write custom check functions and what tools are available in `hubValidations` to help. 
 
-While more details about deploying custom check functions during validation workflows are available in **`vignette("articles/deploying-custom-functions")`**, it's useful to mention here that custom functions are configured through the `validations.yml` file and executed as part of `validate_model_data()`, `validate_model_metadata()` and `validate_model_file()` functions.
+Custom functions are configured through the `validations.yml` file and executed as part of `validate_model_data()`, `validate_model_metadata()` and `validate_model_file()` functions. More details about deploying custom check functions during validation workflows are available in **`vignette("articles/deploying-custom-functions")`**.
 
 # Anatomy of a check function
 
@@ -51,6 +51,7 @@ The output of `create_custom_check()` can also be parametarised through a number
 
 Let's take a look at the basic structure of a custom check function created by `create_custom_check()`:
 
+We'll start by creating a temporary "hub" for us to work in, but if you have an existing hub, you can work in there.
 
 ```{r}
 hub_path <- withr::local_tempdir()
@@ -69,7 +70,7 @@ The contents of the created file at `src/validations/R/cstm_check_tbl_basic.R` a
 
 <div class="alert alert-info">
 
-**Function naming conventions**
+### **Function naming conventions**
 
 While not necessary for deploying custom functions, we recommend following the naming conventions used in `hubValidations`.
 
@@ -92,17 +93,26 @@ The minimum inputs required by a custom check function depend on the type of che
 - `file_path`: the relative path to the submission file being validated is required for all check functions. **`file_path` must therefore be included as an argument** in all custom check function.
 - `tbl` or `tbl_chr`: a tibble representation of the contents of a model output submission (with column data types matching the hub schema (`tbl`) or an all character version (`tbl_chr`) is also required by any checks that operate on the data in the submission file.
 
-Since `file_path` and `tbl` are the most common inputs to check functions, `create_custom_check()` includes them as arguments by default. 
+Since `file_path` and `tbl` are the most common inputs to check functions, `create_custom_check()` includes them as arguments by default. This means that the custom check function will include these objects in the function call environment by default. 
+
+<div class="alert alert-warn">
+
+Keep in mind that `tbl` and `tbl_chr` are only available when calling `validate_model_data()`, but not in `validate_model_metadata()` or `validate_model_file()`. Therefore, the default `create_custom_check()` function is designed for checks run by `validate_model_data()`. If you're not running your custom check with `validate_model_data()`, you should remove `tbl` from the function arguments. If your custom check not run by `validate_model_data()` needs the model output file contens, you can use `hubValidations::read_model_out_file(file_path)` within your function body to read it.
+
+</div>
 
 In addition to these, custom check functions can also have additional arguments for inputs required by the check. Some of these inputs **are available in the check caller environment** and can be passed automatically to a custom check function by including an argument with the same name as the input object required in the custom function formals. Other inputs can be passed explicitly to function arguments through [the functions `args` field](deploying-custom-functions#validations-yml-structure) when configuring the `validations.yml` file.
 
 #### Arguments available in the caller environment 
 
-The `hubValidations` package automatically passes a set of standard objects to custom check functions. These objects are passed to arguments of custom check functions with the same name and do not need to be included in the `args` configuration in the `validations.yml` file.
-
-
 ```{r child="children/_custom-fn-available-args.Rmd", echo=FALSE, results="asis"}
 ```
+
+<div class="alert alert-info">
+
+Note that, when writing custom functions, these objects **do not all need to be specified as arguments** in the function definition. **Only the ones that your custom function actually requires as inputs**.
+
+</div>
 
 #### Additional arguments
 
