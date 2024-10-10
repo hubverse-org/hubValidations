@@ -25,7 +25,7 @@ files within the \code{hub-config} directory.}
 
 \item{round_id_col}{Character string. The name of the column containing
 \code{round_id}s. Usually, the value of round property \code{round_id} in hub \code{tasks.json}
-config file.}
+config file. Defaults to \code{NULL} and determined from the config if applicable.}
 }
 \value{
 Depending on whether validation has succeeded, one of:

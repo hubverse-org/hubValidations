@@ -14,7 +14,7 @@ The exact set of objects available to arguments depend on `validate_*()` calling
   - `hub_path`: character string of path to hub.
   - `round_id`: character string of `round_id`
   - `file_meta`: named list containing `round_id`, `team_abbr`, `model_abbr` and `model_id` details.
-  - `round_id_col`: character string of name of `tbl` column containing `round_id` information.
+  - `round_id_col`: character string of name of `tbl` column containing `round_id` information. Defaults to `NULL` and usually determined from the `tasks.json` config if applicable unless explicitly provided as an argument to `validate_model_data()`.
   - `output_type_id_datatype`: character string. The value of the `output_type_id_datatype` argument. This value is useful in functions like `hubData::create_hub_schema()` or `hubValidations::expand_model_out_grid()` to set the data type of `output_type_id` column.
   - `derived_task_ids`: character vector or `NULL`. The value of the `derived_task_ids` argument, i.e. the names of task IDs whose values depend on other task IDs.
 - **`validate_model_metadata`:** 
