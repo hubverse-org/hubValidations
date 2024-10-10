@@ -276,9 +276,11 @@ test_that("(#123) check_tbl_values_required works with all optional output types
     c("24A", "24B")
   )
   # Ensure that req_vals check is the only one that fails
-  val <- validate_submission(hub_path, file_path, skip_submit_window_check = TRUE)
   expect_snapshot(
-    check_for_errors(val),
+    check_for_errors(validate_submission(
+      hub_path, file_path,
+      skip_submit_window_check = TRUE
+    )),
     error = TRUE
   )
 })
