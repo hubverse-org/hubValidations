@@ -120,7 +120,6 @@ create_custom_check("cstm_check_tbl_args",
 ```
 
 This adds an extra argument `extra_arg` to the custom check function formals as well as an example input check.
-s
 ```{r, code=readLines(r_path(hub_path, "cstm_check_tbl_args")), eval=FALSE}
 ```
 
