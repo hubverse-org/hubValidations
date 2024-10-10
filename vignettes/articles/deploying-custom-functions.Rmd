@@ -66,7 +66,7 @@ default:
 
 #### Deploying custom functions
 
-The above example involved an optional `hubValidation` function. To deploy a custom function that is not part of the `hubValidations` package, you should store the script containing the function in `src/validations/R/` and include the path to the script in the `source` argument in the configuration file.
+The above example involved an optional `hubValidation` function. To deploy a custom function that is not part of the `hubValidations` or any other package, you should store the script containing the function in the `src/validations/R/` directory (relative to the root of your hub) and include the path to the script in the `source` argument in the configuration file.
 
 ```
 default:
