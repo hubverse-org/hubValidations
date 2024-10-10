@@ -43,7 +43,7 @@ Note that this ensures the additional dependency is available during validation 
 You could use documentation, like your hub's README to communicate additional required dependencies for validation to submitting teams. Even better, you could add a check to the top of your function to catch missing dependencies and provide a helpful error message to the user.
 
 ```{r, eval=FALSE}
-if (!(requireNamespace("additionalPackage"))) {
+if (!(requireNamespace("additionalPackage", quietly = TRUE))) {
   stop(
     "Package 'additionalPackage' must be installed to run the full validation check. 
     Please install and try again."
