@@ -137,10 +137,9 @@ If the value passed to `check ` is `TRUE`, the function returns a `<message/chec
 
 If the value is `FALSE`, the output depends on the `error` argument.  
 
-- If `error` is `TRUE`, the function returns a `<message/check_error>` class object. If `error` is `FALSE`, the function returns a `<error/check_failure>` class object, which indicates the check has failed. 
-- If `error` is `TRUE`, the function returns a `<error/check_error>` class object, which indicates the check has failed and additionally causes execution of further custom validation functions to halt. Set `error = TRUE` if downstream checks cannot be run if the current check fails.
 
-The default value of `error` is `FALSE` in `create_custom_check()` but setting it to `TRUE` sets the error argument to `TRUE`.
+- If `error` is `FALSE` (the default), the function returns a `<error/check_failure>` class object, which indicates the check has failed.
+- If `error` is `TRUE`, the function returns a `<error/check_error>` class object, which indicates the check has failed and additionally causes execution of further custom validation functions to halt. Set `error = TRUE` if downstream checks cannot be run if the current check fails.
 
 ```{r}
 create_custom_check("cstm_check_tbl_error",
