@@ -17,7 +17,7 @@ library(hubValidations)
 Custom validation functions can be included and configured within standard `hubValidation` workflows by **including a `validations.yml` file in the `hub-config` directory**. Alternatively, an appropriately structured file can be included at a different location and the path to the file provided through argument `validations_cfg_path`.
 
 `hubValidations` uses the [`config`](https://rstudio.github.io/config/articles/inheritance.html) package to get validation configuration. This allows for configuration inheritance and the ability to include executable R code. 
-See the `confog` package vignette on [inheritance and R expressions](https://rstudio.github.io/config/articles/inheritance.html) for more details.
+See the `config` package vignette on [inheritance and R expressions](https://rstudio.github.io/config/articles/inheritance.html) for more details.
 
 ## `validations.yml` structure
 
