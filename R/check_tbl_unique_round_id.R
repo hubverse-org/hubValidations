@@ -2,7 +2,7 @@
 #'
 #' @param round_id_col Character string. The name of the column containing
 #' `round_id`s. Usually, the value of round property `round_id` in hub `tasks.json`
-#' config file.
+#' config file. Defaults to `NULL` and determined from the config if applicable.
 #' @inheritParams check_tbl_colnames
 #' @return
 #' Depending on whether validation has succeeded, one of:

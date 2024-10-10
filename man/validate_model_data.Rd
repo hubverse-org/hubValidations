@@ -30,7 +30,7 @@ the hub's model-output directory.}
 
 \item{round_id_col}{Character string. The name of the column containing
 \code{round_id}s. Usually, the value of round property \code{round_id} in hub \code{tasks.json}
-config file.}
+config file. Defaults to \code{NULL} and determined from the config if applicable.}
 
 \item{output_type_id_datatype}{character string. One of \code{"from_config"}, \code{"auto"},
 \code{"character"}, \code{"double"}, \code{"integer"}, \code{"logical"}, \code{"Date"}.

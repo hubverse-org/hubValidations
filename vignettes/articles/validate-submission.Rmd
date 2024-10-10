@@ -29,7 +29,7 @@ validate_submission(hub_path,
 )
 ```
 
-For more details on the structure of `<hub_validations>` objects, including how to access more information on individual checks, see `vignette("hub-validations-class")`.
+For more details on the structure of `<hub_validations>` objects, including how to access more information on individual checks, see `vignette("articles/hub-validations-class")`.
 
 ### Validation early return
 
@@ -136,7 +136,7 @@ validate_model_metadata(hub_path,
 ```
 
 
-For more details on the structure of `<hub_validations>` objects, including how to access more information on individual checks, see `vignette("hub-validations-class")`.
+For more details on the structure of `<hub_validations>` objects, including how to access more information on individual checks, see `vignette("articles/hub-validations-class")`.
 
 ### `validate_model_metadata` check details
 
@@ -163,6 +163,6 @@ arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")
 #### Custom checks
 
 The standard checks discussed here are the checks deployed by default by the `validate_submission` or `validate_model_metadata` functions. 
-For more information on deploying optional/custom functions or functions that require configuration please check the article on [including custom functions](articles/custom-functions.html) (`vignette("custom-functions")`).
+For more information on deploying optional/custom functions or functions that require configuration please check the article on [including custom functions](deploying-custom-functions.html) (`vignette("articles/deploying-custom-functions")`).
 
 </div>

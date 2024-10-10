@@ -1,0 +1,24 @@
+### Deploying custom functions as a package
+
+To deploy custom functions managed as a package in `src/validations`, you can use the `pkg` configuration property in the `validations.yml` file to specify the package namespace.
+
+For example, if you have created a simple package in `src/validations/` with a `cstm_check_tbl_example.R` script containing the specification of an `cstm_check_tbl_example()` function in `src/validations/R`, you can use the following configuration in your `validation.yml` file to source the function from the installed `validations` package namespace:
+
+```
+default:
+    validate_model_data:
+      custom_check:
+        fn: "cstm_check_tbl_example"
+        pkg: "validations"
+```
+
+To ensure the package (and any additional dependencies it depends on) is installed and available during validation, you must add the package to the `setup-r-dependencies` step in the `hubverse-actions` `validate-submission.yaml` GitHub Action workflow of your hub like so:
+
+```yaml
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: |
+            any::hubValidations
+            any::sessioninfo
+            local::./src/validations
+```

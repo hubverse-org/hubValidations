@@ -1,0 +1,53 @@
+
+## Available dependencies
+
+**All `hubValidations` exported functions are available** for use in your custom check functions as well as functions from hubverse packages **`huUtils`**, **`hubAdmin`** and **`hubData`**. 
+
+```{r, echo=FALSE}
+get_deps <- function(pkg) {
+  suppressMessages(pak::pkg_deps(pkg))
+}
+memoise_pkg_deps <- memoise::memoise(get_deps)
+pkgs <- memoise_pkg_deps(".")[, c("package", "version")]
+```
+
+In addition, **functions in packages from the `hubValidations` dependency tree are also generally available**, both locally (once `hubValidations` is installed) and in the hubverse `validate-submission` GitHub Action.
+
+Functions from these packages can be used in your custom checks without specifying them as additional dependencies.
+
+```{r, echo=FALSE}
+pkgs[order(pkgs$package), ] |>
+  DT::datatable(rownames = FALSE)
+```
+
+
+## Additional dependencies
+
+If any custom functions you are deploying depend on additional packages, you will need to ensure these packages are available during validation.
+
+The simplest way to ensure they are available is to edit the  `setup-r-dependencies` step in the `hubverse-actions` [`validate-submission.yaml`](https://github.com/hubverse-org/hubverse-actions/blob/main/validate-submission/validate-submission.yaml) GitHub Action workflow of your hub and add any additional dependency to the `packages` field list.
+
+In the following pseudo example we add `additionalPackage` package to the list of standard dependencies:
+
+```yaml
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: |
+            any::hubValidations
+            any::sessioninfo
+            any::additionalPackage
+```
+
+Note that this ensures the additional dependency is available during validation on GitHub but does not guarantee it will be installed locally for hub administrators or submitting teams. Indeed such missing dependencies could lead to execution errors in custom checks when running `validate_submission()` locally. 
+
+You could use documentation, like your hub's README to communicate additional required dependencies for validation to submitting teams. Even better, you could add a check to the top of your function to catch missing dependencies and provide a helpful error message to the user.
+
+```{r, eval=FALSE}
+if (!(requireNamespace("additionalPackage", quietly = TRUE))) {
+  stop(
+    "Package 'additionalPackage' must be installed to run the full validation check. 
+    Please install and try again."
+  )
+}
+```
+ 
