@@ -104,7 +104,7 @@ If you do add additional arguments to a custom check function, you should also a
 For example, the optional check `opt_check_tbl_col_timediff()` (which is deployed in exactly the same fashion as custom functions, i.e. through the `validations.yml` file) takes additional arguments `t0_colname`, `t1_colname` and `timediff`. 
 
 
-```{r}
+```{r, comment = NA}
 opt_check_tbl_col_timediff
 ```
 
@@ -170,7 +170,7 @@ capture_check_info(
 
 For example, the `check_tbl_value_col_ascending()` check function which validates that values are ascending when arranged by increasing `output_type_id` order is only applicable to `cdf` and `quantile` output types. Before proceeding with the main check, the function first checks whether the model output `tbl` contains data for `cdf` and `quantile` output types. If not, the check is skipped.
 
-```{r}
+```{r, comment = NA}
 check_tbl_value_col_ascending
 ```
 
