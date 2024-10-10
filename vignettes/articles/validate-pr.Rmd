@@ -76,7 +76,7 @@ Supplying the names of derived task IDs to argument `derived_task_ids` will igno
 
 #### Warning
   
-Ignoring derived task IDs means that the validity of derived task ID value combinations will not be check. It is therefore **important to ensure that the values of derived task IDs are correctly derived from other task IDs through custom checks**. For example, the values of `target_end_date` can be checked by deploying optional check `opt_check_tbl_horizon_timediff()`. See the article on [including custom functions](articles/deploying-custom-functions.html) for more information.
+Ignoring derived task IDs means that the validity of derived task ID value combinations will not be check. It is therefore **important to ensure that the values of derived task IDs are correctly derived from other task IDs through custom checks**. For example, the values of `target_end_date` can be checked by deploying optional check `opt_check_tbl_horizon_timediff()`. See the article on [including custom functions](deploying-custom-functions.html) for more information.
 
 </div>
 
