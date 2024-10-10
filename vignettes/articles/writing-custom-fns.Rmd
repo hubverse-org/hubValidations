@@ -47,7 +47,7 @@ To help you get started on the right path, we also provide function `create_cust
 
 The function requires a name for the new custom check function, e.g. `"example_check"`. It then creates an `.R` script file named after the function (`example_check.R`) and saves it in the hub at the recommended location: `src/validations/R/`. The script contains basic skeleton code to create a custom check function called `example_check`.
 
-The output of `create_custom_check()` can also be parametarised through a number of arguments to include additional template code snippets.
+The output of `create_custom_check()` can also be parametarised through a number of arguments to include additional template code snippets (see below for examples).
 
 Let's take a look at the basic structure of a custom check function created by `create_custom_check()`:
 
