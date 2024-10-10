@@ -42,7 +42,9 @@ Within the default configuration, individual checks can be configured for each o
 
 #### Deploying optional `hubValidations` functions
 
-Here's an example configuration for a single optional `hubValidations` check (`opt_check_tbl_horizon_timediff()`) to be run as part of the `validate_model_data()` validation function which checks the content of the model data submission files.
+Here's an example configuration for a single optional `hubValidations` check, `opt_check_tbl_horizon_timediff()`, which checks that the temporal difference between the values in two date columns (defined by additional arguments `t0_colname` & `t1_colname`) is equal to a time period defined by horizon values (contained in a column defined by `horizon_colname`) and the length of a single horizon defined by argument `timediff`.
+
+The check is to be run as part of the `validate_model_data()` validation function which checks the content of the model data submission files.
 
 ```{r, eval=FALSE, code=readLines(system.file('testhubs/flusight/hub-config/validations.yml', package = 'hubValidations'))}
 ```
