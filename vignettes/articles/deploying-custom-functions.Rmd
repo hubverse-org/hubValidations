@@ -34,7 +34,7 @@ Within the default configuration, individual checks can be configured for each o
         - **`fn`:** The name of the check function to be run, as character string (required).
         - **`pkg`:** The name of the package namespace from which to get check function. Must be supplied if function is distributed as part of a package.
         - **`source:`** Path to `.R` script containing function code to be sourced. If relative, should be relative to the hub's directory root. Must be supplied if function is not part of a package and only exists as a script.
-        - **`args`:** A yaml dictionary of key/value pairs or arguments to be passed to the custom function. Values can be yaml lists or even executable R code (optional).
+        - **`args`:** A yaml dictionary of key/value pairs of arguments and their values to be passed to the custom function. Values can be yaml lists or even executable R code (optional).
         
 
 ```{r child="children/_custom-fn-available-args.Rmd", echo=FALSE, results="asis"}
