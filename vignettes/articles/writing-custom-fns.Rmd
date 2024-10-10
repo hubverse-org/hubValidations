@@ -29,6 +29,7 @@ While source code of existing `hubValidations` `check_*()` functions can be a go
 
 At it's most basic, a custom check function should:
 
+- take in a set of inputs to be validated
 - evaluate whether a condition is met
 - return an appropriate check condition object
 
@@ -39,7 +40,6 @@ In general, `hubValidations` check functions evaluate conditions with respect to
 - Model output submission files
 - Model output submission file content (i.e data)
 - Model metadata files
-
 
 ## `create_custom_check()` for creating custom check function templates
 
@@ -84,9 +84,19 @@ To distinguish `hubValidations` package functions from custom ones, we also reco
 
 </div>
 
-## Arguments to custom check functions
 
-### Arguments available in the caller environment 
+## Function inputs / arguments
+
+The minimum inputs required by a custom check function depend on the type of check being performed.
+
+- `file_path`: the relative path to the submission file being validated is required for all check functions. **`file_path` must therefore be included as an argument** in all custom check function.
+- `tbl` or `tbl_chr`: a tibble representation of the contents of a model output submission (with column data types matching the hub schema (`tbl`) or an all character version (`tbl_chr`) is also required by any checks that operate on the data in the submission file.
+
+Since `file_path` and `tbl` are the most common inputs to check functions, `create_custom_check()` includes them as arguments by default. 
+
+In addition to these, custom check functions can also have additional arguments for inputs required by the check. Some of these inputs **are available in the check caller environment** and can be passed automatically to a custom check function by including an argument with the same name as the input object required in the custom function formals. Other inputs can be passed explicitly to function arguments through [the functions `args` field](deploying-custom-functions#validations-yml-structure) when configuring the `validations.yml` file.
+
+#### Arguments available in the caller environment 
 
 The `hubValidations` package automatically passes a set of standard objects to custom check functions. These objects are passed to arguments of custom check functions with the same name and do not need to be included in the `args` configuration in the `validations.yml` file.
 
@@ -94,7 +104,7 @@ The `hubValidations` package automatically passes a set of standard objects to c
 ```{r child="children/_custom-fn-available-args.Rmd", echo=FALSE, results="asis"}
 ```
 
-### Additional arguments
+#### Additional arguments
 
 You can add additional arguments to custom check functions and pass values to them by including them in the `args` configuration in the `validations.yml` file. These values are passed to the custom check function by `hubValidations` when the function is called.
 
@@ -107,7 +117,6 @@ For example, the optional check `opt_check_tbl_col_timediff()` (which is deploye
 ```{r, comment = NA}
 opt_check_tbl_col_timediff
 ```
-
 
 
 You can add an example extra argument with `extra_args = TRUE` when creating the custom check function with `create_custom_check()`.
