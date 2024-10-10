@@ -150,7 +150,7 @@ This adds an extra example argument `extra_arg` to the custom check function for
 
 **Returning a check condition with `capture_check_cnd()`**
 
-The `capture_check_cnd()` function is used to return a check condition and it's output should also be what a custom check function returns in most cases. The function returns a `<hub_check>` class object depending on the value passed to the `check` argument, which represents the summary of the condition being checked by a given validation function. 
+The `capture_check_cnd()` function is used to return a check condition (success, failure, or error) and it's output is what a custom check function should return in most cases (see below for exception). The function returns a `<hub_check>` class object depending on the value passed to the `check` argument, which represents the summary of the condition being checked by a given validation function. 
 
 If the value passed to `check ` is `TRUE`, the function returns a `<message/check_success>` class object. 
 
@@ -166,7 +166,7 @@ create_custom_check("cstm_check_tbl_error",
 )
 ```
 
-```{r, code=readLines(r_path(hub_path, "cstm_check_tbl_error")), eval=FALSE}
+```{r, code=readLines(r_path(hub_path, "cstm_check_tbl_error")), eval=FALSE, comment=NA}
 ```
 
 
