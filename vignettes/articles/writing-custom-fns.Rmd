@@ -99,7 +99,7 @@ The `hubValidations` package automatically passes a set of standard objects to c
 You can add additional arguments to custom check functions and pass values to them by including them in the `args` configuration in the `validations.yml` file. These values are passed to the custom check function by `hubValidations` when the function is called.
 
 
-If you do add additional arguments to a custom check function, you should also add input  checks at the start of the function to ensure inputs are valid. Package `checkmate` contains a wide range of functions for checking inputs.
+If you do add additional arguments to a custom check function, you should also add input  checks at the start of the function to ensure inputs are valid. [The `checkmate` package](https://mllg.github.io/checkmate/) contains a wide range of functions for checking inputs.
 
 For example, the optional check `opt_check_tbl_col_timediff()` (which is deployed in exactly the same fashion as custom functions, i.e. through the `validations.yml` file) takes additional arguments `t0_colname`, `t1_colname` and `timediff`. 
 
