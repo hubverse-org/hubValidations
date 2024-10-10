@@ -17,7 +17,7 @@ library(hubValidations)
 
 The `validate_pr()` functions is designed to be used to validate team submissions through Pull Requests on GitHub. 
 Only model output and model metadata files are individually validated using `validate_submission()` or `validate_model_metadata()` respectively on each file according to file type
-(_See the end of this article for details of the standard checks performed on each file. For more information on deploying optional or custom functions please check the article on [including custom functions](articles/deploying-custom-functions.html) (`vignette("deploying-custom-functions")`)_).
+(_See the end of this article for details of the standard checks performed on each file. For more information on deploying optional or custom functions please check the article on [including custom functions](deploying-custom-functions.html) (`vignette("articles/deploying-custom-functions")`)_).
 As part of checks, however, hub config files are also validated. 
 Any other files included in the PR are ignored but flagged in a message.
 
@@ -215,7 +215,7 @@ check_for_errors(v_pass, verbose = TRUE)
 
 ## `validate_pr` check details
 
-For details on the structure of `<hub_validations>` objects, including on how to access more information about specific checks, see `vignette("hub-validations-class")`.
+For details on the structure of `<hub_validations>` objects, including on how to access more information about specific checks, see `vignette("articles/hub-validations-class")`.
 
 ### Checks on model output files
 
@@ -260,6 +260,6 @@ arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")
 
 #### Custom checks
 
-The standard checks discussed here are the checks deployed by default by the `validate_pr` function. For more information on deploying optional or custom functions please check the article on [deploying custom functions](articles/deploying-custom-functions.html) (`vignette("deploying-custom-functions")`).
+The standard checks discussed here are the checks deployed by default by the `validate_pr` function. For more information on deploying optional or custom functions please check the article on [deploying custom functions](deploying-custom-functions.html) (`vignette("articles/deploying-custom-functions")`).
 
 </div>
