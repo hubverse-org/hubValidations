@@ -64,7 +64,7 @@ create_custom_check("cstm_check_tbl_basic",
 The contents of the created file at `src/validations/R/cstm_check_tbl_basic.R` are as follows:
 
 
-```{r, code=readLines(r_path(hub_path, "cstm_check_tbl_basic")), eval=FALSE}
+```{r, code=readLines(r_path(hub_path, "cstm_check_tbl_basic")), eval=FALSE, comment=NA}
 ```
 
 
@@ -140,7 +140,7 @@ create_custom_check("cstm_check_tbl_args",
 
 This adds an extra example argument `extra_arg` to the custom check function formals as well as an example input check to the top of the function body.
 
-```{r, code=readLines(r_path(hub_path, "cstm_check_tbl_args")), eval=FALSE}
+```{r, code=readLines(r_path(hub_path, "cstm_check_tbl_args")), eval=FALSE, comment=NA}
 ```
 
 
@@ -203,7 +203,7 @@ create_custom_check("cstm_check_tbl_skip",
 ```
 
 
-```{r, code=readLines(r_path(hub_path, "cstm_check_tbl_skip")), eval=FALSE}
+```{r, code=readLines(r_path(hub_path, "cstm_check_tbl_skip")), eval=FALSE, comment=NA}
 ```
 
 
@@ -224,7 +224,7 @@ create_custom_check("cstm_check_tbl_config",
 ```
 
 
-```{r, code=readLines(r_path(hub_path, "cstm_check_tbl_config")), eval=FALSE}
+```{r, code=readLines(r_path(hub_path, "cstm_check_tbl_config")), eval=FALSE, comment=NA}
 ```
 
 
