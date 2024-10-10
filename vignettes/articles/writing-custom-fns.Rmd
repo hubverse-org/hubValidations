@@ -74,14 +74,17 @@ The contents of the created file at `src/validations/R/cstm_check_tbl_basic.R` a
 
 We recommend following the naming conventions used in `hubValidations`.
 
-- `check_file_*` for checks that operate on model output files (e.g. file location, name etc).
-- `check_tbl_*` for checks that operate on a tibble of model output data (i.e. the contents of a file).
-- `check_meta_*` for checks that operate on model metadata files.
-- `check_submission_*` for checks that operate on high level properties of the submission (e.g. timing).
-- `check_config_*` for checks that operate on the hub configuration files.
-- `check_valid_*` for checks that don't fit into the above categories.
+To distinguish `hubValidations` package functions from custom ones, we recommend prefixing custom function names with an additional prefix, e.g. `cstm_` or `cs`.
 
-To distinguish `hubValidations` package functions from custom ones, we also recommend prefixing custom function names with an additional prefix, e.g. `cstm_` or `cs`.
+- `cstm_check_file_*` for checks that operate on model output files (e.g. file location, name etc).
+- `cstm_check_tbl_*` for checks that operate on a tibble of model output data (i.e. the contents of a file).
+- `cstm_check_meta_*` for checks that operate on model metadata files.
+- `cstm_check_submission_*` for checks that operate on high level properties of the submission (e.g. timing).
+- `cstm_check_config_*` for checks that operate on the hub configuration files.
+- `cstm_check_valid_*` for checks that don't fit into the above categories.
+
+Neither of these recommendations are required for custom functions to work, but consistency is an important aspect of maintaining a hub. 
+
 
 </div>
 
