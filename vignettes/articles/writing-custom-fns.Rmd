@@ -23,7 +23,7 @@ This guide will help you understand how to write custom check functions and what
 
 Custom functions are configured through the `validations.yml` file and executed as part of `validate_model_data()`, `validate_model_metadata()` and `validate_model_file()` functions. More details about deploying custom check functions during validation workflows are available in **`vignette("articles/deploying-custom-functions")`**.
 
-# Anatomy of a check function
+## Anatomy of a check function
 
 While source code of existing `hubValidations` `check_*()` functions can be a good place to start when writing custom check functions, it is important to understand the structure of a check function, particularly the expected inputs and outputs.
 
@@ -106,7 +106,7 @@ Keep in mind that `tbl` and `tbl_chr` are only available when calling `validate_
 
 In addition to these, custom check functions can also have additional arguments for inputs required by the check. Some of these inputs **are available in the check caller environment** and can be passed automatically to a custom check function by including an argument with the same name as the input object required in the custom function formals. Other inputs can be passed explicitly to function arguments through [the functions `args` field](deploying-custom-functions#validations-yml-structure) when configuring the `validations.yml` file.
 
-#### Arguments available in the caller environment 
+### Arguments available in the caller environment 
 
 ```{r child="children/_custom-fn-available-args.Rmd", echo=FALSE, results="asis"}
 ```
@@ -117,7 +117,7 @@ Note that, when writing custom functions, these objects **do not all need to be 
 
 </div>
 
-#### Additional arguments
+### Additional arguments
 
 You can add additional arguments to custom check functions and pass values to them by including them in the `args` configuration in the `validations.yml` file. These values are passed to the custom check function by `hubValidations` when the function is called.
 
@@ -231,7 +231,7 @@ create_custom_check("cstm_check_tbl_config",
 ```
 
 
-# Custom function dependencies
+## Custom function dependencies
 
 When writing your functions you might want to use functions from other packages. 
 
@@ -240,7 +240,7 @@ When writing your functions you might want to use functions from other packages.
 ```
 
  
-# Managing custom check functions as a package
+## Managing custom check functions as a package
 
 The simplest way to manage custom check functions is to store them as scripts in the `src/validations/R` directory in the root of the hub and source them during validation by specifying the path to a custom functions file via the `source:` property in `validations.yml`.
 
