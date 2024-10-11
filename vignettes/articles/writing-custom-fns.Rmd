@@ -49,7 +49,7 @@ The function requires a name for the new custom check function, e.g. `"example_c
 
 The output of `create_custom_check()` can also be parametarised through a number of arguments to include additional template code snippets (see below for examples).
 
-Let's take a look at the basic structure of a custom check function created by `create_custom_check()`:
+Let's take a look at the basic structure of a custom check function created by `create_custom_check()`.
 
 We'll start by creating a temporary "hub" for us to work in, but if you have an existing hub, you can work in there.
 
