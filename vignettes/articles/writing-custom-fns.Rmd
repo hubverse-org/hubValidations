@@ -100,8 +100,6 @@ Since `file_path` and `tbl` are the most common inputs to check functions, `crea
 
 <div class="alert alert-warning" role="alert">
 
-### Use `tbl` only with `validate_model_data()`
-
 Keep in mind that **`tbl` and `tbl_chr` are only available when calling `validate_model_data()`**, but not in `validate_model_metadata()` or `validate_model_file()`. Therefore, the default `create_custom_check()` function is designed for checks run by `validate_model_data()`. 
 
 **If you're not running your custom check with `validate_model_data()`, you should remove `tbl` from the function arguments**. If your custom check not run by `validate_model_data()` needs the model output file contents, you can use `hubValidations::read_model_out_file(file_path)` within your function body to read it.
@@ -153,9 +151,7 @@ This adds an extra example argument `extra_arg` to the custom check function for
 
 ## Function output
 
-### Capturing and returning check results
-
-**Returning a check condition with `capture_check_cnd()`**
+### Capturing and returning check results with `capture_check_cnd()`
 
 The `capture_check_cnd()` function is used to return a check condition (success, failure, or error) and it's output is what a custom check function should return in most cases (see below for exception). The function returns a `<hub_check>` class object depending on the value passed to the `check` argument, which represents the summary of the condition being checked by a given validation function. 
 
@@ -177,9 +173,8 @@ create_custom_check("cstm_check_tbl_error",
 ```
 
 
-### Skipping a check
+### Skipping checks and returning a message with `capture_check_info()`
 
-**Returning a check message with `capture_check_info()`**
 
 Sometimes a check function might not always be applicable and a pre-condition needs to be met before the main check itself is performed. **If the pre-condition is not met, the check is usually skipped**. 
 
