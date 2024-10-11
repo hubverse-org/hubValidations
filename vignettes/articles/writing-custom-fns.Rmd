@@ -17,7 +17,7 @@ r_path <- function(hub_path, file_name) {
 library(hubValidations)
 ```
 
-While `hubValidations` provides a wide range of validation `check_*()` functions, there are times when you might need to write your own custom check functions to check a specific aspect of your hub's submissions.  
+`hubValidations` provides a wide range of validation `check_*()` functions, but there are times when you might need to write your own custom check functions to check a specific aspect of your hub's submissions.  
 
 This guide will help you understand how to write custom check functions and what tools are available in `hubValidations` to help. 
 
