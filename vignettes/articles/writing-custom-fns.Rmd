@@ -93,10 +93,10 @@ Neither of these recommendations are required for custom functions to work, but 
 
 The minimum inputs required by a custom check function depend on the type of check being performed.
 
-- `file_path`: the relative path to the submission file being validated is required for all check functions. **`file_path` must therefore be included as an argument** in all custom check function.
-- `tbl` or `tbl_chr`: a tibble representation of the contents of a model output submission (with column data types matching the hub schema (`tbl`) or an all character version (`tbl_chr`) is also required by any checks that operate on the data in the submission file.
+- **`file_path`**: the relative path to the submission file being validated is required for all check functions. **`file_path` must therefore be included as an argument** in all custom check function.
+- **`tbl`** or **`tbl_chr`**: a **tibble representation of the contents of a model output** submission—with column data types matching the hub schema (`tbl`) or an all character version (`tbl_chr`)—is also **required by any checks that operate on the data** in the submission file.
 
-Since `file_path` and `tbl` are the most common inputs to check functions, `create_custom_check()` includes them as arguments by default. This means that the custom check function will include these objects in the function call environment by default. 
+Since `file_path` and `tbl` are the most common inputs to check functions, `create_custom_check()` includes them as arguments by default. This means that the **custom check function will include these objects in the function call environment by default**. 
 
 <div class="alert alert-warning" role="alert">
 

@@ -2,19 +2,19 @@ Each of the `validate_*()` functions **contain a number of standard objects in t
 
 **All `validate_*()` functions will contain the following five objects in their caller environment:**
 
-  - `file_path`: character string of path to file being validated relative to the `model-output` directory.  
-  - `hub_path`: character string of path to hub. 
-  - `round_id`: character string of `round_id` derived from the model file name. 
-  - `file_meta`: named list containing `round_id`, `team_abbr`, `model_abbr` and `model_id` details. 
-  - `validations_cfg_path`: character string of path to `validations.yml` file. Defaults to `hub-config/validations.yml`.
+  - **`file_path`**: character string of path to file being validated relative to the `model-output` directory.  
+  - **`hub_path`**: character string of path to hub. 
+  - **`round_id`**: character string of `round_id` derived from the model file name. 
+  - **`file_meta`**: named list containing `round_id`, `team_abbr`, `model_abbr` and `model_id` details. 
+  - **`validations_cfg_path`**: character string of path to `validations.yml` file. Defaults to `hub-config/validations.yml`.
 
 **`validate_model_data()` will contain the following additional objects:** 
 
-  - `tbl`: a tibble of the model output data being validated.  
-  - `tbl_chr`: a tibble of the model output data being validated with all columns coerced to character type.  
-  - `round_id_col`: character string of name of `tbl` column containing `round_id` information. Defaults to `NULL` and usually determined from the `tasks.json` config if applicable unless explicitly provided as an argument to `validate_model_data()`.
-  - `output_type_id_datatype`: character string. The value of the `output_type_id_datatype` argument. This value is useful in functions like `hubData::create_hub_schema()` or `hubValidations::expand_model_out_grid()` to set the data type of `output_type_id` column.
-  - `derived_task_ids`: character vector or `NULL`. The value of the `derived_task_ids` argument, i.e. the names of task IDs whose values depend on other task IDs.
+  - **`tbl`**: a tibble of the model output data being validated.  
+  - **`tbl_chr`**: a tibble of the model output data being validated with all columns coerced to character type.  
+  - **`round_id_col`**: character string of name of `tbl` column containing `round_id` information. Defaults to `NULL` and usually determined from the `tasks.json` config if applicable unless explicitly provided as an argument to `validate_model_data()`.
+  - **`output_type_id_datatype`**: character string. The value of the `output_type_id_datatype` argument. This value is useful in functions like `hubData::create_hub_schema()` or `hubValidations::expand_model_out_grid()` to set the data type of `output_type_id` column.
+  - **`derived_task_ids`**: character vector or `NULL`. The value of the `derived_task_ids` argument, i.e. the names of task IDs whose values depend on other task IDs.
 
 
 The `args` configuration can be used to override objects from the caller environment as well as defaults during deployment.
