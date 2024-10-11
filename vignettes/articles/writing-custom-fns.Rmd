@@ -100,6 +100,8 @@ Since `file_path` and `tbl` are the most common inputs to check functions, `crea
 
 <div class="alert alert-warning" role="alert">
 
+### Use `tbl` only with `validate_model_data()`
+
 Keep in mind that **`tbl` and `tbl_chr` are only available when calling `validate_model_data()`**, but not in `validate_model_metadata()` or `validate_model_file()`. Therefore, the default `create_custom_check()` function is designed for checks run by `validate_model_data()`. 
 
 **If you're not running your custom check with `validate_model_data()`, you should remove `tbl` from the function arguments**. If your custom check not run by `validate_model_data()` needs the model output file contents, you can use `hubValidations::read_model_out_file(file_path)` within your function body to read it.
