@@ -49,7 +49,9 @@ The check is to be run as part of the `validate_model_data()` validation functio
 ```{r, eval=FALSE, code=readLines(system.file('testhubs/flusight/hub-config/validations.yml', package = 'hubValidations'))}
 ```
 
-The above configuration file relies on default values for arguments `horizon_colname` (`"horizon"`) and `timediff` (`lubridate::weeks()`). We can use the `validations.yml` `args` list to override the default values. Here's an example that includes **executable r code** as the value of an argument.
+The above configuration file relies on default values for arguments `horizon_colname` (`"horizon"`) and `timediff` (`lubridate::weeks()`). We can **use the `validations.yml` `args` list to override the `horizon_colname` and `timediff` argument default values**. 
+
+In this example, we **also include executable r code** as the value of the `timediff` argument.
 
 ```
 default:
