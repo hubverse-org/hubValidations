@@ -1,0 +1,264 @@
+---
+title: "Writing custom validation functions"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+r_path <- function(hub_path, file_name) {
+  fs::path(hub_path, "src", "validations", "R", file_name, ext = "R")
+}
+```
+
+```{r setup}
+library(hubValidations)
+```
+
+`hubValidations` provides a wide range of validation `check_*()` functions, but there are times when you might need to write your own custom check functions to check a specific aspect of your hub's submissions.  
+
+This guide will help you understand how to write custom check functions and what tools are available in `hubValidations` to help. 
+
+Custom functions are configured through the `validations.yml` file and executed as part of `validate_model_data()`, `validate_model_metadata()` and `validate_model_file()` functions. More details about deploying custom check functions during validation workflows are available in **`vignette("articles/deploying-custom-functions")`**.
+
+## Anatomy of a check function
+
+While source code of existing `hubValidations` `check_*()` functions can be a good place to start when writing custom check functions, it is important to understand the structure of a check function, particularly the expected inputs and outputs.
+
+At it's most basic, a custom check function should:
+
+- take in a set of inputs to be validated
+- evaluate whether a condition is met
+- return an appropriate check condition object
+
+In addition, if the check condition is not met, it's also helpful to capture any details that can guide users towards specifics of the failure and how to fix it
+
+In general, `hubValidations` check functions evaluate conditions with respect to one or more of the following:
+
+- Model output submission files
+- Model output submission file content (i.e data)
+- Model metadata files
+
+## `create_custom_check()` for creating custom check function templates
+
+To help you get started on the right path, we also provide function `create_custom_check()` for creating a basic custom check function from a template. 
+
+The function requires a name for the new custom check function, e.g. `"example_check"`. It then creates an `.R` script file named after the function (`example_check.R`) and saves it in the hub at the recommended location: `src/validations/R/`. The script contains basic skeleton code to create a custom check function called `example_check`.
+
+The output of `create_custom_check()` can also be parametarised through a number of arguments to include additional template code snippets (see below for examples).
+
+Let's take a look at the basic structure of a custom check function created by `create_custom_check()`.
+
+We'll start by creating a temporary "hub" for us to work in, but if you have an existing hub, you can work in there.
+
+```{r}
+hub_path <- withr::local_tempdir()
+
+create_custom_check("cstm_check_tbl_basic",
+  hub_path = hub_path
+)
+```
+
+The contents of the created file at `src/validations/R/cstm_check_tbl_basic.R` are as follows:
+
+
+```{r, code=readLines(r_path(hub_path, "cstm_check_tbl_basic")), eval=FALSE, comment=NA}
+```
+
+
+<div class="alert alert-info" role="alert">
+
+### **Function naming conventions**
+
+We recommend following the naming conventions used in `hubValidations`.
+
+To distinguish `hubValidations` package functions from custom ones, we recommend prefixing custom function names with an additional prefix, e.g. `cstm_` or `cs`.
+
+- `cstm_check_file_*` for checks that operate on model output files (e.g. file location, name etc).
+- `cstm_check_tbl_*` for checks that operate on a tibble of model output data (i.e. the contents of a file).
+- `cstm_check_meta_*` for checks that operate on model metadata files.
+- `cstm_check_submission_*` for checks that operate on high level properties of the submission (e.g. timing).
+- `cstm_check_config_*` for checks that operate on the hub configuration files.
+- `cstm_check_valid_*` for checks that don't fit into the above categories.
+
+Neither of these recommendations are required for custom functions to work, but consistency is an important aspect of maintaining a hub. 
+
+
+</div>
+
+
+## Function inputs / arguments
+
+The minimum inputs required by a custom check function depend on the type of check being performed.
+
+- **`file_path`**: the relative path to the submission file being validated is required for all check functions. **`file_path` must therefore be included as an argument** in all custom check function.
+- **`tbl`** or **`tbl_chr`**: a **tibble representation of the contents of a model output** submission—with column data types matching the hub schema (`tbl`) or an all character version (`tbl_chr`)—is also **required by any checks that operate on the data** in the submission file.
+
+Since `file_path` and `tbl` are the most common inputs to check functions, `create_custom_check()` includes them as arguments by default. This means that the **custom check function will include these objects in the function call environment by default**. 
+
+<div class="alert alert-warning" role="alert">
+
+Keep in mind that **`tbl` and `tbl_chr` are only available when calling `validate_model_data()`**, but not in `validate_model_metadata()` or `validate_model_file()`. Therefore, the default `create_custom_check()` function is designed for checks run by `validate_model_data()`. 
+
+**If you're not running your custom check with `validate_model_data()`, you should remove `tbl` from the function arguments**. If your custom check not run by `validate_model_data()` needs the model output file contents, you can use `hubValidations::read_model_out_file(file_path)` within your function body to read it.
+
+</div>
+
+In addition to these, custom check functions can also have additional arguments for inputs required by the check. Some of these inputs **are available in the check caller environment** and can be passed automatically to a custom check function by including an argument with the same name as the input object required in the custom function formals. Other inputs can be passed explicitly to function arguments through [the functions `args` field](deploying-custom-functions#validations-yml-structure) when configuring the `validations.yml` file.
+
+### Arguments available in the caller environment 
+
+```{r child="children/_custom-fn-available-args.Rmd", echo=FALSE, results="asis"}
+```
+
+<div class="alert alert-info" role="alert">
+
+Note that, when writing custom functions, these objects **do not all need to be specified as arguments** in the function definition. **Only the ones that your custom function actually requires as inputs**.
+
+</div>
+
+### Additional arguments
+
+You can add additional arguments to custom check functions and pass values to them by including them in the `args` configuration in the `validations.yml` file. These values are passed to the custom check function by `hubValidations` when the function is called.
+
+
+If you do add additional arguments to a custom check function, you should also add input  checks at the start of the function to ensure inputs are valid. [The `checkmate` package](https://mllg.github.io/checkmate/) contains a wide range of functions for checking inputs.
+
+For example, the optional check `opt_check_tbl_col_timediff()` (which is deployed in exactly the same fashion as custom functions, i.e. through the `validations.yml` file) takes additional arguments `t0_colname`, `t1_colname` and `timediff`. 
+
+
+```{r, comment = NA}
+opt_check_tbl_col_timediff
+```
+
+
+You can add an example extra argument with `extra_args = TRUE` when creating the custom check function with `create_custom_check()`.
+
+```{r}
+create_custom_check("cstm_check_tbl_args",
+  hub_path = hub_path,
+  extra_args = TRUE
+)
+```
+
+This adds an extra example argument `extra_arg` to the custom check function formals as well as an example input check to the top of the function body.
+
+```{r, code=readLines(r_path(hub_path, "cstm_check_tbl_args")), eval=FALSE, comment=NA}
+```
+
+
+## Function output
+
+### Capturing and returning check results with `capture_check_cnd()`
+
+The `capture_check_cnd()` function is used to return a check condition (success, failure, or error) and it's output is what a custom check function should return in most cases (see below for exception). The function returns a `<hub_check>` class object depending on the value passed to the `check` argument, which represents the summary of the condition being checked by a given validation function. 
+
+If the value passed to `check ` is `TRUE`, the function returns a `<message/check_success>` class object. 
+
+If the value is `FALSE`, the output depends on the `error` argument.  
+
+
+- If `error` is `FALSE` (the default), the function returns a `<error/check_failure>` class object, which indicates the check has failed.
+- If `error` is `TRUE`, the function returns a `<error/check_error>` class object, which indicates the check has failed and additionally causes execution of further custom validation functions to halt. Set `error = TRUE` if downstream checks cannot be run if the current check fails.
+
+```{r}
+create_custom_check("cstm_check_tbl_error",
+  hub_path = hub_path, error = TRUE
+)
+```
+
+```{r, code=readLines(r_path(hub_path, "cstm_check_tbl_error")), eval=FALSE, comment=NA}
+```
+
+
+### Skipping checks and returning a message with `capture_check_info()`
+
+
+Sometimes a check function might not always be applicable and a pre-condition needs to be met before the main check itself is performed. **If the pre-condition is not met, the check is usually skipped**. 
+
+**For such checks, the function should return a `<message/check_info>` object**, generated by the `capture_check_info()` function. Use the `msg` argument to explain that a check was skipped and why.
+
+
+```{r}
+capture_check_info(
+  "modelA-teamA/2024-09-12-modelA-teamA",
+  "Condition for running this check was not met. Skipped."
+)
+```
+
+For example, the `check_tbl_value_col_ascending()` check function which validates that values are ascending when arranged by increasing `output_type_id` order is only applicable to `cdf` and `quantile` output types. Before proceeding with the main check, the function first checks whether the model output `tbl` contains data for `cdf` and `quantile` output types. If not, the check is skipped.
+
+```{r, comment = NA}
+check_tbl_value_col_ascending
+```
+
+
+You can add a pre-condition check block of code with argument `conditional = TRUE` when creating the custom check function with `create_custom_check()`.
+
+```{r}
+create_custom_check("cstm_check_tbl_skip",
+  hub_path = hub_path,
+  conditional = TRUE
+)
+```
+
+
+```{r, code=readLines(r_path(hub_path, "cstm_check_tbl_skip")), eval=FALSE, comment=NA}
+```
+
+
+## Loading config files
+
+Many checks are conditioned against information stored in hub configuration files and these are often read in at the start of the custom check function.
+
+The easiest way to make hub configuration information available within your function is to pass the `hub_path` caller environment object by specifying it as a function argument and then use `hubUtils::read_config(hub_path)` to read in the `tasks.json` configuration file.
+
+You can add a `config = TRUE` argument when creating the custom check function with `create_custom_check()` to include the `hub_path` argument and insert a code snippet in you custom check function skeleton that reads in the `tasks.json` hub configuration file.
+
+
+```{r}
+create_custom_check("cstm_check_tbl_config",
+  hub_path = hub_path,
+  config = TRUE
+)
+```
+
+
+```{r, code=readLines(r_path(hub_path, "cstm_check_tbl_config")), eval=FALSE, comment=NA}
+```
+
+
+## Custom function dependencies
+
+When writing your functions you might want to use functions from other packages. 
+
+
+```{r child="children/_add-deps-source.Rmd", echo=FALSE, results="asis"}
+```
+
+ 
+## Managing custom check functions as a package
+
+The simplest way to manage custom check functions is to store them as scripts in the `src/validations/R` directory in the root of the hub and source them during validation by specifying the path to a custom functions file via the `source:` property in `validations.yml`.
+
+Alternatively, you could **manage your custom functions as a package**. 
+
+You can easily [turn the contents of `src/validations` into a local `validations` R package](https://r-pkgs.org/whole-game.html#create_package) with:
+
+```{r, eval=FALSE}
+usethis::create_package("src/validations", open = FALSE)
+```
+
+This would allow you to:
+
+- Make your functions available locally by users who could use `pak::local_install("src/validations")` in the hub root to install the `validations` package.
+- [Manage additional dependencies](https://r-pkgs.org/description.html#sec-description-imports-suggests) required by your custom functions formally through the `DESCRIPTION` file.
+- [Formally test your custom functions](https://r-pkgs.org/testing-basics.html) using `testthat` tests in the `tests/testthat` directory.
+
+
+```{r child="children/_add-deps-pkg.Rmd", echo=FALSE, results="asis"}
+```
+
+If you want to share custom functions across multiple hubs, you could even consider separating them into a standalone package and hosting them on GitHub.

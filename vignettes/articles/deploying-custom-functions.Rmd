@@ -1,5 +1,5 @@
 ---
-title: "Include custom validation functions"
+title: "Deploying custom validation functions"
 ---
 
 ```{r, include = FALSE}
@@ -17,7 +17,7 @@ library(hubValidations)
 Custom validation functions can be included and configured within standard `hubValidation` workflows by **including a `validations.yml` file in the `hub-config` directory**. Alternatively, an appropriately structured file can be included at a different location and the path to the file provided through argument `validations_cfg_path`.
 
 `hubValidations` uses the [`config`](https://rstudio.github.io/config/articles/inheritance.html) package to get validation configuration. This allows for configuration inheritance and the ability to include executable R code. 
-See the `confog` package vignette on [inheritance and R expressions](https://rstudio.github.io/config/articles/inheritance.html) for more details.
+See the `config` package vignette on [inheritance and R expressions](https://rstudio.github.io/config/articles/inheritance.html) for more details.
 
 ## `validations.yml` structure
 
@@ -34,37 +34,24 @@ Within the default configuration, individual checks can be configured for each o
         - **`fn`:** The name of the check function to be run, as character string (required).
         - **`pkg`:** The name of the package namespace from which to get check function. Must be supplied if function is distributed as part of a package.
         - **`source:`** Path to `.R` script containing function code to be sourced. If relative, should be relative to the hub's directory root. Must be supplied if function is not part of a package and only exists as a script.
-        - **`args`:** A yaml dictionary of key/value pairs or arguments to be passed to the custom function. Values can be yaml lists or even executable R code (optional).
+        - **`args`:** A yaml dictionary of key/value pairs of arguments and their values to be passed to the custom function. Values can be yaml lists or even executable R code (optional).
         
-Note that each of the `validate_*()` functions contain a standard objects in their call environment which are passed automatically to any custom check function and therefore do not need including in the `args` configuration. 
 
-- **`validate_model_file`:**
-  - `file_path`: character string of path to file being validated relative to the `model-output` directory.
-  - `hub_path`: character string of path to hub.
-  - `round_id`: character string of `round_id`
-  - `file_meta`: named list containing `round_id`, `team_abbr`, `model_abbr` and `model_id` details.
-- **`validate_model_data`:** 
-  - `tbl`: a tibble of the model output data being validated.
-  - `file_path`: character string of path to file being validated relative to the `model-output` directory.
-  - `hub_path`: character string of path to hub.
-  - `round_id`: character string of `round_id`
-  - `file_meta`: named list containing `round_id`, `team_abbr`, `model_abbr` and `model_id` details.
-  - `round_id_col`: character string of name of `tbl` column containing `round_id` information.
-- **`validate_model_metadata`:** 
-  - `file_path`: character string of path to file being validated relative to the `model-output` directory.
-  - `hub_path`: character string of path to hub.
-  - `round_id`: character string of `round_id`
-  - `file_meta`: named list containing `round_id`, `team_abbr`, `model_abbr` and `model_id` details.
+```{r child="children/_custom-fn-available-args.Rmd", echo=FALSE, results="asis"}
+```
 
-The `args` configuration can be used to override objects from the caller environment as well as defaults.
+#### Deploying optional `hubValidations` functions
 
+Here's an example configuration for a single optional `hubValidations` check, `opt_check_tbl_horizon_timediff()`, which checks that the temporal difference between the values in two date columns (defined by additional arguments `t0_colname` & `t1_colname`) is equal to a time period defined by horizon values (contained in a column defined by `horizon_colname`) and the length of a single horizon defined by argument `timediff`.
 
-Here's an example configuration for a single check (`opt_check_tbl_horizon_timediff()`) to be run as part of the `validate_model_data()` validation function which checks the content of the model data submission files.
+The check is to be run as part of the `validate_model_data()` validation function which checks the content of the model data submission files.
 
 ```{r, eval=FALSE, code=readLines(system.file('testhubs/flusight/hub-config/validations.yml', package = 'hubValidations'))}
 ```
 
-The above configuration file relies on default values for arguments `horizon_colname` (`"horizon"`) and `timediff` (`lubridate::weeks()`). We can use the `validations.yml` `args` list to override the default values. Here's an example that includes **executable r code** as the value of an argument.
+The above configuration file relies on default values for arguments `horizon_colname` (`"horizon"`) and `timediff` (`lubridate::weeks()`). We can **use the `validations.yml` `args` list to override the `horizon_colname` and `timediff` argument default values**. 
+
+In this example, we **also include executable r code** as the value of the `timediff` argument.
 
 ```
 default:
@@ -78,6 +65,19 @@ default:
           horizon_colname: "horizons"
           timediff: !expr lubridate::weeks(2)
 ```
+
+#### Deploying custom functions
+
+The above example involved an optional `hubValidation` function. To deploy a custom function that is not part of the `hubValidations` or any other package, you should store the script containing the function in the `src/validations/R/` directory (relative to the root of your hub) and include the path to the script in the `source` argument in the configuration file.
+
+```
+default:
+    validate_model_data:
+      custom_check:
+        fn: "cstm_check_tbl_example"
+        source: "src/validations/R/cstm_check_tbl_example.R"
+```
+
 
 ### Round specific configuration
 
@@ -159,6 +159,12 @@ arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")
 ```
 
 
-## Managing dependencies of custom sourced functions
+# Managing dependencies of custom functions
 
-TODO
+If any custom functions you are deploying depend on additional packages, you will need to ensure these packages are available during validation. 
+
+```{r child="children/_add-deps-source.Rmd", echo=FALSE, results="asis"}
+```
+
+```{r child="children/_add-deps-pkg.Rmd", echo=FALSE, results="asis"}
+```

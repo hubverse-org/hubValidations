@@ -1,5 +1,9 @@
 # hubValidations (development version)
 
+* Added:
+  - new vignette on how to create custom validation checks for hub validations (#121) 
+  - new section on how to manage additional dependencies required by custom validation functions (#22).
+
 # hubValidations 0.7.0
 
 * Added function `create_custom_check()` for creating custom validation check function files from templates (#121).
