@@ -41,7 +41,7 @@
       get_file_round_id(file_path = "team1-goodmodel/2022-10-08-team-1-goodmodel.csv")
     Condition
       Error in `parse_file_name()`:
-      ! Could not parse file name '2022-10-08-team-1-goodmodel' for submission metadata. Please consult documentation for file name requirements for correct metadata parsing.
+      ! Could not parse file name '2022-10-08-team-1-goodmodel' for submission metadata. Please consult documentation for file name requirements (<https://hubverse.io/en/latest/user-guide/model-output.html#directory-structure>) for correct metadata parsing.
 
 # get_file_* utils work
 

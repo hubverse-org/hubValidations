@@ -334,7 +334,7 @@
       validate_model_data(hub_path, file_path = "random-path.csv")
     Condition
       Error in `parse_file_name()`:
-      ! Could not parse file name 'random-path' for submission metadata. Please consult documentation for file name requirements for correct metadata parsing.
+      ! Could not parse file name 'random-path' for submission metadata. Please consult documentation for file name requirements (<https://hubverse.io/en/latest/user-guide/model-output.html#directory-structure>) for correct metadata parsing.
 
 # validate_model_data with v3 sample data works
 

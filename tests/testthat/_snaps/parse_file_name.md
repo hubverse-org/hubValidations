@@ -88,7 +88,7 @@
       parse_file_name("hubBaseline.yml", file_type = "model_metadata")
     Condition
       Error in `parse_file_name()`:
-      ! Could not parse file name 'hubBaseline' for submission metadata. Please consult documentation for file name requirements for correct metadata parsing.
+      ! Could not parse file name 'hubBaseline' for submission metadata. Please consult documentation for file name requirements (<https://hubverse.io/en/latest/user-guide/model-output.html#directory-structure>) for correct metadata parsing.
 
 # parse_file_name fails correctly
 
@@ -96,7 +96,7 @@
       parse_file_name("model-output/team1-goodmodel/2022-10-08-team1_goodmodel.csv")
     Condition
       Error in `parse_file_name()`:
-      ! Could not parse file name '2022-10-08-team1_goodmodel' for submission metadata. Please consult documentation for file name requirements for correct metadata parsing.
+      ! Could not parse file name '2022-10-08-team1_goodmodel' for submission metadata. Please consult documentation for file name requirements (<https://hubverse.io/en/latest/user-guide/model-output.html#directory-structure>) for correct metadata parsing.
 
 # parse_file_name ignores compression extensions
 
@@ -118,9 +118,6 @@
       
       $ext
       [1] "parquet"
-      
-      $compression_ext
-      [1] "gzip"
       
 
 ---
@@ -144,9 +141,6 @@
       $ext
       [1] "parquet"
       
-      $compression_ext
-      [1] "gz"
-      
 
 ---
 
@@ -169,9 +163,6 @@
       $ext
       [1] "parquet"
       
-      $compression_ext
-      [1] "snappy"
-      
 
 ---
 
@@ -180,5 +171,5 @@
         "model-output/team1-goodmodel/2022-10-08-team1-goodmodel.gzipr.parquet")
     Condition
       Error in `parse_file_name()`:
-      ! Could not parse file name '2022-10-08-team1-goodmodel.gzipr' for submission metadata. Please consult documentation for file name requirements for correct metadata parsing.
+      ! Could not parse file name '2022-10-08-team1-goodmodel.gzipr' for submission metadata. Please consult documentation for file name requirements (<https://hubverse.io/en/latest/user-guide/model-output.html#directory-structure>) for correct metadata parsing.
 

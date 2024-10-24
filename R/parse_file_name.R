@@ -28,7 +28,6 @@
 parse_file_name <- function(file_path, file_type = c("model_output", "model_metadata")) {
   file_type <- rlang::arg_match(file_type)
   checkmate::assert_string(file_path)
-  file_name <- tools::file_path_sans_ext(basename(file_path))
 
   split_pattern <- stringr::regex(
     "([[:digit:]]{4}-[[:digit:]]{2}-[[:digit:]]{2})|[a-z_0-9]+",
@@ -39,10 +38,13 @@ parse_file_name <- function(file_path, file_type = c("model_output", "model_meta
     paste0(compress_codec, collapse = "|"),
     ")$"
   )
+  file_name <- tools::file_path_sans_ext(basename(file_path)) |>
+    # remove compression extension before validating and splitting
+    stringr::str_remove(compress_regex)
+
   split_res <- unlist(
     stringr::str_extract_all(
-      # remove compression extension before splitting
-      stringr::str_remove(file_name, compress_regex),
+      file_name,
       split_pattern
     )
   )
@@ -53,8 +55,9 @@ parse_file_name <- function(file_path, file_type = c("model_output", "model_meta
   if (length(split_res) != exp_n) {
     cli::cli_abort(
       "Could not parse file name {.path {file_name}} for submission metadata.
-      Please consult documentation for file name requirements for correct
-      metadata parsing."
+      Please consult
+      {.href [documentation for file name requirements
+      ](https://hubverse.io/en/latest/user-guide/model-output.html#directory-structure)} for correct metadata parsing."
     )
   }
   if (file_type == "model_metadata") {
