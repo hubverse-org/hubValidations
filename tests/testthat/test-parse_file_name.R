@@ -56,6 +56,20 @@ test_that("parse_file_name fails correctly", {
     ),
     error = TRUE
   )
+  # Correctly detects invalid characters
+  expect_snapshot(
+    parse_file_name(
+      "model-output/team1-goodmodel/2022-10-08-team1_goodmodel .csv"
+    ),
+    error = TRUE
+  )
+  expect_snapshot(
+    parse_file_name(
+      "model-output/team1-goodmodel/2022-10-08-team1_goodmodel*.csv"
+    ),
+    error = TRUE
+  )
+
   expect_error(
     parse_file_name(
       "model-output/team1-goodmodel/round_1-team1-good-model.parquet"

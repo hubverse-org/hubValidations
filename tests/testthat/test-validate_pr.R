@@ -190,11 +190,13 @@ test_that("validate_pr works on valid PR using v2.0.0 schema and old orgname", {
     branch = "pr-valid"
   )
 
-  checks <- validate_pr(
-    hub_path = temp_hub,
-    gh_repo = "hubverse-org/ci-testhub-simple-old-orgname",
-    pr_number = 1,
-    skip_submit_window_check = TRUE
+  checks <- suppressMessages(
+    validate_pr(
+      hub_path = temp_hub,
+      gh_repo = "hubverse-org/ci-testhub-simple-old-orgname",
+      pr_number = 1,
+      skip_submit_window_check = TRUE
+    )
   )
 
   expect_snapshot(str(checks))
