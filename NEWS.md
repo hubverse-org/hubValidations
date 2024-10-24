@@ -1,9 +1,11 @@
 # hubValidations 0.7.1
 
-* Added:
+* Updated documentation for custom validations:
   - new vignette on how to create custom validation checks for hub validations (#121) 
   - new section on how to manage additional dependencies required by custom validation functions (#22).
-* Bolstered parsing of file names in `parse_file_name()` to ensure they match the specific pattern required rather than just checking patterns of interest are extracted successfully and added more fine-grained check error messages  (#132).
+* Bolstered parsing of file names in`parse_file_name()`:
+  - ensure filenames are composed of letters, numbers, and underscores (#132).
+  - added more fine-grained check error messages to identify portion of file name that errored.
 
 # hubValidations 0.7.0
 
