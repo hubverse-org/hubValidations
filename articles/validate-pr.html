@@ -26,7 +26,7 @@
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/hubverse-org/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubValidations</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,7 +51,9 @@
     <li><h6 class="dropdown-header" data-toc-skip>Validation for submitting teams</h6></li>
     <li><a class="dropdown-item" href="../articles/validate-submission.html">Validating submissions locally</a></li>
     <li><hr class="dropdown-divider"></li>
-    <li><a class="dropdown-item" href="../articles/custom-functions.html">Including custom validation functions</a></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Custom validation checks</h6></li>
+    <li><a class="dropdown-item" href="../articles/writing-custom-fns.html">Writing custom validation functions</a></li>
+    <li><a class="dropdown-item" href="../articles/deploying-custom-functions.html">Deploying custom validation functions</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -90,10 +92,10 @@ output and model metadata files are individually validated using
 <code><a href="../reference/validate_model_metadata.html">validate_model_metadata()</a></code> respectively on each file
 according to file type (<em>See the end of this article for details of
 the standard checks performed on each file. For more information on
-deploying optional or custom functions please check the article on <a href="articles/custom-functions.html">including custom functions</a>
-(<code>vignette("custom-functions")</code>)</em>). As part of checks,
-however, hub config files are also validated. Any other files included
-in the PR are ignored but flagged in a message.</p>
+deploying optional or custom functions please check the article on <a href="deploying-custom-functions.html">including custom functions</a>
+(<code><a href="../articles/deploying-custom-functions.html">vignette("articles/deploying-custom-functions")</a></code>)</em>). As
+part of checks, however, hub config files are also validated. Any other
+files included in the PR are ignored but flagged in a message.</p>
 <div class="section level3">
 <h3 id="deploying-validate_pr-though-a-github-action-workflow">Deploying <code>validate_pr()</code> though a GitHub Action
 workflow<a class="anchor" aria-label="anchor" href="#deploying-validate_pr-though-a-github-action-workflow"></a>
@@ -182,7 +184,7 @@ to ensure that the values of derived task IDs are correctly derived from
 other task IDs through custom checks</strong>. For example, the values
 of <code>target_end_date</code> can be checked by deploying optional
 check <code><a href="../reference/opt_check_tbl_horizon_timediff.html">opt_check_tbl_horizon_timediff()</a></code>. See the article on
-<a href="articles/custom-functions.html">including custom functions</a>
+<a href="deploying-custom-functions.html">including custom functions</a>
 for more information.</p>
 </div>
 </div>
@@ -568,7 +570,7 @@ summarising the results of checks that failed, argument
 </h2>
 <p>For details on the structure of <code>&lt;hub_validations&gt;</code>
 objects, including on how to access more information about specific
-checks, see <code>vignette("hub-validations-class")</code>.</p>
+checks, see <code><a href="../articles/hub-validations-class.html">vignette("articles/hub-validations-class")</a></code>.</p>
 <div class="section level3">
 <h3 id="checks-on-model-output-files">Checks on model output files<a class="anchor" aria-label="anchor" href="#checks-on-model-output-files"></a>
 </h3>
@@ -1150,8 +1152,8 @@ check_error
 </h4>
 <p>The standard checks discussed here are the checks deployed by default
 by the <code>validate_pr</code> function. For more information on
-deploying optional or custom functions please check the article on <a href="articles/custom-functions.html">including custom functions</a>
-(<code>vignette("custom-functions")</code>).</p>
+deploying optional or custom functions please check the article on <a href="deploying-custom-functions.html">deploying custom functions</a>
+(<code><a href="../articles/deploying-custom-functions.html">vignette("articles/deploying-custom-functions")</a></code>).</p>
 </div>
 </div>
 </div>
