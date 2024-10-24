@@ -83,7 +83,8 @@ validate_filename_contents <- function(file_name, call = rlang::caller_env()) {
   invalid_contents <- isFALSE(grepl(pattern, file_name))
 
   if (invalid_contents) {
-    invalid_char <- stringr::str_remove_all(file_name, "[A-Za-z0-9_-]+") |>
+
+    invalid_char <- stringr::str_remove_all(file_name, "[A-Za-z0-9_-]+") |> # nolint: object_usage_linter
       strsplit("") |>
       unlist() |>
       unique()
@@ -105,12 +106,14 @@ validate_filename_pattern <- function(file_name, file_type,
     model_metadata = "^([A-Za-z0-9_]+)-([A-Za-z0-9_]+)$"
   )
 
-  expected_pattern <- switch(file_type,
+
+  expected_pattern <- switch(file_type, # nolint: object_usage_linter
     model_output = "[round_id]-[team_abbr]-[model_abbr]",
     model_metadata = "[team_abbr]-[model_abbr]"
   )
 
-  info_url <- switch(file_type,
+
+  info_url <- switch(file_type, # nolint: object_usage_linter
     model_output = "https://hubverse.io/en/latest/user-guide/model-output.html#directory-structure",
     model_metadata = "https://hubverse.io/en/latest/user-guide/model-metadata.html#directory-structure"
   )
