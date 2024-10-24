@@ -1,4 +1,4 @@
-# hubValidations (development version)
+# hubValidations 0.7.1
 
 * Added:
   - new vignette on how to create custom validation checks for hub validations (#121) 
