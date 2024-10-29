@@ -32,13 +32,12 @@
 # execute_custom_checks sourcing functions from scripts works
 
     Code
-      test_custom_checks_caller(validations_cfg_path = testthat::test_path("testdata",
-        "config", "validations-src.yml"))
+      print(res)
     Message
       
       -- 2023-05-08-hub-ensemble.parquet ----
       
-      i [src_check_works]: Sourcing custom functions WORKS! Also "Extra arguments passed"!!
+      i [check_1]: Sourcing custom functions WORKS! Also "Extra arguments passed"!!
 
 # execute_custom_checks return early when appropriate
 
