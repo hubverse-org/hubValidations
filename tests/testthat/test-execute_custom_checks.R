@@ -24,6 +24,17 @@ test_that("execute_custom_checks works", {
   )
 })
 
+test_that("execute_custom_checks works from a separate directory", {
+  tmp <- withr::local_tempdir()
+  hub <- stand_up_custom_check_hub(new_path = tmp)
+
+  expect_no_error({
+    withr::with_tempdir({
+      test_custom_checks_caller(hub_path = hub)
+    })
+  })
+})
+
 test_that("execute_custom_checks sourcing functions from scripts works", {
 
   expect_snapshot(
