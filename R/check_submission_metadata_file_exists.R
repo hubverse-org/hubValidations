@@ -38,6 +38,6 @@ check_submission_metadata_file_exists <- function(file_path, hub_path = ".") {
     msg_subject = "Metadata file",
     msg_attribute = msg_attribute,
     msg_verbs = c("exists", "does not exist"),
-    error = TRUE
+    error = FALSE
   )
 }

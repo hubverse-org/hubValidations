@@ -63,6 +63,10 @@ test_that("validate_pr flags modifications and deletions in PR", {
     branch = "test-mod-del"
   )
 
+  # This checks that removed metadata and model-output files are detected and
+  # flagged as check errors.
+  # It also checks that missing metadata files do not cause early return
+  # of submission validation of model output file.
   mod_checks_error <- suppressMessages(
     validate_pr(
       hub_path = temp_hub,
@@ -90,6 +94,10 @@ test_that("validate_pr flags modifications and deletions in PR", {
     )
   )
 
+  # This checks that removed metadata and model-output files are detected and
+  # flagged as check failure.
+  # It also checks that missing metadata files do not cause early return
+  # of submission validation of model output file.
   mod_checks_warn <- suppressMessages(
     validate_pr(
       hub_path = temp_hub,
