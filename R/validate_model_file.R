@@ -91,9 +91,6 @@ validate_model_file <- function(hub_path, file_path,
       file_path = file_path
     ), file_path
   )
-  if (is_any_error(checks$metadata_exists)) {
-    return(checks)
-  }
 
   custom_checks <- execute_custom_checks(validations_cfg_path = validations_cfg_path)
   checks <- combine(checks, custom_checks)
