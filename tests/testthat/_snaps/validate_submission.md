@@ -1214,3 +1214,85 @@
       Task ID combinations of non compound task id values consistent across modeling task samples.
       
 
+# validate_submission returns check_failure when duplicate files per round exist
+
+    Code
+      str(dup_model_out_val)
+    Output
+      Classes 'hub_validations', 'list'  hidden list of 10
+       $ file_exists       :List of 4
+        ..$ message       : chr "File exists at path 'model-output/team1-goodmodel/2022-10-08-team1-goodmodel.csv'. \n "
+        ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+        ..$ call          : chr "check_file_exists"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ file_name         :List of 4
+        ..$ message       : chr "File name \"2022-10-08-team1-goodmodel.csv\" is valid. \n "
+        ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+        ..$ call          : chr "check_file_name"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ file_location     :List of 4
+        ..$ message       : chr "File directory name matches `model_id`\n                                           metadata in file name. \n "
+        ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+        ..$ call          : chr "check_file_location"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ round_id_valid    :List of 4
+        ..$ message       : chr "`round_id` is valid. \n "
+        ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+        ..$ call          : chr "check_valid_round_id"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ file_format       :List of 4
+        ..$ message       : chr "File is accepted hub format. \n "
+        ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+        ..$ call          : chr "check_file_format"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ file_n            :List of 6
+        ..$ message       : chr "Number of accepted model output files per round exceeded.  \n Should be 1 but  pre-existing round\n    submissi"| __truncated__
+        ..$ trace         : NULL
+        ..$ parent        : NULL
+        ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+        ..$ call          : chr "check_file_n"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_error" "error" ...
+       $ metadata_exists   :List of 4
+        ..$ message       : chr "Metadata file exists at path 'model-metadata/team1-goodmodel.yaml'. \n "
+        ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+        ..$ call          : chr "check_submission_metadata_file_exists"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ file_read         :List of 4
+        ..$ message       : chr "File could be read successfully. \n "
+        ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+        ..$ call          : chr "check_file_read"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ valid_round_id_col:List of 6
+        ..$ message       : chr "`round_id_col` name must be valid. \n Must be one of\n                                      \"location\", \"ref"| __truncated__
+        ..$ trace         : NULL
+        ..$ parent        : NULL
+        ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+        ..$ call          : chr "check_valid_round_id_col"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_error" "error" ...
+       $ unique_round_id   :List of 6
+        ..$ message       : chr "`round_id_col` name must be valid. \n Must be one of\n                                      \"location\", \"ref"| __truncated__
+        ..$ trace         : NULL
+        ..$ parent        : NULL
+        ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+        ..$ call          : chr "check_tbl_unique_round_id"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_error" "hub_check" "rlang_error" "error" ...
+
+---
+
+    Code
+      dup_model_out_val[["file_n"]]
+    Output
+      <error/check_failure>
+      Error:
+      ! Number of accepted model output files per round exceeded.  Should be 1 but pre-existing round submission file "team1-goodmodel/2022-10-08-team1-goodmodel.parquet" found in team directory.
+
