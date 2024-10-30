@@ -4,7 +4,7 @@
       str(validate_submission(hub_path, file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv",
         skip_submit_window_check = TRUE, skip_check_config = TRUE))
     Output
-      List of 18
+      List of 19
        $ file_exists       :List of 4
         ..$ message       : chr "File exists at path 'model-output/team1-goodmodel/2022-10-08-team1-goodmodel.csv'. \n "
         ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
@@ -33,6 +33,12 @@
         ..$ message       : chr "File is accepted hub format. \n "
         ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
         ..$ call          : chr "check_file_format"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ file_n            :List of 4
+        ..$ message       : chr "Number of accepted model output files per round met.  \n "
+        ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+        ..$ call          : chr "check_file_n"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ metadata_exists   :List of 4
@@ -146,7 +152,7 @@
       str(validate_submission(hub_path, file_path = "team1-goodmodel/2022-10-15-hub-baseline.csv",
         skip_submit_window_check = TRUE, skip_check_config = TRUE))
     Output
-      Classes 'hub_validations', 'list'  hidden list of 10
+      Classes 'hub_validations', 'list'  hidden list of 11
        $ file_exists       :List of 4
         ..$ message       : chr "File exists at path 'model-output/team1-goodmodel/2022-10-15-hub-baseline.csv'. \n "
         ..$ where         : chr "team1-goodmodel/2022-10-15-hub-baseline.csv"
@@ -177,6 +183,12 @@
         ..$ message       : chr "File is accepted hub format. \n "
         ..$ where         : chr "team1-goodmodel/2022-10-15-hub-baseline.csv"
         ..$ call          : chr "check_file_format"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ file_n            :List of 4
+        ..$ message       : chr "Number of accepted model output files per round met.  \n "
+        ..$ where         : chr "team1-goodmodel/2022-10-15-hub-baseline.csv"
+        ..$ call          : chr "check_file_n"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ metadata_exists   :List of 4
@@ -219,7 +231,7 @@
         round_id_col = "random_col", skip_submit_window_check = TRUE,
         skip_check_config = TRUE))
     Output
-      Classes 'hub_validations', 'list'  hidden list of 9
+      Classes 'hub_validations', 'list'  hidden list of 10
        $ file_exists       :List of 4
         ..$ message       : chr "File exists at path 'model-output/team1-goodmodel/2022-10-08-team1-goodmodel.csv'. \n "
         ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
@@ -248,6 +260,12 @@
         ..$ message       : chr "File is accepted hub format. \n "
         ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
         ..$ call          : chr "check_file_format"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ file_n            :List of 4
+        ..$ message       : chr "Number of accepted model output files per round met.  \n "
+        ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+        ..$ call          : chr "check_file_n"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ metadata_exists   :List of 4
@@ -285,7 +303,7 @@
       str(validate_submission(hub_path, file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv",
         skip_submit_window_check = TRUE))
     Output
-      List of 19
+      List of 20
        $ valid_config      :List of 4
         ..$ message       : chr "All hub config files are valid. \n "
         ..$ where         : chr "simple"
@@ -320,6 +338,12 @@
         ..$ message       : chr "File is accepted hub format. \n "
         ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
         ..$ call          : chr "check_file_format"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ file_n            :List of 4
+        ..$ message       : chr "Number of accepted model output files per round met.  \n "
+        ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+        ..$ call          : chr "check_file_n"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ metadata_exists   :List of 4
@@ -445,7 +469,7 @@
       str(validate_submission(hub_path = test_path("testdata/hub"), file_path = "hub-baseline/2023-04-24-hub-baseline.csv",
       skip_submit_window_check = TRUE))
     Output
-      List of 19
+      List of 20
        $ valid_config      :List of 4
         ..$ message       : chr "All hub config files are valid. \n "
         ..$ where         : chr "hub"
@@ -480,6 +504,12 @@
         ..$ message       : chr "File is accepted hub format. \n "
         ..$ where         : chr "hub-baseline/2023-04-24-hub-baseline.csv"
         ..$ call          : chr "check_file_format"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ file_n            :List of 4
+        ..$ message       : chr "Number of accepted model output files per round met.  \n "
+        ..$ where         : chr "hub-baseline/2023-04-24-hub-baseline.csv"
+        ..$ call          : chr "check_file_n"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ metadata_exists   :List of 4
@@ -578,7 +608,7 @@
       str(validate_submission(hub_path = test_path("testdata/hub-nul"), file_path = "team-model/2023-11-26-team-model.parquet",
       skip_submit_window_check = TRUE))
     Output
-      List of 19
+      List of 20
        $ valid_config      :List of 4
         ..$ message       : chr "All hub config files are valid. \n "
         ..$ where         : chr "hub-nul"
@@ -613,6 +643,12 @@
         ..$ message       : chr "File is accepted hub format. \n "
         ..$ where         : chr "team-model/2023-11-26-team-model.parquet"
         ..$ call          : chr "check_file_format"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ file_n            :List of 4
+        ..$ message       : chr "Number of accepted model output files per round met.  \n "
+        ..$ where         : chr "team-model/2023-11-26-team-model.parquet"
+        ..$ call          : chr "check_file_n"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ metadata_exists   :List of 4
@@ -711,7 +747,7 @@
       str(validate_submission(hub_path = test_path("testdata/hub-nul"), file_path = "team-model/2023-11-19-team-model.parquet",
       skip_submit_window_check = TRUE))
     Output
-      List of 19
+      List of 20
        $ valid_config      :List of 4
         ..$ message       : chr "All hub config files are valid. \n "
         ..$ where         : chr "hub-nul"
@@ -746,6 +782,12 @@
         ..$ message       : chr "File is accepted hub format. \n "
         ..$ where         : chr "team-model/2023-11-19-team-model.parquet"
         ..$ call          : chr "check_file_format"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ file_n            :List of 4
+        ..$ message       : chr "Number of accepted model output files per round met.  \n "
+        ..$ where         : chr "team-model/2023-11-19-team-model.parquet"
+        ..$ call          : chr "check_file_n"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ metadata_exists   :List of 4
@@ -957,7 +999,7 @@
       file_path = "flu-base/2022-10-22-flu-base.csv", skip_submit_window_check = TRUE,
       derived_task_ids = "target_end_date"))
     Output
-      List of 24
+      List of 25
        $ valid_config           :List of 4
         ..$ message       : chr "All hub config files are valid. \n "
         ..$ where         : chr "samples"
@@ -992,6 +1034,12 @@
         ..$ message       : chr "File is accepted hub format. \n "
         ..$ where         : chr "flu-base/2022-10-22-flu-base.csv"
         ..$ call          : chr "check_file_format"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ file_n                 :List of 4
+        ..$ message       : chr "Number of accepted model output files per round met.  \n "
+        ..$ where         : chr "flu-base/2022-10-22-flu-base.csv"
+        ..$ call          : chr "check_file_n"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ metadata_exists        :List of 4

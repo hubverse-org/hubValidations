@@ -85,6 +85,13 @@ validate_model_file <- function(hub_path, file_path,
     return(checks)
   }
 
+  checks$file_n <- try_check(
+    check_file_n(
+      file_path = file_path,
+      hub_path = hub_path
+    ), file_path
+  )
+
   checks$metadata_exists <- try_check(
     check_submission_metadata_file_exists(
       hub_path = hub_path,

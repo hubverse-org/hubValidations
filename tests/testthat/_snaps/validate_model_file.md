@@ -3,7 +3,7 @@
     Code
       str(validate_model_file(hub_path, file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv"))
     Output
-      List of 6
+      List of 7
        $ file_exists    :List of 4
         ..$ message       : chr "File exists at path 'model-output/team1-goodmodel/2022-10-08-team1-goodmodel.csv'. \n "
         ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
@@ -32,6 +32,12 @@
         ..$ message       : chr "File is accepted hub format. \n "
         ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
         ..$ call          : chr "check_file_format"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ file_n         :List of 4
+        ..$ message       : chr "Number of accepted model output files per round met.  \n "
+        ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+        ..$ call          : chr "check_file_n"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ metadata_exists:List of 4
@@ -70,6 +76,7 @@
       v [file_location]: File directory name matches `model_id` metadata in file name.
       v [round_id_valid]: `round_id` is valid.
       v [file_format]: File is accepted hub format.
+      v [file_n]: Number of accepted model output files per round met.
       v [metadata_exists]: Metadata file exists at path 'model-metadata/team1-goodmodel.yaml'.
 
 ---
@@ -95,6 +102,7 @@
       x [file_location]: File directory name must match `model_id` metadata in file name.  File should be submitted to directory "hub-baseline" not "team1-goodmodel"
       v [round_id_valid]: `round_id` is valid.
       v [file_format]: File is accepted hub format.
+      v [file_n]: Number of accepted model output files per round met.
       v [metadata_exists]: Metadata file exists at path 'model-metadata/hub-baseline.yml'.
 
 # validate_model_file print method work [ansi]
@@ -110,6 +118,7 @@
       [32mv[39m [90m[file_location][39m: File directory name matches `model_id` metadata in file name.
       [32mv[39m [90m[round_id_valid][39m: `round_id` is valid.
       [32mv[39m [90m[file_format][39m: File is accepted hub format.
+      [32mv[39m [90m[file_n][39m: Number of accepted model output files per round met.
       [32mv[39m [90m[metadata_exists][39m: Metadata file exists at path [34mmodel-metadata/team1-goodmodel.yaml[39m.
 
 ---
@@ -135,6 +144,7 @@
       [31mx[39m [90m[file_location][39m: File directory name must match `model_id` metadata in file name.  File should be submitted to directory [34m"hub-baseline"[39m not [34m"team1-goodmodel"[39m
       [32mv[39m [90m[round_id_valid][39m: `round_id` is valid.
       [32mv[39m [90m[file_format][39m: File is accepted hub format.
+      [32mv[39m [90m[file_n][39m: Number of accepted model output files per round met.
       [32mv[39m [90m[metadata_exists][39m: Metadata file exists at path [34mmodel-metadata/hub-baseline.yml[39m.
 
 # validate_model_file print method work [unicode]
@@ -150,6 +160,7 @@
       ✔ [file_location]: File directory name matches `model_id` metadata in file name.
       ✔ [round_id_valid]: `round_id` is valid.
       ✔ [file_format]: File is accepted hub format.
+      ✔ [file_n]: Number of accepted model output files per round met.
       ✔ [metadata_exists]: Metadata file exists at path 'model-metadata/team1-goodmodel.yaml'.
 
 ---
@@ -175,6 +186,7 @@
       ✖ [file_location]: File directory name must match `model_id` metadata in file name.  File should be submitted to directory "hub-baseline" not "team1-goodmodel"
       ✔ [round_id_valid]: `round_id` is valid.
       ✔ [file_format]: File is accepted hub format.
+      ✔ [file_n]: Number of accepted model output files per round met.
       ✔ [metadata_exists]: Metadata file exists at path 'model-metadata/hub-baseline.yml'.
 
 # validate_model_file print method work [fancy]
@@ -190,6 +202,7 @@
       [32m✔[39m [90m[file_location][39m: File directory name matches `model_id` metadata in file name.
       [32m✔[39m [90m[round_id_valid][39m: `round_id` is valid.
       [32m✔[39m [90m[file_format][39m: File is accepted hub format.
+      [32m✔[39m [90m[file_n][39m: Number of accepted model output files per round met.
       [32m✔[39m [90m[metadata_exists][39m: Metadata file exists at path [34mmodel-metadata/team1-goodmodel.yaml[39m.
 
 ---
@@ -215,5 +228,6 @@
       [31m✖[39m [90m[file_location][39m: File directory name must match `model_id` metadata in file name.  File should be submitted to directory [34m"hub-baseline"[39m not [34m"team1-goodmodel"[39m
       [32m✔[39m [90m[round_id_valid][39m: `round_id` is valid.
       [32m✔[39m [90m[file_format][39m: File is accepted hub format.
+      [32m✔[39m [90m[file_n][39m: Number of accepted model output files per round met.
       [32m✔[39m [90m[metadata_exists][39m: Metadata file exists at path [34mmodel-metadata/hub-baseline.yml[39m.
 

@@ -3,7 +3,7 @@
     Code
       str(checks)
     Output
-      List of 23
+      List of 24
        $ valid_config           :List of 4
         ..$ message       : chr "All hub config files are valid. \n "
         ..$ where         : chr "valid_sb_hub"
@@ -38,6 +38,12 @@
         ..$ message       : chr "File is accepted hub format. \n "
         ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
         ..$ call          : chr "check_file_format"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ file_n                 :List of 4
+        ..$ message       : chr "Number of accepted model output files per round met.  \n "
+        ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
+        ..$ call          : chr "check_file_n"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ metadata_exists        :List of 4
@@ -159,7 +165,7 @@
     Code
       str(invalid_checks)
     Output
-      Classes 'hub_validations', 'list'  hidden list of 12
+      Classes 'hub_validations', 'list'  hidden list of 13
        $ valid_config      :List of 4
         ..$ message       : chr "All hub config files are valid. \n "
         ..$ where         : chr "invalid_sb_hub"
@@ -194,6 +200,12 @@
         ..$ message       : chr "File is accepted hub format. \n "
         ..$ where         : 'fs_path' chr "hub-baseline/2022-10-22-hub-baseline.parquet"
         ..$ call          : chr "check_file_format"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ file_n            :List of 4
+        ..$ message       : chr "Number of accepted model output files per round met.  \n "
+        ..$ where         : 'fs_path' chr "hub-baseline/2022-10-22-hub-baseline.parquet"
+        ..$ call          : chr "check_file_n"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ metadata_exists   :List of 4
@@ -240,7 +252,7 @@
     Code
       str(mod_checks_error)
     Output
-      List of 48
+      List of 50
        $ valid_config             :List of 4
         ..$ message       : chr "All hub config files are valid. \n "
         ..$ where         : chr "mod_del_hub"
@@ -299,6 +311,12 @@
         ..$ message       : chr "File is accepted hub format. \n "
         ..$ where         : 'fs_path' chr "hub-baseline/2022-10-08-hub-baseline.csv"
         ..$ call          : chr "check_file_format"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ file_n                   :List of 4
+        ..$ message       : chr "Number of accepted model output files per round met.  \n "
+        ..$ where         : 'fs_path' chr "hub-baseline/2022-10-08-hub-baseline.csv"
+        ..$ call          : chr "check_file_n"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ metadata_exists          :List of 4
@@ -440,6 +458,12 @@
         ..$ message       : chr "File is accepted hub format. \n "
         ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
         ..$ call          : chr "check_file_format"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ file_n_1                 :List of 4
+        ..$ message       : chr "Number of accepted model output files per round met.  \n "
+        ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
+        ..$ call          : chr "check_file_n"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ metadata_exists_1        :List of 6
@@ -563,7 +587,7 @@
     Code
       str(mod_checks_warn)
     Output
-      List of 48
+      List of 50
        $ valid_config             :List of 4
         ..$ message       : chr "All hub config files are valid. \n "
         ..$ where         : chr "mod_del_hub"
@@ -622,6 +646,12 @@
         ..$ message       : chr "File is accepted hub format. \n "
         ..$ where         : 'fs_path' chr "hub-baseline/2022-10-08-hub-baseline.csv"
         ..$ call          : chr "check_file_format"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ file_n                   :List of 4
+        ..$ message       : chr "Number of accepted model output files per round met.  \n "
+        ..$ where         : 'fs_path' chr "hub-baseline/2022-10-08-hub-baseline.csv"
+        ..$ call          : chr "check_file_n"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ metadata_exists          :List of 4
@@ -763,6 +793,12 @@
         ..$ message       : chr "File is accepted hub format. \n "
         ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
         ..$ call          : chr "check_file_format"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ file_n_1                 :List of 4
+        ..$ message       : chr "Number of accepted model output files per round met.  \n "
+        ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
+        ..$ call          : chr "check_file_n"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ metadata_exists_1        :List of 6
@@ -886,7 +922,7 @@
     Code
       str(mod_checks_message)
     Output
-      List of 48
+      List of 50
        $ valid_config             :List of 4
         ..$ message       : chr "All hub config files are valid. \n "
         ..$ where         : chr "mod_del_hub"
@@ -939,6 +975,12 @@
         ..$ message       : chr "File is accepted hub format. \n "
         ..$ where         : 'fs_path' chr "hub-baseline/2022-10-08-hub-baseline.csv"
         ..$ call          : chr "check_file_format"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ file_n                   :List of 4
+        ..$ message       : chr "Number of accepted model output files per round met.  \n "
+        ..$ where         : 'fs_path' chr "hub-baseline/2022-10-08-hub-baseline.csv"
+        ..$ call          : chr "check_file_n"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ metadata_exists          :List of 4
@@ -1080,6 +1122,12 @@
         ..$ message       : chr "File is accepted hub format. \n "
         ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
         ..$ call          : chr "check_file_format"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ file_n_1                 :List of 4
+        ..$ message       : chr "Number of accepted model output files per round met.  \n "
+        ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
+        ..$ call          : chr "check_file_n"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ metadata_exists_1        :List of 6
@@ -1203,7 +1251,7 @@
     Code
       str(mod_checks_none)
     Output
-      List of 45
+      List of 47
        $ valid_config             :List of 4
         ..$ message       : chr "All hub config files are valid. \n "
         ..$ where         : chr "mod_del_hub"
@@ -1238,6 +1286,12 @@
         ..$ message       : chr "File is accepted hub format. \n "
         ..$ where         : 'fs_path' chr "hub-baseline/2022-10-08-hub-baseline.csv"
         ..$ call          : chr "check_file_format"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ file_n                   :List of 4
+        ..$ message       : chr "Number of accepted model output files per round met.  \n "
+        ..$ where         : 'fs_path' chr "hub-baseline/2022-10-08-hub-baseline.csv"
+        ..$ call          : chr "check_file_n"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ metadata_exists          :List of 4
@@ -1379,6 +1433,12 @@
         ..$ message       : chr "File is accepted hub format. \n "
         ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
         ..$ call          : chr "check_file_format"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ file_n_1                 :List of 4
+        ..$ message       : chr "Number of accepted model output files per round met.  \n "
+        ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
+        ..$ call          : chr "check_file_n"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ metadata_exists_1        :List of 6
@@ -1502,7 +1562,7 @@
     Code
       str(mod_checks_in_window)
     Output
-      List of 47
+      List of 49
        $ valid_config             :List of 4
         ..$ message       : chr "All hub config files are valid. \n "
         ..$ where         : chr "mod_del_hub"
@@ -1553,6 +1613,12 @@
         ..$ message       : chr "File is accepted hub format. \n "
         ..$ where         : 'fs_path' chr "hub-baseline/2022-10-08-hub-baseline.csv"
         ..$ call          : chr "check_file_format"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ file_n                   :List of 4
+        ..$ message       : chr "Number of accepted model output files per round met.  \n "
+        ..$ where         : 'fs_path' chr "hub-baseline/2022-10-08-hub-baseline.csv"
+        ..$ call          : chr "check_file_n"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ metadata_exists          :List of 4
@@ -1694,6 +1760,12 @@
         ..$ message       : chr "File is accepted hub format. \n "
         ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
         ..$ call          : chr "check_file_format"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ file_n_1                 :List of 4
+        ..$ message       : chr "Number of accepted model output files per round met.  \n "
+        ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
+        ..$ call          : chr "check_file_n"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ metadata_exists_1        :List of 6
@@ -1856,7 +1928,7 @@
     Code
       str(checks)
     Output
-      List of 19
+      List of 20
        $ valid_config      :List of 4
         ..$ message       : chr "All hub config files are valid. \n "
         ..$ where         : chr "valid_sb_hub-old"
@@ -1891,6 +1963,12 @@
         ..$ message       : chr "File is accepted hub format. \n "
         ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
         ..$ call          : chr "check_file_format"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ file_n            :List of 4
+        ..$ message       : chr "Number of accepted model output files per round met.  \n "
+        ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
+        ..$ call          : chr "check_file_n"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ metadata_exists   :List of 4
