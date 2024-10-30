@@ -266,6 +266,7 @@ within their allowed submission window.</p>
 <span><span class="co">#&gt;   name.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[round_id_valid]</span>: `round_id` is valid.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_format]</span>: File is accepted hub format.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_n]</span>: Number of accepted model output files per round met.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[metadata_exists]</span>: Metadata file exists at path</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">model-metadata/hub-baseline.yml</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_read]</span>: File could be read successfully.</span></span>
@@ -326,6 +327,7 @@ within their allowed submission window.</p>
 <span><span class="co">#&gt;   name.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[round_id_valid_1]</span>: `round_id` is valid.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_format_1]</span>: File is accepted hub format.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_n_1]</span>: Number of accepted model output files per round met.</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[metadata_exists_1]</span>: Metadata file does not exist at path</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">model-metadata/team1-goodmodel.yml</span> or <span style="color: #0000BB;">model-metadata/team1-goodmodel.yaml</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_read_1]</span>: File could be read successfully.</span></span>
@@ -516,6 +518,7 @@ summarising the results of checks that failed, argument
 <span><span class="co">#&gt;   name.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[round_id_valid]</span>: `round_id` is valid.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_format]</span>: File is accepted hub format.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_n]</span>: Number of accepted model output files per round met.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[metadata_exists]</span>: Metadata file exists at path</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">model-metadata/hub-baseline.yml</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_read]</span>: File could be read successfully.</span></span>
@@ -559,6 +562,7 @@ summarising the results of checks that failed, argument
 <span><span class="co">#&gt;   name.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[round_id_valid]</span>: `round_id` is valid.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_format]</span>: File is accepted hub format.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_n]</span>: Number of accepted model output files per round met.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[metadata_exists]</span>: Metadata file exists at path</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">model-metadata/team1-goodmodel.yaml</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_read]</span>: File could be read successfully.</span></span>
@@ -734,6 +738,23 @@ TRUE
 </td>
 <td style="text-align:left;">
 check_error
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+file_n
+</td>
+<td style="text-align:left;">
+Number of submission files per round per team does not exceed allowed
+number
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+check_failure
 </td>
 <td style="text-align:left;">
 </td>
