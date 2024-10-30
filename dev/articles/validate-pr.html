@@ -326,8 +326,36 @@ within their allowed submission window.</p>
 <span><span class="co">#&gt;   name.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[round_id_valid_1]</span>: `round_id` is valid.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_format_1]</span>: File is accepted hub format.</span></span>
-<span><span class="co">#&gt; <span style="color: #BB0000;">ⓧ</span> <span style="color: #B2B2B2;">[metadata_exists_1]</span>: Metadata file does not exist at path</span></span>
-<span><span class="co">#&gt;   <span style="color: #0000BB;">model-metadata/team1-goodmodel.yml</span> or <span style="color: #0000BB;">model-metadata/team1-goodmodel.yaml</span>.</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[metadata_exists_1]</span>: Metadata file does not exist at path</span></span>
+<span><span class="co">#&gt;   <span style="color: #0000BB;">model-metadata/team1-goodmodel.yml</span> or <span style="color: #0000BB;">model-metadata/team1-goodmodel.yaml</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_read_1]</span>: File could be read successfully.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_round_id_col_1]</span>: `round_id_col` name is valid.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[unique_round_id_1]</span>: `round_id` column <span style="color: #0000BB;">"origin_date"</span> contains a single,</span></span>
+<span><span class="co">#&gt;   unique round ID value.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[match_round_id_1]</span>: All `round_id_col` <span style="color: #0000BB;">"origin_date"</span> values match submission</span></span>
+<span><span class="co">#&gt;   `round_id` from file name.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[colnames_1]</span>: Column names are consistent with expected round task IDs and</span></span>
+<span><span class="co">#&gt;   std column names.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[col_types_1]</span>: Column data types match hub schema.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_vals_1]</span>: `tbl` contains valid values/value combinations.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[rows_unique_1]</span>: All combinations of task ID</span></span>
+<span><span class="co">#&gt;   column/`output_type`/`output_type_id` values are unique.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[req_vals_1]</span>: Required task ID/output type/output type ID combinations all</span></span>
+<span><span class="co">#&gt;   present.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[value_col_valid_1]</span>: Values in column `value` all valid with respect to</span></span>
+<span><span class="co">#&gt;   modeling task config.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[value_col_non_desc_1]</span>: Values in `value` column are non-decreasing as</span></span>
+<span><span class="co">#&gt;   output_type_ids increase for all unique task ID value/output type</span></span>
+<span><span class="co">#&gt;   combinations of quantile or cdf output types.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[value_col_sum1_1]</span>: No pmf output types to check for sum of 1. Check skipped.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[spl_compound_taskid_set_1]</span>: No v3 samples found in model output data to</span></span>
+<span><span class="co">#&gt;   check. Skipping `check_tbl_spl_compound_taskid_set` check.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[spl_compound_tid_1]</span>: No v3 samples found in model output data to check.</span></span>
+<span><span class="co">#&gt;   Skipping `check_tbl_spl_compound_tid` check.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[spl_non_compound_tid_1]</span>: No v3 samples found in model output data to check.</span></span>
+<span><span class="co">#&gt;   Skipping `check_tbl_spl_non_compound_tid` check.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[spl_n_1]</span>: No v3 samples found in model output data to check. Skipping</span></span>
+<span><span class="co">#&gt;   `check_tbl_spl_n` check.</span></span></code></pre></div>
 <p>These settings can be modified if required though the use of
 arguments <code>file_modification_check</code> and
 <code>allow_submit_window_mods</code>.</p>
@@ -718,10 +746,10 @@ metadata_exists
 Model metadata file exists in expected location
 </td>
 <td style="text-align:left;">
-TRUE
+FALSE
 </td>
 <td style="text-align:left;">
-check_error
+check_failure
 </td>
 <td style="text-align:left;">
 </td>
