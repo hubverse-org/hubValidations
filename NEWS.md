@@ -1,5 +1,8 @@
 # hubValidations (development version)
 
+* Downgrade result of missing model metadata file check from `check_error` to `check_failure` and suppress early return in case of check failure in `validate_model_file()` (#138).
+* Add `check_file_n()` function to validate that the number of files submitted per round does not exceed the allowed number of submissions per team (#139).
+
 # hubValidations 0.7.1
 
 * Updated documentation for custom validations:
