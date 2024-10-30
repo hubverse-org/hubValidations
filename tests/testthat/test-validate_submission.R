@@ -380,3 +380,40 @@ test_that("Ignoring derived_task_ids in validate_submission works", {
     )]
   )
 })
+
+test_that("validate_submission returns check_failure when duplicate files per round exist", {
+  skip_if_offline()
+
+  copy_path <- withr::local_tempdir()
+  fs::dir_copy(
+    system.file("testhubs/simple", package = "hubValidations"),
+    copy_path
+  )
+  hub_path <- fs::path(copy_path, "simple")
+
+  # Create duplicate parquet file
+  read_model_out_file(
+    file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv",
+    hub_path = hub_path,
+    coerce_types = "hub"
+  ) |>
+    arrow::write_parquet(
+      fs::path(
+        hub_path,
+        "model-output/team1-goodmodel/2022-10-08-team1-goodmodel.parquet"
+      )
+    )
+
+  dup_model_out_val <- validate_submission(
+    hub_path,
+    file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv",
+    skip_submit_window_check = TRUE,
+    skip_check_config = TRUE
+  )
+  expect_snapshot(
+    str(dup_model_out_val)
+  )
+  expect_snapshot(
+    dup_model_out_val[["file_n"]]
+  )
+})

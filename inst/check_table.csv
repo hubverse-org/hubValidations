@@ -6,6 +6,7 @@ file_name,File name valid,TRUE,check_error,validate_model_file,check_file_name,,
 file_location,File located in correct team directory,FALSE,check_failure,validate_model_file,check_file_location,,FALSE
 round_id_valid,File round ID is valid hub round IDs,TRUE,check_error,validate_model_file,check_valid_round_id,,FALSE
 file_format,File format is accepted hub/round format,TRUE,check_error,validate_model_file,check_file_format,,FALSE
+file_n,Number of submission files per round per team does not exceed allowed number,FALSE,check_failure,validate_model_file,check_file_n,,FALSE
 metadata_exists,Model metadata file exists in expected location,FALSE,check_failure,validate_model_file,check_submission_metadata_file_exists,,FALSE
 file_read,File can be read without errors,TRUE,check_error,validate_model_data,check_file_read,,FALSE
 valid_round_id_col,Round ID var from config exists in data column names. Skipped if `round_id_from_var` is FALSE in config.,FALSE,check_failure,validate_model_data,check_valid_round_id_col,,FALSE
