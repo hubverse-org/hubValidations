@@ -117,8 +117,8 @@ test_that("handling of NAs in opt_check_tbl_horizon_timediff works", {
   tbl$horizon[8:15] <- NA
   expect_s3_class(
     opt_check_tbl_horizon_timediff(tbl, file_path, hub_path,
-                               t0_colname = "forecast_date",
-                               t1_colname = "target_end_date"
+      t0_colname = "forecast_date",
+      t1_colname = "target_end_date"
     ),
     c("check_success", "hub_check", "rlang_message", "message", "condition"),
     exact = TRUE
