@@ -32,16 +32,19 @@ execute_custom_checks <- function(validations_cfg_path = NULL) {
     return(NULL)
   }
 
+  # extract the correct function from the config file based on the round ID
   validations_cfg <- config::get(
     value = rlang::call_name(caller_call),
     config = rlang::env_get(env = caller_env, nm = "round_id"),
     file = validations_cfg_path
   )
 
+  # again, no need to perform checks if no checks exist
   if (is.null(validations_cfg)) {
     return(NULL)
   }
 
+  # Create the list to contain the validation output
   out <- vector("list", length(validations_cfg)) |>
     stats::setNames(names(validations_cfg))
 
