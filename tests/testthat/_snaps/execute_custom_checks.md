@@ -32,12 +32,12 @@
 # execute_custom_checks sourcing functions from scripts works
 
     Code
-      print(res)
+      validations_src_external
     Message
       
       -- 2023-05-08-hub-ensemble.parquet ----
       
-      i [check_1]: Sourcing custom functions WORKS! Also "Extra arguments passed"!!
+      i [src_check_works]: Sourcing custom functions WORKS! Also "Extra arguments passed"!!
 
 # execute_custom_checks return early when appropriate
 
