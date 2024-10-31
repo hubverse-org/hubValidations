@@ -24,6 +24,23 @@ test_that("execute_custom_checks works", {
   )
 })
 
+
+test_that("bad configs throw the correct errors", {
+
+  missing_cfg <- testthat::test_path("testdata", "config", "does-not-exist.yml")
+  expect_error(
+    test_custom_checks_caller(validations_cfg_path = missing_cfg),
+    class = "custom_validation_yml_missing"
+  )
+
+  malformed_cfg <- testthat::test_path("testdata", "config", "validations-bad-cfg.yml")
+  expect_error(
+    test_custom_checks_caller(validations_cfg_path = malformed_cfg),
+    class = "custom_validation_cfg_malformed"
+  )
+})
+
+
 test_that("execute_custom_checks sourcing functions from scripts works", {
   tmp <- withr::local_tempdir()
   the_config <- testthat::test_path("testdata/config/validations-src.yml")
