@@ -25,6 +25,14 @@ exec_cfg_check <- function(check_name, validations_cfg, caller_env, caller_call)
     src <- fs::path(hub_path, fn_cfg[["source"]])
     source(src, local = TRUE)
     fn <- get(fn_cfg[["fn"]])
+  } else {
+    path <- rlang::env_get(env = caller_env, nm = "validations_cfg_path")
+    msg <- c("Custom validation function {.var {check_name}}",
+    "must specify either a {.arg pkg} or {.arg script} in {.path {path}}")
+    cli::cli_abort(paste(msg, collapse = " "),
+      call = caller_call,
+      class = "custom_validation_cfg_malformed"
+    )
   }
 
   # get the arguments from the caller environment
