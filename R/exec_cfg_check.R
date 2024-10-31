@@ -1,5 +1,5 @@
 #' Execute a check function from the validations configuration file
-#' 
+#'
 #' @param check_name [character] the name of the check function
 #' @param validations_cfg [list] the the parsed `validaitons.yml` file
 #' @param caller_env [environment] the environment of the calling function.
@@ -26,9 +26,9 @@ exec_cfg_check <- function(check_name, validations_cfg, caller_env, caller_call)
     source(src, local = TRUE)
     fn <- get(fn_cfg[["fn"]])
   } else {
-    path <- rlang::env_get(env = caller_env, nm = "validations_cfg_path")
+    path <- rlang::env_get(env = caller_env, nm = "validations_cfg_path") # nolint
     msg <- c("Custom validation function {.var {check_name}}",
-    "must specify either a {.arg pkg} or {.arg script} in {.path {path}}")
+      "must specify either a {.arg pkg} or {.arg script} in {.path {path}}")
     cli::cli_abort(paste(msg, collapse = " "),
       call = caller_call,
       class = "custom_validation_cfg_malformed"
