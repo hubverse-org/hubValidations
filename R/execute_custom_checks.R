@@ -19,16 +19,17 @@ execute_custom_checks <- function(validations_cfg_path = NULL) {
     )
   }
 
+  # if the validations_cfg_path is not specified, we check if it exists in
+  # the hub.
   if (is.null(validations_cfg_path)) {
-    default_cfg_path <- fs::path(
+    validations_cfg_path <- fs::path(
       rlang::env_get(env = caller_env, nm = "hub_path"),
       "hub-config", "validations.yml"
     )
-    if (!fs::file_exists(default_cfg_path)) {
-      return(NULL)
-    } else {
-      validations_cfg_path <- default_cfg_path
-    }
+  }
+  # no need to perform checks if there is no config file
+  if (!fs::file_exists(validations_cfg_path)) {
+    return(NULL)
   }
 
   validations_cfg <- config::get(
