@@ -1,4 +1,4 @@
-# hubValidations (development version)
+# hubValidations 0.8.0
 
 * Custom checks no longer fail if validation is run outside of the root of the hub (#141)
 * Downgrade result of missing model metadata file check from `check_error` to `check_failure` and suppress early return in case of check failure in `validate_model_file()` (#138).
