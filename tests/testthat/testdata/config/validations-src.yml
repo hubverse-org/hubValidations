@@ -1,0 +1,7 @@
+default:
+    test_custom_checks_caller:
+      src_check_works:
+        fn: "src_check_works"
+        source: !expr testthat::test_path("testdata/src/R/src_check_works.R")
+        args:
+          extra_msg: "Extra arguments passed"
