@@ -1,25 +1,40 @@
+#' Execute a check function from the validations configuration file
+#' 
+#' @param check_name [character] the name of the check function
+#' @param validations_cfg [list] the the parsed `validaitons.yml` file
+#' @param caller_env [environment] the environment of the calling function.
+#'   This is usually generated from `rlang::caller_env()`
+#' @param caller_call [call] the call of the calling function.
+#'   This is usually generated from `rlang::caller_call()`
+#' @noRd
 exec_cfg_check <- function(check_name, validations_cfg, caller_env, caller_call) {
   fn_cfg <- validations_cfg[[check_name]]
-  if (!is.null(fn_cfg[["pkg"]])) {
+  from_pkg <- !is.null(fn_cfg[["pkg"]])
+  from_src <- !is.null(fn_cfg[["source"]])
+  if (from_pkg) {
+    # if the function is from a package, assume the package is installed and
+    # extract it from that package.
     fn <- get(fn_cfg[["fn"]],
       envir = getNamespace(fn_cfg[["pkg"]])
     )
-  } else if (!is.null(fn_cfg[["source"]])) {
-    # TODO Validate source script.
+  } else if (from_src) {
+    # TODO: Validate source script.
+    # if it's a source script, we need to run the script locally to extract
+    # the function.
     hub_path <- rlang::env_get(env = caller_env, nm = "hub_path")
     src <- fs::path(hub_path, fn_cfg[["source"]])
     source(src, local = TRUE)
     fn <- get(fn_cfg[["fn"]])
   }
 
+  # get the arguments from the caller environment
   caller_env_formals <- get_caller_env_formals(
-    fn, caller_env,
+    fn,
+    caller_env,
     cfg_args = fn_cfg[["args"]]
   )
-  args <- c(
-    caller_env_formals,
-    fn_cfg[["args"]]
-  )
+  # combine the arguments from the caller environment and the config
+  args <- c(caller_env_formals, fn_cfg[["args"]])
 
   res <- try(rlang::exec(fn, !!!args), silent = TRUE)
 
