@@ -90,5 +90,5 @@ assert_column_date <- function(colname, schema) {
 
 subset_check_tbl <- function(tbl, check_cols) {
   tbl <- tbl[, check_cols]
-  tbl[complete.cases(tbl), ]
+  tbl[stats::complete.cases(tbl), ]
 }
