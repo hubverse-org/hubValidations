@@ -1,5 +1,12 @@
 execute_custom_checks <- function(validations_cfg_path = NULL) {
+  # There is more than one function that will call this function. These two
+  # variables help us to pass the variables from that function to the custom
+  # functions.
+  #
+  # Having the calling function's environment gives us access to the variables
   caller_env <- rlang::caller_env()
+  # Knowing the calling function's name allows us to select the correct
+  # custom validation function.
   caller_call <- rlang::caller_call()
 
   if (!is.null(validations_cfg_path)) {
