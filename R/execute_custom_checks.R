@@ -9,13 +9,14 @@ execute_custom_checks <- function(validations_cfg_path = NULL) {
   # custom validation function.
   caller_call <- rlang::caller_call()
 
-  if (!is.null(validations_cfg_path)) {
-    if (!fs::file_exists(validations_cfg_path)) {
-      cli::cli_abort(
-        "Validations .yml file not found at {.path {validations_cfg_path}}",
-        call = caller_call
-      )
-    }
+  missing_file <- !is.null(validations_cfg_path) &&
+    !fs::file_exists(validations_cfg_path)
+  if (missing_file) {
+    cli::cli_abort(
+      "Validations .yml file not found at {.path {validations_cfg_path}}",
+      call = caller_call,
+      class = "custom_validation_yml_missing"
+    )
   }
 
   if (is.null(validations_cfg_path)) {
