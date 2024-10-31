@@ -83,10 +83,17 @@ Details of checks performed by \code{validate_model_file()}\if{html}{\out{<table
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
+   <td style="text-align:left;font-weight: bold;"> file_n </td>
+   <td style="text-align:left;"> Number of submission files per round per team does not exceed allowed number </td>
+   <td style="text-align:left;"> FALSE </td>
+   <td style="text-align:left;"> check_failure </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
    <td style="text-align:left;font-weight: bold;"> metadata_exists </td>
    <td style="text-align:left;"> Model metadata file exists in expected location </td>
-   <td style="text-align:left;"> TRUE </td>
-   <td style="text-align:left;"> check_error </td>
+   <td style="text-align:left;"> FALSE </td>
+   <td style="text-align:left;"> check_failure </td>
    <td style="text-align:left;">  </td>
   </tr>
 </tbody>

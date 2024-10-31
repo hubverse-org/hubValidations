@@ -12,7 +12,7 @@
     Code
       check_submission_metadata_file_exists(hub_path = hub_path, file_path = "random-model/2022-10-01-random-model.csv")
     Output
-      <error/check_error>
+      <error/check_failure>
       Error:
       ! Metadata file does not exist at path 'model-metadata/random-model.yml' or 'model-metadata/random-model.yaml'.
 

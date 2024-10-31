@@ -34,6 +34,20 @@ opt_check_tbl_col_timediff <- function(tbl, file_path, hub_path,
   assert_column_date(t0_colname, schema)
   assert_column_date(t1_colname, schema)
 
+  # Subset tbl to only relevant columns for check and complete cases to perform
+  # checks. This ensures non-relevant model task rows are ignored.
+  tbl <- subset_check_tbl(tbl, c(t0_colname, t1_colname))
+  # If no rows returned by sub-setting for complete cases of relevant columns,
+  # skip check by returning capture_check_info object early.
+  if (nrow(tbl) == 0) {
+    return(
+      capture_check_info(
+        file_path = file_path,
+        msg = "No relevant data to check. Check skipped."
+      )
+    )
+  }
+
   if (!lubridate::is.Date(tbl[[t0_colname]])) {
     tbl[, t0_colname] <- as.Date(tbl[[t0_colname]])
   }
@@ -72,4 +86,9 @@ assert_column_date <- function(colname, schema) {
       call = rlang::caller_call()
     )
   }
+}
+
+subset_check_tbl <- function(tbl, check_cols) {
+  tbl <- tbl[, check_cols]
+  tbl[stats::complete.cases(tbl), ]
 }
