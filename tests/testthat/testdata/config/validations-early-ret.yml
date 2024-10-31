@@ -2,13 +2,13 @@ default:
     test_custom_checks_caller:
       check_1:
         fn: "simple_example_check"
-        source: "src/R/validatons/src_simple_example_check.R"
+        source: "src/validations/R/src_simple_example_check.R"
         args:
           check: FALSE
           error: TRUE
       check_2:
         fn: "simple_example_check"
-        source: "src/R/validatons/src_simple_example_check.R"
+        source: "src/validations/R/src_simple_example_check.R"
         args:
           check: TRUE
           error: FALSE
