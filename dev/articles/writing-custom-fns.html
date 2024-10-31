@@ -153,7 +153,7 @@ you have an existing hub, you can work in there.</p>
 <span><span class="fu"><a href="../reference/create_custom_check.html">create_custom_check</a></span><span class="op">(</span><span class="st">"cstm_check_tbl_basic"</span>,</span>
 <span>  hub_path <span class="op">=</span> <span class="va">hub_path</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Directory <span style="color: #0000BB;">/tmp/Rtmprqm6Wp/file1d7f5c6b7bcc/src/validations/R</span> created.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Directory <span style="color: #0000BB;">/tmp/RtmpEaRXH6/file1df6321c00b4/src/validations/R</span> created.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Custom validation check template function file <span style="color: #0000BB;">"cstm_check_tbl_basic.R"</span> created.</span></span>
 <span><span class="co">#&gt; → Edit the function template to add your custom check logic.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> See the <span style="color: #00BB00;">Writing custom check functions</span> article for more information.</span></span>
@@ -378,26 +378,30 @@ the same fashion as custom functions, i.e. through the
 <span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a>        <span class="at">r_schema =</span> <span class="cn">TRUE</span>, <span class="at">output_type_id_datatype =</span> output_type_id_datatype)</span>
 <span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a>    <span class="fu">assert_column_date</span>(t0_colname, schema)</span>
 <span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a>    <span class="fu">assert_column_date</span>(t1_colname, schema)</span>
-<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a>    <span class="cf">if</span> (<span class="sc">!</span>lubridate<span class="sc">::</span><span class="fu">is.Date</span>(tbl[[t0_colname]])) {</span>
-<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a>        tbl[, t0_colname] <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(tbl[[t0_colname]])</span>
-<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a>    }</span>
-<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a>    <span class="cf">if</span> (<span class="sc">!</span>lubridate<span class="sc">::</span><span class="fu">is.Date</span>(tbl[[t1_colname]])) {</span>
-<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a>        tbl[, t1_colname] <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(tbl[[t1_colname]])</span>
-<span id="cb4-23"><a href="#cb4-23" tabindex="-1"></a>    }</span>
-<span id="cb4-24"><a href="#cb4-24" tabindex="-1"></a>    compare <span class="ot">&lt;-</span> tbl[[t1_colname]] <span class="sc">-</span> tbl[[t0_colname]] <span class="sc">==</span> timediff</span>
-<span id="cb4-25"><a href="#cb4-25" tabindex="-1"></a>    check <span class="ot">&lt;-</span> <span class="fu">all</span>(compare)</span>
-<span id="cb4-26"><a href="#cb4-26" tabindex="-1"></a>    <span class="cf">if</span> (check) {</span>
-<span id="cb4-27"><a href="#cb4-27" tabindex="-1"></a>        details <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb4-28"><a href="#cb4-28" tabindex="-1"></a>    }</span>
-<span id="cb4-29"><a href="#cb4-29" tabindex="-1"></a>    <span class="cf">else</span> {</span>
-<span id="cb4-30"><a href="#cb4-30" tabindex="-1"></a>        details <span class="ot">&lt;-</span> cli<span class="sc">::</span><span class="fu">format_inline</span>(<span class="st">"t1 var value{?s} {.val {tbl[[t1_colname]][!compare]}} invalid."</span>)</span>
-<span id="cb4-31"><a href="#cb4-31" tabindex="-1"></a>    }</span>
-<span id="cb4-32"><a href="#cb4-32" tabindex="-1"></a>    <span class="fu">capture_check_cnd</span>(<span class="at">check =</span> check, <span class="at">file_path =</span> file_path, <span class="at">msg_subject =</span> cli<span class="sc">::</span><span class="fu">format_inline</span>(<span class="st">"Time differences between t0 var {.var {t0_colname}} and t1 var</span><span class="sc">\n</span><span class="st">        {.var {t1_colname}}"</span>), </span>
-<span id="cb4-33"><a href="#cb4-33" tabindex="-1"></a>        <span class="at">msg_verbs =</span> <span class="fu">c</span>(<span class="st">"all match"</span>, <span class="st">"do not all match"</span>), <span class="at">msg_attribute =</span> cli<span class="sc">::</span><span class="fu">format_inline</span>(<span class="st">"expected period of {.val {timediff}}."</span>), </span>
-<span id="cb4-34"><a href="#cb4-34" tabindex="-1"></a>        <span class="at">details =</span> details)</span>
-<span id="cb4-35"><a href="#cb4-35" tabindex="-1"></a>}</span>
-<span id="cb4-36"><a href="#cb4-36" tabindex="-1"></a><span class="sc">&lt;</span>bytecode<span class="sc">:</span> <span class="dv">0x55e1f7fad048</span><span class="sc">&gt;</span></span>
-<span id="cb4-37"><a href="#cb4-37" tabindex="-1"></a><span class="er">&lt;</span>environment<span class="sc">:</span> namespace<span class="sc">:</span>hubValidations<span class="sc">&gt;</span></span></code></pre></div>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a>    tbl <span class="ot">&lt;-</span> <span class="fu">subset_check_tbl</span>(tbl, <span class="fu">c</span>(t0_colname, t1_colname))</span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">nrow</span>(tbl) <span class="sc">==</span> <span class="dv">0</span>) {</span>
+<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a>        <span class="fu">return</span>(<span class="fu">capture_check_info</span>(<span class="at">file_path =</span> file_path, <span class="at">msg =</span> <span class="st">"No relevant data to check. Check skipped."</span>))</span>
+<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a>    }</span>
+<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a>    <span class="cf">if</span> (<span class="sc">!</span>lubridate<span class="sc">::</span><span class="fu">is.Date</span>(tbl[[t0_colname]])) {</span>
+<span id="cb4-23"><a href="#cb4-23" tabindex="-1"></a>        tbl[, t0_colname] <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(tbl[[t0_colname]])</span>
+<span id="cb4-24"><a href="#cb4-24" tabindex="-1"></a>    }</span>
+<span id="cb4-25"><a href="#cb4-25" tabindex="-1"></a>    <span class="cf">if</span> (<span class="sc">!</span>lubridate<span class="sc">::</span><span class="fu">is.Date</span>(tbl[[t1_colname]])) {</span>
+<span id="cb4-26"><a href="#cb4-26" tabindex="-1"></a>        tbl[, t1_colname] <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(tbl[[t1_colname]])</span>
+<span id="cb4-27"><a href="#cb4-27" tabindex="-1"></a>    }</span>
+<span id="cb4-28"><a href="#cb4-28" tabindex="-1"></a>    compare <span class="ot">&lt;-</span> tbl[[t1_colname]] <span class="sc">-</span> tbl[[t0_colname]] <span class="sc">==</span> timediff</span>
+<span id="cb4-29"><a href="#cb4-29" tabindex="-1"></a>    check <span class="ot">&lt;-</span> <span class="fu">all</span>(compare)</span>
+<span id="cb4-30"><a href="#cb4-30" tabindex="-1"></a>    <span class="cf">if</span> (check) {</span>
+<span id="cb4-31"><a href="#cb4-31" tabindex="-1"></a>        details <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb4-32"><a href="#cb4-32" tabindex="-1"></a>    }</span>
+<span id="cb4-33"><a href="#cb4-33" tabindex="-1"></a>    <span class="cf">else</span> {</span>
+<span id="cb4-34"><a href="#cb4-34" tabindex="-1"></a>        details <span class="ot">&lt;-</span> cli<span class="sc">::</span><span class="fu">format_inline</span>(<span class="st">"t1 var value{?s} {.val {tbl[[t1_colname]][!compare]}} invalid."</span>)</span>
+<span id="cb4-35"><a href="#cb4-35" tabindex="-1"></a>    }</span>
+<span id="cb4-36"><a href="#cb4-36" tabindex="-1"></a>    <span class="fu">capture_check_cnd</span>(<span class="at">check =</span> check, <span class="at">file_path =</span> file_path, <span class="at">msg_subject =</span> cli<span class="sc">::</span><span class="fu">format_inline</span>(<span class="st">"Time differences between t0 var {.var {t0_colname}} and t1 var</span><span class="sc">\n</span><span class="st">        {.var {t1_colname}}"</span>), </span>
+<span id="cb4-37"><a href="#cb4-37" tabindex="-1"></a>        <span class="at">msg_verbs =</span> <span class="fu">c</span>(<span class="st">"all match"</span>, <span class="st">"do not all match"</span>), <span class="at">msg_attribute =</span> cli<span class="sc">::</span><span class="fu">format_inline</span>(<span class="st">"expected period of {.val {timediff}}."</span>), </span>
+<span id="cb4-38"><a href="#cb4-38" tabindex="-1"></a>        <span class="at">details =</span> details)</span>
+<span id="cb4-39"><a href="#cb4-39" tabindex="-1"></a>}</span>
+<span id="cb4-40"><a href="#cb4-40" tabindex="-1"></a><span class="sc">&lt;</span>bytecode<span class="sc">:</span> <span class="dv">0x5557a55e4ad0</span><span class="sc">&gt;</span></span>
+<span id="cb4-41"><a href="#cb4-41" tabindex="-1"></a><span class="er">&lt;</span>environment<span class="sc">:</span> namespace<span class="sc">:</span>hubValidations<span class="sc">&gt;</span></span></code></pre></div>
 <p>You can add an example extra argument with
 <code>extra_args = TRUE</code> when creating the custom check function
 with <code><a href="../reference/create_custom_check.html">create_custom_check()</a></code>.</p>
@@ -559,7 +563,7 @@ model output <code>tbl</code> contains data for <code>cdf</code> and
 <span id="cb10-21"><a href="#cb10-21" tabindex="-1"></a>        <span class="at">msg_attribute =</span> <span class="st">"as output_type_ids increase for all unique task ID</span><span class="sc">\n</span><span class="st">    value/output type combinations of quantile or cdf output types."</span>, </span>
 <span id="cb10-22"><a href="#cb10-22" tabindex="-1"></a>        <span class="at">details =</span> details, <span class="at">error_tbl =</span> error_tbl)</span>
 <span id="cb10-23"><a href="#cb10-23" tabindex="-1"></a>}</span>
-<span id="cb10-24"><a href="#cb10-24" tabindex="-1"></a><span class="sc">&lt;</span>bytecode<span class="sc">:</span> <span class="dv">0x55e1fe328bf8</span><span class="sc">&gt;</span></span>
+<span id="cb10-24"><a href="#cb10-24" tabindex="-1"></a><span class="sc">&lt;</span>bytecode<span class="sc">:</span> <span class="dv">0x5557ab963a50</span><span class="sc">&gt;</span></span>
 <span id="cb10-25"><a href="#cb10-25" tabindex="-1"></a><span class="er">&lt;</span>environment<span class="sc">:</span> namespace<span class="sc">:</span>hubValidations<span class="sc">&gt;</span></span></code></pre></div>
 <p>You can add a pre-condition check block of code with argument
 <code>conditional = TRUE</code> when creating the custom check function
