@@ -1,5 +1,6 @@
 # hubValidations (development version)
 
+* Custom checks no longer fail if validation is run outside of the root of the hub (#141)
 * Downgrade result of missing model metadata file check from `check_error` to `check_failure` and suppress early return in case of check failure in `validate_model_file()` (#138).
 * Add `check_file_n()` function to validate that the number of files submitted per round does not exceed the allowed number of submissions per team (#139).
 * Ignore `NA`s in relevant `tbl` columns in `opt_check_tbl_col_timediff()` and `opt_check_tbl_horizon_timediff()` checks to ensure rows that may not be targeting relevant to modeling task do not cause false check failure. (#140).

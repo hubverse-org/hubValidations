@@ -6,7 +6,9 @@ exec_cfg_check <- function(check_name, validations_cfg, caller_env, caller_call)
     )
   } else if (!is.null(fn_cfg[["source"]])) {
     # TODO Validate source script.
-    source(fn_cfg[["source"]], local = TRUE)
+    hub_path <- rlang::env_get(env = caller_env, nm = "hub_path")
+    src <- fs::path(hub_path, fn_cfg[["source"]])
+    source(src, local = TRUE)
     fn <- get(fn_cfg[["fn"]])
   }
 

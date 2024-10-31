@@ -25,54 +25,51 @@ test_that("execute_custom_checks works", {
 })
 
 test_that("execute_custom_checks sourcing functions from scripts works", {
+  tmp <- withr::local_tempdir()
+  the_config <- testthat::test_path("testdata/config/validations-src.yml")
 
-  expect_snapshot(
-    test_custom_checks_caller(
-      validations_cfg_path = testthat::test_path(
-        "testdata",
-        "config",
-        "validations-src.yml"
-      )
-    )
-  )
+  hub <- stand_up_custom_check_hub(new_path = tmp, yaml_path = the_config)
+
+  expect_no_error({
+    withr::with_tempdir({
+      validations_src_external <- test_custom_checks_caller(hub_path = hub)
+    })
+  })
+
+  expect_snapshot(validations_src_external)
 })
+
 
 test_that("execute_custom_checks return early when appropriate", {
   # When the first custom check returns an check_error class object, custom check
   # execution should return early
-  early_ret_custom <- test_custom_checks_caller(
-    validations_cfg_path = testthat::test_path(
-      "testdata",
-      "config",
-      "validations-early-ret.yml"
-    )
+  tmp1 <- withr::local_tempdir()
+  hub1 <- stand_up_custom_check_hub(new_path = tmp1,
+    yaml_path = testthat::test_path("testdata/config/validations-early-ret.yml")
   )
+  early_ret_custom <- test_custom_checks_caller(hub_path = hub1)
   expect_snapshot(early_ret_custom)
   expect_length(early_ret_custom, 1L)
   expect_false("check_2" %in% names(early_ret_custom))
 
   # Same when the first custom check returns an exec_error class object
-  early_ret_exec_error <- test_custom_checks_caller(
-    validations_cfg_path = testthat::test_path(
-      "testdata",
-      "config",
-      "validations-exec-error.yml"
-    )
+  tmp2 <- withr::local_tempdir()
+  hub2 <- stand_up_custom_check_hub(new_path = tmp2,
+    yaml_path = testthat::test_path("testdata/config/validations-exec-error.yml")
   )
+  early_ret_exec_error <- test_custom_checks_caller(hub2)
   expect_snapshot(early_ret_exec_error)
   expect_length(early_ret_exec_error, 1L)
-  expect_false("check_2" %in% names(early_ret_exec_error))
+  expect_false("check_2" %in% names(early_ret_custom))
 
 
   # When the first custom check returns an check_failure class object, custom check
   # execution should proceed
-  no_early_ret_custom <- test_custom_checks_caller(
-    validations_cfg_path = testthat::test_path(
-      "testdata",
-      "config",
-      "validations-no-early-ret.yml"
-    )
+  tmp3 <- withr::local_tempdir()
+  hub3 <- stand_up_custom_check_hub(new_path = tmp3,
+    yaml_path = testthat::test_path("testdata/config/validations-no-early-ret.yml")
   )
+  no_early_ret_custom <- test_custom_checks_caller(hub3)
   expect_snapshot(no_early_ret_custom)
   expect_length(no_early_ret_custom, 2L)
   expect_true("check_2" %in% names(no_early_ret_custom))

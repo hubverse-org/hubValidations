@@ -32,8 +32,7 @@
 # execute_custom_checks sourcing functions from scripts works
 
     Code
-      test_custom_checks_caller(validations_cfg_path = testthat::test_path("testdata",
-        "config", "validations-src.yml"))
+      validations_src_external
     Message
       
       -- 2023-05-08-hub-ensemble.parquet ----
