@@ -1,5 +1,8 @@
 # hubValidations (development version)
 
+* Custom checks no longer fail if validation is run outside of the root of the
+  hub (#141)
+
 # hubValidations 0.7.1
 
 * Updated documentation for custom validations:
