@@ -65,3 +65,13 @@
       Error in `opt_check_tbl_col_timediff()`:
       ! Column `colname` must be configured as <Date> not <character>.
 
+# handling of NAs in opt_check_tbl_col_timediff works
+
+    Code
+      opt_check_tbl_col_timediff(tbl, file_path, hub_path, t0_colname = "forecast_date",
+        t1_colname = "target_end_date")
+    Output
+      <message/check_info>
+      Message:
+      No relevant data to check. Check skipped.
+

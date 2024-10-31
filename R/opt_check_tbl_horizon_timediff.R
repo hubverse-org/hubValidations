@@ -41,6 +41,20 @@ opt_check_tbl_horizon_timediff <- function(tbl, file_path, hub_path, t0_colname,
   assert_column_date(t1_colname, schema)
   assert_column_integer(horizon_colname, schema)
 
+  # Subset tbl to only relevant columns for check and complete cases to perform
+  # checks. This ensures non-relevant model task rows are ignored.
+  tbl <- subset_check_tbl(tbl, c(t0_colname, t1_colname, horizon_colname))
+  # If no rows returned by sub-setting for complete cases of relevant columns,
+  # skip check by returning capture_check_info object early.
+  if (nrow(tbl) == 0) {
+    return(
+      capture_check_info(
+        file_path = file_path,
+        msg = "No relevant data to check. Check skipped."
+      )
+    )
+  }
+
   if (!lubridate::is.Date(tbl[[t0_colname]])) {
     tbl[, t0_colname] <- as.Date(tbl[[t0_colname]])
   }
