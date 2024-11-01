@@ -11,7 +11,7 @@ of the file."><meta property="og:image" content="https://hubverse-org.github.io/
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/hubverse-org/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubValidations</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.8.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -197,10 +197,15 @@ see <a href="https://hubverse-org.github.io/hubValidations/articles/hub-validati
    <td style="text-align:left;"> TRUE </td>
    <td style="text-align:left;"> check_error </td>
    <td style="text-align:left;">  </td>
+  </tr><tr><td style="text-align:left;font-weight: bold;"> file_n </td>
+   <td style="text-align:left;"> Number of submission files per round per team does not exceed allowed number </td>
+   <td style="text-align:left;"> FALSE </td>
+   <td style="text-align:left;"> check_failure </td>
+   <td style="text-align:left;">  </td>
   </tr><tr><td style="text-align:left;font-weight: bold;"> metadata_exists </td>
    <td style="text-align:left;"> Model metadata file exists in expected location </td>
-   <td style="text-align:left;"> TRUE </td>
-   <td style="text-align:left;"> check_error </td>
+   <td style="text-align:left;"> FALSE </td>
+   <td style="text-align:left;"> check_failure </td>
    <td style="text-align:left;">  </td>
   </tr><tr><td style="text-align:left;font-weight: bold;"> file_read </td>
    <td style="text-align:left;"> File can be read without errors </td>
@@ -305,6 +310,7 @@ the compound idx in question. </td>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   name.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[round_id_valid]</span>: `round_id` is valid.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_format]</span>: File is accepted hub format.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_n]</span>: Number of accepted model output files per round met.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[metadata_exists]</span>: Metadata file exists at path</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">model-metadata/team1-goodmodel.yaml</span>.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_read]</span>: File could be read successfully.</span>
@@ -328,7 +334,7 @@ the compound idx in question. </td>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   combinations of quantile or cdf output types.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[value_col_sum1]</span>: No pmf output types to check for sum of 1. Check skipped.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[submission_time]</span>: Submission time must be within accepted submission window</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   for round.  Current time <span style="color: #0000BB;">"2024-10-24 17:07:12 UTC"</span> is outside window</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   for round.  Current time <span style="color: #0000BB;">"2024-11-01 08:59:21 UTC"</span> is outside window</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span>
 </code></pre></div>
     </div>
