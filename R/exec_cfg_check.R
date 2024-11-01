@@ -1,7 +1,7 @@
 #' Execute a check function from the validations configuration file
 #'
 #' @param check_name [character] the name of the check function
-#' @param validations_cfg [list] the the parsed `validaitons.yml` file
+#' @param validations_cfg [list] the the parsed `validations.yml` file
 #' @param caller_env [environment] the environment of the calling function.
 #'   This is usually generated from `rlang::caller_env()`
 #' @param caller_call [call] the call of the calling function.
@@ -19,8 +19,8 @@ exec_cfg_check <- function(check_name, validations_cfg, caller_env, caller_call)
     )
   } else if (from_src) {
     # TODO: Validate source script.
-    # if it's a source script, we need to run the script locally to extract
-    # the function.
+    # if it's a source script, we need to source the script locally to make
+    # the function available in local environment.
     hub_path <- rlang::env_get(env = caller_env, nm = "hub_path")
     src <- fs::path(hub_path, fn_cfg[["source"]])
     source(src, local = TRUE)
