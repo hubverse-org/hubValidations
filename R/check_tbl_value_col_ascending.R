@@ -93,15 +93,22 @@ split_cdf_quantile <- function(tbl) {
     purrr::compact()
 }
 
+# Order the output type ids in the order of the config
+#
+# This extracts the output_type_id from the config-generated table for the
+# given types and creates a lookup table that has the types in the right order. 
+#
+# The data from `tbl` is then joined into the lookup table (after being coerced
+# to character), which sorts `tbl` in the order of the lookup table.
+#
+# NOTE: this assumes that the cdf and quantile values in the `tbl` are complete.
 order_output_type_ids <- function(tbl, config, types = c("cdf", "quantile")) {
-  # reduce config to two column
+  # step 1: create a lookup table from the config
   order_ref <- config[c("output_type", "output_type_id")]
-  # filter the rows to the specified output types
   cdf_and_quantile <- order_ref$output_type %in% types
   order_ref <- order_ref[cdf_and_quantile, , drop = FALSE]
-  # return a lookup table
   order_ref <- unique(order_ref)
-  # convert output_type_id to character so that we can join good
+  # step 2: join
   tbl$output_type_id <- as.character(tbl$output_type_id)
   dplyr::inner_join(order_ref, tbl, by = c("output_type", "output_type_id"))
 }
