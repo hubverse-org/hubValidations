@@ -96,7 +96,7 @@ split_cdf_quantile <- function(tbl) {
 # Order the output type ids in the order of the config
 #
 # This extracts the output_type_id from the config-generated table for the
-# given types and creates a lookup table that has the types in the right order. 
+# given types and creates a lookup table that has the types in the right order.
 #
 # The data from `tbl` is then joined into the lookup table (after being coerced
 # to character), which sorts `tbl` in the order of the lookup table.
