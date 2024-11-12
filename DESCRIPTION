@@ -46,7 +46,6 @@ Imports:
     jsonvalidate,
     lifecycle,
     lubridate,
-    magrittr,
     purrr,
     rlang,
     stringr,
