@@ -551,5 +551,19 @@ test_that("(#123) expand_output_type_grid() returns expected outputs with option
   )
   expect_equal(nrow(i_have_eight_rows), 8)
   expect_equal(ncol(i_have_eight_rows), 3)
+})
 
+test_that("v4 point estimate output type IDs extracted correctly as NAs", {
+  hub_path <- system.file("testhubs", "v4", "flusight", package = "hubUtils")
+  file_name <- "hub-baseline/2023-05-01-hub-baseline.csv"
+  round_id <- parse_file_name(file_name)$round_id
+  config_tasks <- suppressWarnings(read_config(hub_path = hub_path))
+
+  expect_true(
+    expand_model_out_grid(
+      config_tasks = config_tasks,
+      round_id = round_id,
+      output_types = "mean",
+    )[["output_type_id"]] |> is.na() |> all()
+  )
 })
