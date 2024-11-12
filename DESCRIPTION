@@ -41,7 +41,7 @@ Imports:
     gh,
     hubAdmin (>= 1.0.0),
     hubData (>= 1.2.3.9000),
-    hubUtils,
+    hubUtils (>= 0.2.0.9000),
     jsonlite,
     jsonvalidate,
     lifecycle,
@@ -65,7 +65,7 @@ Suggests:
     testthis,
     withr
 Remotes:
-    hubverse-org/hubUtils@pull/189/head,
+    hubverse-org/hubUtils,
     hubverse-org/hubData,
     hubverse-org/hubAdmin
 Config/testthat/edition: 3
