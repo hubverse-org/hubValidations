@@ -23,8 +23,6 @@ test_that("validate_model_data works", {
     )
   )
 
-
-
   hub_path <- system.file("testhubs/flusight", package = "hubUtils")
   file_path <- "hub-ensemble/2023-05-08-hub-ensemble.parquet"
   expect_snapshot(
