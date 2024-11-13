@@ -10,6 +10,10 @@
 #' contains only a single round.
 #' @param required_vals_only Logical. Whether to return only combinations of
 #' Task ID and related output type ID required values.
+#' @param force_output_types Logical. Whether to force all output types to be required.
+#' If `TRUE`, all output type ID values are treated as required regardless
+#' of the value of the `is_required` property. Useful for creating grids of required
+#' values for optional output types.
 #' @param all_character Logical. Whether to return all character column.
 #' @param bind_model_tasks Logical. Whether to bind expanded grids of
 #' values from multiple modeling tasks into a single tibble/arrow table or
@@ -41,6 +45,8 @@
 #' requested through `output_types`, a zero row grid will be returned.
 #' If all output types are requested however (i.e. when `output_types = NULL`) and
 #' they are all optional, a grid of required task ID values only will be returned.
+#' However, whenever `force_output_types = TRUE`, all output types are treated as
+#' required.rf v];lfgiuy0
 #' @inheritParams hubData::coerce_to_hub_schema
 #' @details
 #' When a round is set to `round_id_from_variable: true`,
@@ -148,9 +154,42 @@
 #'   output_types = "sample",
 #'   derived_task_ids = "target_end_date"
 #' )
+#' # Return only required values
+#' hub_path <- system.file("testhubs", "v4", "simple", package = "hubUtils")
+#' config_tasks <- read_config(hub_path)
+#' # Return required output types and output_types_ids only
+#' expand_model_out_grid(
+#'   config_tasks = config_tasks,
+#'   round_id = "2022-10-22",
+#'   required_vals_only = TRUE
+#' )
+#' # Force all output types to be required
+#' expand_model_out_grid(
+#'   config_tasks = config_tasks,
+#'   round_id = "2022-10-22",
+#'   required_vals_only = TRUE,
+#'   force_output_types = TRUE
+#' )
+#' # Sub-setting for an optional output type returns an empty data frame
+#' expand_model_out_grid(
+#'   config_tasks = config_tasks,
+#'   round_id = "2022-10-22",
+#'   output_types = "mean",
+#'   required_vals_only = TRUE
+#' )
+#' # force_output_types on an optional output type forces all output_type_id values
+#' # to be required
+#' expand_model_out_grid(
+#'   config_tasks = config_tasks,
+#'   round_id = "2022-10-22",
+#'   output_types = "mean",
+#'   required_vals_only = TRUE,
+#'   force_output_types = TRUE
+#' )
 expand_model_out_grid <- function(config_tasks,
                                   round_id,
                                   required_vals_only = FALSE,
+                                  force_output_types = FALSE,
                                   all_character = FALSE,
                                   output_type_id_datatype = c(
                                     "from_config", "auto", "character",
@@ -195,9 +234,9 @@ expand_model_out_grid <- function(config_tasks,
   config_tid <- hubUtils::get_config_tid(config_tasks = config_tasks)
 
   output_type_l <- subset_rnd_output_types(round_config, output_types) %>%
-    extract_rnd_output_type_ids(config_tid) %>%
+    extract_rnd_output_type_ids(config_tid, force_output_types) %>%
     process_grid_inputs(required_vals_only = required_vals_only) %>%
-    purrr::map(~purrr::compact(.x))
+    purrr::map(~ purrr::compact(.x))
 
   # Expand output grid individually for each modeling task and output type.
   grid <- purrr::map2(
@@ -247,7 +286,6 @@ subset_mt_output_types <- function(model_task, output_types) {
     out[mt_output_types]
   }
 }
-
 
 # Extracts/collapses individual task ID values depending on whether all or just required
 # values are needed.
@@ -300,7 +338,7 @@ expand_output_type_grid <- function(task_id_values,
 fix_round_id <- function(x, round_id, round_config, round_ids) {
   if (round_config[["round_id_from_variable"]] && !is.null(round_id)) {
     round_id <- rlang::arg_match(round_id,
-                                 values = round_ids
+      values = round_ids
     )
     round_id_var <- round_config[["round_id"]]
     purrr::map(
@@ -407,11 +445,11 @@ null_taskids_to_na <- function(model_task) {
     model_task, ~ all(purrr::map_lgl(.x, is.null))
   )
   purrr::modify_if(model_task,
-                   .p = to_na,
-                   ~ list(
-                     required = NA,
-                     optional = NULL
-                   )
+    .p = to_na,
+    ~ list(
+      required = NA,
+      optional = NULL
+    )
   )
 }
 
@@ -553,51 +591,91 @@ get_sample_n <- function(x, config_tid) {
 # for back-compatibility with schema versions < v2.0.0. Returns a list of
 # `required` and `optional` or just `required` vectors of values as appropriate for
 # each output type in each model task in the round.
-extract_rnd_output_type_ids <- function(x, config_tid) {
-  purrr::map(x, ~ extract_mt_output_type_ids(.x, config_tid))
+extract_rnd_output_type_ids <- function(x, config_tid, force_output_types = FALSE) {
+  purrr::map(x, ~ extract_mt_output_type_ids(.x, config_tid, force_output_types))
 }
 # Extract the output_type_id values from a model_task object.
 # config_tid is the name of the output_type_id column in the config schema used
 # for back-compatibility with schema versions < v2.0.0. Returns a list of
 # `required` and `optional` or just `required` vectors of values as appropriate for
 # each output type in the model task.
-extract_mt_output_type_ids <- function(x, config_tid) {
+extract_mt_output_type_ids <- function(x, config_tid, force_output_types = FALSE) {
   purrr::map(
     x,
     function(.x) {
       output_type_ids <- .x[[config_tid]]
-      if (valid_output_type_ids(output_type_ids)) {
+      is_std <- std_output_type_ids(output_type_ids)
+      if (is_std && !force_output_types) {
         return(output_type_ids)
       }
-
-      # If dealing with a `NULL` output_type_ids object or a v4 schema version point
-      # estimate output type, determine first if .
-      is_required <- isTRUE(.x[["is_required"]]) ||
-        isTRUE(.x[["output_type_id_params"]][["is_required"]])
-
-      null_output_type_ids(is_required)
+      if (is_std && force_output_types) {
+        return(as_required(output_type_ids))
+      }
+      is_required <- is_required_output_type(.x) || force_output_types
+      standardise_output_types_ids(output_type_ids, is_required)
     }
   )
 }
 
-valid_output_type_ids <- function(output_type_ids) {
-  # If output_type_id values are provided and when dealing with an older
-  # config version that has "required" and"optional" fields or  extract output_type_id values
-  has_output_type_ids <- !is.null(output_type_ids)
-  pre_v4 <- isTRUE(
+pre_v4_std <- function(output_type_ids) {
+  isTRUE(
     all.equal(
       sort(names(output_type_ids)),
       sort(c("required", "optional"))
     )
   )
-  # In post v4 config schema versions, when not NULL, a single `required` element is
-  # a valid output type id configuration and should be returned as is
-  required_not_null <- !is.null(output_type_ids[["required"]])
+}
 
-  # Valid output type id configurations cannot be `NULL` and must either:
-  # have both `required` and `optional` elements or
-  # be a single non-NULL `required` element in post v4 schema versions
-  has_output_type_ids && (pre_v4 || required_not_null)
+is_required_output_type <- function(output_type) {
+  if (pre_v4_std(output_type[["output_type_id"]])) {
+    return(!is.null(output_type[["output_type_id"]][["required"]]))
+  }
+  isTRUE(output_type[["is_required"]]) ||
+    isTRUE(output_type[["output_type_id_params"]][["is_required"]])
+}
+
+std_output_type_ids <- function(output_type_ids) {
+  has_output_type_ids <- !is.null(output_type_ids)
+  # pre v4 configs have both `required` and `optional` fields.
+  pre_v4 <- pre_v4_std(output_type_ids)
+  # Valid output type id configurations cannot be `NULL` and be pre v4 specification
+  # (i.e. have both `required` and `optional` fields.
+  has_output_type_ids && pre_v4
+}
+
+standardise_output_types_ids <- function(output_type_ids, is_required) {
+  # Determine whether we're dealing with a v4 configuration for a point estimate or
+  #  a `NULL` output_type_ids object (in the case of pre v4 samples).
+  #  The below expression will return `TRUE` in both situations.
+  required_null <- is.null(output_type_ids[["required"]])
+  if (required_null) {
+    return(null_output_type_ids(is_required))
+  }
+  to_std_output_type_ids(output_type_ids, is_required)
+}
+
+to_std_output_type_ids <- function(output_type_ids, is_required) {
+  if (is_required) {
+    as_required(output_type_ids)
+  } else {
+    as_optional(output_type_ids)
+  }
+}
+
+as_required <- function(output_type_ids) {
+  opt_values <- output_type_ids$optional
+  req_values <- output_type_ids$required
+  values <- c(req_values, opt_values)
+
+  list(required = values, optional = NULL)
+}
+
+as_optional <- function(output_type_ids) {
+  opt_values <- output_type_ids$optional
+  req_values <- output_type_ids$required
+  values <- c(req_values, opt_values)
+
+  list(required = NULL, optional = values)
 }
 
 # Create a list of NULL or NA required and optional output type id values depending

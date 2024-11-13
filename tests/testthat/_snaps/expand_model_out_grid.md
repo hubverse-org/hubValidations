@@ -579,6 +579,48 @@
       x "random" is not valid output type.
       i `output_types` must be members of: "sample", "mean", and "pmf"
 
+# force_output_types works as expected
+
+    Code
+      v3_forced
+    Output
+      # A tibble: 4 x 5
+        reference_date location variant output_type output_type_id
+        <date>         <chr>    <chr>   <chr>       <chr>         
+      1 2022-10-22     US       AA      median      <NA>          
+      2 2022-10-22     01       AA      median      <NA>          
+      3 2022-10-22     US       BB      median      <NA>          
+      4 2022-10-22     01       BB      median      <NA>          
+
+---
+
+    Code
+      v3_forced_all
+    Output
+      # A tibble: 20 x 5
+         reference_date location variant output_type output_type_id
+         <date>         <chr>    <chr>   <chr>       <chr>         
+       1 2022-10-22     US       <NA>    pmf         low           
+       2 2022-10-22     01       <NA>    pmf         low           
+       3 2022-10-22     US       <NA>    pmf         moderate      
+       4 2022-10-22     01       <NA>    pmf         moderate      
+       5 2022-10-22     US       <NA>    pmf         high          
+       6 2022-10-22     01       <NA>    pmf         high          
+       7 2022-10-22     US       <NA>    pmf         very high     
+       8 2022-10-22     01       <NA>    pmf         very high     
+       9 2022-10-22     US       AA      mean        <NA>          
+      10 2022-10-22     01       AA      mean        <NA>          
+      11 2022-10-22     US       BB      mean        <NA>          
+      12 2022-10-22     01       BB      mean        <NA>          
+      13 2022-10-22     US       AA      median      <NA>          
+      14 2022-10-22     01       AA      median      <NA>          
+      15 2022-10-22     US       BB      median      <NA>          
+      16 2022-10-22     01       BB      median      <NA>          
+      17 2022-10-22     US       AA      sample      <NA>          
+      18 2022-10-22     01       AA      sample      <NA>          
+      19 2022-10-22     US       BB      sample      <NA>          
+      20 2022-10-22     01       BB      sample      <NA>          
+
 # expand_model_out_grid derived_task_ids ignoring works
 
     Code
@@ -697,4 +739,25 @@
     Condition
       Error in `expand_model_out_grid()`:
       x The length of `compound_taskid_set` (0) must match the number of modeling tasks (2) in the round.
+
+# v4 required output type ID values extracted correctly
+
+    Code
+      suppressWarnings(expand_model_out_grid(config_tasks = config_tasks, round_id = round_id,
+        output_types = "pmf", derived_task_ids = get_derived_task_ids(hub_path)))
+    Output
+      # A tibble: 540 x 7
+         forecast_date target  horizon target_date location output_type output_type_id
+         <date>        <chr>     <int> <date>      <chr>    <chr>       <chr>         
+       1 2023-05-01    wk flu~       2 NA          US       pmf         large_decrease
+       2 2023-05-01    wk flu~       1 NA          US       pmf         large_decrease
+       3 2023-05-01    wk flu~       2 NA          01       pmf         large_decrease
+       4 2023-05-01    wk flu~       1 NA          01       pmf         large_decrease
+       5 2023-05-01    wk flu~       2 NA          02       pmf         large_decrease
+       6 2023-05-01    wk flu~       1 NA          02       pmf         large_decrease
+       7 2023-05-01    wk flu~       2 NA          04       pmf         large_decrease
+       8 2023-05-01    wk flu~       1 NA          04       pmf         large_decrease
+       9 2023-05-01    wk flu~       2 NA          05       pmf         large_decrease
+      10 2023-05-01    wk flu~       1 NA          05       pmf         large_decrease
+      # i 530 more rows
 

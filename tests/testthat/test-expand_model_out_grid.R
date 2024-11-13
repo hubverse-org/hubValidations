@@ -397,6 +397,85 @@ test_that("expand_model_out_grid output type subsetting works", {
   )
 })
 
+test_that("force_output_types works as expected", {
+  # Try with v4 config where samples are optional
+  config_tasks <- hubUtils::read_config_file(
+    test_path(
+      "testdata", "configs",
+      "tasks-samples-v4.json"
+    )
+  )
+
+  expand_model_out_grid(config_tasks,
+    round_id = "2022-10-22",
+    include_sample_ids = FALSE,
+    bind_model_tasks = FALSE,
+    output_types = "sample",
+    derived_task_ids = "target_end_date",
+    required_vals_only = TRUE,
+    force_output_types = FALSE
+  )
+
+  expand_model_out_grid(config_tasks,
+    round_id = "2022-10-22",
+    include_sample_ids = FALSE,
+    bind_model_tasks = FALSE,
+    output_types = "sample",
+    derived_task_ids = "target_end_date",
+    required_vals_only = TRUE,
+    force_output_types = TRUE
+  )
+
+  expand_model_out_grid(config_tasks,
+    round_id = "2022-10-22",
+    include_sample_ids = TRUE,
+    bind_model_tasks = FALSE,
+    output_types = "sample",
+    derived_task_ids = "target_end_date",
+    required_vals_only = TRUE,
+    force_output_types = TRUE
+  )
+
+
+
+  # Test behaviour with v3 config where median is optional
+  v3_config_tasks <- hubUtils::read_config(test_path("testdata", "hub-spl"))
+  v3_req <- expand_model_out_grid(v3_config_tasks,
+    round_id = "2022-10-22",
+    include_sample_ids = FALSE,
+    bind_model_tasks = TRUE,
+    output_types = "median",
+    derived_task_ids = "target_end_date",
+    required_vals_only = TRUE
+  )
+  expect_equal(dim(v3_req), c(0L, 0L))
+
+  v3_forced <- expand_model_out_grid(config_tasks,
+    round_id = "2022-10-22",
+    include_sample_ids = FALSE,
+    bind_model_tasks = TRUE,
+    output_types = "median",
+    derived_task_ids = "target_end_date",
+    required_vals_only = TRUE,
+    force_output_types = TRUE
+  )
+
+  expect_equal(dim(v3_forced), c(4L, 5L))
+  expect_snapshot(v3_forced)
+
+  v3_forced_all <- expand_model_out_grid(config_tasks,
+    round_id = "2022-10-22",
+    include_sample_ids = FALSE,
+    bind_model_tasks = TRUE,
+    derived_task_ids = "target_end_date",
+    required_vals_only = TRUE,
+    force_output_types = TRUE
+  )
+
+  expect_equal(dim(v3_forced_all), c(20L, 5L))
+  expect_snapshot(v3_forced_all)
+})
+
 test_that("expand_model_out_grid derived_task_ids ignoring works", {
   config_tasks <- hubUtils::read_config(test_path("testdata", "hub-spl"))
 
@@ -565,5 +644,55 @@ test_that("v4 point estimate output type IDs extracted correctly as NAs", {
       round_id = round_id,
       output_types = "mean",
     )[["output_type_id"]] |> is.na() |> all()
+  )
+})
+
+test_that("v4 required output type ID values extracted correctly", {
+  hub_path <- system.file("testhubs", "v4", "flusight", package = "hubUtils")
+  file_name <- "hub-baseline/2023-05-01-hub-baseline.csv"
+  round_id <- parse_file_name(file_name)$round_id
+  # TODO: Remove suppressWarnings when v4 released
+  config_tasks <- suppressWarnings(read_config(hub_path = hub_path))
+
+  expect_snapshot(
+    # TODO: Remove suppressWarnings when v4 released
+    suppressWarnings(
+      expand_model_out_grid(
+        config_tasks = config_tasks,
+        round_id = round_id,
+        output_types = "pmf",
+        derived_task_ids = get_derived_task_ids(hub_path)
+      )
+    )
+  )
+
+  expect_length(
+    expand_model_out_grid(
+      config_tasks = config_tasks,
+      round_id = round_id,
+      output_types = "pmf",
+      required_vals_only = TRUE
+    ), 0L
+  )
+
+  expect_length(
+    expand_model_out_grid(
+      config_tasks = config_tasks,
+      round_id = round_id,
+      output_types = "pmf",
+      required_vals_only = TRUE,
+      force_output_types = TRUE
+    ), 5L
+  )
+
+  expect_equal(
+    expand_model_out_grid(
+      config_tasks = config_tasks,
+      round_id = round_id,
+      output_types = "pmf",
+      required_vals_only = TRUE,
+      force_output_types = TRUE
+    )$output_type_id,
+    c("large_decrease", "decrease", "stable", "increase", "large_increase")
   )
 })

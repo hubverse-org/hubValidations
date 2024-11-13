@@ -8,6 +8,7 @@ expand_model_out_grid(
   config_tasks,
   round_id,
   required_vals_only = FALSE,
+  force_output_types = FALSE,
   all_character = FALSE,
   output_type_id_datatype = c("from_config", "auto", "character", "double", "integer",
     "logical", "Date"),
@@ -32,6 +33,11 @@ contains only a single round.}
 
 \item{required_vals_only}{Logical. Whether to return only combinations of
 Task ID and related output type ID required values.}
+
+\item{force_output_types}{Logical. Whether to force all output types to be required.
+If \code{TRUE}, all output type ID values are treated as required regardless
+of the value of the \code{is_required} property. Useful for creating grids of required
+values for optional output types.}
 
 \item{all_character}{Logical. Whether to return all character column.}
 
@@ -89,6 +95,8 @@ Note that if \code{required_vals_only = TRUE} and an optional output type is
 requested through \code{output_types}, a zero row grid will be returned.
 If all output types are requested however (i.e. when \code{output_types = NULL}) and
 they are all optional, a grid of required task ID values only will be returned.
+However, whenever \code{force_output_types = TRUE}, all output types are treated as
+required.rf v];lfgiuy0
 }
 \description{
 Create expanded grid of valid task ID and output type value combinations
@@ -197,5 +205,37 @@ expand_model_out_grid(config_tasks,
   bind_model_tasks = FALSE,
   output_types = "sample",
   derived_task_ids = "target_end_date"
+)
+# Return only required values
+hub_path <- system.file("testhubs", "v4", "simple", package = "hubUtils")
+config_tasks <- read_config(hub_path)
+# Return required output types and output_types_ids only
+expand_model_out_grid(
+  config_tasks = config_tasks,
+  round_id = "2022-10-22",
+  required_vals_only = TRUE
+)
+# Force all output types to be required
+expand_model_out_grid(
+  config_tasks = config_tasks,
+  round_id = "2022-10-22",
+  required_vals_only = TRUE,
+  force_output_types = TRUE
+)
+# Sub-setting for an optional output type returns an empty data frame
+expand_model_out_grid(
+  config_tasks = config_tasks,
+  round_id = "2022-10-22",
+  output_types = "mean",
+  required_vals_only = TRUE
+)
+# force_output_types on an optional output type forces all output_type_id values
+# to be required
+expand_model_out_grid(
+  config_tasks = config_tasks,
+  round_id = "2022-10-22",
+  output_types = "mean",
+  required_vals_only = TRUE,
+  force_output_types = TRUE
 )
 }
