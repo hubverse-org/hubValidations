@@ -564,6 +564,8 @@ test_that("v4 point estimate output type IDs extracted correctly as NAs", {
       config_tasks = config_tasks,
       round_id = round_id,
       output_types = "mean",
-    )[["output_type_id"]] |> is.na() |> all()
+    )[["output_type_id"]] |>
+      is.na() |>
+      all()
   )
 })

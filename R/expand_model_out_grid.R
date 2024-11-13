@@ -197,7 +197,7 @@ expand_model_out_grid <- function(config_tasks,
   output_type_l <- subset_rnd_output_types(round_config, output_types) %>%
     extract_rnd_output_type_ids(config_tid) %>%
     process_grid_inputs(required_vals_only = required_vals_only) %>%
-    purrr::map(~purrr::compact(.x))
+    purrr::map(~ purrr::compact(.x))
 
   # Expand output grid individually for each modeling task and output type.
   grid <- purrr::map2(
@@ -300,7 +300,7 @@ expand_output_type_grid <- function(task_id_values,
 fix_round_id <- function(x, round_id, round_config, round_ids) {
   if (round_config[["round_id_from_variable"]] && !is.null(round_id)) {
     round_id <- rlang::arg_match(round_id,
-                                 values = round_ids
+      values = round_ids
     )
     round_id_var <- round_config[["round_id"]]
     purrr::map(
@@ -407,11 +407,11 @@ null_taskids_to_na <- function(model_task) {
     model_task, ~ all(purrr::map_lgl(.x, is.null))
   )
   purrr::modify_if(model_task,
-                   .p = to_na,
-                   ~ list(
-                     required = NA,
-                     optional = NULL
-                   )
+    .p = to_na,
+    ~ list(
+      required = NA,
+      optional = NULL
+    )
   )
 }
 
