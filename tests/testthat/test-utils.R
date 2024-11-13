@@ -1,39 +1,3 @@
-test_that("get_hub_file_formats works", {
-  expect_snapshot(
-    get_hub_file_formats(
-      hub_path = system.file("testhubs/simple", package = "hubValidations"),
-      round_id = "2022-10-08"
-    )
-  )
-  expect_snapshot(
-    get_hub_file_formats(
-      hub_path = system.file("testhubs/flusight", package = "hubUtils"),
-      round_id = "2023-01-30"
-    )
-  )
-})
-
-test_that("get_hub_timezone works", {
-  expect_snapshot(
-    get_hub_timezone(
-      hub_path = system.file("testhubs/simple", package = "hubValidations")
-    )
-  )
-})
-
-test_that("get_hub_model_output_dir works", {
-  expect_snapshot(
-    get_hub_model_output_dir(
-      hub_path = system.file("testhubs/simple", package = "hubValidations")
-    )
-  )
-  expect_snapshot(
-    get_hub_model_output_dir(
-      hub_path = system.file("testhubs/flusight", package = "hubUtils")
-    )
-  )
-})
-
 test_that("abs_file_path works", {
   path_simple <- abs_file_path(
     hub_path = system.file("testhubs/simple", package = "hubValidations"),

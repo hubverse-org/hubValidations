@@ -1,6 +1,6 @@
 test_that("check_tbl_value_col_sum1 works", {
   hub_path <- system.file("testhubs/flusight", package = "hubUtils")
-  file_path <- "umass_ens/2023-05-08-umass_ens.csv"
+  file_path <- "umass-ens/2023-05-08-umass-ens.csv"
   round_id <- "2023-05-08"
   tbl <- hubValidations::read_model_out_file(file_path, hub_path)
   expect_snapshot(
@@ -10,7 +10,7 @@ test_that("check_tbl_value_col_sum1 works", {
 
 test_that("check_tbl_value_col_sum1 errors correctly", {
   hub_path <- system.file("testhubs/flusight", package = "hubUtils")
-  file_path <- "umass_ens/2023-05-08-umass_ens.csv"
+  file_path <- "umass-ens/2023-05-08-umass-ens.csv"
   round_id <- "2023-05-08"
   tbl <- hubValidations::read_model_out_file(file_path, hub_path)
   tbl$value[1] <- 0.1

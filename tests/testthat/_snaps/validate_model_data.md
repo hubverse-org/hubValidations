@@ -167,14 +167,12 @@
         ..$ call          : chr "check_tbl_colnames"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ col_types         :List of 6
-        ..$ message       : chr "Column data types do not match hub schema. \n `output_type_id` should be \"character\" not \"double\"."
-        ..$ trace         : NULL
-        ..$ parent        : NULL
+       $ col_types         :List of 4
+        ..$ message       : chr "Column data types match hub schema. \n "
         ..$ where         : chr "hub-ensemble/2023-05-08-hub-ensemble.parquet"
         ..$ call          : chr "check_tbl_col_types"
         ..$ use_cli_format: logi TRUE
-        ..- attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_error" "error" ...
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ valid_vals        :List of 5
         ..$ message       : chr "`tbl` contains valid values/value combinations.  \n "
         ..$ where         : chr "hub-ensemble/2023-05-08-hub-ensemble.parquet"
@@ -201,14 +199,12 @@
         ..$ call          : chr "check_tbl_values_required"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ value_col_valid   :List of 6
-        ..$ message       : chr "Values in column `value` are not all valid with respect to modeling task config. \n  Values 196.83, 367.89, 244"| __truncated__
-        ..$ trace         : NULL
-        ..$ parent        : NULL
+       $ value_col_valid   :List of 4
+        ..$ message       : chr "Values in column `value` all valid with respect to modeling task config. \n "
         ..$ where         : chr "hub-ensemble/2023-05-08-hub-ensemble.parquet"
         ..$ call          : chr "check_tbl_value_col"
         ..$ use_cli_format: logi TRUE
-        ..- attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_error" "error" ...
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ value_col_non_desc:List of 5
         ..$ message       : chr "Values in `value` column are non-decreasing as output_type_ids increase for all unique task ID\n    value/outpu"| __truncated__
         ..$ where         : chr "hub-ensemble/2023-05-08-hub-ensemble.parquet"
