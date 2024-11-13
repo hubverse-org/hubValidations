@@ -7,18 +7,32 @@
 #' @export
 check_tbl_values_required <- function(tbl, round_id, file_path, hub_path,
                                       derived_task_ids = NULL) {
+  # browser()
   tbl[["value"]] <- NULL
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
+
   if (hubUtils::is_v3_config(config_tasks)) {
     tbl[tbl$output_type == "sample", "output_type_id"] <- NA
   }
   if (!is.null(derived_task_ids)) {
     tbl[, derived_task_ids] <- NA_character_
   }
+  is_v4 <- hubUtils::version_gte("v4.0.0", config = config_tasks)
+  if (is_v4) {
+    output_types <- get_submission_required_output_types(
+      tbl, config_tasks, round_id
+    )
+    force_output_types <- TRUE
+  } else {
+    output_types <- NULL
+    force_output_types <- FALSE
+  }
   req <- expand_model_out_grid(
     config_tasks,
     round_id = round_id,
+    output_types = output_types,
     required_vals_only = TRUE,
+    force_output_types = force_output_types,
     all_character = TRUE,
     bind_model_tasks = FALSE,
     derived_task_ids = derived_task_ids
@@ -27,6 +41,7 @@ check_tbl_values_required <- function(tbl, round_id, file_path, hub_path,
   full <- expand_model_out_grid(
     config_tasks,
     round_id = round_id,
+    output_types = output_types,
     required_vals_only = FALSE,
     all_character = TRUE,
     as_arrow_table = FALSE,
@@ -34,10 +49,7 @@ check_tbl_values_required <- function(tbl, round_id, file_path, hub_path,
     derived_task_ids = derived_task_ids
   )
 
-  tbl <- purrr::map(
-    full,
-    ~ dplyr::inner_join(.x, tbl, by = names(tbl))[, names(tbl)]
-  )
+  tbl <- join_tbl_to_model_task(full, tbl)
 
   missing_df <- purrr::pmap(
     combine_mt_inputs(tbl, req, full),
@@ -341,4 +353,8 @@ combine_mt_inputs <- function(tbl, req, full) {
     req[keep_mt],
     full[keep_mt]
   )
+}
+
+is_zero_tbl <- function(tbl) {
+  isTRUE(ncol(tbl) == 0L)
 }

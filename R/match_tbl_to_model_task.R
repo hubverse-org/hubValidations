@@ -40,10 +40,20 @@ match_tbl_to_model_task <- function(tbl, config_tasks, round_id,
     output_types = output_types,
     derived_task_ids = derived_task_ids
   ) %>%
-    purrr::map(\(.x) {
-      if (nrow(.x) == 0L) {
-        return(NULL)
+    join_model_task(tbl)
+}
+
+join_tbl_to_model_task  <- function(full, tbl) {
+  purrr::map(
+    full,
+    ~ {
+      # If expanded grid is zero tbl, return NULL
+      if (is_zero_tbl(.x)) {
+        return(.x)
       }
-      dplyr::inner_join(.x, tbl, by = join_cols)
-    })
+      # Otherwise join tbl to model task full expanded grids, splitting the submitted tbl
+      # across modeling task
+      dplyr::inner_join(.x, tbl, by = names(tbl))[, names(tbl)]
+    }
+  )
 }

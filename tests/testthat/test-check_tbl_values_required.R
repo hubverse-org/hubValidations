@@ -284,3 +284,9 @@ test_that("(#123) check_tbl_values_required works with all optional output types
     error = TRUE
   )
 })
+
+test_that(" check_tbl_values_required works with v4 hubs", {
+  skip_if_offline()
+
+
+})
