@@ -7,7 +7,6 @@
 #' @export
 check_tbl_values_required <- function(tbl, round_id, file_path, hub_path,
                                       derived_task_ids = NULL) {
-  # browser()
   tbl[["value"]] <- NULL
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
 
@@ -49,7 +48,7 @@ check_tbl_values_required <- function(tbl, round_id, file_path, hub_path,
     derived_task_ids = derived_task_ids
   )
 
-  tbl <- join_tbl_to_model_task(full, tbl)
+  tbl <- join_tbl_to_model_task(full, tbl, subset_to_tbl_cols = TRUE)
 
   missing_df <- purrr::pmap(
     combine_mt_inputs(tbl, req, full),
