@@ -636,6 +636,7 @@ test_that("v4 point estimate output type IDs extracted correctly as NAs", {
   hub_path <- system.file("testhubs", "v4", "flusight", package = "hubUtils")
   file_name <- "hub-baseline/2023-05-01-hub-baseline.csv"
   round_id <- parse_file_name(file_name)$round_id
+  # TODO: remove suppressWarnings() when schemas v4 is released
   config_tasks <- suppressWarnings(read_config(hub_path = hub_path))
 
   expect_true(
