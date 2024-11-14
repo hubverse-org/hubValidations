@@ -579,7 +579,153 @@
       x "random" is not valid output type.
       i `output_types` must be members of: "sample", "mean", and "pmf"
 
-# force_output_types works as expected
+# force_output_types works as expected with v4
+
+    Code
+      v4_opt_spls
+    Output
+      [[1]]
+      # A tibble: 0 x 0
+      
+      [[2]]
+      # A tibble: 0 x 0
+      
+
+---
+
+    Code
+      v4_opt_spls_force
+    Output
+      [[1]]
+      # A tibble: 0 x 0
+      
+      [[2]]
+      # A tibble: 4 x 5
+        reference_date location variant output_type output_type_id
+        <date>         <chr>    <chr>   <chr>       <chr>         
+      1 2022-10-22     US       AA      sample      <NA>          
+      2 2022-10-22     01       AA      sample      <NA>          
+      3 2022-10-22     US       BB      sample      <NA>          
+      4 2022-10-22     01       BB      sample      <NA>          
+      
+
+---
+
+    Code
+      v4_opt_spls_force_spl_idx
+    Output
+      [[1]]
+      # A tibble: 0 x 0
+      
+      [[2]]
+      # A tibble: 4 x 5
+        reference_date location variant output_type output_type_id
+        <date>         <chr>    <chr>   <chr>       <chr>         
+      1 2022-10-22     US       AA      sample      1             
+      2 2022-10-22     01       AA      sample      2             
+      3 2022-10-22     US       BB      sample      3             
+      4 2022-10-22     01       BB      sample      4             
+      
+
+---
+
+    Code
+      v4_opt_mdn
+    Output
+      [[1]]
+      # A tibble: 0 x 0
+      
+      [[2]]
+      # A tibble: 0 x 0
+      
+
+---
+
+    Code
+      v4_opt_mdn_force
+    Output
+      [[1]]
+      # A tibble: 0 x 0
+      
+      [[2]]
+      # A tibble: 4 x 5
+        reference_date location variant output_type output_type_id
+        <date>         <chr>    <chr>   <chr>       <chr>         
+      1 2022-10-22     US       AA      median      <NA>          
+      2 2022-10-22     01       AA      median      <NA>          
+      3 2022-10-22     US       BB      median      <NA>          
+      4 2022-10-22     01       BB      median      <NA>          
+      
+
+---
+
+    Code
+      v4_opt_qntl
+    Output
+      [[1]]
+      # A tibble: 0 x 0
+      
+      [[2]]
+      # A tibble: 0 x 0
+      
+
+---
+
+    Code
+      v4_opt_qntl_force
+    Output
+      [[1]]
+      # A tibble: 0 x 0
+      
+      [[2]]
+      # A tibble: 23 x 5
+         forecast_date horizon location output_type output_type_id
+         <date>          <int> <chr>    <chr>       <chr>         
+       1 2023-04-24          2 US       quantile    0.01          
+       2 2023-04-24          2 US       quantile    0.025         
+       3 2023-04-24          2 US       quantile    0.05          
+       4 2023-04-24          2 US       quantile    0.1           
+       5 2023-04-24          2 US       quantile    0.15          
+       6 2023-04-24          2 US       quantile    0.2           
+       7 2023-04-24          2 US       quantile    0.25          
+       8 2023-04-24          2 US       quantile    0.3           
+       9 2023-04-24          2 US       quantile    0.35          
+      10 2023-04-24          2 US       quantile    0.4           
+      # i 13 more rows
+      
+
+---
+
+    Code
+      v4_req_only
+    Output
+      # A tibble: 2 x 3
+        forecast_date horizon location
+        <date>          <int> <chr>   
+      1 2023-04-24          2 US      
+      2 2023-04-24          2 US      
+
+---
+
+    Code
+      v4_force_all
+    Output
+      # A tibble: 29 x 5
+         forecast_date horizon location output_type output_type_id
+         <date>          <int> <chr>    <chr>       <chr>         
+       1 2023-04-24          2 US       pmf         large_decrease
+       2 2023-04-24          2 US       pmf         decrease      
+       3 2023-04-24          2 US       pmf         stable        
+       4 2023-04-24          2 US       pmf         increase      
+       5 2023-04-24          2 US       pmf         large_increase
+       6 2023-04-24          2 US       quantile    0.01          
+       7 2023-04-24          2 US       quantile    0.025         
+       8 2023-04-24          2 US       quantile    0.05          
+       9 2023-04-24          2 US       quantile    0.1           
+      10 2023-04-24          2 US       quantile    0.15          
+      # i 19 more rows
+
+# force_output_types works as expected with v3
 
     Code
       v3_forced
