@@ -58,7 +58,13 @@ knitr::include_graphics("assets/ga-action-screenshot.png")
 
 ### Ignoring derived task IDs to improve performance
 
-Argument **`derived_task_ids`** allows for the specification of **task IDs that are derived from other task IDs** to be ignored, which **can often lead to a significant improvement in validation performance**.
+Argument **`derived_task_ids`** allows for the specification of **task IDs that are derived from other task IDs** to be ignored. This **can often lead to a significant improvement in validation performance**.
+
+<div class="alert alert-warning" role="alert">
+
+Note that it is **necessary for `derived_task_ids` to be specified if any of the task IDs derived task IDs depend on have required values**. If this is the case and derived task IDs are not specified, the dependent nature of derived task ID values will result in **false validation errors when validating required values**.
+
+</div>
 
 #### What are derived task IDs?
 
