@@ -93,7 +93,9 @@ the task IDs derived task IDs depend on have required values}. If this is the
 case and derived task IDs are not specified, the dependent nature of derived
 task ID values will result in \strong{false validation errors when validating
 required values}.
-\subsection{Details of checks performed by \code{validate_submission()}\if{html}{\out{<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">}}}{\if{html}{\out{
+
+Details of checks performed by \code{validate_submission()}\if{html}{\out{
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
  <thead>
   <tr>
    <th style="text-align:left;"> Name </th>
@@ -284,8 +286,6 @@ the compound idx in question. </td>
 </tbody>
 </table>
 }}
-
-}
 }
 \examples{
 hub_path <- system.file("testhubs/simple", package = "hubValidations")

@@ -13,7 +13,7 @@
 #' task ID values will result in **false validation errors when validating
 #' required values**.
 #'
-#' ### Details of checks performed by `validate_model_data()`
+#' Details of checks performed by `validate_model_data()`
 #'
 #' ```{r, echo = FALSE}
 #' arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")) %>%

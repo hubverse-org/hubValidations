@@ -26,7 +26,8 @@
 #' task ID values will result in **false validation errors when validating
 #' required values**.
 #'
-#' ### Details of checks performed by `validate_submission()`
+#' Details of checks performed by `validate_submission()`
+#'
 #' ```{r, echo = FALSE}
 #' arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")) %>%
 #' dplyr::filter(.data$`parent fun` != "validate_model_metadata", !.data$optional) %>%
