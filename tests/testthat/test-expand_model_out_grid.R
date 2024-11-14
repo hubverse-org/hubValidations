@@ -639,13 +639,13 @@ test_that("v4 point estimate output type IDs extracted correctly as NAs", {
   # TODO: remove suppressWarnings() when schemas v4 is released
   config_tasks <- suppressWarnings(read_config(hub_path = hub_path))
 
-  expect_true(
-    expand_model_out_grid(
-      config_tasks = config_tasks,
-      round_id = round_id,
-      output_types = "mean",
-    )[["output_type_id"]] |> is.na() |> all()
+  point_est_grid <- expand_model_out_grid(
+    config_tasks = config_tasks,
+    round_id = round_id,
+    output_types = "mean",
   )
+  expect_type(point_est_grid$output_type_id, "character")
+  expect_equal(unique(point_est_grid$output_type_id), NA_character_)
 })
 
 test_that("v4 required output type ID values extracted correctly", {
