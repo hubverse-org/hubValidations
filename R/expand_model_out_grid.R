@@ -635,12 +635,16 @@ is_required_output_type <- function(output_type) {
 }
 
 std_output_type_ids <- function(output_type_ids) {
-  has_output_type_ids <- !is.null(output_type_ids)
-  # pre v4 configs have both `required` and `optional` fields.
-  pre_v4 <- pre_v4_std(output_type_ids)
-  # Valid output type id configurations cannot be `NULL` and be pre v4 specification
-  # (i.e. have both `required` and `optional` fields.
-  has_output_type_ids && pre_v4
+  # Valid output type id configurations cannot be `NULL` . This is the situation
+  # in sample output types which are configured through a output_type_id_params
+  # property
+  no_output_type_ids <- is.null(output_type_ids)
+  if (no_output_type_ids) {
+    return(FALSE)
+  }
+  # pre v4 configs have standard format (i.e. both `required` and `optional` fields.)
+  # which is the format we are standardising to
+  pre_v4_std(output_type_ids)
 }
 
 standardise_output_types_ids <- function(output_type_ids, is_required) {
