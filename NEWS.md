@@ -3,6 +3,7 @@
 * Re-exported functions useful for modelers (#149):
   - `hubUtils::read_config()` and `hubUtils::read_config_file()` for reading in hub configuration files.
   - `hubData::create_hub_schema()` and `hubData::coerce_to_hub_schema()` for creating and coercing data to the hub schema.
+* v4 config supported (#156, #159).
 
 # hubValidations 0.8.0
 
