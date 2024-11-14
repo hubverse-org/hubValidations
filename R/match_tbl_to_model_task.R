@@ -42,12 +42,12 @@ match_tbl_to_model_task <- function(tbl, config_tasks, round_id,
     join_tbl_to_model_task(tbl, subset_to_tbl_cols = FALSE)
 }
 
-join_tbl_to_model_task  <- function(full, tbl, subset_to_tbl_cols = TRUE) {
+join_tbl_to_model_task <- function(full, tbl, subset_to_tbl_cols = TRUE) {
   cols <- names(tbl)
   join_cols <- cols[cols != "value"]
   purrr::map(
     full,
-    ~ {
+    \(.x, join_cols) {
       # If expanded grid is zero tbl, return NULL
       if (is_zero_tbl(.x)) {
         return(NULL)
@@ -59,6 +59,6 @@ join_tbl_to_model_task  <- function(full, tbl, subset_to_tbl_cols = TRUE) {
         match_tbl <- match_tbl[, join_cols]
       }
       match_tbl
-    }
+    }, join_cols = join_cols
   )
 }
