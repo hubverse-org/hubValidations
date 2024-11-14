@@ -23,6 +23,7 @@
 #' @inheritParams validate_model_file
 #' @inheritParams validate_submission
 #' @details
+#'
 #' Only model output and model metadata files are individually validated using
 #' `validate_submission()` or `validate_model_metadata()` respectively although
 #' as part of checks, hub config files are also validated.
@@ -48,6 +49,12 @@
 #' to `FALSE`. This only relates to hubs/rounds where submission windows are
 #' determined relative to a reference date and not when explicit submission
 #' window start and end dates are provided in the config.
+#'
+#' Finally, note that it is **necessary for `derived_task_ids` to be specified if any of
+#' the task IDs derived task IDs depend on have required values**. If this is the
+#' case and derived task IDs are not specified, the dependent nature of derived
+#' task ID values will result in **false validation errors when validating
+#' required values**.
 #'
 #' ### Checks on model output files
 #'

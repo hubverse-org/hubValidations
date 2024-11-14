@@ -7,7 +7,14 @@
 #' @inherit validate_model_file return
 #' @export
 #' @details
-#' Details of checks performed by `validate_model_data()`
+#' Note that it is **necessary for `derived_task_ids` to be specified if any of
+#' the task IDs derived task IDs depend on have required values**. If this is the
+#' case and derived task IDs are not specified, the dependent nature of derived
+#' task ID values will result in **false validation errors when validating
+#' required values**.
+#'
+#' ### Details of checks performed by `validate_model_data()`
+#'
 #' ```{r, echo = FALSE}
 #' arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")) %>%
 #' dplyr::filter(.data$`parent fun` == "validate_model_data", !.data$optional) %>%

@@ -48,3 +48,10 @@ Returned object also inherits from subclass \verb{<hub_check>}.
 Check all required task ID/output type/output type ID value combinations present
 in model data.
 }
+\details{
+Note that it is \strong{necessary for \code{derived_task_ids} to be specified if any of
+the task IDs derived task IDs depend on have required values}. If this is the
+case and derived task IDs are not specified, the dependent nature of derived
+task ID values will result in \strong{false validation errors when validating
+required values}.
+}

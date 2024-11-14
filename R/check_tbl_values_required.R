@@ -5,6 +5,12 @@
 #' @inherit check_tbl_colnames params
 #' @inherit check_tbl_col_types return
 #' @export
+#' @details
+#' Note that it is **necessary for `derived_task_ids` to be specified if any of
+#' the task IDs derived task IDs depend on have required values**. If this is the
+#' case and derived task IDs are not specified, the dependent nature of derived
+#' task ID values will result in **false validation errors when validating
+#' required values**.
 check_tbl_values_required <- function(tbl, round_id, file_path, hub_path,
                                       derived_task_ids = NULL) {
   tbl[["value"]] <- NULL
