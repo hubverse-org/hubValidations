@@ -618,11 +618,9 @@ extract_mt_output_type_ids <- function(x, config_tid, force_output_types = FALSE
 }
 
 pre_v4_std <- function(output_type_ids) {
-  isTRUE(
-    setequal(
-      names(output_type_ids),
-      c("required", "optional")
-    )
+  setequal(
+    names(output_type_ids),
+    c("required", "optional")
   )
 }
 
