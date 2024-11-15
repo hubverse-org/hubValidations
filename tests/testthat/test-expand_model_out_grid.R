@@ -759,24 +759,16 @@ test_that("v4 required output type ID values extracted correctly", {
     ), 0L
   )
 
-  expect_length(
-    expand_model_out_grid(
-      config_tasks = config_tasks,
-      round_id = round_id,
-      output_types = "pmf",
-      required_vals_only = TRUE,
-      force_output_types = TRUE
-    ), 5L
+  force_pmf <-  expand_model_out_grid(
+    config_tasks = config_tasks,
+    round_id = round_id,
+    output_types = "pmf",
+    required_vals_only = TRUE,
+    force_output_types = TRUE
   )
-
+  expect_length(force_pmf, 5L)
   expect_equal(
-    expand_model_out_grid(
-      config_tasks = config_tasks,
-      round_id = round_id,
-      output_types = "pmf",
-      required_vals_only = TRUE,
-      force_output_types = TRUE
-    )$output_type_id,
+    force_pmf$output_type_id,
     c("large_decrease", "decrease", "stable", "increase", "large_increase")
   )
 })
