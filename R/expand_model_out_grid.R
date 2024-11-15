@@ -46,7 +46,7 @@
 #' If all output types are requested however (i.e. when `output_types = NULL`) and
 #' they are all optional, a grid of required task ID values only will be returned.
 #' However, whenever `force_output_types = TRUE`, all output types are treated as
-#' required.rf v];lfgiuy0
+#' required.
 #' @inheritParams hubData::coerce_to_hub_schema
 #' @details
 #' When a round is set to `round_id_from_variable: true`,
