@@ -234,7 +234,7 @@ expand_model_out_grid <- function(config_tasks,
   config_tid <- hubUtils::get_config_tid(config_tasks = config_tasks)
 
   output_type_l <- subset_round_output_types(round_config, output_types) %>%
-    extract_rnd_output_type_ids(config_tid, force_output_types) %>%
+    extract_round_output_type_ids(config_tid, force_output_types) %>%
     process_grid_inputs(required_vals_only = required_vals_only) %>%
     purrr::map(~ purrr::compact(.x))
 
@@ -591,7 +591,7 @@ get_sample_n <- function(x, config_tid) {
 # for back-compatibility with schema versions < v2.0.0. Returns a list of
 # `required` and `optional` or just `required` vectors of values as appropriate for
 # each output type in each model task in the round.
-extract_rnd_output_type_ids <- function(x, config_tid, force_output_types = FALSE) {
+extract_round_output_type_ids <- function(x, config_tid, force_output_types = FALSE) {
   purrr::map(x, ~ extract_mt_output_type_ids(.x, config_tid, force_output_types))
 }
 # Extract the output_type_id values from a model_task object.
