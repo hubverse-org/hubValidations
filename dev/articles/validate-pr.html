@@ -14,8 +14,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Validating Pull Requests on GitHub">
 <meta name="robots" content="noindex">
 </head>
@@ -138,8 +138,16 @@ validation failures.</p>
 </h3>
 <p>Argument <strong><code>derived_task_ids</code></strong> allows for
 the specification of <strong>task IDs that are derived from other task
-IDs</strong> to be ignored, which <strong>can often lead to a
-significant improvement in validation performance</strong>.</p>
+IDs</strong> to be ignored. This <strong>can often lead to a significant
+improvement in validation performance</strong>.</p>
+<div class="alert alert-warning" role="alert">
+<p>Note that it is <strong>necessary for <code>derived_task_ids</code>
+to be specified if any of the task IDs derived task IDs depend on have
+required values</strong>. If this is the case and derived task IDs are
+not specified, the dependent nature of derived task ID values will
+result in <strong>false validation errors when validating required
+values</strong>.</p>
+</div>
 <div class="section level4">
 <h4 id="what-are-derived-task-ids">What are derived task IDs?<a class="anchor" aria-label="anchor" href="#what-are-derived-task-ids"></a>
 </h4>
