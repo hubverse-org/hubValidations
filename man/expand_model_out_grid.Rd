@@ -96,7 +96,7 @@ requested through \code{output_types}, a zero row grid will be returned.
 If all output types are requested however (i.e. when \code{output_types = NULL}) and
 they are all optional, a grid of required task ID values only will be returned.
 However, whenever \code{force_output_types = TRUE}, all output types are treated as
-required.rf v];lfgiuy0
+required.
 }
 \description{
 Create expanded grid of valid task ID and output type value combinations
