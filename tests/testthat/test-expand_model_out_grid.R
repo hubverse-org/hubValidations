@@ -397,6 +397,168 @@ test_that("expand_model_out_grid output type subsetting works", {
   )
 })
 
+test_that("force_output_types works as expected with v4", {
+  # Try with v4 config where samples are optional
+  config_tasks <- read_config_file(
+    test_path(
+      "testdata", "configs",
+      "tasks-samples-v4.json"
+    )
+  ) |> suppressWarnings() # TODO: Remove when v4.0.0 released
+  # test optional samples ----
+  # Without forcing output_types should be list of zero dim tbls
+  v4_opt_spls <- expand_model_out_grid(
+    config_tasks,
+    round_id = "2022-10-22",
+    include_sample_ids = FALSE,
+    bind_model_tasks = FALSE,
+    output_types = "sample",
+    derived_task_ids = "target_end_date",
+    required_vals_only = TRUE,
+    force_output_types = FALSE
+  )
+  expect_equal(lengths(v4_opt_spls), c(0L, 0L))
+  expect_snapshot(v4_opt_spls)
+  # With forcing, a grid that includes sample output type ids as required.
+
+  v4_opt_spls_force <- expand_model_out_grid(config_tasks,
+    round_id = "2022-10-22",
+    include_sample_ids = FALSE,
+    bind_model_tasks = FALSE,
+    output_types = "sample",
+    derived_task_ids = "target_end_date",
+    required_vals_only = TRUE,
+    force_output_types = TRUE
+  )
+  expect_snapshot(v4_opt_spls_force)
+
+  # With forcing, ensure include_sample_ids still works and issues compound_idx
+  # warning.
+  v4_opt_spls_force_spl_idx <- expand_model_out_grid(config_tasks,
+    round_id = "2022-10-22",
+    include_sample_ids = TRUE,
+    bind_model_tasks = FALSE,
+    output_types = "sample",
+    derived_task_ids = "target_end_date",
+    required_vals_only = TRUE,
+    force_output_types = TRUE
+  ) |> suppressWarnings()
+  expect_snapshot(v4_opt_spls_force_spl_idx)
+
+  # test optional point estimate - median ----
+  # Without forcing output_types should be list of zero dim tbls
+  v4_opt_mdn <- expand_model_out_grid(
+    config_tasks,
+    round_id = "2022-10-22",
+    include_sample_ids = FALSE,
+    bind_model_tasks = FALSE,
+    output_types = "median",
+    derived_task_ids = "target_end_date",
+    required_vals_only = TRUE,
+    force_output_types = FALSE
+  )
+  expect_equal(lengths(v4_opt_spls), c(0L, 0L))
+  expect_snapshot(v4_opt_mdn)
+  # With forcing, a grid that includes median output type ids as required.
+  v4_opt_mdn_force <- expand_model_out_grid(
+    config_tasks,
+    round_id = "2022-10-22",
+    include_sample_ids = FALSE,
+    bind_model_tasks = FALSE,
+    output_types = "median",
+    derived_task_ids = "target_end_date",
+    required_vals_only = TRUE,
+    force_output_types = TRUE
+  )
+  expect_snapshot(v4_opt_mdn_force)
+
+  # test optional output type with output type IDs - quantile ----
+  config_tasks <- read_config(system.file("testhubs", "v4", "flusight",
+    package = "hubUtils"
+  )) |> suppressWarnings() # TODO: Remove when v4.0.0 released
+  # Without forcing output_types, should be list of zero dim tbls
+  v4_opt_qntl <- expand_model_out_grid(
+    config_tasks,
+    round_id = "2023-04-24",
+    include_sample_ids = FALSE,
+    bind_model_tasks = FALSE,
+    output_types = "quantile",
+    required_vals_only = TRUE,
+    force_output_types = FALSE
+  )
+  expect_equal(lengths(v4_opt_spls), c(0L, 0L))
+  expect_snapshot(v4_opt_qntl)
+  # With forcing, a grid that includes quantile output type ids as required.
+  v4_opt_qntl_force <- expand_model_out_grid(
+    config_tasks,
+    round_id = "2023-04-24",
+    include_sample_ids = FALSE,
+    bind_model_tasks = FALSE,
+    output_types = "quantile",
+    required_vals_only = TRUE,
+    force_output_types = TRUE
+  )
+  expect_snapshot(v4_opt_qntl_force)
+  # test with all output types ----
+  v4_req_only <- expand_model_out_grid(
+    config_tasks,
+    round_id = "2023-04-24",
+    include_sample_ids = FALSE,
+    bind_model_tasks = TRUE,
+    required_vals_only = TRUE,
+    force_output_types = FALSE
+  )
+  expect_snapshot(v4_req_only)
+  # With forcing, a grid that includes quantile output type ids as required.
+  v4_force_all <- expand_model_out_grid(
+    config_tasks,
+    round_id = "2023-04-24",
+    include_sample_ids = FALSE,
+    bind_model_tasks = TRUE,
+    required_vals_only = TRUE,
+    force_output_types = TRUE
+  )
+  expect_snapshot(v4_force_all)
+})
+test_that("force_output_types works as expected with v3", {
+  # Test behaviour with v3 config where median is optional
+  v3_config_tasks <- read_config(test_path("testdata", "hub-spl"))
+  v3_req <- expand_model_out_grid(v3_config_tasks,
+    round_id = "2022-10-22",
+    include_sample_ids = FALSE,
+    bind_model_tasks = TRUE,
+    output_types = "median",
+    derived_task_ids = "target_end_date",
+    required_vals_only = TRUE
+  )
+  expect_equal(dim(v3_req), c(0L, 0L))
+
+  v3_forced <- expand_model_out_grid(v3_config_tasks,
+    round_id = "2022-10-22",
+    include_sample_ids = FALSE,
+    bind_model_tasks = TRUE,
+    output_types = "median",
+    derived_task_ids = "target_end_date",
+    required_vals_only = TRUE,
+    force_output_types = TRUE
+  )
+
+  expect_equal(dim(v3_forced), c(4L, 5L))
+  expect_snapshot(v3_forced)
+
+  v3_forced_all <- expand_model_out_grid(v3_config_tasks,
+    round_id = "2022-10-22",
+    include_sample_ids = FALSE,
+    bind_model_tasks = TRUE,
+    derived_task_ids = "target_end_date",
+    required_vals_only = TRUE,
+    force_output_types = TRUE
+  )
+
+  expect_equal(dim(v3_forced_all), c(20L, 5L))
+  expect_snapshot(v3_forced_all)
+})
+
 test_that("expand_model_out_grid derived_task_ids ignoring works", {
   config_tasks <- hubUtils::read_config(test_path("testdata", "hub-spl"))
 
@@ -557,15 +719,56 @@ test_that("v4 point estimate output type IDs extracted correctly as NAs", {
   hub_path <- system.file("testhubs", "v4", "flusight", package = "hubUtils")
   file_name <- "hub-baseline/2023-05-01-hub-baseline.csv"
   round_id <- parse_file_name(file_name)$round_id
+  # TODO: remove suppressWarnings() when schemas v4 is released
   config_tasks <- suppressWarnings(read_config(hub_path = hub_path))
 
-  expect_true(
+  point_est_grid <- expand_model_out_grid(
+    config_tasks = config_tasks,
+    round_id = round_id,
+    output_types = "mean",
+  )
+  expect_type(point_est_grid$output_type_id, "character")
+  expect_equal(unique(point_est_grid$output_type_id), NA_character_)
+})
+
+test_that("v4 required output type ID values extracted correctly", {
+  hub_path <- system.file("testhubs", "v4", "flusight", package = "hubUtils")
+  file_name <- "hub-baseline/2023-05-01-hub-baseline.csv"
+  round_id <- parse_file_name(file_name)$round_id
+  # TODO: Remove suppressWarnings when v4 released
+  config_tasks <- suppressWarnings(read_config(hub_path = hub_path))
+
+  expect_snapshot(
+    # TODO: Remove suppressWarnings when v4 released
+    suppressWarnings(
+      expand_model_out_grid(
+        config_tasks = config_tasks,
+        round_id = round_id,
+        output_types = "pmf",
+        derived_task_ids = get_derived_task_ids(hub_path)
+      )
+    )
+  )
+
+  expect_length(
     expand_model_out_grid(
       config_tasks = config_tasks,
       round_id = round_id,
-      output_types = "mean",
-    )[["output_type_id"]] |>
-      is.na() |>
-      all()
+      output_types = "pmf",
+      required_vals_only = TRUE
+    ), 0L
+  )
+
+  force_pmf <-  expand_model_out_grid(
+    config_tasks = config_tasks,
+    round_id = round_id,
+    output_types = "pmf",
+    required_vals_only = TRUE,
+    force_output_types = TRUE
+  )
+  expect_length(force_pmf, 5L)
+  expect_equal(
+    force_pmf$output_type_id,
+    c("large_decrease", "decrease", "stable", "increase", "large_increase")
   )
 })

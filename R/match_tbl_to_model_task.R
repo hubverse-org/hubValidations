@@ -25,7 +25,6 @@
 match_tbl_to_model_task <- function(tbl, config_tasks, round_id,
                                     output_types = NULL, derived_task_ids = NULL,
                                     all_character = TRUE) {
-  join_cols <- names(tbl)[names(tbl) != "value"]
   if (hubUtils::is_v3_config(config_tasks)) {
     tbl[tbl$output_type == "sample", "output_type_id"] <- NA
   }
@@ -40,10 +39,26 @@ match_tbl_to_model_task <- function(tbl, config_tasks, round_id,
     output_types = output_types,
     derived_task_ids = derived_task_ids
   ) %>%
-    purrr::map(\(.x) {
-      if (nrow(.x) == 0L) {
+    join_tbl_to_model_task(tbl, subset_to_tbl_cols = FALSE)
+}
+
+join_tbl_to_model_task <- function(full, tbl, subset_to_tbl_cols = TRUE) {
+  cols <- names(tbl)
+  join_cols <- cols[cols != "value"]
+  purrr::map(
+    full,
+    \(.x, join_cols) {
+      # If expanded grid is zero tbl, return NULL
+      if (is_zero_tbl(.x)) {
         return(NULL)
       }
-      dplyr::inner_join(.x, tbl, by = join_cols)
-    })
+      # Otherwise join tbl to model task full expanded grids, splitting the
+      # submitted tbl across modeling task. Keep only column present in the tbl
+      match_tbl <- dplyr::inner_join(.x, tbl, by = join_cols)
+      if (subset_to_tbl_cols) {
+        match_tbl <- match_tbl[, join_cols]
+      }
+      match_tbl
+    }, join_cols = join_cols
+  )
 }

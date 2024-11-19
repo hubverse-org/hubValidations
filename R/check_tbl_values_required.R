@@ -5,20 +5,49 @@
 #' @inherit check_tbl_colnames params
 #' @inherit check_tbl_col_types return
 #' @export
+#' @details
+#' Note that it is **necessary for `derived_task_ids` to be specified if any of
+#' the task IDs derived task IDs depend on have required values**. If this is the
+#' case and derived task IDs are not specified, the dependent nature of derived
+#' task ID values will result in **false validation errors when validating
+#' required values**.
 check_tbl_values_required <- function(tbl, round_id, file_path, hub_path,
                                       derived_task_ids = NULL) {
   tbl[["value"]] <- NULL
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
+
   if (hubUtils::is_v3_config(config_tasks)) {
     tbl[tbl$output_type == "sample", "output_type_id"] <- NA
   }
   if (!is.null(derived_task_ids)) {
     tbl[, derived_task_ids] <- NA_character_
   }
+  is_v4 <- hubUtils::version_gte("v4.0.0", config = config_tasks)
+  if (is_v4) {
+    # In v4, whether an output type is optional is determined by `is_required`, not
+    # by values in `optional` vs `required` properties and all output type IDs are
+    # stored in the required property.
+    # Also, in v4, if an optional output type is submitted, all output type IDs
+    # associated with it become required.
+    # To support back-compatibility and use existing infrastructure we need to:
+    # 1. Determine the output types that are are being submitted
+    output_types <- get_submission_required_output_types(
+      tbl, config_tasks, round_id
+    )
+    # 2. Force all output types being submitted to be required, regardless of whether
+    # they are optional in the config.
+    force_output_types <- TRUE
+  } else {
+    # For pre v4 configs, we use the legacy settings and rules.
+    output_types <- NULL
+    force_output_types <- FALSE
+  }
   req <- expand_model_out_grid(
     config_tasks,
     round_id = round_id,
+    output_types = output_types,
     required_vals_only = TRUE,
+    force_output_types = force_output_types,
     all_character = TRUE,
     bind_model_tasks = FALSE,
     derived_task_ids = derived_task_ids
@@ -27,6 +56,7 @@ check_tbl_values_required <- function(tbl, round_id, file_path, hub_path,
   full <- expand_model_out_grid(
     config_tasks,
     round_id = round_id,
+    output_types = output_types,
     required_vals_only = FALSE,
     all_character = TRUE,
     as_arrow_table = FALSE,
@@ -34,10 +64,7 @@ check_tbl_values_required <- function(tbl, round_id, file_path, hub_path,
     derived_task_ids = derived_task_ids
   )
 
-  tbl <- purrr::map(
-    full,
-    ~ dplyr::inner_join(.x, tbl, by = names(tbl))[, names(tbl)]
-  )
+  tbl <- join_tbl_to_model_task(full, tbl, subset_to_tbl_cols = TRUE)
 
   missing_df <- purrr::pmap(
     combine_mt_inputs(tbl, req, full),
@@ -341,4 +368,8 @@ combine_mt_inputs <- function(tbl, req, full) {
     req[keep_mt],
     full[keep_mt]
   )
+}
+
+is_zero_tbl <- function(tbl) {
+  isTRUE(ncol(tbl) == 0L)
 }

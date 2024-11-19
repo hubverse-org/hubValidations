@@ -122,6 +122,12 @@ currently \code{allow_submit_window_mods} will not work correctly and is best se
 to \code{FALSE}. This only relates to hubs/rounds where submission windows are
 determined relative to a reference date and not when explicit submission
 window start and end dates are provided in the config.
+
+Finally, note that it is \strong{necessary for \code{derived_task_ids} to be specified if any of
+the task IDs derived task IDs depend on have required values}. If this is the
+case and derived task IDs are not specified, the dependent nature of derived
+task ID values will result in \strong{false validation errors when validating
+required values}.
 \subsection{Checks on model output files}{
 
 Details of checks performed by \code{validate_submission()}\if{html}{\out{<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">}}\if{html}{\out{
