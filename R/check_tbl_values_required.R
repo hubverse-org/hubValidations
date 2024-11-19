@@ -24,11 +24,21 @@ check_tbl_values_required <- function(tbl, round_id, file_path, hub_path,
   }
   is_v4 <- hubUtils::version_gte("v4.0.0", config = config_tasks)
   if (is_v4) {
+    # In v4, whether an output type is optional is determined by `is_required`, not
+    # by values in `optional` vs `required` properties and all output type IDs are
+    # stored in the required property.
+    # Also, in v4, if an optional output type is submitted, all output type IDs
+    # associated with it become required.
+    # To support back-compatibility and use existing infrastructure we need to:
+    # 1. Determine the output types that are are being submitted
     output_types <- get_submission_required_output_types(
       tbl, config_tasks, round_id
     )
+    # 2. Force all output types being submitted to be required, regardless of whether
+    # they are optional in the config.
     force_output_types <- TRUE
   } else {
+    # For pre v4 configs, we use the legacy settings and rules.
     output_types <- NULL
     force_output_types <- FALSE
   }
