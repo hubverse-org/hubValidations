@@ -832,7 +832,7 @@
     Code
       expand_model_out_grid(config_tasks)
     Condition
-      Error in `checkmate::assert_string()`:
+      Error in `expand_model_out_grid()`:
       ! argument "round_id" is missing, with no default
 
 ---
@@ -840,7 +840,7 @@
     Code
       expand_model_out_grid(config_tasks)
     Condition
-      Error in `checkmate::assert_string()`:
+      Error in `expand_model_out_grid()`:
       ! argument "round_id" is missing, with no default
 
 ---
