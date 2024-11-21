@@ -77,7 +77,7 @@ check_tbl_values_required <- function(tbl, round_id, file_path, hub_path,
   if (check) {
     details <- NULL
   } else {
-    missing_df <- hubData::coerce_to_hub_schema(missing_df, config_tasks)
+    missing_df <- coerce_to_hub_schema(missing_df, config_tasks)
     details <- cli::format_inline("See {.var missing} attribute for details.")
   }
 

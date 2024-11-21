@@ -159,7 +159,7 @@ submission_tmpl <- function(hub_con, config_tasks, round_id,
   # Add NA columns for value and all optional cols
   na_cols <- tmpl_cols[!tmpl_cols %in% names(tmpl_df)]
   tmpl_df[, na_cols] <- NA
-  tmpl_df <- hubData::coerce_to_hub_schema(tmpl_df, config_tasks)[, tmpl_cols]
+  tmpl_df <- coerce_to_hub_schema(tmpl_df, config_tasks)[, tmpl_cols]
 
   if (complete_cases_only) {
     subset_complete_cases(tmpl_df)

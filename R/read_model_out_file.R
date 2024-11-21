@@ -53,7 +53,7 @@ read_model_out_file <- function(file_path, hub_path = ".",
     parquet = {
       if (coerce_types == "hub") {
         arrow::read_parquet(full_path) %>%
-          hubData::coerce_to_hub_schema(
+          coerce_to_hub_schema(
             config_tasks = read_config(hub_path, "tasks"),
             output_type_id_datatype = output_type_id_datatype
           )
@@ -67,7 +67,7 @@ read_model_out_file <- function(file_path, hub_path = ".",
     arrow = {
       if (coerce_types == "hub") {
         arrow::read_feather(full_path) %>%
-          hubData::coerce_to_hub_schema(
+          coerce_to_hub_schema(
             config_tasks = read_config(hub_path, "tasks"),
             output_type_id_datatype = output_type_id_datatype
           )

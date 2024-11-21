@@ -411,7 +411,7 @@ process_mt_grid_outputs <- function(x, config_tasks, all_character,
   } else {
     x <- purrr::map(
       x,
-      ~ hubData::coerce_to_hub_schema(
+      ~ coerce_to_hub_schema(
         .x,
         config_tasks,
         as_arrow_table = as_arrow_table,
