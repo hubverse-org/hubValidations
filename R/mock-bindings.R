@@ -3,4 +3,4 @@
 
 # Binging for mocking `Sys.time` function in tests of `validate_pr` and
 # validate_submission
-Sys.time <- NULL
+Sys.time <- NULL # nolint: object_name_linter

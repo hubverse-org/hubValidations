@@ -129,7 +129,8 @@ submission_tmpl <- function(hub_con, config_tasks, round_id,
     )
   } else {
     derived_task_ids <- validate_derived_task_ids(
-      derived_task_ids, config_tasks, round_id)
+      derived_task_ids, config_tasks, round_id
+    )
   }
 
   tmpl_df <- expand_model_out_grid(config_tasks,

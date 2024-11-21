@@ -7,11 +7,13 @@ test_that("check_tbl_col_types works", {
     check_tbl_col_types(tbl, file_path, hub_path)
   )
   local_mocked_bindings(
-    create_hub_schema = function(...) c(
-      origin_date = "character", target = "character", horizon = "double",
-      location = "character", age_group = "character", output_type = "character",
-      output_type_id = "double", value = "integer"
-    )
+    create_hub_schema = function(...) {
+      c(
+        origin_date = "character", target = "character", horizon = "double",
+        location = "character", age_group = "character", output_type = "character",
+        output_type_id = "double", value = "integer"
+      )
+    }
   )
   expect_snapshot(
     check_tbl_col_types(tbl, file_path, hub_path)

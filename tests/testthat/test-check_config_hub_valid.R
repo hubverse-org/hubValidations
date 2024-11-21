@@ -12,10 +12,12 @@ test_that("check_config_hub_valid works", {
     )
   )
   local_mocked_bindings(
-    validate_hub_config = function(...) list(
-      admin = TRUE,
-      tasks = FALSE
-    )
+    validate_hub_config = function(...) {
+      list(
+        admin = TRUE,
+        tasks = FALSE
+      )
+    }
   )
   expect_snapshot(
     check_config_hub_valid(

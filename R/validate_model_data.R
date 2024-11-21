@@ -120,7 +120,8 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
     derived_task_ids <- validate_derived_task_ids(
       derived_task_ids,
       config_tasks = read_config(hub_path),
-      round_id)
+      round_id
+    )
   }
 
   # -- Column level checks ----

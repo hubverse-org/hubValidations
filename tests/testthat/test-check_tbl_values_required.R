@@ -363,16 +363,16 @@ test_that("Reading derived_task_ids from config works", {
   # TODO: Remove suppressWarnings when v4 is released
   config_tasks <- read_config(hub_path, "tasks") |> suppressWarnings()
   tbl <- read_model_out_file(file_path, hub_path,
-                             coerce_types = "chr"
+    coerce_types = "chr"
   ) |> suppressWarnings() # TODO: Remove suppressWarnings when v4 is released
 
   # Ensure reading derived_task_ids from config gives same result as when
   # explicitly provided as argument
   expect_equal(
     check_tbl_values_required(tbl, round_id, file_path, hub_path,
-                              derived_task_ids = "target_date"
+      derived_task_ids = "target_date"
     ) |> suppressWarnings(), # TODO: Remove suppressWarnings when v4 is released
-    check_tbl_values_required(tbl, round_id, file_path, hub_path
-    ) |> suppressWarnings() # TODO: Remove suppressWarnings when v4 is released
+    check_tbl_values_required(tbl, round_id, file_path, hub_path) |>
+      suppressWarnings() # TODO: Remove suppressWarnings when v4 is released
   )
 })
