@@ -210,7 +210,7 @@ missing_req_rows <- function(opt_cols, x, mask, req, full) {
       unique(x[, opt_cols])
     )[, names(x)]
   } else {
-    full[0L, names(x)]
+    full[0L, names(x), drop = FALSE]
   }
 }
 
