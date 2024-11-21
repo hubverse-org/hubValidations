@@ -97,11 +97,8 @@ test_that("validate_submission submission within window works", {
 
   hub_path <- system.file("testhubs/simple", package = "hubValidations")
 
-  mockery::stub(
-    check_submission_time,
-    "Sys.time",
-    lubridate::as_datetime("2022-10-08 18:01:00 EEST"),
-    2
+  local_mocked_bindings(
+    Sys.time = function(...) lubridate::as_datetime("2022-10-08 18:01:00 EEST")
   )
   expect_snapshot(
     str(
@@ -117,11 +114,8 @@ test_that("validate_submission submission outside window fails correctly", {
 
   hub_path <- system.file("testhubs/simple", package = "hubValidations")
 
-  mockery::stub(
-    check_submission_time,
-    "Sys.time",
-    lubridate::as_datetime("2023-10-08 18:01:00 EEST"),
-    2
+  local_mocked_bindings(
+    Sys.time = function(...) lubridate::as_datetime("2023-10-08 18:01:00 EEST")
   )
   expect_snapshot(
     str(
@@ -357,11 +351,9 @@ test_that("Ignoring derived_task_ids in validate_submission works", {
     coerce_types = "chr"
   )
   tbl_mod[1, "target_end_date"] <- "2092-10-22"
-  mockery::stub(
-    validate_submission,
-    "read_model_out_file",
-    tbl_mod,
-    2
+  # Use `local_mocked_bindings()` to override `read_model_out_file`
+  local_mocked_bindings(
+    read_model_out_file = function(...) tbl_mod
   )
   expect_snapshot(
     validate_submission(

@@ -104,12 +104,8 @@ test_that("Different compound_taskid_sets work", {
     ),
     ~ c("reference_date", "horizon", "location", "variant")
   )
-
-  mockery::stub(
-    check_tbl_spl_compound_taskid_set,
-    "hubUtils::read_config",
-    config_tasks_full_ctids,
-    2
+  local_mocked_bindings(
+    read_config = function(...) config_tasks_full_ctids
   )
   expect_snapshot(
     str(
@@ -148,14 +144,9 @@ test_that("Finer compound_taskid_sets work", {
     ),
     ~ c("reference_date", "horizon", "location", "target_end_date")
   )
-
-  mockery::stub(
-    check_tbl_spl_compound_taskid_set,
-    "hubUtils::read_config",
-    config_tasks_no_variant,
-    2
+  local_mocked_bindings(
+    read_config = function(...) config_tasks_no_variant
   )
-
   tbl_fine <- create_spl_file("2022-10-22",
     compound_taskid_set = list(NULL, NULL),
     write = FALSE, out_datatype = "chr"
