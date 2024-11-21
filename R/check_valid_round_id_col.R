@@ -13,9 +13,6 @@
 #' Returned object also inherits from subclass `<hub_check>`.
 #' @export
 check_valid_round_id_col <- function(tbl, file_path, hub_path, round_id_col = NULL) {
-  # print(tbl)
-  # print(file_path)
-  # print(hub_path)
   if (is.null(round_id_col)) {
     if (is_round_id_from_variable(file_path, hub_path)) {
       round_id_col <- get_file_round_id_col(file_path, hub_path)
