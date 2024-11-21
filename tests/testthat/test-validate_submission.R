@@ -426,7 +426,7 @@ test_that("validate_submission works with v4 simple", {
   expect_true(suppressMessages(check_for_errors(v4_simple)))
 })
 
-test_that("validate_submission works with v4 flusight", {
+test_that("validate_submission works with v4 flusight (contains derived_task_ids)", {
   skip_if_offline()
 
   hub_path <- system.file("testhubs", "v4", "flusight", package = "hubUtils")
@@ -442,4 +442,16 @@ test_that("validate_submission works with v4 flusight", {
   # TODO: Update snapshot when v4 flusight hub is updated
   expect_s3_class(v4_missing_meta, c("hub_validations", "list"), exact = TRUE)
   expect_snapshot(check_for_errors(v4_missing_meta), error = TRUE)
+
+  # Check we get the same result when manually supplying derived_task_ids
+  expect_equal(
+    v4_missing_meta,
+    validate_submission(
+      hub_path,
+      file_path = file_path,
+      skip_submit_window_check = TRUE,
+      skip_check_config = TRUE,
+      derived_task_ids = "target_date"
+    )
+  )
 })
