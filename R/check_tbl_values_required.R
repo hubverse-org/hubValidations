@@ -145,22 +145,7 @@ check_modeling_task_values_required <- function(tbl, req, full) {
 # values of successively smaller n.
 missing_required <- function(x, mask, req, full) {
   opt_cols_list <- get_opt_col_list(x, mask, full, req)
-
-  out <- map_missing_req_rows(opt_cols_list, x, mask, req, full)
-
-  if (any(is.na(req))) {
-    # if req table contains any NAs, mapping over blocks of req columns containing
-    # complete cases is required.
-    out <- c(
-      list(out),
-      purrr::map(
-        split_na_req(req),
-        ~ map_missing_req_rows(opt_cols_list, x, mask, .x, full, split_req = TRUE)
-      )
-    ) %>%
-      purrr::list_rbind()
-  }
-  out
+  map_missing_req_rows(opt_cols_list, x, mask, req, full)
 }
 
 # Function creates a list of all optional column/value combinations of successively
@@ -187,32 +172,21 @@ get_opt_col_list <- function(x, mask, full, req) {
 
 # Identify missing required values for optional value combinations.
 # Output full missing rows compiled from optional values and missing required values.
-missing_req_rows <- function(opt_cols, x, mask, req, full, split_req = FALSE) {
-  if (split_req) {
-    opt_cols[all_na_colnames(req)] <- TRUE
-  }
+missing_req_rows <- function(opt_cols, x, mask, req, full) {
 
   if (all(opt_cols == FALSE)) {
     return(req[!conc_rows(req) %in% conc_rows(x), ])
   }
 
   opt_colnms <- names(x)[opt_cols]
-  if (split_req) {
-    opt_full_colnms <- unique(c(
-      opt_colnms,
-      hubUtils::std_colnames["output_type"]
-    ))
-  } else {
-    opt_full_colnms <- opt_colnms
-  }
 
   req <- req[, !names(req) %in% opt_colnms]
 
   # To ensure we focus on applicable required values (which may differ across
   # modeling tasks) we first subset rows from the full combination of values that
   # match a concatenated id of optional value combinations in x.
-  applicaple_full <- dplyr::inner_join(full, unique(x[, opt_full_colnms]),
-    by = opt_full_colnms
+  applicaple_full <- dplyr::inner_join(full, unique(x[, opt_colnms]),
+    by = opt_colnms
   )
   # Then we subset req for only the value combinations that are applicable to the
   # values being validated. This gives a table of expected required values and
@@ -236,15 +210,14 @@ missing_req_rows <- function(opt_cols, x, mask, req, full, split_req = FALSE) {
       unique(x[, opt_cols])
     )[, names(x)]
   } else {
-    full[1, names(x)][0, ]
+    full[0L, names(x)]
   }
 }
 
-map_missing_req_rows <- function(opt_cols_list, x, mask, req, full,
-                                 split_req = FALSE) {
+map_missing_req_rows <- function(opt_cols_list, x, mask, req, full) {
   purrr::map(
     opt_cols_list,
-    ~ missing_req_rows(.x, x, mask, req, full, split_req)
+    ~ missing_req_rows(.x, x, mask, req, full)
   ) %>%
     purrr::list_rbind()
 }
