@@ -5,6 +5,7 @@
 #' type of the appropriate model task.
 #' @inherit check_tbl_colnames params
 #' @inherit check_tbl_col_types return
+#' @inheritParams check_tbl_spl_compound_taskid_set
 #' @inheritParams expand_model_out_grid
 #' @export
 check_tbl_value_col <- function(tbl, round_id, file_path, hub_path,

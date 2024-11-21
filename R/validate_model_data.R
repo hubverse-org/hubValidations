@@ -1,5 +1,10 @@
 #' Validate the contents of a submitted model data file
 #'
+#' @param derived_task_ids Character vector of derived task ID names (task IDs whose
+#' values depend on other task IDs) to ignore. Columns for such task ids will
+#' contain `NA`s.
+#' If `NULL`, defaults to extracting derived task IDs from hub `task.json`. See
+#' [get_derived_task_ids()] for more details.
 #' @inheritParams check_tbl_unique_round_id
 #' @inheritParams validate_model_file
 #' @inheritParams hubData::create_hub_schema
@@ -8,7 +13,7 @@
 #' @export
 #' @details
 #' Note that it is **necessary for `derived_task_ids` to be specified if any of
-#' the task IDs derived task IDs depend on have required values**. If this is the
+#' the task IDs a derived task ID depends on have required values**. If this is the
 #' case and derived task IDs are not specified, the dependent nature of derived
 #' task ID values will result in **false validation errors when validating
 #' required values**.

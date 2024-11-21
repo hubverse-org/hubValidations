@@ -8,6 +8,10 @@
 #' Column types must **all be character**.
 #' @inherit check_tbl_colnames params
 #' @inherit check_tbl_colnames return
+#' @param derived_task_ids Character vector of derived task ID names (task IDs whose
+#' values depend on other task IDs) to ignore. Columns for such task ids will
+#' contain `NA`s. Defaults to extracting derived task IDs from hub `task.json`. See
+#' [get_derived_task_ids()] for more details.
 #' @inheritParams expand_model_out_grid
 #' @details If the check fails, the output of the check includes an `errors` element,
 #' a list of items, one for each modeling task failing validation.

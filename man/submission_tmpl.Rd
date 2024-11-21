@@ -46,7 +46,10 @@ Use to subset for grids for specific output types.}
 
 \item{derived_task_ids}{Character vector of derived task ID names (task IDs whose
 values depend on other task IDs) to ignore. Columns for such task ids will
-contain \code{NA}s.}
+contain \code{NA}s.
+If \code{NULL}, defaults to extracting derived task IDs from \code{config_tasks} or
+the \code{config_tasks} attribute of \code{hub_con}. See \code{\link[=get_config_derived_task_ids]{get_config_derived_task_ids()}}
+for more details.}
 }
 \value{
 a tibble template containing an expanded grid of valid task ID and

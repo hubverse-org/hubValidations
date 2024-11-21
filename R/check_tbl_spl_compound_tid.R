@@ -4,6 +4,7 @@
 #' @param tbl a tibble/data.frame of the contents of the file being validated. Column types must **all be character**.
 #' @inherit check_tbl_colnames params
 #' @inherit check_tbl_colnames return
+#' @inheritParams check_tbl_spl_compound_taskid_set
 #' @inheritParams expand_model_out_grid
 #' @param compound_taskid_set a list of `compound_taskid_set`s (characters vector of compound task IDs),
 #' one for each modeling task. Used to override the compound task ID set in the config file,

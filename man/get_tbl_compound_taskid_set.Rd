@@ -29,7 +29,8 @@ returned with error attributes attached.}
 
 \item{derived_task_ids}{Character vector of derived task ID names (task IDs whose
 values depend on other task IDs) to ignore. Columns for such task ids will
-contain \code{NA}s.}
+contain \code{NA}s. Defaults to extracting derived task IDs from \code{config_tasks}. See
+\code{\link[=get_config_derived_task_ids]{get_config_derived_task_ids()}} for more details.}
 }
 \value{
 A list of vectors of compound task IDs detected in the tbl, one for each

@@ -2,6 +2,12 @@
 #'
 #' @param hub_con A `⁠<hub_connection`>⁠ class object.
 #' @inheritParams expand_model_out_grid
+#' @param derived_task_ids Character vector of derived task ID names (task IDs whose
+#' values depend on other task IDs) to ignore. Columns for such task ids will
+#' contain `NA`s.
+#' If `NULL`, defaults to extracting derived task IDs from `config_tasks` or
+#' the `config_tasks` attribute of `hub_con`. See [get_config_derived_task_ids()]
+#' for more details.
 #' @param complete_cases_only Logical. If `TRUE` (default) and `required_vals_only = TRUE`,
 #' only rows with complete cases of combinations of required values are returned.
 #' If `FALSE`, rows with incomplete cases of combinations of required values

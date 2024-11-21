@@ -28,7 +28,8 @@
 #' Use to subset for grids for specific output types.
 #' @param derived_task_ids Character vector of derived task ID names (task IDs whose
 #' values depend on other task IDs) to ignore. Columns for such task ids will
-#' contain `NA`s.
+#' contain `NA`s. Defaults to extracting derived task IDs from `config_tasks`. See
+#' [get_config_derived_task_ids()] for more details.
 #'
 #' @return If `bind_model_tasks = TRUE` (default) a tibble or arrow table
 #' containing all possible task ID and related output type ID

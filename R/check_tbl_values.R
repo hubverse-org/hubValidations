@@ -1,6 +1,7 @@
 #' Check model output data tbl contains valid value combinations
 #' @param tbl a tibble/data.frame of the contents of the file being validated. Column types must **all be character**.
 #' @inherit check_tbl_colnames params
+#' @inheritParams check_tbl_spl_compound_taskid_set
 #' @inheritParams expand_model_out_grid
 #' @inherit check_tbl_colnames return
 #' @export
