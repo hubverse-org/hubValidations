@@ -69,7 +69,7 @@ test_that("Overriding compound_taskid_set in check_tbl_spl_n works", {
   hub_path <- test_path("testdata/hub-spl")
   file_path <- "flu-base/2022-10-22-flu-base.csv"
   round_id <- "2022-10-22"
-  config_task <- hubUtils::read_config_file(
+  config_task <- read_config_file(
     fs::path(hub_path, "hub-config", "tasks.json")
   )
   compound_taskid_set <- list(

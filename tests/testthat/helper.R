@@ -7,7 +7,7 @@ create_spl_file <- function(round_id, compound_taskid_set = NULL,
   out_datatype <- match.arg(out_datatype)
   file_path <- create_file_path(round_id = round_id, ext = ext)
 
-  config_tasks <- hubUtils::read_config_file(
+  config_tasks <- read_config_file(
     fs::path(hub_path, "hub-config", "tasks.json")
   )
 

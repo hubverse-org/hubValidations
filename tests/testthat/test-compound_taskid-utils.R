@@ -7,7 +7,7 @@ test_that("get_tbl_compound_taskid_set works", {
     hub_path = hub_path,
     coerce_types = "chr"
   )
-  config_tasks <- hubUtils::read_config(hub_path, "tasks")
+  config_tasks <- read_config(hub_path, "tasks")
 
 
   expect_snapshot(
@@ -32,7 +32,7 @@ test_that("get_tbl_compound_taskid_set errors correctly", {
     hub_path = hub_path,
     coerce_types = "chr"
   )
-  config_tasks <- hubUtils::read_config(hub_path, "tasks")
+  config_tasks <- read_config(hub_path, "tasks")
 
   tbl_error_dups[which(tbl_error_dups$output_type_id == "2"), "horizon"] <- "0"
   expect_snapshot(

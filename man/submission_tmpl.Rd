@@ -110,7 +110,7 @@ submission_tmpl(hub_con,
   complete_cases_only = FALSE
 )
 # Hub with sample output type
-config_tasks <- hubUtils::read_config_file(system.file("config", "tasks.json",
+config_tasks <- read_config_file(system.file("config", "tasks.json",
   package = "hubValidations"
 ))
 submission_tmpl(
@@ -118,7 +118,7 @@ submission_tmpl(
   round_id = "2022-12-26"
 )
 # Hub with sample output type and compound task ID structure
-config_tasks <- hubUtils::read_config_file(system.file("config", "tasks-comp-tid.json",
+config_tasks <- read_config_file(system.file("config", "tasks-comp-tid.json",
   package = "hubValidations"
 ))
 submission_tmpl(
@@ -144,7 +144,7 @@ submission_tmpl(
 )
 # Derive a template with ignored derived task ID. Useful to avoid creating
 # a template with invalid derived task ID value combinations.
-config_tasks <- hubUtils::read_config(
+config_tasks <- read_config(
   system.file("testhubs", "flusight", package = "hubValidations")
 )
 submission_tmpl(

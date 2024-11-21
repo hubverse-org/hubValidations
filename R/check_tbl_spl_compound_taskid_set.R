@@ -35,7 +35,7 @@
 check_tbl_spl_compound_taskid_set <- function(
     tbl, round_id, file_path, hub_path,
     derived_task_ids = get_derived_task_ids(hub_path)) {
-  config_tasks <- hubUtils::read_config(hub_path, "tasks")
+  config_tasks <- read_config(hub_path, "tasks")
 
   if (isFALSE(has_spls_tbl(tbl)) || isFALSE(hubUtils::is_v3_config(config_tasks))) {
     return(skip_v3_spl_check(file_path))

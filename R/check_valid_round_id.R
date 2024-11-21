@@ -9,7 +9,7 @@
 #' Returned object also inherits from subclass `<hub_check>`.
 #' @export
 check_valid_round_id <- function(round_id, file_path, hub_path = ".") {
-  config_tasks <- hubUtils::read_config(hub_path, "tasks")
+  config_tasks <- read_config(hub_path, "tasks")
   round_ids <- hubUtils::get_round_ids(config_tasks = config_tasks)
   check <- round_id %in% round_ids
   if (!check) {

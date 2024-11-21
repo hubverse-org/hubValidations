@@ -3,10 +3,11 @@
 #' Checks that `admin` and `tasks` configuration files in directory `hub-config`
 #' are valid.
 #' @inherit check_valid_round_id return params
+#' @importFrom hubAdmin validate_hub_config
 #'
 #' @export
 check_config_hub_valid <- function(hub_path) {
-  valid_config <- hubAdmin::validate_hub_config(hub_path) %>%
+  valid_config <- validate_hub_config(hub_path) %>%
     suppressMessages() %>%
     suppressWarnings()
 

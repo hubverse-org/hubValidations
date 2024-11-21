@@ -16,7 +16,7 @@
 #'   file_path = "flu-base/2022-10-22-flu-base.csv",
 #'   hub_path, coerce_types = "chr"
 #' )
-#' config_tasks <- hubUtils::read_config(hub_path, "tasks")
+#' config_tasks <- read_config(hub_path, "tasks")
 #' match_tbl_to_model_task(tbl, config_tasks, round_id = "2022-10-22")
 #' match_tbl_to_model_task(tbl, config_tasks,
 #'   round_id = "2022-10-22",

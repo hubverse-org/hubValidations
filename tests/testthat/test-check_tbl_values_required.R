@@ -1,7 +1,7 @@
 test_that("check_tbl_values_required works with 1 model task & completely opt cols", {
   hub_path <- system.file("testhubs/simple", package = "hubValidations")
   file_path <- "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
-  config_tasks <- hubUtils::read_config(hub_path, "tasks")
+  config_tasks <- read_config(hub_path, "tasks")
   tbl <- read_model_out_file(file_path, hub_path,
     coerce_types = "chr"
   )
@@ -48,7 +48,7 @@ test_that("check_tbl_values_required works with 2 separate model tasks & complet
   hub_path <- system.file("testhubs/flusight", package = "hubUtils")
   file_path <- "hub-ensemble/2023-05-08-hub-ensemble.parquet"
   round_id <- "2023-05-08"
-  config_tasks <- hubUtils::read_config(hub_path, "tasks")
+  config_tasks <- read_config(hub_path, "tasks")
   tbl <- read_model_out_file(file_path, hub_path,
     coerce_types = "chr"
   )

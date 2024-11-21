@@ -92,7 +92,7 @@
 #'   as_arrow_table = TRUE
 #' )
 #' # Hub with sample output type
-#' config_tasks <- hubUtils::read_config_file(system.file("config", "tasks.json",
+#' config_tasks <- read_config_file(system.file("config", "tasks.json",
 #'   package = "hubValidations"
 #' ))
 #' expand_model_out_grid(config_tasks,
@@ -104,7 +104,7 @@
 #'   include_sample_ids = TRUE
 #' )
 #' # Hub with sample output type and compound task ID structure
-#' config_tasks <- hubUtils::read_config_file(
+#' config_tasks <- read_config_file(
 #'   system.file("config", "tasks-comp-tid.json", package = "hubValidations")
 #' )
 #' expand_model_out_grid(config_tasks,
@@ -131,7 +131,7 @@
 #'   )
 #' )
 #' # Subset output types
-#' config_tasks <- hubUtils::read_config(
+#' config_tasks <- read_config(
 #'   system.file("testhubs", "samples", package = "hubValidations")
 #' )
 #' expand_model_out_grid(config_tasks,
@@ -390,7 +390,7 @@ process_mt_grid_outputs <- function(x, config_tasks, all_character,
       unique()
 
     schema_cols <- names(
-      hubData::create_hub_schema(
+      create_hub_schema(
         config_tasks,
         partitions = NULL,
         output_type_id_datatype = output_type_id_datatype

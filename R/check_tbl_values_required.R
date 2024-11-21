@@ -14,7 +14,7 @@
 check_tbl_values_required <- function(tbl, round_id, file_path, hub_path,
                                       derived_task_ids = get_derived_task_ids(hub_path)) {
   tbl[["value"]] <- NULL
-  config_tasks <- hubUtils::read_config(hub_path, "tasks")
+  config_tasks <- read_config(hub_path, "tasks")
 
   if (hubUtils::is_v3_config(config_tasks)) {
     tbl[tbl$output_type == "sample", "output_type_id"] <- NA

@@ -24,9 +24,9 @@ opt_check_tbl_col_timediff <- function(tbl, file_path, hub_path,
   checkmate::assert_choice(t0_colname, choices = names(tbl))
   checkmate::assert_choice(t1_colname, choices = names(tbl))
 
-  config_tasks <- hubUtils::read_config(hub_path, "tasks")
+  config_tasks <- read_config(hub_path, "tasks")
   output_type_id_datatype <- rlang::arg_match(output_type_id_datatype)
-  schema <- hubData::create_hub_schema(config_tasks,
+  schema <- create_hub_schema(config_tasks,
     partitions = NULL,
     r_schema = TRUE,
     output_type_id_datatype = output_type_id_datatype
