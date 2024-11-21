@@ -119,6 +119,17 @@ test_that("Different compound_taskid_sets work", {
       )
     )
   )
+  # Specifying the derived task IDs allows validation to pass and excludes derived
+  # task IDs from the compound_taskid_set
+  expect_snapshot(
+    str(
+      check_tbl_spl_compound_taskid_set(
+        tbl_coarse_horizon,
+        "2022-11-05", create_file_path("2022-11-05"), hub_path,
+        derived_task_ids = "target_end_date"
+      )
+    )
+  )
 })
 
 test_that("Finer compound_taskid_sets work", {

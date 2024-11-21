@@ -32,8 +32,9 @@
 #' See [hubverse documentation on samples](https://hubverse.io/en/latest/user-guide/sample-output-type.html)
 #' for more details.
 #' @export
-check_tbl_spl_compound_taskid_set <- function(tbl, round_id, file_path, hub_path,
-                                              derived_task_ids = NULL) {
+check_tbl_spl_compound_taskid_set <- function(
+    tbl, round_id, file_path, hub_path,
+    derived_task_ids = get_derived_task_ids(hub_path)) {
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
 
   if (isFALSE(has_spls_tbl(tbl)) || isFALSE(hubUtils::is_v3_config(config_tasks))) {
@@ -43,7 +44,7 @@ check_tbl_spl_compound_taskid_set <- function(tbl, round_id, file_path, hub_path
   compound_taskid_set <- get_tbl_compound_taskid_set(
     tbl, config_tasks, round_id,
     compact = FALSE, error = FALSE,
-    derived_task_ids = NULL
+    derived_task_ids = derived_task_ids
   )
 
   check <- purrr::map_lgl(

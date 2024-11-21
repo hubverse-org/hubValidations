@@ -10,7 +10,7 @@ check_tbl_values_required(
   round_id,
   file_path,
   hub_path,
-  derived_task_ids = NULL
+  derived_task_ids = get_derived_task_ids(hub_path)
 )
 }
 \arguments{

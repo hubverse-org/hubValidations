@@ -31,7 +31,9 @@
 #'
 get_tbl_compound_taskid_set <- function(tbl, config_tasks, round_id,
                                         compact = TRUE, error = TRUE,
-                                        derived_task_ids = NULL) {
+                                        derived_task_ids = get_config_derived_task_ids(
+                                          config_tasks, round_id
+                                        )) {
   if (!inherits(tbl, "tbl_df")) {
     tbl <- dplyr::as_tibble(tbl)
   }

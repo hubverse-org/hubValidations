@@ -4,7 +4,13 @@
 \alias{check_tbl_values}
 \title{Check model output data tbl contains valid value combinations}
 \usage{
-check_tbl_values(tbl, round_id, file_path, hub_path, derived_task_ids = NULL)
+check_tbl_values(
+  tbl,
+  round_id,
+  file_path,
+  hub_path,
+  derived_task_ids = get_derived_task_ids(hub_path, round_id)
+)
 }
 \arguments{
 \item{tbl}{a tibble/data.frame of the contents of the file being validated. Column types must \strong{all be character}.}

@@ -8,7 +8,7 @@
 #' @inheritParams expand_model_out_grid
 #' @export
 check_tbl_value_col <- function(tbl, round_id, file_path, hub_path,
-                                derived_task_ids = NULL) {
+                                derived_task_ids = get_derived_task_ids(hub_path, round_id)) {
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
 
   tbl[, names(tbl) != "value"] <- hubData::coerce_to_character(

@@ -9,7 +9,7 @@ match_tbl_to_model_task(
   config_tasks,
   round_id,
   output_types = NULL,
-  derived_task_ids = NULL,
+  derived_task_ids = get_config_derived_task_ids(config_tasks, round_id),
   all_character = TRUE
 )
 }

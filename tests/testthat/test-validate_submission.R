@@ -417,3 +417,37 @@ test_that("validate_submission returns check_failure when duplicate files per ro
     dup_model_out_val[["file_n"]]
   )
 })
+
+test_that("validate_submission works with v4 simple", {
+  skip_if_offline()
+
+  hub_path <- system.file("testhubs", "v4", "simple", package = "hubUtils")
+  file_path <- "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+
+  v4_simple <- validate_submission(
+    hub_path,
+    file_path = file_path,
+    skip_submit_window_check = TRUE,
+    skip_check_config = TRUE
+  )
+  expect_s3_class(v4_simple, c("hub_validations", "list"), exact = TRUE)
+  expect_true(suppressMessages(check_for_errors(v4_simple)))
+})
+
+test_that("validate_submission works with v4 flusight", {
+  skip_if_offline()
+
+  hub_path <- system.file("testhubs", "v4", "flusight", package = "hubUtils")
+  file_path <- "hub-baseline/2023-05-08-hub-baseline.parquet"
+
+  v4_missing_meta <- validate_submission(
+    hub_path,
+    file_path = file_path,
+    skip_submit_window_check = TRUE,
+    skip_check_config = TRUE
+  )
+
+  # TODO: Update snapshot when v4 flusight hub is updated
+  expect_s3_class(v4_missing_meta, c("hub_validations", "list"), exact = TRUE)
+  expect_snapshot(check_for_errors(v4_missing_meta), error = TRUE)
+})

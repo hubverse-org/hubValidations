@@ -12,7 +12,7 @@
 #' task ID values will result in **false validation errors when validating
 #' required values**.
 check_tbl_values_required <- function(tbl, round_id, file_path, hub_path,
-                                      derived_task_ids = NULL) {
+                                      derived_task_ids = get_derived_task_ids(hub_path)) {
   tbl[["value"]] <- NULL
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
 

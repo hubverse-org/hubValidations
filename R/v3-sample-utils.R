@@ -7,7 +7,9 @@
 # join between tbl sample data and the model output data sample grid for each
 # modeling task. This means that only valid task id combinations are considered.
 spl_hash_tbl <- function(tbl, round_id, config_tasks, compound_taskid_set = NULL,
-                         derived_task_ids = NULL) {
+                         derived_task_ids = get_config_derived_task_ids(
+                           config_tasks, round_id
+                         )) {
   tbl <- tbl[tbl$output_type == "sample", names(tbl) != "value"]
   if (!is.null(derived_task_ids)) {
     tbl[, derived_task_ids] <- NA_character_
@@ -62,7 +64,7 @@ spl_hash_tbl <- function(tbl, round_id, config_tasks, compound_taskid_set = NULL
     )
   ) %>%
     purrr::compact() %>%
-    purrr::imap(~dplyr::mutate(.x, mt_id = as.integer(.y))) %>% # add mt_id
+    purrr::imap(~ dplyr::mutate(.x, mt_id = as.integer(.y))) %>% # add mt_id
     purrr::list_rbind()
 }
 

@@ -72,7 +72,6 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
     )
   }
 
-
   # -- File round ID checks ----
   # Will be skipped if round config round_id_from_var is FALSE and no round_id_col
   # value is explicitly specified.
@@ -110,6 +109,18 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
   )
   if (is_any_error(checks$match_round_id)) {
     return(checks)
+  }
+
+  # Get derived task IDs if not specified
+  if (is.null(derived_task_ids)) {
+    derived_task_ids <- get_derived_task_ids(
+      hub_path, round_id
+    )
+  } else {
+    derived_task_ids <- validate_derived_task_ids(
+      derived_task_ids,
+      config_tasks = read_config(hub_path),
+      round_id)
   }
 
   # -- Column level checks ----

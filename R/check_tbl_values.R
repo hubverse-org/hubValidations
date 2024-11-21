@@ -5,7 +5,7 @@
 #' @inherit check_tbl_colnames return
 #' @export
 check_tbl_values <- function(tbl, round_id, file_path, hub_path,
-                             derived_task_ids = NULL) {
+                             derived_task_ids = get_derived_task_ids(hub_path, round_id)) {
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
 
   valid_tbl <- tbl %>%

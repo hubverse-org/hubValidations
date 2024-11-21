@@ -11,7 +11,7 @@ check_tbl_spl_non_compound_tid(
   file_path,
   hub_path,
   compound_taskid_set = NULL,
-  derived_task_ids = NULL
+  derived_task_ids = get_derived_task_ids(hub_path, round_id)
 )
 }
 \arguments{
