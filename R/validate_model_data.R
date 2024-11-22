@@ -4,7 +4,7 @@
 #' values depend on other task IDs) to ignore. Columns for such task ids will
 #' contain `NA`s.
 #' If `NULL`, defaults to extracting derived task IDs from hub `task.json`. See
-#' [get_derived_task_ids()] for more details.
+#' [get_hub_derived_task_ids()] for more details.
 #' @inheritParams check_tbl_unique_round_id
 #' @inheritParams validate_model_file
 #' @inheritParams hubData::create_hub_schema
@@ -118,7 +118,7 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
 
   # Get derived task IDs if not specified
   if (is.null(derived_task_ids)) {
-    derived_task_ids <- get_derived_task_ids(
+    derived_task_ids <- get_hub_derived_task_ids(
       hub_path, round_id
     )
   } else {

@@ -7,5 +7,5 @@ NULL
 #' @importFrom hubUtils get_hub_model_output_dir
 NULL
 
-#' @importFrom hubUtils get_derived_task_ids
+#' @importFrom hubUtils get_hub_derived_task_ids
 NULL

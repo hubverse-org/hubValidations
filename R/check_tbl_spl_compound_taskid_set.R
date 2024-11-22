@@ -11,7 +11,7 @@
 #' @param derived_task_ids Character vector of derived task ID names (task IDs whose
 #' values depend on other task IDs) to ignore. Columns for such task ids will
 #' contain `NA`s. Defaults to extracting derived task IDs from hub `task.json`. See
-#' [get_derived_task_ids()] for more details.
+#' [get_hub_derived_task_ids()] for more details.
 #' @inheritParams expand_model_out_grid
 #' @details If the check fails, the output of the check includes an `errors` element,
 #' a list of items, one for each modeling task failing validation.
@@ -38,7 +38,7 @@
 #' @export
 check_tbl_spl_compound_taskid_set <- function(
     tbl, round_id, file_path, hub_path,
-    derived_task_ids = get_derived_task_ids(hub_path)) {
+    derived_task_ids = get_hub_derived_task_ids(hub_path)) {
   config_tasks <- read_config(hub_path, "tasks")
 
   if (isFALSE(has_spls_tbl(tbl)) || isFALSE(hubUtils::is_v3_config(config_tasks))) {

@@ -56,7 +56,7 @@ defaults to \code{hub-config/validations.yml}.}
 values depend on other task IDs) to ignore. Columns for such task ids will
 contain \code{NA}s.
 If \code{NULL}, defaults to extracting derived task IDs from hub \code{task.json}. See
-\code{\link[=get_derived_task_ids]{get_derived_task_ids()}} for more details.}
+\code{\link[=get_hub_derived_task_ids]{get_hub_derived_task_ids()}} for more details.}
 }
 \value{
 An object of class \code{hub_validations}. Each named element contains
