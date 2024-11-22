@@ -61,7 +61,7 @@ compound task ID within individual samples</p>
 <span>  <span class="va">file_path</span>,</span>
 <span>  <span class="va">hub_path</span>,</span>
 <span>  compound_taskid_set <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  derived_task_ids <span class="op">=</span> <span class="fu">get_derived_task_ids</span><span class="op">(</span><span class="va">hub_path</span>, <span class="va">round_id</span><span class="op">)</span></span>
+<span>  derived_task_ids <span class="op">=</span> <span class="fu">get_hub_derived_task_ids</span><span class="op">(</span><span class="va">hub_path</span>, <span class="va">round_id</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -104,7 +104,7 @@ for example, when validating coarser samples.</p></dd>
 <dd><p>Character vector of derived task ID names (task IDs whose
 values depend on other task IDs) to ignore. Columns for such task ids will
 contain <code>NA</code>s. Defaults to extracting derived task IDs from hub <code>task.json</code>. See
-<code>get_derived_task_ids()</code> for more details.</p></dd>
+<code>get_hub_derived_task_ids()</code> for more details.</p></dd>
 
 </dl></div>
     <div class="section level2">
