@@ -144,7 +144,7 @@ standard validation checks and returns their results in the form of a
 <span><span class="co">#&gt;   combinations of quantile or cdf output types.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[value_col_sum1]</span>: No pmf output types to check for sum of 1. Check skipped.</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[submission_time]</span>: Submission time must be within accepted submission window</span></span>
-<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2024-11-19 15:22:34 UTC"</span> is outside window</span></span>
+<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2024-11-22 07:46:23 UTC"</span> is outside window</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span></span></code></pre></div>
 <p>For more details on the structure of
 <code>&lt;hub_validations&gt;</code> objects, including how to access
@@ -194,7 +194,7 @@ and the function re-run for validation to proceed further.</p>
 <span><span class="co">#&gt;   submission `round_id` from file name.  `round_id` value <span style="color: #0000BB;">2022-10-08</span> does not</span></span>
 <span><span class="co">#&gt;   match submission `round_id` <span style="color: #0000BB;">"2022-10-15"</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[submission_time]</span>: Submission time must be within accepted submission window</span></span>
-<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2024-11-19 15:22:35 UTC"</span> is outside window</span></span>
+<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2024-11-22 07:46:25 UTC"</span> is outside window</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -222,7 +222,7 @@ will be summarised.</p>
 <span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">2022-10-08-team1-goodmodel.csv</span><span style="color: #BB00BB;"> ────</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[submission_time]</span>: Submission time must be within accepted submission window</span></span>
-<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2024-11-19 15:22:36 UTC"</span> is outside window</span></span>
+<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2024-11-22 07:46:26 UTC"</span> is outside window</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `check_for_errors()`:</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> </span></span>
@@ -248,10 +248,6 @@ validation window check) now passing overall validation.</p>
 <div class="section level3">
 <h3 id="ignoring-derived-task-ids-to-improve-validation-performance">Ignoring derived task IDs to improve validation performance<a class="anchor" aria-label="anchor" href="#ignoring-derived-task-ids-to-improve-validation-performance"></a>
 </h3>
-<p>Argument <strong><code>derived_task_ids</code></strong> allows for
-the specification of <strong>task IDs that are derived from other task
-IDs</strong> to be ignored, which <strong>can often lead to a
-significant improvement in validation performance</strong>.</p>
 <div class="section level4">
 <h4 id="what-are-derived-task-ids">What are derived task IDs?<a class="anchor" aria-label="anchor" href="#what-are-derived-task-ids"></a>
 </h4>
@@ -265,28 +261,36 @@ the <code>reference_date</code> or <code>origin_date</code> and
 <code>horizon</code> task ids.</p>
 </div>
 <div class="section level4">
-<h4 id="implications-of-derived-task-ids-on-validation-performance">Implications of derived task IDs on validation performance<a class="anchor" aria-label="anchor" href="#implications-of-derived-task-ids-on-validation-performance"></a>
-</h4>
-<p>With standard validation, derived task IDs like
-<code>target_end_date</code> tend to pollute the expanded grid used to
-validate valid value combination with invalid combinations. That’s
-because, while a given combination of <code>reference_date</code> and
-<code>horizon</code> values will only have a single valid
-<code>target_end_date</code> value, the <code>target_end_date</code>
-property in the config will contain all possible valid values for all
-combinations of <code>reference_date</code> and <code>horizon</code>.
-Because its the values in the config used to create the expanded valid
-values grid, the sizes these grids can reach as function of config
-complexity can often put excessive strain on the system’s memory,
-affecting overall performance of submission validation.</p>
-</div>
-<div class="section level4">
 <h4 id="how-to-ignore-derived-task-ids">How to ignore derived task IDs<a class="anchor" aria-label="anchor" href="#how-to-ignore-derived-task-ids"></a>
 </h4>
-<p>Supplying the names of derived task IDs to argument
-<code>derived_task_ids</code> will ignore them during validation checks
-and, depending on config complexity, this <strong>can lead to a
-significant improvement in validation performance</strong>.</p>
+<div class="alert alert-info" role="alert">
+<p><strong>For configs using schema version v4.0.0 and above, derived
+task IDs are configured via the hub config and do not need to be ignored
+manually</strong></p>
+<p>To check if the hub uses schema version v4.0.0 or above, you can
+use:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">hubUtils</span><span class="fu">::</span><span class="fu"><a href="https://hubverse-org.github.io/hubUtils/reference/version_equal.html" class="external-link">version_gte</a></span><span class="op">(</span><span class="st">"v4.0.0"</span>, hub_path <span class="op">=</span> <span class="st">"path/to/hub"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<p>Argument <strong><code>derived_task_ids</code></strong> allows for
+the specification of <strong>task IDs that are derived from other task
+IDs</strong>. Supplying the names of derived task IDs to argument
+<code>derived_task_ids</code> will ignore them during validation
+checks.</p>
+<p>Depending on config complexity, this <strong>can often lead to a
+significant improvement in validation performance and in some
+circumstances is necessary for correct validation</strong>.</p>
+<div class="alert alert-warning" role="alert">
+<p>Note that, <strong>if any of the task IDs a derived task ID depends
+on have required values, it is essential for
+<code>derived_task_ids</code> to be specified</strong>. If this is the
+case and derived task IDs are not specified, the dependent nature of
+derived task ID values will result in <strong>false validation errors
+when validating required values</strong>.</p>
+<p>If you’re unsure if this is the case for your hub or which task IDs
+are derived, please consult the hub documentation or contact the hub
+administrators.</p>
+</div>
 </div>
 </div>
 <div class="section level3">
@@ -766,7 +770,7 @@ similarly use function <code><a href="../reference/validate_model_metadata.html"
 <code>file_path</code>, performs a series of validation checks and
 returns their results in the form of a <code>hub_validations</code> S3
 class object.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/validate_model_metadata.html">validate_model_metadata</a></span><span class="op">(</span><span class="va">hub_path</span>,</span>
 <span>  file_path <span class="op">=</span> <span class="st">"hub-baseline.yml"</span></span>
 <span><span class="op">)</span></span>

@@ -159,7 +159,9 @@ provided in the hub's config.</p></dd>
 <dt id="arg-derived-task-ids">derived_task_ids<a class="anchor" aria-label="anchor" href="#arg-derived-task-ids"></a></dt>
 <dd><p>Character vector of derived task ID names (task IDs whose
 values depend on other task IDs) to ignore. Columns for such task ids will
-contain <code>NA</code>s.</p></dd>
+contain <code>NA</code>s.
+If <code>NULL</code>, defaults to extracting derived task IDs from hub <code>task.json</code>. See
+<code>get_derived_task_ids()</code> for more details.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -192,7 +194,7 @@ to <code>FALSE</code>. This only relates to hubs/rounds where submission windows
 determined relative to a reference date and not when explicit submission
 window start and end dates are provided in the config.</p>
 <p>Finally, note that it is <strong>necessary for <code>derived_task_ids</code> to be specified if any of
-the task IDs derived task IDs depend on have required values</strong>. If this is the
+the task IDs a derived task ID depends on have required values</strong>. If this is the
 case and derived task IDs are not specified, the dependent nature of derived
 task ID values will result in <strong>false validation errors when validating
 required values</strong>.</p><div class="section">

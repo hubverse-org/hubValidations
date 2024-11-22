@@ -190,7 +190,7 @@ for more.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   # The following example checks that `extra_arg` is a single character string.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   checkmate::assert_character(extra_arg, len = 1L, null.ok)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   config_tasks &lt;- hubUtils::read_config(hub_path)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   config_tasks &lt;- hubValidations::read_config(hub_path)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   if (!condition) {</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(</span>

@@ -117,7 +117,9 @@ defaults to <code>hub-config/validations.yml</code>.</p></dd>
 <dt id="arg-derived-task-ids">derived_task_ids<a class="anchor" aria-label="anchor" href="#arg-derived-task-ids"></a></dt>
 <dd><p>Character vector of derived task ID names (task IDs whose
 values depend on other task IDs) to ignore. Columns for such task ids will
-contain <code>NA</code>s.</p></dd>
+contain <code>NA</code>s.
+If <code>NULL</code>, defaults to extracting derived task IDs from hub <code>task.json</code>. See
+<code>get_derived_task_ids()</code> for more details.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -132,7 +134,7 @@ see <a href="https://hubverse-org.github.io/hubValidations/articles/hub-validati
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Note that it is <strong>necessary for <code>derived_task_ids</code> to be specified if any of
-the task IDs derived task IDs depend on have required values</strong>. If this is the
+the task IDs a derived task ID depends on have required values</strong>. If this is the
 case and derived task IDs are not specified, the dependent nature of derived
 task ID values will result in <strong>false validation errors when validating
 required values</strong>.</p>

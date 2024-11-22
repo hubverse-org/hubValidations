@@ -53,8 +53,13 @@
 <li>
 <code><a href="https://rdrr.io/pkg/hubData/man/create_hub_schema.html" class="external-link">hubData::create_hub_schema()</a></code> and <code><a href="https://rdrr.io/pkg/hubData/man/coerce_to_hub_schema.html" class="external-link">hubData::coerce_to_hub_schema()</a></code> for creating and coercing data to the hub schema.</li>
 </ul></li>
-<li>v4 config supported (<a href="https://github.com/hubverse-org/hubValidations/issues/156" class="external-link">#156</a>, <a href="https://github.com/hubverse-org/hubValidations/issues/159" class="external-link">#159</a>).</li>
-</ul></div>
+<li>Validation of v4 hubs now fully supported (<a href="https://github.com/hubverse-org/hubValidations/issues/155" class="external-link">#155</a>, <a href="https://github.com/hubverse-org/hubValidations/issues/156" class="external-link">#156</a>, <a href="https://github.com/hubverse-org/hubValidations/issues/159" class="external-link">#159</a>). This includes:</li>
+<li>support for the v4 specification of <code>output_type_ids</code>.</li>
+<li>use of the new <code>is_required</code> property to determine whether output types are required or not.</li>
+<li>
+<code>derived_task_ids</code> are now extracted from the <code>tasks.json</code> config by default.</li>
+</ul><p>See the <a href="https://github.com/hubverse-org/schemas/blob/main/NEWS.md" class="external-link"><code>schemas</code> repository <code>NEWS.md</code></a> for more details.</p>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.8.0" id="hubvalidations-080">hubValidations 0.8.0<a class="anchor" aria-label="anchor" href="#hubvalidations-080"></a></h2>
 <ul><li>Custom checks no longer fail if validation is run outside of the root of the hub (<a href="https://github.com/hubverse-org/hubValidations/issues/141" class="external-link">#141</a>)</li>
