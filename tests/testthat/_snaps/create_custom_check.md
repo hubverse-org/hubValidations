@@ -51,7 +51,7 @@
         # The following example checks that `extra_arg` is a single character string.
         checkmate::assert_character(extra_arg, len = 1L, null.ok)
       
-        config_tasks <- read_config(hub_path)
+        config_tasks <- hubValidations::read_config(hub_path)
       
         if (!condition) {
           return(
