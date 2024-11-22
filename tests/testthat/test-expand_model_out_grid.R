@@ -210,7 +210,7 @@ test_that("expand_model_out_grid output controls work correctly", {
 
 test_that("expand_model_out_grid output controls with samples work correctly", {
   # Hub with sample output type
-  config_tasks <- hubUtils::read_config_file(system.file("config", "tasks.json",
+  config_tasks <- read_config_file(system.file("config", "tasks.json",
     package = "hubValidations"
   ))
 
@@ -244,7 +244,7 @@ test_that("expand_model_out_grid output controls with samples work correctly", {
     )
   )
   # Hub with sample output type and compound task ID structure
-  config_tasks <- hubUtils::read_config_file(
+  config_tasks <- read_config_file(
     system.file("config", "tasks-comp-tid.json",
       package = "hubValidations"
     )
@@ -264,7 +264,7 @@ test_that("expand_model_out_grid output controls with samples work correctly", {
     )
   )
   # Check back-compatibility on older sample specification
-  config_tasks <- hubUtils::read_config_file(
+  config_tasks <- read_config_file(
     test_path("testdata", "configs", "tasks-samples-old-schema.json")
   )
   expect_snapshot(
@@ -300,7 +300,7 @@ test_that("expand_model_out_grid output controls with samples work correctly", {
   )
 
   # Override config compound_taskid_set
-  config_tasks <- hubUtils::read_config_file(
+  config_tasks <- read_config_file(
     system.file("config", "tasks-comp-tid.json",
       package = "hubValidations"
     )
@@ -342,7 +342,7 @@ test_that("expand_model_out_grid output controls with samples work correctly", {
 
 
 test_that("expand_model_out_grid output type subsetting works", {
-  config_tasks <- hubUtils::read_config_file(
+  config_tasks <- read_config_file(
     system.file("config", "tasks-comp-tid.json",
       package = "hubValidations"
     )
@@ -560,7 +560,7 @@ test_that("force_output_types works as expected with v3", {
 })
 
 test_that("expand_model_out_grid derived_task_ids ignoring works", {
-  config_tasks <- hubUtils::read_config(test_path("testdata", "hub-spl"))
+  config_tasks <- read_config(test_path("testdata", "hub-spl"))
 
   expect_snapshot(
     expand_model_out_grid(config_tasks,
@@ -647,7 +647,7 @@ test_that("expand_model_out_grid errors correctly", {
   )
 
 
-  config_tasks <- hubUtils::read_config_file(
+  config_tasks <- read_config_file(
     system.file("config", "tasks-comp-tid.json",
       package = "hubValidations"
     )

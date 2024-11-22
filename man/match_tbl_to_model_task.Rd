@@ -9,7 +9,7 @@ match_tbl_to_model_task(
   config_tasks,
   round_id,
   output_types = NULL,
-  derived_task_ids = NULL,
+  derived_task_ids = get_config_derived_task_ids(config_tasks, round_id),
   all_character = TRUE
 )
 }
@@ -31,7 +31,8 @@ Use to subset for grids for specific output types.}
 
 \item{derived_task_ids}{Character vector of derived task ID names (task IDs whose
 values depend on other task IDs) to ignore. Columns for such task ids will
-contain \code{NA}s.}
+contain \code{NA}s. Defaults to extracting derived task IDs from \code{config_tasks}. See
+\code{\link[=get_config_derived_task_ids]{get_config_derived_task_ids()}} for more details.}
 
 \item{all_character}{Logical. Whether to return all character column.}
 }
@@ -50,7 +51,7 @@ tbl <- read_model_out_file(
   file_path = "flu-base/2022-10-22-flu-base.csv",
   hub_path, coerce_types = "chr"
 )
-config_tasks <- hubUtils::read_config(hub_path, "tasks")
+config_tasks <- read_config(hub_path, "tasks")
 match_tbl_to_model_task(tbl, config_tasks, round_id = "2022-10-22")
 match_tbl_to_model_task(tbl, config_tasks,
   round_id = "2022-10-22",

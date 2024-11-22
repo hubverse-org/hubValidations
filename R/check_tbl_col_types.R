@@ -18,9 +18,9 @@ check_tbl_col_types <- function(tbl, file_path, hub_path,
                                   "logical", "Date"
                                 )) {
   output_type_id_datatype <- rlang::arg_match(output_type_id_datatype)
-  config_tasks <- hubUtils::read_config(hub_path, "tasks")
+  config_tasks <- read_config(hub_path, "tasks")
 
-  schema <- hubData::create_hub_schema(config_tasks,
+  schema <- create_hub_schema(config_tasks,
     partitions = NULL,
     r_schema = TRUE,
     output_type_id_datatype = output_type_id_datatype

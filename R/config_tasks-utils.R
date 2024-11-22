@@ -30,7 +30,9 @@ get_round_output_type_names <- function(config_tasks, round_id,
 
 # get all task_ids values
 get_round_config_values <- function(config_tasks, round_id,
-                                    derived_task_ids = NULL) {
+                                    derived_task_ids = get_config_derived_task_ids(
+                                      config_tasks, round_id
+                                    )) {
   model_tasks <- hubUtils::get_round_model_tasks(config_tasks, round_id)
   task_id_names <- setdiff(
     hubUtils::get_round_task_id_names(config_tasks, round_id),

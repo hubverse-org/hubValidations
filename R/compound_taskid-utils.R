@@ -23,7 +23,7 @@
 #'   hub_path = hub_path,
 #'   coerce_types = "chr"
 #' )
-#' config_tasks <- hubUtils::read_config(hub_path, "tasks")
+#' config_tasks <- read_config(hub_path, "tasks")
 #' get_tbl_compound_taskid_set(tbl, config_tasks, round_id)
 #' get_tbl_compound_taskid_set(tbl, config_tasks, round_id,
 #'   compact = FALSE
@@ -31,7 +31,9 @@
 #'
 get_tbl_compound_taskid_set <- function(tbl, config_tasks, round_id,
                                         compact = TRUE, error = TRUE,
-                                        derived_task_ids = NULL) {
+                                        derived_task_ids = get_config_derived_task_ids(
+                                          config_tasks, round_id
+                                        )) {
   if (!inherits(tbl, "tbl_df")) {
     tbl <- dplyr::as_tibble(tbl)
   }

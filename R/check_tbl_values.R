@@ -1,12 +1,13 @@
 #' Check model output data tbl contains valid value combinations
 #' @param tbl a tibble/data.frame of the contents of the file being validated. Column types must **all be character**.
 #' @inherit check_tbl_colnames params
+#' @inheritParams check_tbl_spl_compound_taskid_set
 #' @inheritParams expand_model_out_grid
 #' @inherit check_tbl_colnames return
 #' @export
 check_tbl_values <- function(tbl, round_id, file_path, hub_path,
-                             derived_task_ids = NULL) {
-  config_tasks <- hubUtils::read_config(hub_path, "tasks")
+                             derived_task_ids = get_derived_task_ids(hub_path, round_id)) {
+  config_tasks <- read_config(hub_path, "tasks")
 
   valid_tbl <- tbl %>%
     tibble::rowid_to_column() %>%

@@ -8,7 +8,7 @@
 
 {{/extra_args}}
 {{#config}}
-  config_tasks <- hubUtils::read_config(hub_path)
+  config_tasks <- hubValidations::read_config(hub_path)
 
 {{/config}}
 {{#conditional}}

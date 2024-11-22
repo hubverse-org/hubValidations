@@ -104,18 +104,25 @@ test_that("Different compound_taskid_sets work", {
     ),
     ~ c("reference_date", "horizon", "location", "variant")
   )
-
-  mockery::stub(
-    check_tbl_spl_compound_taskid_set,
-    "hubUtils::read_config",
-    config_tasks_full_ctids,
-    2
+  local_mocked_bindings(
+    read_config = function(...) config_tasks_full_ctids
   )
   expect_snapshot(
     str(
       check_tbl_spl_compound_taskid_set(
         tbl_coarse_horizon,
         "2022-11-05", create_file_path("2022-11-05"), hub_path
+      )
+    )
+  )
+  # Specifying the derived task IDs allows validation to pass and excludes derived
+  # task IDs from the compound_taskid_set
+  expect_snapshot(
+    str(
+      check_tbl_spl_compound_taskid_set(
+        tbl_coarse_horizon,
+        "2022-11-05", create_file_path("2022-11-05"), hub_path,
+        derived_task_ids = "target_end_date"
       )
     )
   )
@@ -137,14 +144,9 @@ test_that("Finer compound_taskid_sets work", {
     ),
     ~ c("reference_date", "horizon", "location", "target_end_date")
   )
-
-  mockery::stub(
-    check_tbl_spl_compound_taskid_set,
-    "hubUtils::read_config",
-    config_tasks_no_variant,
-    2
+  local_mocked_bindings(
+    read_config = function(...) config_tasks_no_variant
   )
-
   tbl_fine <- create_spl_file("2022-10-22",
     compound_taskid_set = list(NULL, NULL),
     write = FALSE, out_datatype = "chr"

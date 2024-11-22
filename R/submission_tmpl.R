@@ -2,6 +2,12 @@
 #'
 #' @param hub_con A `⁠<hub_connection`>⁠ class object.
 #' @inheritParams expand_model_out_grid
+#' @param derived_task_ids Character vector of derived task ID names (task IDs whose
+#' values depend on other task IDs) to ignore. Columns for such task ids will
+#' contain `NA`s.
+#' If `NULL`, defaults to extracting derived task IDs from `config_tasks` or
+#' the `config_tasks` attribute of `hub_con`. See [get_config_derived_task_ids()]
+#' for more details.
 #' @param complete_cases_only Logical. If `TRUE` (default) and `required_vals_only = TRUE`,
 #' only rows with complete cases of combinations of required values are returned.
 #' If `FALSE`, rows with incomplete cases of combinations of required values
@@ -66,7 +72,7 @@
 #'   complete_cases_only = FALSE
 #' )
 #' # Hub with sample output type
-#' config_tasks <- hubUtils::read_config_file(system.file("config", "tasks.json",
+#' config_tasks <- read_config_file(system.file("config", "tasks.json",
 #'   package = "hubValidations"
 #' ))
 #' submission_tmpl(
@@ -74,7 +80,7 @@
 #'   round_id = "2022-12-26"
 #' )
 #' # Hub with sample output type and compound task ID structure
-#' config_tasks <- hubUtils::read_config_file(system.file("config", "tasks-comp-tid.json",
+#' config_tasks <- read_config_file(system.file("config", "tasks-comp-tid.json",
 #'   package = "hubValidations"
 #' ))
 #' submission_tmpl(
@@ -100,7 +106,7 @@
 #' )
 #' # Derive a template with ignored derived task ID. Useful to avoid creating
 #' # a template with invalid derived task ID value combinations.
-#' config_tasks <- hubUtils::read_config(
+#' config_tasks <- read_config(
 #'   system.file("testhubs", "flusight", package = "hubValidations")
 #' )
 #' submission_tmpl(
@@ -123,6 +129,15 @@ submission_tmpl <- function(hub_con, config_tasks, round_id,
     },
     config_tasks = checkmate::assert_list(config_tasks)
   )
+  if (is.null(derived_task_ids)) {
+    derived_task_ids <- get_config_derived_task_ids(
+      config_tasks, round_id
+    )
+  } else {
+    derived_task_ids <- validate_derived_task_ids(
+      derived_task_ids, config_tasks, round_id
+    )
+  }
 
   tmpl_df <- expand_model_out_grid(config_tasks,
     round_id = round_id,
@@ -144,7 +159,7 @@ submission_tmpl <- function(hub_con, config_tasks, round_id,
   # Add NA columns for value and all optional cols
   na_cols <- tmpl_cols[!tmpl_cols %in% names(tmpl_df)]
   tmpl_df[, na_cols] <- NA
-  tmpl_df <- hubData::coerce_to_hub_schema(tmpl_df, config_tasks)[, tmpl_cols]
+  tmpl_df <- coerce_to_hub_schema(tmpl_df, config_tasks)[, tmpl_cols]
 
   if (complete_cases_only) {
     subset_complete_cases(tmpl_df)

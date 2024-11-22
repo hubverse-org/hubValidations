@@ -3,7 +3,12 @@
 * Re-exported functions useful for modelers (#149):
   - `hubUtils::read_config()` and `hubUtils::read_config_file()` for reading in hub configuration files.
   - `hubData::create_hub_schema()` and `hubData::coerce_to_hub_schema()` for creating and coercing data to the hub schema.
-* v4 config supported (#156, #159).
+* Validation of v4 hubs now fully supported (#155, #156, #159). This includes:
+- support for the v4 specification of `output_type_ids`.
+- use of the new `is_required` property to determine whether output types are required or not. 
+- `derived_task_ids` are now extracted from the `tasks.json` config by default. 
+
+See the [`schemas` repository `NEWS.md`](https://github.com/hubverse-org/schemas/blob/main/NEWS.md) for more details.
 
 # hubValidations 0.8.0
 

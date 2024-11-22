@@ -6,16 +6,14 @@ test_that("check_tbl_col_types works", {
   expect_snapshot(
     check_tbl_col_types(tbl, file_path, hub_path)
   )
-
-  mockery::stub(
-    check_tbl_col_types,
-    "hubData::create_hub_schema",
-    c(
-      origin_date = "character", target = "character", horizon = "double",
-      location = "character", age_group = "character", output_type = "character",
-      output_type_id = "double", value = "integer"
-    ),
-    1
+  local_mocked_bindings(
+    create_hub_schema = function(...) {
+      c(
+        origin_date = "character", target = "character", horizon = "double",
+        location = "character", age_group = "character", output_type = "character",
+        output_type_id = "double", value = "integer"
+      )
+    }
   )
   expect_snapshot(
     check_tbl_col_types(tbl, file_path, hub_path)

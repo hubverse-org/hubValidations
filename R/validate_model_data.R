@@ -1,5 +1,10 @@
 #' Validate the contents of a submitted model data file
 #'
+#' @param derived_task_ids Character vector of derived task ID names (task IDs whose
+#' values depend on other task IDs) to ignore. Columns for such task ids will
+#' contain `NA`s.
+#' If `NULL`, defaults to extracting derived task IDs from hub `task.json`. See
+#' [get_derived_task_ids()] for more details.
 #' @inheritParams check_tbl_unique_round_id
 #' @inheritParams validate_model_file
 #' @inheritParams hubData::create_hub_schema
@@ -8,7 +13,7 @@
 #' @export
 #' @details
 #' Note that it is **necessary for `derived_task_ids` to be specified if any of
-#' the task IDs derived task IDs depend on have required values**. If this is the
+#' the task IDs a derived task ID depends on have required values**. If this is the
 #' case and derived task IDs are not specified, the dependent nature of derived
 #' task ID values will result in **false validation errors when validating
 #' required values**.
@@ -72,7 +77,6 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
     )
   }
 
-
   # -- File round ID checks ----
   # Will be skipped if round config round_id_from_var is FALSE and no round_id_col
   # value is explicitly specified.
@@ -110,6 +114,19 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
   )
   if (is_any_error(checks$match_round_id)) {
     return(checks)
+  }
+
+  # Get derived task IDs if not specified
+  if (is.null(derived_task_ids)) {
+    derived_task_ids <- get_derived_task_ids(
+      hub_path, round_id
+    )
+  } else {
+    derived_task_ids <- validate_derived_task_ids(
+      derived_task_ids,
+      config_tasks = read_config(hub_path),
+      round_id
+    )
   }
 
   # -- Column level checks ----

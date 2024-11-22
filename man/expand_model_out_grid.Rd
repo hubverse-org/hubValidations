@@ -17,7 +17,7 @@ expand_model_out_grid(
   include_sample_ids = FALSE,
   compound_taskid_set = NULL,
   output_types = NULL,
-  derived_task_ids = NULL
+  derived_task_ids = get_config_derived_task_ids(config_tasks, round_id)
 )
 }
 \arguments{
@@ -77,7 +77,8 @@ Use to subset for grids for specific output types.}
 
 \item{derived_task_ids}{Character vector of derived task ID names (task IDs whose
 values depend on other task IDs) to ignore. Columns for such task ids will
-contain \code{NA}s.}
+contain \code{NA}s. Defaults to extracting derived task IDs from \code{config_tasks}. See
+\code{\link[=get_config_derived_task_ids]{get_config_derived_task_ids()}} for more details.}
 }
 \value{
 If \code{bind_model_tasks = TRUE} (default) a tibble or arrow table
@@ -144,7 +145,7 @@ expand_model_out_grid(config_tasks,
   as_arrow_table = TRUE
 )
 # Hub with sample output type
-config_tasks <- hubUtils::read_config_file(system.file("config", "tasks.json",
+config_tasks <- read_config_file(system.file("config", "tasks.json",
   package = "hubValidations"
 ))
 expand_model_out_grid(config_tasks,
@@ -156,7 +157,7 @@ expand_model_out_grid(config_tasks,
   include_sample_ids = TRUE
 )
 # Hub with sample output type and compound task ID structure
-config_tasks <- hubUtils::read_config_file(
+config_tasks <- read_config_file(
   system.file("config", "tasks-comp-tid.json", package = "hubValidations")
 )
 expand_model_out_grid(config_tasks,
@@ -183,7 +184,7 @@ expand_model_out_grid(config_tasks,
   )
 )
 # Subset output types
-config_tasks <- hubUtils::read_config(
+config_tasks <- read_config(
   system.file("testhubs", "samples", package = "hubValidations")
 )
 expand_model_out_grid(config_tasks,
@@ -237,5 +238,15 @@ expand_model_out_grid(
   output_types = "mean",
   required_vals_only = TRUE,
   force_output_types = TRUE
+)
+# Ignore derived task IDs
+hub_path <- system.file("testhubs", "v4", "flusight", package = "hubUtils")
+config_tasks <- read_config(hub_path)
+# Defaults to using derived_task_ids from config
+expand_model_out_grid(config_tasks, round_id = "2023-05-08")
+# Can be overridden by argument derived_task_ids
+expand_model_out_grid(config_tasks,
+  round_id = "2023-05-08",
+  derived_task_ids = NULL
 )
 }

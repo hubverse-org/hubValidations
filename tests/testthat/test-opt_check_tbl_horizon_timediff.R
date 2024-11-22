@@ -72,11 +72,8 @@ test_that("opt_check_tbl_horizon_timediff fails correctly", {
     location = "character", output_type = "character", output_type_id = "character",
     value = "double", target_end_date = "character"
   )
-  mockery::stub(
-    opt_check_tbl_horizon_timediff,
-    "hubData::create_hub_schema",
-    schema,
-    2
+  local_mocked_bindings(
+    create_hub_schema = function(...) schema
   )
   expect_snapshot(
     opt_check_tbl_horizon_timediff(tbl, file_path, hub_path,

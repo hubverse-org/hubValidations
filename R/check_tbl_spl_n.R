@@ -17,11 +17,11 @@
 #' @export
 check_tbl_spl_n <- function(tbl, round_id, file_path, hub_path,
                             compound_taskid_set = NULL,
-                            derived_task_ids = NULL) {
+                            derived_task_ids = get_derived_task_ids(hub_path, round_id)) {
   if (!is.null(compound_taskid_set) && isTRUE(is.na(compound_taskid_set))) {
     cli::cli_abort("Valid {.var compound_taskid_set} must be provided.")
   }
-  config_tasks <- hubUtils::read_config(hub_path, "tasks")
+  config_tasks <- read_config(hub_path, "tasks")
   if (is.null(compound_taskid_set)) {
     compound_taskid_set <- get_round_compound_task_ids(
       config_tasks,

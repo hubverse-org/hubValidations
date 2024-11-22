@@ -141,11 +141,8 @@ test_that("validate_pr flags modifications and deletions in PR", {
     suppressMessages(check_for_errors(mod_checks_none[1:5]))
   )
 
-  mockery::stub(
-    check_submission_time,
-    "Sys.time",
-    lubridate::as_datetime("2022-10-08 18:01:00 EEST"),
-    2
+  local_mocked_bindings(
+    Sys.time = function(...) lubridate::as_datetime("2022-10-08 18:01:00 EEST")
   )
   mod_checks_in_window <- suppressMessages(
     validate_pr(

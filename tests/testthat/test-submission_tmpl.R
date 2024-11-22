@@ -106,7 +106,7 @@ test_that("submission_tmpl works correctly", {
   # Hub with sample output type
   expect_snapshot(
     submission_tmpl(
-      config_tasks = hubUtils::read_config_file(system.file("config", "tasks.json",
+      config_tasks = read_config_file(system.file("config", "tasks.json",
         package = "hubValidations"
       )),
       round_id = "2022-12-26"
@@ -114,7 +114,7 @@ test_that("submission_tmpl works correctly", {
   )
 
   # Hub with sample output type and compound task ID structure
-  config_tasks <- hubUtils::read_config_file(
+  config_tasks <- read_config_file(
     system.file("config", "tasks-comp-tid.json",
       package = "hubValidations"
     )
@@ -200,7 +200,7 @@ test_that("submission_tmpl errors correctly", {
     error = TRUE
   )
 
-  config_tasks <- hubUtils::read_config_file(
+  config_tasks <- read_config_file(
     system.file("config", "tasks-comp-tid.json",
       package = "hubValidations"
     )
@@ -219,7 +219,7 @@ test_that("submission_tmpl errors correctly", {
 })
 
 test_that("submission_tmpl output type subsetting works", {
-  config_tasks <- hubUtils::read_config_file(system.file("config", "tasks-comp-tid.json",
+  config_tasks <- read_config_file(system.file("config", "tasks-comp-tid.json",
     package = "hubValidations"
   ))
 
@@ -243,7 +243,7 @@ test_that("submission_tmpl output type subsetting works", {
 })
 
 test_that("submission_tmpl ignoring derived task ids works", {
-  config_tasks <- hubUtils::read_config(test_path("testdata", "hub-spl"))
+  config_tasks <- read_config(test_path("testdata", "hub-spl"))
 
   expect_snapshot(
     submission_tmpl(

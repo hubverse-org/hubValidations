@@ -57,7 +57,6 @@ Suggests:
     DT,
     gert,
     kableExtra,
-    mockery,
     pak,
     readr,
     rmarkdown,

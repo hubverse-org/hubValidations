@@ -1219,7 +1219,7 @@
     Code
       str(dup_model_out_val)
     Output
-      Classes 'hub_validations', 'list'  hidden list of 10
+      List of 19
        $ file_exists       :List of 4
         ..$ message       : chr "File exists at path 'model-output/team1-goodmodel/2022-10-08-team1-goodmodel.csv'. \n "
         ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
@@ -1270,22 +1270,82 @@
         ..$ call          : chr "check_file_read"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ valid_round_id_col:List of 6
-        ..$ message       : chr "`round_id_col` name must be valid. \n Must be one of\n                                      \"location\", \"ref"| __truncated__
-        ..$ trace         : NULL
-        ..$ parent        : NULL
+       $ valid_round_id_col:List of 4
+        ..$ message       : chr "`round_id_col` name is valid. \n "
         ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
         ..$ call          : chr "check_valid_round_id_col"
         ..$ use_cli_format: logi TRUE
-        ..- attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_error" "error" ...
-       $ unique_round_id   :List of 6
-        ..$ message       : chr "`round_id_col` name must be valid. \n Must be one of\n                                      \"location\", \"ref"| __truncated__
-        ..$ trace         : NULL
-        ..$ parent        : NULL
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ unique_round_id   :List of 4
+        ..$ message       : chr "`round_id` column \"origin_date\" contains a single, unique round ID value. \n "
         ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
         ..$ call          : chr "check_tbl_unique_round_id"
         ..$ use_cli_format: logi TRUE
-        ..- attr(*, "class")= chr [1:5] "check_error" "hub_check" "rlang_error" "error" ...
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ match_round_id    :List of 4
+        ..$ message       : chr "All `round_id_col` \"origin_date\" values match submission `round_id` from file name. \n "
+        ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+        ..$ call          : chr "check_tbl_match_round_id"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ colnames          :List of 4
+        ..$ message       : chr "Column names are consistent with expected round task IDs and std column names. \n "
+        ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+        ..$ call          : chr "check_tbl_colnames"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ col_types         :List of 4
+        ..$ message       : chr "Column data types match hub schema. \n "
+        ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+        ..$ call          : chr "check_tbl_col_types"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ valid_vals        :List of 5
+        ..$ message       : chr "`tbl` contains valid values/value combinations.  \n "
+        ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+        ..$ error_tbl     : NULL
+        ..$ call          : chr "check_tbl_values"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ rows_unique       :List of 4
+        ..$ message       : chr "All combinations of task ID column/`output_type`/`output_type_id` values are unique. \n "
+        ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+        ..$ call          : chr "check_tbl_rows_unique"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ req_vals          :List of 5
+        ..$ message       : chr "Required task ID/output type/output type ID combinations all present.  \n "
+        ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+        ..$ missing       : tibble [0 x 6] (S3: tbl_df/tbl/data.frame)
+        .. ..$ origin_date   : chr(0) 
+        .. ..$ target        : chr(0) 
+        .. ..$ horizon       : chr(0) 
+        .. ..$ location      : chr(0) 
+        .. ..$ output_type   : chr(0) 
+        .. ..$ output_type_id: chr(0) 
+        ..$ call          : chr "check_tbl_values_required"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ value_col_valid   :List of 4
+        ..$ message       : chr "Values in column `value` all valid with respect to modeling task config. \n "
+        ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+        ..$ call          : chr "check_tbl_value_col"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ value_col_non_desc:List of 5
+        ..$ message       : chr "Values in `value` column are non-decreasing as output_type_ids increase for all unique task ID\n    value/outpu"| __truncated__
+        ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+        ..$ error_tbl     : NULL
+        ..$ call          : chr "check_tbl_value_col_ascending"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ value_col_sum1    :List of 4
+        ..$ message       : chr "No pmf output types to check for sum of 1. Check skipped."
+        ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+        ..$ call          : chr "check_tbl_value_col_sum1"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
+       - attr(*, "class")= chr [1:2] "hub_validations" "list"
 
 ---
 
@@ -1295,4 +1355,18 @@
       <error/check_failure>
       Error:
       ! Number of accepted model output files per round exceeded.  Should be 1 but pre-existing round submission file "team1-goodmodel/2022-10-08-team1-goodmodel.parquet" found in team directory.
+
+# validate_submission works with v4 flusight (contains derived_task_ids)
+
+    Code
+      check_for_errors(v4_missing_meta)
+    Message
+      
+      -- 2023-05-08-hub-baseline.parquet ----
+      
+      x [metadata_exists]: Metadata file does not exist at path 'model-metadata/hub-baseline.yml' or 'model-metadata/hub-baseline.yaml'.
+    Condition
+      Error in `check_for_errors()`:
+      ! 
+      The validation checks produced some failures/errors reported above.
 

@@ -131,7 +131,7 @@
 ---
 
     Code
-      submission_tmpl(config_tasks = hubUtils::read_config_file(system.file("config",
+      submission_tmpl(config_tasks = read_config_file(system.file("config",
         "tasks.json", package = "hubValidations")), round_id = "2022-12-26")
     Output
       # A tibble: 42 x 7
@@ -261,7 +261,7 @@
     Code
       submission_tmpl(hub_con)
     Condition
-      Error in `checkmate::assert_string()`:
+      Error in `submission_tmpl()`:
       ! argument "round_id" is missing, with no default
 
 ---
@@ -269,7 +269,7 @@
     Code
       submission_tmpl(hub_con)
     Condition
-      Error in `checkmate::assert_string()`:
+      Error in `submission_tmpl()`:
       ! argument "round_id" is missing, with no default
 
 ---

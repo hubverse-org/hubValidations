@@ -9,6 +9,8 @@ reference:
   contents:
   - validate_submission
   - submission_tmpl
+  - create_hub_schema
+  - coerce_to_hub_schema
 
 - title: "Higher level validation functions"
   desc: "Functions combining appropriate check unit test used for higher level validations. All return `hub_validations` S3 class objects."
@@ -41,6 +43,7 @@ reference:
   - try_check
   - expand_model_out_grid
   - get_tbl_compound_taskid_set
+  - get_config_derived_task_ids
   - match_tbl_to_model_task
 
 

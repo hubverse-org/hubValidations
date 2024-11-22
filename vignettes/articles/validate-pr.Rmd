@@ -58,14 +58,6 @@ knitr::include_graphics("assets/ga-action-screenshot.png")
 
 ### Ignoring derived task IDs to improve performance
 
-Argument **`derived_task_ids`** allows for the specification of **task IDs that are derived from other task IDs** to be ignored. This **can often lead to a significant improvement in validation performance**.
-
-<div class="alert alert-warning" role="alert">
-
-Note that it is **necessary for `derived_task_ids` to be specified if any of the task IDs derived task IDs depend on have required values**. If this is the case and derived task IDs are not specified, the dependent nature of derived task ID values will result in **false validation errors when validating required values**.
-
-</div>
-
 #### What are derived task IDs?
 
 Derived task IDs are a class of task ID whose values depend on the values of other task IDs. As such, the **validity of derived task ID values is dependent on the values of the task IDs they are derived from** and the validity of value combinations of derived and other task IDs is much more restricted. A common example of a derived task ID is `target_end_date` which is most often derived from the `reference_date` or `origin_date` and `horizon` task ids. 
@@ -74,9 +66,26 @@ Derived task IDs are a class of task ID whose values depend on the values of oth
 
 With standard validation, derived task IDs like `target_end_date` tend to pollute the expanded grid used to validate valid value combination with invalid combinations. That's because, while a given combination of `reference_date` and `horizon` values will only have a single valid `target_end_date` value, the `target_end_date` property in the config will contain all possible valid values for all combinations of `reference_date` and `horizon`. Because its the values in the config used to create the expanded valid values grid, the sizes these grids can reach as function of config complexity can often put excessive strain on the system's memory, affecting overall performance of PR validation. 
 
+<div class="alert alert-warning" role="alert">
+
+Note that, **if any of the task IDs a derived task ID depends on have required values, it is essential for `derived_task_ids` to be specified**. 
+If this is the case and derived task IDs are not specified, the dependent nature of derived task ID values will result in **false validation errors when validating required values**.
+
+</div>
+
 #### How to ignore derived task IDs
 
-Supplying the names of derived task IDs to argument `derived_task_ids` will ignore them during validation checks and, depending on config complexity, this **can lead to a significant improvement in validation performance**.
+<div class="alert alert-info" role="alert">
+
+**For configs using schema version v4.0.0 and above, derived task IDs can be specified in the `tasks.json` config file using the `derived_task_ids` property.**
+
+Setting `derived_task_ids` in the config means validations will ignore them by default without needing to set them manually through the `derived_task_ids` argument described below.
+
+</div>
+
+Argument **`derived_task_ids`** allows for the specification of **task IDs that are derived from other task IDs**. Supplying the names of derived task IDs to argument `derived_task_ids` will ignore them during validation checks.
+
+Depending on config complexity, this **can often lead to a significant improvement in validation performance and in some circumstances is necessary for correct validation**.
  
 <div class="alert alert-warning" role="alert">
 

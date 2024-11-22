@@ -7,7 +7,7 @@ create_spl_file <- function(round_id, compound_taskid_set = NULL,
   out_datatype <- match.arg(out_datatype)
   file_path <- create_file_path(round_id = round_id, ext = ext)
 
-  config_tasks <- hubUtils::read_config_file(
+  config_tasks <- read_config_file(
     fs::path(hub_path, "hub-config", "tasks.json")
   )
 
@@ -19,7 +19,7 @@ create_spl_file <- function(round_id, compound_taskid_set = NULL,
     dplyr::filter(.data$output_type == "sample") |>
     dplyr::filter(reference_date + lubridate::weeks(horizon) == target_end_date) |>
     dplyr::mutate(value = sample.int(n = 1000, size = length(value))) |>
-    hubData::coerce_to_hub_schema(config_tasks)
+    coerce_to_hub_schema(config_tasks)
 
   uniq_spl_ids <- unique(tbl$output_type_id)
   recode_spl_ids <- seq_along(uniq_spl_ids) |> as.character()

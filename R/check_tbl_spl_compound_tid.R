@@ -4,6 +4,7 @@
 #' @param tbl a tibble/data.frame of the contents of the file being validated. Column types must **all be character**.
 #' @inherit check_tbl_colnames params
 #' @inherit check_tbl_colnames return
+#' @inheritParams check_tbl_spl_compound_taskid_set
 #' @inheritParams expand_model_out_grid
 #' @param compound_taskid_set a list of `compound_taskid_set`s (characters vector of compound task IDs),
 #' one for each modeling task. Used to override the compound task ID set in the config file,
@@ -19,11 +20,11 @@
 #' @export
 check_tbl_spl_compound_tid <- function(tbl, round_id, file_path, hub_path,
                                        compound_taskid_set = NULL,
-                                       derived_task_ids = NULL) {
+                                       derived_task_ids = get_derived_task_ids(hub_path, round_id)) {
   if (!is.null(compound_taskid_set) && isTRUE(is.na(compound_taskid_set))) {
     cli::cli_abort("Valid {.var compound_taskid_set} must be provided.")
   }
-  config_tasks <- hubUtils::read_config(hub_path, "tasks")
+  config_tasks <- read_config(hub_path, "tasks")
   if (is.null(compound_taskid_set)) {
     compound_taskid_set <- get_round_compound_task_ids(
       config_tasks,

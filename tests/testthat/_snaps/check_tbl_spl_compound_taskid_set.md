@@ -235,6 +235,23 @@
        $ use_cli_format     : logi TRUE
        - attr(*, "class")= chr [1:5] "check_error" "hub_check" "rlang_error" "error" ...
 
+---
+
+    Code
+      str(check_tbl_spl_compound_taskid_set(tbl_coarse_horizon, "2022-11-05",
+        create_file_path("2022-11-05"), hub_path, derived_task_ids = "target_end_date"))
+    Output
+      List of 6
+       $ message            : chr "All samples in a model task conform to single, unique compound task ID set that matches or is\n    coarser than"| __truncated__
+       $ where              : 'fs_path' chr "flu-base/2022-11-05-flu-base.parquet"
+       $ errors             : NULL
+       $ compound_taskid_set:List of 2
+        ..$ 1: NULL
+        ..$ 2: chr [1:2] "reference_date" "horizon"
+       $ call               : chr "check_tbl_spl_compound_taskid_set"
+       $ use_cli_format     : logi TRUE
+       - attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+
 # Finer compound_taskid_sets work
 
     Code

@@ -46,7 +46,10 @@ Use to subset for grids for specific output types.}
 
 \item{derived_task_ids}{Character vector of derived task ID names (task IDs whose
 values depend on other task IDs) to ignore. Columns for such task ids will
-contain \code{NA}s.}
+contain \code{NA}s.
+If \code{NULL}, defaults to extracting derived task IDs from \code{config_tasks} or
+the \code{config_tasks} attribute of \code{hub_con}. See \code{\link[=get_config_derived_task_ids]{get_config_derived_task_ids()}}
+for more details.}
 }
 \value{
 a tibble template containing an expanded grid of valid task ID and
@@ -110,7 +113,7 @@ submission_tmpl(hub_con,
   complete_cases_only = FALSE
 )
 # Hub with sample output type
-config_tasks <- hubUtils::read_config_file(system.file("config", "tasks.json",
+config_tasks <- read_config_file(system.file("config", "tasks.json",
   package = "hubValidations"
 ))
 submission_tmpl(
@@ -118,7 +121,7 @@ submission_tmpl(
   round_id = "2022-12-26"
 )
 # Hub with sample output type and compound task ID structure
-config_tasks <- hubUtils::read_config_file(system.file("config", "tasks-comp-tid.json",
+config_tasks <- read_config_file(system.file("config", "tasks-comp-tid.json",
   package = "hubValidations"
 ))
 submission_tmpl(
@@ -144,7 +147,7 @@ submission_tmpl(
 )
 # Derive a template with ignored derived task ID. Useful to avoid creating
 # a template with invalid derived task ID value combinations.
-config_tasks <- hubUtils::read_config(
+config_tasks <- read_config(
   system.file("testhubs", "flusight", package = "hubValidations")
 )
 submission_tmpl(
