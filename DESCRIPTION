@@ -39,7 +39,7 @@ Imports:
     dplyr (>= 1.1.0),
     fs,
     gh,
-    hubAdmin (>= 1.0.0),
+    hubAdmin (>= 1.4.0),
     hubData (>= 1.3.0),
     hubUtils (>= 0.3.0),
     jsonlite,
