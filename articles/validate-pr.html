@@ -14,8 +14,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Validating Pull Requests on GitHub">
 </head>
 <body>
@@ -26,7 +26,7 @@
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/hubverse-org/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubValidations</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.8.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.9.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -135,10 +135,6 @@ validation failures.</p>
 <div class="section level3">
 <h3 id="ignoring-derived-task-ids-to-improve-performance">Ignoring derived task IDs to improve performance<a class="anchor" aria-label="anchor" href="#ignoring-derived-task-ids-to-improve-performance"></a>
 </h3>
-<p>Argument <strong><code>derived_task_ids</code></strong> allows for
-the specification of <strong>task IDs that are derived from other task
-IDs</strong> to be ignored, which <strong>can often lead to a
-significant improvement in validation performance</strong>.</p>
 <div class="section level4">
 <h4 id="what-are-derived-task-ids">What are derived task IDs?<a class="anchor" aria-label="anchor" href="#what-are-derived-task-ids"></a>
 </h4>
@@ -166,14 +162,34 @@ Because its the values in the config used to create the expanded valid
 values grid, the sizes these grids can reach as function of config
 complexity can often put excessive strain on the system’s memory,
 affecting overall performance of PR validation.</p>
+<div class="alert alert-warning" role="alert">
+<p>Note that, <strong>if any of the task IDs a derived task ID depends
+on have required values, it is essential for
+<code>derived_task_ids</code> to be specified</strong>. If this is the
+case and derived task IDs are not specified, the dependent nature of
+derived task ID values will result in <strong>false validation errors
+when validating required values</strong>.</p>
+</div>
 </div>
 <div class="section level4">
 <h4 id="how-to-ignore-derived-task-ids">How to ignore derived task IDs<a class="anchor" aria-label="anchor" href="#how-to-ignore-derived-task-ids"></a>
 </h4>
-<p>Supplying the names of derived task IDs to argument
-<code>derived_task_ids</code> will ignore them during validation checks
-and, depending on config complexity, this <strong>can lead to a
-significant improvement in validation performance</strong>.</p>
+<div class="alert alert-info" role="alert">
+<p><strong>For configs using schema version v4.0.0 and above, derived
+task IDs can be specified in the <code>tasks.json</code> config file
+using the <code>derived_task_ids</code> property.</strong></p>
+<p>Setting <code>derived_task_ids</code> in the config means validations
+will ignore them by default without needing to set them manually through
+the <code>derived_task_ids</code> argument described below.</p>
+</div>
+<p>Argument <strong><code>derived_task_ids</code></strong> allows for
+the specification of <strong>task IDs that are derived from other task
+IDs</strong>. Supplying the names of derived task IDs to argument
+<code>derived_task_ids</code> will ignore them during validation
+checks.</p>
+<p>Depending on config complexity, this <strong>can often lead to a
+significant improvement in validation performance and in some
+circumstances is necessary for correct validation</strong>.</p>
 </div>
 <div class="section level4 alert alert-warning" role="alert">
 <h4 id="warning">Warning<a class="anchor" aria-label="anchor" href="#warning"></a>
