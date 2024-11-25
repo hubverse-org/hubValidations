@@ -1,6 +1,6 @@
 Package: hubValidations
 Title: Testing framework for hubverse hub validations
-Version: 0.8.0.9000
+Version: 0.9.0
 Authors@R: c(
     person(
         given = "Anna", 
@@ -39,9 +39,9 @@ Imports:
     dplyr (>= 1.1.0),
     fs,
     gh,
-    hubAdmin (>= 1.0.0),
-    hubData (>= 1.2.3.9000),
-    hubUtils (>= 0.2.0.9000),
+    hubAdmin (>= 1.4.0),
+    hubData (>= 1.3.0),
+    hubUtils (>= 0.3.0),
     jsonlite,
     jsonvalidate,
     lifecycle,

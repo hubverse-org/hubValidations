@@ -1,4 +1,4 @@
-# hubValidations (development version)
+# hubValidations 0.9.0
 
 * Re-exported functions useful for modelers (#149):
   - `hubUtils::read_config()` and `hubUtils::read_config_file()` for reading in hub configuration files.
