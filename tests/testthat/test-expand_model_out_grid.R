@@ -404,7 +404,7 @@ test_that("force_output_types works as expected with v4", {
       "testdata", "configs",
       "tasks-samples-v4.json"
     )
-  ) |> suppressWarnings() # TODO: Remove when v4.0.0 released
+  )
   # test optional samples ----
   # Without forcing output_types should be list of zero dim tbls
   v4_opt_spls <- expand_model_out_grid(
@@ -475,7 +475,7 @@ test_that("force_output_types works as expected with v4", {
   # test optional output type with output type IDs - quantile ----
   config_tasks <- read_config(system.file("testhubs", "v4", "flusight",
     package = "hubUtils"
-  )) |> suppressWarnings() # TODO: Remove when v4.0.0 released
+  ))
   # Without forcing output_types, should be list of zero dim tbls
   v4_opt_qntl <- expand_model_out_grid(
     config_tasks,
@@ -719,8 +719,7 @@ test_that("v4 point estimate output type IDs extracted correctly as NAs", {
   hub_path <- system.file("testhubs", "v4", "flusight", package = "hubUtils")
   file_name <- "hub-baseline/2023-05-01-hub-baseline.csv"
   round_id <- parse_file_name(file_name)$round_id
-  # TODO: remove suppressWarnings() when schemas v4 is released
-  config_tasks <- suppressWarnings(read_config(hub_path = hub_path))
+  config_tasks <- read_config(hub_path = hub_path)
 
   point_est_grid <- expand_model_out_grid(
     config_tasks = config_tasks,
@@ -735,18 +734,14 @@ test_that("v4 required output type ID values extracted correctly", {
   hub_path <- system.file("testhubs", "v4", "flusight", package = "hubUtils")
   file_name <- "hub-baseline/2023-05-01-hub-baseline.csv"
   round_id <- parse_file_name(file_name)$round_id
-  # TODO: Remove suppressWarnings when v4 released
-  config_tasks <- suppressWarnings(read_config(hub_path = hub_path))
+  config_tasks <- read_config(hub_path = hub_path)
 
   expect_snapshot(
-    # TODO: Remove suppressWarnings when v4 released
-    suppressWarnings(
-      expand_model_out_grid(
-        config_tasks = config_tasks,
-        round_id = round_id,
-        output_types = "pmf",
-        derived_task_ids = get_hub_derived_task_ids(hub_path)
-      )
+    expand_model_out_grid(
+      config_tasks = config_tasks,
+      round_id = round_id,
+      output_types = "pmf",
+      derived_task_ids = get_hub_derived_task_ids(hub_path)
     )
   )
 
@@ -759,7 +754,7 @@ test_that("v4 required output type ID values extracted correctly", {
     ), 0L
   )
 
-  force_pmf <-  expand_model_out_grid(
+  force_pmf <- expand_model_out_grid(
     config_tasks = config_tasks,
     round_id = round_id,
     output_types = "pmf",

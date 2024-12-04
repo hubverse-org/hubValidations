@@ -289,18 +289,17 @@ test_that("check_tbl_values_required works with v4 hubs", {
   hub_path <- system.file("testhubs/v4/flusight", package = "hubUtils")
   file_path <- "hub-ensemble/2023-05-08-hub-ensemble.parquet"
   round_id <- "2023-05-08"
-  # TODO: Remove suppressWarnings when v4 is released
-  config_tasks <- read_config(hub_path, "tasks") |> suppressWarnings()
+  config_tasks <- read_config(hub_path, "tasks")
   tbl <- read_model_out_file(file_path, hub_path,
     coerce_types = "chr"
-  ) |> suppressWarnings() # TODO: Remove suppressWarnings when v4 is released
+  )
   tbl_hub <- read_model_out_file(file_path, hub_path,
     coerce_types = "hub"
-  ) |> suppressWarnings() # TODO: Remove suppressWarnings when v4 is released
+  )
   expect_s3_class(
     check_tbl_values_required(tbl, round_id, file_path, hub_path,
       derived_task_ids = "target_date"
-    ) |> suppressWarnings(), # TODO: Remove suppressWarnings when v4 is released
+    ),
     c("check_success", "hub_check", "rlang_message", "message", "condition"),
     exact = TRUE
   )
@@ -308,7 +307,7 @@ test_that("check_tbl_values_required works with v4 hubs", {
   missing_required <- check_tbl_values_required(
     tbl[-(24:25), ], round_id, file_path, hub_path,
     derived_task_ids = "target_date"
-  ) |> suppressWarnings() # TODO: Remove suppressWarnings when v4 is released
+  )
   missing <- missing_required$missing
   expect_true(nrow(missing) == 2L)
   expect_equal(
@@ -320,7 +319,7 @@ test_that("check_tbl_values_required works with v4 hubs", {
     tbl[-(1:2), ],
     round_id, file_path, hub_path,
     derived_task_ids = "target_date"
-  ) |> suppressWarnings() # TODO: Remove suppressWarnings when v4 is released
+  )
   missing <- missing_opt_otid$missing
   expect_equal(
     missing[, names(missing) != "target_date"],
@@ -337,7 +336,7 @@ test_that("check_tbl_values_required works with v4 hubs", {
     pmf_row, round_id,
     file_path, hub_path,
     derived_task_ids = "target_date"
-  ) |> suppressWarnings() # TODO: Remove suppressWarnings when v4 is released
+  )
   expect_equal(
     missing_pmf$missing$output_type_id,
     c("decrease", "stable", "increase", "large_increase")
@@ -348,7 +347,7 @@ test_that("check_tbl_values_required works with v4 hubs", {
     pmf_row, round_id,
     file_path, hub_path,
     derived_task_ids = "target_date"
-  ) |> suppressWarnings() # TODO: Remove suppressWarnings when v4 is released
+  )
   missing <- missing_horizon$missing
   expect_equal(nrow(missing), 9L)
   expect_equal(nrow(missing[missing$horizon == 1L, ]), 4L)
@@ -360,19 +359,17 @@ test_that("Reading derived_task_ids from config works", {
   hub_path <- system.file("testhubs/v4/flusight", package = "hubUtils")
   file_path <- "hub-ensemble/2023-05-08-hub-ensemble.parquet"
   round_id <- "2023-05-08"
-  # TODO: Remove suppressWarnings when v4 is released
-  config_tasks <- read_config(hub_path, "tasks") |> suppressWarnings()
+  config_tasks <- read_config(hub_path, "tasks")
   tbl <- read_model_out_file(file_path, hub_path,
     coerce_types = "chr"
-  ) |> suppressWarnings() # TODO: Remove suppressWarnings when v4 is released
+  )
 
   # Ensure reading derived_task_ids from config gives same result as when
   # explicitly provided as argument
   expect_equal(
     check_tbl_values_required(tbl, round_id, file_path, hub_path,
       derived_task_ids = "target_date"
-    ) |> suppressWarnings(), # TODO: Remove suppressWarnings when v4 is released
-    check_tbl_values_required(tbl, round_id, file_path, hub_path) |>
-      suppressWarnings() # TODO: Remove suppressWarnings when v4 is released
+    ),
+    check_tbl_values_required(tbl, round_id, file_path, hub_path)
   )
 })
