@@ -889,8 +889,8 @@
 # v4 required output type ID values extracted correctly
 
     Code
-      suppressWarnings(expand_model_out_grid(config_tasks = config_tasks, round_id = round_id,
-        output_types = "pmf", derived_task_ids = get_hub_derived_task_ids(hub_path)))
+      expand_model_out_grid(config_tasks = config_tasks, round_id = round_id,
+        output_types = "pmf", derived_task_ids = get_hub_derived_task_ids(hub_path))
     Output
       # A tibble: 540 x 7
          forecast_date target  horizon target_date location output_type output_type_id
