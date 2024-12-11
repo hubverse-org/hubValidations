@@ -1,5 +1,7 @@
 # hubValidations (development version)
 
+* Surfaced the `force_output_types` argument in `submission_tmpl()` allowing users to force optional output types to be included in a submission template when `required_vals_only = TRUE`. In conjunction with the use of the `output_types` argument, this allows users to create submission templates which include optional output types they plan to submit.
+
 # hubValidations 0.9.0
 
 * Re-exported functions useful for modelers (#149):
