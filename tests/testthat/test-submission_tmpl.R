@@ -276,7 +276,7 @@ test_that("submission_tmpl force_output_types works", {
       )
     )
   )
-  expect_equal(dim(req_non_force), c(0L, 0L))
+  expect_equal(dim(req_non_force_default), c(0L, 0L))
   # When force_output_types is not set, all output_types are optional and
   # complete_cases_only = FALSE a data.frame containing required task ID
   # values is returned, with all optional task ids and output type related
