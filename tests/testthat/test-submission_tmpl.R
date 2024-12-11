@@ -255,3 +255,60 @@ test_that("submission_tmpl ignoring derived task ids works", {
     )
   )
 })
+
+
+test_that("submission_tmpl force_output_types works", {
+  config_tasks <- read_config_file(
+    test_path(
+      "testdata", "configs",
+      "tasks-samples-v4.json"
+    )
+  )
+  # When force_output_types is not set, all output_types are optional, a
+  #  zero row and column data.frame is returned  by default.
+  req_non_force_default <- suppressMessages(
+    suppressWarnings(
+      submission_tmpl(
+        config_tasks = config_tasks,
+        round_id = "2022-10-22",
+        required_vals_only = TRUE,
+        output_types = "sample"
+      )
+    )
+  )
+  expect_equal(dim(req_non_force), c(0L, 0L))
+  # When force_output_types is not set, all output_types are optional and
+  # complete_cases_only = FALSE a data.frame containing required task ID
+  # values is returned, with all optional task ids and output type related
+  # columns set to NA.
+  req_non_force <- suppressMessages(
+    suppressWarnings(
+      submission_tmpl(
+        config_tasks = config_tasks,
+        round_id = "2022-10-22",
+        required_vals_only = TRUE,
+        output_types = "sample",
+        complete_cases_only = FALSE
+      )
+    )
+  )
+  expect_equal(dim(req_non_force), c(4L, 9L))
+  expect_equal(unique(req_non_force$output_type), NA_character_)
+
+  # When force_output_types is TRUE, the requested output type should be
+  # returned.
+  req_force <- suppressMessages(
+    suppressWarnings(
+      submission_tmpl(
+        config_tasks = config_tasks,
+        round_id = "2022-10-22",
+        required_vals_only = TRUE,
+        force_output_types = TRUE,
+        output_types = "sample",
+        complete_cases_only = FALSE
+      )
+    )
+  )
+  expect_equal(dim(req_force), c(4L, 9L))
+  expect_equal(unique(req_force$output_type), "sample")
+})
