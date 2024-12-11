@@ -1,5 +1,7 @@
 # hubValidations (development version)
 
+* Added `check_tbl_derived_task_id_vals()` check to `validate_model_data()` that ensures that values in derived task ID columns match expected values for the corresponding derived task IDs in the round as defined in `tasks.json` config (#110). Given the dependence of derived task IDs on the values of other values, the check ignores the combinations of derived task ID values with those of other task IDs and focuses only on identifying values that do not match corresponding accepted values.
+
 # hubValidations 0.9.0
 
 * Re-exported functions useful for modelers (#149):

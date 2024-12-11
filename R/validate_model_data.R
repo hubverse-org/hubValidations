@@ -170,6 +170,16 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
     return(checks)
   }
 
+  checks$derived_task_id_vals <- try_check(
+    check_tbl_derived_task_id_vals(
+      tbl_chr,
+      round_id = round_id,
+      file_path = file_path,
+      hub_path = hub_path,
+      derived_task_ids = derived_task_ids
+    ), file_path
+  )
+
   checks$rows_unique <- try_check(
     check_tbl_rows_unique(
       tbl_chr,

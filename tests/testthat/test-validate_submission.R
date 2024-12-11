@@ -327,20 +327,6 @@ test_that("Ignoring derived_task_ids in validate_submission works", {
       )
     )
   )
-  # Results of validation the same
-  expect_equal(
-    validate_submission(
-      hub_path = system.file("testhubs/samples", package = "hubValidations"),
-      file_path = "flu-base/2022-10-22-flu-base.csv",
-      skip_submit_window_check = TRUE,
-      derived_task_ids = "target_end_date"
-    ),
-    validate_submission(
-      hub_path = system.file("testhubs/samples", package = "hubValidations"),
-      file_path = "flu-base/2022-10-22-flu-base.csv",
-      skip_submit_window_check = TRUE
-    )
-  )
 
   # Ensure derived_task_ids values are ignored in validate submission by introducing
   # deliberate error in derived_task_ids through mocking.
