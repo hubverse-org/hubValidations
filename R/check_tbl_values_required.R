@@ -39,37 +39,24 @@ check_tbl_values_required <- function(tbl, round_id, file_path, hub_path,
     force_output_types <- TRUE
   } else {
     # For pre v4 configs, we use the legacy settings and rules.
-    output_types <- NULL
+    output_types <- list(NULL)
     force_output_types <- FALSE
   }
-  req <- expand_model_out_grid(
-    config_tasks,
-    round_id = round_id,
-    output_types = output_types,
-    required_vals_only = TRUE,
-    force_output_types = force_output_types,
-    all_character = TRUE,
-    bind_model_tasks = FALSE,
-    derived_task_ids = derived_task_ids
-  )
 
-  full <- expand_model_out_grid(
-    config_tasks,
-    round_id = round_id,
-    output_types = output_types,
-    required_vals_only = FALSE,
-    all_character = TRUE,
-    as_arrow_table = FALSE,
-    bind_model_tasks = FALSE,
-    derived_task_ids = derived_task_ids
-  )
-
-  tbl <- join_tbl_to_model_task(full, tbl, subset_to_tbl_cols = TRUE)
-
-  missing_df <- purrr::pmap(
-    combine_mt_inputs(tbl, req, full),
-    check_modeling_task_values_required
-  ) %>%
+  # Iterate over output types in v4. This reduces memory pressure and also
+  # keeps output type evaluation separate, resolving the bug reported in #177.
+  # v3 and below is unaffected and validation proceeds as before using the full
+  # modeling task expanded grid
+  missing_df <- purrr::map(output_types, \(.x) {
+    check_required_output_type_by_modeling_task(
+      tbl = tbl,
+      config_tasks = config_tasks,
+      round_id = round_id,
+      output_type = .x,
+      derived_task_ids = derived_task_ids,
+      force_output_types = force_output_types
+    )
+  }) %>%
     purrr::list_rbind()
 
   check <- nrow(missing_df) == 0L
@@ -90,6 +77,41 @@ check_tbl_values_required <- function(tbl, round_id, file_path, hub_path,
     details = details,
     missing = missing_df
   )
+}
+
+check_required_output_type_by_modeling_task <- function(tbl, config_tasks,
+                                                        round_id, output_type,
+                                                        derived_task_ids,
+                                                        force_output_types) {
+  req <- expand_model_out_grid(
+    config_tasks,
+    round_id = round_id,
+    output_types = output_type,
+    required_vals_only = TRUE,
+    force_output_types = force_output_types,
+    all_character = TRUE,
+    bind_model_tasks = FALSE,
+    derived_task_ids = derived_task_ids
+  )
+
+  full <- expand_model_out_grid(
+    config_tasks,
+    round_id = round_id,
+    output_types = output_type,
+    required_vals_only = FALSE,
+    all_character = TRUE,
+    as_arrow_table = FALSE,
+    bind_model_tasks = FALSE,
+    derived_task_ids = derived_task_ids
+  )
+
+  tbl <- join_tbl_to_model_task(full, tbl, subset_to_tbl_cols = TRUE)
+
+  purrr::pmap(
+    combine_mt_inputs(tbl, req, full),
+    check_modeling_task_values_required
+  ) %>%
+    purrr::list_rbind()
 }
 
 check_modeling_task_values_required <- function(tbl, req, full) {
@@ -173,7 +195,6 @@ get_opt_col_list <- function(x, mask, full, req) {
 # Identify missing required values for optional value combinations.
 # Output full missing rows compiled from optional values and missing required values.
 missing_req_rows <- function(opt_cols, x, mask, req, full) {
-
   if (all(opt_cols == FALSE)) {
     return(req[!conc_rows(req) %in% conc_rows(x), ])
   }

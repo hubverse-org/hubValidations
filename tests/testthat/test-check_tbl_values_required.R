@@ -373,3 +373,27 @@ test_that("Reading derived_task_ids from config works", {
     check_tbl_values_required(tbl, round_id, file_path, hub_path)
   )
 })
+
+test_that("v4 config output type leak fixed (#177)", {
+  hub_path <- test_path("testdata", "hub-177")
+  file_path <- "FluSight-baseline/2024-12-14-FluSight-baseline.parquet"
+  round_id <- "2024-12-14"
+  tbl <- read_model_out_file(
+    file_path = file_path,
+    hub_path = hub_path,
+    coerce_types = "chr"
+  )
+  res <- check_tbl_values_required(tbl,
+    round_id = round_id,
+    file_path = file_path, hub_path = hub_path
+  )
+
+  expect_s3_class(res,
+    c(
+      "check_success", "hub_check",
+      "rlang_message", "message",
+      "condition"
+    ),
+    exact = TRUE
+  )
+})
