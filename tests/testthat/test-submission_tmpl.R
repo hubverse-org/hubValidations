@@ -295,18 +295,16 @@ test_that("submission_tmpl force_output_types works", {
 
   # When force_output_types is TRUE, the requested output type should be
   # returned.
-  req_force <- suppressMessages(
-    suppressWarnings(
-      submission_tmpl(
-        config_tasks = config_tasks,
-        round_id = "2022-10-22",
-        required_vals_only = TRUE,
-        force_output_types = TRUE,
-        output_types = "sample",
-        complete_cases_only = FALSE
-      )
+  expect_warning({
+    req_force <- submission_tmpl(
+      config_tasks = config_tasks,
+      round_id = "2022-10-22",
+      required_vals_only = TRUE,
+      force_output_types = TRUE,
+      output_types = "sample",
+      complete_cases_only = FALSE
     )
-  )
+  }, "all optional values") |> suppressMessages()
   expect_equal(dim(req_force), c(4L, 9L))
   expect_equal(unique(req_force$output_type), "sample")
 })
