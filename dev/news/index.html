@@ -47,7 +47,10 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="hubvalidations-development-version">hubValidations (development version)<a class="anchor" aria-label="anchor" href="#hubvalidations-development-version"></a></h2>
-<ul><li>Evaluation of whether all combinations of required values have been submitted through <code><a href="../reference/check_tbl_values_required.html">check_tbl_values_required()</a></code> is now chunked by output type for v4 config and above. This reduces memory pressure and should speed up required value validation in hubs with complex task.json files. It also fixes the bug reported in <a href="https://github.com/hubverse-org/hubValidations/issues/177" class="external-link">#177</a>.</li>
+<ul><li>
+<code><a href="../reference/submission_tmpl.html">submission_tmpl()</a></code> gains the <code>force_output_types</code> allowing users to force optional output types to be included in a submission template when <code>required_vals_only = TRUE</code>. In conjunction with the use of the <code>output_types</code> argument, this allows users to create submission templates which include optional output types they plan to submit.</li>
+<li>
+<code><a href="../reference/check_tbl_values_required.html">check_tbl_values_required()</a></code> no longer reports false positives for v4 hubs, which fixes the bug reported in <a href="https://github.com/hubverse-org/hubValidations/issues/177" class="external-link">#177</a>. Evaluation of whether all combinations of required values have been submitted through <code><a href="../reference/check_tbl_values_required.html">check_tbl_values_required()</a></code> is now chunked by output type for v4 config and above. This reduces memory pressure and should speed up required value validation in hubs with complex task.json files.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.9.0" id="hubvalidations-090">hubValidations 0.9.0<a class="anchor" aria-label="anchor" href="#hubvalidations-090"></a></h2>
