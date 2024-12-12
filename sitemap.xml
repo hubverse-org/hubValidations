@@ -35,6 +35,7 @@
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/check_submission_time.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/check_tbl_col_types.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/check_tbl_colnames.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubValidations/reference/check_tbl_derived_task_id_vals.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/check_tbl_match_round_id.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/check_tbl_rows_unique.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/check_tbl_spl_compound_taskid_set.html</loc></url>
