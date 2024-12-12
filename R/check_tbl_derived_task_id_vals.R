@@ -40,16 +40,10 @@ check_tbl_derived_task_id_vals <- function(
   )[derived_task_ids]
 
   setdiff_vals <- purrr::map2(
-    tbl[derived_task_ids], derived_task_id_vals,
-    \(.x, .y) {
-      setdiff(.x, .y)
-    }
+    tbl[derived_task_ids], derived_task_id_vals, setdiff
   )
 
-  invalid_derived_task_ids <- purrr::map_lgl(
-    setdiff_vals,
-    \(.x) length(.x) > 0L
-  )
+  invalid_derived_task_ids <- lengths(setdiff_vals) > 0L
 
   check <- !any(invalid_derived_task_ids)
 
