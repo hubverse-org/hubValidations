@@ -47,7 +47,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="hubvalidations-development-version">hubValidations (development version)<a class="anchor" aria-label="anchor" href="#hubvalidations-development-version"></a></h2>
-</div>
+<ul><li>Evaluation of whether all combinations of required values have been submitted through <code><a href="../reference/check_tbl_values_required.html">check_tbl_values_required()</a></code> is now chunked by output type for v4 config and above. This reduces memory pressure and should speed up required value validation in hubs with complex task.json files. It also fixes the bug reported in <a href="https://github.com/hubverse-org/hubValidations/issues/177" class="external-link">#177</a>.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.9.0" id="hubvalidations-090">hubValidations 0.9.0<a class="anchor" aria-label="anchor" href="#hubvalidations-090"></a></h2>
 <ul><li>Re-exported functions useful for modelers (<a href="https://github.com/hubverse-org/hubValidations/issues/149" class="external-link">#149</a>):
