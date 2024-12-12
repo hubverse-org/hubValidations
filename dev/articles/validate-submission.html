@@ -133,6 +133,8 @@ standard validation checks and returns their results in the form of a
 <span><span class="co">#&gt;   column names.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[col_types]</span>: Column data types match hub schema.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_vals]</span>: `tbl` contains valid values/value combinations.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[derived_task_id_vals]</span>: No derived task IDs to check. Skipping derived task</span></span>
+<span><span class="co">#&gt;   ID value check.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[rows_unique]</span>: All combinations of task ID</span></span>
 <span><span class="co">#&gt;   column/`output_type`/`output_type_id` values are unique.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[req_vals]</span>: Required task ID/output type/output type ID combinations all</span></span>
@@ -144,7 +146,7 @@ standard validation checks and returns their results in the form of a
 <span><span class="co">#&gt;   combinations of quantile or cdf output types.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[value_col_sum1]</span>: No pmf output types to check for sum of 1. Check skipped.</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[submission_time]</span>: Submission time must be within accepted submission window</span></span>
-<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2024-12-12 15:42:23 UTC"</span> is outside window</span></span>
+<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2024-12-12 15:52:23 UTC"</span> is outside window</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span></span></code></pre></div>
 <p>For more details on the structure of
 <code>&lt;hub_validations&gt;</code> objects, including how to access
@@ -194,7 +196,7 @@ and the function re-run for validation to proceed further.</p>
 <span><span class="co">#&gt;   submission `round_id` from file name.  `round_id` value <span style="color: #0000BB;">2022-10-08</span> does not</span></span>
 <span><span class="co">#&gt;   match submission `round_id` <span style="color: #0000BB;">"2022-10-15"</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[submission_time]</span>: Submission time must be within accepted submission window</span></span>
-<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2024-12-12 15:42:24 UTC"</span> is outside window</span></span>
+<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2024-12-12 15:52:24 UTC"</span> is outside window</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -222,7 +224,7 @@ will be summarised.</p>
 <span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">2022-10-08-team1-goodmodel.csv</span><span style="color: #BB00BB;"> ────</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[submission_time]</span>: Submission time must be within accepted submission window</span></span>
-<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2024-12-12 15:42:25 UTC"</span> is outside window</span></span>
+<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2024-12-12 15:52:25 UTC"</span> is outside window</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `check_for_errors()`:</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> </span></span>
@@ -570,8 +572,9 @@ check_failure
 valid_vals
 </td>
 <td style="text-align:left;">
-Columns (excluding <code>value</code> column) contain valid combinations
-of task ID / output type / output type ID values
+Columns (excluding the <code>value</code> and any derived task ID
+columns) contain valid combinations of task ID / output type / output
+type ID values
 </td>
 <td style="text-align:left;">
 TRUE
@@ -586,11 +589,30 @@ combinations
 </tr>
 <tr>
 <td style="text-align:left;font-weight: bold;">
+derived_task_id_vals
+</td>
+<td style="text-align:left;">
+Derived task ID columns contain valid values.
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+check_failure
+</td>
+<td style="text-align:left;">
+errors: named list of derived task ID values. Each element contains the
+invalid values for each derived task ID that failed the check.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
 rows_unique
 </td>
 <td style="text-align:left;">
-Columns (excluding <code>value</code> column) contain unique
-combinations of task ID / output type / output type ID values
+Columns (excluding the <code>value</code> and any derived task ID
+columns) contain unique combinations of task ID / output type / output
+type ID values
 </td>
 <td style="text-align:left;">
 FALSE
@@ -606,8 +628,9 @@ check_failure
 req_vals
 </td>
 <td style="text-align:left;">
-Columns (excluding <code>value</code> column) contain all required
-combinations of task ID / output type / output type ID values
+Columns (excluding the <code>value</code> and any derived task ID
+columns) contain all required combinations of task ID / output type /
+output type ID values
 </td>
 <td style="text-align:left;">
 FALSE

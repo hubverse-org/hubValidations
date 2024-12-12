@@ -295,6 +295,8 @@ within their allowed submission window.</p>
 <span><span class="co">#&gt;   column names.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[col_types]</span>: Column data types match hub schema.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_vals]</span>: `tbl` contains valid values/value combinations.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[derived_task_id_vals]</span>: No derived task IDs to check. Skipping derived task</span></span>
+<span><span class="co">#&gt;   ID value check.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[rows_unique]</span>: All combinations of task ID</span></span>
 <span><span class="co">#&gt;   column/`output_type`/`output_type_id` values are unique.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[req_vals]</span>: Required task ID/output type/output type ID combinations all</span></span>
@@ -356,6 +358,8 @@ within their allowed submission window.</p>
 <span><span class="co">#&gt;   std column names.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[col_types_1]</span>: Column data types match hub schema.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_vals_1]</span>: `tbl` contains valid values/value combinations.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[derived_task_id_vals_1]</span>: No derived task IDs to check. Skipping derived task</span></span>
+<span><span class="co">#&gt;   ID value check.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[rows_unique_1]</span>: All combinations of task ID</span></span>
 <span><span class="co">#&gt;   column/`output_type`/`output_type_id` values are unique.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[req_vals_1]</span>: Required task ID/output type/output type ID combinations all</span></span>
@@ -591,6 +595,8 @@ summarising the results of checks that failed, argument
 <span><span class="co">#&gt;   column names.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[col_types]</span>: Column data types match hub schema.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_vals]</span>: `tbl` contains valid values/value combinations.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[derived_task_id_vals]</span>: No derived task IDs to check. Skipping derived task</span></span>
+<span><span class="co">#&gt;   ID value check.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[rows_unique]</span>: All combinations of task ID</span></span>
 <span><span class="co">#&gt;   column/`output_type`/`output_type_id` values are unique.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[req_vals]</span>: Required task ID/output type/output type ID combinations all</span></span>
@@ -897,8 +903,9 @@ check_failure
 valid_vals
 </td>
 <td style="text-align:left;">
-Columns (excluding <code>value</code> column) contain valid combinations
-of task ID / output type / output type ID values
+Columns (excluding the <code>value</code> and any derived task ID
+columns) contain valid combinations of task ID / output type / output
+type ID values
 </td>
 <td style="text-align:left;">
 TRUE
@@ -913,11 +920,30 @@ combinations
 </tr>
 <tr>
 <td style="text-align:left;font-weight: bold;">
+derived_task_id_vals
+</td>
+<td style="text-align:left;">
+Derived task ID columns contain valid values.
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+check_failure
+</td>
+<td style="text-align:left;">
+errors: named list of derived task ID values. Each element contains the
+invalid values for each derived task ID that failed the check.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
 rows_unique
 </td>
 <td style="text-align:left;">
-Columns (excluding <code>value</code> column) contain unique
-combinations of task ID / output type / output type ID values
+Columns (excluding the <code>value</code> and any derived task ID
+columns) contain unique combinations of task ID / output type / output
+type ID values
 </td>
 <td style="text-align:left;">
 FALSE
@@ -933,8 +959,9 @@ check_failure
 req_vals
 </td>
 <td style="text-align:left;">
-Columns (excluding <code>value</code> column) contain all required
-combinations of task ID / output type / output type ID values
+Columns (excluding the <code>value</code> and any derived task ID
+columns) contain all required combinations of task ID / output type /
+output type ID values
 </td>
 <td style="text-align:left;">
 FALSE
