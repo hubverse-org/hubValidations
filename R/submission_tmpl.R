@@ -185,11 +185,8 @@ submission_tmpl <- function(hub_con, config_tasks, round_id,
       derived_task_ids = derived_task_ids,
       force_output_types = TRUE
     )
-    tmpl_df <- tmpl_df[, names(tmpl_df) != hubUtils::std_colnames[c(
-      "output_type",
-      "output_type_id",
-      "value"
-    )]] |>
+    output_cols <- hubUtils::std_colnames[c("output_type", "output_type_id", "value")]
+    tmpl_df <- tmpl_df[setdiff(names(tmpl_df), output_cols)] |>
       unique()
   }
   if (nrow(tmpl_df) == 0L) {
