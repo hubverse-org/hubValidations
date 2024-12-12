@@ -107,7 +107,7 @@ check_required_output_type_by_modeling_task <- function(tbl, config_tasks,
 
   tbl <- join_tbl_to_model_task(full, tbl, subset_to_tbl_cols = TRUE)
 
-  missing_df <- purrr::pmap(
+  purrr::pmap(
     combine_mt_inputs(tbl, req, full),
     check_modeling_task_values_required
   ) %>%
