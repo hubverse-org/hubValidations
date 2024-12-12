@@ -7,7 +7,7 @@
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/hubverse-org/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubValidations</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.9.0.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.10.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -47,6 +47,9 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="hubvalidations-development-version">hubValidations (development version)<a class="anchor" aria-label="anchor" href="#hubvalidations-development-version"></a></h2>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.10.0" id="hubvalidations-0100">hubValidations 0.10.0<a class="anchor" aria-label="anchor" href="#hubvalidations-0100"></a></h2>
 <ul><li>Added <code><a href="../reference/check_tbl_derived_task_id_vals.html">check_tbl_derived_task_id_vals()</a></code> check to <code><a href="../reference/validate_model_data.html">validate_model_data()</a></code> that ensures that values in derived task ID columns match expected values for the corresponding derived task IDs in the round as defined in <code>tasks.json</code> config (<a href="https://github.com/hubverse-org/hubValidations/issues/110" class="external-link">#110</a>). Given the dependence of derived task IDs on the values of their source task ID values, the check ignores the combinations of derived task ID values with those of other task IDs and focuses only on identifying values that do not match corresponding accepted values.</li>
 <li>
 <code><a href="../reference/submission_tmpl.html">submission_tmpl()</a></code> gains the <code>force_output_types</code> allowing users to force optional output types to be included in a submission template when <code>required_vals_only = TRUE</code>. In conjunction with the use of the <code>output_types</code> argument, this allows users to create submission templates which include optional output types they plan to submit.</li>
