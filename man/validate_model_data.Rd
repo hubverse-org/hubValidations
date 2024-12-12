@@ -133,21 +133,28 @@ Details of checks performed by \code{validate_model_data()}\if{html}{\out{
   </tr>
   <tr>
    <td style="text-align:left;font-weight: bold;"> valid_vals </td>
-   <td style="text-align:left;"> Columns (excluding `value` column) contain valid combinations of task ID / output type / output type ID values </td>
+   <td style="text-align:left;"> Columns (excluding the `value` and any derived task ID columns) contain valid combinations of task ID / output type / output type ID values </td>
    <td style="text-align:left;"> TRUE </td>
    <td style="text-align:left;"> check_error </td>
    <td style="text-align:left;"> error_tbl: table of invalid task ID/output type/output type ID value combinations </td>
   </tr>
   <tr>
+   <td style="text-align:left;font-weight: bold;"> derived_task_id_vals </td>
+   <td style="text-align:left;"> Derived task ID columns contain valid values. </td>
+   <td style="text-align:left;"> FALSE </td>
+   <td style="text-align:left;"> check_failure </td>
+   <td style="text-align:left;"> errors: named list of derived task ID values. Each element contains the invalid values for each derived task ID that failed the check. </td>
+  </tr>
+  <tr>
    <td style="text-align:left;font-weight: bold;"> rows_unique </td>
-   <td style="text-align:left;"> Columns (excluding `value` column) contain unique combinations of task ID / output type / output type ID values </td>
+   <td style="text-align:left;"> Columns (excluding the `value` and any derived task ID columns) contain unique combinations of task ID / output type / output type ID values </td>
    <td style="text-align:left;"> FALSE </td>
    <td style="text-align:left;"> check_failure </td>
    <td style="text-align:left;">  </td>
   </tr>
   <tr>
    <td style="text-align:left;font-weight: bold;"> req_vals </td>
-   <td style="text-align:left;"> Columns (excluding `value` column) contain all required combinations of task ID / output type / output type ID values </td>
+   <td style="text-align:left;"> Columns (excluding the `value` and any derived task ID columns) contain all required combinations of task ID / output type / output type ID values </td>
    <td style="text-align:left;"> FALSE </td>
    <td style="text-align:left;"> check_failure </td>
    <td style="text-align:left;"> missing_df: table of missing task ID/output type/output type ID value combinations </td>

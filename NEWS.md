@@ -1,5 +1,6 @@
 # hubValidations (development version)
 
+* Added `check_tbl_derived_task_id_vals()` check to `validate_model_data()` that ensures that values in derived task ID columns match expected values for the corresponding derived task IDs in the round as defined in `tasks.json` config (#110). Given the dependence of derived task IDs on the values of their source task ID values, the check ignores the combinations of derived task ID values with those of other task IDs and focuses only on identifying values that do not match corresponding accepted values.
 * `submission_tmpl()` gains the `force_output_types` allowing users to force optional output types to be included in a submission template when `required_vals_only = TRUE`. In conjunction with the use of the `output_types` argument, this allows users to create submission templates which include optional output types they plan to submit.
 * `check_tbl_values_required()` no longer reports false positives for v4 hubs, which fixes the bug reported in #177. Evaluation of whether all combinations of required values have been submitted through `check_tbl_values_required()` is now chunked by output type for v4 config and above. This reduces memory pressure and should speed up required value validation in hubs with complex task.json files.
 

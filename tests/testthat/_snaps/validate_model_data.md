@@ -3,57 +3,63 @@
     Code
       str(validate_model_data(hub_path, file_path))
     Output
-      List of 12
-       $ file_read         :List of 4
+      List of 13
+       $ file_read           :List of 4
         ..$ message       : chr "File could be read successfully. \n "
         ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
         ..$ call          : chr "check_file_read"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ valid_round_id_col:List of 4
+       $ valid_round_id_col  :List of 4
         ..$ message       : chr "`round_id_col` name is valid. \n "
         ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
         ..$ call          : chr "check_valid_round_id_col"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ unique_round_id   :List of 4
+       $ unique_round_id     :List of 4
         ..$ message       : chr "`round_id` column \"origin_date\" contains a single, unique round ID value. \n "
         ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
         ..$ call          : chr "check_tbl_unique_round_id"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ match_round_id    :List of 4
+       $ match_round_id      :List of 4
         ..$ message       : chr "All `round_id_col` \"origin_date\" values match submission `round_id` from file name. \n "
         ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
         ..$ call          : chr "check_tbl_match_round_id"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ colnames          :List of 4
+       $ colnames            :List of 4
         ..$ message       : chr "Column names are consistent with expected round task IDs and std column names. \n "
         ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
         ..$ call          : chr "check_tbl_colnames"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ col_types         :List of 4
+       $ col_types           :List of 4
         ..$ message       : chr "Column data types match hub schema. \n "
         ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
         ..$ call          : chr "check_tbl_col_types"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ valid_vals        :List of 5
+       $ valid_vals          :List of 5
         ..$ message       : chr "`tbl` contains valid values/value combinations.  \n "
         ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
         ..$ error_tbl     : NULL
         ..$ call          : chr "check_tbl_values"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ rows_unique       :List of 4
+       $ derived_task_id_vals:List of 4
+        ..$ message       : chr "No derived task IDs to check. Skipping derived task ID value check."
+        ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+        ..$ call          : chr "check_tbl_derived_task_id_vals"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
+       $ rows_unique         :List of 4
         ..$ message       : chr "All combinations of task ID column/`output_type`/`output_type_id` values are unique. \n "
         ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
         ..$ call          : chr "check_tbl_rows_unique"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ req_vals          :List of 5
+       $ req_vals            :List of 5
         ..$ message       : chr "Required task ID/output type/output type ID combinations all present.  \n "
         ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
         ..$ missing       : tibble [0 x 6] (S3: tbl_df/tbl/data.frame)
@@ -66,20 +72,20 @@
         ..$ call          : chr "check_tbl_values_required"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ value_col_valid   :List of 4
+       $ value_col_valid     :List of 4
         ..$ message       : chr "Values in column `value` all valid with respect to modeling task config. \n "
         ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
         ..$ call          : chr "check_tbl_value_col"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ value_col_non_desc:List of 5
+       $ value_col_non_desc  :List of 5
         ..$ message       : chr "Values in `value` column are non-decreasing as output_type_ids increase for all unique task ID\n    value/outpu"| __truncated__
         ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
         ..$ error_tbl     : NULL
         ..$ call          : chr "check_tbl_value_col_ascending"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ value_col_sum1    :List of 4
+       $ value_col_sum1      :List of 4
         ..$ message       : chr "No pmf output types to check for sum of 1. Check skipped."
         ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
         ..$ call          : chr "check_tbl_value_col_sum1"
@@ -136,57 +142,63 @@
     Code
       str(validate_model_data(hub_path, file_path))
     Output
-      List of 12
-       $ file_read         :List of 4
+      List of 13
+       $ file_read           :List of 4
         ..$ message       : chr "File could be read successfully. \n "
         ..$ where         : chr "hub-ensemble/2023-05-08-hub-ensemble.parquet"
         ..$ call          : chr "check_file_read"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ valid_round_id_col:List of 4
+       $ valid_round_id_col  :List of 4
         ..$ message       : chr "`round_id_col` name is valid. \n "
         ..$ where         : chr "hub-ensemble/2023-05-08-hub-ensemble.parquet"
         ..$ call          : chr "check_valid_round_id_col"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ unique_round_id   :List of 4
+       $ unique_round_id     :List of 4
         ..$ message       : chr "`round_id` column \"forecast_date\" contains a single, unique round ID value. \n "
         ..$ where         : chr "hub-ensemble/2023-05-08-hub-ensemble.parquet"
         ..$ call          : chr "check_tbl_unique_round_id"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ match_round_id    :List of 4
+       $ match_round_id      :List of 4
         ..$ message       : chr "All `round_id_col` \"forecast_date\" values match submission `round_id` from file name. \n "
         ..$ where         : chr "hub-ensemble/2023-05-08-hub-ensemble.parquet"
         ..$ call          : chr "check_tbl_match_round_id"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ colnames          :List of 4
+       $ colnames            :List of 4
         ..$ message       : chr "Column names are consistent with expected round task IDs and std column names. \n "
         ..$ where         : chr "hub-ensemble/2023-05-08-hub-ensemble.parquet"
         ..$ call          : chr "check_tbl_colnames"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ col_types         :List of 4
+       $ col_types           :List of 4
         ..$ message       : chr "Column data types match hub schema. \n "
         ..$ where         : chr "hub-ensemble/2023-05-08-hub-ensemble.parquet"
         ..$ call          : chr "check_tbl_col_types"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ valid_vals        :List of 5
+       $ valid_vals          :List of 5
         ..$ message       : chr "`tbl` contains valid values/value combinations.  \n "
         ..$ where         : chr "hub-ensemble/2023-05-08-hub-ensemble.parquet"
         ..$ error_tbl     : NULL
         ..$ call          : chr "check_tbl_values"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ rows_unique       :List of 4
+       $ derived_task_id_vals:List of 4
+        ..$ message       : chr "No derived task IDs to check. Skipping derived task ID value check."
+        ..$ where         : chr "hub-ensemble/2023-05-08-hub-ensemble.parquet"
+        ..$ call          : chr "check_tbl_derived_task_id_vals"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
+       $ rows_unique         :List of 4
         ..$ message       : chr "All combinations of task ID column/`output_type`/`output_type_id` values are unique. \n "
         ..$ where         : chr "hub-ensemble/2023-05-08-hub-ensemble.parquet"
         ..$ call          : chr "check_tbl_rows_unique"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ req_vals          :List of 5
+       $ req_vals            :List of 5
         ..$ message       : chr "Required task ID/output type/output type ID combinations all present.  \n "
         ..$ where         : chr "hub-ensemble/2023-05-08-hub-ensemble.parquet"
         ..$ missing       : tibble [0 x 6] (S3: tbl_df/tbl/data.frame)
@@ -199,20 +211,20 @@
         ..$ call          : chr "check_tbl_values_required"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ value_col_valid   :List of 4
+       $ value_col_valid     :List of 4
         ..$ message       : chr "Values in column `value` all valid with respect to modeling task config. \n "
         ..$ where         : chr "hub-ensemble/2023-05-08-hub-ensemble.parquet"
         ..$ call          : chr "check_tbl_value_col"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ value_col_non_desc:List of 5
+       $ value_col_non_desc  :List of 5
         ..$ message       : chr "Values in `value` column are non-decreasing as output_type_ids increase for all unique task ID\n    value/outpu"| __truncated__
         ..$ where         : chr "hub-ensemble/2023-05-08-hub-ensemble.parquet"
         ..$ error_tbl     : NULL
         ..$ call          : chr "check_tbl_value_col_ascending"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-       $ value_col_sum1    :List of 4
+       $ value_col_sum1      :List of 4
         ..$ message       : chr "No pmf output types to check for sum of 1. Check skipped."
         ..$ where         : chr "hub-ensemble/2023-05-08-hub-ensemble.parquet"
         ..$ call          : chr "check_tbl_value_col_sum1"
@@ -255,6 +267,7 @@
       v [colnames]: Column names are consistent with expected round task IDs and std column names.
       v [col_types]: Column data types match hub schema.
       v [valid_vals]: `tbl` contains valid values/value combinations.
+      i [derived_task_id_vals]: No derived task IDs to check. Skipping derived task ID value check.
       v [rows_unique]: All combinations of task ID column/`output_type`/`output_type_id` values are unique.
       v [req_vals]: Required task ID/output type/output type ID combinations all present.
       v [value_col_valid]: Values in column `value` all valid with respect to modeling task config.
@@ -276,6 +289,7 @@
       [32mv[39m [90m[colnames][39m: Column names are consistent with expected round task IDs and std column names.
       [32mv[39m [90m[col_types][39m: Column data types match hub schema.
       [32mv[39m [90m[valid_vals][39m: `tbl` contains valid values/value combinations.
+      [36mi[39m [90m[derived_task_id_vals][39m: No derived task IDs to check. Skipping derived task ID value check.
       [32mv[39m [90m[rows_unique][39m: All combinations of task ID column/`output_type`/`output_type_id` values are unique.
       [32mv[39m [90m[req_vals][39m: Required task ID/output type/output type ID combinations all present.
       [32mv[39m [90m[value_col_valid][39m: Values in column `value` all valid with respect to modeling task config.
@@ -297,6 +311,7 @@
       ✔ [colnames]: Column names are consistent with expected round task IDs and std column names.
       ✔ [col_types]: Column data types match hub schema.
       ✔ [valid_vals]: `tbl` contains valid values/value combinations.
+      ℹ [derived_task_id_vals]: No derived task IDs to check. Skipping derived task ID value check.
       ✔ [rows_unique]: All combinations of task ID column/`output_type`/`output_type_id` values are unique.
       ✔ [req_vals]: Required task ID/output type/output type ID combinations all present.
       ✔ [value_col_valid]: Values in column `value` all valid with respect to modeling task config.
@@ -318,6 +333,7 @@
       [32m✔[39m [90m[colnames][39m: Column names are consistent with expected round task IDs and std column names.
       [32m✔[39m [90m[col_types][39m: Column data types match hub schema.
       [32m✔[39m [90m[valid_vals][39m: `tbl` contains valid values/value combinations.
+      [36mℹ[39m [90m[derived_task_id_vals][39m: No derived task IDs to check. Skipping derived task ID value check.
       [32m✔[39m [90m[rows_unique][39m: All combinations of task ID column/`output_type`/`output_type_id` values are unique.
       [32m✔[39m [90m[req_vals][39m: Required task ID/output type/output type ID combinations all present.
       [32m✔[39m [90m[value_col_valid][39m: Values in column `value` all valid with respect to modeling task config.
@@ -339,7 +355,7 @@
       file_path = "flu-base/2022-10-22-flu-base.csv", validations_cfg_path = system.file(
         "testhubs/samples/hub-config/validations.yml", package = "hubValidations")))
     Output
-      List of 17
+      List of 18
        $ file_read              :List of 4
         ..$ message       : chr "File could be read successfully. \n "
         ..$ where         : chr "flu-base/2022-10-22-flu-base.csv"
@@ -383,6 +399,12 @@
         ..$ call          : chr "check_tbl_values"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ derived_task_id_vals   :List of 4
+        ..$ message       : chr "No derived task IDs to check. Skipping derived task ID value check."
+        ..$ where         : chr "flu-base/2022-10-22-flu-base.csv"
+        ..$ call          : chr "check_tbl_derived_task_id_vals"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
        $ rows_unique            :List of 4
         ..$ message       : chr "All combinations of task ID column/`output_type`/`output_type_id` values are unique. \n "
         ..$ where         : chr "flu-base/2022-10-22-flu-base.csv"
