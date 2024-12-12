@@ -1,5 +1,7 @@
 # hubValidations (development version)
 
+* Evaluation of whether all combinations of required values have been submitted through `check_tbl_values_required()` is now chunked by output type for v4 config and above. This reduces memory pressure and should speed up required value validation in hubs with complex task.json files. It also fixes the bug reported in #177.
+
 # hubValidations 0.9.0
 
 * Re-exported functions useful for modelers (#149):
