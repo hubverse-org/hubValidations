@@ -281,17 +281,15 @@ test_that("submission_tmpl force_output_types works", {
   # complete_cases_only = FALSE a data.frame containing required task ID
   # values is returned, with all optional task ids and output type related
   # columns set to NA.
-  req_non_force <- suppressMessages(
-    suppressWarnings(
-      submission_tmpl(
-        config_tasks = config_tasks,
-        round_id = "2022-10-22",
-        required_vals_only = TRUE,
-        output_types = "sample",
-        complete_cases_only = FALSE
-      )
+  expect_warning({
+    req_non_force <- submission_tmpl(
+      config_tasks = config_tasks,
+      round_id = "2022-10-22",
+      required_vals_only = TRUE,
+      output_types = "sample",
+      complete_cases_only = FALSE
     )
-  )
+  }, "all optional values") |> suppressMessages()
   expect_equal(dim(req_non_force), c(4L, 9L))
   expect_equal(unique(req_non_force$output_type), NA_character_)
 
