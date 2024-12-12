@@ -20,14 +20,24 @@
 #' values only.
 #'
 #' @details
-#' For task IDs or output_type_ids where all values are optional, by default, columns
-#' are included as columns of `NA`s when `required_vals_only = TRUE`.
+#' For task IDs where all values are optional, by default, columns
+#' are created as columns of `NA`s when `required_vals_only = TRUE`.
 #' When such columns exist, the function returns a tibble with zero rows, as no
 #' complete cases of required value combinations exists.
 #' _(Note that determination of complete cases does excludes valid `NA`
 #' `output_type_id` values in `"mean"` and `"median"` output types)._
 #' To return a template of incomplete required cases, which includes `NA` columns, use
 #' `complete_cases_only = FALSE`.
+#'
+#' To include output types that are optional in the submission template
+#' when `required_vals_only = TRUE` and `complete_cases_only = FALSE`, use
+#' `force_output_types = TRUE`. Use this in combination with sub-setting for
+#'  output types you plan to submit via argument `output_types` to create a
+#' submission template customised to your submission plans.
+#' _Tip: to ensure you create a template with all required output types, it's
+#' a good idea to first run the functions without subsetting or forcing output
+#' types and examing the unique values in `output_type` to check which output
+#' types are required._
 #'
 #' When sample output types are included in the output, the `output_type_id`
 #' column contains example sample indexes which are useful for identifying the
@@ -116,8 +126,19 @@
 #'   derived_task_ids = "target_end_date",
 #'   complete_cases_only = FALSE
 #' )
+#' # Force optional output type, in this case "mean".
+#' submission_tmpl(
+#'   config_tasks = config_tasks,
+#'   round_id = "2022-12-12",
+#'   required_vals_only = TRUE,
+#'   output_types = c("pmf", "quantile", "mean"),
+#'   force_output_types = TRUE,
+#'   derived_task_ids = "target_end_date",
+#'   complete_cases_only = FALSE
+#' )
 submission_tmpl <- function(hub_con, config_tasks, round_id,
                             required_vals_only = FALSE,
+                            force_output_types = FALSE,
                             complete_cases_only = TRUE,
                             compound_taskid_set = NULL,
                             output_types = NULL,
@@ -138,15 +159,39 @@ submission_tmpl <- function(hub_con, config_tasks, round_id,
       derived_task_ids, config_tasks, round_id
     )
   }
-
   tmpl_df <- expand_model_out_grid(config_tasks,
     round_id = round_id,
     required_vals_only = required_vals_only,
     include_sample_ids = TRUE,
     compound_taskid_set = compound_taskid_set,
     output_types = output_types,
-    derived_task_ids = derived_task_ids
+    derived_task_ids = derived_task_ids,
+    force_output_types = force_output_types
   )
+  if (nrow(tmpl_df) == 0L && !complete_cases_only) {
+    # If all output_types are optional, expand_model_out_grid returns
+    # a zero row and column data.frame. To attempt to expand required task id
+    # values when complete_cases_only = FALSE, we use
+    # force_output_types = TRUE to force the output types to be included. We
+    # then remove output type related columns  and create a data.frame of
+    # required task id vales only.
+    tmpl_df <- expand_model_out_grid(
+      config_tasks,
+      round_id = round_id,
+      required_vals_only = required_vals_only,
+      include_sample_ids = TRUE,
+      compound_taskid_set = compound_taskid_set,
+      output_types = output_types,
+      derived_task_ids = derived_task_ids,
+      force_output_types = TRUE
+    )
+    output_cols <- hubUtils::std_colnames[c("output_type", "output_type_id", "value")]
+    tmpl_df <- tmpl_df[setdiff(names(tmpl_df), output_cols)] |>
+      unique()
+  }
+  if (nrow(tmpl_df) == 0L) {
+    return(tmpl_df)
+  }
 
   tmpl_cols <- c(
     hubUtils::get_round_task_id_names(
@@ -155,7 +200,6 @@ submission_tmpl <- function(hub_con, config_tasks, round_id,
     ),
     hubUtils::std_colnames[names(hubUtils::std_colnames) != "model_id"]
   )
-
   # Add NA columns for value and all optional cols
   na_cols <- tmpl_cols[!tmpl_cols %in% names(tmpl_df)]
   tmpl_df[, na_cols] <- NA

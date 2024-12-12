@@ -9,6 +9,7 @@ submission_tmpl(
   config_tasks,
   round_id,
   required_vals_only = FALSE,
+  force_output_types = FALSE,
   complete_cases_only = TRUE,
   compound_taskid_set = NULL,
   output_types = NULL,
@@ -30,6 +31,11 @@ contains only a single round.}
 
 \item{required_vals_only}{Logical. Whether to return only combinations of
 Task ID and related output type ID required values.}
+
+\item{force_output_types}{Logical. Whether to force all output types to be required.
+If \code{TRUE}, all output type ID values are treated as required regardless
+of the value of the \code{is_required} property. Useful for creating grids of required
+values for optional output types.}
 
 \item{complete_cases_only}{Logical. If \code{TRUE} (default) and \code{required_vals_only = TRUE},
 only rows with complete cases of combinations of required values are returned.
@@ -62,14 +68,24 @@ values only.
 Create a model output submission file template
 }
 \details{
-For task IDs or output_type_ids where all values are optional, by default, columns
-are included as columns of \code{NA}s when \code{required_vals_only = TRUE}.
+For task IDs where all values are optional, by default, columns
+are created as columns of \code{NA}s when \code{required_vals_only = TRUE}.
 When such columns exist, the function returns a tibble with zero rows, as no
 complete cases of required value combinations exists.
 \emph{(Note that determination of complete cases does excludes valid \code{NA}
 \code{output_type_id} values in \code{"mean"} and \code{"median"} output types).}
 To return a template of incomplete required cases, which includes \code{NA} columns, use
 \code{complete_cases_only = FALSE}.
+
+To include output types that are optional in the submission template
+when \code{required_vals_only = TRUE} and \code{complete_cases_only = FALSE}, use
+\code{force_output_types = TRUE}. Use this in combination with sub-setting for
+output types you plan to submit via argument \code{output_types} to create a
+submission template customised to your submission plans.
+\emph{Tip: to ensure you create a template with all required output types, it's
+a good idea to first run the functions without subsetting or forcing output
+types and examing the unique values in \code{output_type} to check which output
+types are required.}
 
 When sample output types are included in the output, the \code{output_type_id}
 column contains example sample indexes which are useful for identifying the
@@ -154,6 +170,16 @@ submission_tmpl(
   config_tasks = config_tasks,
   round_id = "2022-12-12",
   output_types = "pmf",
+  derived_task_ids = "target_end_date",
+  complete_cases_only = FALSE
+)
+# Force optional output type, in this case "mean".
+submission_tmpl(
+  config_tasks = config_tasks,
+  round_id = "2022-12-12",
+  required_vals_only = TRUE,
+  output_types = c("pmf", "quantile", "mean"),
+  force_output_types = TRUE,
   derived_task_ids = "target_end_date",
   complete_cases_only = FALSE
 )
