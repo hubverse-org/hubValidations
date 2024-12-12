@@ -266,15 +266,11 @@ test_that("submission_tmpl force_output_types works", {
   )
   # When force_output_types is not set, all output_types are optional, a
   #  zero row and column data.frame is returned  by default.
-  req_non_force_default <- suppressMessages(
-    suppressWarnings(
-      submission_tmpl(
-        config_tasks = config_tasks,
-        round_id = "2022-10-22",
-        required_vals_only = TRUE,
-        output_types = "sample"
-      )
-    )
+  req_non_force_default <- submission_tmpl(
+    config_tasks = config_tasks,
+    round_id = "2022-10-22",
+    required_vals_only = TRUE,
+    output_types = "sample"
   )
   expect_equal(dim(req_non_force_default), c(0L, 0L))
   # When force_output_types is not set, all output_types are optional and
