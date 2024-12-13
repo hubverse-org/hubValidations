@@ -35,14 +35,14 @@ test_that("check_tbl_spl_n works", {
       tbl_const_error, round_id,
       file_path, hub_path
     ),
-    c("check_success", "hub_check", "rlang_message", "message", "condition")
+    c("check_success")
   )
   expect_s3_class(
     check_tbl_spl_compound_tid(
       tbl_const_error, round_id,
       file_path, hub_path
     ),
-    c("check_success", "hub_check", "rlang_message", "message", "condition")
+    c("check_success")
   )
 
 

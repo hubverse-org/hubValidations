@@ -4,13 +4,13 @@ test_that("check_file_exists works", {
 
   expect_s3_class(
     check_file_exists(file_path, hub_path),
-    c("check_success", "rlang_message", "message", "condition")
+    c("check_success")
   )
 
   file_path <- "team1-goodmodel/2022-10-15-team1-goodmodel.csv"
   expect_s3_class(
     check_file_exists(file_path, hub_path),
-    c("check_error", "rlang_message", "message", "condition")
+    c("check_error")
   )
 
   expect_error(
