@@ -29,11 +29,11 @@ test_that("check_tbl_spl_compound_tid works", {
   # Ensure other checks pass
   expect_s3_class(
     check_tbl_spl_non_compound_tid(tbl_error, round_id, file_path, hub_path),
-    c("check_success", "hub_check", "rlang_message", "message", "condition")
+    c("check_success")
   )
   expect_s3_class(
     check_tbl_spl_compound_tid(tbl_error, round_id, file_path, hub_path),
-    c("check_success", "hub_check", "rlang_message", "message", "condition")
+    c("check_error")
   )
 })
 
