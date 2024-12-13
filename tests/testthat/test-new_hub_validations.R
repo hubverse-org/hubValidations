@@ -2,7 +2,7 @@ test_that("new_hub_validations works", {
   expect_snapshot(str(new_hub_validations()))
   expect_s3_class(
     new_hub_validations(),
-    c("hub_validations", "list")
+    c("hub_validations")
   )
 
 
@@ -23,6 +23,6 @@ test_that("new_hub_validations works", {
       file_exists = check_file_exists(file_path, hub_path),
       file_name = check_file_name(file_path)
     ),
-    c("hub_validations", "list")
+    c("hub_validations")
   )
 })

@@ -1,7 +1,7 @@
 test_that("check_metadata_file_ext works", {
   expect_s3_class(
     check_metadata_file_ext("hub-baseline.yml"),
-    c("check_success", "rlang_message", "message", "condition")
+    c("check_success")
   )
   expect_snapshot(
     check_metadata_file_ext("hub-baseline.yml")
@@ -9,7 +9,7 @@ test_that("check_metadata_file_ext works", {
 
   expect_s3_class(
     check_metadata_file_ext("hub-baseline.yaml"),
-    c("check_success", "rlang_message", "message", "condition")
+    c("check_success")
   )
   expect_snapshot(
     check_metadata_file_ext("hub-baseline.yaml")
@@ -17,7 +17,7 @@ test_that("check_metadata_file_ext works", {
 
   expect_s3_class(
     check_metadata_file_ext("hub-baseline.txt"),
-    c("check_error", "rlang_error", "error", "condition")
+    c("check_error")
   )
   expect_snapshot(
     check_metadata_file_ext("hub-baseline.txt")

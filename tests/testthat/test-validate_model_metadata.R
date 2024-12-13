@@ -9,7 +9,7 @@ test_that("validate_model_metadata works", {
   )
   expect_s3_class(
     validate_model_metadata(hub_path, file_path),
-    c("hub_validations", "list")
+    c("hub_validations")
   )
 
   file_path <- "hub-baseline.yml"
@@ -20,7 +20,7 @@ test_that("validate_model_metadata works", {
   )
   expect_s3_class(
     validate_model_metadata(hub_path, file_path),
-    c("hub_validations", "list")
+    c("hub_validations")
   )
 
   file_path <- "hub-baseline-no-abbrs-or-model_id.yml"
@@ -31,7 +31,7 @@ test_that("validate_model_metadata works", {
   )
   expect_s3_class(
     validate_model_metadata(hub_path, file_path),
-    c("hub_validations", "list")
+    c("hub_validations")
   )
 
   file_path <- "2020-10-06-random-path.csv"
@@ -42,6 +42,6 @@ test_that("validate_model_metadata works", {
   )
   expect_s3_class(
     validate_model_metadata(hub_path, file_path),
-    c("hub_validations", "list")
+    c("hub_validations")
   )
 })

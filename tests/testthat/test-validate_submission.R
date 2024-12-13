@@ -19,7 +19,7 @@ test_that("validate_submission works", {
       skip_submit_window_check = TRUE,
       skip_check_config = TRUE
     ),
-    c("hub_validations", "list")
+    c("hub_validations")
   )
 
   # File with validation error ----
@@ -39,7 +39,7 @@ test_that("validate_submission works", {
       skip_submit_window_check = TRUE,
       skip_check_config = TRUE
     ),
-    c("hub_validations", "list")
+    c("hub_validations")
   )
 
   # Wrong submission location & missing data column (age_group)
@@ -58,7 +58,7 @@ test_that("validate_submission works", {
       skip_submit_window_check = TRUE,
       skip_check_config = TRUE
     ),
-    c("hub_validations", "list")
+    c("hub_validations")
   )
 
 
@@ -88,7 +88,7 @@ test_that("validate_submission works", {
       file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv",
       skip_submit_window_check = TRUE
     ),
-    c("hub_validations", "list")
+    c("hub_validations")
   )
 })
 
@@ -149,7 +149,7 @@ test_that("validate_submission fails when csv cannot be parsed according to sche
       file_path = "hub-baseline/2023-05-01-hub-baseline.csv",
       skip_submit_window_check = TRUE
     )[["file_read"]],
-    c("check_error", "hub_check", "rlang_error", "error", "condition")
+    c("check_error")
   )
 })
 
