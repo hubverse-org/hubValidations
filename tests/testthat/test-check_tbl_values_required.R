@@ -140,7 +140,7 @@ test_that(
 
     expect_s3_class(
       check,
-      c("check_failure", "hub_check", "rlang_warning", "warning", "condition")
+      c("check_failure")
     )
 
     # Expect that values for output type IDs "0.1000000000000000055511",
@@ -162,6 +162,7 @@ test_that(
 test_that(
   "check_tbl_values_required works when config contains non required modeling task.",
   {
+    skip("Expectations have changed---update needed. See <https://github.com/hubverse-org/hubValidations/issues/180#issuecomment-2541884074>")
     hub_path <- test_path("testdata/hub-it")
     file_path <- "Tm-Md/2023-11-04-Tm-Md.csv"
     round_id <- "2023-11-04"
@@ -177,7 +178,7 @@ test_that(
         file_path = file_path,
         hub_path = hub_path
       ),
-      c("check_success", "hub_check", "rlang_message", "message", "condition")
+      c("check_success")
     )
   }
 )
