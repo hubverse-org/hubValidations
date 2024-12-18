@@ -81,7 +81,9 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/hubverse-org/hubValidations" class="external-link">hubValidations</a></span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/hubverse-org/hubValidations" class="external-link">hubValidations</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error in get(paste0(generic, ".", class), envir = get_method_env()) : </span></span>
+<span><span class="co">#&gt;   object 'type_sum.accel' not found</span></span></code></pre></div>
 <p>The high level <code>validate_*()</code> family of functions all
 return a <code>&lt;hub_validations&gt;</code> S3 class object.</p>
 <div class="section level2">
@@ -254,7 +256,7 @@ returned)</li>
 <span><span class="co">#&gt;   combinations of quantile or cdf output types.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[value_col_sum1]</span>: No pmf output types to check for sum of 1. Check skipped.</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[submission_time]</span>: Submission time must be within accepted submission window</span></span>
-<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2024-12-12 21:42:03 UTC"</span> is outside window</span></span>
+<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2024-12-18 16:59:08 UTC"</span> is outside window</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span></span></code></pre></div>
 <p>Note that the submission window check is always performed and
 reported last.</p>
