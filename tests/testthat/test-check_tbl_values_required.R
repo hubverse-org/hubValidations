@@ -140,7 +140,7 @@ test_that(
 
     expect_s3_class(
       check,
-      c("check_failure", "hub_check", "rlang_warning", "warning", "condition")
+      c("check_failure")
     )
 
     # Expect that values for output type IDs "0.1000000000000000055511",
@@ -177,7 +177,7 @@ test_that(
         file_path = file_path,
         hub_path = hub_path
       ),
-      c("check_success", "hub_check", "rlang_message", "message", "condition")
+      c("check_success")
     )
   }
 )

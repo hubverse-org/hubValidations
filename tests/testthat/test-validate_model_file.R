@@ -13,7 +13,7 @@ test_that("validate_model_file works", {
     validate_model_file(hub_path,
       file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
     ),
-    c("hub_validations", "list")
+    c("hub_validations")
   )
 
   # File with validation error
@@ -28,7 +28,7 @@ test_that("validate_model_file works", {
     validate_model_file(hub_path,
       file_path = "team1-goodmodel/2022-10-15-team1-goodmodel.csv"
     ),
-    c("hub_validations", "list")
+    c("hub_validations")
   )
 })
 

@@ -8,7 +8,7 @@ test_that("validate_model_data works", {
   )
   expect_s3_class(
     validate_model_data(hub_path, file_path),
-    c("hub_validations", "list")
+    c("hub_validations")
   )
 
   expect_snapshot(

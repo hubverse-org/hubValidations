@@ -16,6 +16,6 @@ test_that("check_file_read works", {
         hub_path = hub_path
       )
     ),
-    c("check_error", "hub_check", "rlang_error", "error", "condition")
+    c("check_error")
   )
 })

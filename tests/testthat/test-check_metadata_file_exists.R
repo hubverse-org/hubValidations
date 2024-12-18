@@ -3,7 +3,7 @@ test_that("check_metadata_file_exists works", {
 
   expect_s3_class(
     check_metadata_file_exists(hub_path, "hub-baseline.yml"),
-    c("check_success", "rlang_message", "message", "condition")
+    c("check_success")
   )
   expect_snapshot(
     check_metadata_file_exists(hub_path, "hub-baseline.yml")
@@ -11,7 +11,7 @@ test_that("check_metadata_file_exists works", {
 
   expect_s3_class(
     check_metadata_file_exists(hub_path = "random_path", "hub-baseline.yml"),
-    c("check_error", "rlang_error", "error", "condition")
+    c("check_error")
   )
   expect_snapshot(
     check_metadata_file_exists(hub_path = "random_path", "hub-baseline.yml")
@@ -19,7 +19,7 @@ test_that("check_metadata_file_exists works", {
 
   expect_s3_class(
     check_metadata_file_exists(hub_path = hub_path, "random_path"),
-    c("check_error", "rlang_error", "error", "condition")
+    c("check_error")
   )
   expect_snapshot(
     check_metadata_file_exists(hub_path = hub_path, "random_path")
