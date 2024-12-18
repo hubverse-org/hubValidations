@@ -162,7 +162,6 @@ test_that(
 test_that(
   "check_tbl_values_required works when config contains non required modeling task.",
   {
-    skip("Expectations have changed---update needed. See <https://github.com/hubverse-org/hubValidations/issues/180#issuecomment-2541884074>") # nolint: line_length_linter
     hub_path <- test_path("testdata/hub-it")
     file_path <- "Tm-Md/2023-11-04-Tm-Md.csv"
     round_id <- "2023-11-04"
