@@ -50,11 +50,11 @@
 #' determined relative to a reference date and not when explicit submission
 #' window start and end dates are provided in the config.
 #'
-#' Finally, note that it is **necessary for `derived_task_ids` to be specified if any of
-#' the task IDs a derived task ID depends on have required values**. If this is the
-#' case and derived task IDs are not specified, the dependent nature of derived
-#' task ID values will result in **false validation errors when validating
-#' required values**.
+#' Finally, note that it is **necessary for `derived_task_ids` to be specified if any
+#' task IDs with `required` values have dependent derived task IDs**. If this
+#' is the case and derived task IDs are not specified, the dependent nature of
+#' derived task ID values will result in **false validation errors when
+#' validating required values**.
 #'
 #' ### Checks on model output files
 #'
