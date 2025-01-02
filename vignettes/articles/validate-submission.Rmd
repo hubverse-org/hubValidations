@@ -107,7 +107,7 @@ Depending on config complexity, this **can often lead to a significant improveme
 
 <div class="alert alert-warning" role="alert">
 
-Note that, **if any of the task IDs a derived task ID depends on have required values, it is essential for `derived_task_ids` to be specified**. 
+Note that, **if any task IDs with `required` values have dependent derived task IDs, it is essential for `derived_task_ids` to be specified**. 
 If this is the case and derived task IDs are not specified, the dependent nature of derived task ID values will result in **false validation errors when validating required values**.
 
 If you're unsure if this is the case for your hub or which task IDs are derived, please consult the hub documentation or contact the hub administrators.

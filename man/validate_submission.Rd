@@ -90,11 +90,11 @@ file name, extension, location etc as well as model output data, i.e. the conten
 of the file.
 }
 \details{
-Note that it is \strong{necessary for \code{derived_task_ids} to be specified if any of
-the task IDs a derived task ID depends on have required values}. If this is the
-case and derived task IDs are not specified, the dependent nature of derived
-task ID values will result in \strong{false validation errors when validating
-required values}.
+Note that it is \strong{necessary for \code{derived_task_ids} to be specified if any
+task IDs with \code{required} values have dependent derived task IDs}. If this
+is the case and derived task IDs are not specified, the dependent nature of
+derived task ID values will result in \strong{false validation errors when
+validating required values}.
 
 Details of checks performed by \code{validate_submission()}\if{html}{\out{
 <table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
