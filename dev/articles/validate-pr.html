@@ -166,8 +166,8 @@ values grid, the sizes these grids can reach as function of config
 complexity can often put excessive strain on the system’s memory,
 affecting overall performance of PR validation.</p>
 <div class="alert alert-warning" role="alert">
-<p>Note that, <strong>if any of the task IDs a derived task ID depends
-on have required values, it is essential for
+<p>Note that, <strong>if any task IDs with <code>required</code> values
+have dependent derived task IDs, it is essential for
 <code>derived_task_ids</code> to be specified</strong>. If this is the
 case and derived task IDs are not specified, the dependent nature of
 derived task ID values will result in <strong>false validation errors

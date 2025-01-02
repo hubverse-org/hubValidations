@@ -133,11 +133,11 @@ see <a href="https://hubverse-org.github.io/hubValidations/articles/hub-validati
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Note that it is <strong>necessary for <code>derived_task_ids</code> to be specified if any of
-the task IDs a derived task ID depends on have required values</strong>. If this is the
-case and derived task IDs are not specified, the dependent nature of derived
-task ID values will result in <strong>false validation errors when validating
-required values</strong>.</p>
+    <p>Note that it is <strong>necessary for <code>derived_task_ids</code> to be specified if any
+task IDs with <code>required</code> values have dependent derived task IDs</strong>. If this
+is the case and derived task IDs are not specified, the dependent nature of
+derived task ID values will result in <strong>false validation errors when
+validating required values</strong>.</p>
 <p>Details of checks performed by <code>validate_model_data()</code>
 </p><table class="table table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;"><thead><tr><th style="text-align:left;"> Name </th>
    <th style="text-align:left;"> Check </th>
