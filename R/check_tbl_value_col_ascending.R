@@ -13,19 +13,9 @@
 #' @export
 check_tbl_value_col_ascending <- function(tbl, file_path, hub_path, round_id) {
 
-  config_tasks <- hubUtils::read_config(hub_path, "tasks")
-
-  # Coerce accepted vals to character for easier comparison of
-  # values. Tried to use arrow tbls for comparisons as more efficient when
-  # working with larger files but currently arrow does not match NAs as dplyr
-  # does, returning false positives for mean & median rows which contain NA in
-  # output type ID column.
-  accepted_vals <- expand_model_out_grid(
-    config_tasks = config_tasks,
-    round_id = round_id,
-    all_character = TRUE
-  )
-  if (all(!c("cdf", "quantile") %in% tbl[["output_type"]])) {
+  # Exit early if there are no values to check
+  no_values_to_check <- all(!c("cdf", "quantile") %in% tbl[["output_type"]])
+  if (no_values_to_check) {
     return(
       capture_check_info(
         file_path,
@@ -34,6 +24,19 @@ check_tbl_value_col_ascending <- function(tbl, file_path, hub_path, round_id) {
       )
     )
   }
+
+  # create a model output table subset to only the CDF and or quantile values
+  # regardless of whether they are optional or required
+  config_tasks <- hubUtils::read_config(hub_path, "tasks")
+  round_output_types <- get_round_output_type_names(config_tasks, round_id)
+  only_cdf_or_quantile <- intersect(c("cdf", "quantile"), round_output_types)
+  accepted_vals <- expand_model_out_grid(
+    config_tasks = config_tasks,
+    round_id = round_id,
+    all_character = TRUE,
+    force_output_types = TRUE,
+    output_types = only_cdf_or_quantile
+  )
 
   # FIX for <https://github.com/hubverse-org/hubValidations/issues/78>
   # sort the table by config by merging from config ----------------
@@ -52,7 +55,7 @@ check_tbl_value_col_ascending <- function(tbl, file_path, hub_path, round_id) {
     details <- NULL
     error_tbl <- NULL
   } else {
-    details <- cli::format_inline("See {.var error_tbl} attribute for details.")
+details <- cli::format_inline("See {.var error_tbl} attribute for details.")
   }
 
   capture_check_cnd(
