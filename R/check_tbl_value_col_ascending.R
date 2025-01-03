@@ -55,7 +55,7 @@ check_tbl_value_col_ascending <- function(tbl, file_path, hub_path, round_id) {
     details <- NULL
     error_tbl <- NULL
   } else {
-details <- cli::format_inline("See {.var error_tbl} attribute for details.")
+    details <- cli::format_inline("See {.var error_tbl} attribute for details.")
   }
 
   capture_check_cnd(
