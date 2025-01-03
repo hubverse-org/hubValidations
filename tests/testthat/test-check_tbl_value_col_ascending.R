@@ -98,12 +98,14 @@ test_that("(#78) check_tbl_value_col_ascending will sort even if the data doesn'
   )
 
   # Creating the CFG output -----------------------------------------------
-  cfg <- attr(hubData::connect_hub(hub_path), "config_tasks")
+  cfg <- hubUtils::read_config(hub_path, "tasks")
   outputs <- cfg$rounds[[1]]$model_tasks[[1]]$output_type
-  outputs$cfg <- outputs$quantile
+  outputs$cdf <- outputs$quantile
   outputs$quantile <- NULL
-  otid <- outputs$cfg$output_type_id$required
-  outputs$cfg$output_type_id$required <- make_unsortable(otid)
+  otid <- outputs$cdf$output_type_id$required
+  # making the CDF range from 1.01 to 23.99 so that we can distinguish failures
+  # with character sorting.
+  outputs$cdf$output_type_id$required <- make_unsortable(otid)
   cfg$rounds[[1]]$model_tasks[[1]]$output_type <- outputs
   jsonlite::toJSON(cfg) %>%
     jsonlite::prettify() %>%
@@ -112,15 +114,21 @@ test_that("(#78) check_tbl_value_col_ascending will sort even if the data doesn'
   # Updating the data to match the config --------------------------------
   file_path <- "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
   file_meta <- parse_file_name(file_path)
-  tbl <- hubValidations::read_model_out_file(file_path, hub_path)
-  tbl$output_type_id <- make_unsortable(tbl$output_type_id)
+  convert_to_cdf <- function(x) {
+    ifelse(x == "quantile", "cdf", x)
+  }
+  tbl <- hubValidations::read_model_out_file(file_path, hub_path) %>%
+    dplyr::mutate(output_type_id = make_unsortable(.data[["output_type_id"]])) %>%
+    dplyr::mutate(output_type = convert_to_cdf(.data[["output_type"]]))
 
   # validating when it is sorted -----------------------------------------
   res <- check_tbl_value_col_ascending(tbl, file_path, hub_path, file_meta$round_id)
   expect_s3_class(res, "check_success")
   expect_null(res$error_tbl)
 
-  # validating when it is unsorted ---------------------------------------
+  # validating when table rows are randomly ordered ----------------------
+  # In this check, the values still ascend with the output type ID, despite
+  # the rows being unordered.
   res_unordered <- check_tbl_value_col_ascending(
     tbl[sample(nrow(tbl)), ],
     file_path,
@@ -129,4 +137,29 @@ test_that("(#78) check_tbl_value_col_ascending will sort even if the data doesn'
   )
   expect_s3_class(res_unordered, "check_success")
   expect_null(res_unordered$error_tbl)
+
+  # mismatched values will result in an error ----------------------------
+  # if we switch the first two values, this will mean that they are no longer
+  # non-descending.
+  tbl_with_err <- tbl
+  tbl_with_err$value[1:2] <- tbl_with_err$value[2:1]
+  res_with_err <- check_tbl_value_col_ascending(
+    tbl_with_err,
+    file_path,
+    hub_path,
+    file_meta$round_id
+  )
+  expected <- tibble::tibble(
+    origin_date = as.Date("2022-10-08"),
+    target = "wk inc flu hosp",
+    horizon = 1,
+    location = "US",
+    output_type = "cdf"
+  )
+  actual <- res_with_err$error_tbl
+
+  expect_s3_class(res_with_err, "check_failure")
+  expect_s3_class(actual, "data.frame")
+  expect_equal(nrow(actual), 1)
+  expect_equal(actual, expected, ignore_attr = TRUE)
 })
