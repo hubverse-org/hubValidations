@@ -158,27 +158,22 @@ test_that("(#78) check_tbl_value_col_ascending will sort even if the data doesn'
   actual <- res_with_err$error_tbl
 
   expect_s3_class(res_with_err, "check_failure")
-  expect_s3_class(actual, "data.frame")
-  expect_equal(nrow(actual), 1)
   expect_equal(actual, expected, ignore_attr = TRUE)
 })
 
 
-test_that("check_tbl_value_col_ascending works when output type IDs differ by target", {
+test_that("(#78) check_tbl_value_col_ascending works when output type IDs differ by target", {
   hub_path <- test_path("testdata/hub-diff-otid-per-task/")
   file_path <- "ISI-NotOrdered/2024-01-10-ILI-model.csv"
   tbl <- hubValidations::read_model_out_file(file_path, hub_path)
   file_meta <- parse_file_name(file_path)
-  expect_s3_class(
-    check_tbl_value_col_ascending(tbl, file_path, hub_path, file_meta$round_id),
-    "check_success"
-  )
-  # expect_snapshot(
-  #   check_tbl_value_col_ascending(tbl, file_path, hub_path, file_meta$round_id)
-  # )
+
+  res_ok <- check_tbl_value_col_ascending(tbl, file_path, hub_path, file_meta$round_id)
+  expect_s3_class(res_ok, "check_success")
+  expect_null(res_ok$error_tbl)
 })
 
-test_that("order_output_type_ids() can handle separate model tasks", {
+test_that("(#78) order_output_type_ids() can handle separate model tasks", {
   # <https://github.com/hubverse-org/hubValidations/pull/105/files#r1904460868>
   reference_tbl <- data.frame(
     target = c(rep("a", 3), rep("b", 5)),
