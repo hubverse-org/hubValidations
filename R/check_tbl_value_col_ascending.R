@@ -99,23 +99,39 @@ split_cdf_quantile <- function(tbl) {
     purrr::compact()
 }
 
-# Order the output type ids in the order of the config
-#
-# This extracts the output_type_id from the config-generated table for the
-# given types and creates a lookup table that has the types in the right order.
-#
-# The data from `tbl` is then joined into the lookup table (after being coerced
-# to character), which sorts `tbl` in the order of the lookup table.
-#
-# NOTE: this assumes that the output_type_id values in the `tbl` are complete,
-# this is explicitly checked by the `check_tbl_values_required`
+#' Order the output type ids in the order of the config
+#'
+#' This function uses the output from [expand_model_out_grid()] to create
+#' a lookup table that contains the correct ordering for all of the output type
+#' IDs. Performing an inner join with this lookup table as the reference will
+#' auto sort the model output by the output type ID.
+#'
+#' @param tbl a model output table
+#' @param reference_tbl output from [expand_model_out_grid()]
+#'
+#' @note
+#' 1. this assumes that the output_type_id values in the `tbl` are complete,
+#'    which is explicitly checked by the [check_tbl_values_required()]
+#' 2. this assumes that both `tbl` and `reference_tbl` have the same column
+#'    types
+#' @noRd
+#' @examples
+#' reference_tbl <- data.frame(
+#'   target = c(rep("a", 3), rep("b", 5)),
+#'   output_type = rep("quantile", 8),
+#'   output_type_id = c("0", "0.5", "1", "0", "0.25", "0.5", "0.75", "1")
+#' )
+#' tbl <- reference_tbl
+#' tbl$value <- c(
+#'   seq(from = 0, to = 1, length.out = 3),
+#'   seq(from = 0, to = 1, length.out = 5)
+#' )
+#' order_output_type_ids(tbl[sample(nrow(tbl)), ] reference_tbl)
 order_output_type_ids <- function(tbl, reference_tbl) {
   group_cols <- names(tbl)[!names(tbl) %in% hubUtils::std_colnames]
   join_by <- c(group_cols, "output_type", "output_type_id")
-  # step 1: create a lookup table from the reference_tbl
   lookup <- unique(reference_tbl[join_by])
   tbl$output_type_id <- as.character(tbl$output_type_id)
   lookup$output_type_id <- as.character(lookup$output_type_id)
-  # step 2: join
   dplyr::inner_join(lookup, tbl, by = join_by)
 }
