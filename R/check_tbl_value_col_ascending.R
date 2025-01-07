@@ -33,7 +33,7 @@ check_tbl_value_col_ascending <- function(tbl, file_path, hub_path, round_id) {
   reference_tbl <- expand_model_out_grid(
     config_tasks = config_tasks,
     round_id = round_id,
-    all_character = TRUE,
+    all_character = FALSE,
     force_output_types = TRUE,
     output_types = only_cdf_or_quantile
   )
@@ -107,10 +107,12 @@ split_cdf_quantile <- function(tbl) {
 # NOTE: this assumes that the output_type_id values in the `tbl` are complete,
 # this is explicitly checked by the `check_tbl_values_required`
 order_output_type_ids <- function(tbl, reference_tbl) {
-  join_by <- c("output_type", "output_type_id")
+  group_cols <- names(tbl)[!names(tbl) %in% hubUtils::std_colnames]
+  join_by <- c(group_cols, "output_type", "output_type_id")
   # step 1: create a lookup table from the reference_tbl
   lookup <- unique(reference_tbl[join_by])
-  # step 2: join
   tbl$output_type_id <- as.character(tbl$output_type_id)
+  lookup$output_type_id <- as.character(lookup$output_type_id)
+  # step 2: join
   dplyr::inner_join(lookup, tbl, by = join_by)
 }
