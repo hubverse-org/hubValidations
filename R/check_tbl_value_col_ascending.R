@@ -41,6 +41,9 @@ check_tbl_value_col_ascending <- function(tbl, file_path, hub_path, round_id) {
   # FIX for <https://github.com/hubverse-org/hubValidations/issues/78>
   # sort the table by config by merging from config ----------------
   tbl_sorted <- order_output_type_ids(tbl, reference_tbl)
+  # TODO: return an informative error or message if the table has no rows
+  # If this is the case, this likely means that there are invalid combinations
+  # of values.
   output_type_tbl <- split_cdf_quantile(tbl_sorted)
 
   error_tbl <- purrr::map(
