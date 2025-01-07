@@ -21,11 +21,8 @@ test_that("check_tbl_value_col_ascending works", {
 
 test_that("check_tbl_value_col_ascending works when output type IDs not ordered", {
   hub_path <- test_path("testdata/hub-unordered/")
-  tbl <- arrow::read_csv_arrow(
-    fs::path(hub_path, "model-output/2024-01-10-ISI-NotOrdered.csv")
-  ) %>%
-    hubData::coerce_to_character()
   file_path <- "ISI-NotOrdered/2024-01-10-ISI-NotOrdered.csv"
+  tbl <- read_model_out_file(file_path, hub_path)
   file_meta <- parse_file_name(file_path)
   expect_snapshot(
     check_tbl_value_col_ascending(tbl, file_path, hub_path, file_meta$round_id)
