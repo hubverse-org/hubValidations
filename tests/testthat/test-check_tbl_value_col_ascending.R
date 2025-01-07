@@ -193,4 +193,3 @@ test_that("order_output_type_ids() can handle separate model tasks", {
   expect_null(check_values_ascending(tbl))
   expect_null(order_output_type_ids(tbl, reference_tbl) |> check_values_ascending())
 })
-
