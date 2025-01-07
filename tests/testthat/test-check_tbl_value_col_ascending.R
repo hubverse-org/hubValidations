@@ -163,3 +163,18 @@ test_that("(#78) check_tbl_value_col_ascending will sort even if the data doesn'
   expect_equal(nrow(actual), 1)
   expect_equal(actual, expected, ignore_attr = TRUE)
 })
+
+
+test_that("check_tbl_value_col_ascending works when output type IDs differ by target", {
+  hub_path <- test_path("testdata/hub-diff-otid-per-task/")
+  file_path <- "ISI-NotOrdered/2024-01-10-ILI-model.csv"
+  tbl <- hubValidations::read_model_out_file(file_path, hub_path)
+  file_meta <- parse_file_name(file_path)
+  expect_s3_class(
+    check_tbl_value_col_ascending(tbl, file_path, hub_path, file_meta$round_id),
+    "check_success"
+  )
+  # expect_snapshot(
+  #   check_tbl_value_col_ascending(tbl, file_path, hub_path, file_meta$round_id)
+  # )
+})
