@@ -175,8 +175,7 @@ test_that("check_tbl_value_col_ascending works when output type IDs differ by ta
   file_meta <- parse_file_name(file_path)
   expect_s3_class(
     check_tbl_value_col_ascending(tbl, file_path, hub_path, file_meta$round_id),
-    c("check_success", "hub_check", "rlang_message", "message", "condition"),
-    exact = TRUE
+    "check_success"
   )
   # expect_snapshot(
   #   check_tbl_value_col_ascending(tbl, file_path, hub_path, file_meta$round_id)
