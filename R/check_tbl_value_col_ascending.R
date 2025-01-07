@@ -30,7 +30,7 @@ check_tbl_value_col_ascending <- function(tbl, file_path, hub_path, round_id) {
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
   round_output_types <- get_round_output_type_names(config_tasks, round_id)
   only_cdf_or_quantile <- intersect(c("cdf", "quantile"), round_output_types)
-  accepted_vals <- expand_model_out_grid(
+  reference_tbl <- expand_model_out_grid(
     config_tasks = config_tasks,
     round_id = round_id,
     all_character = TRUE,
@@ -40,7 +40,7 @@ check_tbl_value_col_ascending <- function(tbl, file_path, hub_path, round_id) {
 
   # FIX for <https://github.com/hubverse-org/hubValidations/issues/78>
   # sort the table by config by merging from config ----------------
-  tbl_sorted <- order_output_type_ids(tbl, accepted_vals, c("cdf", "quantile"))
+  tbl_sorted <- order_output_type_ids(tbl, reference_tbl)
   output_type_tbl <- split_cdf_quantile(tbl_sorted)
 
   error_tbl <- purrr::map(
@@ -104,14 +104,13 @@ split_cdf_quantile <- function(tbl) {
 # The data from `tbl` is then joined into the lookup table (after being coerced
 # to character), which sorts `tbl` in the order of the lookup table.
 #
-# NOTE: this assumes that the cdf and quantile values in the `tbl` are complete.
-order_output_type_ids <- function(tbl, config, types = c("cdf", "quantile")) {
-  # step 1: create a lookup table from the config
-  order_ref <- config[c("output_type", "output_type_id")]
-  cdf_and_quantile <- order_ref$output_type %in% types
-  order_ref <- order_ref[cdf_and_quantile, , drop = FALSE]
-  order_ref <- unique(order_ref)
+# NOTE: this assumes that the output_type_id values in the `tbl` are complete,
+# this is explicitly checked by the `check_tbl_values_required`
+order_output_type_ids <- function(tbl, reference_tbl) {
+  join_by <- c("output_type", "output_type_id")
+  # step 1: create a lookup table from the reference_tbl
+  lookup <- unique(reference_tbl[join_by])
   # step 2: join
   tbl$output_type_id <- as.character(tbl$output_type_id)
-  dplyr::inner_join(order_ref, tbl, by = c("output_type", "output_type_id"))
+  dplyr::inner_join(lookup, tbl, by = join_by)
 }
