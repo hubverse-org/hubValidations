@@ -175,3 +175,20 @@ test_that("check_tbl_value_col_ascending works when output type IDs differ by ta
   #   check_tbl_value_col_ascending(tbl, file_path, hub_path, file_meta$round_id)
   # )
 })
+
+test_that("order_output_type_ids() can handle separate model tasks", {
+  # <https://github.com/hubverse-org/hubValidations/pull/105/files#r1904460868>
+  reference_tbl <- data.frame(
+    target = c(rep("a", 3), rep("b", 5)),
+    output_type = rep("quantile", 8),
+    output_type_id = c("0", "0.5", "1", "0", "0.25", "0.5", "0.75", "1")
+  )
+  tbl <- reference_tbl
+  tbl$value <- c(
+    seq(from = 0, to = 1, length.out = 3),
+    seq(from = 0, to = 1, length.out = 5)
+  )
+  expect_null(check_values_ascending(tbl))
+  expect_null(order_output_type_ids(tbl, reference_tbl) |> check_values_ascending())
+})
+
