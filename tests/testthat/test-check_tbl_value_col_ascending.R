@@ -167,11 +167,8 @@ test_that("(#78) check_tbl_value_col_ascending will sort even if the data doesn'
 
 test_that("check_tbl_value_col_ascending works when output type IDs differ by target", {
   hub_path <- test_path("testdata/hub-diff-otid-per-task/")
-  tbl <- arrow::read_csv_arrow(
-    fs::path(hub_path, "model-output/2024-01-10-ILI-model.csv")
-  ) %>%
-    hubData::coerce_to_character()
   file_path <- "ISI-NotOrdered/2024-01-10-ILI-model.csv"
+  tbl <- hubValidations::read_model_out_file(file_path, hub_path)
   file_meta <- parse_file_name(file_path)
   expect_s3_class(
     check_tbl_value_col_ascending(tbl, file_path, hub_path, file_meta$round_id),
