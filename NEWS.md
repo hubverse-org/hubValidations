@@ -1,5 +1,10 @@
 # hubValidations (development version)
 
+* `check_tbl_value_col_ascending()` will now use the order of the
+  `output_type_id` values as defined in the schema. This ensures that the
+  `output_type_id`s for `cdf` output types are always sorted in the correct
+  order (#78).
+
 # hubValidations 0.10.0
 
 * Added `check_tbl_derived_task_id_vals()` check to `validate_model_data()`

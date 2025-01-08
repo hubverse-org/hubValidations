@@ -11,8 +11,11 @@
 #' @inherit check_tbl_colnames params
 #' @inherit check_tbl_col_types return
 #' @export
-check_tbl_value_col_ascending <- function(tbl, file_path) {
-  if (all(!c("cdf", "quantile") %in% tbl[["output_type"]])) {
+check_tbl_value_col_ascending <- function(tbl, file_path, hub_path, round_id) {
+
+  # Exit early if there are no values to check
+  no_values_to_check <- all(!c("cdf", "quantile") %in% tbl[["output_type"]])
+  if (no_values_to_check) {
     return(
       capture_check_info(
         file_path,
@@ -22,8 +25,26 @@ check_tbl_value_col_ascending <- function(tbl, file_path) {
     )
   }
 
-  output_type_tbl <- split(tbl, tbl[["output_type"]])[c("cdf", "quantile")] %>%
-    purrr::compact()
+  # create a model output table subset to only the CDF and or quantile values
+  # regardless of whether they are optional or required
+  config_tasks <- hubUtils::read_config(hub_path, "tasks")
+  round_output_types <- get_round_output_type_names(config_tasks, round_id)
+  only_cdf_or_quantile <- intersect(c("cdf", "quantile"), round_output_types)
+  reference_tbl <- expand_model_out_grid(
+    config_tasks = config_tasks,
+    round_id = round_id,
+    all_character = FALSE,
+    force_output_types = TRUE,
+    output_types = only_cdf_or_quantile
+  )
+
+  # FIX for <https://github.com/hubverse-org/hubValidations/issues/78>
+  # sort the table by config by merging from config ----------------
+  tbl_sorted <- order_output_type_ids(tbl, reference_tbl)
+  # TODO: return an informative error or message if the table has no rows
+  # If this is the case, this likely means that there are invalid combinations
+  # of values.
+  output_type_tbl <- split_cdf_quantile(tbl_sorted)
 
   error_tbl <- purrr::map(
     output_type_tbl,
@@ -57,8 +78,8 @@ check_values_ascending <- function(tbl) {
   group_cols <- names(tbl)[!names(tbl) %in% hubUtils::std_colnames]
   tbl[["value"]] <- as.numeric(tbl[["value"]])
 
+  # group by all of the target columns
   check_tbl <- dplyr::group_by(tbl, dplyr::across(dplyr::all_of(group_cols))) %>%
-    dplyr::arrange(.data$output_type_id, .by_group = TRUE) %>%
     dplyr::summarise(non_asc = any(diff(.data[["value"]]) < 0))
 
   if (!any(check_tbl$non_asc)) {
@@ -71,4 +92,46 @@ check_values_ascending <- function(tbl) {
     dplyr::select(-dplyr::all_of("non_asc")) %>%
     dplyr::ungroup() %>%
     dplyr::mutate(.env$output_type)
+}
+
+split_cdf_quantile <- function(tbl) {
+  split(tbl, tbl[["output_type"]])[c("cdf", "quantile")] %>%
+    purrr::compact()
+}
+
+#' Order the output type ids in the order of the config
+#'
+#' This function uses the output from [expand_model_out_grid()] to create
+#' a lookup table that contains the correct ordering for all of the output type
+#' IDs. Performing an inner join with this lookup table as the reference will
+#' auto sort the model output by the output type ID.
+#'
+#' @param tbl a model output table
+#' @param reference_tbl output from [expand_model_out_grid()]
+#'
+#' @note
+#' 1. this assumes that the output_type_id values in the `tbl` are complete,
+#'    which is explicitly checked by the [check_tbl_values_required()]
+#' 2. this assumes that both `tbl` and `reference_tbl` have the same column
+#'    types
+#' @noRd
+#' @examples
+#' reference_tbl <- data.frame(
+#'   target = c(rep("a", 3), rep("b", 5)),
+#'   output_type = rep("quantile", 8),
+#'   output_type_id = c("0", "0.5", "1", "0", "0.25", "0.5", "0.75", "1")
+#' )
+#' tbl <- reference_tbl
+#' tbl$value <- c(
+#'   seq(from = 0, to = 1, length.out = 3),
+#'   seq(from = 0, to = 1, length.out = 5)
+#' )
+#' order_output_type_ids(tbl[sample(nrow(tbl)), ] reference_tbl)
+order_output_type_ids <- function(tbl, reference_tbl) {
+  group_cols <- names(tbl)[!names(tbl) %in% hubUtils::std_colnames]
+  join_by <- c(group_cols, "output_type", "output_type_id")
+  lookup <- unique(reference_tbl[join_by])
+  tbl$output_type_id <- as.character(tbl$output_type_id)
+  lookup$output_type_id <- as.character(lookup$output_type_id)
+  dplyr::inner_join(lookup, tbl, by = join_by)
 }

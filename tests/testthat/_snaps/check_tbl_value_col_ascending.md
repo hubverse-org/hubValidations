@@ -1,7 +1,7 @@
 # check_tbl_value_col_ascending works
 
     Code
-      check_tbl_value_col_ascending(tbl, file_path)
+      check_tbl_value_col_ascending(tbl, file_path, hub_path, file_meta$round_id)
     Output
       <message/check_success>
       Message:
@@ -10,7 +10,7 @@
 ---
 
     Code
-      check_tbl_value_col_ascending(tbl, file_path)
+      check_tbl_value_col_ascending(tbl, file_path, hub_path, file_meta$round_id)
     Output
       <message/check_success>
       Message:
@@ -19,7 +19,7 @@
 # check_tbl_value_col_ascending works when output type IDs not ordered
 
     Code
-      check_tbl_value_col_ascending(tbl, file_path)
+      check_tbl_value_col_ascending(tbl, file_path, hub_path, file_meta$round_id)
     Output
       <message/check_success>
       Message:
@@ -28,7 +28,7 @@
 # check_tbl_value_col_ascending errors correctly
 
     Code
-      str(check_tbl_value_col_ascending(tbl, file_path))
+      str(check_tbl_value_col_ascending(tbl, file_path, hub_path, file_meta$round_id))
     Output
       List of 7
        $ message       : chr "Values in `value` column are not non-decreasing as output_type_ids increase for all unique task ID\n    value/o"| __truncated__
@@ -48,7 +48,8 @@
 ---
 
     Code
-      str(check_tbl_value_col_ascending(tbl_error, file_path))
+      str(check_tbl_value_col_ascending(tbl_error, file_path, hub_path, file_meta$
+        round_id))
     Output
       List of 7
        $ message       : chr "Values in `value` column are not non-decreasing as output_type_ids increase for all unique task ID\n    value/o"| __truncated__
@@ -58,7 +59,7 @@
        $ error_tbl     : tibble [1 x 5] (S3: tbl_df/tbl/data.frame)
         ..$ forecast_date: Date[1:1], format: "2023-05-08"
         ..$ horizon      : int 1
-        ..$ target       : chr "wk ahead inc covid hosp"
+        ..$ target       : chr "wk ahead inc flu hosp"
         ..$ location     : chr "US"
         ..$ output_type  : chr "quantile"
        $ call          : chr "check_tbl_value_col_ascending"
@@ -68,7 +69,8 @@
 ---
 
     Code
-      str(check_tbl_value_col_ascending(rbind(tbl, tbl_error), file_path))
+      str(check_tbl_value_col_ascending(rbind(tbl, tbl_error), file_path, hub_path,
+      file_meta$round_id))
     Output
       List of 7
        $ message       : chr "Values in `value` column are not non-decreasing as output_type_ids increase for all unique task ID\n    value/o"| __truncated__
@@ -78,7 +80,7 @@
        $ error_tbl     : tibble [1 x 5] (S3: tbl_df/tbl/data.frame)
         ..$ forecast_date: Date[1:1], format: "2023-05-08"
         ..$ horizon      : int 1
-        ..$ target       : chr "wk ahead inc covid hosp"
+        ..$ target       : chr "wk ahead inc flu hosp"
         ..$ location     : chr "US"
         ..$ output_type  : chr "quantile"
        $ call          : chr "check_tbl_value_col_ascending"
@@ -88,7 +90,7 @@
 # check_tbl_value_col_ascending skips correctly
 
     Code
-      check_tbl_value_col_ascending(tbl, file_path)
+      check_tbl_value_col_ascending(tbl, file_path, hub_path, file_meta$round_id)
     Output
       <message/check_info>
       Message:
