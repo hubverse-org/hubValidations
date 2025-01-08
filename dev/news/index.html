@@ -47,7 +47,9 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="hubvalidations-development-version">hubValidations (development version)<a class="anchor" aria-label="anchor" href="#hubvalidations-development-version"></a></h2>
-</div>
+<ul><li>
+<code><a href="../reference/check_tbl_value_col_ascending.html">check_tbl_value_col_ascending()</a></code> will now use the order of the <code>output_type_id</code> values as defined in the schema. This ensures that the <code>output_type_id</code>s for <code>cdf</code> output types are always sorted in the correct order (<a href="https://github.com/hubverse-org/hubValidations/issues/78" class="external-link">#78</a>).</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.10.0" id="hubvalidations-0100">hubValidations 0.10.0<a class="anchor" aria-label="anchor" href="#hubvalidations-0100"></a></h2>
 <ul><li>Added <code><a href="../reference/check_tbl_derived_task_id_vals.html">check_tbl_derived_task_id_vals()</a></code> check to <code><a href="../reference/validate_model_data.html">validate_model_data()</a></code> that ensures that values in derived task ID columns match expected values for the corresponding derived task IDs in the round as defined in <code>tasks.json</code> config (<a href="https://github.com/hubverse-org/hubValidations/issues/110" class="external-link">#110</a>). Given the dependence of derived task IDs on the values of their source task ID values, the check ignores the combinations of derived task ID values with those of other task IDs and focuses only on identifying values that do not match corresponding accepted values.</li>
