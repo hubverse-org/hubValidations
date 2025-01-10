@@ -11,7 +11,8 @@
 #' @inherit check_tbl_colnames params
 #' @inherit check_tbl_col_types return
 #' @export
-check_tbl_value_col_ascending <- function(tbl, file_path, hub_path, round_id) {
+check_tbl_value_col_ascending <- function(tbl, file_path, hub_path, round_id,
+                                          derived_task_ids = get_hub_derived_task_ids(hub_path)) {
 
   # Exit early if there are no values to check
   no_values_to_check <- all(!c("cdf", "quantile") %in% tbl[["output_type"]])
@@ -35,7 +36,8 @@ check_tbl_value_col_ascending <- function(tbl, file_path, hub_path, round_id) {
     round_id = round_id,
     all_character = FALSE,
     force_output_types = TRUE,
-    output_types = only_cdf_or_quantile
+    output_types = only_cdf_or_quantile,
+    derived_task_ids = derived_task_ids
   )
 
   # FIX for <https://github.com/hubverse-org/hubValidations/issues/78>

@@ -5,7 +5,13 @@
 \title{Check that \code{quantile} and \code{cdf} output type values of model output data
 are non-descending}
 \usage{
-check_tbl_value_col_ascending(tbl, file_path, hub_path, round_id)
+check_tbl_value_col_ascending(
+  tbl,
+  file_path,
+  hub_path,
+  round_id,
+  derived_task_ids = get_hub_derived_task_ids(hub_path)
+)
 }
 \arguments{
 \item{tbl}{a tibble/data.frame of the contents of the file being validated.}
