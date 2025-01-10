@@ -8,7 +8,7 @@
 #' If not, the check is skipped and a `<message/check_info>` condition class
 #' object is returned.
 #'
-#' @inherit check_tbl_colnames params
+#' @inherit check_tbl_value_col params
 #' @inherit check_tbl_col_types return
 #' @export
 check_tbl_value_col_ascending <- function(tbl, file_path, hub_path, round_id,
