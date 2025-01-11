@@ -172,4 +172,3 @@ test_that("(#78) check_tbl_value_col_ascending works when output type IDs differ
   expect_s3_class(res_ok, "check_success")
   expect_null(res_ok$error_tbl)
 })
-

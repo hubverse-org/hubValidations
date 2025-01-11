@@ -45,7 +45,7 @@ check_tbl_value_col_ascending <- function(tbl, file_path, hub_path, round_id,
     derived_task_ids = derived_task_ids
   ) %>%
     purrr::compact()
-  error_tbl <- purrr::map(output_type_tbls, check_values_ascending) %>% 
+  error_tbl <- purrr::map(output_type_tbls, check_values_ascending) %>%
     purrr::list_rbind()
 
 
@@ -73,7 +73,7 @@ check_tbl_value_col_ascending <- function(tbl, file_path, hub_path, round_id,
 #' Check that values for each model task are ascending
 #'
 #' @param tbl a table with a single output type
-#' @return 
+#' @return
 #'  - If the check succeeds, and all values are non-decreasing: NULL
 #'  - If the check fails, a summary table showing the model tasks that
 #'    had decreasing values for this output type
