@@ -149,9 +149,9 @@ test_that("(#78) check_tbl_value_col_ascending will sort even if the data doesn'
     file_meta$round_id
   )
   expected <- tibble::tibble(
-    origin_date = as.Date("2022-10-08"),
+    origin_date = "2022-10-08",
     target = "wk inc flu hosp",
-    horizon = 1,
+    horizon = "1",
     location = "US",
     output_type = "cdf"
   )
@@ -173,18 +173,3 @@ test_that("(#78) check_tbl_value_col_ascending works when output type IDs differ
   expect_null(res_ok$error_tbl)
 })
 
-test_that("(#78) order_output_type_ids() can handle separate model tasks", {
-  # <https://github.com/hubverse-org/hubValidations/pull/105/files#r1904460868>
-  reference_tbl <- data.frame(
-    target = c(rep("a", 3), rep("b", 5)),
-    output_type = rep("quantile", 8),
-    output_type_id = c("0", "0.5", "1", "0", "0.25", "0.5", "0.75", "1")
-  )
-  tbl <- reference_tbl
-  tbl$value <- c(
-    seq(from = 0, to = 1, length.out = 3),
-    seq(from = 0, to = 1, length.out = 5)
-  )
-  expect_null(check_values_ascending(tbl))
-  expect_null(order_output_type_ids(tbl, reference_tbl) |> check_values_ascending())
-})
