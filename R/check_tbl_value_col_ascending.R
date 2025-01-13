@@ -36,11 +36,13 @@ check_tbl_value_col_ascending <- function(tbl, file_path, hub_path, round_id,
   # memory pressure
   error_tbl <- purrr::map(
     check_output_types,
-    ~ check_values_ascending_by_output_type(
-      .x, tbl,
-      config_tasks, round_id,
-      derived_task_ids
-    )
+    \(.x) {
+      check_values_ascending_by_output_type(
+        .x, tbl,
+        config_tasks, round_id,
+        derived_task_ids
+      )
+    }
   ) %>%
     purrr::list_rbind()
 
