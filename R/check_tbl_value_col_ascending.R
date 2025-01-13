@@ -26,7 +26,7 @@ check_tbl_value_col_ascending <- function(tbl, file_path, hub_path, round_id,
   }
 
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
-  tbl[["value"]] <- as.numeric(tbl[["value"]])
+
   if (!is.null(derived_task_ids)) {
     tbl[derived_task_ids] <- NA_character_
   }
@@ -93,7 +93,7 @@ check_values_ascending_by_output_type <- function(output_type, tbl,
 
 #' Check that values for each model task are ascending
 #'
-#' @param tbl a table with a single output type
+#' @param tbl an all character table with a single output type
 #' @return
 #'  - If the check succeeds, and all values are non-decreasing: NULL
 #'  - If the check fails, a summary table showing the model tasks that
