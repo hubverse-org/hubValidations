@@ -8,7 +8,7 @@
 #' If not, the check is skipped and a `<message/check_info>` condition class
 #' object is returned.
 #'
-#' @inherit check_tbl_value_col params
+#' @inherit check_tbl_values params
 #' @inherit check_tbl_col_types return
 #' @export
 check_tbl_value_col_ascending <- function(tbl, file_path, hub_path, round_id,
@@ -27,8 +27,7 @@ check_tbl_value_col_ascending <- function(tbl, file_path, hub_path, round_id,
   }
 
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
-  not_value <- names(tbl) != "value"
-  tbl[not_value] <- hubData::coerce_to_character(tbl[not_value])
+  tbl[["value"]] <- as.numeric(tbl[["value"]])
   if (!is.null(derived_task_ids)) {
     tbl[derived_task_ids] <- NA_character_
   }

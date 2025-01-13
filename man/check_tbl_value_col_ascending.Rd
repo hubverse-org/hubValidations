@@ -14,7 +14,7 @@ check_tbl_value_col_ascending(
 )
 }
 \arguments{
-\item{tbl}{a tibble/data.frame of the contents of the file being validated.}
+\item{tbl}{a tibble/data.frame of the contents of the file being validated. Column types must \strong{all be character}.}
 
 \item{file_path}{character string. Path to the file being validated relative to
 the hub's model-output directory.}
