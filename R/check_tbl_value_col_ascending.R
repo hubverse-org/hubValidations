@@ -13,9 +13,10 @@
 #' @export
 check_tbl_value_col_ascending <- function(tbl, file_path, hub_path, round_id,
                                           derived_task_ids = get_hub_derived_task_ids(hub_path)) {
+  check_output_types <- intersect(c("cdf", "quantile"), unique(tbl[["output_type"]]))
+
   # Exit early if there are no values to check
-  no_values_to_check <- all(!c("cdf", "quantile") %in% tbl[["output_type"]])
-  if (no_values_to_check) {
+  if (length(check_output_types) == 0L) {
     return(
       capture_check_info(
         file_path,
@@ -30,13 +31,11 @@ check_tbl_value_col_ascending <- function(tbl, file_path, hub_path, round_id,
   if (!is.null(derived_task_ids)) {
     tbl[derived_task_ids] <- NA_character_
   }
-  round_output_types <- get_round_output_type_names(config_tasks, round_id)
-  only_cdf_or_quantile <- intersect(c("cdf", "quantile"), round_output_types)
 
   # Check that values are non-decreasing for each output type separately to reduce
   # memory pressure
   error_tbl <- purrr::map(
-    only_cdf_or_quantile,
+    check_output_types,
     ~ check_values_ascending_by_output_type(
       .x, tbl,
       config_tasks, round_id,
