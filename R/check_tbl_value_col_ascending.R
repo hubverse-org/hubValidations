@@ -13,7 +13,6 @@
 #' @export
 check_tbl_value_col_ascending <- function(tbl, file_path, hub_path, round_id,
                                           derived_task_ids = get_hub_derived_task_ids(hub_path)) {
-
   # Exit early if there are no values to check
   no_values_to_check <- all(!c("cdf", "quantile") %in% tbl[["output_type"]])
   if (no_values_to_check) {
@@ -33,20 +32,18 @@ check_tbl_value_col_ascending <- function(tbl, file_path, hub_path, round_id,
   }
   round_output_types <- get_round_output_type_names(config_tasks, round_id)
   only_cdf_or_quantile <- intersect(c("cdf", "quantile"), round_output_types)
-  # FIX for <https://github.com/hubverse-org/hubValidations/issues/78>
-  # This function uses an inner join to auto-sort the table by model task,
-  # splitting by output type. We can use that to loop through the check.
-  output_type_tbls <- match_tbl_to_model_task(
-    tbl,
-    config_tasks = config_tasks,
-    round_id = round_id,
-    output_types = only_cdf_or_quantile,
-    derived_task_ids = derived_task_ids
-  ) %>%
-    purrr::compact()
-  error_tbl <- purrr::map(output_type_tbls, check_values_ascending) %>%
-    purrr::list_rbind()
 
+  # Check that values are non-decreasing for each output type separately to reduce
+  # memory pressure
+  error_tbl <- purrr::map(
+    only_cdf_or_quantile,
+    ~ check_values_ascending_by_output_type(
+      .x, tbl,
+      config_tasks, round_id,
+      derived_task_ids
+    )
+  ) %>%
+    purrr::list_rbind()
 
   check <- nrow(error_tbl) == 0L
 
@@ -67,6 +64,31 @@ check_tbl_value_col_ascending <- function(tbl, file_path, hub_path, round_id,
     details = details,
     error_tbl = error_tbl
   )
+}
+
+#' Check that values for each model task in specific output types are ascending
+#'
+#' This function allows us to map over individual output types one at a time to
+#' reduce memory pressure.
+#' @param output_type the output type(s) to check. Must be a character vector
+#' @noRd
+check_values_ascending_by_output_type <- function(output_type, tbl,
+                                                  config_tasks, round_id,
+                                                  derived_task_ids) {
+  # FIX for <https://github.com/hubverse-org/hubValidations/issues/78>
+  # This function uses an inner join to auto-sort the table by model task,
+  # splitting by output type. We can use that to loop through the check.
+  output_type_tbls <- match_tbl_to_model_task(
+    tbl,
+    config_tasks = config_tasks,
+    round_id = round_id,
+    output_types = output_type,
+    derived_task_ids = derived_task_ids
+  ) %>%
+    purrr::compact()
+
+  purrr::map(output_type_tbls, check_values_ascending) %>%
+    purrr::list_rbind()
 }
 
 #' Check that values for each model task are ascending
