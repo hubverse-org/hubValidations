@@ -162,12 +162,26 @@ test_that("(#78) check_tbl_value_col_ascending will sort even if the data doesn'
   expect_equal(actual, expected, ignore_attr = TRUE)
 })
 
-
 test_that("(#78) check_tbl_value_col_ascending works when output type IDs differ by target", {
   hub_path <- test_path("testdata/hub-diff-otid-per-task/")
   file_path <- "ISI-NotOrdered/2024-01-10-ILI-model.csv"
   tbl <- read_model_out_file(file_path, hub_path, coerce_types = "chr")
   file_meta <- parse_file_name(file_path)
+
+  res_ok <- check_tbl_value_col_ascending(tbl, file_path, hub_path, file_meta$round_id)
+  expect_s3_class(res_ok, "check_success")
+  expect_null(res_ok$error_tbl)
+})
+
+test_that("(#189) check_tbl_value_col_ascending ignores derived task IDs", {
+  hub_path <- test_path("testdata/hub-177")
+  file_path <- "FluSight-baseline/2024-12-14-FluSight-baseline.parquet"
+  tbl <- read_model_out_file(file_path, hub_path, coerce_types = "chr")
+  file_meta <- parse_file_name(file_path)
+
+  # Introduce invalid value to derived task id that should be ignored when using
+  # `derived_task_ids`.
+  tbl[1, "target_end_date"] <- "random_date"
 
   res_ok <- check_tbl_value_col_ascending(tbl, file_path, hub_path, file_meta$round_id)
   expect_s3_class(res_ok, "check_success")
