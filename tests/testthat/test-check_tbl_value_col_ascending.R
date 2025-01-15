@@ -2,7 +2,7 @@ test_that("check_tbl_value_col_ascending works", {
   hub_path <- system.file("testhubs/simple", package = "hubValidations")
   file_path <- "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
   file_meta <- parse_file_name(file_path)
-  tbl <- hubValidations::read_model_out_file(file_path, hub_path)
+  tbl <- read_model_out_file(file_path, hub_path, coerce_types = "chr")
 
   expect_snapshot(
     check_tbl_value_col_ascending(tbl, file_path, hub_path, file_meta$round_id)
@@ -12,7 +12,7 @@ test_that("check_tbl_value_col_ascending works", {
   file_path <- "hub-ensemble/2023-05-08-hub-ensemble.parquet"
   file_meta <- parse_file_name(file_path)
 
-  tbl <- hubValidations::read_model_out_file(file_path, hub_path)
+  tbl <- read_model_out_file(file_path, hub_path, coerce_types = "chr")
 
   expect_snapshot(
     check_tbl_value_col_ascending(tbl, file_path, hub_path, file_meta$round_id)
@@ -22,7 +22,7 @@ test_that("check_tbl_value_col_ascending works", {
 test_that("check_tbl_value_col_ascending works when output type IDs not ordered", {
   hub_path <- test_path("testdata/hub-unordered/")
   file_path <- "ISI-NotOrdered/2024-01-10-ISI-NotOrdered.csv"
-  tbl <- read_model_out_file(file_path, hub_path)
+  tbl <- read_model_out_file(file_path, hub_path, coerce_types = "chr")
   file_meta <- parse_file_name(file_path)
   expect_snapshot(
     check_tbl_value_col_ascending(tbl, file_path, hub_path, file_meta$round_id)
@@ -33,7 +33,7 @@ test_that("check_tbl_value_col_ascending errors correctly", {
   hub_path <- system.file("testhubs/simple", package = "hubValidations")
   file_path <- "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
   file_meta <- parse_file_name(file_path)
-  tbl <- hubValidations::read_model_out_file(file_path, hub_path)
+  tbl <- read_model_out_file(file_path, hub_path, coerce_types = "chr")
 
   tbl$value[c(1, 10)] <- 150
 
@@ -44,7 +44,7 @@ test_that("check_tbl_value_col_ascending errors correctly", {
   hub_path <- system.file("testhubs/flusight", package = "hubUtils")
   file_path <- "hub-ensemble/2023-05-08-hub-ensemble.parquet"
   file_meta <- parse_file_name(file_path)
-  tbl <- hubValidations::read_model_out_file(file_path, hub_path)
+  tbl <- read_model_out_file(file_path, hub_path, coerce_types = "chr")
   tbl_error <- tbl
   # TODO: 2025-01-07 investigate the purpose of adding an invalid target, which
   # causes the test to fail
@@ -72,7 +72,7 @@ test_that("check_tbl_value_col_ascending skips correctly", {
   hub_path <- system.file("testhubs/simple", package = "hubValidations")
   file_path <- "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
   file_meta <- parse_file_name(file_path)
-  tbl <- hubValidations::read_model_out_file(file_path, hub_path)
+  tbl <- read_model_out_file(file_path, hub_path, coerce_types = "chr")
   tbl <- tbl[tbl$output_type == "mean", ]
 
   expect_snapshot(
@@ -116,9 +116,10 @@ test_that("(#78) check_tbl_value_col_ascending will sort even if the data doesn'
   convert_to_cdf <- function(x) {
     ifelse(x == "quantile", "cdf", x)
   }
-  tbl <- hubValidations::read_model_out_file(file_path, hub_path) %>%
+  tbl <- read_model_out_file(file_path, hub_path) %>%
     dplyr::mutate(output_type_id = make_unsortable(.data[["output_type_id"]])) %>%
-    dplyr::mutate(output_type = convert_to_cdf(.data[["output_type"]]))
+    dplyr::mutate(output_type = convert_to_cdf(.data[["output_type"]])) %>%
+    hubData::coerce_to_character()
 
   # validating when it is sorted -----------------------------------------
   res <- check_tbl_value_col_ascending(tbl, file_path, hub_path, file_meta$round_id)
@@ -161,12 +162,26 @@ test_that("(#78) check_tbl_value_col_ascending will sort even if the data doesn'
   expect_equal(actual, expected, ignore_attr = TRUE)
 })
 
-
 test_that("(#78) check_tbl_value_col_ascending works when output type IDs differ by target", {
   hub_path <- test_path("testdata/hub-diff-otid-per-task/")
   file_path <- "ISI-NotOrdered/2024-01-10-ILI-model.csv"
-  tbl <- hubValidations::read_model_out_file(file_path, hub_path)
+  tbl <- read_model_out_file(file_path, hub_path, coerce_types = "chr")
   file_meta <- parse_file_name(file_path)
+
+  res_ok <- check_tbl_value_col_ascending(tbl, file_path, hub_path, file_meta$round_id)
+  expect_s3_class(res_ok, "check_success")
+  expect_null(res_ok$error_tbl)
+})
+
+test_that("(#189) check_tbl_value_col_ascending ignores derived task IDs", {
+  hub_path <- test_path("testdata/hub-177")
+  file_path <- "FluSight-baseline/2024-12-14-FluSight-baseline.parquet"
+  tbl <- read_model_out_file(file_path, hub_path, coerce_types = "chr")
+  file_meta <- parse_file_name(file_path)
+
+  # Introduce invalid value to derived task id that should be ignored when using
+  # `derived_task_ids`.
+  tbl[1, "target_end_date"] <- "random_date"
 
   res_ok <- check_tbl_value_col_ascending(tbl, file_path, hub_path, file_meta$round_id)
   expect_s3_class(res_ok, "check_success")
