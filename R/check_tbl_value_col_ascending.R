@@ -77,9 +77,11 @@ check_values_ascending_by_output_type <- function(output_type, tbl,
                                                   config_tasks, round_id,
                                                   derived_task_ids) {
   # FIX for <https://github.com/hubverse-org/hubValidations/issues/78>
-  # This function uses an inner join to auto-sort the table by model task,
-  # splitting by output type. We can use that to loop through the check.
-  output_type_tbls <- match_tbl_to_model_task(
+  # This function splits the table by model task (via
+  # `expand_model_out_grid(bind_model_tasks = FALSE)`) and then performs an
+  # inner join to auto-sort for this particular output type regardless if the
+  # output type is inherently sortable.
+  model_task_tbls <- match_tbl_to_model_task(
     tbl,
     config_tasks = config_tasks,
     round_id = round_id,
@@ -88,7 +90,7 @@ check_values_ascending_by_output_type <- function(output_type, tbl,
   ) %>%
     purrr::compact()
 
-  purrr::map(output_type_tbls, check_values_ascending) %>%
+  purrr::map(model_task_tbls, check_values_ascending) %>%
     purrr::list_rbind()
 }
 
