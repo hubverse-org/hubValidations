@@ -67,7 +67,13 @@ object is returned.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">check_tbl_value_col_ascending</span><span class="op">(</span><span class="va">tbl</span>, <span class="va">file_path</span>, <span class="va">hub_path</span>, <span class="va">round_id</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">check_tbl_value_col_ascending</span><span class="op">(</span></span>
+<span>  <span class="va">tbl</span>,</span>
+<span>  <span class="va">file_path</span>,</span>
+<span>  <span class="va">hub_path</span>,</span>
+<span>  <span class="va">round_id</span>,</span>
+<span>  derived_task_ids <span class="op">=</span> <span class="fu">get_hub_derived_task_ids</span><span class="op">(</span><span class="va">hub_path</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -75,7 +81,7 @@ object is returned.</p>
 
 
 <dl><dt id="arg-tbl">tbl<a class="anchor" aria-label="anchor" href="#arg-tbl"></a></dt>
-<dd><p>a tibble/data.frame of the contents of the file being validated.</p></dd>
+<dd><p>a tibble/data.frame of the contents of the file being validated. Column types must <strong>all be character</strong>.</p></dd>
 
 
 <dt id="arg-file-path">file_path<a class="anchor" aria-label="anchor" href="#arg-file-path"></a></dt>
@@ -97,6 +103,13 @@ files within the <code>hub-config</code> directory.</p></dd>
 
 <dt id="arg-round-id">round_id<a class="anchor" aria-label="anchor" href="#arg-round-id"></a></dt>
 <dd><p>character string. The round identifier.</p></dd>
+
+
+<dt id="arg-derived-task-ids">derived_task_ids<a class="anchor" aria-label="anchor" href="#arg-derived-task-ids"></a></dt>
+<dd><p>Character vector of derived task ID names (task IDs whose
+values depend on other task IDs) to ignore. Columns for such task ids will
+contain <code>NA</code>s. Defaults to extracting derived task IDs from hub <code>task.json</code>. See
+<code>get_hub_derived_task_ids()</code> for more details.</p></dd>
 
 </dl></div>
     <div class="section level2">
