@@ -5,10 +5,16 @@
 \title{Check that \code{quantile} and \code{cdf} output type values of model output data
 are non-descending}
 \usage{
-check_tbl_value_col_ascending(tbl, file_path, hub_path, round_id)
+check_tbl_value_col_ascending(
+  tbl,
+  file_path,
+  hub_path,
+  round_id,
+  derived_task_ids = get_hub_derived_task_ids(hub_path)
+)
 }
 \arguments{
-\item{tbl}{a tibble/data.frame of the contents of the file being validated.}
+\item{tbl}{a tibble/data.frame of the contents of the file being validated. Column types must \strong{all be character}.}
 
 \item{file_path}{character string. Path to the file being validated relative to
 the hub's model-output directory.}
@@ -24,6 +30,11 @@ The hub must be fully configured with valid \code{admin.json} and \code{tasks.js
 files within the \code{hub-config} directory.}
 
 \item{round_id}{character string. The round identifier.}
+
+\item{derived_task_ids}{Character vector of derived task ID names (task IDs whose
+values depend on other task IDs) to ignore. Columns for such task ids will
+contain \code{NA}s. Defaults to extracting derived task IDs from hub \code{task.json}. See
+\code{\link[=get_hub_derived_task_ids]{get_hub_derived_task_ids()}} for more details.}
 }
 \value{
 Depending on whether validation has succeeded, one of:

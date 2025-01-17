@@ -8,14 +8,15 @@
 #' If not, the check is skipped and a `<message/check_info>` condition class
 #' object is returned.
 #'
-#' @inherit check_tbl_colnames params
+#' @inherit check_tbl_values params
 #' @inherit check_tbl_col_types return
 #' @export
-check_tbl_value_col_ascending <- function(tbl, file_path, hub_path, round_id) {
+check_tbl_value_col_ascending <- function(tbl, file_path, hub_path, round_id,
+                                          derived_task_ids = get_hub_derived_task_ids(hub_path)) {
+  check_output_types <- intersect(c("cdf", "quantile"), unique(tbl[["output_type"]]))
 
   # Exit early if there are no values to check
-  no_values_to_check <- all(!c("cdf", "quantile") %in% tbl[["output_type"]])
-  if (no_values_to_check) {
+  if (length(check_output_types) == 0L) {
     return(
       capture_check_info(
         file_path,
@@ -25,30 +26,23 @@ check_tbl_value_col_ascending <- function(tbl, file_path, hub_path, round_id) {
     )
   }
 
-  # create a model output table subset to only the CDF and or quantile values
-  # regardless of whether they are optional or required
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
-  round_output_types <- get_round_output_type_names(config_tasks, round_id)
-  only_cdf_or_quantile <- intersect(c("cdf", "quantile"), round_output_types)
-  reference_tbl <- expand_model_out_grid(
-    config_tasks = config_tasks,
-    round_id = round_id,
-    all_character = FALSE,
-    force_output_types = TRUE,
-    output_types = only_cdf_or_quantile
-  )
 
-  # FIX for <https://github.com/hubverse-org/hubValidations/issues/78>
-  # sort the table by config by merging from config ----------------
-  tbl_sorted <- order_output_type_ids(tbl, reference_tbl)
-  # TODO: return an informative error or message if the table has no rows
-  # If this is the case, this likely means that there are invalid combinations
-  # of values.
-  output_type_tbl <- split_cdf_quantile(tbl_sorted)
+  if (!is.null(derived_task_ids)) {
+    tbl[derived_task_ids] <- NA_character_
+  }
 
+  # Check that values are non-decreasing for each output type separately to reduce
+  # memory pressure
   error_tbl <- purrr::map(
-    output_type_tbl,
-    check_values_ascending
+    check_output_types,
+    \(.x) {
+      check_values_ascending_by_output_type(
+        .x, tbl,
+        config_tasks, round_id,
+        derived_task_ids
+      )
+    }
   ) %>%
     purrr::list_rbind()
 
@@ -73,7 +67,41 @@ check_tbl_value_col_ascending <- function(tbl, file_path, hub_path, round_id) {
   )
 }
 
+#' Check that values for each model task in specific output types are ascending
+#'
+#' This function allows us to map over individual output types one at a time to
+#' reduce memory pressure.
+#' @param output_type the output type(s) to check. Must be a character vector
+#' @noRd
+check_values_ascending_by_output_type <- function(output_type, tbl,
+                                                  config_tasks, round_id,
+                                                  derived_task_ids) {
+  # FIX for <https://github.com/hubverse-org/hubValidations/issues/78>
+  # This function splits the table by model task (via
+  # `expand_model_out_grid(bind_model_tasks = FALSE)`) and then performs an
+  # inner join to auto-sort for this particular output type regardless if the
+  # output type is inherently sortable.
+  model_task_tbls <- match_tbl_to_model_task(
+    tbl,
+    config_tasks = config_tasks,
+    round_id = round_id,
+    output_types = output_type,
+    derived_task_ids = derived_task_ids
+  ) %>%
+    purrr::compact()
 
+  purrr::map(model_task_tbls, check_values_ascending) %>%
+    purrr::list_rbind()
+}
+
+#' Check that values for each model task are ascending
+#'
+#' @param tbl an all character table with a single output type
+#' @return
+#'  - If the check succeeds, and all values are non-decreasing: NULL
+#'  - If the check fails, a summary table showing the model tasks that
+#'    had decreasing values for this output type
+#' @noRd
 check_values_ascending <- function(tbl) {
   group_cols <- names(tbl)[!names(tbl) %in% hubUtils::std_colnames]
   tbl[["value"]] <- as.numeric(tbl[["value"]])
@@ -92,46 +120,4 @@ check_values_ascending <- function(tbl) {
     dplyr::select(-dplyr::all_of("non_asc")) %>%
     dplyr::ungroup() %>%
     dplyr::mutate(.env$output_type)
-}
-
-split_cdf_quantile <- function(tbl) {
-  split(tbl, tbl[["output_type"]])[c("cdf", "quantile")] %>%
-    purrr::compact()
-}
-
-#' Order the output type ids in the order of the config
-#'
-#' This function uses the output from [expand_model_out_grid()] to create
-#' a lookup table that contains the correct ordering for all of the output type
-#' IDs. Performing an inner join with this lookup table as the reference will
-#' auto sort the model output by the output type ID.
-#'
-#' @param tbl a model output table
-#' @param reference_tbl output from [expand_model_out_grid()]
-#'
-#' @note
-#' 1. this assumes that the output_type_id values in the `tbl` are complete,
-#'    which is explicitly checked by the [check_tbl_values_required()]
-#' 2. this assumes that both `tbl` and `reference_tbl` have the same column
-#'    types
-#' @noRd
-#' @examples
-#' reference_tbl <- data.frame(
-#'   target = c(rep("a", 3), rep("b", 5)),
-#'   output_type = rep("quantile", 8),
-#'   output_type_id = c("0", "0.5", "1", "0", "0.25", "0.5", "0.75", "1")
-#' )
-#' tbl <- reference_tbl
-#' tbl$value <- c(
-#'   seq(from = 0, to = 1, length.out = 3),
-#'   seq(from = 0, to = 1, length.out = 5)
-#' )
-#' order_output_type_ids(tbl[sample(nrow(tbl)), ] reference_tbl)
-order_output_type_ids <- function(tbl, reference_tbl) {
-  group_cols <- names(tbl)[!names(tbl) %in% hubUtils::std_colnames]
-  join_by <- c(group_cols, "output_type", "output_type_id")
-  lookup <- unique(reference_tbl[join_by])
-  tbl$output_type_id <- as.character(tbl$output_type_id)
-  lookup$output_type_id <- as.character(lookup$output_type_id)
-  dplyr::inner_join(lookup, tbl, by = join_by)
 }

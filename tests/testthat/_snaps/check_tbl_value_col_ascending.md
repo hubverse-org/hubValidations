@@ -36,9 +36,9 @@
        $ parent        : NULL
        $ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
        $ error_tbl     : tibble [1 x 5] (S3: tbl_df/tbl/data.frame)
-        ..$ origin_date: Date[1:1], format: "2022-10-08"
+        ..$ origin_date: chr "2022-10-08"
         ..$ target     : chr "wk inc flu hosp"
-        ..$ horizon    : int 1
+        ..$ horizon    : chr "1"
         ..$ location   : chr "US"
         ..$ output_type: chr "quantile"
        $ call          : chr "check_tbl_value_col_ascending"
@@ -57,9 +57,9 @@
        $ parent        : NULL
        $ where         : chr "hub-ensemble/2023-05-08-hub-ensemble.parquet"
        $ error_tbl     : tibble [1 x 5] (S3: tbl_df/tbl/data.frame)
-        ..$ forecast_date: Date[1:1], format: "2023-05-08"
-        ..$ horizon      : int 1
+        ..$ forecast_date: chr "2023-05-08"
         ..$ target       : chr "wk ahead inc flu hosp"
+        ..$ horizon      : chr "1"
         ..$ location     : chr "US"
         ..$ output_type  : chr "quantile"
        $ call          : chr "check_tbl_value_col_ascending"
@@ -78,9 +78,9 @@
        $ parent        : NULL
        $ where         : chr "hub-ensemble/2023-05-08-hub-ensemble.parquet"
        $ error_tbl     : tibble [1 x 5] (S3: tbl_df/tbl/data.frame)
-        ..$ forecast_date: Date[1:1], format: "2023-05-08"
-        ..$ horizon      : int 1
+        ..$ forecast_date: chr "2023-05-08"
         ..$ target       : chr "wk ahead inc flu hosp"
+        ..$ horizon      : chr "1"
         ..$ location     : chr "US"
         ..$ output_type  : chr "quantile"
        $ call          : chr "check_tbl_value_col_ascending"

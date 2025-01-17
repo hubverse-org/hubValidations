@@ -211,10 +211,11 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
 
   checks$value_col_non_desc <- try_check(
     check_tbl_value_col_ascending(
-      tbl,
+      tbl_chr,
       file_path = file_path,
       hub_path = hub_path,
-      round_id = round_id
+      round_id = round_id,
+      derived_task_ids = derived_task_ids
     ), file_path
   )
 
