@@ -1,4 +1,4 @@
-# hubValidations (development version)
+# hubValidations 0.10.1
 
 * `check_tbl_value_col_ascending()` will now use the order of the
   `output_type_id` values as defined in the schema. This ensures that the
