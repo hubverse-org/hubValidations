@@ -254,7 +254,7 @@ expand_model_out_grid <- function(config_tasks,
   # Expand output grid individually for each modeling task and output type.
   grid <- purrr::map2(
     task_id_l, output_type_l,
-    ~ expand_output_type_grid(
+    ~ expand_model_task_grid(
       task_id_values = .x,
       output_type_values = .y,
       all_output_types = all_output_types
