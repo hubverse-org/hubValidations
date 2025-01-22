@@ -377,10 +377,11 @@ fix_round_id <- function(x, round_id, round_config, round_ids) {
 # - padding with NA columns.
 # - applying the required schema and converting to arrow tables.
 # - binding multiple modeling task grids together.
-process_mt_grid_outputs <- function(x, config_tasks, all_character,
-                                    as_arrow_table = TRUE,
-                                    bind_model_tasks = TRUE,
-                                    output_type_id_datatype = output_type_id_datatype) {
+process_model_task_grids <- function(
+    x, config_tasks, all_character,
+    as_arrow_table = TRUE,
+    bind_model_tasks = TRUE,
+    output_type_id_datatype = output_type_id_datatype) {
   if (bind_model_tasks) {
     # To bind multiple modeling task grids together, we need to ensure they contain
     # the same columns. Any missing columns are padded with NAs.
