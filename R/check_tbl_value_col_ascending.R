@@ -58,10 +58,9 @@ check_tbl_value_col_ascending <- function(tbl, file_path, hub_path, round_id,
   capture_check_cnd(
     check = check,
     file_path = file_path,
-    msg_subject = "Values in {.var value} column",
-    msg_verbs = c("are non-decreasing", "are not non-decreasing"),
-    msg_attribute = "as output_type_ids increase for all unique task ID
-    value/output type combinations of quantile or cdf output types.",
+    msg_subject = "Quantile or cdf {.var value} values",
+    msg_verbs = c("increase", "do not all increase"),
+    msg_attribute = "when ordered by {.var output_type_id}.",
     details = details,
     error_tbl = error_tbl
   )

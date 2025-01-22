@@ -128,7 +128,7 @@
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ value_col_non_desc     :List of 5
-        ..$ message       : chr "Values in `value` column are non-decreasing as output_type_ids increase for all unique task ID\n    value/outpu"| __truncated__
+        ..$ message       : chr "Quantile or cdf `value` values increase when ordered by `output_type_id`. \n "
         ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
         ..$ error_tbl     : NULL
         ..$ call          : chr "check_tbl_value_col_ascending"
@@ -406,7 +406,7 @@
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ value_col_non_desc       :List of 5
-        ..$ message       : chr "Values in `value` column are non-decreasing as output_type_ids increase for all unique task ID\n    value/outpu"| __truncated__
+        ..$ message       : chr "Quantile or cdf `value` values increase when ordered by `output_type_id`. \n "
         ..$ where         : 'fs_path' chr "hub-baseline/2022-10-08-hub-baseline.csv"
         ..$ error_tbl     : NULL
         ..$ call          : chr "check_tbl_value_col_ascending"
@@ -562,7 +562,7 @@
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ value_col_non_desc_1     :List of 5
-        ..$ message       : chr "Values in `value` column are non-decreasing as output_type_ids increase for all unique task ID\n    value/outpu"| __truncated__
+        ..$ message       : chr "Quantile or cdf `value` values increase when ordered by `output_type_id`. \n "
         ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
         ..$ error_tbl     : NULL
         ..$ call          : chr "check_tbl_value_col_ascending"
@@ -753,7 +753,7 @@
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ value_col_non_desc       :List of 5
-        ..$ message       : chr "Values in `value` column are non-decreasing as output_type_ids increase for all unique task ID\n    value/outpu"| __truncated__
+        ..$ message       : chr "Quantile or cdf `value` values increase when ordered by `output_type_id`. \n "
         ..$ where         : 'fs_path' chr "hub-baseline/2022-10-08-hub-baseline.csv"
         ..$ error_tbl     : NULL
         ..$ call          : chr "check_tbl_value_col_ascending"
@@ -909,7 +909,7 @@
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ value_col_non_desc_1     :List of 5
-        ..$ message       : chr "Values in `value` column are non-decreasing as output_type_ids increase for all unique task ID\n    value/outpu"| __truncated__
+        ..$ message       : chr "Quantile or cdf `value` values increase when ordered by `output_type_id`. \n "
         ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
         ..$ error_tbl     : NULL
         ..$ call          : chr "check_tbl_value_col_ascending"
@@ -1094,7 +1094,7 @@
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ value_col_non_desc       :List of 5
-        ..$ message       : chr "Values in `value` column are non-decreasing as output_type_ids increase for all unique task ID\n    value/outpu"| __truncated__
+        ..$ message       : chr "Quantile or cdf `value` values increase when ordered by `output_type_id`. \n "
         ..$ where         : 'fs_path' chr "hub-baseline/2022-10-08-hub-baseline.csv"
         ..$ error_tbl     : NULL
         ..$ call          : chr "check_tbl_value_col_ascending"
@@ -1250,7 +1250,7 @@
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ value_col_non_desc_1     :List of 5
-        ..$ message       : chr "Values in `value` column are non-decreasing as output_type_ids increase for all unique task ID\n    value/outpu"| __truncated__
+        ..$ message       : chr "Quantile or cdf `value` values increase when ordered by `output_type_id`. \n "
         ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
         ..$ error_tbl     : NULL
         ..$ call          : chr "check_tbl_value_col_ascending"
@@ -1417,7 +1417,7 @@
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ value_col_non_desc       :List of 5
-        ..$ message       : chr "Values in `value` column are non-decreasing as output_type_ids increase for all unique task ID\n    value/outpu"| __truncated__
+        ..$ message       : chr "Quantile or cdf `value` values increase when ordered by `output_type_id`. \n "
         ..$ where         : 'fs_path' chr "hub-baseline/2022-10-08-hub-baseline.csv"
         ..$ error_tbl     : NULL
         ..$ call          : chr "check_tbl_value_col_ascending"
@@ -1573,7 +1573,7 @@
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ value_col_non_desc_1     :List of 5
-        ..$ message       : chr "Values in `value` column are non-decreasing as output_type_ids increase for all unique task ID\n    value/outpu"| __truncated__
+        ..$ message       : chr "Quantile or cdf `value` values increase when ordered by `output_type_id`. \n "
         ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
         ..$ error_tbl     : NULL
         ..$ call          : chr "check_tbl_value_col_ascending"
@@ -1756,7 +1756,7 @@
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ value_col_non_desc       :List of 5
-        ..$ message       : chr "Values in `value` column are non-decreasing as output_type_ids increase for all unique task ID\n    value/outpu"| __truncated__
+        ..$ message       : chr "Quantile or cdf `value` values increase when ordered by `output_type_id`. \n "
         ..$ where         : 'fs_path' chr "hub-baseline/2022-10-08-hub-baseline.csv"
         ..$ error_tbl     : NULL
         ..$ call          : chr "check_tbl_value_col_ascending"
@@ -1912,7 +1912,7 @@
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ value_col_non_desc_1     :List of 5
-        ..$ message       : chr "Values in `value` column are non-decreasing as output_type_ids increase for all unique task ID\n    value/outpu"| __truncated__
+        ..$ message       : chr "Quantile or cdf `value` values increase when ordered by `output_type_id`. \n "
         ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
         ..$ error_tbl     : NULL
         ..$ call          : chr "check_tbl_value_col_ascending"
@@ -2119,7 +2119,7 @@
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ value_col_non_desc  :List of 5
-        ..$ message       : chr "Values in `value` column are non-decreasing as output_type_ids increase for all unique task ID\n    value/outpu"| __truncated__
+        ..$ message       : chr "Quantile or cdf `value` values increase when ordered by `output_type_id`. \n "
         ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
         ..$ error_tbl     : NULL
         ..$ call          : chr "check_tbl_value_col_ascending"

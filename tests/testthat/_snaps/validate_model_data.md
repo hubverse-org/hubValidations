@@ -79,7 +79,7 @@
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ value_col_non_desc  :List of 5
-        ..$ message       : chr "Values in `value` column are non-decreasing as output_type_ids increase for all unique task ID\n    value/outpu"| __truncated__
+        ..$ message       : chr "Quantile or cdf `value` values increase when ordered by `output_type_id`. \n "
         ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
         ..$ error_tbl     : NULL
         ..$ call          : chr "check_tbl_value_col_ascending"
@@ -218,7 +218,7 @@
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ value_col_non_desc  :List of 5
-        ..$ message       : chr "Values in `value` column are non-decreasing as output_type_ids increase for all unique task ID\n    value/outpu"| __truncated__
+        ..$ message       : chr "Quantile or cdf `value` values increase when ordered by `output_type_id`. \n "
         ..$ where         : chr "hub-ensemble/2023-05-08-hub-ensemble.parquet"
         ..$ error_tbl     : NULL
         ..$ call          : chr "check_tbl_value_col_ascending"
@@ -271,7 +271,7 @@
       v [rows_unique]: All combinations of task ID column/`output_type`/`output_type_id` values are unique.
       v [req_vals]: Required task ID/output type/output type ID combinations all present.
       v [value_col_valid]: Values in column `value` all valid with respect to modeling task config.
-      v [value_col_non_desc]: Values in `value` column are non-decreasing as output_type_ids increase for all unique task ID value/output type combinations of quantile or cdf output types.
+      v [value_col_non_desc]: Quantile or cdf `value` values increase when ordered by `output_type_id`.
       i [value_col_sum1]: No pmf output types to check for sum of 1. Check skipped.
 
 # validate_model_data print method work [ansi]
@@ -293,7 +293,7 @@
       [32mv[39m [90m[rows_unique][39m: All combinations of task ID column/`output_type`/`output_type_id` values are unique.
       [32mv[39m [90m[req_vals][39m: Required task ID/output type/output type ID combinations all present.
       [32mv[39m [90m[value_col_valid][39m: Values in column `value` all valid with respect to modeling task config.
-      [32mv[39m [90m[value_col_non_desc][39m: Values in `value` column are non-decreasing as output_type_ids increase for all unique task ID value/output type combinations of quantile or cdf output types.
+      [32mv[39m [90m[value_col_non_desc][39m: Quantile or cdf `value` values increase when ordered by `output_type_id`.
       [36mi[39m [90m[value_col_sum1][39m: No pmf output types to check for sum of 1. Check skipped.
 
 # validate_model_data print method work [unicode]
@@ -315,7 +315,7 @@
       ✔ [rows_unique]: All combinations of task ID column/`output_type`/`output_type_id` values are unique.
       ✔ [req_vals]: Required task ID/output type/output type ID combinations all present.
       ✔ [value_col_valid]: Values in column `value` all valid with respect to modeling task config.
-      ✔ [value_col_non_desc]: Values in `value` column are non-decreasing as output_type_ids increase for all unique task ID value/output type combinations of quantile or cdf output types.
+      ✔ [value_col_non_desc]: Quantile or cdf `value` values increase when ordered by `output_type_id`.
       ℹ [value_col_sum1]: No pmf output types to check for sum of 1. Check skipped.
 
 # validate_model_data print method work [fancy]
@@ -337,7 +337,7 @@
       [32m✔[39m [90m[rows_unique][39m: All combinations of task ID column/`output_type`/`output_type_id` values are unique.
       [32m✔[39m [90m[req_vals][39m: Required task ID/output type/output type ID combinations all present.
       [32m✔[39m [90m[value_col_valid][39m: Values in column `value` all valid with respect to modeling task config.
-      [32m✔[39m [90m[value_col_non_desc][39m: Values in `value` column are non-decreasing as output_type_ids increase for all unique task ID value/output type combinations of quantile or cdf output types.
+      [32m✔[39m [90m[value_col_non_desc][39m: Quantile or cdf `value` values increase when ordered by `output_type_id`.
       [36mℹ[39m [90m[value_col_sum1][39m: No pmf output types to check for sum of 1. Check skipped.
 
 # validate_model_data errors correctly
