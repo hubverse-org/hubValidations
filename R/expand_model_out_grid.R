@@ -356,16 +356,14 @@ fix_round_id <- function(x, round_id, round_config, round_ids) {
     round_id_var <- round_config[["round_id"]]
     purrr::map(
       x,
-      function(.x) {
-        purrr::imap(
-          .x,
-          function(.x, .y) {
-            if (.y == round_id_var) {
-              list(required = round_id, optional = NULL)
-            } else {
-              .x
-            }
-          }
+      function(model_task) {
+        purrr::modify_at(
+          model_task,
+          .at = round_id_var,
+          .f = ~ list(
+            required = round_id,
+            optional = NULL
+          )
         )
       }
     )
