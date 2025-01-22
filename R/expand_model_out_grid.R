@@ -268,7 +268,7 @@ expand_model_out_grid <- function(config_tasks,
     grid <- add_sample_idx(grid, round_config, config_tid, compound_taskid_set)
   }
 
-  process_mt_grid_outputs(
+  process_model_task_grids(
     grid,
     config_tasks,
     all_character = all_character,
