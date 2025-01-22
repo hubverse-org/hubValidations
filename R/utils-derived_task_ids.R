@@ -1,4 +1,14 @@
-# Set derived task_ids to all NULL values.
+#' Set derived task_ids to have `NA` values when creating expanded grids of valid
+#' values
+#'
+#' @param model_task A single `model_task` object.
+#' @param derived_task_ids character vector of derived task ID names.
+#'
+#' @returns If `derived_task_ids` is not `NULL`, a modified `model_task` object
+#' with the `required` values of any derived task IDs set to `NULL` and the
+#' `optional` values set to `NA`. Otherwise, the original `model_task` object
+#' is returned.
+#' @noRd
 derived_taskids_to_na <- function(model_task, derived_task_ids) {
   if (!is.null(derived_task_ids)) {
     purrr::modify_at(
@@ -14,6 +24,17 @@ derived_taskids_to_na <- function(model_task, derived_task_ids) {
   }
 }
 
+#' Ensure that derived task IDs are valid task IDs and do not have required values.
+#'
+#' @param derived_task_ids character vector of derived task ID names.
+#' @param config_tasks A `config_tasks` object.
+#' @param round_id character string. The round ID.
+#'
+#' @returns If `derived_task_ids` is `NULL`, `NULL` is returned. Otherwise, a
+#' character vector of valid task IDs is returned.
+#' If any `derived_task_ids` are not valid task IDs, a warning is thrown.
+#' If any `derived_task_ids` have required values, an error is thrown.
+#' @noRd
 validate_derived_task_ids <- function(derived_task_ids, config_tasks, round_id) {
   checkmate::assert_character(derived_task_ids, null.ok = TRUE)
   if (is.null(derived_task_ids)) {
