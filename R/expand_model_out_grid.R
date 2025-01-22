@@ -472,14 +472,20 @@ null_taskids_to_na <- function(model_task) {
 # `required` and `optional` or just `required` vectors of values as appropriate for
 # each output type in each model task in the round.
 extract_round_output_type_ids <- function(x, config_tid, force_output_types = FALSE) {
-  purrr::map(x, ~ extract_mt_output_type_ids(.x, config_tid, force_output_types))
+  purrr::map(
+    x, ~ extract_model_task_output_type_ids(
+      .x,
+      config_tid,
+      force_output_types
+    )
+  )
 }
 # Extract the output_type_id values from a model_task object.
 # config_tid is the name of the output_type_id column in the config schema used
 # for back-compatibility with schema versions < v2.0.0. Returns a list of
 # `required` and `optional` or just `required` vectors of values as appropriate for
 # each output type in the model task.
-extract_mt_output_type_ids <- function(x, config_tid, force_output_types = FALSE) {
+extract_model_task_output_type_ids <- function(x, config_tid, force_output_types = FALSE) {
   purrr::map(
     x,
     function(.x) {
