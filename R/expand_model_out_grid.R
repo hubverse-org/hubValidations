@@ -607,13 +607,16 @@ extract_round_output_type_ids <- function(x, config_tid, force_output_types = FA
 #' @returns a named list of standardised `output_type_id` objects, one element
 #' for each output type in a given the model task.
 #' @noRd
-extract_model_task_output_type_ids <- function(x, config_tid, force_output_types = FALSE) {
+extract_model_task_output_type_ids <- function(x, config_tid,
+                                               force_output_types = FALSE) {
   purrr::map(
     x,
     function(output_type) {
+      is_required <- is_required_output_type(output_type) || force_output_types
       process_output_type_ids(
         output_type_ids = output_type[[config_tid]],
-        force_output_types = force_output_types
+        force_output_types = force_output_types,
+        is_required = is_required
       )
     }
   )
@@ -630,12 +633,14 @@ extract_model_task_output_type_ids <- function(x, config_tid, force_output_types
 #' required. Used for forcing consistent behaviour when formatting pre v4 output
 #' type IDs to conform to the post v4 expectation of all output type IDs being
 #' required when an output type is requested.
+#' @param is_required Logical. Whether the output type is required.
 #'
 #' @returns A standardised `output_type_id` object that has a `required` and
 #' `optional` element.
 #' @noRd
 process_output_type_ids <- function(output_type_ids,
-                                    force_output_types) {
+                                    force_output_types,
+                                    is_required) {
   is_std <- std_output_type_ids(output_type_ids)
   if (is_std && !force_output_types) {
     return(output_type_ids)
@@ -643,6 +648,5 @@ process_output_type_ids <- function(output_type_ids,
   if (is_std && force_output_types) {
     return(as_required(output_type_ids))
   }
-  is_required <- is_required_output_type(output_type) || force_output_types
   standardise_output_types_ids(output_type_ids, is_required)
 }
