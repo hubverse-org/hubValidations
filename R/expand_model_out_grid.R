@@ -239,7 +239,7 @@ expand_model_out_grid <- function(config_tasks,
       round_config = round_config,
       round_ids = hubUtils::get_round_ids(config_tasks)
     ) %>%
-    process_grid_inputs(required_vals_only = required_vals_only)
+    extract_property_values(required_vals_only = required_vals_only)
 
   # Get output type id property according to config schema version
   # TODO: remove back-compatibility with schema versions < v2.0.0 when support
@@ -248,7 +248,7 @@ expand_model_out_grid <- function(config_tasks,
 
   output_type_l <- subset_round_output_types(round_config, output_types) %>%
     extract_round_output_type_ids(config_tid, force_output_types) %>%
-    process_grid_inputs(required_vals_only = required_vals_only) %>%
+    extract_property_values(required_vals_only = required_vals_only) %>%
     purrr::map(~ purrr::compact(.x))
 
   # Expand output grid individually for each modeling task and output type.
@@ -302,7 +302,7 @@ subset_mt_output_types <- function(model_task, output_types) {
 
 # Extracts/collapses individual task ID values depending on whether all or just required
 # values are needed.
-process_grid_inputs <- function(x, required_vals_only = FALSE) {
+extract_property_values <- function(x, required_vals_only = FALSE) {
   if (required_vals_only) {
     purrr::map(x, ~ .x %>% purrr::map(~ .x[["required"]]))
   } else {
