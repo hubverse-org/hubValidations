@@ -4,6 +4,7 @@
   `output_type_id` values as defined in the schema. This ensures that the
   `output_type_id`s for `cdf` output types are always sorted in the correct
   order (#78).
+* Shortened the `check_tbl_value_col_ascending()` check message to improve readability (#143).
 
 # hubValidations 0.10.0
 
