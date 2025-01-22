@@ -7,7 +7,7 @@
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/hubverse-org/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubValidations</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.10.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.10.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -133,11 +133,11 @@ see <a href="https://hubverse-org.github.io/hubValidations/articles/hub-validati
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Note that it is <strong>necessary for <code>derived_task_ids</code> to be specified if any of
-the task IDs a derived task ID depends on have required values</strong>. If this is the
-case and derived task IDs are not specified, the dependent nature of derived
-task ID values will result in <strong>false validation errors when validating
-required values</strong>.</p>
+    <p>Note that it is <strong>necessary for <code>derived_task_ids</code> to be specified if any
+task IDs with <code>required</code> values have dependent derived task IDs</strong>. If this
+is the case and derived task IDs are not specified, the dependent nature of
+derived task ID values will result in <strong>false validation errors when
+validating required values</strong>.</p>
 <p>Details of checks performed by <code>validate_model_data()</code>
 </p><table class="table table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;"><thead><tr><th style="text-align:left;"> Name </th>
    <th style="text-align:left;"> Check </th>
@@ -259,9 +259,8 @@ the compound idx in question. </td>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   present.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[value_col_valid]</span>: Values in column `value` all valid with respect to</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   modeling task config.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[value_col_non_desc]</span>: Values in `value` column are non-decreasing as</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   output_type_ids increase for all unique task ID value/output type</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   combinations of quantile or cdf output types.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[value_col_non_desc]</span>: Quantile or cdf `value` values increase when ordered by</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   `output_type_id`.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[value_col_sum1]</span>: No pmf output types to check for sum of 1. Check skipped.</span>
 </code></pre></div>
     </div>

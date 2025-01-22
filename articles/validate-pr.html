@@ -26,7 +26,7 @@
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/hubverse-org/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubValidations</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.10.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.10.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -163,8 +163,8 @@ values grid, the sizes these grids can reach as function of config
 complexity can often put excessive strain on the system’s memory,
 affecting overall performance of PR validation.</p>
 <div class="alert alert-warning" role="alert">
-<p>Note that, <strong>if any of the task IDs a derived task ID depends
-on have required values, it is essential for
+<p>Note that, <strong>if any task IDs with <code>required</code> values
+have dependent derived task IDs, it is essential for
 <code>derived_task_ids</code> to be specified</strong>. If this is the
 case and derived task IDs are not specified, the dependent nature of
 derived task ID values will result in <strong>false validation errors
@@ -302,9 +302,8 @@ within their allowed submission window.</p>
 <span><span class="co">#&gt;   present.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[value_col_valid]</span>: Values in column `value` all valid with respect to</span></span>
 <span><span class="co">#&gt;   modeling task config.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[value_col_non_desc]</span>: Values in `value` column are non-decreasing as</span></span>
-<span><span class="co">#&gt;   output_type_ids increase for all unique task ID value/output type</span></span>
-<span><span class="co">#&gt;   combinations of quantile or cdf output types.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[value_col_non_desc]</span>: Quantile or cdf `value` values increase when ordered by</span></span>
+<span><span class="co">#&gt;   `output_type_id`.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[value_col_sum1]</span>: No pmf output types to check for sum of 1. Check skipped.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[spl_compound_taskid_set]</span>: No v3 samples found in model output data to check.</span></span>
 <span><span class="co">#&gt;   Skipping `check_tbl_spl_compound_taskid_set` check.</span></span>
@@ -365,9 +364,8 @@ within their allowed submission window.</p>
 <span><span class="co">#&gt;   present.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[value_col_valid_1]</span>: Values in column `value` all valid with respect to</span></span>
 <span><span class="co">#&gt;   modeling task config.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[value_col_non_desc_1]</span>: Values in `value` column are non-decreasing as</span></span>
-<span><span class="co">#&gt;   output_type_ids increase for all unique task ID value/output type</span></span>
-<span><span class="co">#&gt;   combinations of quantile or cdf output types.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[value_col_non_desc_1]</span>: Quantile or cdf `value` values increase when ordered</span></span>
+<span><span class="co">#&gt;   by `output_type_id`.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[value_col_sum1_1]</span>: No pmf output types to check for sum of 1. Check skipped.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[spl_compound_taskid_set_1]</span>: No v3 samples found in model output data to</span></span>
 <span><span class="co">#&gt;   check. Skipping `check_tbl_spl_compound_taskid_set` check.</span></span>
@@ -602,9 +600,8 @@ summarising the results of checks that failed, argument
 <span><span class="co">#&gt;   present.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[value_col_valid]</span>: Values in column `value` all valid with respect to</span></span>
 <span><span class="co">#&gt;   modeling task config.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[value_col_non_desc]</span>: Values in `value` column are non-decreasing as</span></span>
-<span><span class="co">#&gt;   output_type_ids increase for all unique task ID value/output type</span></span>
-<span><span class="co">#&gt;   combinations of quantile or cdf output types.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[value_col_non_desc]</span>: Quantile or cdf `value` values increase when ordered by</span></span>
+<span><span class="co">#&gt;   `output_type_id`.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[value_col_sum1]</span>: No pmf output types to check for sum of 1. Check skipped.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[spl_compound_taskid_set]</span>: No v3 samples found in model output data to check.</span></span>
 <span><span class="co">#&gt;   Skipping `check_tbl_spl_compound_taskid_set` check.</span></span>

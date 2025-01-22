@@ -7,7 +7,7 @@
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/hubverse-org/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubValidations</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.10.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.10.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -193,11 +193,11 @@ currently <code>allow_submit_window_mods</code> will not work correctly and is b
 to <code>FALSE</code>. This only relates to hubs/rounds where submission windows are
 determined relative to a reference date and not when explicit submission
 window start and end dates are provided in the config.</p>
-<p>Finally, note that it is <strong>necessary for <code>derived_task_ids</code> to be specified if any of
-the task IDs a derived task ID depends on have required values</strong>. If this is the
-case and derived task IDs are not specified, the dependent nature of derived
-task ID values will result in <strong>false validation errors when validating
-required values</strong>.</p><div class="section">
+<p>Finally, note that it is <strong>necessary for <code>derived_task_ids</code> to be specified if any
+task IDs with <code>required</code> values have dependent derived task IDs</strong>. If this
+is the case and derived task IDs are not specified, the dependent nature of
+derived task ID values will result in <strong>false validation errors when
+validating required values</strong>.</p><div class="section">
 <h3 id="checks-on-model-output-files">Checks on model output files<a class="anchor" aria-label="anchor" href="#checks-on-model-output-files"></a></h3>
 
 
