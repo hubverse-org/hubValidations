@@ -5,7 +5,7 @@
     Output
       <message/check_success>
       Message:
-      Values in `value` column are non-decreasing as output_type_ids increase for all unique task ID value/output type combinations of quantile or cdf output types.
+      Quantile or cdf `value` values increase when ordered by `output_type_id`.
 
 ---
 
@@ -14,7 +14,7 @@
     Output
       <message/check_success>
       Message:
-      Values in `value` column are non-decreasing as output_type_ids increase for all unique task ID value/output type combinations of quantile or cdf output types.
+      Quantile or cdf `value` values increase when ordered by `output_type_id`.
 
 # check_tbl_value_col_ascending works when output type IDs not ordered
 
@@ -23,7 +23,7 @@
     Output
       <message/check_success>
       Message:
-      Values in `value` column are non-decreasing as output_type_ids increase for all unique task ID value/output type combinations of quantile or cdf output types.
+      Quantile or cdf `value` values increase when ordered by `output_type_id`.
 
 # check_tbl_value_col_ascending errors correctly
 
@@ -31,7 +31,7 @@
       str(check_tbl_value_col_ascending(tbl, file_path, hub_path, file_meta$round_id))
     Output
       List of 7
-       $ message       : chr "Values in `value` column are not non-decreasing as output_type_ids increase for all unique task ID\n    value/o"| __truncated__
+       $ message       : chr "Quantile or cdf `value` values do not all increase when ordered by `output_type_id`. \n See `error_tbl` attribute for details."
        $ trace         : NULL
        $ parent        : NULL
        $ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
@@ -52,7 +52,7 @@
         round_id))
     Output
       List of 7
-       $ message       : chr "Values in `value` column are not non-decreasing as output_type_ids increase for all unique task ID\n    value/o"| __truncated__
+       $ message       : chr "Quantile or cdf `value` values do not all increase when ordered by `output_type_id`. \n See `error_tbl` attribute for details."
        $ trace         : NULL
        $ parent        : NULL
        $ where         : chr "hub-ensemble/2023-05-08-hub-ensemble.parquet"
@@ -73,7 +73,7 @@
       file_meta$round_id))
     Output
       List of 7
-       $ message       : chr "Values in `value` column are not non-decreasing as output_type_ids increase for all unique task ID\n    value/o"| __truncated__
+       $ message       : chr "Quantile or cdf `value` values do not all increase when ordered by `output_type_id`. \n See `error_tbl` attribute for details."
        $ trace         : NULL
        $ parent        : NULL
        $ where         : chr "hub-ensemble/2023-05-08-hub-ensemble.parquet"
