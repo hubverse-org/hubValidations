@@ -57,16 +57,11 @@ spl_hash_tbl <- function(tbl, round_id, config_tasks, compound_taskid_set = NULL
     mt_spl_grid,
     function(.x) {
       if (nrow(.x) == 0L) {
-        NULL
-      } else {
-        dplyr::rename(.x, compound_idx = "output_type_id") %>%
-          dplyr::inner_join(tbl, .,
-            by = setdiff(
-              names(tbl),
-              c("output_type_id", "compound_idx")
-            )
-          )
+        return(NULL)
       }
+      join_by <- setdiff(names(tbl), c("output_type_id", "compound_idx"))
+      mt_spl <- dplyr::rename(.x, compound_idx = "output_type_id")
+      dplyr::inner_join(tbl, mt_spl, by = join_by)
     }
   )
 
