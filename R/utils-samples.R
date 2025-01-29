@@ -353,22 +353,19 @@ add_mt_sample_idx <- function(x, config, start_idx = 0L, config_tid, comp_tids =
     "type"
   )
 
-  if (is.null(comp_tids)) {
-    comp_tids <- names(spl)
-  } else {
-    # Check whether some compound task IDs have only optional values
-    # (i.e. the columns are missing in spl) and warn.
-    # Only do so though if a specific compound task ID set is provided in the config.
-    opt_comp_tids <- setdiff(comp_tids, names(spl))
-    if (length(opt_comp_tids) > 0) {
-      cli::cli_warn(
-        "The compound task ID{?s} {.field {opt_comp_tids}} ha{?s/ve} all optional values.
+  # Check whether some compound task IDs have only optional values
+  # (i.e. the columns are missing in spl) and warn.
+  # Only do so though if a specific compound task ID set is provided in the config.
+  opt_comp_tids <- setdiff(comp_tids, names(spl))
+  if (length(opt_comp_tids) > 0) {
+    cli::cli_warn(
+      "The compound task ID{?s} {.field {opt_comp_tids}} ha{?s/ve} all optional values.
       Representation of compound sample modeling tasks is not fully specified."
-      )
-    }
-    # subset to compound task IDs that are present in spl
-    comp_tids <- intersect(comp_tids, names(spl))
+    )
   }
+  # subset to compound task IDs that are present in spl
+  comp_tids <- intersect(comp_tids, names(spl))
+
 
   # Create a unique sample ID for each unique combinations of values of compound
   # task ID set columns and join to the subset of sample output type rows.
