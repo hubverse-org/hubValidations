@@ -5,23 +5,28 @@
 \title{Create a model output submission file template}
 \usage{
 submission_tmpl(
-  hub_con,
-  config_tasks,
+  hub_path,
   round_id,
   required_vals_only = FALSE,
   force_output_types = FALSE,
   complete_cases_only = TRUE,
   compound_taskid_set = NULL,
   output_types = NULL,
-  derived_task_ids = NULL
+  derived_task_ids = NULL,
+  hub_con = deprecated(),
+  config_tasks = deprecated()
 )
 }
 \arguments{
-\item{hub_con}{A \verb{⁠<hub_connection}>⁠ class object.}
-
-\item{config_tasks}{a list version of the content's of a hub's \code{tasks.json}
-config file, accessed through the \code{"config_tasks"} attribute of a \verb{<hub_connection>}
-object or function \code{\link[hubUtils:read_config]{hubUtils::read_config()}}.}
+\item{hub_path}{Either a character string path to a local Modeling Hub directory
+or an object of class \verb{<SubTreeFileSystem>} created using functions \code{\link[hubData:s3_bucket]{s3_bucket()}}
+or \code{\link[hubData:gs_bucket]{gs_bucket()}} by providing a string S3 or GCS bucket name or path to a
+Modeling Hub directory stored in the cloud.
+For more details consult the
+\href{https://arrow.apache.org/docs/r/articles/fs.html}{Using cloud storage (S3, GCS)}
+in the \code{arrow} package.
+The hub must be fully configured with valid \code{admin.json} and \code{tasks.json}
+files within the \code{hub-config} directory.}
 
 \item{round_id}{Character string. Round identifier. If the round is set to
 \code{round_id_from_variable: true}, IDs are values of the task ID defined in the round's
@@ -56,6 +61,14 @@ contain \code{NA}s.
 If \code{NULL}, defaults to extracting derived task IDs from \code{config_tasks} or
 the \code{config_tasks} attribute of \code{hub_con}. See \code{\link[=get_config_derived_task_ids]{get_config_derived_task_ids()}}
 for more details.}
+
+\item{hub_con}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{hub_path} instead. A
+\verb{⁠<hub_connection>⁠} class object.}
+
+\item{config_tasks}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{hub_path} instead.
+A list version of the content's of a hub's \code{tasks.json} config file,
+accessed through the \code{"config_tasks"} attribute of a \verb{<hub_connection>}
+object or function \code{\link[=read_config]{read_config()}}.}
 }
 \value{
 a tibble template containing an expanded grid of valid task ID and
@@ -98,76 +111,57 @@ specified in \code{round_id} property of \code{config_tasks}) is set to the valu
 \code{round_id} argument in the returned output.
 }
 \examples{
-hub_con <- hubData::connect_hub(
-  system.file("testhubs/flusight", package = "hubUtils")
-)
-submission_tmpl(hub_con, round_id = "2023-01-02")
+hub_path <- system.file("testhubs/flusight", package = "hubUtils")
+submission_tmpl(hub_path, round_id = "2023-01-02")
 submission_tmpl(
-  hub_con,
+  hub_path,
   round_id = "2023-01-02",
   required_vals_only = TRUE
 )
 submission_tmpl(
-  hub_con,
+  hub_path,
   round_id = "2023-01-02",
   required_vals_only = TRUE,
   complete_cases_only = FALSE
 )
 # Specifying a round in a hub with multiple rounds
-hub_con <- hubData::connect_hub(
-  system.file("testhubs/simple", package = "hubUtils")
-)
-submission_tmpl(hub_con, round_id = "2022-10-01")
-submission_tmpl(hub_con, round_id = "2022-10-29")
-submission_tmpl(hub_con,
+hub_path <- system.file("testhubs/simple", package = "hubUtils")
+submission_tmpl(hub_path, round_id = "2022-10-01")
+submission_tmpl(hub_path, round_id = "2022-10-29")
+submission_tmpl(hub_path,
   round_id = "2022-10-29",
   required_vals_only = TRUE
 )
-submission_tmpl(hub_con,
+submission_tmpl(hub_path,
   round_id = "2022-10-29",
   required_vals_only = TRUE,
   complete_cases_only = FALSE
 )
 # Hub with sample output type
-config_tasks <- read_config_file(system.file("config", "tasks.json",
-  package = "hubValidations"
-))
-submission_tmpl(
-  config_tasks = config_tasks,
-  round_id = "2022-12-26"
-)
-# Hub with sample output type and compound task ID structure
-config_tasks <- read_config_file(system.file("config", "tasks-comp-tid.json",
-  package = "hubValidations"
-))
-submission_tmpl(
-  config_tasks = config_tasks,
-  round_id = "2022-12-26"
-)
+hub_path <- system.file("testhubs", "samples", package = "hubValidations")
+submission_tmpl(hub_path, round_id = "2022-12-17")
 # Override config compound task ID set
 # Create coarser compound task ID set for the first modeling task which contains
 # samples
 submission_tmpl(
-  config_tasks = config_tasks,
-  round_id = "2022-12-26",
+  hub_path,
+  round_id = "2022-12-17",
   compound_taskid_set = list(
-    c("forecast_date", "target"),
-    NULL
+    NULL,
+    "reference_date"
   )
 )
 # Subsetting for a single output type
 submission_tmpl(
-  config_tasks = config_tasks,
-  round_id = "2022-12-26",
+  hub_path,
+  round_id = "2022-12-17",
   output_types = "sample"
 )
 # Derive a template with ignored derived task ID. Useful to avoid creating
 # a template with invalid derived task ID value combinations.
-config_tasks <- read_config(
-  system.file("testhubs", "flusight", package = "hubValidations")
-)
+hub_path <- system.file("testhubs", "flusight", package = "hubValidations")
 submission_tmpl(
-  config_tasks = config_tasks,
+  hub_path,
   round_id = "2022-12-12",
   output_types = "pmf",
   derived_task_ids = "target_end_date",
@@ -175,7 +169,7 @@ submission_tmpl(
 )
 # Force optional output type, in this case "mean".
 submission_tmpl(
-  config_tasks = config_tasks,
+  hub_path,
   round_id = "2022-12-12",
   required_vals_only = TRUE,
   output_types = c("pmf", "quantile", "mean"),

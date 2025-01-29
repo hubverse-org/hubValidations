@@ -1,7 +1,13 @@
 #' Create a model output submission file template
 #'
-#' @param hub_con A `⁠<hub_connection`>⁠ class object.
+#' @param hub_con `r lifecycle::badge("deprecated")` Use `hub_path` instead. A
+#' `⁠<hub_connection>⁠` class object.
+#' @param config_tasks `r lifecycle::badge("deprecated")` Use `hub_path` instead.
+#'  A list version of the content's of a hub's `tasks.json` config file,
+#'  accessed through the `"config_tasks"` attribute of a `<hub_connection>`
+#'  object or function [read_config()].
 #' @inheritParams expand_model_out_grid
+#' @inheritParams check_valid_round_id
 #' @param derived_task_ids Character vector of derived task ID names (task IDs whose
 #' values depend on other task IDs) to ignore. Columns for such task ids will
 #' contain `NA`s.
@@ -49,78 +55,60 @@
 #' specified in `round_id` property of `config_tasks`) is set to the value of the
 #' `round_id` argument in the returned output.
 #' @export
+#' @importFrom lifecycle deprecated
 #'
 #' @examples
-#' hub_con <- hubData::connect_hub(
-#'   system.file("testhubs/flusight", package = "hubUtils")
-#' )
-#' submission_tmpl(hub_con, round_id = "2023-01-02")
+#' hub_path <- system.file("testhubs/flusight", package = "hubUtils")
+#' submission_tmpl(hub_path, round_id = "2023-01-02")
 #' submission_tmpl(
-#'   hub_con,
+#'   hub_path,
 #'   round_id = "2023-01-02",
 #'   required_vals_only = TRUE
 #' )
 #' submission_tmpl(
-#'   hub_con,
+#'   hub_path,
 #'   round_id = "2023-01-02",
 #'   required_vals_only = TRUE,
 #'   complete_cases_only = FALSE
 #' )
 #' # Specifying a round in a hub with multiple rounds
-#' hub_con <- hubData::connect_hub(
-#'   system.file("testhubs/simple", package = "hubUtils")
-#' )
-#' submission_tmpl(hub_con, round_id = "2022-10-01")
-#' submission_tmpl(hub_con, round_id = "2022-10-29")
-#' submission_tmpl(hub_con,
+#' hub_path <- system.file("testhubs/simple", package = "hubUtils")
+#' submission_tmpl(hub_path, round_id = "2022-10-01")
+#' submission_tmpl(hub_path, round_id = "2022-10-29")
+#' submission_tmpl(hub_path,
 #'   round_id = "2022-10-29",
 #'   required_vals_only = TRUE
 #' )
-#' submission_tmpl(hub_con,
+#' submission_tmpl(hub_path,
 #'   round_id = "2022-10-29",
 #'   required_vals_only = TRUE,
 #'   complete_cases_only = FALSE
 #' )
 #' # Hub with sample output type
-#' config_tasks <- read_config_file(system.file("config", "tasks.json",
-#'   package = "hubValidations"
-#' ))
-#' submission_tmpl(
-#'   config_tasks = config_tasks,
-#'   round_id = "2022-12-26"
-#' )
-#' # Hub with sample output type and compound task ID structure
-#' config_tasks <- read_config_file(system.file("config", "tasks-comp-tid.json",
-#'   package = "hubValidations"
-#' ))
-#' submission_tmpl(
-#'   config_tasks = config_tasks,
-#'   round_id = "2022-12-26"
-#' )
+#' hub_path <- system.file("testhubs", "samples", package = "hubValidations")
+#' submission_tmpl(hub_path, round_id = "2022-12-17")
 #' # Override config compound task ID set
 #' # Create coarser compound task ID set for the first modeling task which contains
 #' # samples
 #' submission_tmpl(
-#'   config_tasks = config_tasks,
-#'   round_id = "2022-12-26",
+#'   hub_path,
+#'   round_id = "2022-12-17",
 #'   compound_taskid_set = list(
-#'     c("forecast_date", "target"),
-#'     NULL
+#'     NULL,
+#'     "reference_date"
 #'   )
 #' )
 #' # Subsetting for a single output type
 #' submission_tmpl(
-#'   config_tasks = config_tasks,
-#'   round_id = "2022-12-26",
+#'   hub_path,
+#'   round_id = "2022-12-17",
 #'   output_types = "sample"
 #' )
 #' # Derive a template with ignored derived task ID. Useful to avoid creating
 #' # a template with invalid derived task ID value combinations.
-#' config_tasks <- read_config(
-#'   system.file("testhubs", "flusight", package = "hubValidations")
-#' )
+#' hub_path <- system.file("testhubs", "flusight", package = "hubValidations")
 #' submission_tmpl(
-#'   config_tasks = config_tasks,
+#'   hub_path,
 #'   round_id = "2022-12-12",
 #'   output_types = "pmf",
 #'   derived_task_ids = "target_end_date",
@@ -128,7 +116,7 @@
 #' )
 #' # Force optional output type, in this case "mean".
 #' submission_tmpl(
-#'   config_tasks = config_tasks,
+#'   hub_path,
 #'   round_id = "2022-12-12",
 #'   required_vals_only = TRUE,
 #'   output_types = c("pmf", "quantile", "mean"),
@@ -136,20 +124,17 @@
 #'   derived_task_ids = "target_end_date",
 #'   complete_cases_only = FALSE
 #' )
-submission_tmpl <- function(hub_con, config_tasks, round_id,
+submission_tmpl <- function(hub_path, round_id,
                             required_vals_only = FALSE,
                             force_output_types = FALSE,
                             complete_cases_only = TRUE,
                             compound_taskid_set = NULL,
                             output_types = NULL,
-                            derived_task_ids = NULL) {
-  switch(rlang::check_exclusive(hub_con, config_tasks),
-    hub_con = {
-      checkmate::assert_class(hub_con, classes = "hub_connection")
-      config_tasks <- attr(hub_con, "config_tasks")
-    },
-    config_tasks = checkmate::assert_list(config_tasks)
-  )
+                            derived_task_ids = NULL,
+                            hub_con = deprecated(),
+                            config_tasks = deprecated()) {
+  config_tasks <- switch_get_config(hub_con, config_tasks, hub_path)
+
   if (is.null(derived_task_ids)) {
     derived_task_ids <- get_config_derived_task_ids(
       config_tasks, round_id
@@ -264,4 +249,35 @@ subset_complete_cases <- function(tmpl_df) {
     tmpl_df[na_output_type_idx, cols]
   )
   tmpl_df[compl_cases, ]
+}
+
+# This function
+switch_get_config <- function(hub_con, config_tasks, hub_path) {
+  input_arg <- rlang::check_exclusive(hub_con, config_tasks, hub_path,
+    .frame = parent.frame()
+  )
+  switch(input_arg,
+    hub_con = {
+      # Signal the deprecation to the user
+      lifecycle::deprecate_warn(
+        "0.11.0",
+        "hubValidations::submission_tmpl(hub_con = )",
+        "hubValidations::submission_tmpl(hub_path = )"
+      )
+      checkmate::assert_class(hub_con, classes = "hub_connection")
+      attr(hub_con, "config_tasks")
+    },
+    config_tasks = {
+      lifecycle::deprecate_warn(
+        "0.11.0",
+        "hubValidations::submission_tmpl(config_tasks = )",
+        "hubValidations::submission_tmpl(hub_path = )"
+      )
+      checkmate::assert_list(config_tasks)
+    },
+    hub_path = {
+      checkmate::assert_directory_exists(hub_path)
+      read_config(hub_path)
+    }
+  )
 }
