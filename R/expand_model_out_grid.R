@@ -429,19 +429,15 @@ fix_round_id <- function(x, round_id, round_config, round_ids) {
   )
 }
 
-# Function that processes lists of modeling tasks grids of output type values
-# and task IDs by (depending on settings):
-
-
 #' Process expanded grids of modeling task valid values before returning.
 #'
 #' Once expanded grids of valid values for each modeling task in a round have been
 #' created, some post processing is required before returning the final grid in the
 #' required format. This function performs the following tasks:
-#' - add any missing as NA columns if required.
-#  - applying any requested schema.
+#' - add any missing columns as NA columns if required.
+#  - apply any requested schema.
 #  - convert to arrow tables if requested.
-#  - binding multiple modeling task grids together if requested.
+#  - bind multiple modeling task grids together if requested.
 #' @param x A list of expanded grids of valid values for each modeling task in a round.
 #' @param config_tasks A list version of the content's of a hub's `tasks.json`
 #' @param all_character Logical. Whether to convert all columns to character.
