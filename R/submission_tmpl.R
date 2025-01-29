@@ -87,22 +87,23 @@
 #' # Hub with sample output type
 #' hub_path <- system.file("testhubs", "samples", package = "hubValidations")
 #' submission_tmpl(hub_path, round_id = "2022-12-17")
+#' # Subset for a single output type
+#' submission_tmpl(
+#'   hub_path,
+#'   round_id = "2022-12-17",
+#'   output_types = "sample"
+#' )
 #' # Override config compound task ID set
 #' # Create coarser compound task ID set for the first modeling task which contains
 #' # samples
 #' submission_tmpl(
 #'   hub_path,
 #'   round_id = "2022-12-17",
+#'   output_types = "sample",
 #'   compound_taskid_set = list(
 #'     NULL,
 #'     "reference_date"
 #'   )
-#' )
-#' # Subsetting for a single output type
-#' submission_tmpl(
-#'   hub_path,
-#'   round_id = "2022-12-17",
-#'   output_types = "sample"
 #' )
 #' # Derive a template with ignored derived task ID. Useful to avoid creating
 #' # a template with invalid derived task ID value combinations.
