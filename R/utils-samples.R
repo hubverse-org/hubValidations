@@ -132,30 +132,31 @@ get_mt_spl_hash_tbl <- function(tbl, compound_taskids, round_task_ids) {
   # split tbl by sample idx (contained in the output_type_id column)
   split(tbl, f = tbl$output_type_id) %>%
     purrr::map(
-      function(.x, compound_taskids, non_compound_taskids) {
-        # Create tibble of sample properties for each sample idx to be used to
-        # validate various sample expectations.
-        tibble::tibble(
-          # get the value of the most common compound_idx in the sample. Used to
-          # determine which compound_idx the sample belongs to. Using this approach to
-          # ensure errors in sample indexing do not affect attempt to assign a
-          # sample to a compound_idx.
-          compound_idx = names(sort(table(.x$compound_idx), decreasing = TRUE))[1L],
-          # Number of compound_idx values in the sample. Used to detect misallocation
-          # of sample ids.
-          n_compound_idx = length(unique(.x$compound_idx)),
-          # capture value of sample idx.
-          output_type_id = unique(.x$output_type_id),
-          # Create hash of values of non_compound_taskids to check for consistency
-          # across sample.
-          hash_non_comp_tid = rlang::hash(.x[, non_compound_taskids])
-        )
-      },
-      non_compound_taskids = non_compound_taskids,
-      compound_taskids = compound_taskids
+      ~ sample_properties_tbl(.x, non_compound_taskids)
     ) %>%
     purrr::list_rbind()
 }
+
+sample_properties_tbl <- function(x, non_compound_taskids) {
+  # Create tibble of sample properties for each sample idx to be used to
+  # validate various sample expectations.
+  tibble::tibble(
+    # get the value of the most common compound_idx in the sample. Used to
+    # determine which compound_idx the sample belongs to. Using this approach to
+    # ensure errors in sample indexing do not affect attempt to assign a
+    # sample to a compound_idx.
+    compound_idx = names(sort(table(x$compound_idx), decreasing = TRUE))[1L],
+    # Number of compound_idx values in the sample. Used to detect misallocation
+    # of sample ids.
+    n_compound_idx = length(unique(x$compound_idx)),
+    # capture value of sample idx.
+    output_type_id = unique(x$output_type_id),
+    # Create hash of values of non_compound_taskids to check for consistency
+    # across sample.
+    hash_non_comp_tid = rlang::hash(x[, non_compound_taskids])
+  )
+}
+
 # Get output type IDs (`sample_idx`s`) associated with a given hash from the
 # sample hash table
 get_hash_out_type_ids <- function(hash_tbl, hash, hash_type = "hash_non_comp_tid",
@@ -183,25 +184,24 @@ get_round_compound_task_ids <- function(config_tasks, round_id) {
   round_mt <- hubUtils::get_round_model_tasks(config_tasks, round_id)
   purrr::map(
     round_mt,
-    ~ {
-      output_type_id_params <- purrr::pluck(
-        .x,
-        "output_type",
-        "sample",
-        "output_type_id_params"
-      )
-
-      if (is.null(output_type_id_params)) {
-        return(NULL)
-      } else {
-        if (is.null(output_type_id_params$compound_taskid_set)) {
-          return(hubUtils::get_round_task_id_names(config_tasks, round_id))
-        } else {
-          output_type_id_params$compound_taskid_set
-        }
-      }
-    }
+    ~ get_model_task_compound_taskid_set(.x, config_tasks, round_id)
   )
+}
+
+get_model_task_compound_taskid_set <- function(x, config_tasks, round_id) {
+  output_type_id_params <- purrr::pluck(
+    x,
+    "output_type",
+    "sample",
+    "output_type_id_params"
+  )
+  if (is.null(output_type_id_params)) {
+    return(NULL)
+  }
+  if (is.null(output_type_id_params$compound_taskid_set)) {
+    return(hubUtils::get_round_task_id_names(config_tasks, round_id))
+  }
+  output_type_id_params$compound_taskid_set
 }
 
 ## --- v3 sample check utils ---------------------------------------------------
