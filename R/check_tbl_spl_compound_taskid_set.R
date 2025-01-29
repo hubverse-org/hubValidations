@@ -2,7 +2,7 @@
 #' match or are coarser than the expected set defined in the config.
 #'
 #' This check detects the compound task ID sets of samples, implied by the `output_type_id`
-#' and task ID values, and checks them for internal consistency and compliacance with
+#' and task ID values, and checks them for internal consistency and compliance with
 #' the `compound_taskid_set` defined for each round modeling task in the `tasks.json` config.
 #' @param tbl a tibble/data.frame of the contents of the file being validated.
 #' Column types must **all be character**.

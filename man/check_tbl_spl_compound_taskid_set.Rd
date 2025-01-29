@@ -48,7 +48,7 @@ Returned object also inherits from subclass \verb{<hub_check>}.
 }
 \description{
 This check detects the compound task ID sets of samples, implied by the \code{output_type_id}
-and task ID values, and checks them for internal consistency and compliacance with
+and task ID values, and checks them for internal consistency and compliance with
 the \code{compound_taskid_set} defined for each round modeling task in the \code{tasks.json} config.
 }
 \details{

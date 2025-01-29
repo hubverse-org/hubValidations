@@ -688,7 +688,7 @@ test_that("expand_model_out_grid errors correctly", {
   )
 })
 
-test_that("(#123) expand_output_type_grid() returns expected outputs with optional output_type_id", {
+test_that("(#123) expand_model_task_grid() returns expected outputs with optional output_type_id", {
   tasks <- list(
     nowcast_date = "2024-10-02",
     target_date = NULL,
@@ -697,7 +697,7 @@ test_that("(#123) expand_output_type_grid() returns expected outputs with option
     location = NULL
   )
   # If specific output type subset is requested
-  i_have_no_rows <- expand_output_type_grid(
+  i_have_no_rows <- expand_model_task_grid(
     task_id_values = tasks,
     output_type_values = list(),
     all_output_types = FALSE
@@ -706,7 +706,7 @@ test_that("(#123) expand_output_type_grid() returns expected outputs with option
   expect_equal(ncol(i_have_no_rows), 0)
 
   # When no specific output_type subset is requested
-  i_have_eight_rows <- expand_output_type_grid(
+  i_have_eight_rows <- expand_model_task_grid(
     task_id_values = tasks,
     output_type_values = list(),
     all_output_types = TRUE
