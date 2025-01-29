@@ -216,7 +216,7 @@ test_that("submission_tmpl errors correctly", {
       hub_path,
       round_id = "random_round_id"
     ),
-    regexp = '`round_id` must be one of'
+    regexp = "`round_id` must be one of"
   )
   expect_error(
     submission_tmpl(hub_path),
