@@ -160,11 +160,8 @@ get_mt_spl_hash_tbl <- function(tbl, compound_taskids, round_task_ids) {
 # sample hash table
 get_hash_out_type_ids <- function(hash_tbl, hash, hash_type = "hash_non_comp_tid",
                                   n = NULL) {
-  out <- hash_tbl[
-    hash_tbl[[hash_type]] %in% hash,
-    "output_type_id",
-    drop = TRUE
-  ]
+  has_hash <- hash_tbl[[hash_type]] %in% hash
+  out <- hash_tbl$output_type_id[has_hash]
 
   if (is.null(n)) {
     out
