@@ -10,18 +10,17 @@
 #' is returned.
 #' @noRd
 derived_taskids_to_na <- function(model_task, derived_task_ids) {
-  if (!is.null(derived_task_ids)) {
-    purrr::modify_at(
-      model_task,
-      .at = derived_task_ids,
-      .f = ~ list(
-        required = NULL,
-        optional = NA
-      )
-    )
-  } else {
-    model_task
+  if (is.null(derived_task_ids)) {
+    return(model_task)
   }
+  purrr::modify_at(
+    model_task,
+    .at = derived_task_ids,
+    .f = ~ list(
+      required = NULL,
+      optional = NA
+    )
+  )
 }
 
 #' Ensure that derived task IDs are valid task IDs and do not have required values.
