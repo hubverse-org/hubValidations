@@ -1,5 +1,7 @@
 # hubValidations (development version)
 
+* Introduced `hub_path` as main argument to `submission_tmpl()` and deprecated arguments `hub_con` and `config_tasks` (#165 & #137). This way, all that is required by the user to create a submission template is the path to a hub directory.
+
 # hubValidations 0.10.1
 
 * `check_tbl_value_col_ascending()` will now use the order of the
