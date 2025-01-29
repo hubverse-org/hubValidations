@@ -403,31 +403,30 @@ expand_model_task_grid <- function(task_id_values,
 #' If `round_config$round_id_from_variable` is `FALSE`, `x` is returned unchanged.
 #' @noRd
 fix_round_id <- function(x, round_id, round_config, round_ids) {
-  if (round_config[["round_id_from_variable"]] && !is.null(round_id)) {
-    round_id <- rlang::arg_match(round_id,
-      values = round_ids
-    )
-    round_id_var <- round_config[["round_id"]]
-
-    # Iterate over each `model_task` object and set the `required` value in the
-    # `round_id` task ID variable to the single `round_id` value. Set optional
-    # to `NULL` as a round_id value is always required.
-    purrr::map(
-      x,
-      function(model_task) {
-        purrr::modify_at(
-          model_task,
-          .at = round_id_var,
-          .f = ~ list(
-            required = round_id,
-            optional = NULL
-          )
-        )
-      }
-    )
-  } else {
-    x
+  if (!round_config[["round_id_from_variable"]] || is.null(round_id)) {
+    return(x)
   }
+  round_id <- rlang::arg_match(round_id,
+    values = round_ids
+  )
+  round_id_var <- round_config[["round_id"]]
+
+  # Iterate over each `model_task` object and set the `required` value in the
+  # `round_id` task ID variable to the single `round_id` value. Set optional
+  # to `NULL` as a round_id value is always required.
+  purrr::map(
+    x,
+    function(model_task) {
+      purrr::modify_at(
+        model_task,
+        .at = round_id_var,
+        .f = ~ list(
+          required = round_id,
+          optional = NULL
+        )
+      )
+    }
+  )
 }
 
 # Function that processes lists of modeling tasks grids of output type values
