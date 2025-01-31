@@ -61,6 +61,7 @@
 #' @examples
 #' hub_path <- system.file("testhubs/flusight", package = "hubUtils")
 #' submission_tmpl(hub_path, round_id = "2023-01-02")
+#' # Return required values only
 #' submission_tmpl(
 #'   hub_path,
 #'   round_id = "2023-01-02",
@@ -72,38 +73,44 @@
 #'   required_vals_only = TRUE,
 #'   complete_cases_only = FALSE
 #' )
-#' # Specifying a round in a hub with multiple rounds
+#' # Specify a round in a hub with multiple rounds
 #' hub_path <- system.file("testhubs/simple", package = "hubUtils")
 #' submission_tmpl(hub_path, round_id = "2022-10-01")
 #' submission_tmpl(hub_path, round_id = "2022-10-29")
-#' submission_tmpl(hub_path,
-#'   round_id = "2022-10-29",
-#'   required_vals_only = TRUE
-#' )
-#' submission_tmpl(hub_path,
-#'   round_id = "2022-10-29",
-#'   required_vals_only = TRUE,
-#'   complete_cases_only = FALSE
-#' )
-#' # Hub with sample output type
+#' # Subset for a specific output type
 #' hub_path <- system.file("testhubs", "samples", package = "hubValidations")
-#' submission_tmpl(hub_path, round_id = "2022-12-17")
-#' # Subset for a single output type
 #' submission_tmpl(
 #'   hub_path,
 #'   round_id = "2022-12-17",
+#'   output_types = "sample"
+#' )
+#' # Create a template from the path to a tasks config file
+#' config_path <- system.file("config", "tasks.json",
+#'   package = "hubValidations"
+#' )
+#' submission_tmpl(
+#'   config_path,
+#'   round_id = "2022-12-26"
+#' )
+#' # Hub with sample output type and compound task ID structure
+#' config_path <- system.file("config", "tasks-comp-tid.json",
+#'   package = "hubValidations"
+#' )
+#' submission_tmpl(
+#'   config_path,
+#'   round_id = "2022-12-26",
 #'   output_types = "sample"
 #' )
 #' # Override config compound task ID set
 #' # Create coarser compound task ID set for the first modeling task which contains
 #' # samples
 #' submission_tmpl(
-#'   hub_path,
-#'   round_id = "2022-12-17",
+#'   config_path,
+#'   round_id = "2022-12-26",
 #'   output_types = "sample",
 #'   compound_taskid_set = list(
-#'     NULL,
-#'     "reference_date"
+#'     c("forecast_date", "target"),
+#'     NULL
 #'   )
 #' )
 #' # Derive a template with ignored derived task ID. Useful to avoid creating
