@@ -1,4 +1,4 @@
-test_that("submission_tmpl works correctly", {
+test_that("submission_tmpl works correctly with path to hub", {
   hub_path <- system.file("testhubs/flusight", package = "hubUtils")
 
   expect_snapshot(str(
@@ -98,7 +98,9 @@ test_that("submission_tmpl works correctly", {
       required_vals_only = TRUE
     )
   ))
+})
 
+test_that("submission_tmpl works correctly with path to task config file", {
   config_path <- system.file("config", "tasks.json",
                              package = "hubValidations"
   )
@@ -109,57 +111,14 @@ test_that("submission_tmpl works correctly", {
     )
   )
 
-  config_path <- system.file("config", "tasks-comp-tid.json",
-                             package = "hubValidations"
-  )
-  expect_snapshot(
-    submission_tmpl(
-      config_path,
-      round_id = "2022-12-26"
-    )
-  )
-  expect_snapshot(
-    submission_tmpl(
-      config_path,
-      round_id = "2022-12-26"
-    ) %>%
-      dplyr::filter(.data$output_type == "sample")
-  )
-
-  # Override config compound task ID structure
-  expect_snapshot(
-    submission_tmpl(
-      config_path,
-      round_id = "2022-12-26",
-      compound_taskid_set = list(
-        c("forecast_date", "target"),
-        NULL
-      )
-    )
-  )
-
-  # Check that everything works with a single compound_taskid_set column
-  expect_snapshot(
-    submission_tmpl(
-      config_path,
-      round_id = "2022-12-26",
-      compound_taskid_set = list(
-        c("forecast_date"),
-        NULL
-      )
-    )
-  )
-
-  # Check that a list with `NULL` compound_taskid_set specification results in
-  # all task ids being included in the compound_taskid_set
-  expect_snapshot(
-    submission_tmpl(
-      config_path,
-      round_id = "2022-12-26",
-      compound_taskid_set = list(
-        NULL,
-        NULL
-      )
+  hub_path <- system.file("testhubs/flusight", package = "hubUtils")
+  config_path <- file.path(hub_path, "hub-config", "tasks.json")
+  expect_equal(
+    submission_tmpl(hub_path,
+                    round_id = "2023-01-30"
+    ),
+    submission_tmpl(config_path,
+                    round_id = "2023-01-30"
     )
   )
 })
@@ -188,8 +147,6 @@ test_that("submission_tmpl works correctly with deprecated args", {
     )
   )
 })
-
-
 
 test_that("submission_tmpl errors correctly", {
   # Specifying a round in a hub with multiple rounds
@@ -249,6 +206,84 @@ test_that("submission_tmpl output type subsetting works", {
       output_types = c("mean", "sample")
     )
   )
+})
+
+test_that("submission_tmpl handles samples correctly", {
+  config_path <- system.file("config", "tasks-comp-tid.json",
+                             package = "hubValidations"
+  )
+  expect_snapshot(
+    submission_tmpl(
+      config_path,
+      round_id = "2022-12-26"
+    )
+  )
+  expect_snapshot(
+    submission_tmpl(
+      config_path,
+      round_id = "2022-12-26"
+    ) %>%
+      dplyr::filter(.data$output_type == "sample")
+  )
+
+  expect_equal(
+    submission_tmpl(
+      config_path,
+      round_id = "2022-12-26",
+      output_types = "sample"
+    ),
+    submission_tmpl(
+      config_path,
+      round_id = "2022-12-26"
+    ) %>%
+      dplyr::filter(.data$output_type == "sample")
+  )
+
+  # Override config compound task ID structure
+  expect_snapshot(
+    submission_tmpl(
+      config_path,
+      round_id = "2022-12-26",
+      compound_taskid_set = list(
+        c("forecast_date", "target"),
+        NULL
+      )
+    )
+  )
+
+  # Check that everything works with a single compound_taskid_set column
+  expect_snapshot(
+    submission_tmpl(
+      config_path,
+      round_id = "2022-12-26",
+      compound_taskid_set = list(
+        c("forecast_date"),
+        NULL
+      )
+    )
+  )
+
+  # Check that a list with `NULL` compound_taskid_set specification results in
+  # all task ids being included in the compound_taskid_set
+  expect_snapshot(
+    submission_tmpl(
+      config_path,
+      round_id = "2022-12-26",
+      compound_taskid_set = list(
+        NULL,
+        NULL
+      )
+    )
+  )
+
+  # Character sample output type IDs returned as strings with "s" prefix
+  spl_output_type_ids <- submission_tmpl(
+    path = system.file("config", "tasks.json", package = "hubValidations"),
+    round_id = "2022-12-26",
+    output_types = "sample"
+  )$output_type_id
+
+  expect_equal(spl_output_type_ids, c("s1", "s2", "s3", "s4", "s5", "s6"))
 })
 
 test_that("submission_tmpl ignoring derived task ids works", {

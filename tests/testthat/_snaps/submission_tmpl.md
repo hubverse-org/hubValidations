@@ -1,4 +1,4 @@
-# submission_tmpl works correctly
+# submission_tmpl works correctly with path to hub
 
     Code
       str(submission_tmpl(hub_path, round_id = "2023-01-30"))
@@ -128,7 +128,7 @@
        $ output_type_id: num(0) 
        $ value         : int(0) 
 
----
+# submission_tmpl works correctly with path to task config file
 
     Code
       submission_tmpl(config_path, round_id = "2022-12-26")
@@ -148,7 +148,89 @@
       10 2022-12-26    wk ahead inc~       1 01       sample      s4                NA
       # i 32 more rows
 
+# submission_tmpl works correctly with deprecated args
+
+    Code
+      str(submission_tmpl(hub_con = hub_con, round_id = "2023-01-30"))
+    Output
+      tibble [3,132 x 7] (S3: tbl_df/tbl/data.frame)
+       $ forecast_date : Date[1:3132], format: "2023-01-30" "2023-01-30" ...
+       $ target        : chr [1:3132] "wk flu hosp rate change" "wk flu hosp rate change" "wk flu hosp rate change" "wk flu hosp rate change" ...
+       $ horizon       : int [1:3132] 2 1 2 1 2 1 2 1 2 1 ...
+       $ location      : chr [1:3132] "US" "US" "01" "01" ...
+       $ output_type   : chr [1:3132] "pmf" "pmf" "pmf" "pmf" ...
+       $ output_type_id: chr [1:3132] "large_decrease" "large_decrease" "large_decrease" "large_decrease" ...
+       $ value         : num [1:3132] NA NA NA NA NA NA NA NA NA NA ...
+
 ---
+
+    Code
+      submission_tmpl(config_tasks = read_config_file(system.file("config",
+        "tasks.json", package = "hubValidations")), round_id = "2022-12-26")
+    Output
+      # A tibble: 42 x 7
+         forecast_date target        horizon location output_type output_type_id value
+         <date>        <chr>           <int> <chr>    <chr>       <chr>          <dbl>
+       1 2022-12-26    wk ahead inc~       2 US       mean        <NA>              NA
+       2 2022-12-26    wk ahead inc~       1 US       mean        <NA>              NA
+       3 2022-12-26    wk ahead inc~       2 01       mean        <NA>              NA
+       4 2022-12-26    wk ahead inc~       1 01       mean        <NA>              NA
+       5 2022-12-26    wk ahead inc~       2 02       mean        <NA>              NA
+       6 2022-12-26    wk ahead inc~       1 02       mean        <NA>              NA
+       7 2022-12-26    wk ahead inc~       2 US       sample      s1                NA
+       8 2022-12-26    wk ahead inc~       1 US       sample      s2                NA
+       9 2022-12-26    wk ahead inc~       2 01       sample      s3                NA
+      10 2022-12-26    wk ahead inc~       1 01       sample      s4                NA
+      # i 32 more rows
+
+# submission_tmpl errors correctly
+
+    Code
+      submission_tmpl(config_path, round_id = "2022-12-26", compound_taskid_set = list(
+        c("forecast_date", "target", "random_var"), NULL))
+    Condition
+      Error in `expand_model_out_grid()`:
+      x "random_var" is not valid task ID.
+      i The `compound_taskid_set` must be a subset of "forecast_date", "target", "horizon", and "location".
+
+# submission_tmpl output type subsetting works
+
+    Code
+      submission_tmpl(config_path, round_id = "2022-12-26", output_types = "sample")
+    Output
+      # A tibble: 6 x 7
+        forecast_date target         horizon location output_type output_type_id value
+        <date>        <chr>            <int> <chr>    <chr>       <chr>          <dbl>
+      1 2022-12-26    wk ahead inc ~       2 US       sample      1                 NA
+      2 2022-12-26    wk ahead inc ~       2 01       sample      1                 NA
+      3 2022-12-26    wk ahead inc ~       2 02       sample      1                 NA
+      4 2022-12-26    wk ahead inc ~       1 US       sample      2                 NA
+      5 2022-12-26    wk ahead inc ~       1 01       sample      2                 NA
+      6 2022-12-26    wk ahead inc ~       1 02       sample      2                 NA
+
+---
+
+    Code
+      submission_tmpl(config_path, round_id = "2022-12-26", output_types = c("mean",
+        "sample"))
+    Output
+      # A tibble: 12 x 7
+         forecast_date target        horizon location output_type output_type_id value
+         <date>        <chr>           <int> <chr>    <chr>       <chr>          <dbl>
+       1 2022-12-26    wk ahead inc~       2 US       mean        <NA>              NA
+       2 2022-12-26    wk ahead inc~       1 US       mean        <NA>              NA
+       3 2022-12-26    wk ahead inc~       2 01       mean        <NA>              NA
+       4 2022-12-26    wk ahead inc~       1 01       mean        <NA>              NA
+       5 2022-12-26    wk ahead inc~       2 02       mean        <NA>              NA
+       6 2022-12-26    wk ahead inc~       1 02       mean        <NA>              NA
+       7 2022-12-26    wk ahead inc~       2 US       sample      1                 NA
+       8 2022-12-26    wk ahead inc~       2 01       sample      1                 NA
+       9 2022-12-26    wk ahead inc~       2 02       sample      1                 NA
+      10 2022-12-26    wk ahead inc~       1 US       sample      2                 NA
+      11 2022-12-26    wk ahead inc~       1 01       sample      2                 NA
+      12 2022-12-26    wk ahead inc~       1 02       sample      2                 NA
+
+# submission_tmpl handles samples correctly
 
     Code
       submission_tmpl(config_path, round_id = "2022-12-26")
@@ -246,88 +328,6 @@
        9 2022-12-26    wk ahead inc~       2 01       sample      3                 NA
       10 2022-12-26    wk ahead inc~       1 01       sample      4                 NA
       # i 32 more rows
-
-# submission_tmpl works correctly with deprecated args
-
-    Code
-      str(submission_tmpl(hub_con = hub_con, round_id = "2023-01-30"))
-    Output
-      tibble [3,132 x 7] (S3: tbl_df/tbl/data.frame)
-       $ forecast_date : Date[1:3132], format: "2023-01-30" "2023-01-30" ...
-       $ target        : chr [1:3132] "wk flu hosp rate change" "wk flu hosp rate change" "wk flu hosp rate change" "wk flu hosp rate change" ...
-       $ horizon       : int [1:3132] 2 1 2 1 2 1 2 1 2 1 ...
-       $ location      : chr [1:3132] "US" "US" "01" "01" ...
-       $ output_type   : chr [1:3132] "pmf" "pmf" "pmf" "pmf" ...
-       $ output_type_id: chr [1:3132] "large_decrease" "large_decrease" "large_decrease" "large_decrease" ...
-       $ value         : num [1:3132] NA NA NA NA NA NA NA NA NA NA ...
-
----
-
-    Code
-      submission_tmpl(config_tasks = read_config_file(system.file("config",
-        "tasks.json", package = "hubValidations")), round_id = "2022-12-26")
-    Output
-      # A tibble: 42 x 7
-         forecast_date target        horizon location output_type output_type_id value
-         <date>        <chr>           <int> <chr>    <chr>       <chr>          <dbl>
-       1 2022-12-26    wk ahead inc~       2 US       mean        <NA>              NA
-       2 2022-12-26    wk ahead inc~       1 US       mean        <NA>              NA
-       3 2022-12-26    wk ahead inc~       2 01       mean        <NA>              NA
-       4 2022-12-26    wk ahead inc~       1 01       mean        <NA>              NA
-       5 2022-12-26    wk ahead inc~       2 02       mean        <NA>              NA
-       6 2022-12-26    wk ahead inc~       1 02       mean        <NA>              NA
-       7 2022-12-26    wk ahead inc~       2 US       sample      s1                NA
-       8 2022-12-26    wk ahead inc~       1 US       sample      s2                NA
-       9 2022-12-26    wk ahead inc~       2 01       sample      s3                NA
-      10 2022-12-26    wk ahead inc~       1 01       sample      s4                NA
-      # i 32 more rows
-
-# submission_tmpl errors correctly
-
-    Code
-      submission_tmpl(config_path, round_id = "2022-12-26", compound_taskid_set = list(
-        c("forecast_date", "target", "random_var"), NULL))
-    Condition
-      Error in `expand_model_out_grid()`:
-      x "random_var" is not valid task ID.
-      i The `compound_taskid_set` must be a subset of "forecast_date", "target", "horizon", and "location".
-
-# submission_tmpl output type subsetting works
-
-    Code
-      submission_tmpl(config_path, round_id = "2022-12-26", output_types = "sample")
-    Output
-      # A tibble: 6 x 7
-        forecast_date target         horizon location output_type output_type_id value
-        <date>        <chr>            <int> <chr>    <chr>       <chr>          <dbl>
-      1 2022-12-26    wk ahead inc ~       2 US       sample      1                 NA
-      2 2022-12-26    wk ahead inc ~       2 01       sample      1                 NA
-      3 2022-12-26    wk ahead inc ~       2 02       sample      1                 NA
-      4 2022-12-26    wk ahead inc ~       1 US       sample      2                 NA
-      5 2022-12-26    wk ahead inc ~       1 01       sample      2                 NA
-      6 2022-12-26    wk ahead inc ~       1 02       sample      2                 NA
-
----
-
-    Code
-      submission_tmpl(config_path, round_id = "2022-12-26", output_types = c("mean",
-        "sample"))
-    Output
-      # A tibble: 12 x 7
-         forecast_date target        horizon location output_type output_type_id value
-         <date>        <chr>           <int> <chr>    <chr>       <chr>          <dbl>
-       1 2022-12-26    wk ahead inc~       2 US       mean        <NA>              NA
-       2 2022-12-26    wk ahead inc~       1 US       mean        <NA>              NA
-       3 2022-12-26    wk ahead inc~       2 01       mean        <NA>              NA
-       4 2022-12-26    wk ahead inc~       1 01       mean        <NA>              NA
-       5 2022-12-26    wk ahead inc~       2 02       mean        <NA>              NA
-       6 2022-12-26    wk ahead inc~       1 02       mean        <NA>              NA
-       7 2022-12-26    wk ahead inc~       2 US       sample      1                 NA
-       8 2022-12-26    wk ahead inc~       2 01       sample      1                 NA
-       9 2022-12-26    wk ahead inc~       2 02       sample      1                 NA
-      10 2022-12-26    wk ahead inc~       1 US       sample      2                 NA
-      11 2022-12-26    wk ahead inc~       1 01       sample      2                 NA
-      12 2022-12-26    wk ahead inc~       1 02       sample      2                 NA
 
 # submission_tmpl ignoring derived task ids works
 
