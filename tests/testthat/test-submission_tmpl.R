@@ -102,7 +102,7 @@ test_that("submission_tmpl works correctly with path to hub", {
 
 test_that("submission_tmpl works correctly with path to task config file", {
   config_path <- system.file("config", "tasks.json",
-                             package = "hubValidations"
+    package = "hubValidations"
   )
   expect_snapshot(
     submission_tmpl(
@@ -115,10 +115,10 @@ test_that("submission_tmpl works correctly with path to task config file", {
   config_path <- file.path(hub_path, "hub-config", "tasks.json")
   expect_equal(
     submission_tmpl(hub_path,
-                    round_id = "2023-01-30"
+      round_id = "2023-01-30"
     ),
     submission_tmpl(config_path,
-                    round_id = "2023-01-30"
+      round_id = "2023-01-30"
     )
   )
 })
@@ -170,7 +170,7 @@ test_that("submission_tmpl errors correctly", {
   )
 
   config_path <- system.file("config", "tasks-comp-tid.json",
-                             package = "hubValidations"
+    package = "hubValidations"
   )
   expect_snapshot(
     submission_tmpl(
@@ -187,7 +187,7 @@ test_that("submission_tmpl errors correctly", {
 
 test_that("submission_tmpl output type subsetting works", {
   config_path <- system.file("config", "tasks-comp-tid.json",
-                             package = "hubValidations"
+    package = "hubValidations"
   )
   # Subsetting for a single output type
   expect_snapshot(
@@ -210,7 +210,7 @@ test_that("submission_tmpl output type subsetting works", {
 
 test_that("submission_tmpl handles samples correctly", {
   config_path <- system.file("config", "tasks-comp-tid.json",
-                             package = "hubValidations"
+    package = "hubValidations"
   )
   expect_snapshot(
     submission_tmpl(
