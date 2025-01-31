@@ -47,9 +47,9 @@
         complete_cases_only = FALSE))
     Message
       ! Column "target" whose values are all optional included as all `NA` column.
-      ! Round contains more than one modeling task (2)
-      i See Hub's 'tasks.json' file or <hub_connection> attribute "config_tasks" for
-        details of optional task ID/output_type/output_type ID value combinations.
+      ! Round contains more than one modeling task (n = 2)
+      i See Hub's 'tasks.json' file for details of optional task
+        ID/output_type/output_type ID value combinations.
     Output
       tibble [28 x 7] (S3: tbl_df/tbl/data.frame)
        $ forecast_date : Date[1:28], format: "2023-01-16" "2023-01-16" ...
@@ -81,8 +81,8 @@
         complete_cases_only = FALSE))
     Message
       ! Column "location" whose values are all optional included as all `NA` column.
-      i See Hub's 'tasks.json' file or <hub_connection> attribute "config_tasks" for
-        details of optional task ID/output_type/output_type ID value combinations.
+      i See Hub's 'tasks.json' file for details of optional task
+        ID/output_type/output_type ID value combinations.
     Output
       tibble [23 x 7] (S3: tbl_df/tbl/data.frame)
        $ origin_date   : Date[1:23], format: "2022-10-01" "2022-10-01" ...
@@ -100,8 +100,8 @@
         complete_cases_only = FALSE))
     Message
       ! Column "location" whose values are all optional included as all `NA` column.
-      i See Hub's 'tasks.json' file or <hub_connection> attribute "config_tasks" for
-        details of optional task ID/output_type/output_type ID value combinations.
+      i See Hub's 'tasks.json' file for details of optional task
+        ID/output_type/output_type ID value combinations.
     Output
       tibble [23 x 8] (S3: tbl_df/tbl/data.frame)
        $ origin_date   : Date[1:23], format: "2022-10-29" "2022-10-29" ...
