@@ -1,13 +1,14 @@
 #' Create a model output submission file template
 #'
-#' @param hub_con `r lifecycle::badge("deprecated")` Use `hub_path` instead. A
+#' @param path Character string. Path to a fully configured
+#' hub directory or path to a `tasks.json` file.
+#' @param hub_con `r lifecycle::badge("deprecated")` Use `path` instead. A
 #' `⁠<hub_connection>⁠` class object.
-#' @param config_tasks `r lifecycle::badge("deprecated")` Use `hub_path` instead.
+#' @param config_tasks `r lifecycle::badge("deprecated")` Use `path` instead.
 #'  A list version of the content's of a hub's `tasks.json` config file,
 #'  accessed through the `"config_tasks"` attribute of a `<hub_connection>`
 #'  object or function [read_config()].
 #' @inheritParams expand_model_out_grid
-#' @inheritParams check_valid_round_id
 #' @param derived_task_ids Character vector of derived task ID names (task IDs whose
 #' values depend on other task IDs) to ignore. Columns for such task ids will
 #' contain `NA`s.
@@ -125,7 +126,7 @@
 #'   derived_task_ids = "target_end_date",
 #'   complete_cases_only = FALSE
 #' )
-submission_tmpl <- function(hub_path, round_id,
+submission_tmpl <- function(path, round_id,
                             required_vals_only = FALSE,
                             force_output_types = FALSE,
                             complete_cases_only = TRUE,
@@ -134,7 +135,7 @@ submission_tmpl <- function(hub_path, round_id,
                             derived_task_ids = NULL,
                             hub_con = deprecated(),
                             config_tasks = deprecated()) {
-  config_tasks <- switch_get_config(hub_con, config_tasks, hub_path)
+  config_tasks <- switch_get_config(hub_con, config_tasks, path)
 
   if (is.null(derived_task_ids)) {
     derived_task_ids <- get_config_derived_task_ids(
@@ -253,8 +254,8 @@ subset_complete_cases <- function(tmpl_df) {
 }
 
 # This function
-switch_get_config <- function(hub_con, config_tasks, hub_path) {
-  input_arg <- rlang::check_exclusive(hub_con, config_tasks, hub_path,
+switch_get_config <- function(hub_con, config_tasks, path) {
+  input_arg <- rlang::check_exclusive(hub_con, config_tasks, path,
     .frame = parent.frame()
   )
   switch(input_arg,
@@ -276,9 +277,16 @@ switch_get_config <- function(hub_con, config_tasks, hub_path) {
       )
       checkmate::assert_list(config_tasks)
     },
-    hub_path = {
-      checkmate::assert_directory_exists(hub_path)
-      read_config(hub_path)
+    path = {
+      if (!fs::file_exists(path)) {
+        cli::cli_abort("{.arg path} {.file {path}} does not exist.")
+      }
+      if (fs::is_dir(path)) {
+        checkmate::assert_directory_exists(path)
+        return(read_config(path))
+      }
+      checkmate::assert_file_exists(path)
+      read_config_file(path)
     }
   )
 }

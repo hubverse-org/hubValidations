@@ -99,44 +99,28 @@ test_that("submission_tmpl works correctly", {
     )
   ))
 
-  # Hub with sample output type
-  # Use local bindings to mock read_config and test against a test config
-  # not part of a hub
-  local_mocked_bindings(
-    read_config = function(...) {
-      read_config_file(system.file("config", "tasks.json",
-        package = "hubValidations"
-      ))
-    }
+  config_path <- system.file("config", "tasks.json",
+                             package = "hubValidations"
   )
   expect_snapshot(
     submission_tmpl(
-      hub_path,
+      config_path,
       round_id = "2022-12-26"
     )
   )
 
-  # Hub with sample output type and compound task ID structure
-  # Use local bindings to mock read_config and test against a test config
-  # not part of a hub
-  local_mocked_bindings(
-    read_config = function(...) {
-      read_config_file(
-        system.file("config", "tasks-comp-tid.json",
-          package = "hubValidations"
-        )
-      )
-    }
+  config_path <- system.file("config", "tasks-comp-tid.json",
+                             package = "hubValidations"
   )
   expect_snapshot(
     submission_tmpl(
-      hub_path,
+      config_path,
       round_id = "2022-12-26"
     )
   )
   expect_snapshot(
     submission_tmpl(
-      hub_path,
+      config_path,
       round_id = "2022-12-26"
     ) %>%
       dplyr::filter(.data$output_type == "sample")
@@ -145,7 +129,7 @@ test_that("submission_tmpl works correctly", {
   # Override config compound task ID structure
   expect_snapshot(
     submission_tmpl(
-      hub_path,
+      config_path,
       round_id = "2022-12-26",
       compound_taskid_set = list(
         c("forecast_date", "target"),
@@ -157,7 +141,7 @@ test_that("submission_tmpl works correctly", {
   # Check that everything works with a single compound_taskid_set column
   expect_snapshot(
     submission_tmpl(
-      hub_path,
+      config_path,
       round_id = "2022-12-26",
       compound_taskid_set = list(
         c("forecast_date"),
@@ -170,7 +154,7 @@ test_that("submission_tmpl works correctly", {
   # all task ids being included in the compound_taskid_set
   expect_snapshot(
     submission_tmpl(
-      hub_path,
+      config_path,
       round_id = "2022-12-26",
       compound_taskid_set = list(
         NULL,
@@ -224,24 +208,16 @@ test_that("submission_tmpl errors correctly", {
   )
 
   expect_error(
-    submission_tmpl(hub_path = "random_hub_path"),
-    regexp = "Assertion on 'hub_path' failed: Directory 'random_hub_path' does not exist."
+    submission_tmpl(path = "random_hub_path"),
+    regexp = "does not exist."
   )
 
-  # Use local bindings to mock read_config and test against a test config
-  # not part of a hub
-  local_mocked_bindings(
-    read_config = function(...) {
-      read_config_file(
-        system.file("config", "tasks-comp-tid.json",
-          package = "hubValidations"
-        )
-      )
-    }
+  config_path <- system.file("config", "tasks-comp-tid.json",
+                             package = "hubValidations"
   )
   expect_snapshot(
     submission_tmpl(
-      hub_path,
+      config_path,
       round_id = "2022-12-26",
       compound_taskid_set = list(
         c("forecast_date", "target", "random_var"),
@@ -253,22 +229,13 @@ test_that("submission_tmpl errors correctly", {
 })
 
 test_that("submission_tmpl output type subsetting works", {
-  hub_path <- system.file("testhubs/simple", package = "hubUtils")
-  # Use local bindings to mock read_config and test against a test config
-  # not part of a hub
-  local_mocked_bindings(
-    read_config = function(...) {
-      read_config_file(
-        system.file("config", "tasks-comp-tid.json",
-          package = "hubValidations"
-        )
-      )
-    }
+  config_path <- system.file("config", "tasks-comp-tid.json",
+                             package = "hubValidations"
   )
   # Subsetting for a single output type
   expect_snapshot(
     submission_tmpl(
-      hub_path,
+      config_path,
       round_id = "2022-12-26",
       output_types = "sample"
     )
@@ -277,7 +244,7 @@ test_that("submission_tmpl output type subsetting works", {
   # Subsetting for a two output types
   expect_snapshot(
     submission_tmpl(
-      hub_path,
+      config_path,
       round_id = "2022-12-26",
       output_types = c("mean", "sample")
     )
@@ -299,23 +266,14 @@ test_that("submission_tmpl ignoring derived task ids works", {
 
 
 test_that("submission_tmpl force_output_types works", {
-  hub_path <- system.file("testhubs/simple", package = "hubUtils")
-  # Use local bindings to mock read_config and test against a test config
-  # not part of a hub
-  local_mocked_bindings(
-    read_config = function(...) {
-      read_config_file(
-        test_path(
-          "testdata", "configs",
-          "tasks-samples-v4.json"
-        )
-      )
-    }
+  config_path <- test_path(
+    "testdata", "configs",
+    "tasks-samples-v4.json"
   )
   # When force_output_types is not set, all output_types are optional, a
   #  zero row and column data.frame is returned  by default.
   req_non_force_default <- submission_tmpl(
-    hub_path,
+    config_path,
     round_id = "2022-10-22",
     required_vals_only = TRUE,
     output_types = "sample"
@@ -328,7 +286,7 @@ test_that("submission_tmpl force_output_types works", {
   expect_warning(
     {
       req_non_force <- submission_tmpl(
-        hub_path,
+        config_path,
         round_id = "2022-10-22",
         required_vals_only = TRUE,
         output_types = "sample",
@@ -345,7 +303,7 @@ test_that("submission_tmpl force_output_types works", {
   expect_warning(
     {
       req_force <- submission_tmpl(
-        hub_path,
+        config_path,
         round_id = "2022-10-22",
         required_vals_only = TRUE,
         force_output_types = TRUE,

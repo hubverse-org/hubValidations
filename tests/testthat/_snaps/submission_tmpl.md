@@ -131,7 +131,7 @@
 ---
 
     Code
-      submission_tmpl(hub_path, round_id = "2022-12-26")
+      submission_tmpl(config_path, round_id = "2022-12-26")
     Output
       # A tibble: 42 x 7
          forecast_date target        horizon location output_type output_type_id value
@@ -151,7 +151,7 @@
 ---
 
     Code
-      submission_tmpl(hub_path, round_id = "2022-12-26")
+      submission_tmpl(config_path, round_id = "2022-12-26")
     Output
       # A tibble: 42 x 7
          forecast_date target        horizon location output_type output_type_id value
@@ -171,7 +171,7 @@
 ---
 
     Code
-      submission_tmpl(hub_path, round_id = "2022-12-26") %>% dplyr::filter(.data$
+      submission_tmpl(config_path, round_id = "2022-12-26") %>% dplyr::filter(.data$
         output_type == "sample")
     Output
       # A tibble: 6 x 7
@@ -187,8 +187,8 @@
 ---
 
     Code
-      submission_tmpl(hub_path, round_id = "2022-12-26", compound_taskid_set = list(c(
-        "forecast_date", "target"), NULL))
+      submission_tmpl(config_path, round_id = "2022-12-26", compound_taskid_set = list(
+        c("forecast_date", "target"), NULL))
     Output
       # A tibble: 42 x 7
          forecast_date target        horizon location output_type output_type_id value
@@ -208,8 +208,8 @@
 ---
 
     Code
-      submission_tmpl(hub_path, round_id = "2022-12-26", compound_taskid_set = list(c(
-        "forecast_date"), NULL))
+      submission_tmpl(config_path, round_id = "2022-12-26", compound_taskid_set = list(
+        c("forecast_date"), NULL))
     Output
       # A tibble: 42 x 7
          forecast_date target        horizon location output_type output_type_id value
@@ -229,7 +229,7 @@
 ---
 
     Code
-      submission_tmpl(hub_path, round_id = "2022-12-26", compound_taskid_set = list(
+      submission_tmpl(config_path, round_id = "2022-12-26", compound_taskid_set = list(
         NULL, NULL))
     Output
       # A tibble: 42 x 7
@@ -285,8 +285,8 @@
 # submission_tmpl errors correctly
 
     Code
-      submission_tmpl(hub_path, round_id = "2022-12-26", compound_taskid_set = list(c(
-        "forecast_date", "target", "random_var"), NULL))
+      submission_tmpl(config_path, round_id = "2022-12-26", compound_taskid_set = list(
+        c("forecast_date", "target", "random_var"), NULL))
     Condition
       Error in `expand_model_out_grid()`:
       x "random_var" is not valid task ID.
@@ -295,7 +295,7 @@
 # submission_tmpl output type subsetting works
 
     Code
-      submission_tmpl(hub_path, round_id = "2022-12-26", output_types = "sample")
+      submission_tmpl(config_path, round_id = "2022-12-26", output_types = "sample")
     Output
       # A tibble: 6 x 7
         forecast_date target         horizon location output_type output_type_id value
@@ -310,7 +310,7 @@
 ---
 
     Code
-      submission_tmpl(hub_path, round_id = "2022-12-26", output_types = c("mean",
+      submission_tmpl(config_path, round_id = "2022-12-26", output_types = c("mean",
         "sample"))
     Output
       # A tibble: 12 x 7
