@@ -288,10 +288,8 @@ switch_get_config <- function(hub_con, config_tasks, path) {
         cli::cli_abort("{.arg path} {.file {path}} does not exist.")
       }
       if (fs::is_dir(path)) {
-        checkmate::assert_directory_exists(path)
         return(read_config(path))
       }
-      checkmate::assert_file_exists(path)
       read_config_file(path)
     }
   )
