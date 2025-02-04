@@ -259,7 +259,8 @@ subset_complete_cases <- function(tmpl_df) {
   tmpl_df[compl_cases, ]
 }
 
-# This function
+# This function handles issuing deprecation warnings for older arguments
+# and returns a config_tasks list according to the input argument.
 switch_get_config <- function(hub_con, config_tasks, path) {
   input_arg <- rlang::check_exclusive(hub_con, config_tasks, path,
     .frame = parent.frame()
