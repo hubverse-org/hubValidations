@@ -151,27 +151,22 @@ check_modeling_task_values_required <- function(tbl, req, full, derived_task_ids
   } else {
     missing_df <- list(req)
   }
-  # We split the tbl & mask using a concatenation of optional values in each row.
+  # We subset the tbl & mask using the grouping of unique optional value
+  # combinations in each row.
   # This enables us to check that for each unique combination of optional values,
   # all related required values have also been supplied.
-  split_idx <- conc_rows(tbl, mask = req_mask)
-  split_tbl <- split(tbl, split_idx)
-  split_req_mask <- split(
-    tibble::as_tibble(req_mask),
-    split_idx
-  )
-
-  # We can then map our check over each unique combination of optional
-  # values, ensuring any required value combination across the remaining columns
-  # exists in the tbl subset.
-  missing_df <- c(
-    missing_df,
-    purrr::map2(
-      .x = split_tbl, .y = split_req_mask,
-      ~ missing_required(x = .x, mask = .y, req, full)
+  new_missing_df <- get_group_rows(tbl, mask = req_mask) |>
+    # We can then map our check over each unique combination of optional
+    # values, ensuring any required value combination across the remaining columns
+    # exists in the tbl subset.
+    purrr::map(
+      ~ missing_required(
+        x = tbl[.x, ], mask = req_mask[.x, , drop = FALSE],
+        req, full
+      )
     )
-  ) %>%
-    purrr::list_rbind() %>%
+
+  missing_df <- purrr::list_rbind(c(missing_df, new_missing_df)) |>
     unique()
 
   # Remove false positives that may have been erroneously identified because checks
@@ -213,13 +208,11 @@ get_opt_col_list <- function(x, mask, full, req) {
 # Output full missing rows compiled from optional values and missing required values.
 missing_req_rows <- function(opt_cols, x, mask, req, full) {
   if (all(opt_cols == FALSE)) {
-    return(req[!conc_rows(req) %in% conc_rows(x), ])
+    return(req[!get_group_indices(req) %in% get_group_indices(x), ])
   }
-
   opt_colnms <- names(x)[opt_cols]
 
   req <- req[, !names(req) %in% opt_colnms]
-
   # To ensure we focus on applicable required values (which may differ across
   # modeling tasks) we first subset rows from the full combination of values that
   # match a concatenated id of optional value combinations in x.
@@ -285,7 +278,7 @@ full_req_grid_tested <- function(req_mask, req) {
 
 # Get a named list of the unique optional value in each optional column in x.
 get_opt_vals <- function(x, mask) {
-  idx <- purrr::map_lgl(mask, all)
+  idx <- apply(mask, 2, all)
   if (all(idx)) {
     return(NULL)
   }
@@ -316,7 +309,7 @@ get_opt_val_combs <- function(opt_vals, min_opt_col = 0L) {
 
 # Get a logical vector of whether a column contains all optional values or not.
 get_opt_cols <- function(mask, check_opt_comb = NULL, all_opt_cols = NULL) {
-  opt_cols <- purrr::map_lgl(mask, ~ !all(.x))
+  opt_cols <- apply(mask, 2, function(x) !all(x))
   if (!is.null(check_opt_comb)) {
     opt_cols[names(check_opt_comb)] <- FALSE
   }
@@ -352,7 +345,6 @@ ignore_optional_output_type <- function(opt_vals, x, mask, full, req) {
   if (!output_tid_col %in% names(opt_vals)) {
     return(opt_vals)
   }
-
   req_output_types <- get_required_output_types(x, mask, full, req)
   if (!opt_vals[[output_tid_col]] %in% req_output_types) {
     opt_vals[hubUtils::std_colnames[
