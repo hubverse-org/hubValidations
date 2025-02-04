@@ -285,7 +285,8 @@ switch_get_config <- function(hub_con, config_tasks, path) {
     },
     path = {
       if (!fs::file_exists(path)) {
-        cli::cli_abort("{.arg path} {.file {path}} does not exist.")
+        cli::cli_abort("{.arg path} {.file {path}} does not exist.",
+                       call = rlang::caller_env(1))
       }
       if (fs::is_dir(path)) {
         return(read_config(path))
