@@ -158,7 +158,7 @@
 #'   round_id = "2022-11-28",
 #'   output_types = "quantile"
 #' )
-#' @examplesIf asNamespace("hubValidations")$not_rcmd_check() && requireNamespace("arrow", quietly = TRUE)
+#' @examplesIf asNamespace("hubUtils")$not_rcmd_check() && requireNamespace("arrow", quietly = TRUE)
 #' # Create submission file using config file from AWS S3 bucket hub
 #' # Use `s3_bucket()` to create a path to the hub's root directory
 #' s3_hub_path <- arrow::s3_bucket("hubverse/hubutils/testhubs/simple/")

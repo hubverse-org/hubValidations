@@ -205,7 +205,7 @@ submission_tmpl(
   round_id = "2022-11-28",
   output_types = "quantile"
 )
-\dontshow{if (asNamespace("hubValidations")$not_rcmd_check() && requireNamespace("arrow", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (asNamespace("hubUtils")$not_rcmd_check() && requireNamespace("arrow", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Create submission file using config file from AWS S3 bucket hub
 # Use `s3_bucket()` to create a path to the hub's root directory
 s3_hub_path <- arrow::s3_bucket("hubverse/hubutils/testhubs/simple/")
