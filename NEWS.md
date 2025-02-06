@@ -1,6 +1,7 @@
 # hubValidations (development version)
 
-* Introduced `path` as main argument to `submission_tmpl()` and deprecated arguments `hub_con` and `config_tasks` (#165 & #137). This way, all that is required by the user to create a submission template is the path to a hub directory or `tasks.json` config file.
+* Introduced `path` as main argument to `submission_tmpl()` and deprecated arguments `hub_con` and `config_tasks` (#165 & #137). This way, all that is required by the user to create a submission template is the path to a hub directory or `tasks.json` config file. We also added functionality to enable sourcing config files from a
+cloud hub or directly from GitHub which means users do not required a local copy of the hub to create a submission template.
 
 # hubValidations 0.10.1
 

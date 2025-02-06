@@ -351,3 +351,93 @@ test_that("submission_tmpl force_output_types works", {
   expect_equal(dim(req_force), c(4L, 9L))
   expect_equal(unique(req_force$output_type), "sample")
 })
+
+test_that("submission_tmpl works with URLs as inputs", {
+  skip_if_offline()
+
+  gh_repo_tmpl <- submission_tmpl(
+    path = "https://github.com/hubverse-org/example-simple-forecast-hub",
+    round_id = "2022-11-28",
+    output_types = "quantile"
+  )
+  expect_s3_class(gh_repo_tmpl, "tbl_df")
+  expect_equal(dim(gh_repo_tmpl), c(26082L, 7L))
+
+  config_raw_url <- paste0(
+    "https://raw.githubusercontent.com/hubverse-org/",
+    "example-simple-forecast-hub/refs/heads/main/hub-config/tasks.json"
+  )
+  gh_config_tmpl <- submission_tmpl(
+    path = config_raw_url,
+    round_id = "2022-11-28",
+    output_types = "quantile"
+  )
+  expect_equal(gh_config_tmpl, gh_repo_tmpl)
+
+  md_raw_url <- paste0(
+    "https://raw.githubusercontent.com/hubverse-org/",
+    "example-simple-forecast-hub/refs/heads/main/README.md"
+  )
+  expect_error(
+    submission_tmpl(
+      path = md_raw_url,
+      round_id = "2022-11-28",
+      output_types = "quantile"
+    ),
+    regexp = "is not a JSON file."
+  )
+  expect_error(
+    submission_tmpl(
+      path = "https://github.com/hubverse-org/random-repo",
+      round_id = "2022-11-28",
+      output_types = "quantile"
+    ),
+    regexp = "is invalid or unreachable"
+  )
+})
+
+test_that("submission_tmpl works with SubTreeFileSystems", {
+  skip_if_offline()
+
+  s3_hub_path <- arrow::s3_bucket("hubverse/hubutils/testhubs/simple/")
+  s3_hub_tmpl <- submission_tmpl(
+    path = s3_hub_path,
+    round_id = "2022-10-01",
+    output_types = "quantile"
+  ) |> suppressMessages()
+
+  expect_s3_class(s3_hub_tmpl, "tbl_df")
+  expect_equal(dim(s3_hub_tmpl), c(4968L, 7L))
+
+  # Use `path()` method to create a path to the tasks.json file relative to the
+  # the S3 cloud hub's root directory
+  s3_config_path <- s3_hub_path$path("hub-config/tasks.json")
+  s3_config_tmpl <- submission_tmpl(
+    path = s3_config_path,
+    round_id = "2022-10-01",
+    output_types = "quantile"
+  ) |> suppressMessages()
+
+  expect_equal(s3_config_tmpl, s3_hub_tmpl)
+
+  s3_error_path <- s3_hub_path$path("random.json")
+  expect_error(
+    submission_tmpl(
+      path = s3_error_path,
+      round_id = "2022-11-28",
+      output_types = "quantile"
+    ),
+    regexp = "does not.*exist."
+  )
+
+  base_path <- "model-output/hub-baseline/2022-10-01-hub-baseline.csv"
+  s3_ext_error_path <- s3_hub_path$path(base_path)
+  expect_error(
+    submission_tmpl(
+      path = s3_ext_error_path,
+      round_id = "2022-11-28",
+      output_types = "quantile"
+    ),
+    regexp = "is not a JSON file"
+  )
+})

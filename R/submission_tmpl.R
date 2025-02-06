@@ -1,7 +1,15 @@
 #' Create a model output submission file template
 #'
-#' @param path Character string. Path to a fully configured
-#' hub directory or path to a `tasks.json` file.
+#' @param path Character string. Can be one of:
+#' - a path to a local fully configured hub directory
+#' - a path to a local `tasks.json` file.
+#' - a URL to the repository of a fully configured hub on GitHub.
+#' - a URL to the **raw contents** of a `tasks.json` file on GitHub.
+#' - a `<SubTreeFileSystem>` class object pointing to the root of an S3 cloud hub.
+#' - a `<SubTreeFileSystem>` class object pointing to a `tasks.json` config file in
+#' an S3 cloud hub, relative to the hub's root directory.
+#'
+#' See examples for more details.
 #' @param hub_con `r lifecycle::badge("deprecated")` Use `path` instead. A
 #' `⁠<hub_connection>⁠` class object.
 #' @param config_tasks `r lifecycle::badge("deprecated")` Use `path` instead.
@@ -132,6 +140,40 @@
 #'   force_output_types = TRUE,
 #'   derived_task_ids = "target_end_date",
 #'   complete_cases_only = FALSE
+#' )
+#' # Create a template from a URL to fully configured hub repository on GitHub
+#' submission_tmpl(
+#'   path = "https://github.com/hubverse-org/example-simple-forecast-hub",
+#'   round_id = "2022-11-28",
+#'   output_types = "quantile"
+#' )
+#' # Create a template from a URL to the raw contents of a tasks.json file on
+#' # GitHub
+#' config_raw_url <- paste0(
+#'   "https://raw.githubusercontent.com/hubverse-org/",
+#'   "example-simple-forecast-hub/refs/heads/main/hub-config/tasks.json"
+#' )
+#' submission_tmpl(
+#'   path = config_raw_url,
+#'   round_id = "2022-11-28",
+#'   output_types = "quantile"
+#' )
+#' @examplesIf asNamespace("hubValidations")$not_rcmd_check() && requireNamespace("arrow", quietly = TRUE)
+#' # Create submission file using config file from AWS S3 bucket hub
+#' # Use `s3_bucket()` to create a path to the hub's root directory
+#' s3_hub_path <- arrow::s3_bucket("hubverse/hubutils/testhubs/simple/")
+#' submission_tmpl(
+#'   path = s3_hub_path,
+#'   round_id = "2022-10-01",
+#'   output_types = "quantile"
+#' )
+#' # Use `path()` method to create a path to the tasks.json file relative to the
+#' # the S3 cloud hub's root directory
+#' s3_config_path <- s3_hub_path$path("hub-config/tasks.json")
+#' submission_tmpl(
+#'   path = s3_config_path,
+#'   round_id = "2022-10-01",
+#'   output_types = "quantile"
 #' )
 submission_tmpl <- function(path, round_id,
                             required_vals_only = FALSE,
@@ -285,9 +327,25 @@ switch_get_config <- function(hub_con, config_tasks, path) {
       checkmate::assert_list(config_tasks)
     },
     path = {
+      # Read config from cloud hub
+      if (inherits(path, "SubTreeFileSystem")) {
+        if (hubUtils::is_s3_base_fs(path)) {
+          return(read_config(path))
+        }
+        return(read_config_file(path))
+      }
+      # Read config file from URL
+      if (hubUtils::is_url(path)) {
+        if (hubUtils::is_github_repo_url(path)) {
+          return(read_config(path))
+        }
+        return(read_config_file(path))
+      }
+      # Read local config
       if (!fs::file_exists(path)) {
         cli::cli_abort("{.arg path} {.file {path}} does not exist.",
-                       call = rlang::caller_env(1))
+          call = rlang::caller_env(1)
+        )
       }
       if (fs::is_dir(path)) {
         return(read_config(path))

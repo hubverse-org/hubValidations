@@ -18,8 +18,18 @@ submission_tmpl(
 )
 }
 \arguments{
-\item{path}{Character string. Path to a fully configured
-hub directory or path to a \code{tasks.json} file.}
+\item{path}{Character string. Can be one of:
+\itemize{
+\item a path to a local fully configured hub directory
+\item a path to a local \code{tasks.json} file.
+\item a URL to the repository of a fully configured hub on GitHub.
+\item a URL to the \strong{raw contents} of a \code{tasks.json} file on GitHub.
+\item a \verb{<SubTreeFileSystem>} class object pointing to the root of an S3 cloud hub.
+\item a \verb{<SubTreeFileSystem>} class object pointing to a \code{tasks.json} config file in
+an S3 cloud hub, relative to the hub's root directory.
+}
+
+See examples for more details.}
 
 \item{round_id}{Character string. Round identifier. If the round is set to
 \code{round_id_from_variable: true}, IDs are values of the task ID defined in the round's
@@ -178,4 +188,39 @@ submission_tmpl(
   derived_task_ids = "target_end_date",
   complete_cases_only = FALSE
 )
+# Create a template from a URL to fully configured hub repository on GitHub
+submission_tmpl(
+  path = "https://github.com/hubverse-org/example-simple-forecast-hub",
+  round_id = "2022-11-28",
+  output_types = "quantile"
+)
+# Create a template from a URL to the raw contents of a tasks.json file on
+# GitHub
+config_raw_url <- paste0(
+  "https://raw.githubusercontent.com/hubverse-org/",
+  "example-simple-forecast-hub/refs/heads/main/hub-config/tasks.json"
+)
+submission_tmpl(
+  path = config_raw_url,
+  round_id = "2022-11-28",
+  output_types = "quantile"
+)
+\dontshow{if (asNamespace("hubValidations")$not_rcmd_check() && requireNamespace("arrow", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+# Create submission file using config file from AWS S3 bucket hub
+# Use `s3_bucket()` to create a path to the hub's root directory
+s3_hub_path <- arrow::s3_bucket("hubverse/hubutils/testhubs/simple/")
+submission_tmpl(
+  path = s3_hub_path,
+  round_id = "2022-10-01",
+  output_types = "quantile"
+)
+# Use `path()` method to create a path to the tasks.json file relative to the
+# the S3 cloud hub's root directory
+s3_config_path <- s3_hub_path$path("hub-config/tasks.json")
+submission_tmpl(
+  path = s3_config_path,
+  round_id = "2022-10-01",
+  output_types = "quantile"
+)
+\dontshow{\}) # examplesIf}
 }
