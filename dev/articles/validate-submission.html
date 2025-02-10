@@ -145,7 +145,7 @@ standard validation checks and returns their results in the form of a
 <span><span class="co">#&gt;   `output_type_id`.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[value_col_sum1]</span>: No pmf output types to check for sum of 1. Check skipped.</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[submission_time]</span>: Submission time must be within accepted submission window</span></span>
-<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2025-01-29 15:47:35 UTC"</span> is outside window</span></span>
+<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2025-02-10 16:47:48 UTC"</span> is outside window</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span></span></code></pre></div>
 <p>For more details on the structure of
 <code>&lt;hub_validations&gt;</code> objects, including how to access
@@ -195,7 +195,7 @@ and the function re-run for validation to proceed further.</p>
 <span><span class="co">#&gt;   submission `round_id` from file name.  `round_id` value <span style="color: #0000BB;">2022-10-08</span> does not</span></span>
 <span><span class="co">#&gt;   match submission `round_id` <span style="color: #0000BB;">"2022-10-15"</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[submission_time]</span>: Submission time must be within accepted submission window</span></span>
-<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2025-01-29 15:47:36 UTC"</span> is outside window</span></span>
+<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2025-02-10 16:47:49 UTC"</span> is outside window</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -223,7 +223,7 @@ will be summarised.</p>
 <span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">2022-10-08-team1-goodmodel.csv</span><span style="color: #BB00BB;"> ────</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[submission_time]</span>: Submission time must be within accepted submission window</span></span>
-<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2025-01-29 15:47:37 UTC"</span> is outside window</span></span>
+<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2025-02-10 16:47:50 UTC"</span> is outside window</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `check_for_errors()`:</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> </span></span>
@@ -264,7 +264,7 @@ the <code>reference_date</code> or <code>origin_date</code> and
 <div class="section level4">
 <h4 id="how-to-ignore-derived-task-ids">How to ignore derived task IDs<a class="anchor" aria-label="anchor" href="#how-to-ignore-derived-task-ids"></a>
 </h4>
-<div class="alert alert-info" role="alert">
+<div class="alert alert-info" role="note">
 <p><strong>For configs using schema version v4.0.0 and above, derived
 task IDs are configured via the hub config and do not need to be ignored
 manually</strong></p>
@@ -281,7 +281,7 @@ checks.</p>
 <p>Depending on config complexity, this <strong>can often lead to a
 significant improvement in validation performance and in some
 circumstances is necessary for correct validation</strong>.</p>
-<div class="alert alert-warning" role="alert">
+<div class="alert alert-warning" role="note">
 <p>Note that, <strong>if any task IDs with <code>required</code> values
 have dependent derived task IDs, it is essential for
 <code>derived_task_ids</code> to be specified</strong>. If this is the
@@ -967,7 +967,7 @@ check_error
 </tr>
 </tbody>
 </table>
-<div class="section level4 alert alert-info" role="alert">
+<div class="section level4 alert alert-info" role="note">
 <h4 id="custom-checks">Custom checks<a class="anchor" aria-label="anchor" href="#custom-checks"></a>
 </h4>
 <p>The standard checks discussed here are the checks deployed by default
