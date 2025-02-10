@@ -66,7 +66,7 @@ Derived task IDs are a class of task ID whose values depend on the values of oth
 
 With standard validation, derived task IDs like `target_end_date` tend to pollute the expanded grid used to validate valid value combination with invalid combinations. That's because, while a given combination of `reference_date` and `horizon` values will only have a single valid `target_end_date` value, the `target_end_date` property in the config will contain all possible valid values for all combinations of `reference_date` and `horizon`. Because its the values in the config used to create the expanded valid values grid, the sizes these grids can reach as function of config complexity can often put excessive strain on the system's memory, affecting overall performance of PR validation. 
 
-<div class="alert alert-warning" role="alert">
+<div class="alert alert-warning" role="note">
 
 Note that, **if any task IDs with `required` values have dependent derived task IDs, it is essential for `derived_task_ids` to be specified**. 
 If this is the case and derived task IDs are not specified, the dependent nature of derived task ID values will result in **false validation errors when validating required values**.
@@ -75,7 +75,7 @@ If this is the case and derived task IDs are not specified, the dependent nature
 
 #### How to ignore derived task IDs
 
-<div class="alert alert-info" role="alert">
+<div class="alert alert-info" role="note">
 
 **For configs using schema version v4.0.0 and above, derived task IDs can be specified in the `tasks.json` config file using the `derived_task_ids` property.**
 
@@ -87,7 +87,7 @@ Argument **`derived_task_ids`** allows for the specification of **task IDs that 
 
 Depending on config complexity, this **can often lead to a significant improvement in validation performance and in some circumstances is necessary for correct validation**.
  
-<div class="alert alert-warning" role="alert">
+<div class="alert alert-warning" role="note">
 
 #### Warning
   
@@ -148,7 +148,7 @@ Is ignored when checking model metadata files as well as when `file_modification
 
 
 
-<div class="alert alert-warning" role="alert">
+<div class="alert alert-warning" role="note">
 
 #### Warning
   
@@ -271,7 +271,7 @@ arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")
 ```
 
 
-<div class="alert alert-info" role="alert">
+<div class="alert alert-info" role="note">
 
 #### Custom checks
 

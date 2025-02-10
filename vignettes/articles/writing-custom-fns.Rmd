@@ -68,7 +68,7 @@ The contents of the created file at `src/validations/R/cstm_check_tbl_basic.R` a
 ```
 
 
-<div class="alert alert-info" role="alert">
+<div class="alert alert-info" role="note">
 
 ### **Function naming conventions**
 
@@ -98,7 +98,7 @@ The minimum inputs required by a custom check function depend on the type of che
 
 Since `file_path` and `tbl` are the most common inputs to check functions, `create_custom_check()` includes them as arguments by default. This means that the **custom check function will include these objects in the function call environment by default**. 
 
-<div class="alert alert-warning" role="alert">
+<div class="alert alert-warning" role="note">
 
 Keep in mind that **`tbl` and `tbl_chr` are only available when calling `validate_model_data()`**, but not in `validate_model_metadata()` or `validate_model_file()`. Therefore, the default `create_custom_check()` function is designed for checks run by `validate_model_data()`. 
 
@@ -113,7 +113,7 @@ In addition to these, custom check functions can also have additional arguments 
 ```{r child="children/_custom-fn-available-args.Rmd", echo=FALSE, results="asis"}
 ```
 
-<div class="alert alert-info" role="alert">
+<div class="alert alert-info" role="note">
 
 Note that, when writing custom functions, these objects **do not all need to be specified as arguments** in the function definition. **Only the ones that your custom function actually requires as inputs**.
 

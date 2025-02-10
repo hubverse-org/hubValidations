@@ -90,7 +90,7 @@ Derived task IDs are a class of task ID whose values depend on the values of oth
 
 #### How to ignore derived task IDs
 
-<div class="alert alert-info" role="alert">
+<div class="alert alert-info" role="note">
 
 **For configs using schema version v4.0.0 and above, derived task IDs are configured via the hub config and do not need to be ignored manually**
 
@@ -105,7 +105,7 @@ Argument **`derived_task_ids`** allows for the specification of **task IDs that 
 
 Depending on config complexity, this **can often lead to a significant improvement in validation performance and in some circumstances is necessary for correct validation**.
 
-<div class="alert alert-warning" role="alert">
+<div class="alert alert-warning" role="note">
 
 Note that, **if any task IDs with `required` values have dependent derived task IDs, it is essential for `derived_task_ids` to be specified**. 
 If this is the case and derived task IDs are not specified, the dependent nature of derived task ID values will result in **false validation errors when validating required values**.
@@ -173,7 +173,7 @@ arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")
 ```
 
 
-<div class="alert alert-info" role="alert">
+<div class="alert alert-info" role="note">
 
 #### Custom checks
 
