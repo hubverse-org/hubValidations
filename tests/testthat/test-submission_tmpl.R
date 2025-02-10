@@ -403,6 +403,8 @@ test_that("submission_tmpl works with URLs as inputs", {
     ),
     regexp = "is.*invalid.*URL to the repository root directory"
   )
+  # TODO: Handle expection of file without extension being interpretted as directory
+  # explicitly
   expect_error(
     submission_tmpl(
       path = "https://raw.githubusercontent.com/hubverse-org/hubValidations/refs/heads/main/LICENSE",
