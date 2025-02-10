@@ -403,6 +403,7 @@ test_that("submission_tmpl works with URLs as inputs", {
     ),
     regexp = "is.*invalid.*URL to the repository root directory"
   )
+
   # TODO: Handle exception of file without extension being interpreted as directory
   # explicitly
   expect_error(
