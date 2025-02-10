@@ -327,30 +327,31 @@ switch_get_config <- function(hub_con, config_tasks, path) {
       checkmate::assert_list(config_tasks)
     },
     path = {
-      # Read config from cloud hub
-      if (inherits(path, "SubTreeFileSystem")) {
-        if (hubUtils::is_s3_base_fs(path)) {
-          return(read_config(path))
-        }
-        return(read_config_file(path))
-      }
-      # Read config file from URL
-      if (hubUtils::is_url(path)) {
-        if (hubUtils::is_github_repo_url(path)) {
-          return(read_config(path))
-        }
-        return(read_config_file(path))
-      }
-      # Read local config
-      if (!fs::file_exists(path)) {
-        cli::cli_abort("{.arg path} {.file {path}} does not exist.",
+      is_s3_dir <- inherits(path, "SubTreeFileSystem") &&
+        hubUtils::is_s3_base_fs(path)
+
+      invalid_github_url <- !inherits(path, "SubTreeFileSystem") &&
+        hubUtils::is_github_url(path) &&
+        !hubUtils::is_github_repo_url(path)
+
+      if (invalid_github_url) {
+        cli::cli_abort(
+          c(
+            "x" = "GitHub URL {.url {path}} is invalid.",
+            "i" = "Please supply either a {.url github.com} URL to the repository
+            root directory or a {.url raw.githubusercontent.com} URL to the raw
+            contents of a {.path tasks.json} file. See examples for details."
+          ),
           call = rlang::caller_env(1)
         )
       }
-      if (fs::is_dir(path)) {
-        return(read_config(path))
+
+      is_dir <- is.character(path) && fs::path_ext(path) == ""
+      if (is_s3_dir || is_dir) {
+        read_config(path)
+      } else {
+        read_config_file(path)
       }
-      read_config_file(path)
     }
   )
 }

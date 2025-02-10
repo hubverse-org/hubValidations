@@ -394,6 +394,23 @@ test_that("submission_tmpl works with URLs as inputs", {
     ),
     regexp = "is invalid or unreachable"
   )
+
+  expect_error(
+    submission_tmpl(
+      path = "https://github.com/hubverse-org/schemas/tree/main/v5.0.0",
+      round_id = "2022-11-28",
+      output_types = "quantile"
+    ),
+    regexp = "is.*invalid.*URL to the repository root directory"
+  )
+  expect_error(
+    submission_tmpl(
+      path = "https://raw.githubusercontent.com/hubverse-org/example-simple-forecast-hub/refs/heads/main/README",
+      round_id = "2022-11-28",
+      output_types = "quantile"
+    ),
+    regexp = "is invalid or unreachable."
+  )
 })
 
 test_that("submission_tmpl works with SubTreeFileSystems", {
