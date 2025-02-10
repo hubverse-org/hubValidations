@@ -405,7 +405,7 @@ test_that("submission_tmpl works with URLs as inputs", {
   )
   expect_error(
     submission_tmpl(
-      path = "https://raw.githubusercontent.com/hubverse-org/example-simple-forecast-hub/refs/heads/main/README",
+      path = "https://raw.githubusercontent.com/hubverse-org/hubValidations/refs/heads/main/LICENSE",
       round_id = "2022-11-28",
       output_types = "quantile"
     ),
