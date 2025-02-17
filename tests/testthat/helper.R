@@ -6,13 +6,10 @@ create_spl_file <- function(round_id, compound_taskid_set = NULL,
                             n_samples = 10L) {
   out_datatype <- match.arg(out_datatype)
   file_path <- create_file_path(round_id = round_id, ext = ext)
-
-  config_tasks <- read_config_file(
-    fs::path(hub_path, "hub-config", "tasks.json")
-  )
+  config_tasks <- read_config(hub_path)
 
   tbl <- submission_tmpl(
-    config_tasks = config_tasks,
+    hub_path,
     round_id = round_id,
     compound_taskid_set = compound_taskid_set
   ) |>

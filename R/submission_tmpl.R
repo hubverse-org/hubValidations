@@ -1,6 +1,21 @@
 #' Create a model output submission file template
 #'
-#' @param hub_con A `⁠<hub_connection`>⁠ class object.
+#' @param path Character string. Can be one of:
+#' - a path to a local fully configured hub directory
+#' - a path to a local `tasks.json` file.
+#' - a URL to the repository of a fully configured hub on GitHub.
+#' - a URL to the **raw contents** of a `tasks.json` file on GitHub.
+#' - a `<SubTreeFileSystem>` class object pointing to the root of an S3 cloud hub.
+#' - a `<SubTreeFileSystem>` class object pointing to a `tasks.json` config file in
+#' an S3 cloud hub, relative to the hub's root directory.
+#'
+#' See examples for more details.
+#' @param hub_con `r lifecycle::badge("deprecated")` Use `path` instead. A
+#' `⁠<hub_connection>⁠` class object.
+#' @param config_tasks `r lifecycle::badge("deprecated")` Use `path` instead.
+#'  A list version of the content's of a hub's `tasks.json` config file,
+#'  accessed through the `"config_tasks"` attribute of a `<hub_connection>`
+#'  object or function [read_config()].
 #' @inheritParams expand_model_out_grid
 #' @param derived_task_ids Character vector of derived task ID names (task IDs whose
 #' values depend on other task IDs) to ignore. Columns for such task ids will
@@ -49,78 +64,68 @@
 #' specified in `round_id` property of `config_tasks`) is set to the value of the
 #' `round_id` argument in the returned output.
 #' @export
+#' @importFrom lifecycle deprecated
 #'
 #' @examples
-#' hub_con <- hubData::connect_hub(
-#'   system.file("testhubs/flusight", package = "hubUtils")
-#' )
-#' submission_tmpl(hub_con, round_id = "2023-01-02")
+#' hub_path <- system.file("testhubs/flusight", package = "hubUtils")
+#' submission_tmpl(hub_path, round_id = "2023-01-02")
+#' # Return required values only
 #' submission_tmpl(
-#'   hub_con,
+#'   hub_path,
 #'   round_id = "2023-01-02",
 #'   required_vals_only = TRUE
 #' )
 #' submission_tmpl(
-#'   hub_con,
+#'   hub_path,
 #'   round_id = "2023-01-02",
 #'   required_vals_only = TRUE,
 #'   complete_cases_only = FALSE
 #' )
-#' # Specifying a round in a hub with multiple rounds
-#' hub_con <- hubData::connect_hub(
-#'   system.file("testhubs/simple", package = "hubUtils")
+#' # Specify a round in a hub with multiple rounds
+#' hub_path <- system.file("testhubs/simple", package = "hubUtils")
+#' submission_tmpl(hub_path, round_id = "2022-10-01")
+#' submission_tmpl(hub_path, round_id = "2022-10-29")
+#' # Subset for a specific output type
+#' hub_path <- system.file("testhubs", "samples", package = "hubValidations")
+#' submission_tmpl(
+#'   hub_path,
+#'   round_id = "2022-12-17",
+#'   output_types = "sample"
 #' )
-#' submission_tmpl(hub_con, round_id = "2022-10-01")
-#' submission_tmpl(hub_con, round_id = "2022-10-29")
-#' submission_tmpl(hub_con,
-#'   round_id = "2022-10-29",
-#'   required_vals_only = TRUE
-#' )
-#' submission_tmpl(hub_con,
-#'   round_id = "2022-10-29",
-#'   required_vals_only = TRUE,
-#'   complete_cases_only = FALSE
-#' )
-#' # Hub with sample output type
-#' config_tasks <- read_config_file(system.file("config", "tasks.json",
+#' # Create a template from the path to a tasks config file
+#' config_path <- system.file("config", "tasks.json",
 #'   package = "hubValidations"
-#' ))
+#' )
 #' submission_tmpl(
-#'   config_tasks = config_tasks,
+#'   config_path,
 #'   round_id = "2022-12-26"
 #' )
 #' # Hub with sample output type and compound task ID structure
-#' config_tasks <- read_config_file(system.file("config", "tasks-comp-tid.json",
+#' config_path <- system.file("config", "tasks-comp-tid.json",
 #'   package = "hubValidations"
-#' ))
+#' )
 #' submission_tmpl(
-#'   config_tasks = config_tasks,
-#'   round_id = "2022-12-26"
+#'   config_path,
+#'   round_id = "2022-12-26",
+#'   output_types = "sample"
 #' )
 #' # Override config compound task ID set
 #' # Create coarser compound task ID set for the first modeling task which contains
 #' # samples
 #' submission_tmpl(
-#'   config_tasks = config_tasks,
+#'   config_path,
 #'   round_id = "2022-12-26",
+#'   output_types = "sample",
 #'   compound_taskid_set = list(
 #'     c("forecast_date", "target"),
 #'     NULL
 #'   )
 #' )
-#' # Subsetting for a single output type
-#' submission_tmpl(
-#'   config_tasks = config_tasks,
-#'   round_id = "2022-12-26",
-#'   output_types = "sample"
-#' )
 #' # Derive a template with ignored derived task ID. Useful to avoid creating
 #' # a template with invalid derived task ID value combinations.
-#' config_tasks <- read_config(
-#'   system.file("testhubs", "flusight", package = "hubValidations")
-#' )
+#' hub_path <- system.file("testhubs", "flusight", package = "hubValidations")
 #' submission_tmpl(
-#'   config_tasks = config_tasks,
+#'   hub_path,
 #'   round_id = "2022-12-12",
 #'   output_types = "pmf",
 #'   derived_task_ids = "target_end_date",
@@ -128,7 +133,7 @@
 #' )
 #' # Force optional output type, in this case "mean".
 #' submission_tmpl(
-#'   config_tasks = config_tasks,
+#'   hub_path,
 #'   round_id = "2022-12-12",
 #'   required_vals_only = TRUE,
 #'   output_types = c("pmf", "quantile", "mean"),
@@ -136,20 +141,51 @@
 #'   derived_task_ids = "target_end_date",
 #'   complete_cases_only = FALSE
 #' )
-submission_tmpl <- function(hub_con, config_tasks, round_id,
+#' # Create a template from a URL to fully configured hub repository on GitHub
+#' submission_tmpl(
+#'   path = "https://github.com/hubverse-org/example-simple-forecast-hub",
+#'   round_id = "2022-11-28",
+#'   output_types = "quantile"
+#' )
+#' # Create a template from a URL to the raw contents of a tasks.json file on
+#' # GitHub
+#' config_raw_url <- paste0(
+#'   "https://raw.githubusercontent.com/hubverse-org/",
+#'   "example-simple-forecast-hub/refs/heads/main/hub-config/tasks.json"
+#' )
+#' submission_tmpl(
+#'   path = config_raw_url,
+#'   round_id = "2022-11-28",
+#'   output_types = "quantile"
+#' )
+#' @examplesIf asNamespace("hubUtils")$not_rcmd_check() && requireNamespace("arrow", quietly = TRUE)
+#' # Create submission file using config file from AWS S3 bucket hub
+#' # Use `s3_bucket()` to create a path to the hub's root directory
+#' s3_hub_path <- arrow::s3_bucket("hubverse/hubutils/testhubs/simple/")
+#' submission_tmpl(
+#'   path = s3_hub_path,
+#'   round_id = "2022-10-01",
+#'   output_types = "quantile"
+#' )
+#' # Use `path()` method to create a path to the tasks.json file relative to the
+#' # the S3 cloud hub's root directory
+#' s3_config_path <- s3_hub_path$path("hub-config/tasks.json")
+#' submission_tmpl(
+#'   path = s3_config_path,
+#'   round_id = "2022-10-01",
+#'   output_types = "quantile"
+#' )
+submission_tmpl <- function(path, round_id,
                             required_vals_only = FALSE,
                             force_output_types = FALSE,
                             complete_cases_only = TRUE,
                             compound_taskid_set = NULL,
                             output_types = NULL,
-                            derived_task_ids = NULL) {
-  switch(rlang::check_exclusive(hub_con, config_tasks),
-    hub_con = {
-      checkmate::assert_class(hub_con, classes = "hub_connection")
-      config_tasks <- attr(hub_con, "config_tasks")
-    },
-    config_tasks = checkmate::assert_list(config_tasks)
-  )
+                            derived_task_ids = NULL,
+                            hub_con = deprecated(),
+                            config_tasks = deprecated()) {
+  config_tasks <- switch_get_config(hub_con, config_tasks, path)
+
   if (is.null(derived_task_ids)) {
     derived_task_ids <- get_config_derived_task_ids(
       config_tasks, round_id
@@ -231,13 +267,12 @@ message_opt_tasks <- function(na_cols, n_mt) {
   if (n_mt > 1L) {
     msg <- c(
       msg,
-      "!" = "Round contains more than one modeling task ({.val {n_mt}})"
+      "!" = "Round contains more than one modeling task (n = {.val {n_mt}})"
     )
   }
   msg <- c(
     msg,
-    "i" = "See Hub's {.path tasks.json} file or {.cls hub_connection} attribute
-          {.val config_tasks} for details of optional
+    "i" = "See Hub's {.path tasks.json} file for details of optional
     task ID/output_type/output_type ID value combinations."
   )
   cli::cli_bullets(msg)
@@ -264,4 +299,59 @@ subset_complete_cases <- function(tmpl_df) {
     tmpl_df[na_output_type_idx, cols]
   )
   tmpl_df[compl_cases, ]
+}
+
+# This function handles issuing deprecation warnings for older arguments
+# and returns a config_tasks list according to the input argument.
+switch_get_config <- function(hub_con, config_tasks, path) {
+  input_arg <- rlang::check_exclusive(hub_con, config_tasks, path,
+    .frame = parent.frame()
+  )
+  switch(input_arg,
+    hub_con = {
+      # Signal the deprecation to the user
+      lifecycle::deprecate_warn(
+        "0.11.0",
+        "hubValidations::submission_tmpl(hub_con = )",
+        "hubValidations::submission_tmpl(hub_path = )"
+      )
+      checkmate::assert_class(hub_con, classes = "hub_connection")
+      attr(hub_con, "config_tasks")
+    },
+    config_tasks = {
+      lifecycle::deprecate_warn(
+        "0.11.0",
+        "hubValidations::submission_tmpl(config_tasks = )",
+        "hubValidations::submission_tmpl(hub_path = )"
+      )
+      checkmate::assert_list(config_tasks)
+    },
+    path = {
+      is_s3_dir <- inherits(path, "SubTreeFileSystem") &&
+        hubUtils::is_s3_base_fs(path)
+
+      invalid_github_url <- !inherits(path, "SubTreeFileSystem") &&
+        hubUtils::is_github_url(path) &&
+        !hubUtils::is_github_repo_url(path)
+
+      if (invalid_github_url) {
+        cli::cli_abort(
+          c(
+            "x" = "GitHub URL {.url {path}} is invalid.",
+            "i" = "Please supply either a {.url github.com} URL to the repository
+            root directory or a {.url raw.githubusercontent.com} URL to the raw
+            contents of a {.path tasks.json} file. See examples for details."
+          ),
+          call = rlang::caller_env(1)
+        )
+      }
+
+      is_dir <- is.character(path) && fs::path_ext(path) == ""
+      if (is_s3_dir || is_dir) {
+        read_config(path)
+      } else {
+        read_config_file(path)
+      }
+    }
+  )
 }

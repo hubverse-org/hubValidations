@@ -41,7 +41,7 @@ Imports:
     gh,
     hubAdmin (>= 1.4.0),
     hubData (>= 1.3.0),
-    hubUtils (>= 0.3.0),
+    hubUtils (>= 0.4.0.9000),
     jsonlite,
     jsonvalidate,
     lifecycle,

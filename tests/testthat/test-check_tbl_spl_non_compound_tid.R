@@ -41,15 +41,12 @@ test_that("Overriding compound_taskid_set in check_tbl_spl_compound_tid works", 
   hub_path <- test_path("testdata/hub-spl")
   file_path <- "flu-base/2022-10-22-flu-base.csv"
   round_id <- "2022-10-22"
-  config_task <- read_config_file(
-    fs::path(hub_path, "hub-config", "tasks.json")
-  )
   compound_taskid_set <- list(
     NULL,
     c("reference_date", "horizon")
   )
   tbl_coarse <- submission_tmpl(
-    config_task = config_task,
+    hub_path,
     round_id = round_id,
     compound_taskid_set = compound_taskid_set
   ) |>
