@@ -1,0 +1,171 @@
+{
+    "schema_version": "https://raw.githubusercontent.com/hubverse-org/schemas/main/v5.0.0/tasks-schema.json",
+    "rounds": [
+        {
+            "round_id_from_variable": true,
+            "round_id": "reference_date",
+            "model_tasks": [
+                {
+                    "task_ids": {
+                        "reference_date": {
+                            "required": null,
+                            "optional": [
+                                "2022-10-22", "2022-10-29", "2022-11-05"
+                            ]
+                        },
+                        "target": {
+                            "required": null,
+                            "optional": ["wk flu hosp rate category"]
+                        },
+                        "horizon": {
+                            "required": null,
+                            "optional": [0, 1, 2, 3]
+                        },
+                        "location": {
+                            "required": [
+                                "US",
+                                "01"
+                            ],
+                            "optional": [
+                                "02",
+                                "04",
+                                "05"
+                            ]
+                        },
+                        "variant": {
+                            "required": null,
+                            "optional": null
+                        },
+                        "target_end_date": {
+                            "required": null,
+                            "optional": [
+                                "2022-10-22", "2022-10-29", "2022-11-05",
+                                "2022-11-12", "2022-11-19", "2022-11-26"
+                            ]
+                        }
+                    },
+                    "output_type": {
+                        "pmf": {
+                            "output_type_id": {
+                                "required": [
+                                    "low",
+                                    "moderate",
+                                    "high",
+                                    "very high"
+                                ]
+                            },
+                            "is_required": true,
+                            "value": {
+                                "type": "double",
+                                "minimum": 0,
+                                "maximum": 1
+                            }
+                        }
+                    },
+                    "target_metadata": [
+                        {
+                            "target_id": "wk flu hosp rate category",
+                            "target_name": "week ahead weekly influenza hospitalization rate category",
+                            "target_units": "rate per 100,000 population",
+                            "target_keys": {
+                                "target": "wk flu hosp rate category"
+                            },
+                            "target_type": "ordinal",
+                            "description": "This target represents a categorical severity level for rate of new hospitalizations per week for the week ending [horizon] weeks after the reference_date, on target_end_date.",
+                            "is_step_ahead": true,
+                            "time_unit": "week"
+                        }
+                    ]
+                },
+                {
+                    "task_ids": {
+                        "reference_date": {
+                            "required": null,
+                            "optional": [
+                                "2022-10-22", "2022-10-29", "2022-11-05"
+                            ]
+                        },
+                        "target": {
+                            "required": ["wk inc flu hosp"],
+                            "optional": null
+                        },
+                        "horizon": {
+                            "required": [1],
+                            "optional": [0, 2, 3]
+                        },
+                        "location": {
+                            "required": [
+                                "US",
+                                "01"
+                            ],
+                            "optional": [
+                                "02",
+                                "04",
+                                "05"
+                            ]
+                        },
+                        "variant": {
+                            "required": [
+                                "AA",
+                                "BB"
+                            ],
+                            "optional": [
+                                "CC",
+                                "DD"
+                            ]
+                        },
+                        "target_end_date": {
+                            "required": null,
+                            "optional": [
+                                "2022-10-22", "2022-10-29", "2022-11-05",
+                                "2022-11-12", "2022-11-19", "2022-11-26"
+                            ]
+                        }
+                    },
+                    "output_type": {
+                        "mean": {
+                            "output_type_id": {
+                                "required": null
+                            },
+                            "is_required": true,
+                            "value": {
+                                "type": "double",
+                                "minimum": 0
+                            }
+                        },
+                        "median": {
+                            "output_type_id": {
+                                "required": null
+                            },
+                            "is_required": false,
+                            "value": {
+                                "type": "double",
+                                "minimum": 0
+                            }
+                        }
+                    },
+                    "target_metadata": [
+                        {
+                            "target_id": "wk inc flu hosp",
+                            "target_name": "incident influenza hospitalizations",
+                            "target_units": "count",
+                            "target_keys": {
+                                "target": "wk inc flu hosp"
+                            },
+                            "target_type": "continuous",
+                            "description": "This target represents the count of new hospitalizations in the week ending on the date [horizon] weeks after the reference_date, on the target_end_date.",
+                            "is_step_ahead": true,
+                            "time_unit": "week"
+                        }
+                    ]
+                }
+            ],
+            "derived_task_ids": ["target_end_date"],
+            "submissions_due": {
+                "relative_to": "reference_date",
+                "start": -6,
+                "end": -3
+            }
+        }
+    ]
+}

@@ -109,16 +109,33 @@ check_required_output_type_by_modeling_task <- function(tbl, config_tasks,
 
   purrr::pmap(
     combine_mt_inputs(tbl, req, full),
-    check_modeling_task_values_required
+    check_modeling_task_values_required,
+    derived_task_ids = derived_task_ids
   ) %>%
     purrr::list_rbind()
 }
 
-check_modeling_task_values_required <- function(tbl, req, full) {
+check_modeling_task_values_required <- function(tbl, req, full, derived_task_ids) {
+  # Check whether `tbl` is empty. This occurs when data has not been submitted for a
+  # specific model task. There are two situations that affect how check is assessed:
+  # 1. If the columns in `req` match the columns in tbl, the model task is considered
+  #   required (each task ID has at least one required value) and the `req` object
+  #   is returned.
+  # 2. If the columns in `req` do not match all columns in `tbl`, the model task
+  # contains optional task IDs and therefore it is ok that data has not been
+  # submitted to the model task. The empty `tbl` is returned in this case.
+  # Note that we disregard derived task IDs during this check as they are not
+  # included in `req`.
   if (nrow(tbl) == 0L) {
-    if (setequal(names(tbl), names(req))) {
-      return(req[, names(tbl)])
+    # Ignore derived task ids which are not included in req
+    tbl_names <- setdiff(names(tbl), derived_task_ids)
+    req_names <- names(req)
+    # If names of tbl (excluding derived task IDs) and req are equal,
+    # return req (columns ordered as tbl)
+    if (setequal(tbl_names, req_names)) {
+      return(req[, tbl_names])
     } else {
+      # Else return empty tbl
       return(tbl)
     }
   }

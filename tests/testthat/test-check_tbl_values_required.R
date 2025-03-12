@@ -397,3 +397,52 @@ test_that("v4 config output type leak fixed (#177)", {
     exact = TRUE
   )
 })
+
+test_that("Missing required modeling task detected (#203)", {
+  file_path <- test_path("testdata/files/missing-req-vals-203.parquet")
+  tbl_chr <- arrow::read_parquet(file_path) |>
+    hubData::coerce_to_character()
+
+  testthat::local_mocked_bindings(
+    read_config = function(...) {
+      read_config_file(test_path("testdata/configs/tasks-v5-req-task-id.json"))
+    }
+  )
+
+  res <- hubValidations::check_tbl_values_required(tbl_chr,
+    round_id = "2022-11-05",
+    file_path = "missing-req-vals-203.parquet", hub_path = "test-hub",
+    derived_task_ids = "target_end_date"
+  )
+
+  expect_s3_class(res, "check_failure")
+
+  expect_equal(
+    res$missing,
+    structure(
+      list(
+        reference_date = structure(
+          c(19301, 19301, 19301, 19301),
+          class = "Date"
+        ),
+        target = c(
+          "wk inc flu hosp", "wk inc flu hosp",
+          "wk inc flu hosp", "wk inc flu hosp"
+        ),
+        horizon = c(1L, 1L, 1L, 1L),
+        location = c("US", "01", "US", "01"),
+        variant = c("AA", "AA", "BB", "BB"),
+        target_end_date = structure(c(
+          NA_real_, NA_real_,
+          NA_real_, NA_real_
+        ), class = "Date"),
+        output_type = c("mean", "mean", "mean", "mean"),
+        output_type_id = c(
+          NA_character_, NA_character_, NA_character_, NA_character_
+        )
+      ),
+      class = c("tbl_df", "tbl", "data.frame"),
+      row.names = c(NA, -4L)
+    )
+  )
+})
