@@ -403,13 +403,13 @@ test_that("Missing required modeling task detected (#203)", {
   tbl_chr <- arrow::read_parquet(file_path) |>
     hubData::coerce_to_character()
 
-  testthat::local_mocked_bindings(
+  local_mocked_bindings(
     read_config = function(...) {
       read_config_file(test_path("testdata/configs/tasks-v5-req-task-id.json"))
     }
   )
 
-  res <- hubValidations::check_tbl_values_required(tbl_chr,
+  res <- check_tbl_values_required(tbl_chr,
     round_id = "2022-11-05",
     file_path = "missing-req-vals-203.parquet", hub_path = "test-hub",
     derived_task_ids = "target_end_date"
