@@ -346,33 +346,29 @@ check_pr_modf_del_file <- function(df_row, file_type, allow_submit_window_mods,
   # The type of object returned depends on argument alert, which is passed down
   # from validate_pr argument file_modification_check
   if (alert == "message") {
-    return(
-      capture_check_info(
-        file_path = df_row$rel_path,
-        msg = cli::format_inline(
-          "Previously submitted {stringr::str_replace(file_type, '_', ' ')} file
+    capture_check_info(
+      file_path = df_row$rel_path,
+      msg = cli::format_inline(
+        "Previously submitted {stringr::str_replace(file_type, '_', ' ')} file
           {.path {df_row$filename}} {df_row$status}."
-        )
       )
     )
   } else {
     error <- alert == "error"
-    return(
-      capture_check_cnd(
-        check = FALSE,
-        file_path = df_row$rel_path,
-        msg_subject = paste(
-          "Previously submitted",
-          stringr::str_replace(file_type, "_", " "),
-          "files"
-        ),
-        msg_verbs = c("were not", "must not be"),
-        msg_attribute = paste0(df_row$status, "."),
-        details = cli::format_inline(
-          "{.path {df_row$filename}} {df_row$status}."
-        ),
-        error = error
-      )
+    capture_check_cnd(
+      check = FALSE,
+      file_path = df_row$rel_path,
+      msg_subject = paste(
+        "Previously submitted",
+        stringr::str_replace(file_type, "_", " "),
+        "files"
+      ),
+      msg_verbs = c("were not", "must not be"),
+      msg_attribute = paste0(df_row$status, "."),
+      details = cli::format_inline(
+        "{.path {df_row$filename}} {df_row$status}."
+      ),
+      error = error
     )
   }
 }

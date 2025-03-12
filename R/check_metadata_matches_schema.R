@@ -67,16 +67,14 @@ check_metadata_matches_schema <- function(file_path, hub_path = ".") {
       # happen when, e.g., the csv file cannot be parsed by read_csv(). In this
       # situation, we want to output all the validations until this point plus
       # this "unrecoverable" error.
-      return(
-        capture_check_cnd(
-          check = FALSE,
-          file_path = file_path,
-          msg_subject = "Metadata file contents",
-          msg_attribute = "consistent with schema specifications",
-          msg_verbs = c("matches", "must match"),
-          details = conditionMessage(e),
-          error = TRUE
-        )
+      capture_check_cnd(
+        check = FALSE,
+        file_path = file_path,
+        msg_subject = "Metadata file contents",
+        msg_attribute = "consistent with schema specifications",
+        msg_verbs = c("matches", "must match"),
+        details = conditionMessage(e),
+        error = TRUE
       )
     }
   )

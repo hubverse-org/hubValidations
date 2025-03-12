@@ -154,13 +154,11 @@ detect_invalid_int <- function(original_values, coerced_values) {
   invalid_int <- compare > 0L
 
   if (any(invalid_int)) {
-    return(
-      list(
-        check = TRUE,
-        vals = original_values[invalid_int]
-      )
+    list(
+      check = TRUE,
+      vals = original_values[invalid_int]
     )
   } else {
-    return(list(check = FALSE, vals = NULL))
+    list(check = FALSE, vals = NULL)
   }
 }

@@ -85,8 +85,8 @@ get_output_type_id_values <- function(output_type, model_tasks) {
     as.character()
 
   if (length(out) == 0L) {
-    return(NA_character_)
+    NA_character_
   } else {
-    return(out)
+    out
   }
 }
