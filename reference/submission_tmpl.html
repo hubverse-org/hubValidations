@@ -7,7 +7,7 @@
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/hubverse-org/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubValidations</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.10.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.11.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,15 +53,16 @@
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">submission_tmpl</span><span class="op">(</span></span>
-<span>  <span class="va">hub_con</span>,</span>
-<span>  <span class="va">config_tasks</span>,</span>
+<span>  <span class="va">path</span>,</span>
 <span>  <span class="va">round_id</span>,</span>
 <span>  required_vals_only <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  force_output_types <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  complete_cases_only <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  compound_taskid_set <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  output_types <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  derived_task_ids <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  derived_task_ids <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  hub_con <span class="op">=</span> <span class="fu">deprecated</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  config_tasks <span class="op">=</span> <span class="fu">deprecated</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -69,14 +70,15 @@
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
 
 
-<dl><dt id="arg-hub-con">hub_con<a class="anchor" aria-label="anchor" href="#arg-hub-con"></a></dt>
-<dd><p>A <code>⁠&lt;hub_connection</code>&gt;⁠ class object.</p></dd>
-
-
-<dt id="arg-config-tasks">config_tasks<a class="anchor" aria-label="anchor" href="#arg-config-tasks"></a></dt>
-<dd><p>a list version of the content's of a hub's <code>tasks.json</code>
-config file, accessed through the <code>"config_tasks"</code> attribute of a <code>&lt;hub_connection&gt;</code>
-object or function <code><a href="https://hubverse-org.github.io/hubUtils/reference/read_config.html" class="external-link">hubUtils::read_config()</a></code>.</p></dd>
+<dl><dt id="arg-path">path<a class="anchor" aria-label="anchor" href="#arg-path"></a></dt>
+<dd><p>Character string. Can be one of:</p><ul><li><p>a path to a local fully configured hub directory</p></li>
+<li><p>a path to a local <code>tasks.json</code> file.</p></li>
+<li><p>a URL to the repository of a fully configured hub on GitHub.</p></li>
+<li><p>a URL to the <strong>raw contents</strong> of a <code>tasks.json</code> file on GitHub.</p></li>
+<li><p>a <code>&lt;SubTreeFileSystem&gt;</code> class object pointing to the root of an S3 cloud hub.</p></li>
+<li><p>a <code>&lt;SubTreeFileSystem&gt;</code> class object pointing to a <code>tasks.json</code> config file in
+an S3 cloud hub, relative to the hub's root directory.</p></li>
+</ul><p>See examples for more details.</p></dd>
 
 
 <dt id="arg-round-id">round_id<a class="anchor" aria-label="anchor" href="#arg-round-id"></a></dt>
@@ -126,6 +128,18 @@ If <code>NULL</code>, defaults to extracting derived task IDs from <code>config_
 the <code>config_tasks</code> attribute of <code>hub_con</code>. See <code><a href="get_config_derived_task_ids.html">get_config_derived_task_ids()</a></code>
 for more details.</p></dd>
 
+
+<dt id="arg-hub-con">hub_con<a class="anchor" aria-label="anchor" href="#arg-hub-con"></a></dt>
+<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> Use <code>path</code> instead. A
+<code>⁠&lt;hub_connection&gt;⁠</code> class object.</p></dd>
+
+
+<dt id="arg-config-tasks">config_tasks<a class="anchor" aria-label="anchor" href="#arg-config-tasks"></a></dt>
+<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> Use <code>path</code> instead.
+A list version of the content's of a hub's <code>tasks.json</code> config file,
+accessed through the <code>"config_tasks"</code> attribute of a <code>&lt;hub_connection&gt;</code>
+object or function <code><a href="https://hubverse-org.github.io/hubUtils/reference/read_config.html" class="external-link">read_config()</a></code>.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -166,10 +180,8 @@ specified in <code>round_id</code> property of <code>config_tasks</code>) is set
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">hub_con</span> <span class="op">&lt;-</span> <span class="fu">hubData</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/hubData/man/connect_hub.html" class="external-link">connect_hub</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"testhubs/flusight"</span>, package <span class="op">=</span> <span class="st">"hubUtils"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">submission_tmpl</span><span class="op">(</span><span class="va">hub_con</span>, round_id <span class="op">=</span> <span class="st">"2023-01-02"</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">hub_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"testhubs/flusight"</span>, package <span class="op">=</span> <span class="st">"hubUtils"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">submission_tmpl</span><span class="op">(</span><span class="va">hub_path</span>, round_id <span class="op">=</span> <span class="st">"2023-01-02"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3,132 × 7</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    forecast_date target        horizon location output_type output_type_id value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
@@ -184,8 +196,9 @@ specified in <code>round_id</code> property of <code>config_tasks</code>) is set
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2023-01-02    wk flu hosp …       2 05       pmf         large_decrease    <span style="color: #BB0000;">NA</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2023-01-02    wk flu hosp …       1 05       pmf         large_decrease    <span style="color: #BB0000;">NA</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 3,122 more rows</span></span>
+<span class="r-in"><span><span class="co"># Return required values only</span></span></span>
 <span class="r-in"><span><span class="fu">submission_tmpl</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">hub_con</span>,</span></span>
+<span class="r-in"><span>  <span class="va">hub_path</span>,</span></span>
 <span class="r-in"><span>  round_id <span class="op">=</span> <span class="st">"2023-01-02"</span>,</span></span>
 <span class="r-in"><span>  required_vals_only <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
@@ -193,15 +206,15 @@ specified in <code>round_id</code> property of <code>config_tasks</code>) is set
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 7 variables: forecast_date &lt;date&gt;, target &lt;chr&gt;, horizon &lt;int&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   location &lt;chr&gt;, output_type &lt;chr&gt;, output_type_id &lt;chr&gt;, value &lt;dbl&gt;</span></span>
 <span class="r-in"><span><span class="fu">submission_tmpl</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">hub_con</span>,</span></span>
+<span class="r-in"><span>  <span class="va">hub_path</span>,</span></span>
 <span class="r-in"><span>  round_id <span class="op">=</span> <span class="st">"2023-01-02"</span>,</span></span>
 <span class="r-in"><span>  required_vals_only <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>  complete_cases_only <span class="op">=</span> <span class="cn">FALSE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Column <span style="color: #0000BB;">"target"</span> whose values are all optional included as all `NA` column.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Round contains more than one modeling task (<span style="color: #0000BB;">2</span>)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> See Hub's <span style="color: #0000BB;">tasks.json</span> file or <span style="color: #0000BB;">&lt;hub_connection&gt;</span> attribute <span style="color: #0000BB;">"config_tasks"</span> for</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   details of optional task ID/output_type/output_type ID value combinations.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Round contains more than one modeling task (n = <span style="color: #0000BB;">2</span>)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> See Hub's <span style="color: #0000BB;">tasks.json</span> file for details of optional task</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   ID/output_type/output_type ID value combinations.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 28 × 7</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    forecast_date target horizon location output_type output_type_id value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
@@ -216,11 +229,9 @@ specified in <code>round_id</code> property of <code>config_tasks</code>) is set
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2023-01-02    <span style="color: #BB0000;">NA</span>           2 US       quantile    0.1               <span style="color: #BB0000;">NA</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2023-01-02    <span style="color: #BB0000;">NA</span>           2 US       quantile    0.15              <span style="color: #BB0000;">NA</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 18 more rows</span></span>
-<span class="r-in"><span><span class="co"># Specifying a round in a hub with multiple rounds</span></span></span>
-<span class="r-in"><span><span class="va">hub_con</span> <span class="op">&lt;-</span> <span class="fu">hubData</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/hubData/man/connect_hub.html" class="external-link">connect_hub</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"testhubs/simple"</span>, package <span class="op">=</span> <span class="st">"hubUtils"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">submission_tmpl</span><span class="op">(</span><span class="va">hub_con</span>, round_id <span class="op">=</span> <span class="st">"2022-10-01"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Specify a round in a hub with multiple rounds</span></span></span>
+<span class="r-in"><span><span class="va">hub_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"testhubs/simple"</span>, package <span class="op">=</span> <span class="st">"hubUtils"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">submission_tmpl</span><span class="op">(</span><span class="va">hub_path</span>, round_id <span class="op">=</span> <span class="st">"2022-10-01"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 5,184 × 7</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    origin_date target          horizon location output_type output_type_id value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
@@ -235,7 +246,7 @@ specified in <code>round_id</code> property of <code>config_tasks</code>) is set
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2022-10-01  wk inc flu hosp       1 02       mean                    <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2022-10-01  wk inc flu hosp       2 02       mean                    <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 5,174 more rows</span></span>
-<span class="r-in"><span><span class="fu">submission_tmpl</span><span class="op">(</span><span class="va">hub_con</span>, round_id <span class="op">=</span> <span class="st">"2022-10-29"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">submission_tmpl</span><span class="op">(</span><span class="va">hub_path</span>, round_id <span class="op">=</span> <span class="st">"2022-10-29"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 25,920 × 8</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    origin_date target      horizon location age_group output_type output_type_id</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
@@ -251,43 +262,34 @@ specified in <code>round_id</code> property of <code>config_tasks</code>) is set
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2022-10-29  wk inc flu…       2 02       65+       mean                    <span style="color: #BB0000;">NA</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 25,910 more rows</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 1 more variable: value &lt;int&gt;</span></span>
-<span class="r-in"><span><span class="fu">submission_tmpl</span><span class="op">(</span><span class="va">hub_con</span>,</span></span>
-<span class="r-in"><span>  round_id <span class="op">=</span> <span class="st">"2022-10-29"</span>,</span></span>
-<span class="r-in"><span>  required_vals_only <span class="op">=</span> <span class="cn">TRUE</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 0 × 8</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 8 variables: origin_date &lt;date&gt;, target &lt;chr&gt;, horizon &lt;int&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   location &lt;chr&gt;, age_group &lt;chr&gt;, output_type &lt;chr&gt;, output_type_id &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   value &lt;int&gt;</span></span>
-<span class="r-in"><span><span class="fu">submission_tmpl</span><span class="op">(</span><span class="va">hub_con</span>,</span></span>
-<span class="r-in"><span>  round_id <span class="op">=</span> <span class="st">"2022-10-29"</span>,</span></span>
-<span class="r-in"><span>  required_vals_only <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
-<span class="r-in"><span>  complete_cases_only <span class="op">=</span> <span class="cn">FALSE</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Column <span style="color: #0000BB;">"location"</span> whose values are all optional included as all `NA` column.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> See Hub's <span style="color: #0000BB;">tasks.json</span> file or <span style="color: #0000BB;">&lt;hub_connection&gt;</span> attribute <span style="color: #0000BB;">"config_tasks"</span> for</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   details of optional task ID/output_type/output_type ID value combinations.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 23 × 8</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    origin_date target      horizon location age_group output_type output_type_id</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2022-10-29  wk inc flu…       1 <span style="color: #BB0000;">NA</span>       65+       quantile             0.01 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2022-10-29  wk inc flu…       1 <span style="color: #BB0000;">NA</span>       65+       quantile             0.025</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2022-10-29  wk inc flu…       1 <span style="color: #BB0000;">NA</span>       65+       quantile             0.05 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2022-10-29  wk inc flu…       1 <span style="color: #BB0000;">NA</span>       65+       quantile             0.1  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2022-10-29  wk inc flu…       1 <span style="color: #BB0000;">NA</span>       65+       quantile             0.15 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2022-10-29  wk inc flu…       1 <span style="color: #BB0000;">NA</span>       65+       quantile             0.2  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2022-10-29  wk inc flu…       1 <span style="color: #BB0000;">NA</span>       65+       quantile             0.25 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2022-10-29  wk inc flu…       1 <span style="color: #BB0000;">NA</span>       65+       quantile             0.3  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2022-10-29  wk inc flu…       1 <span style="color: #BB0000;">NA</span>       65+       quantile             0.35 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2022-10-29  wk inc flu…       1 <span style="color: #BB0000;">NA</span>       65+       quantile             0.4  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 13 more rows</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 1 more variable: value &lt;int&gt;</span></span>
-<span class="r-in"><span><span class="co"># Hub with sample output type</span></span></span>
-<span class="r-in"><span><span class="va">config_tasks</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://hubverse-org.github.io/hubUtils/reference/read_config_file.html" class="external-link">read_config_file</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"config"</span>, <span class="st">"tasks.json"</span>,</span></span>
-<span class="r-in"><span>  package <span class="op">=</span> <span class="st">"hubValidations"</span></span></span>
-<span class="r-in"><span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Subset for a specific output type</span></span></span>
+<span class="r-in"><span><span class="va">hub_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"testhubs"</span>, <span class="st">"samples"</span>, package <span class="op">=</span> <span class="st">"hubValidations"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">submission_tmpl</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  config_tasks <span class="op">=</span> <span class="va">config_tasks</span>,</span></span>
+<span class="r-in"><span>  <span class="va">hub_path</span>,</span></span>
+<span class="r-in"><span>  round_id <span class="op">=</span> <span class="st">"2022-12-17"</span>,</span></span>
+<span class="r-in"><span>  output_types <span class="op">=</span> <span class="st">"sample"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 640 × 8</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    reference_date target          horizon location target_end_date output_type</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2022-12-17     wk inc flu hosp       0 US       2022-10-22      sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2022-12-17     wk inc flu hosp       1 US       2022-10-22      sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2022-12-17     wk inc flu hosp       2 US       2022-10-22      sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2022-12-17     wk inc flu hosp       3 US       2022-10-22      sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2022-12-17     wk inc flu hosp       0 US       2022-10-29      sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2022-12-17     wk inc flu hosp       1 US       2022-10-29      sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2022-12-17     wk inc flu hosp       2 US       2022-10-29      sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2022-12-17     wk inc flu hosp       3 US       2022-10-29      sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2022-12-17     wk inc flu hosp       0 US       2022-11-05      sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2022-12-17     wk inc flu hosp       1 US       2022-11-05      sample     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 630 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 2 more variables: output_type_id &lt;chr&gt;, value &lt;dbl&gt;</span></span>
+<span class="r-in"><span><span class="co"># Create a template from the path to a tasks config file</span></span></span>
+<span class="r-in"><span><span class="va">config_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"config"</span>, <span class="st">"tasks.json"</span>,</span></span>
+<span class="r-in"><span>  package <span class="op">=</span> <span class="st">"hubValidations"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">submission_tmpl</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">config_path</span>,</span></span>
 <span class="r-in"><span>  round_id <span class="op">=</span> <span class="st">"2022-12-26"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 42 × 7</span></span>
@@ -305,55 +307,11 @@ specified in <code>round_id</code> property of <code>config_tasks</code>) is set
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2022-12-26    wk ahead inc…       1 01       sample      s4                <span style="color: #BB0000;">NA</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 32 more rows</span></span>
 <span class="r-in"><span><span class="co"># Hub with sample output type and compound task ID structure</span></span></span>
-<span class="r-in"><span><span class="va">config_tasks</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://hubverse-org.github.io/hubUtils/reference/read_config_file.html" class="external-link">read_config_file</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"config"</span>, <span class="st">"tasks-comp-tid.json"</span>,</span></span>
+<span class="r-in"><span><span class="va">config_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"config"</span>, <span class="st">"tasks-comp-tid.json"</span>,</span></span>
 <span class="r-in"><span>  package <span class="op">=</span> <span class="st">"hubValidations"</span></span></span>
-<span class="r-in"><span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">submission_tmpl</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  config_tasks <span class="op">=</span> <span class="va">config_tasks</span>,</span></span>
-<span class="r-in"><span>  round_id <span class="op">=</span> <span class="st">"2022-12-26"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 42 × 7</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    forecast_date target        horizon location output_type output_type_id value</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2022-12-26    wk ahead inc…       2 US       mean        <span style="color: #BB0000;">NA</span>                <span style="color: #BB0000;">NA</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2022-12-26    wk ahead inc…       1 US       mean        <span style="color: #BB0000;">NA</span>                <span style="color: #BB0000;">NA</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2022-12-26    wk ahead inc…       2 01       mean        <span style="color: #BB0000;">NA</span>                <span style="color: #BB0000;">NA</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2022-12-26    wk ahead inc…       1 01       mean        <span style="color: #BB0000;">NA</span>                <span style="color: #BB0000;">NA</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2022-12-26    wk ahead inc…       2 02       mean        <span style="color: #BB0000;">NA</span>                <span style="color: #BB0000;">NA</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2022-12-26    wk ahead inc…       1 02       mean        <span style="color: #BB0000;">NA</span>                <span style="color: #BB0000;">NA</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2022-12-26    wk ahead inc…       2 US       sample      1                 <span style="color: #BB0000;">NA</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2022-12-26    wk ahead inc…       2 01       sample      1                 <span style="color: #BB0000;">NA</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2022-12-26    wk ahead inc…       2 02       sample      1                 <span style="color: #BB0000;">NA</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2022-12-26    wk ahead inc…       1 US       sample      2                 <span style="color: #BB0000;">NA</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 32 more rows</span></span>
-<span class="r-in"><span><span class="co"># Override config compound task ID set</span></span></span>
-<span class="r-in"><span><span class="co"># Create coarser compound task ID set for the first modeling task which contains</span></span></span>
-<span class="r-in"><span><span class="co"># samples</span></span></span>
 <span class="r-in"><span><span class="fu">submission_tmpl</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  config_tasks <span class="op">=</span> <span class="va">config_tasks</span>,</span></span>
-<span class="r-in"><span>  round_id <span class="op">=</span> <span class="st">"2022-12-26"</span>,</span></span>
-<span class="r-in"><span>  compound_taskid_set <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"forecast_date"</span>, <span class="st">"target"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    <span class="cn">NULL</span></span></span>
-<span class="r-in"><span>  <span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 42 × 7</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    forecast_date target        horizon location output_type output_type_id value</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2022-12-26    wk ahead inc…       2 US       mean        <span style="color: #BB0000;">NA</span>                <span style="color: #BB0000;">NA</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2022-12-26    wk ahead inc…       1 US       mean        <span style="color: #BB0000;">NA</span>                <span style="color: #BB0000;">NA</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2022-12-26    wk ahead inc…       2 01       mean        <span style="color: #BB0000;">NA</span>                <span style="color: #BB0000;">NA</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2022-12-26    wk ahead inc…       1 01       mean        <span style="color: #BB0000;">NA</span>                <span style="color: #BB0000;">NA</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2022-12-26    wk ahead inc…       2 02       mean        <span style="color: #BB0000;">NA</span>                <span style="color: #BB0000;">NA</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2022-12-26    wk ahead inc…       1 02       mean        <span style="color: #BB0000;">NA</span>                <span style="color: #BB0000;">NA</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2022-12-26    wk ahead inc…       2 US       sample      1                 <span style="color: #BB0000;">NA</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2022-12-26    wk ahead inc…       1 US       sample      1                 <span style="color: #BB0000;">NA</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2022-12-26    wk ahead inc…       2 01       sample      1                 <span style="color: #BB0000;">NA</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2022-12-26    wk ahead inc…       1 01       sample      1                 <span style="color: #BB0000;">NA</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 32 more rows</span></span>
-<span class="r-in"><span><span class="co"># Subsetting for a single output type</span></span></span>
-<span class="r-in"><span><span class="fu">submission_tmpl</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  config_tasks <span class="op">=</span> <span class="va">config_tasks</span>,</span></span>
+<span class="r-in"><span>  <span class="va">config_path</span>,</span></span>
 <span class="r-in"><span>  round_id <span class="op">=</span> <span class="st">"2022-12-26"</span>,</span></span>
 <span class="r-in"><span>  output_types <span class="op">=</span> <span class="st">"sample"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
@@ -366,13 +324,32 @@ specified in <code>round_id</code> property of <code>config_tasks</code>) is set
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 2022-12-26    wk ahead inc …       1 US       sample      2                 <span style="color: #BB0000;">NA</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> 2022-12-26    wk ahead inc …       1 01       sample      2                 <span style="color: #BB0000;">NA</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> 2022-12-26    wk ahead inc …       1 02       sample      2                 <span style="color: #BB0000;">NA</span></span>
+<span class="r-in"><span><span class="co"># Override config compound task ID set</span></span></span>
+<span class="r-in"><span><span class="co"># Create coarser compound task ID set for the first modeling task which contains</span></span></span>
+<span class="r-in"><span><span class="co"># samples</span></span></span>
+<span class="r-in"><span><span class="fu">submission_tmpl</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">config_path</span>,</span></span>
+<span class="r-in"><span>  round_id <span class="op">=</span> <span class="st">"2022-12-26"</span>,</span></span>
+<span class="r-in"><span>  output_types <span class="op">=</span> <span class="st">"sample"</span>,</span></span>
+<span class="r-in"><span>  compound_taskid_set <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"forecast_date"</span>, <span class="st">"target"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="cn">NULL</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 7</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   forecast_date target         horizon location output_type output_type_id value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 2022-12-26    wk ahead inc …       2 US       sample      1                 <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 2022-12-26    wk ahead inc …       1 US       sample      1                 <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 2022-12-26    wk ahead inc …       2 01       sample      1                 <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 2022-12-26    wk ahead inc …       1 01       sample      1                 <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> 2022-12-26    wk ahead inc …       2 02       sample      1                 <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> 2022-12-26    wk ahead inc …       1 02       sample      1                 <span style="color: #BB0000;">NA</span></span>
 <span class="r-in"><span><span class="co"># Derive a template with ignored derived task ID. Useful to avoid creating</span></span></span>
 <span class="r-in"><span><span class="co"># a template with invalid derived task ID value combinations.</span></span></span>
-<span class="r-in"><span><span class="va">config_tasks</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://hubverse-org.github.io/hubUtils/reference/read_config.html" class="external-link">read_config</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"testhubs"</span>, <span class="st">"flusight"</span>, package <span class="op">=</span> <span class="st">"hubValidations"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">hub_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"testhubs"</span>, <span class="st">"flusight"</span>, package <span class="op">=</span> <span class="st">"hubValidations"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">submission_tmpl</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  config_tasks <span class="op">=</span> <span class="va">config_tasks</span>,</span></span>
+<span class="r-in"><span>  <span class="va">hub_path</span>,</span></span>
 <span class="r-in"><span>  round_id <span class="op">=</span> <span class="st">"2022-12-12"</span>,</span></span>
 <span class="r-in"><span>  output_types <span class="op">=</span> <span class="st">"pmf"</span>,</span></span>
 <span class="r-in"><span>  derived_task_ids <span class="op">=</span> <span class="st">"target_end_date"</span>,</span></span>
@@ -395,7 +372,7 @@ specified in <code>round_id</code> property of <code>config_tasks</code>) is set
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 2 more variables: output_type_id &lt;chr&gt;, value &lt;dbl&gt;</span></span>
 <span class="r-in"><span><span class="co"># Force optional output type, in this case "mean".</span></span></span>
 <span class="r-in"><span><span class="fu">submission_tmpl</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  config_tasks <span class="op">=</span> <span class="va">config_tasks</span>,</span></span>
+<span class="r-in"><span>  <span class="va">hub_path</span>,</span></span>
 <span class="r-in"><span>  round_id <span class="op">=</span> <span class="st">"2022-12-12"</span>,</span></span>
 <span class="r-in"><span>  required_vals_only <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>  output_types <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"pmf"</span>, <span class="st">"quantile"</span>, <span class="st">"mean"</span><span class="op">)</span>,</span></span>
@@ -405,9 +382,9 @@ specified in <code>round_id</code> property of <code>config_tasks</code>) is set
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Columns <span style="color: #0000BB;">"target_end_date"</span> and <span style="color: #0000BB;">"target"</span> whose values are all optional included</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   as all `NA` columns.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Round contains more than one modeling task (<span style="color: #0000BB;">2</span>)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> See Hub's <span style="color: #0000BB;">tasks.json</span> file or <span style="color: #0000BB;">&lt;hub_connection&gt;</span> attribute <span style="color: #0000BB;">"config_tasks"</span> for</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   details of optional task ID/output_type/output_type ID value combinations.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Round contains more than one modeling task (n = <span style="color: #0000BB;">2</span>)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> See Hub's <span style="color: #0000BB;">tasks.json</span> file for details of optional task</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   ID/output_type/output_type ID value combinations.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 29 × 8</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    forecast_date target_end_date target horizon location output_type</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span>
@@ -423,6 +400,97 @@ specified in <code>round_id</code> property of <code>config_tasks</code>) is set
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2022-12-12    <span style="color: #BB0000;">NA</span>              <span style="color: #BB0000;">NA</span>           2 US       quantile   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 19 more rows</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 2 more variables: output_type_id &lt;chr&gt;, value &lt;dbl&gt;</span></span>
+<span class="r-in"><span><span class="co"># Create a template from a URL to fully configured hub repository on GitHub</span></span></span>
+<span class="r-in"><span><span class="fu">submission_tmpl</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  path <span class="op">=</span> <span class="st">"https://github.com/hubverse-org/example-simple-forecast-hub"</span>,</span></span>
+<span class="r-in"><span>  round_id <span class="op">=</span> <span class="st">"2022-11-28"</span>,</span></span>
+<span class="r-in"><span>  output_types <span class="op">=</span> <span class="st">"quantile"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 26,082 × 7</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    origin_date target         horizon location output_type output_type_id value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2022-11-28  inc covid hosp      -<span style="color: #BB0000;">6</span> US       quantile              0.01    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2022-11-28  inc covid hosp      -<span style="color: #BB0000;">5</span> US       quantile              0.01    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2022-11-28  inc covid hosp      -<span style="color: #BB0000;">4</span> US       quantile              0.01    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2022-11-28  inc covid hosp      -<span style="color: #BB0000;">3</span> US       quantile              0.01    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2022-11-28  inc covid hosp      -<span style="color: #BB0000;">2</span> US       quantile              0.01    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2022-11-28  inc covid hosp      -<span style="color: #BB0000;">1</span> US       quantile              0.01    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2022-11-28  inc covid hosp       0 US       quantile              0.01    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2022-11-28  inc covid hosp       1 US       quantile              0.01    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2022-11-28  inc covid hosp       2 US       quantile              0.01    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2022-11-28  inc covid hosp       3 US       quantile              0.01    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 26,072 more rows</span></span>
+<span class="r-in"><span><span class="co"># Create a template from a URL to the raw contents of a tasks.json file on</span></span></span>
+<span class="r-in"><span><span class="co"># GitHub</span></span></span>
+<span class="r-in"><span><span class="va">config_raw_url</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="st">"https://raw.githubusercontent.com/hubverse-org/"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"example-simple-forecast-hub/refs/heads/main/hub-config/tasks.json"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">submission_tmpl</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  path <span class="op">=</span> <span class="va">config_raw_url</span>,</span></span>
+<span class="r-in"><span>  round_id <span class="op">=</span> <span class="st">"2022-11-28"</span>,</span></span>
+<span class="r-in"><span>  output_types <span class="op">=</span> <span class="st">"quantile"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 26,082 × 7</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    origin_date target         horizon location output_type output_type_id value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2022-11-28  inc covid hosp      -<span style="color: #BB0000;">6</span> US       quantile              0.01    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2022-11-28  inc covid hosp      -<span style="color: #BB0000;">5</span> US       quantile              0.01    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2022-11-28  inc covid hosp      -<span style="color: #BB0000;">4</span> US       quantile              0.01    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2022-11-28  inc covid hosp      -<span style="color: #BB0000;">3</span> US       quantile              0.01    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2022-11-28  inc covid hosp      -<span style="color: #BB0000;">2</span> US       quantile              0.01    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2022-11-28  inc covid hosp      -<span style="color: #BB0000;">1</span> US       quantile              0.01    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2022-11-28  inc covid hosp       0 US       quantile              0.01    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2022-11-28  inc covid hosp       1 US       quantile              0.01    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2022-11-28  inc covid hosp       2 US       quantile              0.01    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2022-11-28  inc covid hosp       3 US       quantile              0.01    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 26,072 more rows</span></span>
+<span class="r-in"><span><span class="co"># Create submission file using config file from AWS S3 bucket hub</span></span></span>
+<span class="r-in"><span><span class="co"># Use `s3_bucket()` to create a path to the hub's root directory</span></span></span>
+<span class="r-in"><span><span class="va">s3_hub_path</span> <span class="op">&lt;-</span> <span class="fu">arrow</span><span class="fu">::</span><span class="fu"><a href="https://arrow.apache.org/docs/r/reference/s3_bucket.html" class="external-link">s3_bucket</a></span><span class="op">(</span><span class="st">"hubverse/hubutils/testhubs/simple/"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">submission_tmpl</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  path <span class="op">=</span> <span class="va">s3_hub_path</span>,</span></span>
+<span class="r-in"><span>  round_id <span class="op">=</span> <span class="st">"2022-10-01"</span>,</span></span>
+<span class="r-in"><span>  output_types <span class="op">=</span> <span class="st">"quantile"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Updating superseded URL `Infectious-Disease-Modeling-hubs` to `hubverse-org`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 4,968 × 7</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    origin_date target          horizon location output_type output_type_id value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2022-10-01  wk inc flu hosp       1 US       quantile              0.01    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2022-10-01  wk inc flu hosp       2 US       quantile              0.01    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2022-10-01  wk inc flu hosp       3 US       quantile              0.01    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2022-10-01  wk inc flu hosp       4 US       quantile              0.01    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2022-10-01  wk inc flu hosp       1 01       quantile              0.01    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2022-10-01  wk inc flu hosp       2 01       quantile              0.01    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2022-10-01  wk inc flu hosp       3 01       quantile              0.01    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2022-10-01  wk inc flu hosp       4 01       quantile              0.01    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2022-10-01  wk inc flu hosp       1 02       quantile              0.01    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2022-10-01  wk inc flu hosp       2 02       quantile              0.01    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 4,958 more rows</span></span>
+<span class="r-in"><span><span class="co"># Use `path()` method to create a path to the tasks.json file relative to the</span></span></span>
+<span class="r-in"><span><span class="co"># the S3 cloud hub's root directory</span></span></span>
+<span class="r-in"><span><span class="va">s3_config_path</span> <span class="op">&lt;-</span> <span class="va">s3_hub_path</span><span class="op">$</span><span class="fu">path</span><span class="op">(</span><span class="st">"hub-config/tasks.json"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">submission_tmpl</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  path <span class="op">=</span> <span class="va">s3_config_path</span>,</span></span>
+<span class="r-in"><span>  round_id <span class="op">=</span> <span class="st">"2022-10-01"</span>,</span></span>
+<span class="r-in"><span>  output_types <span class="op">=</span> <span class="st">"quantile"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Updating superseded URL `Infectious-Disease-Modeling-hubs` to `hubverse-org`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 4,968 × 7</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    origin_date target          horizon location output_type output_type_id value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2022-10-01  wk inc flu hosp       1 US       quantile              0.01    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2022-10-01  wk inc flu hosp       2 US       quantile              0.01    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2022-10-01  wk inc flu hosp       3 US       quantile              0.01    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2022-10-01  wk inc flu hosp       4 US       quantile              0.01    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2022-10-01  wk inc flu hosp       1 01       quantile              0.01    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2022-10-01  wk inc flu hosp       2 01       quantile              0.01    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2022-10-01  wk inc flu hosp       3 01       quantile              0.01    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2022-10-01  wk inc flu hosp       4 01       quantile              0.01    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2022-10-01  wk inc flu hosp       1 02       quantile              0.01    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2022-10-01  wk inc flu hosp       2 02       quantile              0.01    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 4,958 more rows</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

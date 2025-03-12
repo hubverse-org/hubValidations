@@ -7,7 +7,7 @@
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/hubverse-org/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubValidations</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.10.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.11.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,6 +45,12 @@
       <small>Source: <a href="https://github.com/hubverse-org/hubValidations/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.11.0" id="hubvalidations-0110">hubValidations 0.11.0<a class="anchor" aria-label="anchor" href="#hubvalidations-0110"></a></h2>
+<ul><li>Introduced <code>path</code> as main argument to <code><a href="../reference/submission_tmpl.html">submission_tmpl()</a></code> and deprecated arguments <code>hub_con</code> and <code>config_tasks</code> (<a href="https://github.com/hubverse-org/hubValidations/issues/165" class="external-link">#165</a> &amp; <a href="https://github.com/hubverse-org/hubValidations/issues/137" class="external-link">#137</a>). This way, all that is required by the user to create a submission template is the path to a hub directory or <code>tasks.json</code> config file. We also added functionality to enable sourcing config files from a cloud hub or directly from GitHub which means users do not required a local copy of the hub to create a submission template.</li>
+<li>
+<code><a href="../reference/submission_tmpl.html">submission_tmpl()</a></code> gains <code>path</code> as the main argument, which can take a path to a local hub or config file, an s3 connection, or a URL to a hub or tasks configuration file. This allows users to create submission templates without downloading a local copy of the entire hub. The arguments <code>hub_con</code> and <code>config_tasks</code> are deprecated and will be removed in future versions (<a href="https://github.com/hubverse-org/hubValidations/issues/165" class="external-link">#165</a> &amp; <a href="https://github.com/hubverse-org/hubValidations/issues/137" class="external-link">#137</a>).</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.10.1" id="hubvalidations-0101">hubValidations 0.10.1<a class="anchor" aria-label="anchor" href="#hubvalidations-0101"></a></h2>
 <ul><li>
