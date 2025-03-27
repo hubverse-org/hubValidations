@@ -10,6 +10,8 @@ on:
     - cron: "47 14 * * 1"   # <=== Set to run at 14:47 on Mondays (avoiding 00:00 and top of the hour runs gives us a better chance for getting server time)
 
 name: R-CMD-check
+permissions:
+  contents: read
 
 jobs:
   R-CMD-check:

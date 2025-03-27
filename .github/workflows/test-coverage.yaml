@@ -7,6 +7,8 @@ on:
     branches: [main, master]
 
 name: test-coverage
+permissions:
+  contents: read
 
 jobs:
   test-coverage:
