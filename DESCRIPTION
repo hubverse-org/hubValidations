@@ -1,5 +1,5 @@
 Package: hubValidations
-Title: Testing framework for hubverse hub validations
+Title: Testing Framework for 'Hubverse' Hub Validations
 Version: 0.11.0.9000
 Authors@R: c(
     person(
