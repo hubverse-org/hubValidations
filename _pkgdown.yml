@@ -40,6 +40,8 @@ reference:
   - starts_with("is_")
   - parse_file_name
   - read_model_out_file
+  - read_target_file
+  - contains("hive")
   - try_check
   - expand_model_out_grid
   - get_tbl_compound_taskid_set
