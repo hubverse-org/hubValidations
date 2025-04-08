@@ -7,7 +7,7 @@
 check_file_exists(
   file_path,
   hub_path = ".",
-  subdir = c("model-output", "model-metadata", "hub-config")
+  subdir = c("model-output", "model-metadata", "hub-config", "target-data")
 )
 }
 \arguments{
