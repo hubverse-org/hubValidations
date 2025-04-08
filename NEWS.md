@@ -1,5 +1,10 @@
 # hubValidations (development version)
 
+* Added utilities for working with hive-partitioned data file paths:
+  - `extract_hive_partitions()` for extracting key value pairs from paths to hive-partitioned data files.
+  - `is_hive_partitioned_path()` for checking if a path is hive-partitioned.
+* Added `read_target_file()` function for reading in individual target data files.
+
 # hubValidations 0.11.0
 
 * Introduced `path` as main argument to `submission_tmpl()` and deprecated arguments `hub_con` and `config_tasks` (#165 & #137). This way, all that is required by the user to create a submission template is the path to a hub directory or `tasks.json` config file. We also added functionality to enable sourcing config files from a
