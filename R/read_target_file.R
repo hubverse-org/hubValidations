@@ -20,7 +20,7 @@
 #' # download example hub
 #' hub_path <- withr::local_tempdir()
 #' example_hub <- "https://github.com/hubverse-org/example-complex-forecast-hub.git"
-#' git2r::clone(url = example_hub, local_path = hub_path)
+#' gert::git_clone(url = example_hub, path = hub_path)
 #' # read in time-series file
 #' read_target_file("time-series.csv", hub_path)
 #' read_target_file("time-series.csv", hub_path, coerce_types = "chr")
