@@ -10,6 +10,7 @@ check_file_exists <- function(file_path, hub_path = ".",
                                 "model-output", "model-metadata",
                                 "hub-config", "target-data"
                               )) {
+  subdir <- match.arg(subdir)
   abs_path <- abs_file_path(file_path, hub_path, subdir)
   rel_path <- rel_file_path(file_path, hub_path, subdir) # nolint: object_usage_linter
   check <- fs::file_exists(abs_path)
