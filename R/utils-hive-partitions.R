@@ -88,7 +88,7 @@ extract_hive_partitions <- function(path, strict = FALSE) {
   # Extract key-value pairs safely
   purrr::map(kv_pairs, function(pair) {
     # Split on the first '='
-    parts <- strcapture("^([^=]+)=(.*)$",
+    parts <- utils::strcapture("^([^=]+)=(.*)$",
       pair,
       proto = list(
         key = character(),
@@ -107,7 +107,7 @@ extract_hive_partitions <- function(path, strict = FALSE) {
       # Decode URL-encoded values
       parts$val <- utils::URLdecode(parts$val)
     }
-    setNames(parts$val, parts$key)
+    stats::setNames(parts$val, parts$key)
   }) |>
     purrr::compact() |> # Drop any NULLs (malformed pairs)
     unlist()
