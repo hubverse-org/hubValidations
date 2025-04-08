@@ -212,9 +212,11 @@ test_that("connect_target_timeseries with HIVE-PARTTIONED data works on local hu
   expect_equal(dim(file_chr), expected_dims)
   expect_equal(
     purrr::map_chr(file_chr, ~ class(.x)),
-    c(date = "character", location = "character", observation = "character",
-      target = "character")
+    c(
+      date = "character", location = "character", observation = "character",
+      target = "character"
     )
+  )
 
   # Create CSV a hive partitioned timeseries dataset by target ----
   fs::dir_delete(dir)
