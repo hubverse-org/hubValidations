@@ -219,6 +219,7 @@ test_that("connect_target_timeseries with HIVE-PARTTIONED data works on local hu
   )
 
   # Create CSV a hive partitioned timeseries dataset by target ----
+  skip_on_windows()
   fs::dir_delete(dir)
   fs::dir_create(dir)
   arrow::write_dataset(dat, dir, partitioning = "target", format = "csv")
