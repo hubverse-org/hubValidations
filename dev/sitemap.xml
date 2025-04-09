@@ -52,9 +52,11 @@
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/combine.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/create_custom_check.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/expand_model_out_grid.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/extract_hive_partitions.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/get_config_derived_task_ids.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/get_tbl_compound_taskid_set.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/index.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/is_hive_partitioned_path.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/is_success.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/match_tbl_to_model_task.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/new_hub_validations.html</loc></url>
@@ -67,6 +69,7 @@
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/print.hub_validations.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/print.pr_hub_validations.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/read_model_out_file.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/read_target_file.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/reexports.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/submission_tmpl.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/try_check.html</loc></url>

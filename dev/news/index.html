@@ -47,7 +47,14 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="hubvalidations-development-version">hubValidations (development version)<a class="anchor" aria-label="anchor" href="#hubvalidations-development-version"></a></h2>
-</div>
+<ul><li>Added utilities for working with hive-partitioned data file paths:
+<ul><li>
+<code><a href="../reference/extract_hive_partitions.html">extract_hive_partitions()</a></code> for extracting key value pairs from paths to hive-partitioned data files.</li>
+<li>
+<code><a href="../reference/is_hive_partitioned_path.html">is_hive_partitioned_path()</a></code> for checking if a path is hive-partitioned.</li>
+</ul></li>
+<li>Added <code><a href="../reference/read_target_file.html">read_target_file()</a></code> function for reading in individual target data files.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.11.0" id="hubvalidations-0110">hubValidations 0.11.0<a class="anchor" aria-label="anchor" href="#hubvalidations-0110"></a></h2>
 <ul><li>Introduced <code>path</code> as main argument to <code><a href="../reference/submission_tmpl.html">submission_tmpl()</a></code> and deprecated arguments <code>hub_con</code> and <code>config_tasks</code> (<a href="https://github.com/hubverse-org/hubValidations/issues/165" class="external-link">#165</a> &amp; <a href="https://github.com/hubverse-org/hubValidations/issues/137" class="external-link">#137</a>). This way, all that is required by the user to create a submission template is the path to a hub directory or <code>tasks.json</code> config file. We also added functionality to enable sourcing config files from a cloud hub or directly from GitHub which means users do not required a local copy of the hub to create a submission template.</li>
