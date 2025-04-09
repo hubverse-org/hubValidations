@@ -227,10 +227,6 @@ test_that("connect_target_timeseries with HIVE-PARTTIONED data works on local hu
     hub_path = dir_hub_path
   )
 
-  file <- read_target_file("time-series/target=wk%20inc%20flu%20hosp/part-0.csv",
-    hub_path = dir_hub_path
-  )
-
   expect_s3_class(file, "tbl_df")
   expect_equal(dim(file), expected_dims)
   expect_equal(
