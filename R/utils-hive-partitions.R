@@ -32,7 +32,7 @@
 #' # is_hive_partitioned_path("data/=US/year=2024/", strict = TRUE) # This will error
 #'
 #' @export
-is_hive_partitioned_path <- function(path, strict = FALSE) {
+is_hive_partitioned_path <- function(path, strict = TRUE) {
   checkmate::assert_character(path, len = 1)
   # Split into path segments
   parts <- fs::path_split(path)[[1]]
@@ -74,7 +74,7 @@ is_hive_partitioned_path <- function(path, strict = FALSE) {
 #' # extract_hive_partitions("data/=US/year=2024/", strict = TRUE) # This will error
 #' @seealso [is_hive_partitioned_path()]
 #' @export
-extract_hive_partitions <- function(path, strict = FALSE) {
+extract_hive_partitions <- function(path, strict = TRUE) {
   checkmate::assert_character(path, len = 1)
   if (!is_hive_partitioned_path(path, strict = strict)) {
     return(NULL)
@@ -135,11 +135,11 @@ extract_hive_partitions <- function(path, strict = FALSE) {
 #' extract_partition_df("data/country=US/year=2024/file.parquet", schema)
 #' @seealso [extract_hive_partitions()], [is_hive_partitioned_path()]
 #' @noRd
-extract_partition_df <- function(path, schema = NULL, strict = FALSE) {
+extract_partition_df <- function(path, schema = NULL, strict = TRUE) {
   if (!is_hive_partitioned_path(path, strict = strict)) {
     return(NULL)
   }
-  parts <- extract_hive_partitions(path)
+  parts <- extract_hive_partitions(path, strict = strict)
 
   # Manually coerce all values according to schema types
   if (!is.null(schema)) {

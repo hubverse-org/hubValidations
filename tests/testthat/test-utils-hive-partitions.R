@@ -6,7 +6,7 @@ test_that("is_hive_partitioned_path correctly identifies Hive-style partitioned 
   expect_true(is_hive_partitioned_path("data/country=/year=2024/"))
 
   # Valid: even with an invalid one present, if not in strict mode
-  expect_true(is_hive_partitioned_path("data/=US/year=2024/"))
+  expect_true(is_hive_partitioned_path("data/=US/year=2024/", strict = FALSE))
 
   # Invalid: no partition-like segments at all
   expect_false(is_hive_partitioned_path("data/year2024/countryUS/file.parquet"))
@@ -24,7 +24,9 @@ test_that("is_hive_partitioned_path correctly identifies Hive-style partitioned 
   expect_true(is_hive_partitioned_path("data/region=EU/country=FR/year=2024/month=04/"))
 
   # Valid: mixed valid and malformed in non-strict mode
-  expect_true(is_hive_partitioned_path("data/=US/region=EU/year=2024/"))
+  expect_true(is_hive_partitioned_path("data/=US/region=EU/year=2024/",
+    strict = FALSE
+  ))
 
   # Strict mode: invalid partition throws error with specific message
   expect_error(
@@ -72,12 +74,12 @@ test_that("extract_hive_partitions returns NULL if no valid partitions", {
 
 test_that("extract_hive_partitions ignores malformed segments in non-strict mode", {
   expect_equal(
-    extract_hive_partitions("data/=US/year=2024/"),
+    extract_hive_partitions("data/=US/year=2024/", strict = FALSE),
     c(year = "2024")
   )
 
   expect_equal(
-    extract_hive_partitions("data/=/region=EU/"),
+    extract_hive_partitions("data/=/region=EU/", strict = FALSE),
     c(region = "EU")
   )
 })
@@ -139,7 +141,7 @@ test_that("extract_partition_df handles special Hive NA placeholder", {
 
 
 test_that("extract_partition_df errors if schema is missing a partition key", {
-  schema <- arrow::schema(year = arrow::int32())  # Missing 'country'
+  schema <- arrow::schema(year = arrow::int32()) # Missing 'country'
 
   expect_error(
     extract_partition_df("data/country=US/year=2024/", schema),
@@ -148,7 +150,7 @@ test_that("extract_partition_df errors if schema is missing a partition key", {
 })
 
 test_that("extract_partition_df handles multiple missing keys in schema", {
-  schema <- arrow::schema(foo = arrow::utf8())  # Missing both
+  schema <- arrow::schema(foo = arrow::utf8()) # Missing both
 
   expect_error(
     extract_partition_df("data/country=US/year=2024/", schema),
