@@ -4,7 +4,7 @@
 \alias{extract_hive_partitions}
 \title{Extract Hive-style partition key-value pairs from a path}
 \usage{
-extract_hive_partitions(path, strict = FALSE)
+extract_hive_partitions(path, strict = TRUE)
 }
 \arguments{
 \item{path}{A character string of length 1: the path to a file or directory.}

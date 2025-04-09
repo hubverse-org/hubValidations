@@ -53,6 +53,7 @@ a tibble of contents of the target data file.
 Read a single target data file
 }
 \examples{
+\dontshow{if (requireNamespace("curl", quietly = TRUE) && curl::has_internet()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # download example hub
 hub_path <- withr::local_tempdir()
 example_hub <- "https://github.com/hubverse-org/example-complex-forecast-hub.git"
@@ -63,4 +64,5 @@ read_target_file("time-series.csv", hub_path, coerce_types = "chr")
 # read in oracle-output file
 read_target_file("oracle-output.csv", hub_path)
 read_target_file("oracle-output.csv", hub_path, coerce_types = "chr")
+\dontshow{\}) # examplesIf}
 }

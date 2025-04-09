@@ -4,7 +4,7 @@
 \alias{is_hive_partitioned_path}
 \title{Check whether a path contains Hive-style partitioning}
 \usage{
-is_hive_partitioned_path(path, strict = FALSE)
+is_hive_partitioned_path(path, strict = TRUE)
 }
 \arguments{
 \item{path}{Character string. Path to a
