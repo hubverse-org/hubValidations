@@ -16,7 +16,7 @@
 #' @returns  a tibble of contents of the target data file.
 #' @export
 #'
-#' @examples
+#' @examplesIf requireNamespace("curl", quietly = TRUE) && curl::has_internet()
 #' # download example hub
 #' hub_path <- withr::local_tempdir()
 #' example_hub <- "https://github.com/hubverse-org/example-complex-forecast-hub.git"
