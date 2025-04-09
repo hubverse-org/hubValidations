@@ -127,7 +127,6 @@ test_that("read_target_file works with split timeseries file.", {
       arrow::write_csv_arrow(.x, file = path)
     }
   )
-  fs::dir_ls(dir)
 
   # read in one of the time-series file with hub schema
   file <- read_target_file("time-series/target-wk_inc_flu_hosp.csv", dir_hub_path)
