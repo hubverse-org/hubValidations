@@ -88,11 +88,11 @@ read_target_file <- function(target_file_path, hub_path,
   tbl <- tibble::as_tibble(tbl)
 
   # Extract partition values and bind them
-  partition_row <- extract_partition_df(
+  partition_df <- extract_partition_df(
     target_file_path, schema, strict = TRUE
   )
-  if (!is.null(partition_row)) {
-    tbl <- dplyr::bind_cols(tbl, partition_row)
+  if (!is.null(partition_df)) {
+    tbl <- dplyr::bind_cols(tbl, partition_df)
   }
   tbl
 }
