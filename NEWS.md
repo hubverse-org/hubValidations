@@ -4,6 +4,8 @@
   - `extract_hive_partitions()` for extracting key value pairs from paths to hive-partitioned data files.
   - `is_hive_partitioned_path()` for checking if a path is hive-partitioned.
 * Added `read_target_file()` function for reading in individual target data files.
+* Added target data validation checks:
+  - `check_target_file_name()`: that a hive-partitioned target data file name can be correctly parsed.
 
 # hubValidations 0.11.0
 
