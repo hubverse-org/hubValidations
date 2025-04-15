@@ -1,4 +1,4 @@
-test_that("check_target_file_name on valid hive-partitiones paths works", {
+test_that("check_target_file_name on valid hive-partitions paths works", {
   valid_check <- check_target_file_name(
     file_path = "time-series/location=US/partition=valid/good-file.csv"
   )
@@ -9,7 +9,7 @@ test_that("check_target_file_name on valid hive-partitiones paths works", {
   )
 })
 
-test_that("check_target_file_name on invalid hive-partitiones paths works", {
+test_that("check_target_file_name on invalid hive-partitions paths works", {
   error_check <- check_target_file_name(file_path = "time-series/=/=error/good-file.csv")
   expect_s3_class(error_check, "check_error")
   expect_equal(
@@ -18,7 +18,7 @@ test_that("check_target_file_name on invalid hive-partitiones paths works", {
   )
 })
 
-test_that("check_target_file_name on non hive-partitiones paths is skipped", {
+test_that("check_target_file_name on non hive-partitions paths is skipped", {
   skip_check <- check_target_file_name(
     file_path = "time-series/good-file.csv"
   )
