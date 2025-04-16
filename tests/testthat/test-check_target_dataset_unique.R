@@ -19,7 +19,7 @@ test_that("check_target_dataset_unique works", {
 
   fs::dir_create(fs::path(hub_path, "target-data", "time-series"))
   error_check <- check_target_dataset_unique(hub_path, target_type = "time-series")
-  expect_s3_class(error_check, "check_error")
+  expect_s3_class(error_check, "check_failure")
   expect_equal(
     cli::ansi_strip(error_check$message) |> stringr::str_squish(),
     "'target-data' directory must contain single unique time-series dataset. Multiple time-series datasets found: 'time-series' and 'time-series.csv'" # nolint: line_length_linter
