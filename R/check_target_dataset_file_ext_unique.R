@@ -3,9 +3,10 @@
 #' @inheritParams hubData::get_target_path
 #' @inherit check_tbl_col_types return
 #' @export
-check_target_dataset_file_ext_unique <- function(hub_path, target_type = c(
-  "time-series", "oracle-output"
-)) {
+check_target_dataset_file_ext_unique <- function(hub_path,
+                                                 target_type = c(
+                                                   "time-series", "oracle-output"
+                                                 )) {
   target_type <- rlang::arg_match(target_type)
   target_path <- hubData::get_target_path(hub_path, target_type)
   file_path <- fs::path("target-data", target_type)
@@ -41,11 +42,11 @@ check_target_dataset_file_ext_unique <- function(hub_path, target_type = c(
     check = check,
     file_path = file_path,
     msg_subject = cli::format_inline(
-      "{.field {target_type}} dataset files"),
+      "{.field {target_type}} dataset files"
+    ),
     msg_attribute = "single unique file format.",
     msg_verbs = c("share", "must share"),
     error = FALSE,
     details = details
   )
-
 }

@@ -3,8 +3,10 @@
 #' @inheritParams hubData::get_target_path
 #' @inherit check_tbl_col_types return
 #' @export
-check_target_dataset_unique <- function(hub_path, target_type = c(
-                                          "time-series", "oracle-output"
+check_target_dataset_unique <- function(hub_path,
+                                        target_type = c(
+                                          "time-series",
+                                          "oracle-output"
                                         )) {
   target_type <- rlang::arg_match(target_type)
   file_path <- file.path("target-data", target_type)
