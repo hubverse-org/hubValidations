@@ -32,6 +32,8 @@
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/check_metadata_schema_exists.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/check_submission_metadata_file_exists.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/check_submission_time.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/check_target_dataset_file_ext_unique.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/check_target_dataset_unique.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/check_target_file_name.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_col_types.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_colnames.html</loc></url>
