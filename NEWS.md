@@ -6,6 +6,8 @@
 * Added `read_target_file()` function for reading in individual target data files.
 * Added target data validation checks:
   - `check_target_file_name()`: that a hive-partitioned target data file name can be correctly parsed.
+  - `check_target_dataset_unique()`: that a single unique target dataset exists for a given target type.
+  - `check_target_dataset_file_ext_unique()`: that file(s) in a target dataset (e.g. `time-series` or `oracle-output`) share a single unique file extension.
 
 # hubValidations 0.11.0
 
