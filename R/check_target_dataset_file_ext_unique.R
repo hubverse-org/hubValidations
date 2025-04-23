@@ -26,7 +26,8 @@ check_target_dataset_file_ext_unique <- function(hub_path,
     ~ hubData::get_target_file_ext(hub_path, .x)
   ) |>
     purrr::flatten_chr() |>
-    unique()
+    unique() |>
+    sort()
 
   check <- length(ext) == 1L
   details <- NULL
