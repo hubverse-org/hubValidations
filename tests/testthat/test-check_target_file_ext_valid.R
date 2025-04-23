@@ -51,7 +51,7 @@ test_that("hive-partitioned invalid extension returns check_error with correct m
   expect_s3_class(hive_err, "check_error")
   expect_equal(
     cli::ansi_strip(hive_err$message) |> stringr::str_squish(),
-    "Hive-partitioned target data file extension must be valid. Extension \"csv\" is not. Must be one of \"parquet\"."
+    "Hive-partitioned target data file extension must be valid. Extension \"csv\" is not. Must be \"parquet\"."
   )
 })
 

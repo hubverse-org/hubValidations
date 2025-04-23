@@ -23,7 +23,7 @@ check_target_file_ext_valid <- function(file_path) {
     invalid_ext <- setdiff(file_ext, valid_ext) # nolint: object_usage_linter
     details <- cli::format_inline(
       "Extension {.val {invalid_ext}} is not.
-    Must be one of {.val {valid_ext}}."
+    Must be {cli::qty(length(valid_ext))} {?/one of }{.val {valid_ext}}."
     )
   }
 
