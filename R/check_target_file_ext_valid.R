@@ -9,8 +9,10 @@ check_target_file_ext_valid <- function(file_path) {
   hive <- is_hive_partitioned_path(file_path, strict = FALSE)
   if (hive) {
     valid_ext <- c("parquet")
+    subject <- "Hive-partitioned target data file"
   } else {
     valid_ext <- c("csv", "parquet")
+    subject <- "Target data file"
   }
   file_ext <- fs::path_ext(file_path)
 
@@ -23,12 +25,6 @@ check_target_file_ext_valid <- function(file_path) {
       "Extension {.val {invalid_ext}} is not.
     Must be one of {.val {valid_ext}}."
     )
-  }
-
-  subject <- if (hive) {
-    "Hive-partitioned target data file"
-  } else {
-    "Target data file"
   }
 
   capture_check_cnd(
