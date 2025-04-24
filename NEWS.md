@@ -4,6 +4,8 @@
   - `extract_hive_partitions()` for extracting key value pairs from paths to hive-partitioned data files.
   - `is_hive_partitioned_path()` for checking if a path is hive-partitioned.
 * Added `read_target_file()` function for reading in individual target data files.
+* Added target data utilities:
+  - `get_target_task_id()` for extracting the name of the task ID(s) containing targets from the target metadata of a hub's config.
 * Added target data validation checks:
   - `check_target_file_name()`: that a hive-partitioned target data file name can be correctly parsed.
   - `check_target_dataset_unique()`: that a single unique target dataset exists for a given target type.
