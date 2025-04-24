@@ -219,7 +219,7 @@ test_that("check_tbl_values_required works with v3 spec samples", {
   expect_snapshot(missing)
   expect_equal(
     unique(missing$output_type),
-    c("pmf", "sample", "mean", "median")
+    c("pmf", "mean", "median", "sample")
   )
   expect_true(all(missing$location == "US"))
 })
