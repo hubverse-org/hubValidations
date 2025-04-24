@@ -1,6 +1,6 @@
 group_tbl <- function(tbl, mask = NULL, sep = "-") {
   if (!is.null(mask)) {
-    tbl[mask] <- ""
+    tbl[mask] <- NA
   }
   dplyr::group_by(tbl, dplyr::pick(dplyr::everything()))
 }
