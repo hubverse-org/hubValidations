@@ -19,4 +19,3 @@ get_group_rows <- function(tbl, mask = NULL) {
   group_tbl(tbl, mask = mask) |>
     dplyr::group_rows()
 }
-
