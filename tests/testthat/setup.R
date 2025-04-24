@@ -1,5 +1,8 @@
 # Set up test target data hub
-if (curl::has_internet()) {
+example_hub_exists <- exists("hub_path") && dir.exists(
+  file.path(hub_path, "target-data")
+)
+if (curl::has_internet() && !example_hub_exists) {
   tmp_dir <- withr::local_tempdir(clean = FALSE)
   hub_path <- fs::path(tmp_dir, "main")
   file_hub_path <- fs::path(tmp_dir, "file")
