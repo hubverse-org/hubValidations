@@ -9,6 +9,7 @@
   - `check_target_dataset_unique()`: that a single unique target dataset exists for a given target type.
   - `check_target_dataset_file_ext_unique()`: that file(s) in a target dataset (e.g. `time-series` or `oracle-output`) share a single unique file extension.
   - `check_target_file_ext_valid()`: that the file extension of a single target data file is valid.
+* Improved performance of `check_tbl_values_required()`.
 
 # hubValidations 0.11.0
 
