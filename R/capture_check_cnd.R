@@ -55,6 +55,7 @@ capture_check_cnd <- function(check, file_path, msg_subject, msg_attribute,
   if (!is.null(call)) {
     call <- rlang::call_name(call)
   }
+  details <- paste(details, collapse = " | ")
 
   if (check) {
     msg <- cli::format_inline(
