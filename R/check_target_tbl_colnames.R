@@ -7,9 +7,11 @@
 #' @inherit check_tbl_colnames params return
 #' @inheritParams hubData::get_target_path
 #' @export
-check_target_tbl_colnames <- function(target_tbl, target_type = c(
+check_target_tbl_colnames <- function(target_tbl,
+                                      target_type = c(
                                         "time-series", "oracle-output"
-                                      ), file_path, hub_path) {
+                                      ),
+                                      file_path, hub_path) {
   target_type <- rlang::arg_match(target_type)
   col_names <- colnames(target_tbl)
   config_tasks <- read_config(hub_path)
