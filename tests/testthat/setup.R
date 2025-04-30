@@ -1,28 +1,17 @@
-# Helper: pick correct environment depending on whether running interactively
-defer_env <- function() {
-  if (requireNamespace("testthat", quietly = TRUE)) {
-    # Try to get the teardown environment if it exists
-    tryCatch(
-      teardown_env(),
-      error = function(e) globalenv()  # Fallback for interactive use
-    )
-  } else {
-    globalenv()
-  }
-}
-
 # Set up test target data hub
-example_hub_exists <- exists("complex_forecasting_hub_path") && dir.exists(
-  file.path(complex_forecasting_hub_path, "target-data")
+example_hub_exists <- exists("example_complex_forecasting_hub_path") && dir.exists(
+  file.path(example_complex_forecasting_hub_path, "target-data")
 )
 if (curl::has_internet() && !example_hub_exists) {
   # Allow example data temp directory to persist across tests.
   tmp_dir <- withr::local_tempdir(clean = FALSE)
-  # Ensure clean teardown after tests
-  withr::defer(
-    fs::dir_delete(tmp_dir),
-    envir = defer_env()
-  )
+  # Only register teardown if running in a testthat context
+  if (is_testing()) {
+    withr::defer(
+      fs::dir_delete(tmp_dir),
+      envir = teardown_env()
+    )
+  }
 
   example_complex_forecasting_hub_path <- fs::path(tmp_dir, "main")
   example_file_hub_path <- fs::path(tmp_dir, "file")
