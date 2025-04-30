@@ -310,7 +310,8 @@ get_opt_val_combs <- function(opt_vals, min_opt_col = 0L) {
 
 # Get a logical vector of whether a column contains all optional values or not.
 get_opt_cols <- function(mask, check_opt_comb = NULL, all_opt_cols = NULL) {
-  opt_cols <- apply(mask, 2, function(x) !all(x))
+  n <- nrow(mask)
+  opt_cols <- colSums(mask) < n
   if (!is.null(check_opt_comb)) {
     opt_cols[names(check_opt_comb)] <- FALSE
   }
