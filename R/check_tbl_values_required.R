@@ -278,7 +278,8 @@ full_req_grid_tested <- function(req_mask, req) {
 
 # Get a named list of the unique optional value in each optional column in x.
 get_opt_vals <- function(x, mask) {
-  idx <- apply(mask, 2, all)
+  n <- nrow(mask)
+  idx <- colSums(mask) == n
   if (all(idx)) {
     return(NULL)
   }
