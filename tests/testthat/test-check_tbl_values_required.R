@@ -217,11 +217,34 @@ test_that("check_tbl_values_required works with v3 spec samples", {
     hub_path = hub_path
   )$missing
   expect_snapshot(missing)
+  # Missing required values reported should include optional values
+  # (e.g optional horizons 0:2) and output types (e.g. mean & median)
+  # for which other locations have been submitted but the required
+  #  US location is now missing.
   expect_equal(
     unique(missing$output_type),
-    c("pmf", "sample", "mean", "median")
+    c("pmf", "mean", "median", "sample")
   )
   expect_true(all(missing$location == "US"))
+  expect_equal(unique(missing$horizon),  0:2)
+
+  # Remove some optional submission values to check that they are not
+  # flagged as required when required US value is missing.
+  tbl <- tbl[tbl$horizon == 1L, ]
+  tbl <- tbl[tbl$output_type != "median", ]
+
+  missing <- check_tbl_values_required(
+    tbl = tbl,
+    round_id = round_id,
+    file_path = file_path,
+    hub_path = hub_path
+  )$missing
+
+  expect_equal(unique(missing$horizon),  1)
+  expect_equal(
+    unique(missing$output_type),
+    c("pmf", "mean", "sample")
+  )
 })
 
 test_that("Ignoring derived_task_ids in check_tbl_values_required works", {
