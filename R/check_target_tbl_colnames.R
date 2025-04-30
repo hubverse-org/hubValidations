@@ -24,6 +24,7 @@ check_target_tbl_colnames <- function(target_tbl, target_type = c(
     ),
     `oracle-output` = c(
       "oracle_value",
+      get_target_task_id(config_tasks),
       # output_type and output_type_id are only required for "cdf" and "pmf"
       # output types.
       if (any(unique(target_tbl[["output_type"]]) %in% c("cdf", "pmf"))) {
@@ -73,7 +74,7 @@ check_target_tbl_colnames <- function(target_tbl, target_type = c(
     details <- c(
       details,
       cli::format_inline(
-        "Invalid columns {.val {invalid_cols}} detected."
+        "Invalid column{?s} {.val {invalid_cols}} detected."
       )
     )
   }
