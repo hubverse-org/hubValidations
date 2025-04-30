@@ -7,7 +7,7 @@
 #' @param config_tasks a list representation of the `tasks.json` config file.
 #'
 #' @return A character vector of unique target task ID names. Post v5.0.0
-#' this should be a single task ID names.
+#' this should be a single task ID name.
 #' @export
 get_target_task_id <- function(config_tasks) {
   get_target_metadata(config_tasks) |>
