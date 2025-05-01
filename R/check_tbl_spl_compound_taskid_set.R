@@ -33,7 +33,7 @@
 #' - `invalid_tbl_comp_tids`: the names of invalid compound task IDs.
 #'
 #' The name of each element is the index identifying the config modeling task the sample is associated with `mt_id`.
-#' See [hubverse documentation on samples](https://hubverse.io/en/latest/user-guide/sample-output-type.html)
+#' See [hubverse documentation on samples](https://docs.hubverse.io/en/latest/user-guide/sample-output-type.html)
 #' for more details.
 #' @export
 check_tbl_spl_compound_taskid_set <- function(

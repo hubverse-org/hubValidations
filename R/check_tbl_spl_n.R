@@ -12,7 +12,7 @@
 #' - `max_samples_per_task`: the maximum number of samples required for the compound idx.
 #' - `compound_idx_tbl`: a tibble of the expected structure for samples belonging to
 #' the compound idx.
-#' See [hubverse documentation on samples](https://hubverse.io/en/latest/user-guide/sample-output-type.html)
+#' See [hubverse documentation on samples](https://docs.hubverse.io/en/latest/user-guide/sample-output-type.html)
 #' for more details.
 #' @export
 check_tbl_spl_n <- function(tbl, round_id, file_path, hub_path,

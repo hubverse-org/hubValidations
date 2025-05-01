@@ -65,7 +65,7 @@ non-compound task ID value combination across all
 samples in the modeling task.
 \item \code{frequent}: The most frequent non-compound task ID value combination
 across all samples in the modeling task to which all samples were compared.
-See \href{https://hubverse.io/en/latest/user-guide/sample-output-type.html}{hubverse documentation on samples}
+See \href{https://docs.hubverse.io/en/latest/user-guide/sample-output-type.html}{hubverse documentation on samples}
 for more details.
 }
 }

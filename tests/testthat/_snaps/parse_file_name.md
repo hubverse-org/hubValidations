@@ -88,7 +88,7 @@
       parse_file_name("hubBaseline.yml", file_type = "model_metadata")
     Condition
       Error in `parse_file_name()`:
-      x File name 'hubBaseline' does not match expected pattern of [team_abbr]-[model_abbr]. Please consult documentation on file name requirements (<https://hubverse.io/en/latest/user-guide/model-metadata.html#directory-structure>) for details.
+      x File name 'hubBaseline' does not match expected pattern of [team_abbr]-[model_abbr]. Please consult documentation on file name requirements (<https://docs.hubverse.io/en/latest/user-guide/model-metadata.html#directory-structure>) for details.
 
 # parse_file_name fails correctly
 
@@ -96,7 +96,7 @@
       parse_file_name("model-output/team1-goodmodel/2022-10-08-team1_goodmodel.csv")
     Condition
       Error in `parse_file_name()`:
-      x File name '2022-10-08-team1_goodmodel' does not match expected pattern of [round_id]-[team_abbr]-[model_abbr]. Please consult documentation on file name requirements (<https://hubverse.io/en/latest/user-guide/model-output.html#directory-structure>) for details.
+      x File name '2022-10-08-team1_goodmodel' does not match expected pattern of [round_id]-[team_abbr]-[model_abbr]. Please consult documentation on file name requirements (<https://docs.hubverse.io/en/latest/user-guide/model-output.html#directory-structure>) for details.
 
 ---
 
@@ -196,5 +196,5 @@
         "model-output/team1-goodmodel/2022-10-08-team1-goodmodel.gzipr.parquet")
     Condition
       Error in `parse_file_name()`:
-      x Compression extension "gzipr" is not valid. Must be one of "snappy", "gzip", "gz", "brotli", "zstd", "lz4", "lzo", and "bz2". Please consult documentation on file name requirements (<https://hubverse.io/en/latest/user-guide/model-output.html#directory-structure>) for details.
+      x Compression extension "gzipr" is not valid. Must be one of "snappy", "gzip", "gz", "brotli", "zstd", "lz4", "lzo", and "bz2". Please consult documentation on file name requirements (<https://docs.hubverse.io/en/latest/user-guide/model-output.html#directory-structure>) for details.
 

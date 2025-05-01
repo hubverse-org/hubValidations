@@ -145,7 +145,7 @@ Additional useful functionality:
 # hubValidations 0.0.1
 
 * Release stable 0.0.1 version
-* Enforce minimum dependence on latest `hubData` (0.1.0) & `hubAdmin` (0.1.0). This allows for successful validation of submissions to hubs with multiple model tasks, where a given model task might contain non relevant task IDs and both `required` and `optional` properties have been set to `null` in `tasks.json` (#75). See the [relevant section in `hubDocs` documentation](https://hubverse.io/en/latest/quickstart-hub-admin/tasks-config.html#required-and-optional-elements) for more details.
+* Enforce minimum dependence on latest `hubData` (0.1.0) & `hubAdmin` (0.1.0). This allows for successful validation of submissions to hubs with multiple model tasks, where a given model task might contain non relevant task IDs and both `required` and `optional` properties have been set to `null` in `tasks.json` (#75). See the [relevant section in `hubDocs` documentation](https://docs.hubverse.io/en/latest/quickstart-hub-admin/tasks-config.html#required-and-optional-elements) for more details.
 * Improve formatting of current time print in `validate_submission_time()` message by removing decimal seconds and including local time zone.
 
 

@@ -64,7 +64,7 @@ one for each compound_idx failing validation, with the following structure:
 \item \code{max_samples_per_task}: the maximum number of samples required for the compound idx.
 \item \code{compound_idx_tbl}: a tibble of the expected structure for samples belonging to
 the compound idx.
-See \href{https://hubverse.io/en/latest/user-guide/sample-output-type.html}{hubverse documentation on samples}
+See \href{https://docs.hubverse.io/en/latest/user-guide/sample-output-type.html}{hubverse documentation on samples}
 for more details.
 }
 }

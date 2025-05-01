@@ -13,9 +13,9 @@ folder with a template that submitting teams can copy and update for their
 own models. Because some model metadata fields may be hub-specific, creators 
 of the hub are encouraged to create their template by:
 
-- adding the [Hubverse template model metadata file](https://hubverse.io/en/latest/user-guide/model-metadata.html#template-metadata-schema-file) to `model-metadata` 
+- adding the [Hubverse template model metadata file](https://docs.hubverse.io/en/latest/user-guide/model-metadata.html#template-metadata-schema-file) to `model-metadata` 
 - modifying the template model metadata file to include any hub-specific fields
-- ensuring that the above changes are consistent with [Hubverse model metadata guidelines](https://hubverse.io/en/latest/format/model-metadata.html).
+- ensuring that the above changes are consistent with [Hubverse model metadata guidelines](https://docs.hubverse.io/en/latest/format/model-metadata.html).
 
 
 The instructions below provide detail about the [data

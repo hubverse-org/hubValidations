@@ -76,6 +76,6 @@ task config.
 }
 
 The name of each element is the index identifying the config modeling task the sample is associated with \code{mt_id}.
-See \href{https://hubverse.io/en/latest/user-guide/sample-output-type.html}{hubverse documentation on samples}
+See \href{https://docs.hubverse.io/en/latest/user-guide/sample-output-type.html}{hubverse documentation on samples}
 for more details.
 }

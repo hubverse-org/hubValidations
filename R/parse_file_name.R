@@ -68,7 +68,8 @@ split_filename <- function(file_name, file_type) {
       "Could not parse file name {.path {file_name}} for submission metadata.
       Please consult
       {.href [documentation on file name requirements
-      ](https://hubverse.io/en/latest/user-guide/model-output.html#directory-structure)} for correct metadata parsing."
+      ](https://docs.hubverse.io/en/latest/user-guide/model-output.html#directory-structure)} 
+      for correct metadata parsing."
     )
   }
   if (file_type == "model_metadata") {
@@ -114,8 +115,8 @@ validate_filename_pattern <- function(file_name, file_type,
 
 
   info_url <- switch(file_type, # nolint: object_usage_linter
-    model_output = "https://hubverse.io/en/latest/user-guide/model-output.html#directory-structure",
-    model_metadata = "https://hubverse.io/en/latest/user-guide/model-metadata.html#directory-structure"
+    model_output = "https://docs.hubverse.io/en/latest/user-guide/model-output.html#directory-structure",
+    model_metadata = "https://docs.hubverse.io/en/latest/user-guide/model-metadata.html#directory-structure"
   )
 
   if (!grepl(pattern, file_name)) {
@@ -141,7 +142,7 @@ validate_compression_ext <- function(compression_ext, call = rlang::caller_env()
       c("x" = "Compression extension {.val {compression_ext}} is not valid.
       Must be one of {.val {compress_codec}}.
       Please consult {.href [documentation on file name requirements
-      ](https://hubverse.io/en/latest/user-guide/model-output.html#directory-structure)}
+      ](https://docs.hubverse.io/en/latest/user-guide/model-output.html#directory-structure)}
       for details."),
       call = call
     )
