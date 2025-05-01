@@ -68,7 +68,8 @@ split_filename <- function(file_name, file_type) {
       "Could not parse file name {.path {file_name}} for submission metadata.
       Please consult
       {.href [documentation on file name requirements
-      ](https://docs.hubverse.io/en/latest/user-guide/model-output.html#directory-structure)} for correct metadata parsing."
+      ](https://docs.hubverse.io/en/latest/user-guide/model-output.html#directory-structure)} 
+      for correct metadata parsing."
     )
   }
   if (file_type == "model_metadata") {
