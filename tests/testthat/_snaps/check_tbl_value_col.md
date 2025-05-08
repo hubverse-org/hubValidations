@@ -23,7 +23,7 @@
     Output
       <error/check_failure>
       Error:
-      ! Values in column `value` are not all valid with respect to modeling task config.  Value "fail" cannot be coerced to expected data type "integer" for output type "quantile".Values in column `value` are not all valid with respect to modeling task config.  Value -6 is smaller than allowed minimum value 0 for output type "quantile".
+      ! Values in column `value` are not all valid with respect to modeling task config.  Value "fail" cannot be coerced to expected data type "integer" for output type "quantile". | Value -6 is smaller than allowed minimum value 0 for output type "quantile".
 
 ---
 
@@ -32,7 +32,7 @@
     Output
       <error/check_failure>
       Error:
-      ! Values in column `value` are not all valid with respect to modeling task config.  Value "fail" cannot be coerced to expected data type "integer" for output type "quantile".Values in column `value` are not all valid with respect to modeling task config.  Value -6 is smaller than allowed minimum value 0 for output type "quantile".
+      ! Values in column `value` are not all valid with respect to modeling task config.  Value "fail" cannot be coerced to expected data type "integer" for output type "quantile". | Value -6 is smaller than allowed minimum value 0 for output type "quantile".
 
 # Ignoring derived_task_ids in check_tbl_value_col works
 
