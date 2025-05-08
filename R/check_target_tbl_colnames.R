@@ -47,6 +47,22 @@ check_target_tbl_colnames <- function(target_tbl,
     )
   }
 
+  if (target_type == "time-series") {
+    req_col_n <- length(required) + 1L
+    check_col_n <- ncol(target_tbl) >= req_col_n
+    if (!check_col_n) {
+      details <- c(
+        details,
+        cli::format_inline(
+          "Fewer columns ({.val {ncol(target_tbl)}}) than the required number of
+          columns ({.val {req_col_n}}) detected."
+        )
+      )
+    }
+  } else {
+    check_col_n <- TRUE
+  }
+
   invalid_cols <- switch(target_type,
     `time-series` = {
       # Time series is more lenient as it allows additional columns.
@@ -81,7 +97,7 @@ check_target_tbl_colnames <- function(target_tbl,
     )
   }
 
-  check <- check_missing && check_invalid
+  check <- check_missing && check_invalid && check_col_n
 
   capture_check_cnd(
     check = check,
