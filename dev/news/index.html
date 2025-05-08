@@ -54,6 +54,10 @@
 <code><a href="../reference/is_hive_partitioned_path.html">is_hive_partitioned_path()</a></code> for checking if a path is hive-partitioned.</li>
 </ul></li>
 <li>Added <code><a href="../reference/read_target_file.html">read_target_file()</a></code> function for reading in individual target data files.</li>
+<li>Added target data utilities:
+<ul><li>
+<code><a href="../reference/get_target_task_id.html">get_target_task_id()</a></code> for extracting the name of the task ID(s) containing targets from the target metadata of a hub’s config.</li>
+</ul></li>
 <li>Added target data validation checks:
 <ul><li>
 <code><a href="../reference/check_target_file_name.html">check_target_file_name()</a></code>: that a hive-partitioned target data file name can be correctly parsed.</li>
@@ -63,6 +67,8 @@
 <code><a href="../reference/check_target_dataset_file_ext_unique.html">check_target_dataset_file_ext_unique()</a></code>: that file(s) in a target dataset (e.g. <code>time-series</code> or <code>oracle-output</code>) share a single unique file extension.</li>
 <li>
 <code><a href="../reference/check_target_file_ext_valid.html">check_target_file_ext_valid()</a></code>: that the file extension of a single target data file is valid.</li>
+<li>
+<code><a href="../reference/check_target_tbl_colnames.html">check_target_tbl_colnames()</a></code>: that column names of a target data file match expected column names for the target type.</li>
 </ul></li>
 <li>Improved performance of <code><a href="../reference/check_tbl_values_required.html">check_tbl_values_required()</a></code>.</li>
 </ul></div>
