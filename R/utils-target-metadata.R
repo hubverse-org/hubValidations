@@ -10,9 +10,11 @@
 #' this should be a single task ID name.
 #' @export
 get_target_task_id <- function(config_tasks) {
-  get_target_metadata(config_tasks) |>
-    purrr::map_chr(~ names(.x[["target_keys"]])) |>
+  safe_names <- function(x) names(x) %||% ""
+  out <- get_target_metadata(config_tasks) |>
+    purrr::map_chr(~ safe_names(.x[["target_keys"]])) |>
     unique()
+  if (identical(out, "")) NULL else out
 }
 
 #' Get Target Metadata for all rounds

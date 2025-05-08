@@ -89,3 +89,82 @@ test_that("check_target_tbl_colnames works on oracle data", {
     "Column names must be consistent with expected column names for oracle-output target type data. Required columns \"target\" and \"output_type_id\" are missing. | Invalid column \"value\" detected." # nolint: line_length_linter
   )
 })
+
+test_that("check_target_tbl_colnames works with null target keys", {
+  target_tbl <- read_target_file("time-series.csv", example_file_hub_path)
+
+  ## Modify the config to have null target keys
+  config_tasks <- hubUtils::read_config(example_file_hub_path)
+  # restrict to first round and model task
+  config_tasks$rounds[[1]]$model_tasks <- config_tasks$rounds[[1]]$model_tasks[1]
+  # Assing NULL to target_keys
+  config_tasks <- purrr::assign_in(
+    config_tasks,
+    list(
+      "rounds", 1, "model_tasks", 1,
+      "target_metadata", 1, "target_keys"
+    ),
+    NULL
+  )
+  # Remove target task ID
+  config_tasks$rounds[[1]]$model_tasks[[1]]$task_ids[["target"]] <- NULL
+
+  local_mocked_bindings(
+    read_config = function(hub_path) {
+      config_tasks
+    }
+  )
+
+  # In time-series output, the allowance of additional columns means the target
+  #  column is not flagged as invalid
+  valid_ts <- check_target_tbl_colnames(
+    target_tbl,
+    target_type = "time-series",
+    file_path = "time-series.csv",
+    example_file_hub_path
+  )
+  expect_s3_class(valid_ts, "check_success")
+  expect_equal(
+    cli::ansi_strip(valid_ts$message) |> stringr::str_squish(),
+    "Column names are consistent with expected column names for time-series target type data."
+  )
+
+  target_tbl$target <- NULL
+  valid_ts_sans_target <- check_target_tbl_colnames(
+    target_tbl,
+    target_type = "time-series",
+    file_path = "time-series.csv",
+    example_file_hub_path
+  )
+  expect_equal(valid_ts_sans_target, valid_ts)
+
+  # Oracle output
+  target_tbl <- read_target_file("oracle-output.csv", example_file_hub_path)
+
+  # In oracle output, the target column is now flagged as invalid
+  invalid_oo <- check_target_tbl_colnames(
+    target_tbl,
+    target_type = "oracle-output",
+    file_path = "oracle-output.csv",
+    example_file_hub_path
+  )
+  expect_s3_class(invalid_oo, "check_error")
+  expect_equal(
+    cli::ansi_strip(invalid_oo$message) |> stringr::str_squish(),
+    "Column names must be consistent with expected column names for oracle-output target type data. Invalid column \"target\" detected." # nolint: line_length_linter
+  )
+
+  # Once the target column is removed, the check passes
+  target_tbl$target <- NULL
+  valid_oo <- check_target_tbl_colnames(
+    target_tbl,
+    target_type = "oracle-output",
+    file_path = "oracle-output.csv",
+    example_file_hub_path
+  )
+  expect_s3_class(valid_oo, "check_success")
+  expect_equal(
+    cli::ansi_strip(valid_oo$message) |> stringr::str_squish(),
+    "Column names are consistent with expected column names for oracle-output target type data."
+  )
+})
