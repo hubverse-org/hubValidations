@@ -12,7 +12,7 @@
 get_target_task_id <- function(config_tasks) {
   safe_names <- function(x) names(x) %||% ""
   out <- get_target_metadata(config_tasks) |>
-    purrr::map_chr(~ safe_names(.x[["target_keys"]])) |>
+    purrr::map_chr(\(.x) safe_names(.x[["target_keys"]])) |>
     unique()
   if (identical(out, "")) NULL else out
 }
