@@ -199,8 +199,21 @@ test_that("check_target_tbl_colnames minimum column n check works", {
     cli::ansi_strip(invalid_ts$message) |> stringr::str_squish(),
     "Column names must be consistent with expected column names for time-series target type data. Required column \"target\" is missing. | Fewer columns (2) than the required number of columns (3) detected." # nolint: line_length_linter
   )
+  # With 3 columns (including an optional `as_of` column) the check fails
+  target_tbl$as_of <- Sys.Date()
+  invalid_ts <- check_target_tbl_colnames(
+    target_tbl,
+    target_type = "time-series",
+    file_path = "time-series.csv",
+    example_file_hub_path
+  )
+  expect_s3_class(invalid_ts, "check_error")
+  expect_equal(
+    cli::ansi_strip(invalid_ts$message) |> stringr::str_squish(),
+    "Column names must be consistent with expected column names for time-series target type data. Required column \"target\" is missing. | Fewer columns (3) than the required number of columns (4) detected." # nolint: line_length_linter
+  )
 
-  # With 2 columns & NULL target keys check passes
+  # With 3 columns (including an optional `as_of` column) & NULL target keys check passes
   ## Modify the config to have null target keys
   config_tasks <- hubUtils::read_config(example_file_hub_path)
   # restrict to first round and model task
@@ -238,7 +251,7 @@ test_that("check_target_tbl_colnames minimum column n check works", {
   )
 
   target_tbl$date <- NULL
-  # With 1 column & NULL target keys, check fails
+  # With 2 columns (including an optional `as_of` column) & NULL target keys, check fails
   invalid_ts <- check_target_tbl_colnames(
     target_tbl,
     target_type = "time-series",
@@ -248,6 +261,6 @@ test_that("check_target_tbl_colnames minimum column n check works", {
   expect_s3_class(invalid_ts, "check_error")
   expect_equal(
     cli::ansi_strip(invalid_ts$message) |> stringr::str_squish(),
-    "Column names must be consistent with expected column names for time-series target type data. Fewer columns (1) than the required number of columns (2) detected." # nolint: line_length_linter
+    "Column names must be consistent with expected column names for time-series target type data. Fewer columns (2) than the required number of columns (3) detected." # nolint: line_length_linter
   )
 })
