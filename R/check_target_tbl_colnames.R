@@ -48,7 +48,8 @@ check_target_tbl_colnames <- function(target_tbl,
   }
 
   if (target_type == "time-series") {
-    req_col_n <- length(required) + 1L
+    has_as_of_col <- "as_of" %in% col_names
+    req_col_n <- length(required) + 1L + has_as_of_col
     check_col_n <- ncol(target_tbl) >= req_col_n
     if (!check_col_n) {
       details <- c(
