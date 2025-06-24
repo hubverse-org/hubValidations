@@ -43,3 +43,21 @@ test_that("check_target_tbl_values works with time-series data", {
     "`target_tbl` contains invalid values/value combinations. Column `target` contains invalid value \"random_target\"; Column `location` contains invalid value \"random_location\". See `error_tbl` for details." # nolint: line_length_linter
   )
 })
+
+test_that("check_target_tbl_values skips when necessary", {
+  target_tbl <- read_target_file("time-series.csv", example_file_hub_path)
+  file_path <- "time-series.csv"
+
+  # Remove all task IDs from the target_tbl
+  target_tbl[c("target", "location")] <- NULL
+  skipped_ts <- check_target_tbl_values(target_tbl,
+    target_type = "time-series",
+    file_path, example_file_hub_path
+  )
+
+  expect_s3_class(skipped_ts, "check_info")
+  expect_equal(
+    cli::ansi_strip(skipped_ts$message) |> stringr::str_squish(),
+    "`target_tbl` contains no task ID columns, skipping check."
+  )
+})

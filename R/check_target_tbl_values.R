@@ -16,6 +16,17 @@ check_target_tbl_values <- function(target_tbl,
   config_tasks <- read_config(hub_path)
   task_ids <- hubUtils::get_task_id_names(config_tasks)
 
+  if (isFALSE(any(colnames(target_tbl) %in% task_ids))) {
+    # If no task IDs are present in the target_tbl, we can skip the check
+    return(
+      capture_check_info(
+      file_path = file_path,
+      msg = cli::format_inline(
+        "`target_tbl` contains no task ID columns, skipping check."
+      )
+    ))
+  }
+
   details <- NULL
 
   valid_tbl <- expand_target_data_vals(config_tasks, target_tbl)
