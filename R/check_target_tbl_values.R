@@ -141,6 +141,7 @@ create_invalid_tbl <- function(config_tasks, target_tbl_chr, output_type = NULL)
 #' @return A tibble containing all valid combinations of
 #' task ID/output_type/output_type_id values present
 #' in both the hub configuration and `target_tbl_chr`.
+#' @noRd
 expand_target_data_vals <- function(config_tasks, target_tbl_chr,
                                     output_type = NULL, intersect = TRUE) {
   extract_target_data_vals(
@@ -242,6 +243,7 @@ extract_round_vals <- function(round_config, target_tbl_chr, output_type = NULL,
 #'
 #' @return A named list of valid task ID/output_type/output_type_id values for
 #' the model task, or `NULL` if no intersection is found.
+#' @noRd
 extract_model_task_vals <- function(model_task, target_tbl_chr, output_type = NULL,
                                     intersect = TRUE) {
   # If output_type is specified but not present in the model_task, return NULL
