@@ -178,7 +178,9 @@ expand_target_data_vals <- function(config_tasks, target_tbl_chr,
 extract_target_data_vals <- function(config_tasks, target_tbl_chr, output_type = NULL,
                                      collapse = FALSE, intersect = TRUE) {
   out <- config_tasks[["rounds"]] |>
-    purrr::map(~ extract_round_vals(.x, target_tbl_chr,
+    purrr::map(~ extract_round_vals(
+      .x,
+      target_tbl_chr,
       output_type = output_type,
       intersect = intersect
     )) |>
@@ -446,7 +448,7 @@ summarise_invalid_target_values <- function(valid_tbl, invalid_tbl) {
   ) |>
     unlist(use.names = FALSE) |>
     unique() |>
-    setdiff(seq(nrow(invalid_tbl)))
+    setdiff(seq_len(nrow(invalid_tbl)))
 
   if (length(invalid_combo_rows) > 0L) {
     invalid_combs_msg <- cli::format_inline(
