@@ -13,6 +13,7 @@ test_that("check_target_tbl_values works with time-series data", {
     cli::ansi_strip(valid_ts$message) |> stringr::str_squish(),
     "`target_tbl_chr` contains valid values/value combinations."
   )
+  expect_null(valid_ts$error_tbl)
 
   # Introducing invalid values causes check to fail
   target_tbl_chr$location[1] <- "random_location"
@@ -28,6 +29,19 @@ test_that("check_target_tbl_values works with time-series data", {
     cli::ansi_strip(invalid_ts$message) |> stringr::str_squish(),
     "`target_tbl_chr` contains invalid values/value combinations. Column `target` contains invalid value \"random_target\"; Column `location` contains invalid value \"random_location\". See `error_tbl` for details." # nolint: line_length_linter
   )
+  expect_s3_class(invalid_ts$error_tbl, "tbl_df")
+  expect_named(
+    invalid_ts$error_tbl,
+    c("date", "target", "location", "observation")
+  )
+  expect_equal(
+    invalid_ts$error_tbl$location,
+    c("random_location", "15")
+  )
+  expect_equal(
+    invalid_ts$error_tbl$target,
+    c("wk inc flu hosp", "random_target")
+  )
 
   # Check that function still works when `target_tbl_chr` has errors in every row and
   # therefore no model task intersect with config values. Tests situation where a zero
@@ -42,6 +56,19 @@ test_that("check_target_tbl_values works with time-series data", {
   expect_equal(
     cli::ansi_strip(invalid_ts$message) |> stringr::str_squish(),
     "`target_tbl_chr` contains invalid values/value combinations. Column `target` contains invalid value \"random_target\"; Column `location` contains invalid value \"random_location\". See `error_tbl` for details." # nolint: line_length_linter
+  )
+  expect_s3_class(invalid_ts$error_tbl, "tbl_df")
+  expect_equal(
+    invalid_ts$error_tbl$location,
+    c("random_location", "15")
+  )
+  expect_equal(
+    invalid_ts$error_tbl$target,
+    c("random_target", "random_target")
+  )
+  expect_named(
+    invalid_ts$error_tbl,
+    c("date", "target", "location", "observation")
   )
 })
 
@@ -83,6 +110,7 @@ test_that("check_target_tbl_values works with oracle-output data", {
     cli::ansi_strip(valid_oracle$message) |> stringr::str_squish(),
     "`target_tbl_chr` contains valid values/value combinations."
   )
+  expect_null(valid_oracle$error_tbl)
 
   # Introducing invalid values causes check to fail
   target_tbl_chr$location[1] <- "random_location"
@@ -97,5 +125,21 @@ test_that("check_target_tbl_values works with oracle-output data", {
   expect_equal(
     cli::ansi_strip(invalid_oracle$message) |> stringr::str_squish(),
     "`target_tbl_chr` contains invalid values/value combinations. Column `location` contains invalid value \"random_location\"; Column `target` contains invalid value \"random_target\". See `error_tbl` for details." # nolint: line_length_linter
+  )
+  expect_s3_class(invalid_oracle$error_tbl, "tbl_df")
+  expect_equal(
+    invalid_oracle$error_tbl$location,
+    c("random_location", "01")
+  )
+  expect_equal(
+    invalid_oracle$error_tbl$target,
+    c("wk inc flu hosp", "random_target")
+  )
+  expect_named(
+    invalid_oracle$error_tbl,
+    c(
+      "location", "target_end_date", "target",
+      "output_type", "output_type_id", "oracle_value"
+    )
   )
 })
