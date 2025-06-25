@@ -57,7 +57,7 @@ check_target_tbl_values <- function(target_tbl_chr,
       "contains valid values/value combinations.",
       "contains invalid values/value combinations."
     ),
-    error_tbl = invalid_tbl,
+    error_tbl = if (check) NULL else invalid_tbl,
     details = details,
     error = TRUE
   )
