@@ -1,9 +1,11 @@
 #' Check that task ID columns in a target data file have valid task ID values
 #'
+#' Check is only performed when the target data file contains columns that map onto
+#' task IDs or output types defined in the hub configuration.
 #' @param target_tbl_chr A tibble/data.frame of the contents of the target data file
 #' being validated. All columns should be coerced to character.
 #' @inheritParams check_target_file_name
-#' @inheritParams check_target_tbl_chr_colnames
+#' @inheritParams check_target_tbl_colnames
 #' @inherit check_tbl_colnames params return
 #' @inheritParams hubData::get_target_path
 #' @export

@@ -41,5 +41,6 @@ Depending on whether validation has succeeded, one of:
 Returned object also inherits from subclass \verb{<hub_check>}.
 }
 \description{
-Check that task ID columns in a target data file have valid task ID values
+Check is only performed when the target data file contains columns that map onto
+task IDs or output types defined in the hub configuration.
 }
