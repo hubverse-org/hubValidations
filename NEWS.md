@@ -12,6 +12,7 @@
   - `check_target_dataset_file_ext_unique()`: that file(s) in a target dataset (e.g. `time-series` or `oracle-output`) share a single unique file extension.
   - `check_target_file_ext_valid()`: that the file extension of a single target data file is valid.
   - `check_target_tbl_colnames()`: that column names of a target data file match expected column names for the target type.
+  - `check_target_tbl_values()`: that values in a target data file match valid values/value combinations for model tasks specified n the `tasks.json` hub config file.
 * Improved performance of `check_tbl_values_required()`.
 
 
