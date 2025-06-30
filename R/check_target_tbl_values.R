@@ -185,7 +185,8 @@ extract_target_data_vals <- function(config_tasks, target_tbl_chr, output_type =
       intersect = intersect
     )) |>
     # Remove round depth of nesting so that we have a list of all model tasks
-    purrr::list_flatten()
+    purrr::list_flatten() |>
+    unique()
 
   if (collapse) {
     out <- out |>
