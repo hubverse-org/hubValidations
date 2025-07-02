@@ -6,7 +6,9 @@
 #' through the config file. Otherwise, the values in the target task ID column
 #' of `target_tbl` are checked. Note that valid `time-series` targets must be
 #' step ahead and their target type must be one of `"continuous"`, `"discrete"`,
-#' `"binary"` or `"compositional"`. If the hub contains no valid time-series targets, no time-series target data should be present and validation of such data will be skipped.
+#' `"binary"` or `"compositional"`. If the hub contains no valid time-series
+#' targets, no time-series target data should be present and validation of
+#' such data will be skipped.
 #' @param target_tbl A tibble/data.frame of the contents of the target data file
 #' being validated.
 #' @inheritParams check_target_file_name

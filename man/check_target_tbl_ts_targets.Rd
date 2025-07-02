@@ -47,5 +47,7 @@ target and \code{target_keys = NULL}), the validity of the target is only checke
 through the config file. Otherwise, the values in the target task ID column
 of \code{target_tbl} are checked. Note that valid \code{time-series} targets must be
 step ahead and their target type must be one of \code{"continuous"}, \code{"discrete"},
-\code{"binary"} or \code{"compositional"}. If the hub contains no valid time-series targets, no time-series target data should be present and validation of such data will be skipped.
+\code{"binary"} or \code{"compositional"}. If the hub contains no valid time-series
+targets, no time-series target data should be present and validation of
+such data will be skipped.
 }
