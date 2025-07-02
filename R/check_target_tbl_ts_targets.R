@@ -113,7 +113,7 @@ check_target_tbl_ts_targets <- function(target_tbl,
   )
 }
 
-#' Check whether a target_metadata item is a valid time-series target
+# Check whether a target_metadata item is a valid time-series target
 is_ts_target <- function(x) {
   valid_target_types <- c("continuous", "discrete", "binary", "compositional")
   out <- x$is_step_ahead && x$target_type %in% valid_target_types
