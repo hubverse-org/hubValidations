@@ -42,6 +42,8 @@ stand_up_custom_check_hub <- function(
   return(new_path)
 }
 
+# Create inferred target config_tasks for testing. Defaults to using task.json
+#  from clone of github.com/hubverse-org/example-complex-forecast-hub
 mock_inferred_target_config <- function(categorical = FALSE, config_tasks = NULL) {
   # Supplying config_tasks allows us to override any mocking that might be applied to
   # read_config() in the tests.
