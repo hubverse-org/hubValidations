@@ -40,26 +40,14 @@ test_that("check_target_tbl_ts_targets works with a target column", {
 
 test_that("check_target_tbl_ts_targets works with NULL target_keys", {
   file_path <- "time-series.csv"
-  original_config <- read_config(example_file_hub_path)
-
-  # Test with valid inferred target from config ----
-  config_tasks <- original_config
   # restrict to first round and model task 3 ("wk inc flu hosp" target)
-  config_tasks$rounds[[1]]$model_tasks <- config_tasks$rounds[[1]]$model_tasks[3]
-  # Assing NULL to target_keys
-  config_tasks <- purrr::assign_in(
-    config_tasks,
-    list(
-      "rounds", 1, "model_tasks", 1,
-      "target_metadata", 1, "target_keys"
-    ),
-    NULL
-  )
-  # Remove target task ID
-  config_tasks$rounds[[1]]$model_tasks[[1]]$task_ids[["target"]] <- NULL
+  valid_inf_config_tasks <- mock_inferred_target_config(categorical = FALSE)
+  # restrict to first round and model task 1 (target "wk flu hosp rate category")
+  invalid_inf_config_tasks <- mock_inferred_target_config(categorical = TRUE)
+
   local_mocked_bindings(
     read_config = function(hub_path) {
-      config_tasks
+      valid_inf_config_tasks
     }
   )
 
@@ -74,24 +62,9 @@ test_that("check_target_tbl_ts_targets works with NULL target_keys", {
     "time-series target is valid."
   )
 
-  # Test with invalid inferred target from config ----
-  config_tasks <- original_config
-  # restrict to first round and model task 1 (target "wk flu hosp rate category")
-  config_tasks$rounds[[1]]$model_tasks <- config_tasks$rounds[[1]]$model_tasks[1]
-  # Assing NULL to target_keys
-  config_tasks <- purrr::assign_in(
-    config_tasks,
-    list(
-      "rounds", 1, "model_tasks", 1,
-      "target_metadata", 1, "target_keys"
-    ),
-    NULL
-  )
-  # Remove target task ID
-  config_tasks$rounds[[1]]$model_tasks[[1]]$task_ids[["target"]] <- NULL
   local_mocked_bindings(
     read_config = function(hub_path) {
-      config_tasks
+      invalid_inf_config_tasks
     }
   )
   invalid_null <- check_target_tbl_ts_targets(
