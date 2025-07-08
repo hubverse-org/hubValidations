@@ -46,7 +46,7 @@ mock_inferred_target_config <- function(categorical = FALSE, config_tasks = NULL
   # Supplying config_tasks allows us to override any mocking that might be applied to
   # read_config() in the tests.
   if (is.null(config_tasks)) {
-    config_tasks <- read_config(example_file_hub_path)
+    config_tasks <- read_config(example_file_hub_path) # nolint: object_usage_linter
   }
 
   if (categorical) {
