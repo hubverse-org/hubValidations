@@ -1,4 +1,6 @@
 test_that("check_target_tbl_ts_targets works with a target column", {
+  # Example hub is the hubverse-org/example-complex-forecast-hub on github
+  #  cloned in `setup.R`
   hub_path <- example_file_hub_path
   target_tbl <- read_target_file("time-series.csv", example_file_hub_path)
   file_path <- "time-series.csv"
