@@ -4,11 +4,19 @@
 \alias{check_target_tbl_output_type_ids}
 \title{Check that output type ID values in a target data file are valid and complete}
 \usage{
-check_target_tbl_output_type_ids(target_tbl_chr, file_path, hub_path)
+check_target_tbl_output_type_ids(
+  target_tbl_chr,
+  target_type = c("oracle-output", "time-series"),
+  file_path,
+  hub_path
+)
 }
 \arguments{
 \item{target_tbl_chr}{A tibble/data.frame of the contents of the target data file
 being validated. All columns should be coerced to character.}
+
+\item{target_type}{Type of target data to validate. One of "time-series" or
+"oracle-output". oracle-output"}
 
 \item{file_path}{A character string representing the path to the target data file
 relative to the \code{target-data} directory.}

@@ -4,11 +4,26 @@
 #' `output_type_id` column. It verifies that non-distributional
 #' output types have all NA output type IDs, and that distributional output types
 #' (`cdf`, `pmf`) include the complete output_type_id set defined in the hub config.
+#' @param target_type Type of target data to validate. One of "time-series" or
+#' "oracle-output". oracle-output"
 #' @inheritParams check_target_tbl_values
 #' @inherit check_tbl_colnames params return
 #' @export
 check_target_tbl_output_type_ids <- function(target_tbl_chr,
+                                             target_type = c(
+                                               "oracle-output",
+                                               "time-series"
+                                             ),
                                              file_path, hub_path) {
+  target_type <- rlang::arg_match(target_type)
+  if (target_type == "time-series") {
+    return(
+      capture_check_info(
+        file_path,
+        msg = "Check not applicable to {.field time-series} target data. Skipped."
+      )
+    )
+  }
   if (!has_output_type_ids(target_tbl_chr)) {
     return(
       capture_check_info(file_path,
