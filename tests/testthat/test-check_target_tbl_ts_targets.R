@@ -44,11 +44,15 @@ test_that("check_target_tbl_ts_targets works with NULL target_keys", {
   file_path <- "time-series.csv"
   hub_path <- example_file_hub_path
   # restrict to first round and model task 3 ("wk inc flu hosp" target)
-  valid_inf_config_tasks <- mock_global_target_config(categorical = FALSE,
-                                                        hub_path = hub_path)
+  valid_inf_config_tasks <- mock_global_target_config(
+    categorical = FALSE,
+    hub_path = hub_path
+  )
   # restrict to first round and model task 1 (target "wk flu hosp rate category")
-  invalid_inf_config_tasks <- mock_global_target_config(categorical = TRUE,
-                                                          hub_path = hub_path)
+  invalid_inf_config_tasks <- mock_global_target_config(
+    categorical = TRUE,
+    hub_path = hub_path
+  )
 
   local_mocked_bindings(
     read_config = function(hub_path) {
