@@ -28,15 +28,22 @@ check_target_tbl_output_type_ids <- function(target_tbl_chr,
     return(
       capture_check_info(file_path,
         msg = cli::format_inline(
-          "Target table does not have {.code output_type_id} column. Check kipped."
+          "Target table does not have {.code output_type_id} column. Check skipped."
         )
       )
     )
   }
   details <- NULL
+  missing <- NULL
 
   if (!has_distributional(target_tbl_chr)) {
-    check <- has_na_output_type_ids(target_tbl_chr)
+    check <- has_all_na_output_type_ids(target_tbl_chr)
+    if (!check) {
+      invalid_output_types <- has_non_na_output_type_ids(target_tbl_chr)
+      details <- cli::format_inline(
+        "Non-{.code NA} output type ID values detected for output type{?s} {.val {invalid_output_types}}."
+      )
+    }
   } else {
     config_tasks <- read_config(hub_path)
     output_types <- unique(target_tbl_chr[["output_type"]])
@@ -82,7 +89,7 @@ check_td_output_type_ids <- function(output_type, target_tbl_chr,
                                      config_tasks) {
   tbl <- target_tbl_chr[target_tbl_chr$output_type == output_type, ]
   if (!is_distributional(output_type)) {
-    check <- has_na_output_type_ids(tbl)
+    check <- has_all_na_output_type_ids(tbl)
     if (!check) {
       details <- cli::format_inline(
         "Non-{.code NA} output type ID values detected for output type {.val {output_type}}."
@@ -115,18 +122,17 @@ check_dist_output_type_ids <- function(output_type = c("cdf", "pmf"), tbl,
     output_type = output_type,
     tbl = tbl,
     config_tasks = config_tasks
-  )
-  target_task_id <- get_target_task_id(config_tasks)
-  targets <- unique(tbl[[target_task_id]])
+  ) |>
+    unique()
 
-  missing <- purrr::map(targets, ~ diff_output_type_ids(
-    target = .x,
-    tbl = tbl[tbl[[target_task_id]] == .x, ],
-    output_type_ids = output_type_ids[[.x]],
-    config_tasks
-  )) |>
-    purrr::compact() |>
-    purrr::list_rbind()
+    missing <- purrr::map(output_type_ids, ~ diff_output_type_ids(
+      tbl = tbl,
+      output_type_ids = .x,
+      config_tasks
+    )) |>
+      purrr::compact() |>
+      purrr::list_rbind()
+
 
   check <- nrow(missing) == 0
   if (check) missing <- NULL
@@ -138,14 +144,17 @@ check_dist_output_type_ids <- function(output_type = c("cdf", "pmf"), tbl,
 }
 #' Identify missing output_type_id values for a specific target unit
 #'
-#' @param target Value of the target task identifier.
 #' @param tbl Data frame for that target and output type.
 #' @param output_type_ids Expected vector of output_type_id values.
 #' @param config_tasks List of hub configuration tasks.
 #' @return A data frame of missing support rows, grouped by non-unique columns.
 #' @importFrom dplyr group_by across all_of reframe
 #' @noRd
-diff_output_type_ids <- function(target, tbl, output_type_ids, config_tasks) {
+diff_output_type_ids <- function(tbl, output_type_ids, config_tasks) {
+  tbl <- tbl[tbl$output_type_id %in% output_type_ids, ]
+  if (nrow(tbl) == 0L) {
+    return(NULL)
+  }
   obs_unit <- task_id_cols_to_validate(tbl, config_tasks)
   if ("as_of" %in% colnames(tbl)) {
     obs_unit <- c(obs_unit, "as_of")
@@ -169,21 +178,13 @@ diff_output_type_ids <- function(target, tbl, output_type_ids, config_tasks) {
 #' @return A named list mapping target IDs to their expected support vectors.
 #' @noRd
 extract_output_type_id_vals <- function(output_type = NULL, tbl, config_tasks) {
-  target_task_id <- get_target_task_id(config_tasks)
   vals <- extract_target_data_vals(
     config_tasks, tbl,
     output_type = output_type,
     intersect = FALSE,
     collapse = FALSE
   )
-
-  target_ids <- purrr::map_chr(
-    vals, ~ .x[[target_task_id]]
-  )
-  purrr::map(
-    purrr::set_names(vals, target_ids),
-    ~ .x[["output_type_id"]]
-  )
+  purrr::map(vals, "output_type_id")
 }
 
 #' Summarise output_type_id values in a table
@@ -218,6 +219,9 @@ summarise_output_type_ids <- function(tbl) {
 #' @return A formatted message string or NULL.
 #' @noRd
 details_summarise_non_dist <- function(invalid_output_types) {
+  if (length(invalid_output_types) == 0L) {
+    return(NULL)
+  }
   non_dist <- !is_distributional(names(invalid_output_types))
   invalid_non_dist <- names(non_dist[non_dist & invalid_output_types])
 

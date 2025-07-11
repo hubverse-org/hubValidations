@@ -63,7 +63,19 @@ has_distributional <- function(tbl) {
 #' @param tbl A data frame.
 #' @return Logical scalar that is TRUE if all IDs are NA.
 #' @noRd
-has_na_output_type_ids <- function(tbl) {
+has_all_na_output_type_ids <- function(tbl) {
   any(colnames(tbl) == "output_type_id") &&
     all(is.na(tbl[["output_type_id"]]))
+}
+
+#' Get unique output types with non-NA IDs
+#'
+#' Returns a character vector of unique `output_type` names for which
+#' `output_type_id` is not `NA`.
+#'
+#' @param tbl A data frame containing `output_type` and `output_type_id` columns.
+#' @return A character vector of unique output types with non-missing IDs.
+#' @noRd
+has_non_na_output_type_ids <- function(tbl) {
+  unique(tbl$output_type[!is.na(tbl$output_type_id)])
 }
