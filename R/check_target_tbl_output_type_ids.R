@@ -37,6 +37,8 @@ check_target_tbl_output_type_ids <- function(target_tbl_chr,
   missing <- NULL
 
   if (!has_distributional(target_tbl_chr)) {
+    # If no distributional output types (i.e. no pmf or cdf), just check that all
+    # output_type_id values are NA
     check <- has_all_na_output_type_ids(target_tbl_chr)
     if (!check) {
       invalid_output_types <- has_non_na_output_type_ids(target_tbl_chr)
@@ -48,6 +50,8 @@ check_target_tbl_output_type_ids <- function(target_tbl_chr,
     config_tasks <- read_config(hub_path)
     output_types <- unique(target_tbl_chr[["output_type"]])
 
+    # If target data contain a distributional output type (i.e. pmf or cdf),
+    # validate each output type separately.
     check_list <- purrr::map(
       purrr::set_names(output_types),
       ~ check_td_output_type_ids(.x, target_tbl_chr, config_tasks)
@@ -118,6 +122,7 @@ check_dist_output_type_ids <- function(output_type = c("cdf", "pmf"), tbl,
                                        config_tasks) {
   output_type <- rlang::arg_match(output_type)
 
+  # Gather expected unique vectors of output_type_id values from config
   output_type_ids <- extract_output_type_id_vals(
     output_type = output_type,
     tbl = tbl,
@@ -125,6 +130,8 @@ check_dist_output_type_ids <- function(output_type = c("cdf", "pmf"), tbl,
   ) |>
     unique()
 
+  # Identify any missing output_type id values per unique combinations of
+  # values in columns that belong to the observation unit
     missing <- purrr::map(output_type_ids, ~ diff_output_type_ids(
       tbl = tbl,
       output_type_ids = .x,
@@ -155,6 +162,8 @@ diff_output_type_ids <- function(tbl, output_type_ids, config_tasks) {
   if (nrow(tbl) == 0L) {
     return(NULL)
   }
+  # TODO: eventually the obs_unit will be defined in the target-data.json config
+  # file
   obs_unit <- task_id_cols_to_validate(tbl, config_tasks)
   if ("as_of" %in% colnames(tbl)) {
     obs_unit <- c(obs_unit, "as_of")
