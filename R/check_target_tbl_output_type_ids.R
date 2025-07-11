@@ -54,7 +54,7 @@ check_target_tbl_output_type_ids <- function(target_tbl_chr,
     # validate each output type separately.
     check_list <- purrr::map(
       purrr::set_names(output_types),
-      ~ check_td_output_type_ids(.x, target_tbl_chr, config_tasks)
+      \(.x) check_td_output_type_ids(.x, target_tbl_chr, config_tasks)
     )
     invalid_output_types <- !purrr::map_lgl(check_list, "check")
     check <- !any(invalid_output_types)
@@ -94,18 +94,9 @@ check_td_output_type_ids <- function(output_type, target_tbl_chr,
   tbl <- target_tbl_chr[target_tbl_chr$output_type == output_type, ]
   if (!is_distributional(output_type)) {
     check <- has_all_na_output_type_ids(tbl)
-    if (!check) {
-      details <- cli::format_inline(
-        "Non-{.code NA} output type ID values detected for output type {.val {output_type}}."
-      )
-    } else {
-      details <- NULL
-    }
-    return(
-      list(
-        check = check,
-        missing = NULL
-      )
+    list(
+      check = check,
+      missing = NULL
     )
   } else {
     check_dist_output_type_ids(output_type, tbl, config_tasks)
@@ -132,13 +123,13 @@ check_dist_output_type_ids <- function(output_type = c("cdf", "pmf"), tbl,
 
   # Identify any missing output_type id values per unique combinations of
   # values in columns that belong to the observation unit
-    missing <- purrr::map(output_type_ids, ~ diff_output_type_ids(
-      tbl = tbl,
-      output_type_ids = .x,
-      config_tasks
-    )) |>
-      purrr::compact() |>
-      purrr::list_rbind()
+  missing <- purrr::map(output_type_ids, ~ diff_output_type_ids(
+    tbl = tbl,
+    output_type_ids = .x,
+    config_tasks
+  )) |>
+    purrr::compact() |>
+    purrr::list_rbind()
 
 
   check <- nrow(missing) == 0
@@ -235,7 +226,7 @@ details_summarise_non_dist <- function(invalid_output_types) {
   invalid_non_dist <- names(non_dist[non_dist & invalid_output_types])
 
   if (length(invalid_non_dist) == 0L) {
-    return(NULL)
+    NULL
   } else {
     cli::format_inline(
       "Non-{.code NA} output type ID values detected for output type{?s} {.val {invalid_non_dist}}."
@@ -269,6 +260,7 @@ details_summarise_missing <- function(missing) {
     return(NULL)
   }
   cli::format_inline(
-    "Missing output type ID values detected for output type{?s} {.val {unique(missing$output_type)}}. See {.var missing} for details."
+    "Missing output type ID values detected for output type{?s}
+    {.val {unique(missing$output_type)}}. See {.var missing} for details."
   )
 }
