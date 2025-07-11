@@ -42,10 +42,13 @@ test_that("check_target_tbl_ts_targets works with a target column", {
 
 test_that("check_target_tbl_ts_targets works with NULL target_keys", {
   file_path <- "time-series.csv"
+  hub_path <- example_file_hub_path
   # restrict to first round and model task 3 ("wk inc flu hosp" target)
-  valid_inf_config_tasks <- mock_inferred_target_config(categorical = FALSE)
+  valid_inf_config_tasks <- mock_global_target_config(categorical = FALSE,
+                                                        hub_path = hub_path)
   # restrict to first round and model task 1 (target "wk flu hosp rate category")
-  invalid_inf_config_tasks <- mock_inferred_target_config(categorical = TRUE)
+  invalid_inf_config_tasks <- mock_global_target_config(categorical = TRUE,
+                                                          hub_path = hub_path)
 
   local_mocked_bindings(
     read_config = function(hub_path) {
@@ -77,7 +80,7 @@ test_that("check_target_tbl_ts_targets works with NULL target_keys", {
   expect_s3_class(invalid_null, "check_error")
   expect_equal(
     cli::ansi_strip(invalid_null$message) |> stringr::str_squish(),
-    "time-series target is not valid. Target \"wk flu hosp rate category\" inferred from hub config is invalid. Time-series target data not appropriate. Valid time-series targets must be step-ahead and their target type must be one of \"continuous\", \"discrete\", \"binary\", and \"compositional\"." # nolint: line_length_linter
+    "time-series target is not valid. Global target \"wk flu hosp rate category\" inferred from hub config is invalid. Time-series target data not appropriate. Valid time-series targets must be step-ahead and their target type must be one of \"continuous\", \"discrete\", \"binary\", and \"compositional\"." # nolint: line_length_linter
   )
 })
 
