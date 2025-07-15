@@ -89,7 +89,8 @@ check_target_tbl_ts_targets <- function(target_tbl,
       }
     } else {
       details <- cli::format_inline(
-        "Target {.val {invalid_targets}} inferred from hub config is invalid. Time-series target data not appropriate."
+        "Global target {.val {invalid_targets}} inferred from hub config is invalid.
+        Time-series target data not appropriate."
       )
     }
     valid_target_types <- c("continuous", "discrete", "binary", "compositional") # nolint: object_usage_linter

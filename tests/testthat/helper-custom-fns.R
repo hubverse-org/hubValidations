@@ -42,13 +42,13 @@ stand_up_custom_check_hub <- function(
   return(new_path)
 }
 
-# Create inferred target config_tasks for testing. Defaults to using task.json
+# Create global target config_tasks for testing. Defaults to using task.json
 #  from clone of github.com/hubverse-org/example-complex-forecast-hub
-mock_inferred_target_config <- function(categorical = FALSE, config_tasks = NULL) {
+mock_global_target_config <- function(categorical = FALSE, config_tasks = NULL, hub_path = NULL) {
   # Supplying config_tasks allows us to override any mocking that might be applied to
   # read_config() in the tests.
   if (is.null(config_tasks)) {
-    config_tasks <- read_config(example_file_hub_path) # nolint: object_usage_linter
+    config_tasks <- read_config(hub_path)
   }
 
   if (categorical) {
@@ -69,6 +69,26 @@ mock_inferred_target_config <- function(categorical = FALSE, config_tasks = NULL
   )
   # Remove target task ID
   config_tasks$rounds[[1]]$model_tasks[[1]]$task_ids[["target"]] <- NULL
+
+  config_tasks
+}
+
+mock_global_2_target_config <- function(config_tasks = NULL, hub_path = NULL) {
+  new_target <- "wk flu death rate category"
+  if (is.null(config_tasks)) {
+    config_tasks <- read_config(hub_path)
+  }
+  # Subset to single model task with distributional target
+  config_tasks$rounds[[1]]$model_tasks <- config_tasks$rounds[[1]]$model_tasks[1]
+
+  # Add target metadata for the new target
+  config_tasks$rounds[[1]]$model_tasks[[1]]$target_metadata[[2]] <-
+    config_tasks$rounds[[1]]$model_tasks[[1]]$target_metadata[[1]]
+  config_tasks$rounds[[1]]$model_tasks[[1]]$target_metadata[[2]]$target_id <-
+    new_target
+
+  # Add additional target to target task ID
+  config_tasks$rounds[[1]]$model_tasks[[1]]$task_ids[["target"]]$optional[2] <- new_target
 
   config_tasks
 }
