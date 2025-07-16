@@ -9,7 +9,8 @@ test_that("check_target_tbl_output_type_ids works", {
   valid_oo <- check_target_tbl_output_type_ids(
     target_tbl_chr,
     target_type = "oracle-output",
-    file_path, hub_path
+    file_path,
+    hub_path
   )
 
   expect_s3_class(valid_oo, "check_success")
@@ -21,13 +22,18 @@ test_that("check_target_tbl_output_type_ids works", {
 
   # Introducing invalid values causes check to fail ----
   # Add random output type ID to pmf output type
-  target_tbl_chr$output_type_id[target_tbl_chr$output_type == "pmf"][1] <- "random"
+  target_tbl_chr$output_type_id[target_tbl_chr$output_type == "pmf"][
+    1
+  ] <- "random"
   # Add non-NAs to quantile output type
-  target_tbl_chr$output_type_id[target_tbl_chr$output_type == "quantile"][1] <- "random"
+  target_tbl_chr$output_type_id[target_tbl_chr$output_type == "quantile"][
+    1
+  ] <- "random"
   invalid_oo <- check_target_tbl_output_type_ids(
     target_tbl_chr,
     target_type = "oracle-output",
-    file_path, hub_path
+    file_path,
+    hub_path
   )
 
   expect_s3_class(invalid_oo, "check_error")
@@ -55,13 +61,16 @@ test_that("check_target_tbl_output_type_ids works", {
 
   # Remove row with error. Should get the same output given we're interested in
   # completeness of output type IDs
-  missing_row_tbl <- target_tbl_chr[-which(
-    target_tbl_chr$output_type == "pmf"
-  )[1], ]
+  missing_row_tbl <- target_tbl_chr[
+    -which(
+      target_tbl_chr$output_type == "pmf"
+    )[1],
+  ]
   missing_oo <- check_target_tbl_output_type_ids(
     target_tbl_chr,
     target_type = "oracle-output",
-    file_path, hub_path
+    file_path,
+    hub_path
   )
   expect_equal(missing_oo, invalid_oo)
 })
@@ -97,7 +106,8 @@ test_that("check_target_tbl_output_type_ids works with NULL target_keys", {
   valid_non_dist <- check_target_tbl_output_type_ids(
     target_tbl_chr = non_dist_tbl,
     target_type = "oracle-output",
-    file_path, hub_path
+    file_path,
+    hub_path
   )
   expect_s3_class(valid_non_dist, "check_success")
   expect_equal(
@@ -115,7 +125,8 @@ test_that("check_target_tbl_output_type_ids works with NULL target_keys", {
   invalid_non_dist <- check_target_tbl_output_type_ids(
     target_tbl_chr = non_dist_tbl,
     target_type = "oracle-output",
-    file_path, hub_path
+    file_path,
+    hub_path
   )
   expect_s3_class(invalid_non_dist, "check_error")
   expect_equal(
@@ -133,7 +144,8 @@ test_that("check_target_tbl_output_type_ids works with NULL target_keys", {
   valid_dist <- check_target_tbl_output_type_ids(
     target_tbl_chr = dist_tbl,
     target_type = "oracle-output",
-    file_path, hub_path
+    file_path,
+    hub_path
   )
   expect_s3_class(valid_dist, "check_success")
   expect_equal(
@@ -148,7 +160,8 @@ test_that("check_target_tbl_output_type_ids works with NULL target_keys", {
   invalid_dist <- check_target_tbl_output_type_ids(
     target_tbl_chr = dist_tbl,
     target_type = "oracle-output",
-    file_path, hub_path
+    file_path,
+    hub_path
   )
   expect_s3_class(invalid_dist, "check_error")
   expect_equal(
@@ -174,7 +187,8 @@ test_that("check_target_tbl_output_type_ids skipped for time-series", {
   skip <- check_target_tbl_output_type_ids(
     target_tbl_chr = NULL,
     target_type = "time-series",
-    file_path = "time-series.csv", hub_path
+    file_path = "time-series.csv",
+    hub_path
   )
   expect_s3_class(skip, "check_info")
   expect_equal(
@@ -221,11 +235,14 @@ test_that("check_target_tbl_output_type_ids works with 2 dist targets", {
   expect_null(valid_dist_2$error_tbl)
 
   dist_2_tbl$output_type_id[1] <- "random"
-  dist_2_tbl[dist_2_tbl$target == "wk flu death rate category", ]$output_type_id[1] <- "random"
+  dist_2_tbl[
+    dist_2_tbl$target == "wk flu death rate category",
+  ]$output_type_id[1] <- "random"
   invalid_dist_2 <- check_target_tbl_output_type_ids(
     target_tbl_chr = dist_2_tbl,
     target_type = "oracle-output",
-    file_path, hub_path
+    file_path,
+    hub_path
   )
   expect_s3_class(invalid_dist_2, "check_error")
   expect_equal(

@@ -9,12 +9,15 @@
 #' @inheritParams check_target_tbl_values
 #' @inherit check_tbl_colnames params return
 #' @export
-check_target_tbl_output_type_ids <- function(target_tbl_chr,
-                                             target_type = c(
-                                               "oracle-output",
-                                               "time-series"
-                                             ),
-                                             file_path, hub_path) {
+check_target_tbl_output_type_ids <- function(
+  target_tbl_chr,
+  target_type = c(
+    "oracle-output",
+    "time-series"
+  ),
+  file_path,
+  hub_path
+) {
   target_type <- rlang::arg_match(target_type)
   if (target_type == "time-series") {
     return(
@@ -26,7 +29,8 @@ check_target_tbl_output_type_ids <- function(target_tbl_chr,
   }
   if (!has_output_type_ids(target_tbl_chr)) {
     return(
-      capture_check_info(file_path,
+      capture_check_info(
+        file_path,
         msg = cli::format_inline(
           "Target table does not have {.code output_type_id} column. Check skipped."
         )
@@ -70,7 +74,9 @@ check_target_tbl_output_type_ids <- function(target_tbl_chr,
   capture_check_cnd(
     check = check,
     file_path = file_path,
-    msg_subject = cli::format_inline("{.field oracle-output} {.var target_tbl}"),
+    msg_subject = cli::format_inline(
+      "{.field oracle-output} {.var target_tbl}"
+    ),
     msg_attribute = "",
     msg_verbs = c(
       "contains valid complete output_type_id values.",
@@ -89,8 +95,11 @@ check_target_tbl_output_type_ids <- function(target_tbl_chr,
 #' @param config_tasks List of task configurations obtained from hub config.
 #' @return A list with elements `check` (logical) and `missing` (data.frame or NULL).
 #' @noRd
-check_td_output_type_ids <- function(output_type, target_tbl_chr,
-                                     config_tasks) {
+check_td_output_type_ids <- function(
+  output_type,
+  target_tbl_chr,
+  config_tasks
+) {
   tbl <- target_tbl_chr[target_tbl_chr$output_type == output_type, ]
   if (!is_distributional(output_type)) {
     check <- has_all_na_output_type_ids(tbl)
@@ -109,8 +118,11 @@ check_td_output_type_ids <- function(output_type, target_tbl_chr,
 #' @param config_tasks List of task configurations with expected support values.
 #' @return A list with elements `check` (logical) and `missing` (data.frame or NULL).
 #' @noRd
-check_dist_output_type_ids <- function(output_type = c("cdf", "pmf"), tbl,
-                                       config_tasks) {
+check_dist_output_type_ids <- function(
+  output_type = c("cdf", "pmf"),
+  tbl,
+  config_tasks
+) {
   output_type <- rlang::arg_match(output_type)
 
   # Gather expected unique vectors of output_type_id values from config
@@ -123,17 +135,21 @@ check_dist_output_type_ids <- function(output_type = c("cdf", "pmf"), tbl,
 
   # Identify any missing output_type id values per unique combinations of
   # values in columns that belong to the observation unit
-  missing <- purrr::map(output_type_ids, ~ diff_output_type_ids(
-    tbl = tbl,
-    output_type_ids = .x,
-    config_tasks
-  )) |>
+  missing <- purrr::map(
+    output_type_ids,
+    ~ diff_output_type_ids(
+      tbl = tbl,
+      output_type_ids = .x,
+      config_tasks
+    )
+  ) |>
     purrr::compact() |>
     purrr::list_rbind()
 
-
   check <- nrow(missing) == 0
-  if (check) missing <- NULL
+  if (check) {
+    missing <- NULL
+  }
 
   list(
     check = check,
@@ -157,7 +173,8 @@ diff_output_type_ids <- function(tbl, output_type_ids, config_tasks) {
   # file
   tbl <- group_by_obs_unit(tbl, config_tasks)
 
-  reframe(tbl,
+  reframe(
+    tbl,
     output_type = unique(.data[["output_type"]]),
     output_type_id = setdiff(
       output_type_ids,
@@ -175,7 +192,8 @@ diff_output_type_ids <- function(tbl, output_type_ids, config_tasks) {
 #' @noRd
 extract_output_type_id_vals <- function(output_type = NULL, tbl, config_tasks) {
   vals <- extract_target_data_vals(
-    config_tasks, tbl,
+    config_tasks,
+    tbl,
     output_type = output_type,
     intersect = FALSE,
     collapse = FALSE
