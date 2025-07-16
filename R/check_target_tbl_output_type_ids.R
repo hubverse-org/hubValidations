@@ -155,11 +155,7 @@ diff_output_type_ids <- function(tbl, output_type_ids, config_tasks) {
   }
   # TODO: eventually the obs_unit will be defined in the target-data.json config
   # file
-  obs_unit <- task_id_cols_to_validate(tbl, config_tasks)
-  if ("as_of" %in% colnames(tbl)) {
-    obs_unit <- c(obs_unit, "as_of")
-  }
-  tbl <- group_by(tbl, across(all_of(obs_unit)))
+  tbl <- group_by_obs_unit(tbl, config_tasks)
 
   reframe(tbl,
     output_type = unique(.data[["output_type"]]),
