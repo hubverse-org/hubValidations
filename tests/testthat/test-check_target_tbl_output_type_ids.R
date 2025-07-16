@@ -17,7 +17,7 @@ test_that("check_target_tbl_output_type_ids works", {
     cli::ansi_strip(valid_oo$message) |> stringr::str_squish(),
     "oracle-output `target_tbl` contains valid complete output_type_id values."
   )
-  expect_null(valid_oo$error_tbl)
+  expect_null(valid_oo$missing)
 
   # Introducing invalid values causes check to fail ----
   # Add random output type ID to pmf output type
@@ -104,6 +104,7 @@ test_that("check_target_tbl_output_type_ids works with NULL target_keys", {
     cli::ansi_strip(valid_non_dist$message) |> stringr::str_squish(),
     "oracle-output `target_tbl` contains valid complete output_type_id values."
   )
+  expect_null(valid_non_dist$missing)
 
   # Check invalid non-distributional output types ----
   non_dist_tbl$output_type_id[1] <- "random"
@@ -139,6 +140,7 @@ test_that("check_target_tbl_output_type_ids works with NULL target_keys", {
     cli::ansi_strip(valid_dist$message) |> stringr::str_squish(),
     "oracle-output `target_tbl` contains valid complete output_type_id values."
   )
+  expect_null(valid_dist$missing)
 
   # Check invalid distributional output types ----
   dist_tbl$output_type_id[1] <- "random"
