@@ -472,12 +472,6 @@ target_cols_to_validate <- function(target_tbl, config_tasks) {
   )
 }
 
-task_id_cols_to_validate <- function(target_tbl, config_tasks) {
-  intersect(
-    colnames(target_tbl),
-    hubUtils::get_task_id_names(config_tasks)
-  )
-}
 output_type_cols_to_validate <- function(target_tbl) {
   intersect(
     colnames(target_tbl),
