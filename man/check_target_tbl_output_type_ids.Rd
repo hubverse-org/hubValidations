@@ -15,8 +15,8 @@ check_target_tbl_output_type_ids(
 \item{target_tbl_chr}{A tibble/data.frame of the contents of the target data file
 being validated. All columns should be coerced to character.}
 
-\item{target_type}{Type of target data to validate. One of "time-series" or
-"oracle-output". oracle-output"}
+\item{target_type}{Type of target data to validate. One of \code{"time-series"} or
+\code{"oracle-output"}. Defaults to \code{"oracle-output"}.}
 
 \item{file_path}{A character string representing the path to the target data file
 relative to the \code{target-data} directory.}

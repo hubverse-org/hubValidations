@@ -4,8 +4,8 @@
 #' `output_type_id` column. It verifies that non-distributional
 #' output types have all NA output type IDs, and that distributional output types
 #' (`cdf`, `pmf`) include the complete output_type_id set defined in the hub config.
-#' @param target_type Type of target data to validate. One of "time-series" or
-#' "oracle-output". oracle-output"
+#' @param target_type Type of target data to validate. One of `"time-series"` or
+#' `"oracle-output"`. Defaults to `"oracle-output"`.
 #' @inheritParams check_target_tbl_values
 #' @inherit check_tbl_colnames params return
 #' @export
