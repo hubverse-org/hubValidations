@@ -205,7 +205,8 @@ check_oracle_value_cdf_crossing <- function(
   if (nrow(tbl) == 0L) {
     return(NULL)
   }
-  # Ensure output_type_id is a factor with levels in the order of output_type_ids extracted from config and arrange in that order
+  # Ensure output_type_id is a factor with levels in the order of output_type_ids
+  # extracted from config and arrange in that order
   tbl[["output_type_id"]] <- factor(
     tbl[["output_type_id"]],
     levels = output_type_ids
@@ -249,8 +250,8 @@ details_summarise_oracle_value_checks <- function(
   details <- NULL
 
   if (!is.null(check_vals)) {
-    invalid_output_types <- unique(check_vals[["output_type"]])
-    invalid_vals <- unique(check_vals[["oracle_value"]])
+    invalid_output_types <- unique(check_vals[["output_type"]]) # nolint: object_usage_linter
+    invalid_vals <- unique(check_vals[["oracle_value"]]) # nolint: object_usage_linter
     details <- c(
       details,
       format_inline(
