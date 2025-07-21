@@ -4,6 +4,7 @@
 #' @param target_tbl A tibble/data.frame of the contents of the target data file
 #' being validated.
 #' @inherit check_target_tbl_colnames params return
+#' @inheritParams hubData::connect_target_oracle_output
 #' @inheritParams hubData::connect_target_timeseries
 #' @export
 check_target_tbl_coltypes <- function(
