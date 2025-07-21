@@ -13,6 +13,9 @@
   - `check_target_file_ext_valid()`: that the file extension of a single target data file is valid.
   - `check_target_tbl_colnames()`: that column names of a target data file match expected column names for the target type.
   - `check_target_tbl_coltypes()`: that column types of a target data file match expected column types for the target type.
+  - `check_target_tbl_values()`: that values in a target data file match valid values/value combinations for model tasks specified n the `tasks.json` hub config file.
+  - `check_target_tbl_ts_targets()`: Check that targets contained in a time-series target data file or implied through hub config are valid time-series targets.
+  - `check_target_tbl_output_type_ids()`: Check that each observation (as defined by the observable unit) in an oracle-output target data file matches the expected `output_type_id`s.
 * Improved performance of `check_tbl_values_required()`.
 
 
