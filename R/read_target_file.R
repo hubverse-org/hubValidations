@@ -43,12 +43,14 @@ read_target_file <- function(
   full_path <- abs_file_path(target_file_path, hub_path, subdir = "target-data")
 
   if (!fs::file_exists(full_path)) {
+    # nolint start: object_usage_linter
     rel_path <- rel_file_path(
       target_file_path,
       hub_path,
       subdir = "target-data"
-    ) # nolint: object_usage_linter
-    cli::cli_abort("No file exists at path {.path {rel_path}}")
+    )
+    # nolint end
+    cli::cli_abort("No file exists at path {.path {rel_path}}") # nolint: object_usage_linter
   }
 
   file_ext <- fs::path_ext(target_file_path)
