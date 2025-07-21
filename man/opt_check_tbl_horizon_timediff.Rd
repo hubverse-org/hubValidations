@@ -40,7 +40,7 @@ files within the \code{hub-config} directory.}
 \item{horizon_colname}{Character string. The name of the horizon column.
 Defaults to \code{"horizon"}.}
 
-\item{timediff}{an object of class \code{lubridate} \code{\linkS4class{Period}} and length 1.
+\item{timediff}{an object of class \code{\link[lubridate:Period-class]{lubridate::Period}} and length 1.
 The period of a single horizon. Default to 1 week.}
 
 \item{output_type_id_datatype}{character string. One of \code{"from_config"}, \code{"auto"},

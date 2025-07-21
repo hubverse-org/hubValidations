@@ -2,21 +2,30 @@
 #'
 #' @param t0_colname Character string. The name of the time zero date column.
 #' @param t1_colname Character string. The name of the time zero + 1 time step date column.
-#' @param timediff an object of class `lubridate` [`Period-class`] and length 1.
+#' @param timediff an object of class [`lubridate::Period-class`] and length 1.
 #' @inheritParams hubData::create_hub_schema
 #' @details
 #' Should be deployed as part of `validate_model_data` optional checks.
 #' @inherit check_tbl_colnames params
 #' @inherit check_tbl_col_types return
 #' @export
-opt_check_tbl_col_timediff <- function(tbl, file_path, hub_path,
-                                       t0_colname, t1_colname,
-                                       timediff = lubridate::weeks(2),
-                                       output_type_id_datatype = c(
-                                         "from_config", "auto", "character",
-                                         "double", "integer",
-                                         "logical", "Date"
-                                       )) {
+opt_check_tbl_col_timediff <- function(
+  tbl,
+  file_path,
+  hub_path,
+  t0_colname,
+  t1_colname,
+  timediff = lubridate::weeks(2),
+  output_type_id_datatype = c(
+    "from_config",
+    "auto",
+    "character",
+    "double",
+    "integer",
+    "logical",
+    "Date"
+  )
+) {
   checkmate::assert_class(timediff, "Period")
   checkmate::assert_scalar(timediff)
   checkmate::assert_character(t0_colname, len = 1L)
@@ -26,7 +35,8 @@ opt_check_tbl_col_timediff <- function(tbl, file_path, hub_path,
 
   config_tasks <- read_config(hub_path, "tasks")
   output_type_id_datatype <- rlang::arg_match(output_type_id_datatype)
-  schema <- create_hub_schema(config_tasks,
+  schema <- create_hub_schema(
+    config_tasks,
     partitions = NULL,
     r_schema = TRUE,
     output_type_id_datatype = output_type_id_datatype
