@@ -9,6 +9,9 @@ check_target_tbl_coltypes(
   target_tbl,
   target_type = c("time-series", "oracle-output"),
   date_col = NULL,
+  na = c("NA", ""),
+  output_type_id_datatype = c("from_config", "auto", "character", "double", "integer",
+    "logical", "Date"),
   file_path,
   hub_path
 )
@@ -23,6 +26,11 @@ being validated.}
 \item{date_col}{Optional column name to be interpreted as date. Default is \code{NULL}.
 Useful when the required date column is a partitioning column in the target data
 and does not have the same name as a date typed task ID variable in the config.}
+
+\item{na}{A character vector of strings to interpret as missing values. Only
+applies to CSV files. The default is \code{c("NA", "")}. Useful when actual character
+string \code{"NA"} values are used in the data. In such a case, use empty cells to
+indicate missing values in your files and set \code{na = ""}.}
 
 \item{file_path}{A character string representing the path to the target data file
 relative to the \code{target-data} directory.}

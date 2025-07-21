@@ -7,7 +7,7 @@
 read_target_file(
   target_file_path,
   hub_path,
-  coerce_types = c("hub", "chr", "none"),
+  coerce_types = c("target", "chr", "none"),
   date_col = NULL,
   na = c("NA", "")
 )
