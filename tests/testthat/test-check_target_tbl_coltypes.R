@@ -61,6 +61,11 @@ test_that("check_target_tbl_coltypes works on csv time-series data", {
 
   invalid_ts <- read_target_file("time-series.parquet", hub_path)
   invalid_ts$observation <- as.character(target_tbl$observation)
+
+  # Explicitly release handle before overwriting to silence windows IO error
+  rm(target_tbl, valid_ts)
+
+  # Force garbage collection to close file mapping
   arrow::write_parquet(
     invalid_ts,
     fs::path(hub_path, "target-data", "time-series.parquet")
