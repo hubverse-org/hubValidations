@@ -82,15 +82,15 @@ opt_check_tbl_horizon_timediff <- function(
   if (check) {
     details <- NULL
   } else {
+    # nolint start: object_usage_linter
     invalid_vals <- paste0(
-      # nolint: object_usage_linter
       tbl[[t1_colname]][!compare],
       " (horizon = ",
       tbl[[horizon_colname]][!compare],
       ")"
     ) %>%
       unique()
-
+    # nolint end
     details <- cli::format_inline(
       "t1 var value{?s} {.val {invalid_vals}} are invalid."
     )
