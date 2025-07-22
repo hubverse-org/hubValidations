@@ -8,7 +8,6 @@
 #' @inherit check_tbl_col_types return
 #' @export
 check_tbl_rows_unique <- function(tbl, file_path, hub_path) {
-
   tbl[["values"]] <- NULL
   check <- !any(duplicated(tbl))
 
