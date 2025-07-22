@@ -15,6 +15,7 @@
   - `check_target_tbl_values()`: that values in a target data file match valid values/value combinations for model tasks specified n the `tasks.json` hub config file.
   - `check_target_tbl_ts_targets()`: Check that targets contained in a time-series target data file or implied through hub config are valid time-series targets.
   - `check_target_tbl_output_type_ids()`: Check that each observation (as defined by the observable unit) in an oracle-output target data file matches the expected `output_type_id`s.
+  - `check_target_tbl_rows_unique()`: Check that each observation in a target data file is unique.
 * Improved performance of `check_tbl_values_required()`.
 
 
