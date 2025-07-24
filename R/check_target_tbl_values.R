@@ -9,11 +9,15 @@
 #' @inherit check_tbl_colnames params return
 #' @inheritParams hubData::get_target_path
 #' @export
-check_target_tbl_values <- function(target_tbl_chr,
-                                    target_type = c(
-                                      "time-series", "oracle-output"
-                                    ),
-                                    file_path, hub_path) {
+check_target_tbl_values <- function(
+  target_tbl_chr,
+  target_type = c(
+    "time-series",
+    "oracle-output"
+  ),
+  file_path,
+  hub_path
+) {
   target_type <- rlang::arg_match(target_type)
   config_tasks <- read_config(hub_path)
 
@@ -40,8 +44,10 @@ check_target_tbl_values <- function(target_tbl_chr,
       details,
       summarise_invalid_target_values(
         valid_tbl = extract_target_data_vals(
-          config_tasks, target_tbl_chr,
-          collapse = TRUE, intersect = FALSE
+          config_tasks,
+          target_tbl_chr,
+          collapse = TRUE,
+          intersect = FALSE
         ),
         invalid_tbl
       )
@@ -80,15 +86,19 @@ check_target_tbl_values <- function(target_tbl_chr,
 detect_invalid_target_vals <- function(target_tbl_chr, config_tasks) {
   if (has_output_types(target_tbl_chr)) {
     split(target_tbl_chr, f = target_tbl_chr$output_type) |>
-      purrr::imap(~ create_invalid_tbl(
-        config_tasks,
-        target_tbl_chr = .x, output_type = .y
-      )) |>
+      purrr::imap(
+        ~ create_invalid_tbl(
+          config_tasks,
+          target_tbl_chr = .x,
+          output_type = .y
+        )
+      ) |>
       purrr::list_rbind()
   } else {
     create_invalid_tbl(
       config_tasks,
-      target_tbl_chr = target_tbl_chr, output_type = NULL
+      target_tbl_chr = target_tbl_chr,
+      output_type = NULL
     )
   }
 }
@@ -106,8 +116,13 @@ detect_invalid_target_vals <- function(target_tbl_chr, config_tasks) {
 #'
 #' @return A tibble of invalid rows.
 #' @noRd
-create_invalid_tbl <- function(config_tasks, target_tbl_chr, output_type = NULL) {
-  valid_tbl <- expand_target_data_vals(config_tasks,
+create_invalid_tbl <- function(
+  config_tasks,
+  target_tbl_chr,
+  output_type = NULL
+) {
+  valid_tbl <- expand_target_data_vals(
+    config_tasks,
     target_tbl_chr = target_tbl_chr,
     output_type = output_type
   )
@@ -144,8 +159,12 @@ create_invalid_tbl <- function(config_tasks, target_tbl_chr, output_type = NULL)
 #' task ID/output_type/output_type_id values present
 #' in both the hub configuration and `target_tbl_chr`.
 #' @noRd
-expand_target_data_vals <- function(config_tasks, target_tbl_chr,
-                                    output_type = NULL, intersect = TRUE) {
+expand_target_data_vals <- function(
+  config_tasks,
+  target_tbl_chr,
+  output_type = NULL,
+  intersect = TRUE
+) {
   extract_target_data_vals(
     config_tasks,
     target_tbl_chr,
@@ -175,15 +194,22 @@ expand_target_data_vals <- function(config_tasks, target_tbl_chr,
 #' @return A list of value sets for each model task, or a collapsed list of
 #' unique values if `collapse = TRUE`.
 #' @noRd
-extract_target_data_vals <- function(config_tasks, target_tbl_chr, output_type = NULL,
-                                     collapse = FALSE, intersect = TRUE) {
+extract_target_data_vals <- function(
+  config_tasks,
+  target_tbl_chr,
+  output_type = NULL,
+  collapse = FALSE,
+  intersect = TRUE
+) {
   out <- config_tasks[["rounds"]] |>
-    purrr::map(~ extract_round_vals(
-      .x,
-      target_tbl_chr,
-      output_type = output_type,
-      intersect = intersect
-    )) |>
+    purrr::map(
+      ~ extract_round_vals(
+        .x,
+        target_tbl_chr,
+        output_type = output_type,
+        intersect = intersect
+      )
+    ) |>
     # Remove round depth of nesting so that we have a list of all model tasks
     purrr::list_flatten() |>
     unique()
@@ -218,11 +244,17 @@ extract_target_data_vals <- function(config_tasks, target_tbl_chr, output_type =
 #'
 #' @return A list of value combinations for each model task in the round.
 #' @noRd
-extract_round_vals <- function(round_config, target_tbl_chr, output_type = NULL,
-                               intersect = TRUE) {
+extract_round_vals <- function(
+  round_config,
+  target_tbl_chr,
+  output_type = NULL,
+  intersect = TRUE
+) {
   purrr::map(
     round_config[["model_tasks"]],
-    ~ extract_model_task_vals(.x, target_tbl_chr,
+    ~ extract_model_task_vals(
+      .x,
+      target_tbl_chr,
       output_type = output_type,
       intersect = intersect
     )
@@ -249,15 +281,20 @@ extract_round_vals <- function(round_config, target_tbl_chr, output_type = NULL,
 #' @return A named list of valid task ID/output_type/output_type_id values for
 #' the model task, or `NULL` if no intersection is found.
 #' @noRd
-extract_model_task_vals <- function(model_task, target_tbl_chr, output_type = NULL,
-                                    intersect = TRUE) {
+extract_model_task_vals <- function(
+  model_task,
+  target_tbl_chr,
+  output_type = NULL,
+  intersect = TRUE
+) {
   # If output_type is specified but not present in the model_task, return NULL
   if (!is.null(output_type) && is.null(model_task$output_type[[output_type]])) {
     return(NULL)
   }
 
   task_id_target_cols <- intersect(
-    colnames(target_tbl_chr), names(model_task[["task_ids"]])
+    colnames(target_tbl_chr),
+    names(model_task[["task_ids"]])
   )
   output_type_target_cols <- intersect(
     colnames(target_tbl_chr),
@@ -272,7 +309,10 @@ extract_model_task_vals <- function(model_task, target_tbl_chr, output_type = NU
 
   # Extracts a list of task ID values from the model_task for task IDs that match columns
   # in target_tbl_chr. If no task ID columns are present in target_tbl_chr, returns NULL.
-  config_task_id_vals <- extract_config_task_is_vals(model_task, task_id_target_cols)
+  config_task_id_vals <- extract_config_task_is_vals(
+    model_task,
+    task_id_target_cols
+  )
 
   # Extracts the output_type and output_type_id values from the model_task if
   # output type columns are present in target_tbl_chr
@@ -284,14 +324,18 @@ extract_model_task_vals <- function(model_task, target_tbl_chr, output_type = NU
       )
     } else {
       config_output_type_vals <- extract_config_output_type_vals(
-        model_task, output_type_target_cols, output_type
+        model_task,
+        output_type_target_cols,
+        output_type
       )
     }
   } else {
     config_output_type_vals <- NULL
   }
 
-  config_vals <- c(config_task_id_vals, config_output_type_vals)[cols_to_extract]
+  config_vals <- c(config_task_id_vals, config_output_type_vals)[
+    cols_to_extract
+  ]
 
   if (intersect) {
     # If intersect = TRUE, filter config values to include only those that are
@@ -334,16 +378,21 @@ extract_model_task_vals <- function(model_task, target_tbl_chr, output_type = NU
 #'
 #' @return A named list of `output_type` and `output_type_id` values.
 #' @noRd
-extract_config_output_type_vals <- function(model_task, output_type_target_cols,
-                                            output_type) {
+extract_config_output_type_vals <- function(
+  model_task,
+  output_type_target_cols,
+  output_type
+) {
   # Extract the output_type_id from the model_task or
   # cast as NA if expected for the output_type in target data.
   if (output_type %in% c("cdf", "pmf")) {
     list(
       output_type = output_type,
       output_type_id = purrr::pluck(
-        model_task, "output_type",
-        output_type, "output_type_id"
+        model_task,
+        "output_type",
+        output_type,
+        "output_type_id"
       ) |>
         unlist(use.names = FALSE) |>
         # Ensure vectors returned are character.
@@ -370,10 +419,15 @@ extract_config_output_type_vals <- function(model_task, output_type_target_cols,
 #'
 #' @return A named list of `output_type` and `output_type_id` values.
 #' @noRd
-extract_config_all_output_type_vals <- function(model_task, output_type_target_cols) {
+extract_config_all_output_type_vals <- function(
+  model_task,
+  output_type_target_cols
+) {
   names(model_task[["output_type"]]) |>
     purrr::map(
-      ~ extract_config_output_type_vals(model_task, output_type_target_cols,
+      ~ extract_config_output_type_vals(
+        model_task,
+        output_type_target_cols,
         output_type = .x
       )
     ) |>
@@ -472,12 +526,6 @@ target_cols_to_validate <- function(target_tbl, config_tasks) {
   )
 }
 
-task_id_cols_to_validate <- function(target_tbl, config_tasks) {
-  intersect(
-    colnames(target_tbl),
-    hubUtils::get_task_id_names(config_tasks)
-  )
-}
 output_type_cols_to_validate <- function(target_tbl) {
   intersect(
     colnames(target_tbl),
