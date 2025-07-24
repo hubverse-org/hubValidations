@@ -211,7 +211,6 @@ check_oracle_value_cdf_crossing <- function(
     tbl[["output_type_id"]],
     levels = output_type_ids
   )
-  tbl <- arrange(tbl, .data[["output_type_id"]])
   # TODO: eventually the obs_unit will be defined in the target-data.json config
   # file
   tbl <- group_by_obs_unit(tbl, config_tasks) |>
