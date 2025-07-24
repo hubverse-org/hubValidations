@@ -7,6 +7,7 @@
 \alias{coerce_to_hub_schema}
 \alias{read_config}
 \alias{read_config_file}
+\alias{get_hub_derived_task_ids}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -16,6 +17,6 @@ below to see their documentation.
 \describe{
   \item{hubData}{\code{\link[hubData]{coerce_to_hub_schema}}, \code{\link[hubData]{create_hub_schema}}}
 
-  \item{hubUtils}{\code{\link[hubUtils]{read_config}}, \code{\link[hubUtils]{read_config_file}}}
+  \item{hubUtils}{\code{\link[hubUtils:get_hub_timezone]{get_hub_derived_task_ids}}, \code{\link[hubUtils]{read_config}}, \code{\link[hubUtils]{read_config_file}}}
 }}
 
