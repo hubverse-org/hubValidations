@@ -28,10 +28,10 @@ files within the \code{hub-config} directory.}
 
 \item{coerce_types}{character string. What to coerce column types to on read.
 \itemize{
-\item \code{hub}: (default) read in (\code{csv}) or coerce (\code{parquet}) to schema according to
-\code{hub} config (See \code{\link[hubData:create_timeseries_schema]{hubData::create_timeseries_schema()}} and
+\item \code{target}: (default) read in (\code{csv}) or coerce (\code{parquet}) to expected schema
+by target type (See \code{\link[hubData:create_timeseries_schema]{hubData::create_timeseries_schema()}} and
 \code{\link[hubData:create_oracle_output_schema]{hubData::create_oracle_output_schema()}} for details).
-When coercing data types using the \code{hub} schema, the \code{output_type_id_datatype}
+When coercing data types using the \code{target} schema, the \code{output_type_id_datatype}
 can also be used to set the \code{output_type_id} column data type manually.
 \item \code{chr}: read in (\code{csv}) or coerce (\code{parquet}) all columns to character.
 \item \code{none}: No coercion. Use \code{arrow} \verb{read_*} function defaults.

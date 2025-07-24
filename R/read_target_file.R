@@ -5,10 +5,10 @@
 #' @inheritParams hubData::connect_target_timeseries
 #' @inheritParams read_model_out_file
 #' @param coerce_types character string. What to coerce column types to on read.
-#' - `hub`: (default) read in (`csv`) or coerce (`parquet`) to schema according to
-#'  `hub` config (See [hubData::create_timeseries_schema()] and
+#' - `target`: (default) read in (`csv`) or coerce (`parquet`) to expected schema
+#' by target type (See [hubData::create_timeseries_schema()] and
 #'  [hubData::create_oracle_output_schema()] for details).
-#' When coercing data types using the `hub` schema, the `output_type_id_datatype`
+#' When coercing data types using the `target` schema, the `output_type_id_datatype`
 #' can also be used to set the `output_type_id` column data type manually.
 #' - `chr`: read in (`csv`) or coerce (`parquet`) all columns to character.
 #' - `none`: No coercion. Use `arrow` `read_*` function defaults.
