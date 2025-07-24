@@ -55,7 +55,7 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">read_target_file</span><span class="op">(</span></span>
 <span>  <span class="va">target_file_path</span>,</span>
 <span>  <span class="va">hub_path</span>,</span>
-<span>  coerce_types <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"hub"</span>, <span class="st">"chr"</span>, <span class="st">"none"</span><span class="op">)</span>,</span>
+<span>  coerce_types <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"target"</span>, <span class="st">"chr"</span>, <span class="st">"none"</span><span class="op">)</span>,</span>
 <span>  date_col <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"NA"</span>, <span class="st">""</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -83,10 +83,10 @@ files within the <code>hub-config</code> directory.</p></dd>
 
 
 <dt id="arg-coerce-types">coerce_types<a class="anchor" aria-label="anchor" href="#arg-coerce-types"></a></dt>
-<dd><p>character string. What to coerce column types to on read.</p><ul><li><p><code>hub</code>: (default) read in (<code>csv</code>) or coerce (<code>parquet</code>) to schema according to
-<code>hub</code> config (See <code><a href="https://rdrr.io/pkg/hubData/man/create_timeseries_schema.html" class="external-link">hubData::create_timeseries_schema()</a></code> and
+<dd><p>character string. What to coerce column types to on read.</p><ul><li><p><code>target</code>: (default) read in (<code>csv</code>) or coerce (<code>parquet</code>) to expected schema
+by target type (See <code><a href="https://rdrr.io/pkg/hubData/man/create_timeseries_schema.html" class="external-link">hubData::create_timeseries_schema()</a></code> and
 <code><a href="https://rdrr.io/pkg/hubData/man/create_oracle_output_schema.html" class="external-link">hubData::create_oracle_output_schema()</a></code> for details).
-When coercing data types using the <code>hub</code> schema, the <code>output_type_id_datatype</code>
+When coercing data types using the <code>target</code> schema, the <code>output_type_id_datatype</code>
 can also be used to set the <code>output_type_id</code> column data type manually.</p></li>
 <li><p><code>chr</code>: read in (<code>csv</code>) or coerce (<code>parquet</code>) all columns to character.</p></li>
 <li><p><code>none</code>: No coercion. Use <code>arrow</code> <code>read_*</code> function defaults.</p></li>
