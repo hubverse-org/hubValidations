@@ -75,6 +75,8 @@
 <code><a href="../reference/check_target_tbl_ts_targets.html">check_target_tbl_ts_targets()</a></code>: Check that targets contained in a time-series target data file or implied through hub config are valid time-series targets.</li>
 <li>
 <code><a href="../reference/check_target_tbl_output_type_ids.html">check_target_tbl_output_type_ids()</a></code>: Check that each observation (as defined by the observable unit) in an oracle-output target data file matches the expected <code>output_type_id</code>s.</li>
+<li>
+<code><a href="../reference/check_target_tbl_oracle_value.html">check_target_tbl_oracle_value()</a></code>: Check that the <code>oracle_value</code> values in an oracle-output target data file for <code>cdf</code> and <code>pmf</code> output types conform to expectations. Specifically it verifies that oracle values are either 0 or 1, <code>pmf</code> oracle values sum to 1 for each observation unit and <code>cdf</code> oracle values are non-decreasing for each observation unit when sorted by the <code>output_type_id</code> set defined in the hub config.</li>
 </ul></li>
 <li>Improved performance of <code><a href="../reference/check_tbl_values_required.html">check_tbl_values_required()</a></code>.</li>
 </ul></div>
