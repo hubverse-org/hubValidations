@@ -5,7 +5,7 @@
 #' @param t1_colname Character string. The name of the time zero + 1 time step date column.
 #' @param horizon_colname Character string. The name of the horizon column.
 #' Defaults to `"horizon"`.
-#' @param timediff an object of class `lubridate` [`Period-class`] and length 1.
+#' @param timediff an object of class [`lubridate::Period-class`] and length 1.
 #' The period of a single horizon. Default to 1 week.
 #' @inherit check_tbl_colnames params
 #' @inherit check_tbl_col_types return
@@ -13,14 +13,24 @@
 #' @details
 #' Should be deployed as part of `validate_model_data` optional checks.
 #' @export
-opt_check_tbl_horizon_timediff <- function(tbl, file_path, hub_path, t0_colname,
-                                           t1_colname, horizon_colname = "horizon",
-                                           timediff = lubridate::weeks(),
-                                           output_type_id_datatype = c(
-                                             "from_config", "auto", "character",
-                                             "double", "integer",
-                                             "logical", "Date"
-                                           )) {
+opt_check_tbl_horizon_timediff <- function(
+  tbl,
+  file_path,
+  hub_path,
+  t0_colname,
+  t1_colname,
+  horizon_colname = "horizon",
+  timediff = lubridate::weeks(),
+  output_type_id_datatype = c(
+    "from_config",
+    "auto",
+    "character",
+    "double",
+    "integer",
+    "logical",
+    "Date"
+  )
+) {
   checkmate::assert_class(timediff, "Period")
   checkmate::assert_scalar(timediff)
   checkmate::assert_character(t0_colname, len = 1L)
@@ -32,7 +42,8 @@ opt_check_tbl_horizon_timediff <- function(tbl, file_path, hub_path, t0_colname,
 
   config_tasks <- read_config(hub_path, "tasks")
   output_type_id_datatype <- rlang::arg_match(output_type_id_datatype)
-  schema <- create_hub_schema(config_tasks,
+  schema <- create_hub_schema(
+    config_tasks,
     partitions = NULL,
     r_schema = TRUE,
     output_type_id_datatype = output_type_id_datatype
@@ -65,16 +76,21 @@ opt_check_tbl_horizon_timediff <- function(tbl, file_path, hub_path, t0_colname,
     tbl[, horizon_colname] <- as.integer(tbl[[horizon_colname]])
   }
 
-  compare <- tbl[[t0_colname]] + (timediff * tbl[[horizon_colname]]) == tbl[[t1_colname]]
+  compare <- tbl[[t0_colname]] + (timediff * tbl[[horizon_colname]]) ==
+    tbl[[t1_colname]]
   check <- all(compare)
   if (check) {
     details <- NULL
   } else {
-    invalid_vals <- paste0( # nolint: object_usage_linter
+    # nolint start: object_usage_linter
+    invalid_vals <- paste0(
       tbl[[t1_colname]][!compare],
-      " (horizon = ", tbl[[horizon_colname]][!compare], ")"
-    ) %>% unique()
-
+      " (horizon = ",
+      tbl[[horizon_colname]][!compare],
+      ")"
+    ) %>%
+      unique()
+    # nolint end
     details <- cli::format_inline(
       "t1 var value{?s} {.val {invalid_vals}} are invalid."
     )
@@ -88,7 +104,9 @@ opt_check_tbl_horizon_timediff <- function(tbl, file_path, hub_path, t0_colname,
         {.var {t1_colname}}"
     ),
     msg_verbs = c("all match", "do not all match"),
-    msg_attribute = cli::format_inline("expected period of {.val {timediff}} * {.var {horizon_colname}}."),
+    msg_attribute = cli::format_inline(
+      "expected period of {.val {timediff}} * {.var {horizon_colname}}."
+    ),
     details = details
   )
 }

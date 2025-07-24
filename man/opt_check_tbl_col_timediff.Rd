@@ -35,7 +35,7 @@ files within the \code{hub-config} directory.}
 
 \item{t1_colname}{Character string. The name of the time zero + 1 time step date column.}
 
-\item{timediff}{an object of class \code{lubridate} \code{\linkS4class{Period}} and length 1.}
+\item{timediff}{an object of class \code{\link[lubridate:Period-class]{lubridate::Period}} and length 1.}
 
 \item{output_type_id_datatype}{character string. One of \code{"from_config"}, \code{"auto"},
 \code{"character"}, \code{"double"}, \code{"integer"}, \code{"logical"}, \code{"Date"}.
