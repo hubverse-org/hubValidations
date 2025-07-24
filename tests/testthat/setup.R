@@ -1,7 +1,8 @@
 # Set up test target data hub
-example_hub_exists <- exists("example_complex_forecasting_hub_path") && dir.exists(
-  file.path(example_complex_forecasting_hub_path, "target-data")
-)
+example_hub_exists <- exists("example_complex_forecasting_hub_path") &&
+  dir.exists(
+    file.path(example_complex_forecasting_hub_path, "target-data")
+  )
 if (curl::has_internet() && !example_hub_exists) {
   # Allow example data temp directory to persist across tests.
   tmp_dir <- withr::local_tempdir(clean = FALSE)
