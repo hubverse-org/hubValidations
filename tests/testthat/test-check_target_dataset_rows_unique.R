@@ -135,6 +135,8 @@ test_that("check_target_dataset_rows_unique works with hive partitioned parquet 
     source_hub_path = source_hub_path,
     target_type = target_type
   )
+  # Read target data from single source hub file. We use a separate source
+  # hub file here to avoid I/O lock issues on Windows.
   ts_dat <- test_read_target_data(source_hub_path, target_type)
 
   test_partition_target_data(
@@ -412,6 +414,8 @@ test_that("check_target_dataset_rows_unique works with hive partitioned parquet 
     source_hub_path = source_hub_path,
     target_type = target_type
   )
+  # Read target data from single source hub file. We use a separate source
+  # hub file here to avoid I/O lock issues on Windows.
   oo_dat <- test_read_target_data(source_hub_path, target_type)
 
   test_partition_target_data(

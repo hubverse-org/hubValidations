@@ -6,7 +6,8 @@ test_setup_blank_target_dir <- function(
   target_type <- rlang::arg_match(target_type)
   fs::dir_delete(hub_path)
   fs::dir_copy(source_hub_path, hub_path)
-  # Delete single time-series file in preparation for creating time-series directory
+
+  # Delete single target file in preparation for creating target directory
   hub_ts_path <- fs::path(
     hub_path,
     "target-data",
@@ -15,7 +16,6 @@ test_setup_blank_target_dir <- function(
   )
   fs::file_delete(hub_ts_path)
 
-  # Create hive partitioned timeseries data by target
   ts_dir <- test_target_dir_path(
     hub_path,
     target_type
@@ -44,7 +44,7 @@ test_read_target_data <- function(
   target_type = c("time-series", "oracle-output")
 ) {
   target_type <- rlang::arg_match(target_type)
-  # Read timeseries data from single source hub file
+
   source_ts_path <- fs::path(
     source_hub_path,
     "target-data",
