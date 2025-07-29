@@ -1,8 +1,9 @@
 test_custom_checks_caller <- function(
-    # nolint start
-    hub_path = system.file("testhubs/flusight", package = "hubValidations"),
-    file_path = "hub-ensemble/2023-05-08-hub-ensemble.parquet",
-    validations_cfg_path = NULL) {
+  # nolint start
+  hub_path = system.file("testhubs/flusight", package = "hubValidations"),
+  file_path = "hub-ensemble/2023-05-08-hub-ensemble.parquet",
+  validations_cfg_path = NULL
+) {
   round_id <- parse_file_name(file_path)$round_id
   tbl <- read_model_out_file(
     file_path = file_path,
@@ -13,11 +14,12 @@ test_custom_checks_caller <- function(
 }
 
 stand_up_custom_check_hub <- function(
-    # nolint start
-    hub_path = system.file("testhubs/flusight", package = "hubValidations"),
-    new_path = NULL,
-    check_dir = testthat::test_path("testdata/src/R/"),
-    yaml_path = testthat::test_path("testdata/config/validations-src.yml")) {
+  # nolint start
+  hub_path = system.file("testhubs/flusight", package = "hubValidations"),
+  new_path = NULL,
+  check_dir = testthat::test_path("testdata/src/R/"),
+  yaml_path = testthat::test_path("testdata/config/validations-src.yml")
+) {
   if (is.null(new_path)) {
     return()
   }
@@ -44,7 +46,11 @@ stand_up_custom_check_hub <- function(
 
 # Create global target config_tasks for testing. Defaults to using task.json
 #  from clone of github.com/hubverse-org/example-complex-forecast-hub
-mock_global_target_config <- function(categorical = FALSE, config_tasks = NULL, hub_path = NULL) {
+mock_global_target_config <- function(
+  categorical = FALSE,
+  config_tasks = NULL,
+  hub_path = NULL
+) {
   # Supplying config_tasks allows us to override any mocking that might be applied to
   # read_config() in the tests.
   if (is.null(config_tasks)) {
@@ -53,17 +59,26 @@ mock_global_target_config <- function(categorical = FALSE, config_tasks = NULL, 
 
   if (categorical) {
     # restrict to first round and model task 1 (target "wk flu hosp rate category")
-    config_tasks$rounds[[1]]$model_tasks <- config_tasks$rounds[[1]]$model_tasks[1]
+    config_tasks$rounds[[1]]$model_tasks <- config_tasks$rounds[[
+      1
+    ]]$model_tasks[1]
   } else {
     # restrict to first round and model task 3 ("wk inc flu hosp" target)
-    config_tasks$rounds[[1]]$model_tasks <- config_tasks$rounds[[1]]$model_tasks[3]
+    config_tasks$rounds[[1]]$model_tasks <- config_tasks$rounds[[
+      1
+    ]]$model_tasks[3]
   }
   # Assing NULL to target_keys
   config_tasks <- purrr::assign_in(
     config_tasks,
     list(
-      "rounds", 1, "model_tasks", 1,
-      "target_metadata", 1, "target_keys"
+      "rounds",
+      1,
+      "model_tasks",
+      1,
+      "target_metadata",
+      1,
+      "target_keys"
     ),
     NULL
   )
@@ -79,7 +94,9 @@ mock_global_2_target_config <- function(config_tasks = NULL, hub_path = NULL) {
     config_tasks <- read_config(hub_path)
   }
   # Subset to single model task with distributional target
-  config_tasks$rounds[[1]]$model_tasks <- config_tasks$rounds[[1]]$model_tasks[1]
+  config_tasks$rounds[[1]]$model_tasks <- config_tasks$rounds[[1]]$model_tasks[
+    1
+  ]
 
   # Add target metadata for the new target
   config_tasks$rounds[[1]]$model_tasks[[1]]$target_metadata[[2]] <-
@@ -88,7 +105,9 @@ mock_global_2_target_config <- function(config_tasks = NULL, hub_path = NULL) {
     new_target
 
   # Add additional target to target task ID
-  config_tasks$rounds[[1]]$model_tasks[[1]]$task_ids[["target"]]$optional[2] <- new_target
+  config_tasks$rounds[[1]]$model_tasks[[1]]$task_ids[["target"]]$optional[
+    2
+  ] <- new_target
 
   config_tasks
 }
