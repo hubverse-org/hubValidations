@@ -2,10 +2,12 @@ test_that("check_target_file_read works with csv data", {
   # Example hub is the hubverse-org/example-complex-forecast-hub on github
   # cloned in `setup.R`
   hub_path <- fs::path(tmp_dir, "test")
+  if (fs::dir_exists(hub_path)) {
+    fs::dir_delete(hub_path)
+  }
   fs::dir_copy(
     example_complex_forecasting_hub_path,
-    hub_path,
-    overwrite = TRUE
+    hub_path
   )
 
   target_path <- hubData::get_target_path(
