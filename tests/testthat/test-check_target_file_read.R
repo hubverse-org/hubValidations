@@ -1,6 +1,6 @@
 test_that("check_target_file_read works with csv data", {
   # Example hub is the hubverse-org/example-complex-forecast-hub on github
-  #  cloned in `setup.R`
+  # cloned in `setup.R`
   hub_path <- fs::path(tmp_dir, "test")
   fs::dir_copy(
     example_complex_forecasting_hub_path,
@@ -15,6 +15,8 @@ test_that("check_target_file_read works with csv data", {
     target_path,
     fs::path(hub_path, "target-data")
   )
+
+  # Should read successfully
   valid_csv <- check_target_file_read(
     file_path = file_path,
     hub_path = hub_path
@@ -116,7 +118,7 @@ test_that("check_target_file_read works with parquet data", {
     fs::path(hub_path, "target-data")
   )
 
-  # ✅ Should read successfully
+  # Should read successfully
   valid_parquet <- check_target_file_read(
     file_path = file_path,
     hub_path = hub_path
@@ -127,7 +129,7 @@ test_that("check_target_file_read works with parquet data", {
     "target file could be read successfully."
   )
 
-  # 🔴 Empty parquet file ----
+  # Empty parquet file ----
   file.create(parquet_path)
 
   empty_parquet <- check_target_file_read(
@@ -140,7 +142,7 @@ test_that("check_target_file_read works with parquet data", {
     "target file could not be read successfully.*Invalid: Parquet file size is 0 bytes"
   )
 
-  # 🔴 Corrupted parquet file ----
+  # Corrupted parquet file ----
   writeBin(as.raw(c(0x50, 0x51, 0x00, 0xFF)), parquet_path) # random binary junk
 
   corrupt_parquet <- check_target_file_read(
@@ -153,7 +155,7 @@ test_that("check_target_file_read works with parquet data", {
     "target file could not be read successfully.*Invalid: Parquet file size is 4 bytes, smaller than the minimum file footer"
   )
 
-  # 🔴 Wrong file type ----
+  # Wrong file type ----
   writeLines(c("<html>", "<body>not parquet</body>", "</html>"), parquet_path)
 
   html_parquet <- check_target_file_read(
@@ -165,4 +167,45 @@ test_that("check_target_file_read works with parquet data", {
     cli::ansi_strip(html_parquet$message) |> stringr::str_squish(),
     "target file could not be read successfully.*Invalid: Parquet magic bytes not found in footer"
   )
+})
+
+test_that("check_target_file_read works on partitioned data", {
+  # Example hub is the hubverse-org/example-complex-forecast-hub on github
+  # cloned in `setup.R`
+  target_type <- "time-series"
+  hub_path <- fs::path(tmp_dir, "test")
+  fs::dir_create(hub_path)
+
+  source_hub_path <- example_file_hub_path
+  source_target_path <- hubData::get_target_path(
+    hub_path = source_hub_path
+  )
+
+  test_setup_blank_target_dir(
+    hub_path = hub_path,
+    source_hub_path = source_hub_path,
+    target_type = target_type
+  )
+  # Read target data from single source hub file. We use a separate source
+  # hub file here to avoid I/O lock issues on Windows.
+  ts_dat <- test_read_target_data(source_hub_path, target_type)
+
+  test_partition_target_data(
+    data = ts_dat,
+    hub_path = hub_path,
+    target_type = target_type
+  )
+
+  # Should read successfully
+  file_path <- "time-series/target=wk%20flu%20hosp%20rate/part-0.parquet"
+  valid_partitioned <- check_target_file_read(
+    file_path = file_path,
+    hub_path = hub_path
+  )
+  expect_s3_class(valid_parquet, "check_success")
+  expect_equal(
+    cli::ansi_strip(valid_parquet$message) |> stringr::str_squish(),
+    "target file could be read successfully."
+  )
+  expect_equal(valid_partitioned$where, file_path)
 })
