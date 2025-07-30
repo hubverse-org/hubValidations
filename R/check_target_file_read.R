@@ -1,6 +1,7 @@
 #' Check target file can be read successfully
 #'
 #' @inheritParams check_target_file_name
+#' @inheritParams check_file_read
 #' @inherit check_target_file_name return
 #'
 #' @export

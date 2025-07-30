@@ -9,6 +9,16 @@ check_target_file_read(file_path, hub_path = ".")
 \arguments{
 \item{file_path}{A character string representing the path to the target data file
 relative to the \code{target-data} directory.}
+
+\item{hub_path}{Either a character string path to a local Modeling Hub directory
+or an object of class \verb{<SubTreeFileSystem>} created using functions \code{\link[hubData:s3_bucket]{s3_bucket()}}
+or \code{\link[hubData:gs_bucket]{gs_bucket()}} by providing a string S3 or GCS bucket name or path to a
+Modeling Hub directory stored in the cloud.
+For more details consult the
+\href{https://arrow.apache.org/docs/r/articles/fs.html}{Using cloud storage (S3, GCS)}
+in the \code{arrow} package.
+The hub must be fully configured with valid \code{admin.json} and \code{tasks.json}
+files within the \code{hub-config} directory.}
 }
 \value{
 Depending on whether validation has succeeded, one of:
