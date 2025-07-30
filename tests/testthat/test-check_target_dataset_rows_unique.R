@@ -27,10 +27,10 @@ test_that("check_target_dataset_rows_unique works time-series data", {
   ts_dat <- read_target_file("time-series.csv", hub_path)
 
   ts_dat_versioned <- rbind(ts_dat, ts_dat)
-  ts_dat_versioned$as_of <- Sys.Date()
+  ts_dat_versioned$as_of <- as.Date("2025-07-29")
   ts_dat_versioned$as_of[
     duplicated(ts_dat_versioned)
-  ] <- Sys.Date() - 7L
+  ] <- as.Date("2025-07-29") - 7L
   arrow::write_csv_arrow(
     ts_dat_versioned,
     ts_path
@@ -92,7 +92,7 @@ test_that("check_target_dataset_rows_unique works time-series data", {
   # is being taken into account (i.e. not flagged as duplicate).
   ts_dat_versioned[2:4, ] <- ts_dat_versioned[1, ]
   ts_dat_versioned[2, "observation"] <- 1 # original was 0.
-  ts_dat_versioned[3, "as_of"] <- Sys.Date() - 14L
+  ts_dat_versioned[3, "as_of"] <- as.Date("2025-07-29") - 14L
   arrow::write_csv_arrow(
     ts_dat_versioned,
     ts_path
@@ -170,10 +170,10 @@ test_that("check_target_dataset_rows_unique works with hive partitioned parquet 
 
   # Test with valid versioned data with two as_of dates
   ts_dat_versioned <- rbind(ts_dat, ts_dat)
-  ts_dat_versioned$as_of <- Sys.Date()
+  ts_dat_versioned$as_of <- as.Date("2025-07-29")
   ts_dat_versioned$as_of[
     duplicated(ts_dat_versioned)
-  ] <- Sys.Date() - 7L
+  ] <- as.Date("2025-07-29") - 7L
 
   test_partition_target_data(
     data = ts_dat_versioned,
@@ -250,7 +250,7 @@ test_that("check_target_dataset_rows_unique works with hive partitioned parquet 
   # is being taken into account (i.e. not flagged as duplicate).
   ts_dat_versioned[2:4, ] <- ts_dat_versioned[1, ]
   ts_dat_versioned[2, "observation"] <- 1 # original was 0.
-  ts_dat_versioned[3, "as_of"] <- Sys.Date() - 14L
+  ts_dat_versioned[3, "as_of"] <- as.Date("2025-07-29") - 14L
   test_partition_target_data(
     data = ts_dat_versioned,
     hub_path = hub_path,
@@ -307,7 +307,7 @@ test_that("check_target_dataset_rows_unique works on oracle-output data", {
   )
 
   oo_dat_versioned <- oo_dat
-  oo_dat_versioned$as_of <- Sys.Date()
+  oo_dat_versioned$as_of <- as.Date("2025-07-29")
   arrow::write_csv_arrow(
     oo_dat_versioned,
     oo_path
@@ -370,7 +370,7 @@ test_that("check_target_dataset_rows_unique works on oracle-output data", {
   # NOT being taken into account (i.e. still flagged as duplicate).
   oo_dat_versioned[2:4, ] <- oo_dat_versioned[1, ]
   oo_dat_versioned[2, "oracle_value"] <- 100 # original was 2380.
-  oo_dat_versioned[3, "as_of"] <- Sys.Date() - 7L
+  oo_dat_versioned[3, "as_of"] <- as.Date("2025-07-29") - 7L
   arrow::write_csv_arrow(
     oo_dat_versioned,
     oo_path
@@ -449,7 +449,7 @@ test_that("check_target_dataset_rows_unique works with hive partitioned parquet 
 
   # Test with valid versioned data with two as_of dates
   oo_dat_versioned <- oo_dat
-  oo_dat_versioned$as_of <- Sys.Date()
+  oo_dat_versioned$as_of <- as.Date("2025-07-29")
 
   test_partition_target_data(
     data = oo_dat_versioned,
@@ -528,7 +528,7 @@ test_that("check_target_dataset_rows_unique works with hive partitioned parquet 
   # NOT being taken into account (i.e. still flagged as duplicate).
   oo_dat_versioned[2:4, ] <- oo_dat_versioned[1, ]
   oo_dat_versioned[2, "oracle_value"] <- 100 # original was 2380.
-  oo_dat_versioned[3, "as_of"] <- Sys.Date() - 7L
+  oo_dat_versioned[3, "as_of"] <- as.Date("2025-07-29") - 7L
 
   test_partition_target_data(
     data = oo_dat_versioned,
