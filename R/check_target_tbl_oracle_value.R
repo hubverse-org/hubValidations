@@ -194,7 +194,7 @@ check_cdf_oracle_value <- function(tbl, config_tasks) {
 #' @param config_tasks List of hub task configurations.
 #' @return A data frame of rows with decreasing oracle values, or `NULL`.
 #' @noRd
-#' @importFrom dplyr arrange filter mutate select ungroup
+#' @importFrom dplyr arrange filter mutate select ungroup all_of
 check_oracle_value_cdf_crossing <- function(
   tbl,
   output_type_ids,
@@ -226,7 +226,7 @@ check_oracle_value_cdf_crossing <- function(
       0L
   ) |>
     filter(.data[["invalid"]]) |>
-    select(-.data[["invalid"]]) |>
+    select(-all_of("invalid")) |>
     ungroup()
 }
 

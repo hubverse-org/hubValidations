@@ -1,4 +1,6 @@
 test_that("check_target_tbl_rows_unique works time-series data", {
+  # Example hub is the hubverse-org/example-complex-forecast-hub on github
+  #  cloned in `setup.R`
   hub_path <- example_file_hub_path
   target_tbl <- read_target_file("time-series.csv", hub_path)
   file_path <- "time-series.csv"
@@ -120,7 +122,7 @@ test_that("check_target_tbl_rows_unique works oracle-output data", {
   # Check with invalid time-series data. ----
   # -- Non-versioned --
   # Add duplicate rows to the target table.
-  # Change the `observation` column value in one of the
+  # Change the `oracle_value` column value in one of the
   # duplicates to demonstrate it's not being taken into account.
   target_tbl[2:3, ] <- target_tbl[1, ]
   target_tbl[2, "oracle_value"] <- 100 # original was 2380.

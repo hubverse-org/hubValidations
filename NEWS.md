@@ -10,6 +10,7 @@
   - `check_target_file_name()`: that a hive-partitioned target data file name can be correctly parsed.
   - `check_target_dataset_unique()`: that a single unique target dataset exists for a given target type.
   - `check_target_dataset_file_ext_unique()`: that file(s) in a target dataset (e.g. `time-series` or `oracle-output`) share a single unique file extension.
+  - `check_target_dataset_rows_unique()`: that each row in a target dataset is unique. Function designed to be used as part of overall target data integrity check.
   - `check_target_file_ext_valid()`: that the file extension of a single target data file is valid.
   - `check_target_tbl_colnames()`: that column names of a target data file match expected column names for the target type.
   - `check_target_tbl_coltypes()`: that column types of a target data file match expected column types for the target type.
