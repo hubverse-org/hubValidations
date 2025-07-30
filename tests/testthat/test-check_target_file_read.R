@@ -4,7 +4,8 @@ test_that("check_target_file_read works with csv data", {
   hub_path <- fs::path(tmp_dir, "test")
   fs::dir_copy(
     example_complex_forecasting_hub_path,
-    hub_path
+    hub_path,
+    overwrite = TRUE
   )
 
   target_path <- hubData::get_target_path(
@@ -202,9 +203,9 @@ test_that("check_target_file_read works on partitioned data", {
     file_path = file_path,
     hub_path = hub_path
   )
-  expect_s3_class(valid_parquet, "check_success")
+  expect_s3_class(valid_partitioned, "check_success")
   expect_equal(
-    cli::ansi_strip(valid_parquet$message) |> stringr::str_squish(),
+    cli::ansi_strip(valid_partitioned$message) |> stringr::str_squish(),
     "target file could be read successfully."
   )
   expect_equal(valid_partitioned$where, file_path)
