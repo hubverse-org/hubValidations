@@ -73,7 +73,7 @@ test_that("check_target_file_read works with csv data", {
   expect_s3_class(binary_junk_csv, "check_error")
   expect_match(
     cli::ansi_strip(binary_junk_csv$message) |> stringr::str_squish(),
-    "target file could not be read successfully.*Invalid: CSV parse error: Empty CSV file or block|Invalid or incomplete multibyte|parsing failure"
+    "target file could not be read successfully.*Invalid: CSV parse error: Empty CSV file or block|Invalid or incomplete multibyte|parsing failure" # nolint: line_length_linter
   )
 
   # Empty file ----
@@ -152,7 +152,7 @@ test_that("check_target_file_read works with parquet data", {
   expect_s3_class(corrupt_parquet, "check_error")
   expect_match(
     cli::ansi_strip(corrupt_parquet$message) |> stringr::str_squish(),
-    "target file could not be read successfully.*Invalid: Parquet file size is 4 bytes, smaller than the minimum file footer"
+    "target file could not be read successfully.*Invalid: Parquet file size is 4 bytes, smaller than the minimum file footer" # nolint: line_length_linter
   )
 
   # Wrong file type ----
