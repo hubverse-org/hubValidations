@@ -1,21 +1,22 @@
-#' Check file can be read successfully
+#' Check target file can be read successfully
 #'
-#' @inheritParams check_valid_round_id
-#' @inherit check_valid_round_id return
+#' @inheritParams check_target_file_name
+#' @inheritParams check_file_read
+#' @inherit check_target_file_name return
 #'
 #' @export
-check_file_read <- function(file_path, hub_path = ".") {
+check_target_file_read <- function(file_path, hub_path = ".") {
   try_read <- try(
     {
       if (fs::path_ext(file_path) == "csv") {
-        read_model_out_file(
-          file_path = file_path,
+        read_target_file(
+          target_file_path = file_path,
           hub_path = hub_path,
-          coerce_types = "hub"
+          coerce_types = "target"
         )
       } else {
-        read_model_out_file(
-          file_path = file_path,
+        read_target_file(
+          target_file_path = file_path,
           hub_path = hub_path,
           coerce_types = "none"
         )
@@ -31,14 +32,14 @@ check_file_read <- function(file_path, hub_path = ".") {
     details <- cli::format_inline(
       attr(try_read, "condition")$message,
       "\n",
-      "Please check file path is correct and file can be read using {.fn read_model_out_file}"
+      "Please check file path is correct and target file can be read using {.fn read_target_file}"
     )
   }
 
   capture_check_cnd(
     check = check,
     file_path = file_path,
-    msg_subject = "File",
+    msg_subject = "target file",
     msg_attribute = "successfully.",
     msg_verbs = c("could be read", "could not be read"),
     error = TRUE,
