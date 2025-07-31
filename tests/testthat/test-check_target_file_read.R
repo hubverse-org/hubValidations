@@ -133,6 +133,7 @@ test_that("check_target_file_read works with parquet data", {
   )
 
   # Empty parquet file ----
+  fs::file_delete(parquet_path)
   file.create(parquet_path)
 
   empty_parquet <- check_target_file_read(
