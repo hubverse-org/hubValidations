@@ -159,10 +159,13 @@ test_that("check_target_file_read works with parquet data", {
   )
 
   # Corrupted parquet file ----
+  # Release any open file handles (especially important on Windows)
   gc()
   Sys.sleep(0.2)
+  # Write invalid binary content to a temp file to simulate a corrupt Parquet file
   temp_path <- fs::path_temp("junk.parquet")
   writeBin(as.raw(c(0x50, 0x51, 0x00, 0xFF)), temp_path)
+  # Move into place to avoid writing over a potentially locked file
   fs::file_move(temp_path, parquet_path)
 
   corrupt_parquet <- check_target_file_read(
