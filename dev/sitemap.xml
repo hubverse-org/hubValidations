@@ -37,6 +37,7 @@
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/check_target_dataset_unique.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/check_target_file_ext_valid.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/check_target_file_name.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/check_target_file_read.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/check_target_tbl_colnames.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/check_target_tbl_coltypes.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/check_target_tbl_oracle_value.html</loc></url>
