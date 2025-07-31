@@ -133,8 +133,20 @@ test_that("check_target_file_read works with parquet data", {
   )
 
   # Empty parquet file ----
-  fs::file_delete(parquet_path)
-  file.create(parquet_path)
+  # Ensure any open file handles are released (important on Windows)
+  gc()
+  Sys.sleep(0.2) # Give OS time to release file locks
+
+  # Create a truly empty (0-byte) Parquet file
+  fs::file_delete(parquet_path) # Start fresh to avoid file lock issues
+  fs::file_create(parquet_path) # Simulates an unreadable empty Parquet file
+  # Confirm it's actually empty
+  stopifnot(fs::file_info(parquet_path)$size == 0)
+
+  corrupt_parquet <- check_target_file_read(
+    file_path = file_path,
+    hub_path = hub_path
+  )
 
   empty_parquet <- check_target_file_read(
     file_path = file_path,
@@ -147,7 +159,11 @@ test_that("check_target_file_read works with parquet data", {
   )
 
   # Corrupted parquet file ----
-  writeBin(as.raw(c(0x50, 0x51, 0x00, 0xFF)), parquet_path) # random binary junk
+  gc()
+  Sys.sleep(0.2)
+  temp_path <- fs::path_temp("junk.parquet")
+  writeBin(as.raw(c(0x50, 0x51, 0x00, 0xFF)), temp_path)
+  fs::file_move(temp_path, parquet_path)
 
   corrupt_parquet <- check_target_file_read(
     file_path = file_path,
