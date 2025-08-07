@@ -4,7 +4,8 @@
 #'  file relative to the `target-data` directory.
 #' @param validations_cfg_path Path to YAML file configuring custom validation checks.
 #' If `NULL` defaults to standard `hub-config/validations.yml` path. For more details
-#' see [article on custom validation checks](https://hubverse-org.github.io/hubValidations/articles/deploying-custom-functions.html).
+#' see [article on custom validation checks](
+#' https://hubverse-org.github.io/hubValidations/articles/deploying-custom-functions.html).
 #' @inheritParams check_tbl_colnames
 #' @return An object of class `hub_validations`. Each named element contains
 #' a `hub_check` class object reflecting the result of a given check. Function

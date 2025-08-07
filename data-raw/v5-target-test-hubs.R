@@ -122,7 +122,7 @@ task_cat <- create_model_task(
       target_units = "rate per 100,000 population",
       target_keys = list(target = "wk flu hosp rate category"),
       target_type = "ordinal",
-      description = "This target represents a categorical severity level for rate of new hospitalizations per week for the week ending [horizon] weeks after the reference_date, on target_end_date.",
+      description = "This target represents a categorical severity level for rate of new hospitalizations per week for the week ending [horizon] weeks after the reference_date, on target_end_date.", # nolint: line_length_linter
       is_step_ahead = TRUE,
       time_unit = "week"
     )
@@ -145,7 +145,7 @@ task_cont <- create_model_task(
       target_units = "rate per 100,000 population",
       target_keys = list(target = "wk flu hosp rate"),
       target_type = "continuous",
-      description = "This target is the weekly rate of new hospitalizations per 100k population for the week ending [horizon] weeks after the reference_date, on target_end_date.",
+      description = "This target is the weekly rate of new hospitalizations per 100k population for the week ending [horizon] weeks after the reference_date, on target_end_date.", # nolint: line_length_linter
       is_step_ahead = TRUE,
       time_unit = "week"
     )
@@ -183,7 +183,7 @@ task_inc <- create_model_task(
       target_units = "count",
       target_keys = list(target = "wk inc flu hosp"),
       target_type = "continuous",
-      description = "This target represents the count of new hospitalizations in the week ending on the date [horizon] weeks after the reference_date, on the target_end_date.",
+      description = "This target represents the count of new hospitalizations in the week ending on the date [horizon] weeks after the reference_date, on the target_end_date.", # nolint: line_length_linters
       is_step_ahead = TRUE,
       time_unit = "week"
     )

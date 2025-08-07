@@ -5,5 +5,10 @@ linters: linters_with_defaults(
     cyclocomp_linter = cyclocomp_linter(complexity_limit = 20L)
   )
 exclusions: list(
-    "tests/testthat/helper.R"
+    "tests/testthat/helper.R",
+    "inst/testhubs/v5",
+    # excluded from objest_usage_linter:
+    "data-raw/v5-target-test-hubs.R" = list(
+      object_usage_linter = Inf
+    )
   )
