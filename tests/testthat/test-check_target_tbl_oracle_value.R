@@ -4,7 +4,7 @@ test_that("check_target_tbl_oracle_value works", {
     package = "hubUtils"
   )
   file_path <- "oracle-output.csv"
-  target_type = "oracle-output"
+  target_type <- "oracle-output"
   target_tbl <- read_target_file(file_path, hub_path)
 
   # ---- Check valid data ----
@@ -98,7 +98,7 @@ test_that("check_target_tbl_oracle_value skipped when no output type id column p
     package = "hubUtils"
   )
   file_path <- "oracle-output.csv"
-  target_type = "oracle-output"
+  target_type <- "oracle-output"
   target_tbl <- read_target_file(file_path, hub_path)
   target_tbl[["output_type_id"]] <- NULL
 
@@ -121,7 +121,7 @@ test_that("check_target_tbl_oracle_value skipped when no distributional output t
     package = "hubUtils"
   )
   file_path <- "oracle-output.csv"
-  target_type = "oracle-output"
+  target_type <- "oracle-output"
   target_tbl <- read_target_file(file_path, hub_path)
   target_tbl <- target_tbl[
     !target_tbl[["output_type"]] %in% c("pmf", "cdf"),
