@@ -51,7 +51,10 @@ test_that("check_target_tbl_ts_targets works with a target column", {
 
 test_that("check_target_tbl_ts_targets works with NULL target_keys", {
   file_path <- "time-series.csv"
-  hub_path <- hub_path
+  hub_path <- system.file(
+    "testhubs/v5/target_file",
+    package = "hubUtils"
+  )
   # restrict to first round and model task 3 ("wk inc flu hosp" target)
   valid_inf_config_tasks <- mock_global_target_config(
     categorical = FALSE,
