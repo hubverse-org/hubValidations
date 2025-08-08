@@ -1,19 +1,20 @@
 test_that("check_target_file_read works with csv data", {
-  # Example hub is the hubverse-org/example-complex-forecast-hub on github
-  # cloned in `setup.R`
+  source_hub_path <- system.file(
+    "testhubs/v5/target_file",
+    package = "hubUtils"
+  )
+  tmp_dir <- withr::local_tempdir()
   hub_path <- fs::path(tmp_dir, "test")
-  if (fs::dir_exists(hub_path)) {
-    fs::dir_delete(hub_path)
-  }
   fs::dir_copy(
-    example_complex_forecasting_hub_path,
+    system.file(
+      "testhubs/v5/target_file",
+      package = "hubUtils"
+    ),
     hub_path
   )
-
   target_path <- hubData::get_target_path(
     hub_path = hub_path
   )
-
   file_path <- fs::path_rel(
     target_path,
     fs::path(hub_path, "target-data")
@@ -31,7 +32,6 @@ test_that("check_target_file_read works with csv data", {
   )
 
   # Modify the file to make it invalid. First create path to source file
-  source_hub_path <- example_file_hub_path
   source_target_path <- hubData::get_target_path(
     hub_path = source_hub_path
   )
@@ -63,7 +63,7 @@ test_that("check_target_file_read works with csv data", {
   expect_s3_class(unclosed_quote_csv, "check_error")
   expect_match(
     cli::ansi_strip(unclosed_quote_csv$message) |> stringr::str_squish(),
-    "target file could not be read successfully.*CSV parse error: Row #3: Expected 4 columns, got 1"
+    "target file could not be read successfully.*CSV parse error: Row #3: Expected 4 columns, got 3"
   )
 
   # Corrupted binary content ----
@@ -94,17 +94,22 @@ test_that("check_target_file_read works with csv data", {
 })
 
 test_that("check_target_file_read works with parquet data", {
-  # Setup: clone and modify hub
-  hub_path <- fs::path(tmp_dir, "test-parquet")
+  source_hub_path <- system.file(
+    "testhubs/v5/target_file",
+    package = "hubUtils"
+  )
+  tmp_dir <- withr::local_tempdir()
+  hub_path <- fs::path(tmp_dir, "test")
   fs::dir_copy(
-    example_complex_forecasting_hub_path,
+    system.file(
+      "testhubs/v5/target_file",
+      package = "hubUtils"
+    ),
     hub_path
   )
-
-  # Overwrite CSV with Parquet version
-  source_hub_path <- example_file_hub_path
   source_target_path <- hubData::get_target_path(hub_path = source_hub_path)
 
+  # Overwrite CSV with Parquet version
   df <- readr::read_csv(source_target_path, show_col_types = FALSE)
   parquet_path <- fs::path_ext_set(
     hubData::get_target_path(hub_path = hub_path),
@@ -193,30 +198,9 @@ test_that("check_target_file_read works with parquet data", {
 })
 
 test_that("check_target_file_read works on partitioned data", {
-  # Example hub is the hubverse-org/example-complex-forecast-hub on github
-  # cloned in `setup.R`
-  target_type <- "time-series"
-  hub_path <- fs::path(tmp_dir, "test")
-  fs::dir_create(hub_path)
-
-  source_hub_path <- example_file_hub_path
-  source_target_path <- hubData::get_target_path(
-    hub_path = source_hub_path
-  )
-
-  test_setup_blank_target_dir(
-    hub_path = hub_path,
-    source_hub_path = source_hub_path,
-    target_type = target_type
-  )
-  # Read target data from single source hub file. We use a separate source
-  # hub file here to avoid I/O lock issues on Windows.
-  ts_dat <- test_read_target_data(source_hub_path, target_type)
-
-  test_partition_target_data(
-    data = ts_dat,
-    hub_path = hub_path,
-    target_type = target_type
+  hub_path <- system.file(
+    "testhubs/v5/target_dir",
+    package = "hubUtils"
   )
 
   # Should read successfully
