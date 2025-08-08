@@ -1,13 +1,16 @@
 test_that("check_target_tbl_oracle_value works", {
-  # Example hub is the hubverse-org/example-complex-forecast-hub on github
-  #  cloned in `setup.R`
-  hub_path <- example_file_hub_path
-  target_tbl <- read_target_file("oracle-output.csv", hub_path)
+  hub_path <- system.file(
+    "testhubs/v5/target_file",
+    package = "hubUtils"
+  )
   file_path <- "oracle-output.csv"
+  target_type <- "oracle-output"
+  target_tbl <- read_target_file(file_path, hub_path)
+
   # ---- Check valid data ----
   valid_oo <- check_target_tbl_oracle_value(
     target_tbl,
-    target_type = "oracle-output",
+    target_type = target_type,
     file_path,
     hub_path
   )
@@ -24,8 +27,8 @@ test_that("check_target_tbl_oracle_value works", {
   target_tbl$oracle_value[target_tbl$output_type == "pmf"][1] <- 2L
   # Add second 1L oracle value to pmf output type observation
   target_tbl$oracle_value[target_tbl$output_type == "pmf"][5] <- 1L
-  # Add non-decreasing oracle value to cdf output type observation
-  target_tbl$oracle_value[target_tbl$output_type == "cdf"][1] <- 1L
+  # Add decreasing oracle value to cdf output type observation
+  target_tbl$oracle_value[target_tbl$output_type == "cdf"][3] <- 0L
 
   invalid_oo <- check_target_tbl_oracle_value(
     target_tbl,
@@ -39,40 +42,39 @@ test_that("check_target_tbl_oracle_value works", {
     cli::ansi_strip(invalid_oo$message) |> stringr::str_squish(),
     "oracle-output `target_tbl` contains invalid oracle values. Invalid `oracle_value` value 2 in \"pmf\" output type detected | \"cdf\" oracle values that violate CDF non-decreasing constrain detected | \"pmf\" oracle values that do not sum to 1 for each observation unit detected | See `error_tbl` for details." # nolint: line_length_linter
   )
-  expect_s3_class(invalid_oo$error_df, "tbl_df")
-  expect_named(
-    invalid_oo$error_df,
-    c(
-      "location",
-      "target_end_date",
-      "target",
-      "output_type",
-      "output_type_id",
-      "oracle_value"
+  expect_equal(
+    invalid_oo$error_df[, c("output_type", "output_type_id", "oracle_value")],
+    structure(
+      list(
+        output_type = c(
+          "pmf",
+          "cdf",
+          "pmf",
+          "pmf",
+          "pmf",
+          "pmf",
+          "pmf",
+          "pmf",
+          "pmf",
+          "pmf"
+        ),
+        output_type_id = c(
+          "low",
+          "3",
+          "low",
+          "moderate",
+          "high",
+          "very high",
+          "low",
+          "moderate",
+          "high",
+          "very high"
+        ),
+        oracle_value = c(2, 0, 1, 1, 0, 0, 2, 0, 0, 0)
+      ),
+      row.names = c(NA, -10L),
+      class = c("tbl_df", "tbl", "data.frame")
     )
-  )
-  expect_equal(
-    invalid_oo$error_df$output_type_id,
-    c(
-      "low",
-      "0.5",
-      "low",
-      "moderate",
-      "high",
-      "very high",
-      "low",
-      "moderate",
-      "high",
-      "very high"
-    )
-  )
-  expect_equal(
-    invalid_oo$error_df$oracle_value,
-    c(2, 0, 1, 1, 0, 0, 2, 0, 0, 0)
-  )
-  expect_equal(
-    unique(invalid_oo$error_df$output_type),
-    c("pmf", "cdf")
   )
 })
 
@@ -91,17 +93,19 @@ test_that("check_target_tbl_oracle_value skipped for time-series", {
 })
 
 test_that("check_target_tbl_oracle_value skipped when no output type id column present", {
-  # Example hub is the hubverse-org/example-complex-forecast-hub on github
-  #  cloned in `setup.R`
-  hub_path <- example_file_hub_path
-  target_tbl <- read_target_file("oracle-output.csv", hub_path)
+  hub_path <- system.file(
+    "testhubs/v5/target_file",
+    package = "hubUtils"
+  )
   file_path <- "oracle-output.csv"
+  target_type <- "oracle-output"
+  target_tbl <- read_target_file(file_path, hub_path)
   target_tbl[["output_type_id"]] <- NULL
 
   skip <- check_target_tbl_oracle_value(
     target_tbl = target_tbl,
-    target_type = "oracle-output",
-    file_path = "oracle-output.csv",
+    target_type = target_type,
+    file_path = file_path,
     hub_path
   )
   expect_s3_class(skip, "check_info")
@@ -112,19 +116,21 @@ test_that("check_target_tbl_oracle_value skipped when no output type id column p
 })
 
 test_that("check_target_tbl_oracle_value skipped when no distributional output types present", {
-  # Example hub is the hubverse-org/example-complex-forecast-hub on github
-  #  cloned in `setup.R`
-  hub_path <- example_file_hub_path
-  target_tbl <- read_target_file("oracle-output.csv", hub_path)
+  hub_path <- system.file(
+    "testhubs/v5/target_file",
+    package = "hubUtils"
+  )
   file_path <- "oracle-output.csv"
+  target_type <- "oracle-output"
+  target_tbl <- read_target_file(file_path, hub_path)
   target_tbl <- target_tbl[
     !target_tbl[["output_type"]] %in% c("pmf", "cdf"),
   ]
 
   skip <- check_target_tbl_oracle_value(
     target_tbl = target_tbl,
-    target_type = "oracle-output",
-    file_path = "oracle-output.csv",
+    target_type = target_type,
+    file_path = file_path,
     hub_path
   )
   expect_s3_class(skip, "check_info")

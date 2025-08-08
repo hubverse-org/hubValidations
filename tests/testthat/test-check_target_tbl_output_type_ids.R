@@ -1,7 +1,8 @@
 test_that("check_target_tbl_output_type_ids works", {
-  # Example hub is the hubverse-org/example-complex-forecast-hub on github
-  #  cloned in `setup.R`
-  hub_path <- example_file_hub_path
+  hub_path <- system.file(
+    "testhubs/v5/target_file",
+    package = "hubUtils"
+  )
   target_tbl_chr <- read_target_file("oracle-output.csv", hub_path) |>
     hubData::coerce_to_character()
   file_path <- "oracle-output.csv"
@@ -76,7 +77,10 @@ test_that("check_target_tbl_output_type_ids works", {
 })
 
 test_that("check_target_tbl_output_type_ids works with NULL target_keys", {
-  hub_path <- example_file_hub_path
+  hub_path <- system.file(
+    "testhubs/v5/target_file",
+    package = "hubUtils"
+  )
   target_tbl_chr <- read_target_file("oracle-output.csv", hub_path) |>
     hubData::coerce_to_character()
   target_tbl_chr[["targets"]] <- NULL
@@ -198,7 +202,10 @@ test_that("check_target_tbl_output_type_ids skipped for time-series", {
 })
 
 test_that("check_target_tbl_output_type_ids works with 2 dist targets", {
-  hub_path <- example_file_hub_path
+  hub_path <- system.file(
+    "testhubs/v5/target_file",
+    package = "hubUtils"
+  )
   target_tbl_chr <- read_target_file("oracle-output.csv", hub_path) |>
     hubData::coerce_to_character()
   file_path <- "oracle-output.csv"

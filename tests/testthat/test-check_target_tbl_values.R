@@ -1,11 +1,17 @@
 test_that("check_target_tbl_values works with time-series data", {
-  target_tbl_chr <- read_target_file("time-series.csv", example_file_hub_path) |>
+  hub_path <- system.file(
+    "testhubs/v5/target_file",
+    package = "hubUtils"
+  )
+  target_tbl_chr <- read_target_file("time-series.csv", hub_path) |>
     hubData::coerce_to_character()
   file_path <- "time-series.csv"
 
-  valid_ts <- check_target_tbl_values(target_tbl_chr,
+  valid_ts <- check_target_tbl_values(
+    target_tbl_chr,
     target_type = "time-series",
-    file_path, example_file_hub_path
+    file_path,
+    hub_path
   )
 
   expect_s3_class(valid_ts, "check_success")
@@ -19,9 +25,11 @@ test_that("check_target_tbl_values works with time-series data", {
   target_tbl_chr$location[1] <- "random_location"
   target_tbl_chr$target[2] <- "random_target"
 
-  invalid_ts <- check_target_tbl_values(target_tbl_chr,
+  invalid_ts <- check_target_tbl_values(
+    target_tbl_chr,
     target_type = "time-series",
-    file_path, example_file_hub_path
+    file_path,
+    hub_path
   )
 
   expect_s3_class(invalid_ts, "check_error")
@@ -32,11 +40,11 @@ test_that("check_target_tbl_values works with time-series data", {
   expect_s3_class(invalid_ts$error_tbl, "tbl_df")
   expect_named(
     invalid_ts$error_tbl,
-    c("date", "target", "location", "observation")
+    c("target_end_date", "target", "location", "observation")
   )
   expect_equal(
     invalid_ts$error_tbl$location,
-    c("random_location", "15")
+    c("random_location", "01")
   )
   expect_equal(
     invalid_ts$error_tbl$target,
@@ -48,9 +56,11 @@ test_that("check_target_tbl_values works with time-series data", {
   # row `valid_tbl` is created internally.
   target_tbl_chr <- target_tbl_chr[1:2, ]
   target_tbl_chr$target[1] <- "random_target"
-  invalid_ts <- check_target_tbl_values(target_tbl_chr,
+  invalid_ts <- check_target_tbl_values(
+    target_tbl_chr,
     target_type = "time-series",
-    file_path, example_file_hub_path
+    file_path,
+    hub_path
   )
   expect_s3_class(invalid_ts, "check_error")
   expect_equal(
@@ -60,7 +70,7 @@ test_that("check_target_tbl_values works with time-series data", {
   expect_s3_class(invalid_ts$error_tbl, "tbl_df")
   expect_equal(
     invalid_ts$error_tbl$location,
-    c("random_location", "15")
+    c("random_location", "01")
   )
   expect_equal(
     invalid_ts$error_tbl$target,
@@ -68,20 +78,26 @@ test_that("check_target_tbl_values works with time-series data", {
   )
   expect_named(
     invalid_ts$error_tbl,
-    c("date", "target", "location", "observation")
+    c("target_end_date", "target", "location", "observation")
   )
 })
 
 test_that("check_target_tbl_values skips when necessary", {
-  target_tbl_chr <- read_target_file("time-series.csv", example_file_hub_path) |>
+  hub_path <- system.file(
+    "testhubs/v5/target_file",
+    package = "hubUtils"
+  )
+  target_tbl_chr <- read_target_file("time-series.csv", hub_path) |>
     hubData::coerce_to_character()
   file_path <- "time-series.csv"
 
   # Remove all task IDs from the target_tbl_chr
-  target_tbl_chr[c("target", "location")] <- NULL
-  skipped_ts <- check_target_tbl_values(target_tbl_chr,
+  target_tbl_chr[c("target", "location", "target_end_date")] <- NULL
+  skipped_ts <- check_target_tbl_values(
+    target_tbl_chr,
     target_type = "time-series",
-    file_path, example_file_hub_path
+    file_path,
+    hub_path
   )
 
   expect_s3_class(skipped_ts, "check_info")
@@ -92,17 +108,20 @@ test_that("check_target_tbl_values skips when necessary", {
 })
 
 
-
-
-
 test_that("check_target_tbl_values works with oracle-output data", {
-  target_tbl_chr <- read_target_file("oracle-output.csv", example_file_hub_path) |>
+  hub_path <- system.file(
+    "testhubs/v5/target_file",
+    package = "hubUtils"
+  )
+  target_tbl_chr <- read_target_file("oracle-output.csv", hub_path) |>
     hubData::coerce_to_character()
   file_path <- "oracle-output.csv"
 
-  valid_oracle <- check_target_tbl_values(target_tbl_chr,
+  valid_oracle <- check_target_tbl_values(
+    target_tbl_chr,
     target_type = "oracle-output",
-    file_path, example_file_hub_path
+    file_path,
+    hub_path
   )
 
   expect_s3_class(valid_oracle, "check_success")
@@ -116,9 +135,11 @@ test_that("check_target_tbl_values works with oracle-output data", {
   target_tbl_chr$location[1] <- "random_location"
   target_tbl_chr$target[2] <- "random_target"
 
-  invalid_oracle <- check_target_tbl_values(target_tbl_chr,
+  invalid_oracle <- check_target_tbl_values(
+    target_tbl_chr,
     target_type = "oracle-output",
-    file_path, example_file_hub_path
+    file_path,
+    hub_path
   )
 
   expect_s3_class(invalid_oracle, "check_error")
@@ -129,17 +150,21 @@ test_that("check_target_tbl_values works with oracle-output data", {
   expect_s3_class(invalid_oracle$error_tbl, "tbl_df")
   expect_equal(
     invalid_oracle$error_tbl$location,
-    c("random_location", "01")
+    c("random_location", "US")
   )
   expect_equal(
     invalid_oracle$error_tbl$target,
-    c("wk inc flu hosp", "random_target")
+    c("wk flu hosp rate", "random_target")
   )
   expect_named(
     invalid_oracle$error_tbl,
     c(
-      "location", "target_end_date", "target",
-      "output_type", "output_type_id", "oracle_value"
+      "location",
+      "target_end_date",
+      "target",
+      "output_type",
+      "output_type_id",
+      "oracle_value"
     )
   )
 })
