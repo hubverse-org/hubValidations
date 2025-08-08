@@ -61,7 +61,9 @@
 #' Details of checks performed by `validate_submission()`
 #' ```{r, echo = FALSE}
 #' arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")) %>%
-#' dplyr::filter(.data$`parent fun` != "validate_model_metadata", !.data$optional) %>%
+#' dplyr::filter(
+#' !.data$`parent fun` %in% c("validate_model_metadata", "validate_target_file"),
+#' !.data$optional) %>%
 #'   dplyr::select(-"parent fun", -"check fun", -"optional") %>%
 #'   dplyr::mutate("Extra info" = dplyr::case_when(
 #'     is.na(.data$`Extra info`) ~ "",
@@ -84,7 +86,11 @@
 #'     TRUE ~ .data$`Extra info`
 #'   )) %>%
 #'   knitr::kable() %>%
-#'   kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+#'   kableExtra::kable_styling(
+#'      bootstrap_options = c(
+#'          "striped", "hover", "condensed", "responsive"
+#'        )
+#'      ) %>%
 #'   kableExtra::column_spec(1, bold = TRUE)
 #' ```
 #' @return An object of class `hub_validations`.
@@ -98,24 +104,36 @@
 #'   pr_number = 3
 #' )
 #' }
-validate_pr <- function(hub_path = ".", gh_repo, pr_number,
-                        round_id_col = NULL,
-                        output_type_id_datatype = c(
-                          "from_config", "auto", "character",
-                          "double", "integer",
-                          "logical", "Date"
-                        ), validations_cfg_path = NULL,
-                        skip_submit_window_check = FALSE,
-                        file_modification_check = c(
-                          "error", "failure", "warn",
-                          "message", "none"
-                        ),
-                        allow_submit_window_mods = TRUE,
-                        submit_window_ref_date_from = c(
-                          "file",
-                          "file_path"
-                        ),
-                        derived_task_ids = NULL) {
+validate_pr <- function(
+  hub_path = ".",
+  gh_repo,
+  pr_number,
+  round_id_col = NULL,
+  output_type_id_datatype = c(
+    "from_config",
+    "auto",
+    "character",
+    "double",
+    "integer",
+    "logical",
+    "Date"
+  ),
+  validations_cfg_path = NULL,
+  skip_submit_window_check = FALSE,
+  file_modification_check = c(
+    "error",
+    "failure",
+    "warn",
+    "message",
+    "none"
+  ),
+  allow_submit_window_mods = TRUE,
+  submit_window_ref_date_from = c(
+    "file",
+    "file_path"
+  ),
+  derived_task_ids = NULL
+) {
   file_modification_check <- rlang::arg_match(file_modification_check)
   if (file_modification_check == "warn") {
     lifecycle::deprecate_warn(
@@ -130,7 +148,8 @@ validate_pr <- function(hub_path = ".", gh_repo, pr_number,
   model_metadata_dir <- "model-metadata" # nolint: object_name_linter
   validations <- new_hub_validations()
 
-  validations$valid_config <- try_check(check_config_hub_valid(hub_path),
+  validations$valid_config <- try_check(
+    check_config_hub_valid(hub_path),
     file_path = basename(hub_path)
   )
   if (is_any_error(validations$valid_config)) {
@@ -161,15 +180,20 @@ validate_pr <- function(hub_path = ".", gh_repo, pr_number,
         dplyr::mutate(
           rel_path = dplyr::case_when(
             .data$model_output ~ fs::path_rel(.data$filename, model_output_dir),
-            .data$model_metadata ~ fs::path_rel(.data$filename, model_metadata_dir),
+            .data$model_metadata ~
+              fs::path_rel(.data$filename, model_metadata_dir),
             .default = .data$filename
           ),
           hub_path = hub_path
         )
       inform_unvalidated_files(pr_df)
 
-      model_output_files <- pr_df$rel_path[pr_df$model_output & pr_df$status != "removed"]
-      model_metadata_files <- pr_df$rel_path[pr_df$model_metadata & pr_df$status != "removed"]
+      model_output_files <- pr_df$rel_path[
+        pr_df$model_output & pr_df$status != "removed"
+      ]
+      model_metadata_files <- pr_df$rel_path[
+        pr_df$model_metadata & pr_df$status != "removed"
+      ]
 
       if (file_modification_check != "none") {
         file_modifications <- purrr::map(
@@ -185,7 +209,6 @@ validate_pr <- function(hub_path = ".", gh_repo, pr_number,
       } else {
         file_modifications <- NULL
       }
-
 
       model_output_vals <- purrr::map(
         model_output_files,
@@ -212,7 +235,6 @@ validate_pr <- function(hub_path = ".", gh_repo, pr_number,
       ) %>%
         purrr::list_flatten() %>%
         as_hub_validations()
-
 
       validations <- combine(
         validations,
@@ -241,7 +263,8 @@ validate_pr <- function(hub_path = ".", gh_repo, pr_number,
 
 # Sends message reporting any files with changes in PR that were not validated.
 inform_unvalidated_files <- function(pr_df) {
-  unvalidated_files <- pr_df[!pr_df$model_output & !pr_df$model_metadata,
+  unvalidated_files <- pr_df[
+    !pr_df$model_output & !pr_df$model_metadata,
     "filename",
     drop = TRUE
   ]
@@ -255,19 +278,23 @@ inform_unvalidated_files <- function(pr_df) {
   cli::cli_inform(
     c(
       "i" = "PR contains commits to additional files which have not been checked:",
-      unvalidated_bullets, "\n"
+      unvalidated_bullets,
+      "\n"
     )
   )
 }
 # Checks for model output file modifications and model output & model metadata
 # file deletions/renaming. Returns an <error/check_error>⁠ condition class object if any
 # modification or deletion detected.
-check_pr_modf_del_files <- function(pr_df, file_type = c(
-                                      "model_output", # nolint
-                                      "model_metadata"
-                                    ),
-                                    alert = c("message", "failure", "error"),
-                                    allow_submit_window_mods = TRUE) {
+check_pr_modf_del_files <- function(
+  pr_df,
+  file_type = c(
+    "model_output", # nolint
+    "model_metadata"
+  ),
+  alert = c("message", "failure", "error"),
+  allow_submit_window_mods = TRUE
+) {
   file_type <- rlang::arg_match(file_type)
   alert <- rlang::arg_match(alert)
 
@@ -279,7 +306,8 @@ check_pr_modf_del_files <- function(pr_df, file_type = c(
   df <- pr_df[pr_df[[file_type]], ]
 
   # Subset to files whose modification/deletion is not allowed and needs reporting.
-  df <- switch(file_type,
+  df <- switch(
+    file_type,
     model_output = df[df$status %in% c("removed", "modified", "renamed"), ],
     model_metadata = df[df$status %in% c("removed", "renamed"), ]
   )
@@ -306,8 +334,12 @@ check_pr_modf_del_files <- function(pr_df, file_type = c(
 
 # Check individual file for non-allowed modification/deletion and return appropriate
 # notification object according to alert
-check_pr_modf_del_file <- function(df_row, file_type, allow_submit_window_mods,
-                                   alert) {
+check_pr_modf_del_file <- function(
+  df_row,
+  file_type,
+  allow_submit_window_mods,
+  alert
+) {
   # If mods/dels allowed within submission window and file_type == "model_output",
   #  try checking whether file is within their submission window.
   if (allow_submit_window_mods && file_type == "model_output") {

@@ -30,7 +30,9 @@
 #'
 #' ```{r, echo = FALSE}
 #' arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")) %>%
-#' dplyr::filter(.data$`parent fun` != "validate_model_metadata", !.data$optional) %>%
+#' dplyr::filter(
+#' !.data$`parent fun` %in% c("validate_model_metadata", "validate_target_file"),
+#' !.data$optional) %>%
 #'   dplyr::select(-"parent fun", -"check fun", -"optional") %>%
 #'   dplyr::mutate("Extra info" = dplyr::case_when(
 #'     is.na(.data$`Extra info`) ~ "",
@@ -45,20 +47,28 @@
 #' hub_path <- system.file("testhubs/simple", package = "hubValidations")
 #' file_path <- "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
 #' validate_submission(hub_path, file_path)
-validate_submission <- function(hub_path, file_path, round_id_col = NULL,
-                                validations_cfg_path = NULL,
-                                output_type_id_datatype = c(
-                                  "from_config", "auto", "character",
-                                  "double", "integer",
-                                  "logical", "Date"
-                                ),
-                                skip_submit_window_check = FALSE,
-                                skip_check_config = FALSE,
-                                submit_window_ref_date_from = c(
-                                  "file",
-                                  "file_path"
-                                ),
-                                derived_task_ids = NULL) {
+validate_submission <- function(
+  hub_path,
+  file_path,
+  round_id_col = NULL,
+  validations_cfg_path = NULL,
+  output_type_id_datatype = c(
+    "from_config",
+    "auto",
+    "character",
+    "double",
+    "integer",
+    "logical",
+    "Date"
+  ),
+  skip_submit_window_check = FALSE,
+  skip_check_config = FALSE,
+  submit_window_ref_date_from = c(
+    "file",
+    "file_path"
+  ),
+  derived_task_ids = NULL
+) {
   check_hub_config <- new_hub_validations()
   output_type_id_datatype <- rlang::arg_match(output_type_id_datatype)
 
@@ -76,7 +86,8 @@ validate_submission <- function(hub_path, file_path, round_id_col = NULL,
     checks_submission_time <- new_hub_validations()
   } else {
     checks_submission_time <- validate_submission_time(
-      hub_path, file_path,
+      hub_path,
+      file_path,
       ref_date_from = submit_window_ref_date_from
     )
   }
