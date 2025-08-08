@@ -22,7 +22,6 @@
   - `check_target_tbl_oracle_value()`: Check that the `oracle_value` values in an oracle-output target data file for `cdf` and `pmf` output types conform to expectations. Specifically it verifies that oracle values are either 0 or 1, `pmf` oracle values sum to 1 for each observation unit and `cdf` oracle values are non-decreasing for each observation unit when sorted by the `output_type_id` set defined in the hub config.
 * Added `validate_target_file()` function for validating file level properties of a target data file (#250).
 * Improved performance of `check_tbl_values_required()`.
-* Added v5.1.0 version example hubs to `testhubs` directory in `hubValidations` package for testing and demonstration purposes. Hub `target_file` contains target data in an individual files, while hub `target_dir` contains hive-partitioned multi-file target data.
 
 
 # hubValidations 0.11.0

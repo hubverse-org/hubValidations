@@ -1,5 +1,5 @@
 test_that("validate_target_file works with single CSV target data file", {
-  hub_path <- system.file("testhubs/v5/target_file", package = "hubValidations")
+  hub_path <- system.file("testhubs/v5/target_file", package = "hubUtils")
 
   # time-series CSV file
   res_ts <- validate_target_file(hub_path, file_path = "time-series.csv")
@@ -30,7 +30,7 @@ test_that("validate_target_file works with single CSV target data file", {
 
 
 test_that("validate_target_file works with partitioned parquet target data file", {
-  hub_path <- system.file("testhubs/v5/target_dir", package = "hubValidations")
+  hub_path <- system.file("testhubs/v5/target_dir", package = "hubUtils")
 
   # time-series CSV file
   res_ts <- validate_target_file(
