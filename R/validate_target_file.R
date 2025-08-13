@@ -32,16 +32,14 @@
 #'   kableExtra::column_spec(1, bold = TRUE)
 #' ```
 #' @examples
-#' hub_path <- system.file("testhubs/v5/target_file", package = "hubValidations")
+#' hub_path <- system.file("testhubs/v5/target_file", package = "hubUtils")
 #' validate_target_file(hub_path,
 #'   file_path = "time-series.csv"
 #' )
 #' validate_target_file(hub_path,
 #'   file_path = "oracle-output.csv"
 #' )
-#' hub_path <- system.file("testhubs/v5/target_dir",
-#'   package = "hubValidations"
-#' )
+#' hub_path <- system.file("testhubs/v5/target_dir", package = "hubUtils")
 #' validate_target_file(hub_path,
 #'   file_path = "time-series/target=wk%20flu%20hosp%20rate/part-0.parquet"
 #' )
