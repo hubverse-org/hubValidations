@@ -33,7 +33,7 @@ metadata_file_ext,The metadata file has correct extension (yaml or yml).,TRUE,ch
 metadata_file_location,The metadata file has been saved to correct location.,TRUE,check_failure,validate_model_metadata,check_metadata_file_location,,FALSE
 metadata_matches_schema,The contents of the metadata file match the hub's model metadata schema,TRUE,check_error,validate_model_metadata,check_metadata_matches_schema,,FALSE
 metadata_file_name,The metadata filename matches the model ID specified in the contents of the file.,TRUE,check_error,validate_model_metadata,check_metadata_file_name,,FALSE
-target_file_exists,File exists at `file_path` provided,TRUE,check_error,validate_target_file,check_file_exists,,FALSE
+target_file_exists,File exists at `file_path` provided.,TRUE,check_error,validate_target_file,check_file_exists,,FALSE
 target_partition_file_name,Hive-style partition file path segments are valid and can be parsed successfully. Skipped if target dataset not hive-partitioned.,TRUE,check_error,validate_target_file,check_target_file_name,,FALSE
 target_file_ext,Target data file extension is valid.,TRUE,check_error,validate_target_file,check_target_file_ext_valid,,FALSE
 NA,The number of metadata files submitted by a single team does not exceed the maximum number allowed.,FALSE,check_failure,validate_model_metadata,opt_check_metadata_team_max_model_n,,TRUE

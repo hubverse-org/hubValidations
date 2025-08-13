@@ -57,7 +57,7 @@ Details of checks performed by \code{validate_target_file()}\if{html}{\out{<tabl
 <tbody>
   <tr>
    <td style="text-align:left;font-weight: bold;"> target_file_exists </td>
-   <td style="text-align:left;"> File exists at `file_path` provided </td>
+   <td style="text-align:left;"> File exists at `file_path` provided. </td>
    <td style="text-align:left;"> TRUE </td>
    <td style="text-align:left;"> check_error </td>
    <td style="text-align:left;">  </td>
