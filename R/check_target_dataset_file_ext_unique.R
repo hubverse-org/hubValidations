@@ -3,20 +3,25 @@
 #' @inheritParams hubData::get_target_path
 #' @inherit check_tbl_col_types return
 #' @export
-check_target_dataset_file_ext_unique <- function(hub_path,
-                                                 target_type = c(
-                                                   "time-series", "oracle-output"
-                                                 )) {
+check_target_dataset_file_ext_unique <- function(
+  hub_path,
+  target_type = c(
+    "time-series",
+    "oracle-output"
+  )
+) {
   target_type <- rlang::arg_match(target_type)
   target_path <- hubData::get_target_path(hub_path, target_type)
-  file_path <- fs::path("target-data", target_type)
+  file_path <- rel_file_path(target_path, hub_path, subdir = "target-data")
 
   if (length(target_path) == 0L) {
     return(
       capture_check_info(
         file_path = file_path,
-        cli::format_inline("No {.field {target_type}} target type files detected in
-        {.code target-data} directory. Check skipped.")
+        cli::format_inline(
+          "No {.field {target_type}} target type files detected in
+        {.code target-data} directory. Check skipped."
+        )
       )
     )
   }
@@ -41,7 +46,7 @@ check_target_dataset_file_ext_unique <- function(hub_path,
 
   capture_check_cnd(
     check = check,
-    file_path = file_path,
+    file_path = as.character(file_path),
     msg_subject = cli::format_inline(
       "{.field {target_type}} dataset files"
     ),
