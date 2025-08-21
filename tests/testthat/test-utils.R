@@ -40,6 +40,19 @@ test_that("rel_file_path works", {
   )
 })
 
+test_that("rel_file_path works when hub_path included in file_path", {
+  hub_path <- hubutils_target_file_hub()
+  target_path <- hubData::get_target_path(hub_path, "time-series")
+  expect_equal(
+    rel_file_path(
+      file_path = target_path,
+      hub_path = hub_path,
+      subdir = "target-data"
+    ),
+    fs::path("time-series.csv")
+  )
+})
+
 test_that("get_file_round_id works", {
   expect_equal(
     get_file_round_id(
