@@ -38,8 +38,7 @@ check_target_dataset_unique <- function(
   } else {
     # If the check passes, return the relative path to the dataset,
     # otherwise continue returning the target type
-    file_path <- hubData::get_target_path(hub_path, target_type) |>
-      rel_file_path(hub_path, subdir = "target-data")
+    file_path <- basename(target_path)
   }
 
   capture_check_cnd(

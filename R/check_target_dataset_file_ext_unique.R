@@ -12,7 +12,7 @@ check_target_dataset_file_ext_unique <- function(
 ) {
   target_type <- rlang::arg_match(target_type)
   target_path <- hubData::get_target_path(hub_path, target_type)
-  file_path <- rel_file_path(target_path, hub_path, subdir = "target-data")
+  file_path <- basename(target_path)
 
   if (length(target_path) == 0L) {
     return(
@@ -46,7 +46,7 @@ check_target_dataset_file_ext_unique <- function(
 
   capture_check_cnd(
     check = check,
-    file_path = as.character(file_path),
+    file_path = file_path,
     msg_subject = cli::format_inline(
       "{.field {target_type}} dataset files"
     ),
