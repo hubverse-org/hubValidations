@@ -35,17 +35,10 @@ rel_file_path <- function(
   if (subdir == "model-output") {
     subdir <- get_hub_model_output_dir(hub_path)
   }
-  if (startsWith(file_path, hub_path)) {
-    fs::path_rel(
-      file_path,
-      fs::path(hub_path, subdir)
-    )
-  } else {
-    fs::path(
-      subdir,
-      file_path
-    )
-  }
+  fs::path(
+    subdir,
+    file_path
+  )
 }
 
 get_file_round_id <- function(file_path) {
