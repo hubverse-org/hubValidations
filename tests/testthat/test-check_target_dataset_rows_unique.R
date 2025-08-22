@@ -1,9 +1,11 @@
 test_that("check_target_dataset_rows_unique works time-series data", {
-  # Example hub is the hubverse-org/example-complex-forecast-hub on github
-  #  cloned in `setup.R`
+  tmp_dir <- withr::local_tempdir()
   hub_path <- fs::path(tmp_dir, "test")
   fs::dir_copy(
-    example_complex_forecasting_hub_path,
+    system.file(
+      "testhubs/v5/target_file",
+      package = "hubUtils"
+    ),
     hub_path
   )
 
@@ -72,9 +74,9 @@ test_that("check_target_dataset_rows_unique works time-series data", {
     invalid_ts$duplicate_df,
     structure(
       list(
-        date = structure(18272, class = "Date"),
+        target_end_date = structure(19287, class = "Date"),
         target = "wk inc flu hosp",
-        location = "01",
+        location = "02",
         count = 3L
       ),
       class = c("tbl_df", "tbl", "data.frame"),
@@ -111,9 +113,9 @@ test_that("check_target_dataset_rows_unique works time-series data", {
     invalid_ts_versioned$duplicate_df,
     structure(
       list(
-        date = structure(18272, class = "Date"),
+        target_end_date = structure(19287, class = "Date"),
         target = "wk inc flu hosp",
-        location = "01",
+        location = "02",
         as_of = structure(20298, class = "Date"),
         count = 3L
       ),
@@ -124,26 +126,20 @@ test_that("check_target_dataset_rows_unique works time-series data", {
 })
 
 test_that("check_target_dataset_rows_unique works with hive partitioned parquet time-series data", {
-  # Example hub is the hubverse-org/example-complex-forecast-hub on github
-  #  cloned in `setup.R`
-  hub_path <- example_dir_hub_path
-  source_hub_path <- example_file_hub_path
+  tmp_dir <- withr::local_tempdir()
+  hub_path <- fs::path(tmp_dir, "test")
+  source_hub_path <- system.file(
+    "testhubs/v5/target_file",
+    package = "hubUtils"
+  )
+  fs::dir_copy(
+    system.file(
+      "testhubs/v5/target_dir",
+      package = "hubUtils"
+    ),
+    hub_path
+  )
   target_type <- "time-series"
-
-  test_setup_blank_target_dir(
-    hub_path = hub_path,
-    source_hub_path = source_hub_path,
-    target_type = target_type
-  )
-  # Read target data from single source hub file. We use a separate source
-  # hub file here to avoid I/O lock issues on Windows.
-  ts_dat <- test_read_target_data(source_hub_path, target_type)
-
-  test_partition_target_data(
-    data = ts_dat,
-    hub_path = hub_path,
-    target_type = target_type
-  )
 
   valid_ts <- check_target_dataset_rows_unique(
     target_type = target_type,
@@ -162,12 +158,10 @@ test_that("check_target_dataset_rows_unique works with hive partitioned parquet 
 
   # Test with valid versioned data with two as_of dates ----
   # Reset test hub
-  test_setup_blank_target_dir(
-    hub_path = hub_path,
-    source_hub_path = source_hub_path,
-    target_type = target_type
-  )
-
+  test_clear_target_dir(hub_path, target_type)
+  # Read target data from single source hub file. We use a separate source
+  # hub file here to avoid I/O lock issues on Windows.
+  ts_dat <- test_read_target_data(source_hub_path, target_type)
   # Test with valid versioned data with two as_of dates
   ts_dat_versioned <- rbind(ts_dat, ts_dat)
   ts_dat_versioned$as_of <- as.Date("2025-07-29")
@@ -194,11 +188,7 @@ test_that("check_target_dataset_rows_unique works with hive partitioned parquet 
 
   # Check with invalid time-series data. ----
   # -- Non-versioned --
-  test_setup_blank_target_dir(
-    hub_path = hub_path,
-    source_hub_path = source_hub_path,
-    target_type = target_type
-  )
+  test_clear_target_dir(hub_path, target_type)
   # Add duplicate rows to the target table.
   # Change the `observation` column value in one of the
   # duplicates to demonstrate it's not being taken into account.
@@ -224,8 +214,8 @@ test_that("check_target_dataset_rows_unique works with hive partitioned parquet 
     invalid_ts$duplicate_df,
     structure(
       list(
-        date = structure(18272, class = "Date"),
-        location = "01",
+        target_end_date = structure(19287, class = "Date"),
+        location = "02",
         target = "wk inc flu hosp",
         count = 3L
       ),
@@ -237,11 +227,7 @@ test_that("check_target_dataset_rows_unique works with hive partitioned parquet 
   # Check with invalid time-series data. ----
   # -- Versioned --
   # Reset test hub
-  test_setup_blank_target_dir(
-    hub_path = hub_path,
-    source_hub_path = source_hub_path,
-    target_type = target_type
-  )
+  test_clear_target_dir(hub_path, target_type)
   # Add duplicate rows to the target table.
   # Change the `observation` column value in one of the
   # duplicates to demonstrate it's not being taken into account
@@ -270,8 +256,8 @@ test_that("check_target_dataset_rows_unique works with hive partitioned parquet 
     invalid_ts_versioned$duplicate_df,
     structure(
       list(
-        date = structure(18272, class = "Date"),
-        location = "01",
+        target_end_date = structure(19287, class = "Date"),
+        location = "02",
         as_of = structure(20298, class = "Date"),
         target = "wk inc flu hosp",
         count = 3L
@@ -283,9 +269,13 @@ test_that("check_target_dataset_rows_unique works with hive partitioned parquet 
 })
 
 test_that("check_target_dataset_rows_unique works on oracle-output data", {
+  tmp_dir <- withr::local_tempdir()
   hub_path <- fs::path(tmp_dir, "test")
   fs::dir_copy(
-    example_complex_forecasting_hub_path,
+    system.file(
+      "testhubs/v5/target_file",
+      package = "hubUtils"
+    ),
     hub_path
   )
   oo_dat <- read_target_file("oracle-output.csv", hub_path)
@@ -330,7 +320,7 @@ test_that("check_target_dataset_rows_unique works on oracle-output data", {
   # Change the `oracle_value` column value in one of the
   # duplicates to demonstrate it's not being taken into account.
   oo_dat[2:3, ] <- oo_dat[1, ]
-  oo_dat[2, "oracle_value"] <- 100 # original was 2380.
+  oo_dat[2, "oracle_value"] <- 100 # original was 1.
   arrow::write_csv_arrow(
     oo_dat,
     oo_path
@@ -351,9 +341,9 @@ test_that("check_target_dataset_rows_unique works on oracle-output data", {
       list(
         location = "US",
         target_end_date = structure(19287, class = "Date"),
-        target = "wk inc flu hosp",
-        output_type = "quantile",
-        output_type_id = NA_character_,
+        target = "wk flu hosp rate",
+        output_type = "cdf",
+        output_type_id = "1",
         count = 3L
       ),
       class = c("tbl_df", "tbl", "data.frame"),
@@ -391,9 +381,9 @@ test_that("check_target_dataset_rows_unique works on oracle-output data", {
       list(
         location = "US",
         target_end_date = structure(19287, class = "Date"),
-        target = "wk inc flu hosp",
-        output_type = "quantile",
-        output_type_id = NA_character_,
+        target = "wk flu hosp rate",
+        output_type = "cdf",
+        output_type_id = "1",
         count = 4L
       ),
       class = c("tbl_df", "tbl", "data.frame"),
@@ -403,26 +393,20 @@ test_that("check_target_dataset_rows_unique works on oracle-output data", {
 })
 
 test_that("check_target_dataset_rows_unique works with hive partitioned parquet oracle-output data", {
-  # Example hub is the hubverse-org/example-complex-forecast-hub on github
-  #  cloned in `setup.R`
-  hub_path <- example_dir_hub_path
-  source_hub_path <- example_file_hub_path
+  tmp_dir <- withr::local_tempdir()
+  hub_path <- fs::path(tmp_dir, "test")
+  source_hub_path <- system.file(
+    "testhubs/v5/target_file",
+    package = "hubUtils"
+  )
+  fs::dir_copy(
+    system.file(
+      "testhubs/v5/target_dir",
+      package = "hubUtils"
+    ),
+    hub_path
+  )
   target_type <- "oracle-output"
-
-  test_setup_blank_target_dir(
-    hub_path = hub_path,
-    source_hub_path = source_hub_path,
-    target_type = target_type
-  )
-  # Read target data from single source hub file. We use a separate source
-  # hub file here to avoid I/O lock issues on Windows.
-  oo_dat <- test_read_target_data(source_hub_path, target_type)
-
-  test_partition_target_data(
-    data = oo_dat,
-    hub_path = hub_path,
-    target_type = target_type
-  )
 
   valid_oo <- check_target_dataset_rows_unique(
     target_type = target_type,
@@ -438,14 +422,13 @@ test_that("check_target_dataset_rows_unique works with hive partitioned parquet 
     valid_oo$where,
     "oracle-output"
   )
+  # Read target data from single source hub file. We use a separate source
+  # hub file here to avoid I/O lock issues on Windows.
+  oo_dat <- test_read_target_data(source_hub_path, target_type)
 
   # Test with valid versioned data with two as_of dates ----
   # Reset test hub
-  test_setup_blank_target_dir(
-    hub_path = hub_path,
-    source_hub_path = source_hub_path,
-    target_type = target_type
-  )
+  test_clear_target_dir(hub_path, target_type)
 
   # Test with valid versioned data with two as_of dates
   oo_dat_versioned <- oo_dat
@@ -470,11 +453,7 @@ test_that("check_target_dataset_rows_unique works with hive partitioned parquet 
 
   # Check with invalid oracle-output data. ----
   # -- Non-versioned --
-  test_setup_blank_target_dir(
-    hub_path = hub_path,
-    source_hub_path = source_hub_path,
-    target_type = target_type
-  )
+  test_clear_target_dir(hub_path, target_type)
   # Add duplicate rows to the dataset.
   # Change the `oracle_value` column value in one of the
   # duplicates to demonstrate it's not being taken into account.
@@ -502,9 +481,9 @@ test_that("check_target_dataset_rows_unique works with hive partitioned parquet 
       list(
         location = "US",
         target_end_date = structure(19287, class = "Date"),
-        output_type = "quantile",
-        output_type_id = NA_character_,
-        target = "wk inc flu hosp",
+        output_type = "cdf",
+        output_type_id = "1",
+        target = "wk flu hosp rate",
         count = 3L
       ),
       class = c("tbl_df", "tbl", "data.frame"),
@@ -515,11 +494,8 @@ test_that("check_target_dataset_rows_unique works with hive partitioned parquet 
   # Check with invalid oracle-output data. ----
   # -- Versioned --
   # Reset test hub
-  test_setup_blank_target_dir(
-    hub_path = hub_path,
-    source_hub_path = source_hub_path,
-    target_type = target_type
-  )
+  test_clear_target_dir(hub_path, target_type)
+
   # Add duplicate rows to the target table.
   # Change the `oracle_value` column value in one of the
   # duplicates to demonstrate it's not being taken into account
@@ -551,9 +527,9 @@ test_that("check_target_dataset_rows_unique works with hive partitioned parquet 
       list(
         location = "US",
         target_end_date = structure(19287, class = "Date"),
-        output_type = "quantile",
-        output_type_id = NA_character_,
-        target = "wk inc flu hosp",
+        output_type = "cdf",
+        output_type_id = "1",
+        target = "wk flu hosp rate",
         count = 4L
       ),
       class = c("tbl_df", "tbl", "data.frame"),

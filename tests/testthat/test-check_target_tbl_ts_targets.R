@@ -1,13 +1,18 @@
 test_that("check_target_tbl_ts_targets works with a target column", {
   # Example hub is the hubverse-org/example-complex-forecast-hub on github
   #  cloned in `setup.R`
-  hub_path <- example_file_hub_path
-  target_tbl <- read_target_file("time-series.csv", example_file_hub_path)
+  hub_path <- system.file(
+    "testhubs/v5/target_file",
+    package = "hubUtils"
+  )
+  target_tbl <- read_target_file("time-series.csv", hub_path)
   file_path <- "time-series.csv"
 
-  valid_ts <- check_target_tbl_ts_targets(target_tbl,
+  valid_ts <- check_target_tbl_ts_targets(
+    target_tbl,
     target_type = "time-series",
-    file_path, example_file_hub_path
+    file_path,
+    hub_path
   )
 
   expect_s3_class(valid_ts, "check_success")
@@ -17,9 +22,11 @@ test_that("check_target_tbl_ts_targets works with a target column", {
   )
 
   target_tbl$target[1] <- "wk flu hosp rate category"
-  invalid_ts <- check_target_tbl_ts_targets(target_tbl,
+  invalid_ts <- check_target_tbl_ts_targets(
+    target_tbl,
     target_type = "time-series",
-    file_path, example_file_hub_path
+    file_path,
+    hub_path
   )
   expect_s3_class(invalid_ts, "check_error")
   expect_equal(
@@ -29,9 +36,11 @@ test_that("check_target_tbl_ts_targets works with a target column", {
 
   # Check that appropriate error returned when target column is missing
   target_tbl$target <- NULL
-  invalid_target_col <- check_target_tbl_ts_targets(target_tbl,
+  invalid_target_col <- check_target_tbl_ts_targets(
+    target_tbl,
     target_type = "time-series",
-    file_path, example_file_hub_path
+    file_path,
+    hub_path
   )
   expect_s3_class(invalid_target_col, "check_error")
   expect_equal(
@@ -42,7 +51,10 @@ test_that("check_target_tbl_ts_targets works with a target column", {
 
 test_that("check_target_tbl_ts_targets works with NULL target_keys", {
   file_path <- "time-series.csv"
-  hub_path <- example_file_hub_path
+  hub_path <- system.file(
+    "testhubs/v5/target_file",
+    package = "hubUtils"
+  )
   # restrict to first round and model task 3 ("wk inc flu hosp" target)
   valid_inf_config_tasks <- mock_global_target_config(
     categorical = FALSE,
@@ -63,7 +75,8 @@ test_that("check_target_tbl_ts_targets works with NULL target_keys", {
   valid_null <- check_target_tbl_ts_targets(
     target_tbl = NULL,
     target_type = "time-series",
-    file_path, example_file_hub_path
+    file_path,
+    hub_path
   )
   expect_s3_class(valid_null, "check_success")
   expect_equal(
@@ -79,7 +92,8 @@ test_that("check_target_tbl_ts_targets works with NULL target_keys", {
   invalid_null <- check_target_tbl_ts_targets(
     target_tbl = NULL,
     target_type = "time-series",
-    file_path, example_file_hub_path
+    file_path,
+    hub_path
   )
   expect_s3_class(invalid_null, "check_error")
   expect_equal(
@@ -93,7 +107,8 @@ test_that("check_target_tbl_ts_targets skipped for oracle-output", {
   skip <- check_target_tbl_ts_targets(
     target_tbl = NULL,
     target_type = "oracle-output",
-    file_path = "oracle-output.csv", example_file_hub_path
+    file_path = "oracle-output.csv",
+    hub_path
   )
   expect_s3_class(skip, "check_info")
   expect_equal(

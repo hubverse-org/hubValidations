@@ -1,12 +1,16 @@
 test_that("check_target_tbl_colnames works on time-series data", {
-  target_tbl <- read_target_file("time-series.csv", example_file_hub_path)
+  hub_path <- system.file(
+    "testhubs/v5/target_file",
+    package = "hubUtils"
+  )
+  target_tbl <- read_target_file("time-series.csv", hub_path)
   file_path <- "time-series.csv"
 
   valid_ts <- check_target_tbl_colnames(
     target_tbl,
     target_type = "time-series",
     file_path = "time-series.csv",
-    example_file_hub_path
+    hub_path
   )
   expect_s3_class(valid_ts, "check_success")
   expect_equal(
@@ -20,12 +24,12 @@ test_that("check_target_tbl_colnames works on time-series data", {
     target_tbl,
     target_type = "oracle-output",
     file_path = "oracle-output.csv",
-    example_file_hub_path
+    hub_path
   )
   expect_s3_class(invalid_oo, "check_error")
   expect_equal(
     cli::ansi_strip(invalid_oo$message) |> stringr::str_squish(),
-    "Column names must be consistent with expected column names for oracle-output target type data. Required column \"oracle_value\" is missing. | Invalid columns \"date\" and \"observation\" detected." # nolint: line_length_linter
+    "Column names must be consistent with expected column names for oracle-output target type data. Required column \"oracle_value\" is missing. | Invalid column \"observation\" detected." # nolint: line_length_linter
   )
 
   target_tbl <- cbind(target_tbl, value = 0L) |>
@@ -35,7 +39,7 @@ test_that("check_target_tbl_colnames works on time-series data", {
     target_tbl,
     target_type = "time-series",
     file_path = "time-series.csv",
-    example_file_hub_path
+    hub_path
   )
   expect_s3_class(invalid_ts, "check_error")
   expect_equal(
@@ -45,14 +49,18 @@ test_that("check_target_tbl_colnames works on time-series data", {
 })
 
 test_that("check_target_tbl_colnames works on oracle data", {
-  target_tbl <- read_target_file("oracle-output.csv", example_file_hub_path)
+  hub_path <- system.file(
+    "testhubs/v5/target_file",
+    package = "hubUtils"
+  )
+  target_tbl <- read_target_file("oracle-output.csv", hub_path)
   file_path <- "oracle-output.csv"
 
   valid_oo <- check_target_tbl_colnames(
     target_tbl,
     target_type = "oracle-output",
     file_path = "oracle-output.csv",
-    example_file_hub_path
+    hub_path
   )
   expect_s3_class(valid_oo, "check_success")
   expect_equal(
@@ -66,7 +74,7 @@ test_that("check_target_tbl_colnames works on oracle data", {
     target_tbl,
     target_type = "time-series",
     file_path = "time-series.csv",
-    example_file_hub_path
+    hub_path
   )
   expect_s3_class(invalid_ts, "check_error")
   expect_equal(
@@ -81,7 +89,7 @@ test_that("check_target_tbl_colnames works on oracle data", {
     target_tbl,
     target_type = "oracle-output",
     file_path = "oracle-output.csv",
-    example_file_hub_path
+    hub_path
   )
   expect_s3_class(invalid_oo, "check_error")
   expect_equal(
@@ -91,18 +99,29 @@ test_that("check_target_tbl_colnames works on oracle data", {
 })
 
 test_that("check_target_tbl_colnames works with null target keys", {
-  target_tbl <- read_target_file("time-series.csv", example_file_hub_path)
+  hub_path <- system.file(
+    "testhubs/v5/target_file",
+    package = "hubUtils"
+  )
+  target_tbl <- read_target_file("time-series.csv", hub_path)
 
   ## Modify the config to have null target keys
-  config_tasks <- hubUtils::read_config(example_file_hub_path)
+  config_tasks <- hubUtils::read_config(hub_path)
   # restrict to first round and model task
-  config_tasks$rounds[[1]]$model_tasks <- config_tasks$rounds[[1]]$model_tasks[1]
+  config_tasks$rounds[[1]]$model_tasks <- config_tasks$rounds[[1]]$model_tasks[
+    1
+  ]
   # Assing NULL to target_keys
   config_tasks <- purrr::assign_in(
     config_tasks,
     list(
-      "rounds", 1, "model_tasks", 1,
-      "target_metadata", 1, "target_keys"
+      "rounds",
+      1,
+      "model_tasks",
+      1,
+      "target_metadata",
+      1,
+      "target_keys"
     ),
     NULL
   )
@@ -121,7 +140,7 @@ test_that("check_target_tbl_colnames works with null target keys", {
     target_tbl,
     target_type = "time-series",
     file_path = "time-series.csv",
-    example_file_hub_path
+    hub_path
   )
   expect_s3_class(valid_ts, "check_success")
   expect_equal(
@@ -134,19 +153,19 @@ test_that("check_target_tbl_colnames works with null target keys", {
     target_tbl,
     target_type = "time-series",
     file_path = "time-series.csv",
-    example_file_hub_path
+    hub_path
   )
   expect_equal(valid_ts_sans_target, valid_ts)
 
   # Oracle output
-  target_tbl <- read_target_file("oracle-output.csv", example_file_hub_path)
+  target_tbl <- read_target_file("oracle-output.csv", hub_path)
 
   # In oracle output, the target column is now flagged as invalid
   invalid_oo <- check_target_tbl_colnames(
     target_tbl,
     target_type = "oracle-output",
     file_path = "oracle-output.csv",
-    example_file_hub_path
+    hub_path
   )
   expect_s3_class(invalid_oo, "check_error")
   expect_equal(
@@ -160,7 +179,7 @@ test_that("check_target_tbl_colnames works with null target keys", {
     target_tbl,
     target_type = "oracle-output",
     file_path = "oracle-output.csv",
-    example_file_hub_path
+    hub_path
   )
   expect_s3_class(valid_oo, "check_success")
   expect_equal(
@@ -170,7 +189,11 @@ test_that("check_target_tbl_colnames works with null target keys", {
 })
 
 test_that("check_target_tbl_colnames minimum column n check works", {
-  target_tbl <- read_target_file("time-series.csv", example_file_hub_path)
+  hub_path <- system.file(
+    "testhubs/v5/target_file",
+    package = "hubUtils"
+  )
+  target_tbl <- read_target_file("time-series.csv", hub_path)
   target_tbl$location <- NULL
 
   # With 3 columns & named target keys, check passes
@@ -178,7 +201,7 @@ test_that("check_target_tbl_colnames minimum column n check works", {
     target_tbl,
     target_type = "time-series",
     file_path = "time-series.csv",
-    example_file_hub_path
+    hub_path
   )
   expect_s3_class(valid_ts, "check_success")
   expect_equal(
@@ -192,7 +215,7 @@ test_that("check_target_tbl_colnames minimum column n check works", {
     target_tbl,
     target_type = "time-series",
     file_path = "time-series.csv",
-    example_file_hub_path
+    hub_path
   )
   expect_s3_class(invalid_ts, "check_error")
   expect_equal(
@@ -205,7 +228,7 @@ test_that("check_target_tbl_colnames minimum column n check works", {
     target_tbl,
     target_type = "time-series",
     file_path = "time-series.csv",
-    example_file_hub_path
+    hub_path
   )
   expect_s3_class(invalid_ts, "check_error")
   expect_equal(
@@ -215,15 +238,22 @@ test_that("check_target_tbl_colnames minimum column n check works", {
 
   # With 3 columns (including an optional `as_of` column) & NULL target keys check passes
   ## Modify the config to have null target keys
-  config_tasks <- hubUtils::read_config(example_file_hub_path)
+  config_tasks <- hubUtils::read_config(hub_path)
   # restrict to first round and model task
-  config_tasks$rounds[[1]]$model_tasks <- config_tasks$rounds[[1]]$model_tasks[1]
+  config_tasks$rounds[[1]]$model_tasks <- config_tasks$rounds[[1]]$model_tasks[
+    1
+  ]
   # Assing NULL to target_keys
   config_tasks <- purrr::assign_in(
     config_tasks,
     list(
-      "rounds", 1, "model_tasks", 1,
-      "target_metadata", 1, "target_keys"
+      "rounds",
+      1,
+      "model_tasks",
+      1,
+      "target_metadata",
+      1,
+      "target_keys"
     ),
     NULL
   )
@@ -242,7 +272,7 @@ test_that("check_target_tbl_colnames minimum column n check works", {
     target_tbl,
     target_type = "time-series",
     file_path = "time-series.csv",
-    example_file_hub_path
+    hub_path
   )
   expect_s3_class(valid_ts, "check_success")
   expect_equal(
@@ -250,13 +280,13 @@ test_that("check_target_tbl_colnames minimum column n check works", {
     "Column names are consistent with expected column names for time-series target type data."
   )
 
-  target_tbl$date <- NULL
+  target_tbl$target_end_date <- NULL
   # With 2 columns (including an optional `as_of` column) & NULL target keys, check fails
   invalid_ts <- check_target_tbl_colnames(
     target_tbl,
     target_type = "time-series",
     file_path = "time-series.csv",
-    example_file_hub_path
+    hub_path
   )
   expect_s3_class(invalid_ts, "check_error")
   expect_equal(
