@@ -22,11 +22,17 @@ in the \code{arrow} package.
 The hub must be fully configured with valid \code{admin.json} and \code{tasks.json}
 files within the \code{hub-config} directory.}
 
+\item{target_type}{Type of target data to retrieve matching files. One of "time-series" or
+"oracle-output". Defaults to "time-series".}
+
 \item{validations_cfg_path}{Path to YAML file configuring custom validation checks.
 If \code{NULL} defaults to standard \code{hub-config/validations.yml} path. For more details
 see \href{https://hubverse-org.github.io/hubValidations/articles/deploying-custom-functions.html}{article on custom validation checks}.}
 
-\item{round_id}{character string. The round identifier.}
+\item{round_id}{Character string. Not generally relevant to target datasets
+but can be used to specify a specific block of custom validation checks.
+Otherwise best set to \code{"default"} which will deploy the default custom
+validation checks.}
 }
 \value{
 An object of class \code{hub_validations}. Each named element contains

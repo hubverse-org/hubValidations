@@ -29,7 +29,10 @@ file relative to the \code{target-data} directory.}
 If \code{NULL} defaults to standard \code{hub-config/validations.yml} path. For more details
 see \href{https://hubverse-org.github.io/hubValidations/articles/deploying-custom-functions.html}{article on custom validation checks}.}
 
-\item{round_id}{character string. The round identifier.}
+\item{round_id}{Character string. Not generally relevant to target datasets
+but can be used to specify a specific block of custom validation checks.
+Otherwise best set to \code{"default"} which will deploy the default custom
+validation checks.}
 }
 \value{
 An object of class \code{hub_validations}. Each named element contains

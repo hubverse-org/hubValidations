@@ -1,7 +1,7 @@
 #' Validate dataset level properties of a given target type
 #'
 #' @inheritParams validate_target_file
-#' @inheritParams check_tbl_colnames
+#' @inheritParams check_target_dataset_unique
 #' @return An object of class `hub_validations`. Each named element contains
 #' a `hub_check` class object reflecting the result of a given check. Function
 #' will return early if a check returns an error.
