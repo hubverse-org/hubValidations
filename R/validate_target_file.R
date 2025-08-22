@@ -6,6 +6,10 @@
 #' If `NULL` defaults to standard `hub-config/validations.yml` path. For more details
 #' see [article on custom validation checks](
 #' https://hubverse-org.github.io/hubValidations/articles/deploying-custom-functions.html).
+#' @param round_id Character string. Not generally relevant to target datasets
+#' but can be used to specify a specific block of custom validation checks.
+#' Otherwise best set to `"default"` which will deploy the default custom
+#' validation checks.
 #' @inheritParams check_tbl_colnames
 #' @return An object of class `hub_validations`. Each named element contains
 #' a `hub_check` class object reflecting the result of a given check. Function

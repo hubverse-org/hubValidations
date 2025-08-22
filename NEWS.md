@@ -8,6 +8,7 @@
   - `get_target_task_id()` for extracting the name of the task ID(s) containing targets from the target metadata of a hub's config.
 * Added target data validation checks:
   - `check_target_file_name()`: that a hive-partitioned target data file name can be correctly parsed.
+  - `check_target_dataset_exists()`: that a target dataset exists and can be detected. Required before running any other checks.
   - `check_target_dataset_unique()`: that a single unique target dataset exists for a given target type.
   - `check_target_dataset_file_ext_unique()`: that file(s) in a target dataset (e.g. `time-series` or `oracle-output`) share a single unique file extension.
   - `check_target_dataset_rows_unique()`: that each row in a target dataset is unique. Function designed to be used as part of overall target data integrity check.
@@ -21,6 +22,7 @@
   - `check_target_tbl_rows_unique()`: Check that each observation in a target data file is unique.
   - `check_target_tbl_oracle_value()`: Check that the `oracle_value` values in an oracle-output target data file for `cdf` and `pmf` output types conform to expectations. Specifically it verifies that oracle values are either 0 or 1, `pmf` oracle values sum to 1 for each observation unit and `cdf` oracle values are non-decreasing for each observation unit when sorted by the `output_type_id` set defined in the hub config.
 * Added `validate_target_file()` function for validating file level properties of a target data file (#250).
+* Added `validate_target_dataset()` function for validating dataset level properties of a target dataset (#229).
 * Improved performance of `check_tbl_values_required()`.
 
 
