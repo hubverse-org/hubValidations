@@ -11,6 +11,8 @@ check_target_dataset_unique <- function(
   )
 ) {
   target_type <- rlang::arg_match(target_type)
+  # Use target type as file_path to bgin with as it's not guaranteed a
+  # valid unique target path can be detected yet
   file_path <- target_type
 
   target_path <- hubData::get_target_path(hub_path, target_type)
