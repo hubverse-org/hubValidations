@@ -1,15 +1,19 @@
 #' Check that a single unique target dataset exists for a given target type.
 #'
 #' @inheritParams hubData::get_target_path
-#' @inherit check_tbl_col_types return
+#' @inherit check_target_file_name return
 #' @export
-check_target_dataset_unique <- function(hub_path,
-                                        target_type = c(
-                                          "time-series",
-                                          "oracle-output"
-                                        )) {
+check_target_dataset_unique <- function(
+  hub_path,
+  target_type = c(
+    "time-series",
+    "oracle-output"
+  )
+) {
   target_type <- rlang::arg_match(target_type)
-  file_path <- file.path("target-data", target_type)
+  # Use target type as file_path to bgin with as it's not guaranteed a
+  # valid unique target path can be detected yet
+  file_path <- target_type
 
   target_path <- hubData::get_target_path(hub_path, target_type)
   target_n <- length(target_path)
@@ -18,8 +22,10 @@ check_target_dataset_unique <- function(hub_path,
     return(
       capture_check_info(
         file_path = file_path,
-        cli::format_inline("No {.field {target_type}} target type files detected in
-        {.path target-data} directory. Check skipped.")
+        cli::format_inline(
+          "No {.field {target_type}} target type files detected in
+        {.path target-data} directory. Check skipped."
+        )
       )
     )
   }
@@ -31,6 +37,10 @@ check_target_dataset_unique <- function(hub_path,
       "Multiple {.field {target_type}} datasets found:
       {.path {basename(target_path)}}"
     )
+  } else {
+    # If the check passes, return the relative path to the dataset,
+    # otherwise continue returning the target type
+    file_path <- basename(target_path)
   }
 
   capture_check_cnd(
@@ -41,7 +51,7 @@ check_target_dataset_unique <- function(hub_path,
       "single unique {.field {target_type}} dataset."
     ),
     msg_verbs = c("contains", "must contain"),
-    error = FALSE,
+    error = TRUE,
     details = details
   )
 }

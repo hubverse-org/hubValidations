@@ -62,8 +62,14 @@
 #' ```{r, echo = FALSE}
 #' arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")) %>%
 #' dplyr::filter(
-#' !.data$`parent fun` %in% c("validate_model_metadata", "validate_target_file"),
-#' !.data$optional) %>%
+#'  .data$`parent fun` %in% c(
+#'                              "validate_submission_time",
+#'                              "validate_model_file",
+#'                              "validate_model_data"
+#'                            ) |
+#'  .data$`check fun` == "check_config_hub_valid",
+#'  !.data$optional
+#'  ) %>%
 #'   dplyr::select(-"parent fun", -"check fun", -"optional") %>%
 #'   dplyr::mutate("Extra info" = dplyr::case_when(
 #'     is.na(.data$`Extra info`) ~ "",

@@ -10,11 +10,15 @@ get_file_target_metadata <- function(hub_path, file_path) {
     unique()
 }
 
-abs_file_path <- function(file_path, hub_path,
-                          subdir = c("model-output", "model-metadata", "hub-config",
-                                     "target-data")) {
+abs_file_path <- function(
+  file_path,
+  hub_path,
+  subdir = c("model-output", "model-metadata", "hub-config", "target-data")
+) {
   subdir <- match.arg(subdir)
-  if (subdir == "model-output") subdir <- get_hub_model_output_dir(hub_path)
+  if (subdir == "model-output") {
+    subdir <- get_hub_model_output_dir(hub_path)
+  }
   fs::path(
     hub_path,
     subdir,
@@ -22,11 +26,15 @@ abs_file_path <- function(file_path, hub_path,
   )
 }
 
-rel_file_path <- function(file_path, hub_path,
-                          subdir = c("model-output", "model-metadata", "hub-config",
-                                     "target-data")) {
+rel_file_path <- function(
+  file_path,
+  hub_path,
+  subdir = c("model-output", "model-metadata", "hub-config", "target-data")
+) {
   subdir <- match.arg(subdir)
-  if (subdir == "model-output") subdir <- get_hub_model_output_dir(hub_path)
+  if (subdir == "model-output") {
+    subdir <- get_hub_model_output_dir(hub_path)
+  }
   fs::path(
     subdir,
     file_path
@@ -63,8 +71,11 @@ get_file_round_id_col <- function(file_path, hub_path) {
 }
 
 # Get metadata dile name from submission file path
-get_metadata_file_name <- function(hub_path, file_path,
-                                   ext = c("yml", "yaml", "auto", "both")) {
+get_metadata_file_name <- function(
+  hub_path,
+  file_path,
+  ext = c("yml", "yaml", "auto", "both")
+) {
   ext <- rlang::arg_match(ext)
   model_id <- parse_file_name(file_path)$model_id
 
