@@ -32,6 +32,7 @@
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/check_metadata_schema_exists.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/check_submission_metadata_file_exists.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/check_submission_time.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/check_target_dataset_exists.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/check_target_dataset_file_ext_unique.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/check_target_dataset_rows_unique.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/check_target_dataset_unique.html</loc></url>
@@ -93,6 +94,7 @@
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/validate_pr.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/validate_submission.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/validate_submission_time.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/validate_target_dataset.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/validate_target_file.html</loc></url>
 </urlset>
 

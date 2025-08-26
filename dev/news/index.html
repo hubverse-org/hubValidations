@@ -62,6 +62,8 @@
 <ul><li>
 <code><a href="../reference/check_target_file_name.html">check_target_file_name()</a></code>: that a hive-partitioned target data file name can be correctly parsed.</li>
 <li>
+<code><a href="../reference/check_target_dataset_exists.html">check_target_dataset_exists()</a></code>: that a target dataset exists and can be detected. Required before running any other checks.</li>
+<li>
 <code><a href="../reference/check_target_dataset_unique.html">check_target_dataset_unique()</a></code>: that a single unique target dataset exists for a given target type.</li>
 <li>
 <code><a href="../reference/check_target_dataset_file_ext_unique.html">check_target_dataset_file_ext_unique()</a></code>: that file(s) in a target dataset (e.g. <code>time-series</code> or <code>oracle-output</code>) share a single unique file extension.</li>
@@ -87,6 +89,7 @@
 <code><a href="../reference/check_target_tbl_oracle_value.html">check_target_tbl_oracle_value()</a></code>: Check that the <code>oracle_value</code> values in an oracle-output target data file for <code>cdf</code> and <code>pmf</code> output types conform to expectations. Specifically it verifies that oracle values are either 0 or 1, <code>pmf</code> oracle values sum to 1 for each observation unit and <code>cdf</code> oracle values are non-decreasing for each observation unit when sorted by the <code>output_type_id</code> set defined in the hub config.</li>
 </ul></li>
 <li>Added <code><a href="../reference/validate_target_file.html">validate_target_file()</a></code> function for validating file level properties of a target data file (<a href="https://github.com/hubverse-org/hubValidations/issues/250" class="external-link">#250</a>).</li>
+<li>Added <code><a href="../reference/validate_target_dataset.html">validate_target_dataset()</a></code> function for validating dataset level properties of a target dataset (<a href="https://github.com/hubverse-org/hubValidations/issues/229" class="external-link">#229</a>).</li>
 <li>Improved performance of <code><a href="../reference/check_tbl_values_required.html">check_tbl_values_required()</a></code>.</li>
 </ul></div>
     <div class="section level2">
