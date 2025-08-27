@@ -35,20 +35,20 @@ test_early_return_val_target_data <- function(
     "target_tbl_output_type_ids",
     "target_tbl_oracle_value"
   )
-  with_mocked_bindings(
+  testthat::with_mocked_bindings(
     {
       res <- validate_target_data(
         hub_path,
         file_path = file_path,
         target_type = target_type
       )
-      expect_s3_class(res, "hub_validations")
+      testthat::expect_s3_class(res, "hub_validations")
       # Expected check names should be those up to and including the one
       # that errored unless provided explicitly
       if (is.null(expected_check_names)) {
         expected_check_names <- check_names[1:match(check_name, check_names)]
       }
-      expect_named(res, expected_check_names)
+      testthat::expect_named(res, expected_check_names)
     },
     # mock exec error which should trigger early return
     !!!check_mock
