@@ -1,7 +1,7 @@
 #' Validate the contents of a submitted target data file.
 #'
 #' @inherit validate_target_file params return
-#' @inheritParams read_target_file
+#' @inheritParams check_target_tbl_coltypes
 #' @details
 #'
 #' Details of checks performed by `validate_target_data()`
