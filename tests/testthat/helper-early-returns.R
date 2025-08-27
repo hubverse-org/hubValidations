@@ -16,7 +16,7 @@ test_early_return_val_target_data <- function(
   check_name,
   expected_check_names = NULL
 ) {
-  hub_path <- hubutils_target_file_hub()
+  hub_path <- hubutils_target_file_hub() # nolint: object_usage_linter
   target_type <- "time-series"
   file_path <- fs::path(target_type, ext = "csv")
 
