@@ -114,7 +114,7 @@ test_that("validate_target_data works on  multi-file oracle-output target data f
   expect_snapshot(res_oo)
 })
 
-test_that("validate_target_data fails on invalid target_type", {
+test_that("validate_target_data returns early as expected", {
   # Uses helper function test_early_return_val_target_data in helper-early-returns.R to
   # mock an execution error in each check function and ensure that
   # validate_target_data returns early as expected
