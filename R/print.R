@@ -120,11 +120,15 @@ is_check_class <- function(
 #' @param x A validation object or one of it's subclasses
 #' @param unique Logical, whether to return unique filenames only
 #' @param ... Additional arguments passed to methods
+#' @noRd
+#' @keywords internal
 get_filenames <- function(x, unique = FALSE, ...) {
   UseMethod("get_filenames")
 }
 
 #' @export
+#' @noRd
+#' @keywords internal
 get_filenames.default <- function(x, unique = FALSE, ...) {
   # This is your original implementation
   filenames <- fs::path_file(purrr::map_chr(x, "where"))
@@ -136,6 +140,8 @@ get_filenames.default <- function(x, unique = FALSE, ...) {
 }
 
 #' @export
+#' @noRd
+#' @keywords internal
 get_filenames.target_validations <- function(x, unique = FALSE, ...) {
   # Use full path instead of basename for target validations
   filenames <- unname(purrr::map_chr(x, "where"))
