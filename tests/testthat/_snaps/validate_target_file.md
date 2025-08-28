@@ -28,7 +28,7 @@
       res_ts
     Message
       
-      -- part-0.parquet ----
+      -- time-series/target=wk%20flu%20hosp%20rate/part-0.parquet ----
       
       v [target_file_exists]: File exists at path 'target-data/time-series/target=wk%20flu%20hosp%20rate/part-0.parquet'.
       v [target_partition_file_name]: Hive-style partition file path segments are valid.
@@ -40,7 +40,7 @@
       res_oo
     Message
       
-      -- part-0.parquet ----
+      -- oracle-output/output_type=pmf/part-0.parquet ----
       
       v [target_file_exists]: File exists at path 'target-data/oracle-output/output_type=pmf/part-0.parquet'.
       v [target_partition_file_name]: Hive-style partition file path segments are valid.

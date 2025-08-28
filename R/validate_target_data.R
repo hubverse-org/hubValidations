@@ -58,7 +58,7 @@ validate_target_data <- function(
   target_type <- rlang::arg_match(target_type)
   output_type_id_datatype <- rlang::arg_match(output_type_id_datatype)
 
-  checks <- new_hub_validations()
+  checks <- new_target_validations()
 
   # -- File parsing checks ----
   checks$target_file_read <- try_check(
@@ -178,7 +178,8 @@ validate_target_data <- function(
   )
 
   custom_checks <- execute_custom_checks(
-    validations_cfg_path = validations_cfg_path
+    validations_cfg_path = validations_cfg_path,
+    subclass = "target_validations"
   )
   checks <- combine(checks, custom_checks)
 

@@ -56,7 +56,7 @@ validate_target_file <- function(
   validations_cfg_path = NULL,
   round_id = "default"
 ) {
-  checks <- new_hub_validations()
+  checks <- new_target_validations()
 
   checks$target_file_exists <- try_check(
     check_file_exists(
@@ -89,7 +89,8 @@ validate_target_file <- function(
   }
 
   custom_checks <- execute_custom_checks(
-    validations_cfg_path = validations_cfg_path
+    validations_cfg_path = validations_cfg_path,
+    subclass = "target_validations"
   )
   checks <- combine(checks, custom_checks)
 
