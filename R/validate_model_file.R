@@ -35,29 +35,35 @@
 #' validate_model_file(hub_path,
 #'   file_path = "team1-goodmodel/2022-10-15-team1-goodmodel.csv"
 #' )
-validate_model_file <- function(hub_path, file_path,
-                                validations_cfg_path = NULL) {
+validate_model_file <- function(
+  hub_path,
+  file_path,
+  validations_cfg_path = NULL
+) {
   checks <- new_hub_validations()
 
   checks$file_exists <- try_check(
     check_file_exists(
       file_path = file_path,
       hub_path = hub_path
-    ), file_path
+    ),
+    file_path
   )
   if (is_any_error(checks$file_exists)) {
     return(checks)
   }
 
   checks$file_name <- try_check(
-    check_file_name(file_path), file_path
+    check_file_name(file_path),
+    file_path
   )
   if (is_any_error(checks$file_name)) {
     return(checks)
   }
 
   checks$file_location <- try_check(
-    check_file_location(file_path), file_path
+    check_file_location(file_path),
+    file_path
   )
 
   file_meta <- parse_file_name(file_path)
@@ -68,7 +74,8 @@ validate_model_file <- function(hub_path, file_path,
       round_id = round_id,
       file_path = file_path,
       hub_path = hub_path
-    ), file_path
+    ),
+    file_path
   )
   if (is_any_error(checks$round_id_valid)) {
     return(checks)
@@ -79,7 +86,8 @@ validate_model_file <- function(hub_path, file_path,
       file_path = file_path,
       hub_path = hub_path,
       round_id = round_id
-    ), file_path
+    ),
+    file_path
   )
   if (is_any_error(checks$file_format)) {
     return(checks)
@@ -89,17 +97,21 @@ validate_model_file <- function(hub_path, file_path,
     check_file_n(
       file_path = file_path,
       hub_path = hub_path
-    ), file_path
+    ),
+    file_path
   )
 
   checks$metadata_exists <- try_check(
     check_submission_metadata_file_exists(
       hub_path = hub_path,
       file_path = file_path
-    ), file_path
+    ),
+    file_path
   )
 
-  custom_checks <- execute_custom_checks(validations_cfg_path = validations_cfg_path)
+  custom_checks <- execute_custom_checks(
+    validations_cfg_path = validations_cfg_path
+  )
   checks <- combine(checks, custom_checks)
 
   checks

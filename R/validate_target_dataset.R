@@ -50,7 +50,7 @@ validate_target_dataset <- function(
   round_id = "default"
 ) {
   target_type <- rlang::arg_match(target_type)
-  checks <- new_hub_validations()
+  checks <- new_target_validations()
 
   checks$target_dataset_exists <- try_check(
     check_target_dataset_exists(
@@ -99,7 +99,8 @@ validate_target_dataset <- function(
   )
 
   custom_checks <- execute_custom_checks(
-    validations_cfg_path = validations_cfg_path
+    validations_cfg_path = validations_cfg_path,
+    subclass = "target_validations"
   )
   checks <- combine(checks, custom_checks)
 

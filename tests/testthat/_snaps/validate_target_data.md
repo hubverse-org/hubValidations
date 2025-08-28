@@ -38,7 +38,7 @@
       res_ts
     Message
       
-      -- part-0.parquet ----
+      -- time-series/target=wk%20flu%20hosp%20rate/part-0.parquet ----
       
       v [target_file_read]: target file could be read successfully.
       v [target_tbl_colnames]: Column names are consistent with expected column names for time-series target type data.
@@ -55,7 +55,7 @@
       res_oo
     Message
       
-      -- part-0.parquet ----
+      -- oracle-output/output_type=cdf/part-0.parquet ----
       
       v [target_file_read]: target file could be read successfully.
       v [target_tbl_colnames]: Column names are consistent with expected column names for oracle-output target type data.

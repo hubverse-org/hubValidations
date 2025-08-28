@@ -6,7 +6,7 @@ test_that("validate_target_data works on single time-series target data file", {
     file_path = "time-series.csv",
     target_type = "time-series"
   )
-  expect_s3_class(res_ts, "hub_validations")
+  expect_s3_class(res_ts, c("target_validations", "hub_validations"))
   expect_named(
     res_ts,
     c(
@@ -35,7 +35,7 @@ test_that("validate_target_data works on single oracle-output target data file",
     file_path = "oracle-output.csv",
     target_type = "oracle-output"
   )
-  expect_s3_class(res_oo, "hub_validations")
+  expect_s3_class(res_oo, c("target_validations", "hub_validations"))
   expect_named(
     res_oo,
     c(
@@ -64,7 +64,7 @@ test_that("validate_target_data works on multi-file time-series target data file
     file_path = "time-series/target=wk%20flu%20hosp%20rate/part-0.parquet",
     target_type = "time-series"
   )
-  expect_s3_class(res_ts, "hub_validations")
+  expect_s3_class(res_ts, c("target_validations", "hub_validations"))
   expect_named(
     res_ts,
     c(
@@ -93,7 +93,7 @@ test_that("validate_target_data works on  multi-file oracle-output target data f
     file_path = "oracle-output/output_type=cdf/part-0.parquet",
     target_type = "oracle-output"
   )
-  expect_s3_class(res_oo, "hub_validations")
+  expect_s3_class(res_oo, c("target_validations", "hub_validations"))
   expect_named(
     res_oo,
     c(

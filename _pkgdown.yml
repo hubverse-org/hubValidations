@@ -51,11 +51,12 @@ reference:
 
 
 - title: "`<hub_validations>` methods"
-  desc: "Methods for `<hub_validations>` S3 objects."
+  desc: "Methods for `<hub_validations>` S3 objects and subclasses."
   contents:
   - starts_with("print")
   - starts_with("combine")
   - contains("hub_validations")
+  - contains("target_validations")
 
 navbar:
  components:

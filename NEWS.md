@@ -1,5 +1,9 @@
 # hubValidations (development version)
 
+* Added `target_validations` class, a subclass of `hub_validations` designed for target (truth) data validation results (#265).
+  - New functions: `new_target_validations()` and `as_target_validations()`
+  - `combine.target_validations()` method for concatenating target validation objects
+  - Print method displays full file paths instead of basenames for better clarity when working with target data files
 * Added utilities for working with hive-partitioned data file paths:
   - `extract_hive_partitions()` for extracting key value pairs from paths to hive-partitioned data files.
   - `is_hive_partitioned_path()` for checking if a path is hive-partitioned.
@@ -25,6 +29,7 @@
 * Added `validate_target_dataset()` function for validating dataset level properties of a target dataset (#229).
 * Added `validate_target_data()` function for validating the contents of a submitted target data file (#249).
 * Improved performance of `check_tbl_values_required()`.
+
 
 
 # hubValidations 0.11.0
