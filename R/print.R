@@ -1,13 +1,13 @@
 #' Print results of `validate_...()` function as a bullet list
 #'
-#' @param x An object of class `hub_validations`
+#' @param x An object of class `hub_validations` or any of it's subclasses.
 #' @param ... Unused argument present for class consistency
 #'
 #'
 #' @export
 print.hub_validations <- function(x, ...) {
   if (length(x) == 0L) {
-    msg <- cli::format_inline("Empty {.cls hub_validations}")
+    msg <- cli::format_inline("Empty {.cls {class(x)[1]}}")
     cli::cli_inform(msg)
   } else {
     print_file <- function(file_name, x) {
@@ -41,57 +41,6 @@ print.hub_validations <- function(x, ...) {
       x = x
     )
   }
-}
-
-
-#' Concatenate `hub_validations` S3 class objects
-#'
-#' @param ... `hub_validations` S3 class objects to be concatenated.
-#' @return a `hub_validations` S3 class object.
-#'
-#' @export
-combine <- function(...) {
-  UseMethod("combine")
-}
-
-#' @export
-combine.hub_validations <- function(...) {
-  rlang::list2(...) %>%
-    purrr::compact() %>%
-    validate_internal_class(class = "hub_validations")
-
-  combined <- c(...)
-  if (is.null(names(combined))) {
-    combined_names <- NULL
-  } else {
-    combined_names <- make.unique(names(combined), sep = "_")
-  }
-  structure(
-    combined,
-    class = c("hub_validations", "list"),
-    names = combined_names
-  )
-}
-
-validate_internal_class <- function(x, class = c(
-                                      "hub_check", # nolint
-                                      "hub_validations"
-                                    )) {
-  if (length(x) == 0L) {
-    return(invisible(TRUE))
-  }
-  class <- rlang::arg_match(class)
-  valid <- purrr::map_lgl(x, ~ inherits(.x, class))
-  if (any(!valid)) {
-    cli::cli_abort(
-      c(
-        "!" = "All elements must inherit from class {.cls {class}}.",
-        "x" = "{cli::qty(sum(!valid))} Element{?s} with ind{?ex/ices}
-           {.val {which(!valid)}} {cli::qty(sum(!valid))} do{?es/} not."
-      )
-    )
-  }
-  invisible(TRUE)
 }
 
 # TODO: Code to consider implementing more hierarchical printing of messages.
@@ -132,10 +81,15 @@ hub_validation_theme <- list(
     fmt = function(x) {
       cli::col_magenta(
         paste0(
-          cli::symbol$line, cli::symbol$line,
-          " ", cli::style_underline(x), " ",
-          cli::symbol$line, cli::symbol$line,
-          cli::symbol$line, cli::symbol$line
+          cli::symbol$line,
+          cli::symbol$line,
+          " ",
+          cli::style_underline(x),
+          " ",
+          cli::symbol$line,
+          cli::symbol$line,
+          cli::symbol$line,
+          cli::symbol$line
         )
       )
     }
@@ -146,18 +100,45 @@ apply_cli_span_class <- function(x, class = "check_name") {
   paste0("{.", class, " ", x, "}")
 }
 
-is_check_class <- function(x,
-                           class = c(
-                             "check_success", "check_failure",
-                             "check_exec_warn", "check_error",
-                             "check_exec_error", "check_info"
-                           )) {
+is_check_class <- function(
+  x,
+  class = c(
+    "check_success",
+    "check_failure",
+    "check_exec_warn",
+    "check_error",
+    "check_exec_error",
+    "check_info"
+  )
+) {
   class <- rlang::arg_match(class)
   purrr::map_lgl(x, ~ rlang::inherits_any(.x, class))
 }
 
-get_filenames <- function(x, unique = FALSE) {
+#' Get filenames from hub validation object and it's subclasses
+#'
+#' @param x A validation object or one of it's subclasses
+#' @param unique Logical, whether to return unique filenames only
+#' @param ... Additional arguments passed to methods
+get_filenames <- function(x, unique = FALSE, ...) {
+  UseMethod("get_filenames")
+}
+
+#' @export
+get_filenames.default <- function(x, unique = FALSE, ...) {
+  # This is your original implementation
   filenames <- fs::path_file(purrr::map_chr(x, "where"))
+  if (unique) {
+    unique(filenames)
+  } else {
+    filenames
+  }
+}
+
+#' @export
+get_filenames.target_validations <- function(x, unique = FALSE, ...) {
+  # Use full path instead of basename for target validations
+  filenames <- unname(purrr::map_chr(x, "where"))
   if (unique) {
     unique(filenames)
   } else {

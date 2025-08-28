@@ -1,4 +1,7 @@
-execute_custom_checks <- function(validations_cfg_path = NULL) {
+execute_custom_checks <- function(
+  validations_cfg_path = NULL,
+  subclass = c("none", "target_validations")
+) {
   # There is more than one function that will call this function. These two
   # variables help us to pass the variables from that function to the custom
   # functions.
@@ -8,6 +11,8 @@ execute_custom_checks <- function(validations_cfg_path = NULL) {
   # Knowing the calling function's name allows us to select the correct
   # custom validation function.
   caller_call <- rlang::caller_call()
+
+  subclass <- rlang::arg_match(subclass)
 
   missing_file <- !is.null(validations_cfg_path) &&
     !fs::file_exists(validations_cfg_path)
@@ -24,7 +29,8 @@ execute_custom_checks <- function(validations_cfg_path = NULL) {
   if (is.null(validations_cfg_path)) {
     validations_cfg_path <- fs::path(
       rlang::env_get(env = caller_env, nm = "hub_path"),
-      "hub-config", "validations.yml"
+      "hub-config",
+      "validations.yml"
     )
   }
   # no need to perform checks if there is no config file
@@ -60,5 +66,10 @@ execute_custom_checks <- function(validations_cfg_path = NULL) {
       break
     }
   }
-  purrr::compact(out) |> as_hub_validations()
+  out <- purrr::compact(out)
+  if (subclass == "none") {
+    as_hub_validations(out)
+  } else {
+    get(paste0("as_", subclass))(out)
+  }
 }
