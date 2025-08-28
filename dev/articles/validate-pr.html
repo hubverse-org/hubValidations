@@ -1160,7 +1160,7 @@ check_error
 target_dataset_exists
 </td>
 <td style="text-align:left;">
-Target dataset can be successfully detected for a given target type
+Target dataset can be successfully detected for a given target type.
 </td>
 <td style="text-align:left;">
 TRUE
@@ -1176,7 +1176,7 @@ check_error
 target_dataset_unique
 </td>
 <td style="text-align:left;">
-A single unique target dataset exists for a given target type
+A single unique target dataset exists for a given target type.
 </td>
 <td style="text-align:left;">
 TRUE
@@ -1192,7 +1192,7 @@ check_error
 target_dataset_file_ext_unique
 </td>
 <td style="text-align:left;">
-All files of a given target type share a single unique file format
+All files of a given target type share a single unique file format.
 </td>
 <td style="text-align:left;">
 TRUE
@@ -1208,7 +1208,139 @@ check_error
 target_dataset_rows_unique
 </td>
 <td style="text-align:left;">
-Target dataset rows are all unique
+Target dataset rows are all unique.
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+check_failure
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+target_file_read
+</td>
+<td style="text-align:left;">
+Target data file can be read successfully.
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:left;">
+check_error
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+target_tbl_colnames
+</td>
+<td style="text-align:left;">
+Target data file has the correct column names according to target type.
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:left;">
+check_error
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+target_tbl_coltypes
+</td>
+<td style="text-align:left;">
+Target data file has the correct column types according to target type.
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:left;">
+check_error
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+target_tbl_ts_targets
+</td>
+<td style="text-align:left;">
+Targets in a time-series target data file are valid. Only performed on
+<code>time-series</code> data files.
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:left;">
+check_error
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+target_tbl_rows_unique
+</td>
+<td style="text-align:left;">
+Target data file rows are all unique.
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+check_failure
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+target_tbl_values
+</td>
+<td style="text-align:left;">
+Task ID columns in a target data file have valid task ID values.
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:left;">
+check_error
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+target_tbl_output_type_ids
+</td>
+<td style="text-align:left;">
+Output type ID values in a target data file are valid and complete. Only
+performed when the target data file contains
+an <code>output_type_id</code> column.
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:left;">
+check_error
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+target_tbl_oracle_value
+</td>
+<td style="text-align:left;">
+Oracle values in a target data file are valid. Only performed on
+<code>oracle output</code> data files.
 </td>
 <td style="text-align:left;">
 FALSE

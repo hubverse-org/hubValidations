@@ -144,7 +144,7 @@ standard validation checks and returns their results in the form of a
 <span><span class="co">#&gt;   `output_type_id`.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[value_col_sum1]</span>: No pmf output types to check for sum of 1. Check skipped.</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[submission_time]</span>: Submission time must be within accepted submission window</span></span>
-<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2025-08-26 08:36:41 UTC"</span> is outside window</span></span>
+<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2025-08-28 07:27:01 UTC"</span> is outside window</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span></span></code></pre></div>
 <p>For more details on the structure of
 <code>&lt;hub_validations&gt;</code> objects, including how to access
@@ -194,7 +194,7 @@ and the function re-run for validation to proceed further.</p>
 <span><span class="co">#&gt;   submission `round_id` from file name.  `round_id` value <span style="color: #0000BB;">2022-10-08</span> does not</span></span>
 <span><span class="co">#&gt;   match submission `round_id` <span style="color: #0000BB;">"2022-10-15"</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[submission_time]</span>: Submission time must be within accepted submission window</span></span>
-<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2025-08-26 08:36:42 UTC"</span> is outside window</span></span>
+<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2025-08-28 07:27:02 UTC"</span> is outside window</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -222,7 +222,7 @@ will be summarised.</p>
 <span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">2022-10-08-team1-goodmodel.csv</span><span style="color: #BB00BB;"> ────</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[submission_time]</span>: Submission time must be within accepted submission window</span></span>
-<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2025-08-26 08:36:43 UTC"</span> is outside window</span></span>
+<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2025-08-28 07:27:03 UTC"</span> is outside window</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `check_for_errors()`:</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> </span></span>
@@ -831,7 +831,7 @@ check_error
 target_dataset_exists
 </td>
 <td style="text-align:left;">
-Target dataset can be successfully detected for a given target type
+Target dataset can be successfully detected for a given target type.
 </td>
 <td style="text-align:left;">
 TRUE
@@ -847,7 +847,7 @@ check_error
 target_dataset_unique
 </td>
 <td style="text-align:left;">
-A single unique target dataset exists for a given target type
+A single unique target dataset exists for a given target type.
 </td>
 <td style="text-align:left;">
 TRUE
@@ -863,7 +863,7 @@ check_error
 target_dataset_file_ext_unique
 </td>
 <td style="text-align:left;">
-All files of a given target type share a single unique file format
+All files of a given target type share a single unique file format.
 </td>
 <td style="text-align:left;">
 TRUE
@@ -879,7 +879,139 @@ check_error
 target_dataset_rows_unique
 </td>
 <td style="text-align:left;">
-Target dataset rows are all unique
+Target dataset rows are all unique.
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+check_failure
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+target_file_read
+</td>
+<td style="text-align:left;">
+Target data file can be read successfully.
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:left;">
+check_error
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+target_tbl_colnames
+</td>
+<td style="text-align:left;">
+Target data file has the correct column names according to target type.
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:left;">
+check_error
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+target_tbl_coltypes
+</td>
+<td style="text-align:left;">
+Target data file has the correct column types according to target type.
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:left;">
+check_error
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+target_tbl_ts_targets
+</td>
+<td style="text-align:left;">
+Targets in a time-series target data file are valid. Only performed on
+<code>time-series</code> data files.
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:left;">
+check_error
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+target_tbl_rows_unique
+</td>
+<td style="text-align:left;">
+Target data file rows are all unique.
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+check_failure
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+target_tbl_values
+</td>
+<td style="text-align:left;">
+Task ID columns in a target data file have valid task ID values.
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:left;">
+check_error
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+target_tbl_output_type_ids
+</td>
+<td style="text-align:left;">
+Output type ID values in a target data file are valid and complete. Only
+performed when the target data file contains
+an <code>output_type_id</code> column.
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:left;">
+check_error
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+target_tbl_oracle_value
+</td>
+<td style="text-align:left;">
+Oracle values in a target data file are valid. Only performed on
+<code>oracle output</code> data files.
 </td>
 <td style="text-align:left;">
 FALSE
