@@ -47,7 +47,14 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="hubvalidations-development-version">hubValidations (development version)<a class="anchor" aria-label="anchor" href="#hubvalidations-development-version"></a></h2>
-<ul><li>Added utilities for working with hive-partitioned data file paths:
+<ul><li>Added <code>target_validations</code> class, a subclass of <code>hub_validations</code> designed for target (truth) data validation results (<a href="https://github.com/hubverse-org/hubValidations/issues/265" class="external-link">#265</a>).
+<ul><li>New functions: <code><a href="../reference/new_target_validations.html">new_target_validations()</a></code> and <code><a href="../reference/new_target_validations.html">as_target_validations()</a></code>
+</li>
+<li>
+<code><a href="../reference/combine.target_validations.html">combine.target_validations()</a></code> method for concatenating target validation objects</li>
+<li>Print method displays full file paths instead of basenames for better clarity when working with target data files</li>
+</ul></li>
+<li>Added utilities for working with hive-partitioned data file paths:
 <ul><li>
 <code><a href="../reference/extract_hive_partitions.html">extract_hive_partitions()</a></code> for extracting key value pairs from paths to hive-partitioned data files.</li>
 <li>

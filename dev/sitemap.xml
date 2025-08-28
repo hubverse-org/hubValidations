@@ -64,6 +64,7 @@
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/check_valid_round_id.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/check_valid_round_id_col.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/combine.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/combine.target_validations.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/create_custom_check.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/expand_model_out_grid.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/extract_hive_partitions.html</loc></url>
@@ -75,6 +76,7 @@
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/is_success.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/match_tbl_to_model_task.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/new_hub_validations.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/new_target_validations.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/opt_check_metadata_team_max_model_n.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/opt_check_tbl_col_timediff.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/dev/reference/opt_check_tbl_counts_lt_popn.html</loc></url>
