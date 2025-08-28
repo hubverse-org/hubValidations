@@ -23,6 +23,7 @@
   - `check_target_tbl_oracle_value()`: Check that the `oracle_value` values in an oracle-output target data file for `cdf` and `pmf` output types conform to expectations. Specifically it verifies that oracle values are either 0 or 1, `pmf` oracle values sum to 1 for each observation unit and `cdf` oracle values are non-decreasing for each observation unit when sorted by the `output_type_id` set defined in the hub config.
 * Added `validate_target_file()` function for validating file level properties of a target data file (#250).
 * Added `validate_target_dataset()` function for validating dataset level properties of a target dataset (#229).
+* Added `validate_target_data()` function for validating the contents of a submitted target data file (#249).
 * Improved performance of `check_tbl_values_required()`.
 
 
