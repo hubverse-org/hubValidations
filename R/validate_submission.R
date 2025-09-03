@@ -9,7 +9,6 @@
 #' @inheritParams expand_model_out_grid
 #' @param skip_submit_window_check Logical. Whether to skip the submission window check.
 #' @param skip_check_config Logical. Whether to skip the hub config validation check.
-#'  check.
 #' @param submit_window_ref_date_from whether to get the reference date around
 #' which relative submission windows will be determined from the file's
 #' `file_path` round ID or the `file` contents themselves.
