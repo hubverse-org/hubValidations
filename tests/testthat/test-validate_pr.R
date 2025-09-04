@@ -20,7 +20,8 @@ test_that("validate_pr works on valid PR", {
 
   expect_snapshot(str(checks))
   expect_invisible(suppressMessages(check_for_errors(checks)))
-  expect_message(check_for_errors(checks),
+  expect_message(
+    check_for_errors(checks),
     regexp = "All validation checks have been successful."
   )
 })
@@ -126,7 +127,6 @@ test_that("validate_pr flags modifications and deletions in PR", {
     suppressMessages(check_for_errors(mod_checks_message[1:5]))
   )
 
-
   mod_checks_none <- suppressMessages(
     validate_pr(
       hub_path = temp_hub,
@@ -155,7 +155,6 @@ test_that("validate_pr flags modifications and deletions in PR", {
   )
   expect_snapshot(str(mod_checks_in_window))
 })
-
 
 
 test_that("validate_pr handles errors in determining submission window & file renaming", {
@@ -206,7 +205,8 @@ test_that("validate_pr works on valid PR using v2.0.0 schema and old orgname", {
 
   expect_snapshot(str(checks))
   expect_invisible(suppressMessages(check_for_errors(checks)))
-  expect_message(check_for_errors(checks),
+  expect_message(
+    check_for_errors(checks),
     regexp = "All validation checks have been successful."
   )
 })

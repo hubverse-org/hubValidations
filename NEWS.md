@@ -29,6 +29,7 @@
 * Added `validate_target_dataset()` function for validating dataset level properties of a target dataset (#229).
 * Added `validate_target_data()` function for validating the contents of a submitted target data file (#249).
 * Added `validate_target_submission()` function for validating a single target data file (#263).
+* Added `validate_target_pr()` function for validating all target data files in a pull request (#264).
 * Improved performance of `check_tbl_values_required()`.
 
 
