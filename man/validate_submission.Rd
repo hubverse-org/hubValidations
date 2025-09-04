@@ -57,8 +57,7 @@ behaviour so use with care.}
 
 \item{skip_submit_window_check}{Logical. Whether to skip the submission window check.}
 
-\item{skip_check_config}{Logical. Whether to skip the hub config validation check.
-check.}
+\item{skip_check_config}{Logical. Whether to skip the hub config validation check.}
 
 \item{submit_window_ref_date_from}{whether to get the reference date around
 which relative submission windows will be determined from the file's
