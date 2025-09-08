@@ -238,7 +238,7 @@ test_that("connect_target_timeseries with HIVE-PARTTIONED data works on local hu
   expect_s3_class(file, "tbl_df")
   expect_equal(
     names(file),
-    c("target_end_date", "location", "observation", "target")
+    c("target_end_date", "location", "target", "observation")
   )
   expect_equal(dim(file), expected_dims)
   expect_equal(
@@ -246,8 +246,8 @@ test_that("connect_target_timeseries with HIVE-PARTTIONED data works on local hu
     c(
       target_end_date = "Date",
       location = "character",
-      observation = "numeric",
-      target = "character"
+      target = "character",
+      observation = "numeric"
     )
   )
   expect_equal(
@@ -255,8 +255,8 @@ test_that("connect_target_timeseries with HIVE-PARTTIONED data works on local hu
     c(
       target_end_date = "double",
       location = "character",
-      observation = "double",
-      target = "character"
+      target = "character",
+      observation = "double"
     )
   )
   # read in one of the time-series file as all character
@@ -271,8 +271,8 @@ test_that("connect_target_timeseries with HIVE-PARTTIONED data works on local hu
     c(
       target_end_date = "character",
       location = "character",
-      observation = "character",
-      target = "character"
+      target = "character",
+      observation = "character"
     )
   )
 
@@ -294,8 +294,8 @@ test_that("connect_target_timeseries with HIVE-PARTTIONED data works on local hu
     c(
       target_end_date = "Date",
       location = "character",
-      observation = "numeric",
-      target = "character"
+      target = "character",
+      observation = "numeric"
     )
   )
   expect_equal(
@@ -303,8 +303,8 @@ test_that("connect_target_timeseries with HIVE-PARTTIONED data works on local hu
     c(
       target_end_date = "double",
       location = "character",
-      observation = "double",
-      target = "character"
+      target = "character",
+      observation = "double"
     )
   )
   # read in one of the time-series file as all character
@@ -319,8 +319,8 @@ test_that("connect_target_timeseries with HIVE-PARTTIONED data works on local hu
     c(
       target_end_date = "character",
       location = "character",
-      observation = "character",
-      target = "character"
+      target = "character",
+      observation = "character"
     )
   )
 
@@ -347,8 +347,8 @@ test_that("connect_target_timeseries with HIVE-PARTTIONED data works on local hu
     c(
       target = "character",
       location = "character",
-      observation = "numeric",
-      target_end_date = "Date"
+      target_end_date = "Date",
+      observation = "numeric"
     )
   )
   expect_equal(
@@ -356,8 +356,8 @@ test_that("connect_target_timeseries with HIVE-PARTTIONED data works on local hu
     c(
       target = "character",
       location = "character",
-      observation = "double",
-      target_end_date = "double"
+      target_end_date = "double",
+      observation = "double"
     )
   )
   # read in one of the time-series file as all character
@@ -372,8 +372,8 @@ test_that("connect_target_timeseries with HIVE-PARTTIONED data works on local hu
     c(
       target = "character",
       location = "character",
-      observation = "character",
-      target_end_date = "character"
+      target_end_date = "character",
+      observation = "character"
     )
   )
 })

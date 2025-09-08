@@ -112,7 +112,7 @@ read_target_file <- function(
   if (!is.null(partition_df)) {
     tbl <- dplyr::bind_cols(tbl, partition_df)
   }
-  tbl
+  rearrange_target_tbl(tbl, target_type)
 }
 
 guess_target_type_from_path <- function(
@@ -132,5 +132,33 @@ guess_target_type_from_path <- function(
         or {.val oracle-output}"
     ),
     call = call
+  )
+}
+
+rearrange_target_tbl <- function(
+  tbl,
+  target_type = c("time-series", "oracle-output")
+) {
+  target_type <- rlang::arg_match(target_type)
+  switch(
+    target_type,
+    `time-series` = dplyr::relocate(
+      tbl,
+      dplyr::any_of(c(
+        "observation",
+        "as_of"
+      )),
+      .after = dplyr::last_col()
+    ),
+    `oracle-output` = dplyr::relocate(
+      tbl,
+      dplyr::any_of(c(
+        "output_type",
+        "output_type_id",
+        "oracle_value",
+        "as_of"
+      )),
+      .after = dplyr::last_col()
+    )
   )
 }
