@@ -1,6 +1,6 @@
 #' Validate Pull Request
 #'
-#' Validates model output and model metadata files in a Pull Request.
+#' Validates target data files in a Pull Request.
 #'
 #' @param gh_repo GitHub repository address in the format `username/repo`
 #' @param pr_number Number of the pull request to validate
