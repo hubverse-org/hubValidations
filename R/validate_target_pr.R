@@ -5,8 +5,8 @@
 #' @param gh_repo GitHub repository address in the format `username/repo`
 #' @param pr_number Number of the pull request to validate
 #' @param file_modification_check Character string. Whether to perform check and what to
-#' return when modification/deletion of a previously submitted model output file
-#' or deletion of a previously submitted model metadata file is detected in PR:
+#' return when modification/deletion of a previously submitted target data file
+#' or deletion of a previously submitted target data file is detected in PR:
 #' - `"none"`: No modification/deletion checks performed.
 #' - `"message"`: Appends a `<message/check_info>` condition class object for each
 #' applicable modified/deleted file.
