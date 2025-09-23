@@ -5,6 +5,8 @@
 \alias{reexports}
 \alias{create_hub_schema}
 \alias{coerce_to_hub_schema}
+\alias{is_hive_partitioned_path}
+\alias{extract_hive_partitions}
 \alias{read_config}
 \alias{read_config_file}
 \alias{get_hub_derived_task_ids}
@@ -15,7 +17,7 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{hubData}{\code{\link[hubData]{coerce_to_hub_schema}}, \code{\link[hubData]{create_hub_schema}}}
+  \item{hubData}{\code{\link[hubData]{coerce_to_hub_schema}}, \code{\link[hubData]{create_hub_schema}}, \code{\link[hubData]{extract_hive_partitions}}, \code{\link[hubData]{is_hive_partitioned_path}}}
 
   \item{hubUtils}{\code{\link[hubUtils:get_hub_timezone]{get_hub_derived_task_ids}}, \code{\link[hubUtils]{read_config}}, \code{\link[hubUtils]{read_config_file}}}
 }}
