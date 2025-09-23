@@ -268,23 +268,23 @@ validate_pr <- function(
 }
 
 # Sends message reporting any files with changes in PR that were not validated.
-inform_unvalidated_files <- function(pr_df) {
-  unvalidated_files <- pr_df[
-    !pr_df$model_output & !pr_df$model_metadata,
-    "filename",
-    drop = TRUE
-  ]
-  if (length(unvalidated_files) == 0L) {
+inform_unvalidated_files <- function(
+  pr_df,
+  filetypes_to_validate = c("model_output", "model_metadata")
+) {
+  ignore <- rowSums(pr_df[filetypes_to_validate]) == 0L
+  ignored_files <- pr_df[["filename"]][ignore]
+  if (length(ignored_files) == 0L) {
     return(invisible(NULL))
   }
 
-  unvalidated_bullets <- sprintf("{.val %s}", unvalidated_files) %>%
-    purrr::set_names(rep("*", length(unvalidated_files)))
+  ignored_bullets <- sprintf("{.val %s}", ignored_files) %>%
+    purrr::set_names(rep("*", length(ignored_files)))
 
   cli::cli_inform(
     c(
       "i" = "PR contains commits to additional files which have not been checked:",
-      unvalidated_bullets,
+      ignored_bullets,
       "\n"
     )
   )
@@ -296,7 +296,9 @@ check_pr_modf_del_files <- function(
   pr_df,
   file_type = c(
     "model_output", # nolint
-    "model_metadata"
+    "model_metadata",
+    "timeseries",
+    "oracle_output"
   ),
   alert = c("message", "failure", "error"),
   allow_submit_window_mods = TRUE
@@ -315,10 +317,14 @@ check_pr_modf_del_files <- function(
   df <- switch(
     file_type,
     model_output = df[df$status %in% c("removed", "modified", "renamed"), ],
-    model_metadata = df[df$status %in% c("removed", "renamed"), ]
+    df[df$status %in% c("removed", "renamed"), ]
   )
   if (nrow(df) == 0L) {
-    return(new_hub_validations())
+    if (file_type %in% c("timeseries", "oracle_output")) {
+      return(new_target_validations())
+    } else {
+      return(new_hub_validations())
+    }
   }
   # Check whether modifications allowed and return notification object according
   # to alert for any file that violates allowed mod/del rules.
@@ -333,8 +339,12 @@ check_pr_modf_del_files <- function(
   ) %>%
     purrr::compact()
 
-  as_hub_validations(out) %>%
-    purrr::set_names(sprintf("%s_mod", file_type))
+  if (file_type %in% c("timeseries", "oracle_output")) {
+    out <- as_target_validations(out)
+  } else {
+    out <- as_hub_validations(out)
+  }
+  purrr::set_names(out, sprintf("%s_mod", file_type))
 }
 
 

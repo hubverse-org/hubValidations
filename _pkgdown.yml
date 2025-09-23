@@ -13,7 +13,7 @@ reference:
   - coerce_to_hub_schema
 
 - title: "Higher level validation functions"
-  desc: "Functions combining appropriate check unit test used for higher level validations. All return `hub_validations` S3 class objects."
+  desc: "Functions combining appropriate check unit test used for higher level validations. All return `hub_validations`  or `target_validations` S3 class objects."
   contents:
   - starts_with("validate_")
   - check_for_errors
