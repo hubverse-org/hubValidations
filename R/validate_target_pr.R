@@ -324,7 +324,8 @@ validate_target_pr <- function(
   return(validations)
 }
 
-
+# Check if file is a standalone target data file named exactly as the target type.
+# For example: "time-series.csv" or "oracle-output.parquet"
 is_target_type_single_file <- function(
   path,
   target_type = c("time-series", "oracle-output")
@@ -336,6 +337,8 @@ is_target_type_single_file <- function(
   file_name == target_type && ext %in% c("csv", "parquet")
 }
 
+# Check if file lives inside a target-data/<target_type>/ directory (any depth),
+# but exclude README files which are not data files.
 is_target_type_dir_file <- function(
   path,
   target_type = c("time-series", "oracle-output")
@@ -345,6 +348,14 @@ is_target_type_dir_file <- function(
     stringr::str_detect(path, "README", negate = TRUE)
 }
 
+#' Determine whether a file path corresponds to a target data file of a given
+#' target type.
+#'
+#' This function checks if the given path represents either:
+#' - a standalone target data file (e.g. `time-series.csv`, `oracle-output.parquet`), or
+#' - a file inside a `target-data/<target_type>/` directory, excluding README files.
+#'
+#' Used to classify pull request files based on their relation to specific target types.
 is_target_type_file <- function(
   path,
   target_type = c("time-series", "oracle-output")
