@@ -1,4 +1,4 @@
-#' Validate Pull Request
+#' Validate Target Data Pull Request
 #'
 #' Validates target data files in a Pull Request.
 #'
