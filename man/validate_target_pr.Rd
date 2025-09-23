@@ -2,7 +2,7 @@
 % Please edit documentation in R/validate_target_pr.R
 \name{validate_target_pr}
 \alias{validate_target_pr}
-\title{Validate Pull Request}
+\title{Validate Target Data Pull Request}
 \usage{
 validate_target_pr(
   hub_path = ".",
@@ -69,8 +69,7 @@ If \code{NULL} defaults to standard \code{hub-config/validations.yml} path. For 
 see \href{https://hubverse-org.github.io/hubValidations/articles/deploying-custom-functions.html}{article on custom validation checks}.}
 
 \item{file_modification_check}{Character string. Whether to perform check and what to
-return when modification/deletion of a previously submitted model output file
-or deletion of a previously submitted model metadata file is detected in PR:
+return when modification/deletion of a previously submitted target data file is detected in PR:
 \itemize{
 \item \code{"none"}: No modification/deletion checks performed.
 \item \code{"message"}: Appends a \verb{<message/check_info>} condition class object for each
@@ -90,7 +89,7 @@ target type dataset (i.e. all files of a target type) in the PR. Defaults to \co
 An object of class \code{target_validations}.
 }
 \description{
-Validates model output and model metadata files in a Pull Request.
+Validates target data files in a Pull Request.
 }
 \details{
 Only target data files are individually validated using
