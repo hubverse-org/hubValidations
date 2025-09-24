@@ -33,6 +33,20 @@
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/check_metadata_schema_exists.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/check_submission_metadata_file_exists.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/check_submission_time.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubValidations/reference/check_target_dataset_exists.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubValidations/reference/check_target_dataset_file_ext_unique.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubValidations/reference/check_target_dataset_rows_unique.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubValidations/reference/check_target_dataset_unique.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubValidations/reference/check_target_file_ext_valid.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubValidations/reference/check_target_file_name.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubValidations/reference/check_target_file_read.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubValidations/reference/check_target_tbl_colnames.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubValidations/reference/check_target_tbl_coltypes.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubValidations/reference/check_target_tbl_oracle_value.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubValidations/reference/check_target_tbl_output_type_ids.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubValidations/reference/check_target_tbl_rows_unique.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubValidations/reference/check_target_tbl_ts_targets.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubValidations/reference/check_target_tbl_values.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/check_tbl_col_types.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/check_tbl_colnames.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/check_tbl_derived_task_id_vals.html</loc></url>
@@ -51,14 +65,17 @@
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/check_valid_round_id.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/check_valid_round_id_col.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/combine.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubValidations/reference/combine.target_validations.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/create_custom_check.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/expand_model_out_grid.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/get_config_derived_task_ids.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubValidations/reference/get_target_task_id.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/get_tbl_compound_taskid_set.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/index.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/is_success.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/match_tbl_to_model_task.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/new_hub_validations.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubValidations/reference/new_target_validations.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/opt_check_metadata_team_max_model_n.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/opt_check_tbl_col_timediff.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/opt_check_tbl_counts_lt_popn.html</loc></url>
@@ -68,6 +85,7 @@
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/print.hub_validations.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/print.pr_hub_validations.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/read_model_out_file.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubValidations/reference/read_target_file.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/reexports.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/submission_tmpl.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/try_check.html</loc></url>
@@ -77,5 +95,10 @@
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/validate_pr.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/validate_submission.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/validate_submission_time.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubValidations/reference/validate_target_data.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubValidations/reference/validate_target_dataset.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubValidations/reference/validate_target_file.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubValidations/reference/validate_target_pr.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubValidations/reference/validate_target_submission.html</loc></url>
 </urlset>
 
