@@ -167,7 +167,9 @@ validate_pr <- function(
       pr_files <- gh::gh(
         "/repos/{gh_repo}/pulls/{pr_number}/files",
         gh_repo = gh_repo,
-        pr_number = pr_number
+        pr_number = pr_number,
+        per_page = 100,
+        .limit = Inf
       )
       pr_df <- tibble::tibble(
         filename = purrr::map_chr(pr_files, ~ .x$filename),
