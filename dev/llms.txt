@@ -1,0 +1,440 @@
+# hubValidations
+
+The goal of hubValidations is to provide a testing framework for
+performing hubverse hub validations.
+
+## Installation
+
+### Latest
+
+You can install the [latest version of hubValidations from the
+R-universe](https://hubverse-org.r-universe.dev/hubValidations):
+
+``` r
+install.packages("hubValidations", repos = c("https://hubverse-org.r-universe.dev", "https://cloud.r-project.org"))
+```
+
+### Development
+
+If you want to test out new features that have not yet been released,
+you can install the development version of hubValidations from
+[GitHub](https://github.com/) with:
+
+``` r
+remotes::install_github("hubverse-org/hubValidations")
+```
+
+> \[!NOTE\]
+>
+> `hubValidations` has a dependency on the `arrow` package. For
+> troubleshooting `arrow` installation problems, please consult the
+> [`arrow` package
+> documentation](https://arrow.apache.org/docs/r/#installation).
+>
+> You could also try installing the package from the [Apache R Universe
+> repository](https://apache.r-universe.dev) with:
+>
+> ``` r
+> install.packages("arrow", repos = c("https://apache.r-universe.dev", "https://cran.r-project.org"))
+> ```
+
+------------------------------------------------------------------------
+
+## Code of Conduct
+
+Please note that the hubValidations package is released with a
+[Contributor Code of
+Conduct](https://hubverse-org.github.io/hubValidations/dev/CODE_OF_CONDUCT.md).
+By contributing to this project, you agree to abide by its terms.
+
+## Contributing
+
+Interested in contributing back to the open-source Hubverse project?
+Learn more about how to [get involved in the Hubverse
+Community](https://hubverse.io/community/) or [how to contribute to
+hubValidations](https://hubverse-org.github.io/hubValidations/dev/CONTRIBUTING.md).
+
+### Contributing new check functions
+
+If submitting a new check function, please ensure you update
+`inst/check_table.csv` with metadata about the check. See our
+[contributing
+guidelines](https://hubverse-org.github.io/hubValidations/dev/CONTRIBUTING.md)
+for more details.
+
+# Package index
+
+## Utilities for submitting teams
+
+Functions to help teams create valid submission model output files.
+
+- [`validate_submission()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_submission.md)
+  : Validate a submitted model data file.
+- [`submission_tmpl()`](https://hubverse-org.github.io/hubValidations/dev/reference/submission_tmpl.md)
+  : Create a model output submission file template
+- [`reexports`](https://hubverse-org.github.io/hubValidations/dev/reference/reexports.md)
+  [`create_hub_schema`](https://hubverse-org.github.io/hubValidations/dev/reference/reexports.md)
+  [`coerce_to_hub_schema`](https://hubverse-org.github.io/hubValidations/dev/reference/reexports.md)
+  [`is_hive_partitioned_path`](https://hubverse-org.github.io/hubValidations/dev/reference/reexports.md)
+  [`extract_hive_partitions`](https://hubverse-org.github.io/hubValidations/dev/reference/reexports.md)
+  [`read_config`](https://hubverse-org.github.io/hubValidations/dev/reference/reexports.md)
+  [`read_config_file`](https://hubverse-org.github.io/hubValidations/dev/reference/reexports.md)
+  [`get_hub_derived_task_ids`](https://hubverse-org.github.io/hubValidations/dev/reference/reexports.md)
+  : Objects exported from other packages
+
+## Higher level validation functions
+
+Functions combining appropriate check unit test used for higher level
+validations. All return `hub_validations` or `target_validations` S3
+class objects.
+
+- [`validate_model_data()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_model_data.md)
+  : Validate the contents of a submitted model data file
+
+- [`validate_model_file()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_model_file.md)
+  : Valid file level properties of a submitted model output file.
+
+- [`validate_model_metadata()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_model_metadata.md)
+  : Valid properties of a metadata file.
+
+- [`validate_pr()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_pr.md)
+  : Validate Pull Request
+
+- [`validate_submission()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_submission.md)
+  : Validate a submitted model data file.
+
+- [`validate_submission_time()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_submission_time.md)
+  : Validate a submitted model data file submission time.
+
+- [`validate_target_data()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_target_data.md)
+  : Validate the contents of a submitted target data file.
+
+- [`validate_target_dataset()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_target_dataset.md)
+  : Validate dataset level properties of a given target type
+
+- [`validate_target_file()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_target_file.md)
+  : Validate file level properties of a target data file.
+
+- [`validate_target_pr()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_target_pr.md)
+  : Validate Target Data Pull Request
+
+- [`validate_target_submission()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_target_submission.md)
+  : Validate a submitted target data file.
+
+- [`check_for_errors()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_for_errors.md)
+  :
+
+  Raise conditions stored in a `hub_validations` S3 object
+
+## Unit validation checks
+
+Unit validation checks. All return `hub_check` S3 class objects.
+
+- [`check_config_hub_valid()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_config_hub_valid.md)
+  : Check hub correctly configured
+
+- [`check_file_exists()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_file_exists.md)
+  : Check file exists at the file path specified
+
+- [`check_file_format()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_file_format.md)
+  : Check file format is accepted by hub.
+
+- [`check_file_location()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_file_location.md)
+  : Check file is being submitted to the correct folder
+
+- [`check_file_n()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_file_n.md)
+  : Check number of files submitted per round does not exceed the
+  allowed number of submissions per team.
+
+- [`check_file_name()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_file_name.md)
+  : Check a model output file name can be correctly parsed.
+
+- [`check_file_read()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_file_read.md)
+  : Check file can be read successfully
+
+- [`check_for_errors()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_for_errors.md)
+  :
+
+  Raise conditions stored in a `hub_validations` S3 object
+
+- [`check_metadata_file_exists()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_metadata_file_exists.md)
+  : Check whether a metadata schema file exists
+
+- [`check_metadata_file_ext()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_metadata_file_ext.md)
+  : Check file is being submitted to the correct folder
+
+- [`check_metadata_file_location()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_metadata_file_location.md)
+  : Check that the metadata file is being submitted to the correct
+  folder
+
+- [`check_metadata_file_name()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_metadata_file_name.md)
+  : Check whether the file name of a metadata file matches the model_id
+  or combination of team_abbr and model_abbr specified within the
+  metadata file
+
+- [`check_metadata_matches_schema()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_metadata_matches_schema.md)
+  : Check whether a metadata file matches the schema provided by the hub
+
+- [`check_metadata_schema_exists()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_metadata_schema_exists.md)
+  : Check whether a metadata schema file exists
+
+- [`check_submission_metadata_file_exists()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_submission_metadata_file_exists.md)
+  : Check whether a metadata file for the given model exists
+
+- [`check_submission_time()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_submission_time.md)
+  : Checks submission is within the valid submission window for a given
+  round.
+
+- [`check_target_dataset_exists()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_target_dataset_exists.md)
+  : Check target dataset can be detected for a given target type
+
+- [`check_target_dataset_file_ext_unique()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_target_dataset_file_ext_unique.md)
+  : Check that all files of a given target type share a single unique
+  file format
+
+- [`check_target_dataset_rows_unique()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_target_dataset_rows_unique.md)
+  : Check target dataset rows are all unique
+
+- [`check_target_dataset_unique()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_target_dataset_unique.md)
+  : Check that a single unique target dataset exists for a given target
+  type.
+
+- [`check_target_file_ext_valid()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_target_file_ext_valid.md)
+  : Check that a target data file has a valid extension.
+
+- [`check_target_file_name()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_target_file_name.md)
+  : Check that a hive-partitioned target data file name can be correctly
+  parsed.
+
+- [`check_target_file_read()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_target_file_read.md)
+  : Check target file can be read successfully
+
+- [`check_target_tbl_colnames()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_target_tbl_colnames.md)
+  : Check that a target data file has the correct column names according
+  to target type
+
+- [`check_target_tbl_coltypes()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_target_tbl_coltypes.md)
+  : Check that a target data file has the correct column types according
+  to target type
+
+- [`check_target_tbl_oracle_value()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_target_tbl_oracle_value.md)
+  : Check that oracle values in an oracle output target data file are
+  valid
+
+- [`check_target_tbl_output_type_ids()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_target_tbl_output_type_ids.md)
+  : Check that output type ID values in a target data file are valid and
+  complete
+
+- [`check_target_tbl_rows_unique()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_target_tbl_rows_unique.md)
+  : Check target data rows are all unique
+
+- [`check_target_tbl_ts_targets()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_target_tbl_ts_targets.md)
+  : Check that targets in a time-series target data file are valid
+
+- [`check_target_tbl_values()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_target_tbl_values.md)
+  : Check that task ID columns in a target data file have valid task ID
+  values
+
+- [`check_tbl_col_types()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_col_types.md)
+  : Check model data column data types
+
+- [`check_tbl_colnames()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_colnames.md)
+  : Check column names of model output data
+
+- [`check_tbl_derived_task_id_vals()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_derived_task_id_vals.md)
+  : Check derived task ID columns contain valid values
+
+- [`check_tbl_match_round_id()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_match_round_id.md)
+  : Check model output data tbl round ID matches submission round ID.
+
+- [`check_tbl_rows_unique()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_rows_unique.md)
+  : Check model data rows are all unique
+
+- [`check_tbl_spl_compound_taskid_set()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_spl_compound_taskid_set.md)
+  : Check model output data tbl sample compound task id sets for each
+  modeling task match or are coarser than the expected set defined in
+  the config.
+
+- [`check_tbl_spl_compound_tid()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_spl_compound_tid.md)
+  : Check model output data tbl samples contain single unique values for
+  each compound task ID within individual samples
+
+- [`check_tbl_spl_n()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_spl_n.md)
+  : Check model output data tbl samples contain the appropriate number
+  of samples for a given compound idx.
+
+- [`check_tbl_spl_non_compound_tid()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_spl_non_compound_tid.md)
+  : Check model output data tbl samples contain single unique
+  combination of non-compound task ID values across all samples
+
+- [`check_tbl_unique_round_id()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_unique_round_id.md)
+  : Check model output data tbl contains a single unique round ID.
+
+- [`check_tbl_value_col()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_value_col.md)
+  : Check output type values of model output data against config
+
+- [`check_tbl_value_col_ascending()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_value_col_ascending.md)
+  :
+
+  Check that `quantile` and `cdf` output type values of model output
+  data are non-descending
+
+- [`check_tbl_value_col_sum1()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_value_col_sum1.md)
+  :
+
+  Check that `pmf` output type values of model output data sum to 1.
+
+- [`check_tbl_values()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_values.md)
+  : Check model output data tbl contains valid value combinations
+
+- [`check_tbl_values_required()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_values_required.md)
+  : Check all required task ID/output type/output type ID value
+  combinations present in model data.
+
+- [`check_valid_round_id()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_valid_round_id.md)
+  :
+
+  Check whether the `round_id` determined for the submission is valid
+
+- [`check_valid_round_id_col()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_valid_round_id_col.md)
+  : Check that any round_id_col name provided or extracted from the hub
+  config is valid.
+
+## Optional unit validation checks
+
+Optional unit validation checks. All return `hub_check` S3 class objects
+and need to be deployed via `validations.yml` file.
+
+- [`opt_check_metadata_team_max_model_n()`](https://hubverse-org.github.io/hubValidations/dev/reference/opt_check_metadata_team_max_model_n.md)
+  : Check that submitting team does not exceed maximum number of allowed
+  models per team
+- [`opt_check_tbl_col_timediff()`](https://hubverse-org.github.io/hubValidations/dev/reference/opt_check_tbl_col_timediff.md)
+  : Check time difference between values in two date columns equal a
+  defined period.
+- [`opt_check_tbl_counts_lt_popn()`](https://hubverse-org.github.io/hubValidations/dev/reference/opt_check_tbl_counts_lt_popn.md)
+  : Check that predicted values per location are less than total
+  location population.
+- [`opt_check_tbl_horizon_timediff()`](https://hubverse-org.github.io/hubValidations/dev/reference/opt_check_tbl_horizon_timediff.md)
+  : Check time difference between values in two date columns equals a
+  defined time period defined by values in a horizon column
+
+## Custom unit validation checks
+
+Functions to support creation and deployment of custom unit validation
+checks
+
+- [`create_custom_check()`](https://hubverse-org.github.io/hubValidations/dev/reference/create_custom_check.md)
+  : Create a custom validation check function template file.
+
+## Lower level functions
+
+Lower level functions for assisting users in developing custom unit
+checks.
+
+- [`capture_check_cnd()`](https://hubverse-org.github.io/hubValidations/dev/reference/capture_check_cnd.md)
+  : Capture a condition of the result of validation check.
+
+- [`capture_check_info()`](https://hubverse-org.github.io/hubValidations/dev/reference/capture_check_info.md)
+  : Capture a simple info message condition
+
+- [`capture_exec_error()`](https://hubverse-org.github.io/hubValidations/dev/reference/capture_exec_error.md)
+  : Capture an execution error condition
+
+- [`capture_exec_warning()`](https://hubverse-org.github.io/hubValidations/dev/reference/capture_exec_warning.md)
+  : Capture an execution warning condition
+
+- [`is_success()`](https://hubverse-org.github.io/hubValidations/dev/reference/is_success.md)
+  [`is_failure()`](https://hubverse-org.github.io/hubValidations/dev/reference/is_success.md)
+  [`is_error()`](https://hubverse-org.github.io/hubValidations/dev/reference/is_success.md)
+  [`is_info()`](https://hubverse-org.github.io/hubValidations/dev/reference/is_success.md)
+  [`not_pass()`](https://hubverse-org.github.io/hubValidations/dev/reference/is_success.md)
+  [`is_exec_error()`](https://hubverse-org.github.io/hubValidations/dev/reference/is_success.md)
+  [`is_exec_warn()`](https://hubverse-org.github.io/hubValidations/dev/reference/is_success.md)
+  [`is_any_error()`](https://hubverse-org.github.io/hubValidations/dev/reference/is_success.md)
+  : Get status of a hub check
+
+- [`parse_file_name()`](https://hubverse-org.github.io/hubValidations/dev/reference/parse_file_name.md)
+  : Parse model output file metadata from file name
+
+- [`read_model_out_file()`](https://hubverse-org.github.io/hubValidations/dev/reference/read_model_out_file.md)
+  : Read a model output file
+
+- [`read_target_file()`](https://hubverse-org.github.io/hubValidations/dev/reference/read_target_file.md)
+  : Read a single target data file
+
+- [`try_check()`](https://hubverse-org.github.io/hubValidations/dev/reference/try_check.md)
+  : Wrap check expression in try to capture check execution errors
+
+- [`expand_model_out_grid()`](https://hubverse-org.github.io/hubValidations/dev/reference/expand_model_out_grid.md)
+  : Create expanded grid of valid task ID and output type value
+  combinations
+
+- [`get_tbl_compound_taskid_set()`](https://hubverse-org.github.io/hubValidations/dev/reference/get_tbl_compound_taskid_set.md)
+  : Detect the compound_taskid_set for a tbl for each modeling task in a
+  given round.
+
+- [`get_config_derived_task_ids()`](https://hubverse-org.github.io/hubValidations/dev/reference/get_config_derived_task_ids.md)
+  :
+
+  Get hub configuration fields from a `<config>` class object
+
+- [`match_tbl_to_model_task()`](https://hubverse-org.github.io/hubValidations/dev/reference/match_tbl_to_model_task.md)
+  :
+
+  Match model output `tbl` data to their model tasks in `config_tasks`.
+
+- [`get_target_task_id()`](https://hubverse-org.github.io/hubValidations/dev/reference/get_target_task_id.md)
+  : Get Unique Target Task ID
+
+## `<hub_validations>` methods
+
+Methods for `<hub_validations>` S3 objects and subclasses.
+
+- [`print(`*`<hub_validations>`*`)`](https://hubverse-org.github.io/hubValidations/dev/reference/print.hub_validations.md)
+  :
+
+  Print results of `validate_...()` function as a bullet list
+
+- [`print(`*`<pr_hub_validations>`*`)`](https://hubverse-org.github.io/hubValidations/dev/reference/print.pr_hub_validations.md)
+  :
+
+  Print results of
+  [`validate_pr()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_pr.md)
+  function as a bullet list
+
+- [`combine()`](https://hubverse-org.github.io/hubValidations/dev/reference/combine.md)
+  :
+
+  Concatenate `hub_validations` S3 class objects
+
+- [`combine(`*`<target_validations>`*`)`](https://hubverse-org.github.io/hubValidations/dev/reference/combine.target_validations.md)
+  :
+
+  Concatenate `target_validations` S3 class objects
+
+- [`new_hub_validations()`](https://hubverse-org.github.io/hubValidations/dev/reference/new_hub_validations.md)
+  [`as_hub_validations()`](https://hubverse-org.github.io/hubValidations/dev/reference/new_hub_validations.md)
+  :
+
+  Create new or convert list to `hub_validations` S3 class object
+
+- [`new_target_validations()`](https://hubverse-org.github.io/hubValidations/dev/reference/new_target_validations.md)
+  [`as_target_validations()`](https://hubverse-org.github.io/hubValidations/dev/reference/new_target_validations.md)
+  :
+
+  Create new or convert list to `target_validations` S3 class object
+
+# Articles
+
+### All vignettes
+
+- [Deploying custom validation
+  functions](https://hubverse-org.github.io/hubValidations/dev/articles/deploying-custom-functions.md):
+- [Structure of hub_validations class
+  objects](https://hubverse-org.github.io/hubValidations/dev/articles/hub-validations-class.md):
+- [Validating Pull Requests on
+  GitHub](https://hubverse-org.github.io/hubValidations/dev/articles/validate-pr.md):
+- [Validating submissions
+  locally](https://hubverse-org.github.io/hubValidations/dev/articles/validate-submission.md):
+- [Writing custom validation
+  functions](https://hubverse-org.github.io/hubValidations/dev/articles/writing-custom-fns.md):
