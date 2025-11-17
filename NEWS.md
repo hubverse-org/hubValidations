@@ -1,5 +1,9 @@
 # hubValidations (development version)
 
+## Bug fixes
+
+* Fixed pagination limit issue in GitHub API call when retrieving PR files. `validate_pr()` now correctly handles PRs with more than 30 files (#276, #277).
+
 # hubValidations 0.12.0
 
 * Added `target_validations` class, a subclass of `hub_validations` designed for target (truth) data validation results (#265).

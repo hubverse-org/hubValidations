@@ -210,3 +210,45 @@ test_that("validate_pr works on valid PR using v2.0.0 schema and old orgname", {
     regexp = "All validation checks have been successful."
   )
 })
+
+test_that("validate_pr works on PR with more than 30 files", {
+  skip_if_offline()
+
+  dir <- withr::local_tempdir()
+  temp_hub <- fs::dir_create(fs::path(dir, "many_files_hub"))
+  gert::git_clone(
+    url = "https://github.com/hubverse-org/ci-testhub-target",
+    path = temp_hub,
+    branch = "pr-many-files"
+  )
+
+  # This tests that validate_pr correctly handles PRs with more than 30 files
+  # (beyond GitHub API's default pagination limit). Relates to issue #278.
+  many_files_checks <- suppressMessages(
+    validate_pr(
+      hub_path = temp_hub,
+      gh_repo = "hubverse-org/ci-testhub-target",
+      pr_number = 7,
+      skip_submit_window_check = TRUE
+    )
+  )
+
+  # Expect errors due to invalid filenames (can't parse model metadata),
+  # but all 35 files should be validated
+  expect_error(
+    suppressMessages(check_for_errors(many_files_checks))
+  )
+  # Verify that all 35 files were processed (each should have validation checks)
+  files_checked <- purrr::map_chr(
+    many_files_checks,
+    ~ .x$where
+  ) |>
+    unique()
+
+  expected_files <- c(
+    "many_files_hub",
+    sprintf("test-model-%02d/2022-10-22-test-model-%02d.csv", 1:35, 1:35)
+  )
+
+  expect_equal(files_checked, expected_files)
+})
