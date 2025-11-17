@@ -6,3 +6,5 @@
 docs
 attic
 .secrets
+claude.md
+.claude

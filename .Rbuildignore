@@ -17,3 +17,5 @@
 ^\.httr-oauth$
 ^\.secrets$
 ^\.lintr$
+^claude\.md$
+^\.claude$
