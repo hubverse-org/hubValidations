@@ -76,7 +76,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Writing custom validation functions</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/hubverse-org/hubValidations/blob/main/vignettes/articles/writing-custom-fns.Rmd" class="external-link"><code>vignettes/articles/writing-custom-fns.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/hubverse-org/hubValidations/blob/v0.12.1/vignettes/articles/writing-custom-fns.Rmd" class="external-link"><code>vignettes/articles/writing-custom-fns.Rmd</code></a></small>
       <div class="d-none name"><code>writing-custom-fns.Rmd</code></div>
     </div>
 
@@ -151,7 +151,7 @@ you have an existing hub, you can work in there.</p>
 <span><span class="fu"><a href="../reference/create_custom_check.html">create_custom_check</a></span><span class="op">(</span><span class="st">"cstm_check_tbl_basic"</span>,</span>
 <span>  hub_path <span class="op">=</span> <span class="va">hub_path</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Directory <span style="color: #0000BB;">/tmp/RtmpXKckPS/file22282c6e751b/src/validations/R</span> created.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Directory <span style="color: #0000BB;">/tmp/Rtmpad9sEX/file21243169755c/src/validations/R</span> created.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Custom validation check template function file <span style="color: #0000BB;">"cstm_check_tbl_basic.R"</span> created.</span></span>
 <span><span class="co">#&gt; → Edit the function template to add your custom check logic.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> See the <span style="color: #00BB00;">Writing custom check functions</span> article for more information.</span></span>
@@ -398,7 +398,7 @@ the same fashion as custom functions, i.e. through the
 <span id="cb4-37"><a href="#cb4-37" tabindex="-1"></a>        <span class="at">msg_verbs =</span> <span class="fu">c</span>(<span class="st">"all match"</span>, <span class="st">"do not all match"</span>), <span class="at">msg_attribute =</span> cli<span class="sc">::</span><span class="fu">format_inline</span>(<span class="st">"expected period of {.val {timediff}}."</span>), </span>
 <span id="cb4-38"><a href="#cb4-38" tabindex="-1"></a>        <span class="at">details =</span> details)</span>
 <span id="cb4-39"><a href="#cb4-39" tabindex="-1"></a>}</span>
-<span id="cb4-40"><a href="#cb4-40" tabindex="-1"></a><span class="sc">&lt;</span>bytecode<span class="sc">:</span> <span class="dv">0x55a2fafdfcf0</span><span class="sc">&gt;</span></span>
+<span id="cb4-40"><a href="#cb4-40" tabindex="-1"></a><span class="sc">&lt;</span>bytecode<span class="sc">:</span> <span class="dv">0x55cc6bf32028</span><span class="sc">&gt;</span></span>
 <span id="cb4-41"><a href="#cb4-41" tabindex="-1"></a><span class="er">&lt;</span>environment<span class="sc">:</span> namespace<span class="sc">:</span>hubValidations<span class="sc">&gt;</span></span></code></pre></div>
 <p>You can add an example extra argument with
 <code>extra_args = TRUE</code> when creating the custom check function
@@ -565,7 +565,7 @@ model output <code>tbl</code> contains data for <code>cdf</code> and
 <span id="cb10-25"><a href="#cb10-25" tabindex="-1"></a>        <span class="at">msg_verbs =</span> <span class="fu">c</span>(<span class="st">"increase"</span>, <span class="st">"do not all increase"</span>), <span class="at">msg_attribute =</span> <span class="st">"when ordered by {.var output_type_id}."</span>, </span>
 <span id="cb10-26"><a href="#cb10-26" tabindex="-1"></a>        <span class="at">details =</span> details, <span class="at">error_tbl =</span> error_tbl)</span>
 <span id="cb10-27"><a href="#cb10-27" tabindex="-1"></a>}</span>
-<span id="cb10-28"><a href="#cb10-28" tabindex="-1"></a><span class="sc">&lt;</span>bytecode<span class="sc">:</span> <span class="dv">0x55a2fdf07bb0</span><span class="sc">&gt;</span></span>
+<span id="cb10-28"><a href="#cb10-28" tabindex="-1"></a><span class="sc">&lt;</span>bytecode<span class="sc">:</span> <span class="dv">0x55cc6f257ae0</span><span class="sc">&gt;</span></span>
 <span id="cb10-29"><a href="#cb10-29" tabindex="-1"></a><span class="er">&lt;</span>environment<span class="sc">:</span> namespace<span class="sc">:</span>hubValidations<span class="sc">&gt;</span></span></code></pre></div>
 <p>You can add a pre-condition check block of code with argument
 <code>conditional = TRUE</code> when creating the custom check function

@@ -17,7 +17,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/hubverse-org/hubValidations/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/hubverse-org/hubValidations/blob/v0.12.1/DESCRIPTION)
 
 Krystalli A, Ray E, Gruson H (2025). *hubValidations: Testing framework
 for hubverse hub validations*. R package version 0.12.1,
