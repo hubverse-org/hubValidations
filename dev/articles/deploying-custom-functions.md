@@ -90,7 +90,7 @@ will contain the following additional objects:**
 - **`output_type_id_datatype`**: character string. The value of the
   `output_type_id_datatype` argument. This value is useful in functions
   like
-  [`hubData::create_hub_schema()`](https://rdrr.io/pkg/hubData/man/create_hub_schema.html)
+  [`hubData::create_hub_schema()`](https://hubverse-org.github.io/hubData/reference/create_hub_schema.html)
   or
   [`hubValidations::expand_model_out_grid()`](https://hubverse-org.github.io/hubValidations/dev/reference/expand_model_out_grid.md)
   to set the data type of `output_type_id` column.

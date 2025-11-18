@@ -5,10 +5,10 @@ to see their documentation.
 
 - hubData:
 
-  [`coerce_to_hub_schema`](https://rdrr.io/pkg/hubData/man/coerce_to_hub_schema.html),
-  [`create_hub_schema`](https://rdrr.io/pkg/hubData/man/create_hub_schema.html),
-  [`extract_hive_partitions`](https://rdrr.io/pkg/hubData/man/extract_hive_partitions.html),
-  [`is_hive_partitioned_path`](https://rdrr.io/pkg/hubData/man/is_hive_partitioned_path.html)
+  [`coerce_to_hub_schema`](https://hubverse-org.github.io/hubData/reference/coerce_to_hub_schema.html),
+  [`create_hub_schema`](https://hubverse-org.github.io/hubData/reference/create_hub_schema.html),
+  [`extract_hive_partitions`](https://hubverse-org.github.io/hubData/reference/extract_hive_partitions.html),
+  [`is_hive_partitioned_path`](https://hubverse-org.github.io/hubData/reference/is_hive_partitioned_path.html)
 
 - hubUtils:
 

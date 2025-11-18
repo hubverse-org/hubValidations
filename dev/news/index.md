@@ -1,6 +1,6 @@
 # Changelog
 
-## hubValidations (development version)
+## hubValidations 0.12.1
 
 ### Bug fixes
 
@@ -25,10 +25,10 @@
   - Print method displays full file paths instead of basenames for
     better clarity when working with target data files
 - Added utilities for working with hive-partitioned data file paths:
-  - [`extract_hive_partitions()`](https://rdrr.io/pkg/hubData/man/extract_hive_partitions.html)
+  - [`extract_hive_partitions()`](https://hubverse-org.github.io/hubData/reference/extract_hive_partitions.html)
     for extracting key value pairs from paths to hive-partitioned data
     files.
-  - [`is_hive_partitioned_path()`](https://rdrr.io/pkg/hubData/man/is_hive_partitioned_path.html)
+  - [`is_hive_partitioned_path()`](https://hubverse-org.github.io/hubData/reference/is_hive_partitioned_path.html)
     for checking if a path is hive-partitioned.
 - Added
   [`read_target_file()`](https://hubverse-org.github.io/hubValidations/dev/reference/read_target_file.md)
@@ -178,9 +178,9 @@
     and
     [`hubUtils::read_config_file()`](https://hubverse-org.github.io/hubUtils/reference/read_config_file.html)
     for reading in hub configuration files.
-  - [`hubData::create_hub_schema()`](https://rdrr.io/pkg/hubData/man/create_hub_schema.html)
+  - [`hubData::create_hub_schema()`](https://hubverse-org.github.io/hubData/reference/create_hub_schema.html)
     and
-    [`hubData::coerce_to_hub_schema()`](https://rdrr.io/pkg/hubData/man/coerce_to_hub_schema.html)
+    [`hubData::coerce_to_hub_schema()`](https://hubverse-org.github.io/hubData/reference/coerce_to_hub_schema.html)
     for creating and coercing data to the hub schema.
 - Validation of v4 hubs now fully supported
   ([\#155](https://github.com/hubverse-org/hubValidations/issues/155),
@@ -378,9 +378,9 @@ Additional useful functionality:
 ## hubValidations 0.2.0
 
 - Move and rename the following `hubData` functions to `hubValidations`:
-- [`hubData::expand_model_out_val_grid`](https://rdrr.io/pkg/hubData/man/expand_model_out_val_grid.html)
+- [`hubData::expand_model_out_val_grid`](https://hubverse-org.github.io/hubData/reference/expand_model_out_val_grid.html)
   to `expand_model_out_grid`.
-- [`hubData::create_model_out_submit_tmpl`](https://rdrr.io/pkg/hubData/man/create_model_out_submit_tmpl.html)
+- [`hubData::create_model_out_submit_tmpl`](https://hubverse-org.github.io/hubData/reference/create_model_out_submit_tmpl.html)
   to `submission_tmpl`.
 
 ## hubValidations 0.1.0

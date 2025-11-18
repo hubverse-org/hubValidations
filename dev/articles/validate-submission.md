@@ -67,7 +67,7 @@ validate_submission(hub_path,
 #>   `output_type_id`.
 #> ℹ [value_col_sum1]: No pmf output types to check for sum of 1. Check skipped.
 #> ✖ [submission_time]: Submission time must be within accepted submission window
-#>   for round.  Current time "2025-11-17 14:12:31 UTC" is outside window
+#>   for round.  Current time "2025-11-18 16:06:22 UTC" is outside window
 #>   2022-10-02 EDT--2022-10-09 23:59:59 EDT.
 ```
 
@@ -120,7 +120,7 @@ validate_submission(hub_path,
 #>   submission `round_id` from file name.  `round_id` value 2022-10-08 does not
 #>   match submission `round_id` "2022-10-15"
 #> ✖ [submission_time]: Submission time must be within accepted submission window
-#>   for round.  Current time "2025-11-17 14:12:33 UTC" is outside window
+#>   for round.  Current time "2025-11-18 16:06:23 UTC" is outside window
 #>   2022-10-02 EDT--2022-10-09 23:59:59 EDT.
 ```
 
@@ -149,7 +149,7 @@ validate_submission(hub_path,
 #> ── 2022-10-08-team1-goodmodel.csv ────
 #> 
 #> ✖ [submission_time]: Submission time must be within accepted submission window
-#>   for round.  Current time "2025-11-17 14:12:34 UTC" is outside window
+#>   for round.  Current time "2025-11-18 16:06:24 UTC" is outside window
 #>   2022-10-02 EDT--2022-10-09 23:59:59 EDT.
 #> Error in `check_for_errors()`:
 #> ! 

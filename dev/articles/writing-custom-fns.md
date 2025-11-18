@@ -76,7 +76,7 @@ hub_path <- withr::local_tempdir()
 create_custom_check("cstm_check_tbl_basic",
   hub_path = hub_path
 )
-#> ✔ Directory /tmp/RtmpqeUVno/file21b926efdd9b/src/validations/R created.
+#> ✔ Directory /tmp/RtmpqQ0EmX/file211aaccb7f6/src/validations/R created.
 #> ✔ Custom validation check template function file "cstm_check_tbl_basic.R" created.
 #> → Edit the function template to add your custom check logic.
 #> ℹ See the Writing custom check functions article for more information.
@@ -226,7 +226,7 @@ will contain the following additional objects:**
 - **`output_type_id_datatype`**: character string. The value of the
   `output_type_id_datatype` argument. This value is useful in functions
   like
-  [`hubData::create_hub_schema()`](https://rdrr.io/pkg/hubData/man/create_hub_schema.html)
+  [`hubData::create_hub_schema()`](https://hubverse-org.github.io/hubData/reference/create_hub_schema.html)
   or
   [`hubValidations::expand_model_out_grid()`](https://hubverse-org.github.io/hubValidations/dev/reference/expand_model_out_grid.md)
   to set the data type of `output_type_id` column.
@@ -300,7 +300,7 @@ function (tbl, file_path, hub_path, t0_colname, t1_colname, timediff = lubridate
         msg_verbs = c("all match", "do not all match"), msg_attribute = cli::format_inline("expected period of {.val {timediff}}."), 
         details = details)
 }
-<bytecode: 0x55fc5829a630>
+<bytecode: 0x55a73cb13068>
 <environment: namespace:hubValidations>
 ```
 
@@ -478,7 +478,7 @@ function (tbl, file_path, hub_path, round_id, derived_task_ids = get_hub_derived
         msg_verbs = c("increase", "do not all increase"), msg_attribute = "when ordered by {.var output_type_id}.", 
         details = details, error_tbl = error_tbl)
 }
-<bytecode: 0x55fc5b591b90>
+<bytecode: 0x55a73fe455d8>
 <environment: namespace:hubValidations>
 ```
 

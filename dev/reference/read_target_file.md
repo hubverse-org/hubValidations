@@ -41,9 +41,9 @@ read_target_file(
 
   - `target`: (default) read in (`csv`) or coerce (`parquet`) to
     expected schema by target type (See
-    [`hubData::create_timeseries_schema()`](https://rdrr.io/pkg/hubData/man/create_timeseries_schema.html)
+    [`hubData::create_timeseries_schema()`](https://hubverse-org.github.io/hubData/reference/create_timeseries_schema.html)
     and
-    [`hubData::create_oracle_output_schema()`](https://rdrr.io/pkg/hubData/man/create_oracle_output_schema.html)
+    [`hubData::create_oracle_output_schema()`](https://hubverse-org.github.io/hubData/reference/create_oracle_output_schema.html)
     for details). When coercing data types using the `target` schema,
     the `output_type_id_datatype` can also be used to set the
     `output_type_id` column data type manually.
