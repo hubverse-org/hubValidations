@@ -7,7 +7,7 @@
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/hubverse-org/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubValidations</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.12.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.12.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,8 +49,7 @@
 
       <div class="section-desc"><p>Functions to help teams create valid submission model output files.</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -61,13 +60,15 @@
 
         </dt>
         <dd>Validate a submitted model data file.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="submission_tmpl.html">submission_tmpl()</a></code>
 
         </dt>
         <dd>Create a model output submission file template</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="reexports.html">reexports</a></code> <code><a href="reexports.html">create_hub_schema</a></code> <code><a href="reexports.html">coerce_to_hub_schema</a></code> <code><a href="reexports.html">is_hive_partitioned_path</a></code> <code><a href="reexports.html">extract_hive_partitions</a></code> <code><a href="reexports.html">read_config</a></code> <code><a href="reexports.html">read_config_file</a></code> <code><a href="reexports.html">get_hub_derived_task_ids</a></code>
 
@@ -78,8 +79,7 @@
 
       <div class="section-desc"><p>Functions combining appropriate check unit test used for higher level validations. All return <code>hub_validations</code> or <code>target_validations</code> S3 class objects.</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -90,67 +90,78 @@
 
         </dt>
         <dd>Validate the contents of a submitted model data file</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="validate_model_file.html">validate_model_file()</a></code>
 
         </dt>
         <dd>Valid file level properties of a submitted model output file.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="validate_model_metadata.html">validate_model_metadata()</a></code>
 
         </dt>
         <dd>Valid properties of a metadata file.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="validate_pr.html">validate_pr()</a></code>
 
         </dt>
         <dd>Validate Pull Request</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="validate_submission.html">validate_submission()</a></code>
 
         </dt>
         <dd>Validate a submitted model data file.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="validate_submission_time.html">validate_submission_time()</a></code>
 
         </dt>
         <dd>Validate a submitted model data file submission time.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="validate_target_data.html">validate_target_data()</a></code>
 
         </dt>
         <dd>Validate the contents of a submitted target data file.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="validate_target_dataset.html">validate_target_dataset()</a></code>
 
         </dt>
         <dd>Validate dataset level properties of a given target type</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="validate_target_file.html">validate_target_file()</a></code>
 
         </dt>
         <dd>Validate file level properties of a target data file.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="validate_target_pr.html">validate_target_pr()</a></code>
 
         </dt>
         <dd>Validate Target Data Pull Request</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="validate_target_submission.html">validate_target_submission()</a></code>
 
         </dt>
         <dd>Validate a submitted target data file.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_for_errors.html">check_for_errors()</a></code>
 
@@ -161,8 +172,7 @@
 
       <div class="section-desc"><p>Unit validation checks. All return <code>hub_check</code> S3 class objects.</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -173,277 +183,323 @@
 
         </dt>
         <dd>Check hub correctly configured</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_file_exists.html">check_file_exists()</a></code>
 
         </dt>
         <dd>Check file exists at the file path specified</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_file_format.html">check_file_format()</a></code>
 
         </dt>
         <dd>Check file format is accepted by hub.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_file_location.html">check_file_location()</a></code>
 
         </dt>
         <dd>Check file is being submitted to the correct folder</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_file_n.html">check_file_n()</a></code>
 
         </dt>
         <dd>Check number of files submitted per round does not exceed the allowed number of submissions per team.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_file_name.html">check_file_name()</a></code>
 
         </dt>
         <dd>Check a model output file name can be correctly parsed.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_file_read.html">check_file_read()</a></code>
 
         </dt>
         <dd>Check file can be read successfully</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_for_errors.html">check_for_errors()</a></code>
 
         </dt>
         <dd>Raise conditions stored in a <code>hub_validations</code> S3 object</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_metadata_file_exists.html">check_metadata_file_exists()</a></code>
 
         </dt>
         <dd>Check whether a metadata schema file exists</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_metadata_file_ext.html">check_metadata_file_ext()</a></code>
 
         </dt>
         <dd>Check file is being submitted to the correct folder</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_metadata_file_location.html">check_metadata_file_location()</a></code>
 
         </dt>
         <dd>Check that the metadata file is being submitted to the correct folder</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_metadata_file_name.html">check_metadata_file_name()</a></code>
 
         </dt>
         <dd>Check whether the file name of a metadata file matches the model_id or combination of team_abbr and model_abbr specified within the metadata file</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_metadata_matches_schema.html">check_metadata_matches_schema()</a></code>
 
         </dt>
         <dd>Check whether a metadata file matches the schema provided by the hub</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_metadata_schema_exists.html">check_metadata_schema_exists()</a></code>
 
         </dt>
         <dd>Check whether a metadata schema file exists</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_submission_metadata_file_exists.html">check_submission_metadata_file_exists()</a></code>
 
         </dt>
         <dd>Check whether a metadata file for the given model exists</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_submission_time.html">check_submission_time()</a></code>
 
         </dt>
         <dd>Checks submission is within the valid submission window for a given round.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_target_dataset_exists.html">check_target_dataset_exists()</a></code>
 
         </dt>
         <dd>Check target dataset can be detected for a given target type</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_target_dataset_file_ext_unique.html">check_target_dataset_file_ext_unique()</a></code>
 
         </dt>
         <dd>Check that all files of a given target type share a single unique file format</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_target_dataset_rows_unique.html">check_target_dataset_rows_unique()</a></code>
 
         </dt>
         <dd>Check target dataset rows are all unique</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_target_dataset_unique.html">check_target_dataset_unique()</a></code>
 
         </dt>
         <dd>Check that a single unique target dataset exists for a given target type.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_target_file_ext_valid.html">check_target_file_ext_valid()</a></code>
 
         </dt>
         <dd>Check that a target data file has a valid extension.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_target_file_name.html">check_target_file_name()</a></code>
 
         </dt>
         <dd>Check that a hive-partitioned target data file name can be correctly parsed.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_target_file_read.html">check_target_file_read()</a></code>
 
         </dt>
         <dd>Check target file can be read successfully</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_target_tbl_colnames.html">check_target_tbl_colnames()</a></code>
 
         </dt>
         <dd>Check that a target data file has the correct column names according to target type</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_target_tbl_coltypes.html">check_target_tbl_coltypes()</a></code>
 
         </dt>
         <dd>Check that a target data file has the correct column types according to target type</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_target_tbl_oracle_value.html">check_target_tbl_oracle_value()</a></code>
 
         </dt>
         <dd>Check that oracle values in an oracle output target data file are valid</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_target_tbl_output_type_ids.html">check_target_tbl_output_type_ids()</a></code>
 
         </dt>
         <dd>Check that output type ID values in a target data file are valid and complete</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_target_tbl_rows_unique.html">check_target_tbl_rows_unique()</a></code>
 
         </dt>
         <dd>Check target data rows are all unique</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_target_tbl_ts_targets.html">check_target_tbl_ts_targets()</a></code>
 
         </dt>
         <dd>Check that targets in a time-series target data file are valid</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_target_tbl_values.html">check_target_tbl_values()</a></code>
 
         </dt>
         <dd>Check that task ID columns in a target data file have valid task ID values</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_tbl_col_types.html">check_tbl_col_types()</a></code>
 
         </dt>
         <dd>Check model data column data types</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_tbl_colnames.html">check_tbl_colnames()</a></code>
 
         </dt>
         <dd>Check column names of model output data</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_tbl_derived_task_id_vals.html">check_tbl_derived_task_id_vals()</a></code>
 
         </dt>
         <dd>Check derived task ID columns contain valid values</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_tbl_match_round_id.html">check_tbl_match_round_id()</a></code>
 
         </dt>
         <dd>Check model output data tbl round ID matches submission round ID.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_tbl_rows_unique.html">check_tbl_rows_unique()</a></code>
 
         </dt>
         <dd>Check model data rows are all unique</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_tbl_spl_compound_taskid_set.html">check_tbl_spl_compound_taskid_set()</a></code>
 
         </dt>
         <dd>Check model output data tbl sample compound task id sets for each modeling task match or are coarser than the expected set defined in the config.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_tbl_spl_compound_tid.html">check_tbl_spl_compound_tid()</a></code>
 
         </dt>
         <dd>Check model output data tbl samples contain single unique values for each compound task ID within individual samples</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_tbl_spl_n.html">check_tbl_spl_n()</a></code>
 
         </dt>
         <dd>Check model output data tbl samples contain the appropriate number of samples for a given compound idx.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_tbl_spl_non_compound_tid.html">check_tbl_spl_non_compound_tid()</a></code>
 
         </dt>
         <dd>Check model output data tbl samples contain single unique combination of non-compound task ID values across all samples</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_tbl_unique_round_id.html">check_tbl_unique_round_id()</a></code>
 
         </dt>
         <dd>Check model output data tbl contains a single unique round ID.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_tbl_value_col.html">check_tbl_value_col()</a></code>
 
         </dt>
         <dd>Check output type values of model output data against config</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_tbl_value_col_ascending.html">check_tbl_value_col_ascending()</a></code>
 
         </dt>
         <dd>Check that <code>quantile</code> and <code>cdf</code> output type values of model output data are non-descending</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_tbl_value_col_sum1.html">check_tbl_value_col_sum1()</a></code>
 
         </dt>
         <dd>Check that <code>pmf</code> output type values of model output data sum to 1.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_tbl_values.html">check_tbl_values()</a></code>
 
         </dt>
         <dd>Check model output data tbl contains valid value combinations</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_tbl_values_required.html">check_tbl_values_required()</a></code>
 
         </dt>
         <dd>Check all required task ID/output type/output type ID value combinations present in model data.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_valid_round_id.html">check_valid_round_id()</a></code>
 
         </dt>
         <dd>Check whether the <code>round_id</code> determined for the submission is valid</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_valid_round_id_col.html">check_valid_round_id_col()</a></code>
 
@@ -454,8 +510,7 @@
 
       <div class="section-desc"><p>Optional unit validation checks. All return <code>hub_check</code> S3 class objects and need to be deployed via <code>validations.yml</code> file.</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -466,19 +521,22 @@
 
         </dt>
         <dd>Check that submitting team does not exceed maximum number of allowed models per team</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="opt_check_tbl_col_timediff.html">opt_check_tbl_col_timediff()</a></code>
 
         </dt>
         <dd>Check time difference between values in two date columns equal a defined period.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="opt_check_tbl_counts_lt_popn.html">opt_check_tbl_counts_lt_popn()</a></code>
 
         </dt>
         <dd>Check that predicted values per location are less than total location population.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="opt_check_tbl_horizon_timediff.html">opt_check_tbl_horizon_timediff()</a></code>
 
@@ -489,8 +547,7 @@
 
       <div class="section-desc"><p>Functions to support creation and deployment of custom unit validation checks</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -506,8 +563,7 @@
 
       <div class="section-desc"><p>Lower level functions for assisting users in developing custom unit checks.</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -518,79 +574,92 @@
 
         </dt>
         <dd>Capture a condition of the result of validation check.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="capture_check_info.html">capture_check_info()</a></code>
 
         </dt>
         <dd>Capture a simple info message condition</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="capture_exec_error.html">capture_exec_error()</a></code>
 
         </dt>
         <dd>Capture an execution error condition</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="capture_exec_warning.html">capture_exec_warning()</a></code>
 
         </dt>
         <dd>Capture an execution warning condition</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="is_success.html">is_success()</a></code> <code><a href="is_success.html">is_failure()</a></code> <code><a href="is_success.html">is_error()</a></code> <code><a href="is_success.html">is_info()</a></code> <code><a href="is_success.html">not_pass()</a></code> <code><a href="is_success.html">is_exec_error()</a></code> <code><a href="is_success.html">is_exec_warn()</a></code> <code><a href="is_success.html">is_any_error()</a></code>
 
         </dt>
         <dd>Get status of a hub check</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="parse_file_name.html">parse_file_name()</a></code>
 
         </dt>
         <dd>Parse model output file metadata from file name</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="read_model_out_file.html">read_model_out_file()</a></code>
 
         </dt>
         <dd>Read a model output file</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="read_target_file.html">read_target_file()</a></code>
 
         </dt>
         <dd>Read a single target data file</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="try_check.html">try_check()</a></code>
 
         </dt>
         <dd>Wrap check expression in try to capture check execution errors</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="expand_model_out_grid.html">expand_model_out_grid()</a></code>
 
         </dt>
         <dd>Create expanded grid of valid task ID and output type value combinations</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="get_tbl_compound_taskid_set.html">get_tbl_compound_taskid_set()</a></code>
 
         </dt>
         <dd>Detect the compound_taskid_set for a tbl for each modeling task in a given round.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="get_config_derived_task_ids.html">get_config_derived_task_ids()</a></code>
 
         </dt>
         <dd>Get hub configuration fields from a <code>&lt;config&gt;</code> class object</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="match_tbl_to_model_task.html">match_tbl_to_model_task()</a></code>
 
         </dt>
         <dd>Match model output <code>tbl</code> data to their model tasks in <code>config_tasks</code>.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="get_target_task_id.html">get_target_task_id()</a></code>
 
@@ -601,8 +670,7 @@
 
       <div class="section-desc"><p>Methods for <code>&lt;hub_validations&gt;</code> S3 objects and subclasses.</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -613,31 +681,36 @@
 
         </dt>
         <dd>Print results of <code>validate_...()</code> function as a bullet list</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="print.pr_hub_validations.html">print(<i>&lt;pr_hub_validations&gt;</i>)</a></code>
 
         </dt>
         <dd>Print results of <code><a href="../reference/validate_pr.html">validate_pr()</a></code> function as a bullet list</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="combine.html">combine()</a></code>
 
         </dt>
         <dd>Concatenate <code>hub_validations</code> S3 class objects</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="combine.target_validations.html">combine(<i>&lt;target_validations&gt;</i>)</a></code>
 
         </dt>
         <dd>Concatenate <code>target_validations</code> S3 class objects</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="new_hub_validations.html">new_hub_validations()</a></code> <code><a href="new_hub_validations.html">as_hub_validations()</a></code>
 
         </dt>
         <dd>Create new or convert list to <code>hub_validations</code> S3 class object</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="new_target_validations.html">new_target_validations()</a></code> <code><a href="new_target_validations.html">as_target_validations()</a></code>
 
@@ -653,7 +726,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3. PR Previews built by <a href="https://www.netlify.com" class="external-link">Netlify</a>. Provided without <strong>any warranty</strong>.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0. PR Previews built by <a href="https://www.netlify.com" class="external-link">Netlify</a>. Provided without <strong>any warranty</strong>.</p>
 </div>
 
     </footer></div>

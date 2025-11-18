@@ -7,7 +7,7 @@
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/hubverse-org/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubValidations</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.12.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.12.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,9 +42,16 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/hubverse-org/hubValidations/blob/v0.12.0/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/hubverse-org/hubValidations/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.12.1" id="hubvalidations-0121">hubValidations 0.12.1<a class="anchor" aria-label="anchor" href="#hubvalidations-0121"></a></h2>
+<div class="section level3">
+<h3 id="bug-fixes-0-12-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-12-1"></a></h3>
+<ul><li>Fixed pagination limit issue in GitHub API call when retrieving PR files. <code><a href="../reference/validate_pr.html">validate_pr()</a></code> now correctly handles PRs with more than 30 files (<a href="https://github.com/hubverse-org/hubValidations/issues/276" class="external-link">#276</a>, <a href="https://github.com/hubverse-org/hubValidations/issues/277" class="external-link">#277</a>).</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.12.0" id="hubvalidations-0120">hubValidations 0.12.0<a class="anchor" aria-label="anchor" href="#hubvalidations-0120"></a></h2>
 <ul><li>Added <code>target_validations</code> class, a subclass of <code>hub_validations</code> designed for target (truth) data validation results (<a href="https://github.com/hubverse-org/hubValidations/issues/265" class="external-link">#265</a>).
@@ -56,9 +63,9 @@
 </ul></li>
 <li>Added utilities for working with hive-partitioned data file paths:
 <ul><li>
-<code><a href="https://rdrr.io/pkg/hubData/man/extract_hive_partitions.html" class="external-link">extract_hive_partitions()</a></code> for extracting key value pairs from paths to hive-partitioned data files.</li>
+<code><a href="https://hubverse-org.github.io/hubData/reference/extract_hive_partitions.html" class="external-link">extract_hive_partitions()</a></code> for extracting key value pairs from paths to hive-partitioned data files.</li>
 <li>
-<code><a href="https://rdrr.io/pkg/hubData/man/is_hive_partitioned_path.html" class="external-link">is_hive_partitioned_path()</a></code> for checking if a path is hive-partitioned.</li>
+<code><a href="https://hubverse-org.github.io/hubData/reference/is_hive_partitioned_path.html" class="external-link">is_hive_partitioned_path()</a></code> for checking if a path is hive-partitioned.</li>
 </ul></li>
 <li>Added <code><a href="../reference/read_target_file.html">read_target_file()</a></code> function for reading in individual target data files.</li>
 <li>Added target data utilities:
@@ -128,7 +135,7 @@
 <ul><li>
 <code><a href="https://hubverse-org.github.io/hubUtils/reference/read_config.html" class="external-link">hubUtils::read_config()</a></code> and <code><a href="https://hubverse-org.github.io/hubUtils/reference/read_config_file.html" class="external-link">hubUtils::read_config_file()</a></code> for reading in hub configuration files.</li>
 <li>
-<code><a href="https://rdrr.io/pkg/hubData/man/create_hub_schema.html" class="external-link">hubData::create_hub_schema()</a></code> and <code><a href="https://rdrr.io/pkg/hubData/man/coerce_to_hub_schema.html" class="external-link">hubData::coerce_to_hub_schema()</a></code> for creating and coercing data to the hub schema.</li>
+<code><a href="https://hubverse-org.github.io/hubData/reference/create_hub_schema.html" class="external-link">hubData::create_hub_schema()</a></code> and <code><a href="https://hubverse-org.github.io/hubData/reference/coerce_to_hub_schema.html" class="external-link">hubData::coerce_to_hub_schema()</a></code> for creating and coercing data to the hub schema.</li>
 </ul></li>
 <li>Validation of v4 hubs now fully supported (<a href="https://github.com/hubverse-org/hubValidations/issues/155" class="external-link">#155</a>, <a href="https://github.com/hubverse-org/hubValidations/issues/156" class="external-link">#156</a>, <a href="https://github.com/hubverse-org/hubValidations/issues/159" class="external-link">#159</a>). This includes:</li>
 <li>support for the v4 specification of <code>output_type_ids</code>.</li>
@@ -217,9 +224,9 @@
 <h2 class="pkg-version" data-toc-text="0.2.0" id="hubvalidations-020">hubValidations 0.2.0<a class="anchor" aria-label="anchor" href="#hubvalidations-020"></a></h2>
 <ul><li>Move and rename the following <code>hubData</code> functions to <code>hubValidations</code>:</li>
 <li>
-<code><a href="https://rdrr.io/pkg/hubData/man/expand_model_out_val_grid.html" class="external-link">hubData::expand_model_out_val_grid</a></code> to <code>expand_model_out_grid</code>.</li>
+<code><a href="https://hubverse-org.github.io/hubData/reference/expand_model_out_val_grid.html" class="external-link">hubData::expand_model_out_val_grid</a></code> to <code>expand_model_out_grid</code>.</li>
 <li>
-<code><a href="https://rdrr.io/pkg/hubData/man/create_model_out_submit_tmpl.html" class="external-link">hubData::create_model_out_submit_tmpl</a></code> to <code>submission_tmpl</code>.</li>
+<code><a href="https://hubverse-org.github.io/hubData/reference/create_model_out_submit_tmpl.html" class="external-link">hubData::create_model_out_submit_tmpl</a></code> to <code>submission_tmpl</code>.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0" id="hubvalidations-010">hubValidations 0.1.0<a class="anchor" aria-label="anchor" href="#hubvalidations-010"></a></h2>
@@ -294,7 +301,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3. PR Previews built by <a href="https://www.netlify.com" class="external-link">Netlify</a>. Provided without <strong>any warranty</strong>.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0. PR Previews built by <a href="https://www.netlify.com" class="external-link">Netlify</a>. Provided without <strong>any warranty</strong>.</p>
 </div>
 
     </footer></div>
