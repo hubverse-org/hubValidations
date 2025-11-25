@@ -122,7 +122,13 @@ check_oracle_value_vals <- function(tbl) {
 check_pmf_oracle_value <- function(tbl, config_tasks) {
   tbl <- tbl[tbl$output_type == "pmf", ]
 
-  obs_unit <- get_tbl_obs_unit(tbl, config_tasks)
+  obs_unit <- get_obs_unit(
+    tbl,
+    config_tasks,
+    config_target_data = NULL,
+    target_type = NULL,
+    include_as_of = TRUE
+  )
   tbl <- group_by(tbl, across(all_of(obs_unit)))
 
   check_tbl <- summarise(
@@ -211,9 +217,13 @@ check_oracle_value_cdf_crossing <- function(
     tbl[["output_type_id"]],
     levels = output_type_ids
   )
-  # TODO: eventually the obs_unit will be defined in the target-data.json config
-  # file
-  tbl <- group_by_obs_unit(tbl, config_tasks) |>
+  tbl <- group_by_obs_unit(
+    tbl,
+    config_tasks,
+    config_target_data = NULL,
+    target_type = NULL,
+    include_as_of = TRUE
+  ) |>
     arrange(.data[["output_type_id"]], .by_group = TRUE)
 
   mutate(

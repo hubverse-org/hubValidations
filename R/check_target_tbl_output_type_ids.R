@@ -169,9 +169,13 @@ diff_output_type_ids <- function(tbl, output_type_ids, config_tasks) {
   if (nrow(tbl) == 0L) {
     return(NULL)
   }
-  # TODO: eventually the obs_unit will be defined in the target-data.json config
-  # file
-  tbl <- group_by_obs_unit(tbl, config_tasks)
+  tbl <- group_by_obs_unit(
+    tbl,
+    config_tasks,
+    config_target_data = NULL,
+    target_type = NULL,
+    include_as_of = TRUE
+  )
 
   reframe(
     tbl,
