@@ -1,5 +1,10 @@
 # hubValidations (development)
 
+## Enhancements
+
+* Enhanced target data column validation to support `target-data.json` configuration (#280).
+  - `check_target_tbl_colnames()` and `check_target_tbl_coltypes()` now use deterministic validation when `target-data.json` config is available, with error messages explicitly referencing the config file.
+
 # hubValidations 0.12.1
 
 ## Bug fixes
