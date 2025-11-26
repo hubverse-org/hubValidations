@@ -1,6 +1,20 @@
 #' Check that a target data file has the correct column types according to
 #' target type
 #'
+#' @details
+#' Column type validation depends on whether a `target-data.json` configuration
+#' file is provided:
+#'
+#' **With `target-data.json` config:**
+#' Expected column types are determined directly from the schema defined in
+#' the configuration. Validation is performed against the schema specifications
+#' in `target-data.json`.
+#'
+#' **Without `target-data.json` config:**
+#' Expected column types are determined from the dataset itself and validated
+#' for internal consistency across files, which mainly applies to partitioned
+#' datasets.
+#'
 #' @param target_tbl A tibble/data.frame of the contents of the target data file
 #' being validated.
 #' @inherit check_target_tbl_colnames params return
@@ -76,11 +90,18 @@ check_target_tbl_coltypes <- function(
       cli::format_inline()
   }
 
+  # Enhance message to reference config when available
+  schema_source <- if (hubUtils::has_target_data_config(hub_path)) {
+    "{target_type} target schema defined in `target-data.json` config."
+  } else {
+    "{target_type} target schema."
+  }
+
   capture_check_cnd(
     check = check,
     file_path = file_path,
     msg_subject = "Column data types",
-    msg_attribute = cli::format_inline("{target_type} target schema."),
+    msg_attribute = cli::format_inline(schema_source),
     msg_verbs = c("match", "do not match"),
     details = details
   )
