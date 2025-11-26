@@ -9,7 +9,8 @@ check_target_tbl_colnames(
   target_tbl,
   target_type = c("time-series", "oracle-output"),
   file_path,
-  hub_path
+  hub_path,
+  config_target_data = NULL
 )
 }
 \arguments{
@@ -31,6 +32,10 @@ For more details consult the
 in the \code{arrow} package.
 The hub must be fully configured with valid \code{admin.json} and \code{tasks.json}
 files within the \code{hub-config} directory.}
+
+\item{config_target_data}{Optional. A \code{target-data.json} config object. If
+provided, validation uses deterministic schema from config. If \code{NULL}
+(default), validation uses inference from \code{tasks.json}.}
 }
 \value{
 Depending on whether validation has succeeded, one of:
@@ -44,4 +49,18 @@ Returned object also inherits from subclass \verb{<hub_check>}.
 \description{
 Check that a target data file has the correct column names according to
 target type
+}
+\details{
+Column name validation depends on whether a \code{target-data.json} configuration
+file is provided:
+
+\strong{With \code{target-data.json} config:}
+Expected columns are determined directly from the configuration. The target
+table must contain exactly the columns defined in the config.
+
+\strong{Without \code{target-data.json} config:}
+Expected columns are inferred from the task ID configuration in \code{tasks.json},
+allowed columns according to the target type, and expectations based on the
+detected output types in the target data. Additional optional columns
+(e.g., \code{as_of}) are allowed.
 }
