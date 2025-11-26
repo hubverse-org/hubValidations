@@ -75,3 +75,17 @@ Returned object also inherits from subclass \verb{<hub_check>}.
 Check that a target data file has the correct column types according to
 target type
 }
+\details{
+Column type validation depends on whether a \code{target-data.json} configuration
+file is provided:
+
+\strong{With \code{target-data.json} config:}
+Expected column types are determined directly from the schema defined in
+the configuration. Validation is performed against the schema specifications
+in \code{target-data.json}.
+
+\strong{Without \code{target-data.json} config:}
+Expected column types are determined from the dataset itself and validated
+for internal consistency across files, which mainly applies to partitioned
+datasets.
+}
