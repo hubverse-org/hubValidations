@@ -88,13 +88,21 @@ validate_target_data <- function(
     )
   }
 
+  # Read target-data.json config if available (NULL if doesn't exist)
+  config_target_data <- if (hubUtils::has_target_data_config(hub_path)) {
+    hubUtils::read_config(hub_path, "target-data")
+  } else {
+    NULL
+  }
+
   # -- Standard checks ----
   checks$target_tbl_colnames <- try_check(
     check_target_tbl_colnames(
       target_tbl = target_tbl,
       target_type = target_type,
       file_path = file_path,
-      hub_path = hub_path
+      hub_path = hub_path,
+      config_target_data = config_target_data
     ),
     file_path
   )
