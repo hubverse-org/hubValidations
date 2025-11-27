@@ -58,20 +58,24 @@ get_obs_unit_from_config <- function(
 #' Get observation unit columns by inferring from table and task configuration.
 #'
 #' Infers the observation unit from the table by combining task identifier
-#' columns from the hub config with `"as_of"` (if present in the table).
+#' columns from the hub config with `"as_of"` (if present in the table and
+#' `include_as_of` is `TRUE`).
 #' This approach is used for backward compatibility when target-data.json
 #' configuration is not available.
 #'
 #' @param tbl A target data frame (oracle output or time-series target data).
 #' @param config_tasks A list of task configurations from the hub config.
+#' @param include_as_of Logical indicating whether to include `as_of` in the
+#'   observation unit when present in the table. Defaults to `TRUE` for
+#'   backward compatibility.
 #' @return A character vector of columns that define the observation unit.
 #' @noRd
-get_obs_unit_from_tbl <- function(tbl, config_tasks) {
+get_obs_unit_from_tbl <- function(tbl, config_tasks, include_as_of = TRUE) {
   # Inference behavior: use task IDs that are present in the table
   obs_unit <- task_id_cols_to_validate(tbl, config_tasks)
 
-  # Always include as_of if present in the table (backward compatibility)
-  if ("as_of" %in% colnames(tbl)) {
+  # Include as_of if present in the table and include_as_of is TRUE
+  if (include_as_of && "as_of" %in% colnames(tbl)) {
     obs_unit <- c(obs_unit, "as_of")
   }
 
@@ -100,8 +104,8 @@ get_obs_unit_from_tbl <- function(tbl, config_tasks) {
 #'   observation unit. When `config_target_data` is provided, `as_of` is only
 #'   added if this is `TRUE` AND the data is versioned (per
 #'   `hubUtils::get_versioned()`). When `config_target_data` is `NULL`, the
-#'   inference behavior is used (always include `as_of` if present in the table),
-#'   regardless of this parameter's value.
+#'   parameter is passed to `get_obs_unit_from_tbl()` which includes `as_of`
+#'   if present in the table AND this parameter is `TRUE`.
 #' @return A character vector of columns that define the observation unit.
 #' @noRd
 get_obs_unit <- function(
@@ -118,7 +122,7 @@ get_obs_unit <- function(
       include_as_of
     )
   } else {
-    get_obs_unit_from_tbl(tbl, config_tasks)
+    get_obs_unit_from_tbl(tbl, config_tasks, include_as_of)
   }
 }
 
