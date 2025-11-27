@@ -27,6 +27,30 @@ test_that("get_obs_unit works with oracle-output (v5 inference mode)", {
   expect_true("as_of" %in% as_of_false)
 })
 
+test_that("get_obs_unit validates required parameters in inference mode", {
+  hub_path <- system.file("testhubs/v5/target_file", package = "hubUtils")
+  config_tasks <- hubUtils::read_config(hub_path, "tasks")
+  tbl <- read_target_file("oracle-output.csv", hub_path)
+
+  # Should error when tbl is NULL in inference mode
+  expect_error(
+    get_obs_unit(tbl = NULL, config_tasks = config_tasks),
+    regexp = "`tbl` and `config_tasks` must be provided when `config_target_data` is NULL."
+  )
+
+  # Should error when config_tasks is NULL in inference mode
+  expect_error(
+    get_obs_unit(tbl = tbl, config_tasks = NULL),
+    regexp = "`tbl` and `config_tasks` must be provided when `config_target_data` is NULL."
+  )
+
+  # Should error when both are NULL in inference mode
+  expect_error(
+    get_obs_unit(tbl = NULL, config_tasks = NULL),
+    regexp = "`tbl` and `config_tasks` must be provided when `config_target_data` is NULL."
+  )
+})
+
 test_that("get_obs_unit works with time-series (v5 inference mode)", {
   hub_path <- system.file("testhubs/v5/target_file", package = "hubUtils")
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
@@ -57,7 +81,7 @@ test_that("get_obs_unit works with v6 oracle-output and config_target_data", {
   # Should error when target_type is NULL with config_target_data provided
   expect_error(
     get_obs_unit(tbl, config_tasks, config_target_data, target_type = NULL),
-    regexp = "`target_type` must be a character vector, not `NULL`."
+    regexp = "`target_type` must be provided when `config_target_data` is supplied."
   )
 
   # With include_as_of = FALSE, should not include as_of
@@ -98,7 +122,11 @@ test_that("get_obs_unit works with v6 oracle-output and config_target_data", {
     c("as_of", config_target_data$observable_unit)
   )
 
-  # Modify config with oracle-output specific observable unit
+  # Test with oracle-output specific observable unit that differs from general
+  # observable unit. Modify config to add "horizon" to oracle-output's
+  # observable unit, making it dataset-specific rather than using the general
+  # observable_unit. Verify get_obs_unit() correctly returns the
+  # oracle-output specific observable unit.
   config_target_data$`oracle-output`$observable_unit <- c(
     config_target_data$observable_unit,
     "horizon"
@@ -111,6 +139,13 @@ test_that("get_obs_unit works with v6 oracle-output and config_target_data", {
     target_type = "oracle-output",
     include_as_of = TRUE
   )
+  # Should return oracle-output specific observable unit (which includes horizon)
+  # plus as_of (since data is versioned and include_as_of = TRUE)
+  expect_setequal(
+    obs_unit_horizon,
+    c("as_of", config_target_data$`oracle-output`$observable_unit)
+  )
+  expect_true("horizon" %in% obs_unit_horizon)
 })
 
 test_that("get_obs_unit works with v6 time-series and config_target_data", {
