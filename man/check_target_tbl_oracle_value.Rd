@@ -8,7 +8,8 @@ check_target_tbl_oracle_value(
   target_tbl,
   target_type = c("oracle-output", "time-series"),
   file_path,
-  hub_path
+  hub_path,
+  config_target_data = NULL
 )
 }
 \arguments{
@@ -30,6 +31,10 @@ For more details consult the
 in the \code{arrow} package.
 The hub must be fully configured with valid \code{admin.json} and \code{tasks.json}
 files within the \code{hub-config} directory.}
+
+\item{config_target_data}{Optional. A \code{target-data.json} config object. If
+provided, validation uses deterministic schema from config. If \code{NULL}
+(default), validation uses inference from \code{tasks.json}.}
 }
 \value{
 Depending on whether validation has succeeded, one of:
@@ -51,4 +56,18 @@ values meet the following criteria:
 \item \code{cdf} oracle values are non-decreasing for each observation unit when
 sorted by the \code{output_type_id} set defined in the hub config.
 }
+}
+\details{
+When validating oracle values, data is grouped by observation unit to check
+PMF sums and CDF monotonicity within each unit.
+
+\strong{With \code{target-data.json} config:}
+Observable unit is determined from the config's \code{observable_unit} specification.
+
+\strong{Without \code{target-data.json} config:}
+Observable unit is inferred from task ID columns present in the data.
+
+The \code{as_of} column is NOT included in the grouping. Oracle data is designed to
+contain a single version per observable unit with a one-to-one mapping to model
+output data.
 }
