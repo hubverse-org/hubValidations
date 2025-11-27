@@ -4,9 +4,26 @@
 #' `output_type_id` column. It verifies that non-distributional
 #' output types have all NA output type IDs, and that distributional output types
 #' (`cdf`, `pmf`) include the complete output_type_id set defined in the hub config.
+#'
+#' @details
+#' When checking for completeness of distributional output types, data is grouped
+#' by observation unit to verify each unit has the complete set of output_type_id
+#' values.
+#'
+#' **With `target-data.json` config:**
+#' Observable unit is determined from the config's `observable_unit` specification.
+#'
+#' **Without `target-data.json` config:**
+#' Observable unit is inferred from task ID columns present in the data.
+#'
+#' The `as_of` column is NOT included in the grouping. Oracle data is designed to
+#' contain a single version per observable unit with a one-to-one mapping to model
+#' output data.
+#'
 #' @param target_type Type of target data to validate. One of `"time-series"` or
 #' `"oracle-output"`. Defaults to `"oracle-output"`.
 #' @inheritParams check_target_tbl_values
+#' @inheritParams check_target_tbl_colnames
 #' @inherit check_tbl_colnames params return
 #' @export
 check_target_tbl_output_type_ids <- function(
@@ -16,7 +33,8 @@ check_target_tbl_output_type_ids <- function(
     "time-series"
   ),
   file_path,
-  hub_path
+  hub_path,
+  config_target_data = NULL
 ) {
   target_type <- rlang::arg_match(target_type)
   if (target_type == "time-series") {
@@ -58,7 +76,7 @@ check_target_tbl_output_type_ids <- function(
     # validate each output type separately.
     check_list <- purrr::map(
       purrr::set_names(output_types),
-      \(.x) check_td_output_type_ids(.x, target_tbl_chr, config_tasks)
+      \(.x) check_td_output_type_ids(.x, target_tbl_chr, config_tasks, config_target_data)
     )
     invalid_output_types <- !purrr::map_lgl(check_list, "check")
     check <- !any(invalid_output_types)
@@ -93,12 +111,14 @@ check_target_tbl_output_type_ids <- function(
 #' @param output_type A single output type string (e.g., "cdf", "pmf", or other).
 #' @param target_tbl_chr Data frame filtered to rows with that output_type.
 #' @param config_tasks List of task configurations obtained from hub config.
+#' @param config_target_data Optional config from target-data.json.
 #' @return A list with elements `check` (logical) and `missing` (data.frame or NULL).
 #' @noRd
 check_td_output_type_ids <- function(
   output_type,
   target_tbl_chr,
-  config_tasks
+  config_tasks,
+  config_target_data = NULL
 ) {
   tbl <- target_tbl_chr[target_tbl_chr$output_type == output_type, ]
   if (!is_distributional(output_type)) {
@@ -108,7 +128,7 @@ check_td_output_type_ids <- function(
       missing = NULL
     )
   } else {
-    check_dist_output_type_ids(output_type, tbl, config_tasks)
+    check_dist_output_type_ids(output_type, tbl, config_tasks, config_target_data)
   }
 }
 #' Check distributional output type IDs against configuration `output_type_id` set
@@ -116,12 +136,14 @@ check_td_output_type_ids <- function(
 #' @param output_type A distributional type ("cdf" or "pmf").
 #' @param tbl Data frame filtered to that output_type.
 #' @param config_tasks List of task configurations with expected support values.
+#' @param config_target_data Optional config from target-data.json.
 #' @return A list with elements `check` (logical) and `missing` (data.frame or NULL).
 #' @noRd
 check_dist_output_type_ids <- function(
   output_type = c("cdf", "pmf"),
   tbl,
-  config_tasks
+  config_tasks,
+  config_target_data = NULL
 ) {
   output_type <- rlang::arg_match(output_type)
 
@@ -140,7 +162,8 @@ check_dist_output_type_ids <- function(
     ~ diff_output_type_ids(
       tbl = tbl,
       output_type_ids = .x,
-      config_tasks
+      config_tasks,
+      config_target_data
     )
   ) |>
     purrr::compact() |>
@@ -161,20 +184,24 @@ check_dist_output_type_ids <- function(
 #' @param tbl Data frame for that target and output type.
 #' @param output_type_ids Expected vector of output_type_id values.
 #' @param config_tasks List of hub configuration tasks.
+#' @param config_target_data Optional config from target-data.json.
 #' @return A data frame of missing support rows, grouped by non-unique columns.
 #' @importFrom dplyr group_by across all_of reframe
 #' @noRd
-diff_output_type_ids <- function(tbl, output_type_ids, config_tasks) {
+diff_output_type_ids <- function(tbl, output_type_ids, config_tasks, config_target_data = NULL) {
   tbl <- tbl[tbl$output_type_id %in% output_type_ids, ]
   if (nrow(tbl) == 0L) {
     return(NULL)
   }
+  # For oracle-output, as_of should NOT be included in grouping.
+  # Oracle data is designed to contain a single version per observable unit
+  # with a one-to-one mapping to model output data.
   tbl <- group_by_obs_unit(
     tbl,
     config_tasks,
-    config_target_data = NULL,
-    target_type = NULL,
-    include_as_of = TRUE
+    config_target_data,
+    target_type = "oracle-output",
+    include_as_of = FALSE
   )
 
   reframe(
