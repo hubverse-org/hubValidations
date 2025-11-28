@@ -49,7 +49,7 @@
       v [target_partition_file_name]: Hive-style partition file path segments are valid.
       v [target_file_ext]: Hive-partitioned target data file extension is valid.
       v [target_file_read]: target file could be read successfully.
-      v [target_tbl_colnames]: Column names are consistent with expected column names for time-series target type data.
+      v [target_tbl_colnames]: Column names are consistent with expected column names for time-series target type data.  Column name validation for time-series data in inference mode is limited. For robust validation, create a 'target-data.json' config file.
       v [target_tbl_coltypes]: Column data types match time-series target schema.
       v [target_tbl_ts_targets]: time-series targets are all valid.
       v [target_tbl_rows_unique]: time-series target data rows are unique.
