@@ -15,7 +15,7 @@ test_that("check_target_tbl_colnames works on time-series data", {
   expect_s3_class(valid_ts, "check_success")
   expect_equal(
     cli::ansi_strip(valid_ts$message) |> stringr::str_squish(),
-    "Column names are consistent with expected column names for time-series target type data."
+    "Column names are consistent with expected column names for time-series target type data. Column name validation for time-series data in inference mode is limited. For robust validation, create a 'target-data.json' config file." # nolint: line_length_linter.
   )
 
   # Providing a time-series target tbl will throw errors when checking for oracle-output
@@ -44,7 +44,7 @@ test_that("check_target_tbl_colnames works on time-series data", {
   expect_s3_class(invalid_ts, "check_error")
   expect_equal(
     cli::ansi_strip(invalid_ts$message) |> stringr::str_squish(),
-    "Column names must be consistent with expected column names for time-series target type data. Required column \"target\" is missing. | Invalid column \"value\" detected." # nolint: line_length_linter
+    "Column names must be consistent with expected column names for time-series target type data. Required column \"target\" is missing. | Invalid column \"value\" detected. | Column name validation for time-series data in inference mode is limited. For robust validation, create a 'target-data.json' config file." # nolint: line_length_linter
   )
 })
 
@@ -79,7 +79,7 @@ test_that("check_target_tbl_colnames works on oracle data", {
   expect_s3_class(invalid_ts, "check_error")
   expect_equal(
     cli::ansi_strip(invalid_ts$message) |> stringr::str_squish(),
-    "Column names must be consistent with expected column names for time-series target type data. Required column \"observation\" is missing. | Invalid columns \"output_type\", \"output_type_id\", and \"oracle_value\" detected." # nolint: line_length_linter
+    "Column names must be consistent with expected column names for time-series target type data. Required column \"observation\" is missing. | Invalid columns \"output_type\", \"output_type_id\", and \"oracle_value\" detected. | Column name validation for time-series data in inference mode is limited. For robust validation, create a 'target-data.json' config file." # nolint: line_length_linter
   )
 
   target_tbl <- cbind(target_tbl, value = 0L) |>
@@ -145,7 +145,7 @@ test_that("check_target_tbl_colnames works with null target keys", {
   expect_s3_class(valid_ts, "check_success")
   expect_equal(
     cli::ansi_strip(valid_ts$message) |> stringr::str_squish(),
-    "Column names are consistent with expected column names for time-series target type data."
+    "Column names are consistent with expected column names for time-series target type data. Column name validation for time-series data in inference mode is limited. For robust validation, create a 'target-data.json' config file." # nolint: line_length_linter.
   )
 
   target_tbl$target <- NULL
@@ -185,113 +185,6 @@ test_that("check_target_tbl_colnames works with null target keys", {
   expect_equal(
     cli::ansi_strip(valid_oo$message) |> stringr::str_squish(),
     "Column names are consistent with expected column names for oracle-output target type data."
-  )
-})
-
-test_that("check_target_tbl_colnames minimum column n check works", {
-  hub_path <- system.file(
-    "testhubs/v5/target_file",
-    package = "hubUtils"
-  )
-  target_tbl <- read_target_file("time-series.csv", hub_path)
-  target_tbl$location <- NULL
-
-  # With 3 columns & named target keys, check passes
-  valid_ts <- check_target_tbl_colnames(
-    target_tbl,
-    target_type = "time-series",
-    file_path = "time-series.csv",
-    hub_path
-  )
-  expect_s3_class(valid_ts, "check_success")
-  expect_equal(
-    cli::ansi_strip(valid_ts$message) |> stringr::str_squish(),
-    "Column names are consistent with expected column names for time-series target type data."
-  )
-
-  target_tbl$target <- NULL
-  # With 2 columns & named target keys, check fails
-  invalid_ts <- check_target_tbl_colnames(
-    target_tbl,
-    target_type = "time-series",
-    file_path = "time-series.csv",
-    hub_path
-  )
-  expect_s3_class(invalid_ts, "check_error")
-  expect_equal(
-    cli::ansi_strip(invalid_ts$message) |> stringr::str_squish(),
-    "Column names must be consistent with expected column names for time-series target type data. Required column \"target\" is missing. | Fewer columns (2) than the required number of columns (3) detected." # nolint: line_length_linter
-  )
-  # With 3 columns (including an optional `as_of` column) the check fails
-  target_tbl$as_of <- Sys.Date()
-  invalid_ts <- check_target_tbl_colnames(
-    target_tbl,
-    target_type = "time-series",
-    file_path = "time-series.csv",
-    hub_path
-  )
-  expect_s3_class(invalid_ts, "check_error")
-  expect_equal(
-    cli::ansi_strip(invalid_ts$message) |> stringr::str_squish(),
-    "Column names must be consistent with expected column names for time-series target type data. Required column \"target\" is missing. | Fewer columns (3) than the required number of columns (4) detected." # nolint: line_length_linter
-  )
-
-  # With 3 columns (including an optional `as_of` column) & NULL target keys check passes
-  ## Modify the config to have null target keys
-  config_tasks <- hubUtils::read_config(hub_path)
-  # restrict to first round and model task
-  config_tasks$rounds[[1]]$model_tasks <- config_tasks$rounds[[1]]$model_tasks[
-    1
-  ]
-  # Assing NULL to target_keys
-  config_tasks <- purrr::assign_in(
-    config_tasks,
-    list(
-      "rounds",
-      1,
-      "model_tasks",
-      1,
-      "target_metadata",
-      1,
-      "target_keys"
-    ),
-    NULL
-  )
-  # Remove target task ID
-  config_tasks$rounds[[1]]$model_tasks[[1]]$task_ids[["target"]] <- NULL
-
-  local_mocked_bindings(
-    read_config = function(hub_path) {
-      config_tasks
-    }
-  )
-
-  # In time-series output, the allowance of additional columns means the target
-  #  column is not flagged as invalid
-  valid_ts <- check_target_tbl_colnames(
-    target_tbl,
-    target_type = "time-series",
-    file_path = "time-series.csv",
-    hub_path
-  )
-  expect_s3_class(valid_ts, "check_success")
-  expect_equal(
-    cli::ansi_strip(valid_ts$message) |> stringr::str_squish(),
-    "Column names are consistent with expected column names for time-series target type data."
-  )
-
-  target_tbl$target_end_date <- NULL
-  # With 2 columns (including an optional `as_of` column) & NULL target keys, check fails
-  invalid_ts <- check_target_tbl_colnames(
-    target_tbl,
-    target_type = "time-series",
-    file_path = "time-series.csv",
-    hub_path
-  )
-  expect_s3_class(invalid_ts, "check_error")
-  expect_equal(
-    cli::ansi_strip(invalid_ts$message) |> stringr::str_squish(),
-    "Column names must be consistent with expected column names for time-series target type data. Fewer columns (2) than the required number of columns (3) detected." # nolint: line_length_linter
   )
 })
 
@@ -348,5 +241,88 @@ test_that("check_target_tbl_colnames detects missing and extra columns with v6 c
   expect_match(
     cli::ansi_strip(invalid_oo$message),
     '"extra_col.*not defined in.*target-data\\.json'
+  )
+})
+
+test_that("check_target_tbl_colnames allows as_of in oracle-output (inference mode)", {
+  hub_path <- system.file("testhubs/v5/target_file", package = "hubUtils")
+  target_tbl <- read_target_file("oracle-output.csv", hub_path)
+
+  # Add as_of column - should now be valid
+  target_tbl$as_of <- as.Date("2024-01-15")
+
+  valid_oo <- check_target_tbl_colnames(
+    target_tbl,
+    target_type = "oracle-output",
+    file_path = "oracle-output.csv",
+    hub_path
+  )
+  expect_s3_class(valid_oo, "check_success")
+})
+
+test_that("check_target_tbl_colnames works with date_col for calculated date columns (inference mode)", {
+  hub_path <- system.file("testhubs/v5/target_file", package = "hubUtils")
+  target_tbl <- read_target_file("time-series.csv", hub_path)
+
+  # Mock scenario: target_end_date is calculated from origin_date + horizon
+  # So it's not in task IDs
+  local_mocked_bindings(
+    get_task_id_names = function(config) c("location", "target")
+  )
+
+  # Without date_col, should pass as time-series allows additional columns
+  valid_ts <- check_target_tbl_colnames(
+    target_tbl,
+    target_type = "time-series",
+    file_path = "time-series.csv",
+    hub_path
+  )
+  expect_s3_class(valid_ts, "check_success")
+  # Check that inference mode warning is included
+  expect_match(
+    cli::ansi_strip(valid_ts$message) |> stringr::str_squish(),
+    "Column name validation for time-series data in inference mode is limited"
+  )
+
+  # With date_col, should pass and include warning
+  valid_ts_date_col <- check_target_tbl_colnames(
+    target_tbl,
+    target_type = "time-series",
+    file_path = "time-series.csv",
+    hub_path,
+    date_col = "target_end_date"
+  )
+  expect_s3_class(valid_ts_date_col, "check_success")
+
+  # Remove only date col
+  target_tbl$target_end_date <- NULL
+
+  # With date_col, missing col should be reported explicitly
+  invalid_date_col <- check_target_tbl_colnames(
+    target_tbl,
+    target_type = "time-series",
+    file_path = "time-series.csv",
+    hub_path,
+    date_col = "target_end_date"
+  )
+  expect_s3_class(invalid_date_col, "check_error")
+  expect_match(
+    cli::ansi_strip(invalid_date_col$message),
+    "Required column \"target_end_date\" is missing"
+  )
+
+  # Without date_col, should pass as it is not possible for inference mode to
+  # detect the missing column
+  undetectable_ts <- check_target_tbl_colnames(
+    target_tbl,
+    target_type = "time-series",
+    file_path = "time-series.csv",
+    hub_path
+  )
+  expect_s3_class(undetectable_ts, "check_success")
+  # Check that inference mode warning is included
+  expect_match(
+    cli::ansi_strip(undetectable_ts$message) |> stringr::str_squish(),
+    "Column name validation for time-series data in inference mode is limited"
   )
 })
