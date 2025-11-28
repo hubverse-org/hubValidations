@@ -143,3 +143,32 @@ test_that("validate_target_data returns early as expected", {
   test_early_return_val_target_data("target_tbl_values")
   test_early_return_val_target_data("target_tbl_output_type_ids")
 })
+
+# v6 config-based validation ----
+test_that("validate_target_data works with v6 target-data.json config", {
+  skip_if_not_installed("hubUtils", minimum_version = "0.1.0")
+
+  hub_path <- system.file("testhubs/v6/target_file", package = "hubUtils")
+
+  res_ts <- validate_target_data(
+    hub_path,
+    file_path = "time-series.csv",
+    target_type = "time-series"
+  )
+  expect_s3_class(res_ts, c("target_validations", "hub_validations"))
+  expect_message(
+    check_for_errors(res_ts),
+    "All validation checks have been successful."
+  )
+
+  res_oo <- validate_target_data(
+    hub_path,
+    file_path = "oracle-output.csv",
+    target_type = "oracle-output"
+  )
+  expect_s3_class(res_oo, c("target_validations", "hub_validations"))
+  expect_message(
+    check_for_errors(res_oo),
+    "All validation checks have been successful."
+  )
+})

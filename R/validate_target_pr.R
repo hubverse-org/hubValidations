@@ -129,6 +129,7 @@ validate_target_pr <- function(
   file_modification_check = c("none", "message", "failure", "error"),
   allow_target_type_deletion = FALSE
 ) {
+  checkmate::assert_string(date_col, null.ok = TRUE)
   file_modification_check <- rlang::arg_match(file_modification_check)
   output_type_id_datatype <- rlang::arg_match(output_type_id_datatype)
   target_data_dir <- "target-data" # nolint: object_name_linter

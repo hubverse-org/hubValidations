@@ -10,6 +10,11 @@
 #' In `oracle-output` data, there should be only a single observation,
 #' regardless of the `as_of` value so the column it is not be included when
 #' determining duplicates.
+#' @param date_col Optional column name to be interpreted as date for dataset
+#' connection. Useful when the date column does not correspond to a valid task ID
+#' (e.g., calculated from other task IDs like `origin_date + horizon`), particularly when
+#' it is also a partitioning column. Ignored when
+#' `target-data.json` config is provided.
 #' @inheritParams check_target_tbl_colnames
 #' @inheritParams hubData::connect_target_timeseries
 #' @inheritParams hubData::connect_target_oracle_output

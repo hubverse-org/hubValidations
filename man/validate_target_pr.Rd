@@ -50,9 +50,13 @@ not valid for the data (e.g. trying to coerce\code{"character"} values to
 \code{"double"}) will likely result in an error or potentially unexpected
 behaviour so use with care.}
 
-\item{date_col}{Optional column name to be interpreted as date. Default is \code{NULL}.
-Useful when the required date column is a partitioning column in the target data
-and does not have the same name as a date typed task ID variable in the config.}
+\item{date_col}{Optional name of the column containing the date observations
+actually occurred (e.g., \code{"target_end_date"}) to be interpreted as date.
+Useful when this column does not correspond to a valid task ID (e.g.,
+calculated from other task IDs like \code{origin_date + horizon}) for: (1) correct
+schema creation, particularly when it's also a partitioning column, and (2)
+more robust column name validation when \code{target-data.json} config does not
+exist. Ignored when \code{target-data.json} exists.}
 
 \item{na}{A character vector of strings to interpret as missing values. Only
 applies to CSV files. The default is \code{c("NA", "")}. Useful when actual character

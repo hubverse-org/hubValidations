@@ -23,9 +23,11 @@ being validated.}
 \item{target_type}{Type of target data to retrieve matching files. One of "time-series" or
 "oracle-output". Defaults to "time-series".}
 
-\item{date_col}{Optional column name to be interpreted as date. Default is \code{NULL}.
-Useful when the required date column is a partitioning column in the target data
-and does not have the same name as a date typed task ID variable in the config.}
+\item{date_col}{Optional column name to be interpreted as date for schema
+creation. Useful when the date column does not correspond to a valid task ID
+(e.g., calculated from other task IDs like \code{origin_date + horizon}), particularly when
+it is also a partitioning column. Ignored when
+\code{target-data.json} config is provided.}
 
 \item{na}{A character vector of strings to interpret as missing values. Only
 applies to CSV files. The default is \code{c("NA", "")}. Useful when actual character
@@ -74,4 +76,18 @@ Returned object also inherits from subclass \verb{<hub_check>}.
 \description{
 Check that a target data file has the correct column types according to
 target type
+}
+\details{
+Column type validation depends on whether a \code{target-data.json} configuration
+file is provided:
+
+\strong{With \code{target-data.json} config:}
+Expected column types are determined directly from the schema defined in
+the configuration. Validation is performed against the schema specifications
+in \code{target-data.json}.
+
+\strong{Without \code{target-data.json} config:}
+Expected column types are determined from the dataset itself and validated
+for internal consistency across files, which mainly applies to partitioned
+datasets.
 }
