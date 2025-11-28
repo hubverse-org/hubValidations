@@ -67,6 +67,7 @@ validate_target_submission <- function(
   validations_cfg_path = NULL,
   skip_check_config = FALSE
 ) {
+  checkmate::assert_string(date_col, null.ok = TRUE)
   check_hub_config <- new_target_validations()
   target_type <- rlang::arg_match(target_type)
   output_type_id_datatype <- rlang::arg_match(output_type_id_datatype)
