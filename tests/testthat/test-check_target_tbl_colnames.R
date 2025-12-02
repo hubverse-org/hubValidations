@@ -326,3 +326,59 @@ test_that("check_target_tbl_colnames works with date_col for calculated date col
     "Column name validation for time-series data in inference mode is limited"
   )
 })
+
+# v6 config-based validation tests ----
+test_that("check_target_tbl_colnames works with v6 target-data.json config", {
+  skip_if_not_installed("hubUtils", minimum_version = "0.1.0")
+
+  hub_path <- system.file("testhubs/v6/target_file", package = "hubUtils")
+  config_target_data <- hubUtils::read_config(hub_path, "target-data")
+
+  # Valid oracle-output passes
+  target_tbl <- read_target_file("oracle-output.csv", hub_path)
+  valid_oo <- check_target_tbl_colnames(
+    target_tbl,
+    target_type = "oracle-output",
+    file_path = "oracle-output.csv",
+    hub_path,
+    config_target_data = config_target_data
+  )
+  expect_s3_class(valid_oo, "check_success")
+
+  # Valid time-series passes
+  target_tbl <- read_target_file("time-series.csv", hub_path)
+  valid_ts <- check_target_tbl_colnames(
+    target_tbl,
+    target_type = "time-series",
+    file_path = "time-series.csv",
+    hub_path,
+    config_target_data = config_target_data
+  )
+  expect_s3_class(valid_ts, "check_success")
+})
+
+test_that("check_target_tbl_colnames detects missing and extra columns with v6 config", {
+  skip_if_not_installed("hubUtils", minimum_version = "0.1.0")
+
+  hub_path <- system.file("testhubs/v6/target_file", package = "hubUtils")
+  config_target_data <- hubUtils::read_config(hub_path, "target-data")
+  target_tbl <- read_target_file("oracle-output.csv", hub_path)
+
+  # Remove required column and add extra
+  target_tbl$oracle_value <- NULL
+  target_tbl$extra_col <- 1
+
+  invalid_oo <- check_target_tbl_colnames(
+    target_tbl,
+    target_type = "oracle-output",
+    file_path = "oracle-output.csv",
+    hub_path,
+    config_target_data = config_target_data
+  )
+  expect_s3_class(invalid_oo, "check_error")
+  expect_match(cli::ansi_strip(invalid_oo$message), "oracle_value.*missing")
+  expect_match(
+    cli::ansi_strip(invalid_oo$message),
+    '"extra_col.*not defined in.*target-data\\.json'
+  )
+})

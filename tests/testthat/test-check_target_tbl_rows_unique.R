@@ -56,7 +56,7 @@ test_that("check_target_tbl_rows_unique works time-series data", {
   expect_s3_class(invalid_ts, "check_failure")
   expect_equal(
     cli::ansi_strip(invalid_ts$message) |> stringr::str_squish(),
-    "time-series target data rows must be unique. Rows containing duplicate combinations: 2 and 3" # nolint: line_length_linter
+    "time-series target data rows must be unique. Rows containing duplicate value combinations: 2 and 3" # nolint: line_length_linter
   )
   expect_equal(invalid_ts$duplicate_rows, 2:3)
 
@@ -81,7 +81,7 @@ test_that("check_target_tbl_rows_unique works time-series data", {
   expect_s3_class(invalid_ts_versioned, "check_failure")
   expect_equal(
     cli::ansi_strip(invalid_ts_versioned$message) |> stringr::str_squish(),
-    "time-series target data rows must be unique. Rows containing duplicate combinations: 2 and 4" # nolint: line_length_linter
+    "time-series target data rows must be unique. Rows containing duplicate value combinations: 2 and 4" # nolint: line_length_linter
   )
   expect_equal(invalid_ts_versioned$duplicate_rows, c(2L, 4L))
 })
@@ -140,7 +140,7 @@ test_that("check_target_tbl_rows_unique works oracle-output data", {
   expect_s3_class(invalid_oo, "check_failure")
   expect_equal(
     cli::ansi_strip(invalid_oo$message) |> stringr::str_squish(),
-    "oracle-output target data rows must be unique. Rows containing duplicate combinations: 2 and 3" # nolint: line_length_linter
+    "oracle-output target data rows must be unique. Rows containing duplicate value combinations: 2 and 3" # nolint: line_length_linter
   )
   expect_equal(invalid_oo$duplicate_rows, 2:3)
 
@@ -164,7 +164,63 @@ test_that("check_target_tbl_rows_unique works oracle-output data", {
   expect_s3_class(invalid_oo_versioned, "check_failure")
   expect_equal(
     cli::ansi_strip(invalid_oo_versioned$message) |> stringr::str_squish(),
-    "oracle-output target data rows must be unique. Rows containing duplicate combinations: 2, 3, and 4" # nolint: line_length_linter
+    "oracle-output target data rows must be unique. Rows containing duplicate value combinations: 2, 3, and 4" # nolint: line_length_linter
   )
   expect_equal(invalid_oo_versioned$duplicate_rows, 2:4)
+})
+
+# v6 config-based validation ----
+test_that("check_target_tbl_rows_unique works with v6 config", {
+  skip_if_not_installed("hubUtils", minimum_version = "0.1.0")
+
+  hub_path <- system.file("testhubs/v6/target_file", package = "hubUtils")
+  config_target_data <- hubUtils::read_config(hub_path, "target-data")
+
+  # Valid time-series
+  target_tbl <- read_target_file("time-series.csv", hub_path)
+  valid_ts <- check_target_tbl_rows_unique(
+    target_tbl,
+    target_type = "time-series",
+    file_path = "time-series.csv",
+    hub_path = hub_path,
+    config_target_data = config_target_data
+  )
+  expect_s3_class(valid_ts, "check_success")
+
+  # Valid oracle-output
+  target_tbl <- read_target_file("oracle-output.csv", hub_path)
+  valid_oo <- check_target_tbl_rows_unique(
+    target_tbl,
+    target_type = "oracle-output",
+    file_path = "oracle-output.csv",
+    hub_path = hub_path,
+    config_target_data = config_target_data
+  )
+  expect_s3_class(valid_oo, "check_success")
+})
+
+test_that("check_target_tbl_rows_unique error message references config with v6 config", {
+  skip_if_not_installed("hubUtils", minimum_version = "0.1.0")
+
+  hub_path <- system.file("testhubs/v6/target_file", package = "hubUtils")
+  config_target_data <- hubUtils::read_config(hub_path, "target-data")
+  target_tbl <- read_target_file("time-series.csv", hub_path)
+
+  # Create duplicates
+  target_tbl[2, ] <- target_tbl[1, ]
+  target_tbl[2, "observation"] <- 999 # Change value to show it's not checked
+
+  invalid_ts <- check_target_tbl_rows_unique(
+    target_tbl,
+    target_type = "time-series",
+    file_path = "time-series.csv",
+    hub_path = hub_path,
+    config_target_data = config_target_data
+  )
+
+  expect_s3_class(invalid_ts, "check_failure")
+  expect_match(
+    cli::ansi_strip(invalid_ts$message),
+    "Rows containing duplicate value combinations across columns defined in.*target-data\\.json.*: 2"
+  )
 })

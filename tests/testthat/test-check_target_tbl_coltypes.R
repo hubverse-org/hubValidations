@@ -318,3 +318,99 @@ test_that("check_target_tbl_coltypes works with date_col parameter", {
     "target_end_date.*not found"
   )
 })
+
+# v6 config-based validation ----
+test_that("check_target_tbl_coltypes works with valid v6 schema", {
+  skip_if_not_installed("hubUtils", minimum_version = "0.1.0")
+
+  hub_path <- system.file("testhubs/v6/target_file", package = "hubUtils")
+
+  # Valid time-series passes
+  target_tbl <- read_target_file("time-series.csv", hub_path)
+  valid_ts <- check_target_tbl_coltypes(
+    target_tbl,
+    target_type = "time-series",
+    file_path = "time-series.csv",
+    hub_path = hub_path
+  )
+  expect_s3_class(valid_ts, "check_success")
+  expect_match(
+    cli::ansi_strip(valid_ts$message),
+    "target-data\\.json"
+  )
+
+  # Valid oracle-output passes
+  target_tbl <- read_target_file("oracle-output.csv", hub_path)
+  valid_oo <- check_target_tbl_coltypes(
+    target_tbl,
+    target_type = "oracle-output",
+    file_path = "oracle-output.csv",
+    hub_path = hub_path
+  )
+  expect_s3_class(valid_oo, "check_success")
+  expect_match(
+    cli::ansi_strip(valid_oo$message),
+    "target-data\\.json"
+  )
+})
+
+test_that("check_target_tbl_coltypes errors with invalid v6 schema", {
+  skip_if_not_installed("hubUtils", minimum_version = "0.1.0")
+
+  hub_path <- system.file("testhubs/v6/target_file", package = "hubUtils")
+  target_tbl <- read_target_file("time-series.csv", hub_path)
+
+  # Force a type mismatch - make observation character instead of numeric
+  target_tbl$observation <- as.character(target_tbl$observation)
+
+  invalid_types <- check_target_tbl_coltypes(
+    target_tbl,
+    target_type = "time-series",
+    file_path = "time-series.csv",
+    hub_path = hub_path
+  )
+
+  expect_s3_class(invalid_types, "check_failure")
+  expect_match(
+    cli::ansi_strip(invalid_types$message),
+    "target-data\\.json.*`observation` should be <double> not <character>."
+  )
+})
+
+test_that("check_target_tbl_coltypes works with partitioned v6 hub", {
+  skip_if_not_installed("hubUtils", minimum_version = "0.1.0")
+
+  hub_path <- system.file("testhubs/v6/target_dir", package = "hubUtils")
+  target_tbl <- read_target_file(
+    "time-series/target=wk%20flu%20hosp%20rate/part-0.parquet",
+    hub_path
+  )
+
+  valid_ts <- check_target_tbl_coltypes(
+    target_tbl,
+    target_type = "time-series",
+    file_path = "time-series/target=wk%20flu%20hosp%20rate/part-0.parquet",
+    hub_path = hub_path
+  )
+  expect_s3_class(valid_ts, "check_success")
+  expect_match(
+    cli::ansi_strip(valid_ts$message),
+    "target-data\\.json"
+  )
+
+  # Force a type mismatch
+  target_tbl$observation <- as.character(target_tbl$observation)
+
+  invalid_ts <- check_target_tbl_coltypes(
+    target_tbl,
+    target_type = "time-series",
+    file_path = "time-series/target=wk%20flu%20hosp%20rate/part-0.parquet",
+    hub_path = hub_path
+  )
+
+  expect_s3_class(invalid_ts, "check_failure")
+  expect_match(
+    cli::ansi_strip(invalid_ts$message),
+    "target-data\\.json.*`observation` should be <double> not <character>."
+  )
+})

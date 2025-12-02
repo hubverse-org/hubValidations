@@ -151,7 +151,8 @@ validate_target_data <- function(
       target_tbl = target_tbl,
       target_type = target_type,
       file_path = file_path,
-      hub_path = hub_path
+      hub_path = hub_path,
+      config_target_data = config_target_data
     ),
     file_path
   )
@@ -177,7 +178,8 @@ validate_target_data <- function(
       target_tbl_chr = target_tbl_chr,
       target_type = target_type,
       file_path = file_path,
-      hub_path = hub_path
+      hub_path = hub_path,
+      config_target_data = config_target_data
     ),
     file_path
   )
@@ -189,7 +191,8 @@ validate_target_data <- function(
       target_tbl = target_tbl,
       target_type = target_type,
       file_path = file_path,
-      hub_path = hub_path
+      hub_path = hub_path,
+      config_target_data = config_target_data
     ),
     file_path
   )

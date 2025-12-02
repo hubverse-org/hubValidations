@@ -8,7 +8,8 @@ check_target_tbl_output_type_ids(
   target_tbl_chr,
   target_type = c("oracle-output", "time-series"),
   file_path,
-  hub_path
+  hub_path,
+  config_target_data = NULL
 )
 }
 \arguments{
@@ -30,6 +31,10 @@ For more details consult the
 in the \code{arrow} package.
 The hub must be fully configured with valid \code{admin.json} and \code{tasks.json}
 files within the \code{hub-config} directory.}
+
+\item{config_target_data}{Optional. A \code{target-data.json} config object. If
+provided, validation uses deterministic schema from config. If \code{NULL}
+(default), validation uses inference from \code{tasks.json}.}
 }
 \value{
 Depending on whether validation has succeeded, one of:
@@ -45,4 +50,19 @@ This check is only performed when the target data file contains an
 \code{output_type_id} column. It verifies that non-distributional
 output types have all NA output type IDs, and that distributional output types
 (\code{cdf}, \code{pmf}) include the complete output_type_id set defined in the hub config.
+}
+\details{
+When checking for completeness of distributional output types, data is grouped
+by observation unit to verify each unit has the complete set of output_type_id
+values.
+
+\strong{With \code{target-data.json} config:}
+Observable unit is determined from the config's \code{observable_unit} specification.
+
+\strong{Without \code{target-data.json} config:}
+Observable unit is inferred from task ID columns present in the data.
+
+The \code{as_of} column is NOT included in the grouping. Oracle data is designed to
+contain a single version per observable unit with a one-to-one mapping to model
+output data.
 }

@@ -8,6 +8,21 @@
 #' - `pmf` oracle values sum to `1` for each observation unit.
 #' - `cdf` oracle values are non-decreasing for each observation unit when
 #' sorted by the `output_type_id` set defined in the hub config.
+#'
+#' @details
+#' When validating oracle values, data is grouped by observation unit to check
+#' PMF sums and CDF monotonicity within each unit.
+#'
+#' **With `target-data.json` config:**
+#' Observable unit is determined from the config's `observable_unit` specification.
+#'
+#' **Without `target-data.json` config:**
+#' Observable unit is inferred from task ID columns present in the data.
+#'
+#' The `as_of` column is NOT included in the grouping. Oracle data is designed to
+#' contain a single version per observable unit with a one-to-one mapping to model
+#' output data.
+#'
 #' @inheritParams check_target_tbl_output_type_ids
 #' @inheritParams check_target_tbl_colnames
 #' @inherit check_tbl_col_types params return
@@ -19,7 +34,8 @@ check_target_tbl_oracle_value <- function(
     "time-series"
   ),
   file_path,
-  hub_path
+  hub_path,
+  config_target_data = NULL
 ) {
   target_type <- rlang::arg_match(target_type)
   if (target_type == "time-series") {
@@ -54,8 +70,8 @@ check_target_tbl_oracle_value <- function(
   config_tasks <- read_config(hub_path)
 
   check_vals <- check_oracle_value_vals(target_tbl)
-  check_cdf <- check_cdf_oracle_value(target_tbl, config_tasks)
-  check_pmf <- check_pmf_oracle_value(target_tbl, config_tasks)
+  check_cdf <- check_cdf_oracle_value(target_tbl, config_tasks, config_target_data)
+  check_pmf <- check_pmf_oracle_value(target_tbl, config_tasks, config_target_data)
 
   details <- details_summarise_oracle_value_checks(
     check_vals,
@@ -115,19 +131,23 @@ check_oracle_value_vals <- function(tbl) {
 #'
 #' @param tbl An oracle output data frame.
 #' @param config_tasks List of hub task configurations.
+#' @param config_target_data Optional config from target-data.json.
 #' @return A data frame of rows from observational units with invalid PMF sums,
 #' or `NULL`.
 #' @noRd
 #' @importFrom dplyr near left_join
-check_pmf_oracle_value <- function(tbl, config_tasks) {
+check_pmf_oracle_value <- function(tbl, config_tasks, config_target_data = NULL) {
   tbl <- tbl[tbl$output_type == "pmf", ]
 
+  # For oracle-output, as_of should NOT be included in grouping.
+  # Oracle data is designed to contain a single version per observable unit
+  # with a one-to-one mapping to model output data.
   obs_unit <- get_obs_unit(
     tbl,
     config_tasks,
-    config_target_data = NULL,
-    target_type = NULL,
-    include_as_of = TRUE
+    config_target_data,
+    target_type = "oracle-output",
+    include_as_of = FALSE
   )
   tbl <- group_by(tbl, across(all_of(obs_unit)))
 
@@ -158,9 +178,10 @@ check_pmf_oracle_value <- function(tbl, config_tasks) {
 #'
 #' @param tbl An oracle output data frame.
 #' @param config_tasks List of hub task configurations.
+#' @param config_target_data Optional config from target-data.json.
 #' @return A data frame of rows violating CDF monotonicity, or `NULL`.
 #' @noRd
-check_cdf_oracle_value <- function(tbl, config_tasks) {
+check_cdf_oracle_value <- function(tbl, config_tasks, config_target_data = NULL) {
   tbl <- tbl[tbl$output_type == "cdf", ]
   # Gather expected unique vectors of output_type_id values from config
   output_type_ids <- extract_output_type_id_vals(
@@ -175,7 +196,8 @@ check_cdf_oracle_value <- function(tbl, config_tasks) {
     ~ check_oracle_value_cdf_crossing(
       tbl = tbl,
       output_type_ids = .x,
-      config_tasks = config_tasks
+      config_tasks = config_tasks,
+      config_target_data = config_target_data
     )
   ) |>
     purrr::compact() |>
@@ -198,13 +220,15 @@ check_cdf_oracle_value <- function(tbl, config_tasks) {
 #' @param tbl A data frame for one or more CDF observation units.
 #' @param output_type_ids A vector of expected `output_type_id` values in order.
 #' @param config_tasks List of hub task configurations.
+#' @param config_target_data Optional config from target-data.json.
 #' @return A data frame of rows with decreasing oracle values, or `NULL`.
 #' @noRd
 #' @importFrom dplyr arrange filter mutate select ungroup all_of
 check_oracle_value_cdf_crossing <- function(
   tbl,
   output_type_ids,
-  config_tasks
+  config_tasks,
+  config_target_data = NULL
 ) {
   tbl <- tbl[tbl$output_type_id %in% output_type_ids, ]
 
@@ -217,12 +241,15 @@ check_oracle_value_cdf_crossing <- function(
     tbl[["output_type_id"]],
     levels = output_type_ids
   )
+  # For oracle-output, as_of should NOT be included in grouping.
+  # Oracle data is designed to contain a single version per observable unit
+  # with a one-to-one mapping to model output data.
   tbl <- group_by_obs_unit(
     tbl,
     config_tasks,
-    config_target_data = NULL,
-    target_type = NULL,
-    include_as_of = TRUE
+    config_target_data,
+    target_type = "oracle-output",
+    include_as_of = FALSE
   ) |>
     arrange(.data[["output_type_id"]], .by_group = TRUE)
 

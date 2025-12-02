@@ -3,11 +3,21 @@
 #' Check that there are no duplicate rows in target data files being validated.
 #'
 #' @details
-#' If datasets are versioned, multiple observations are allowed in `time-series`
-#' target data, so long as they have different `as_of` values. The `as_of` column
-#' is therefore included when determining duplicates.
-#' In `oracle-output` data, there should be only a single observation,
-#' regardless of the `as_of` value so the column it is not be included when
+#' Row uniqueness is determined by checking for duplicate combinations of
+#' key columns (excluding value columns).
+#'
+#' **With `target-data.json` config:**
+#' Columns to check are determined from the config's `observable_unit`
+#' specification. For `oracle-output` data with output type IDs, the
+#' `output_type` and `output_type_id` columns are also included in the
+#' uniqueness check.
+#'
+#' **Without `target-data.json` config:**
+#' For `time-series` data, if versioned, multiple observations are allowed
+#' so long as they have different `as_of` values. The `as_of` column is
+#' therefore included when determining duplicates.
+#' For `oracle-output` data, there should be only a single observation,
+#' regardless of the `as_of` value, so the column is not included when
 #' determining duplicates.
 #' @inheritParams check_target_tbl_colnames
 #' @inherit check_tbl_col_types return
@@ -19,18 +29,40 @@ check_target_tbl_rows_unique <- function(
     "oracle-output"
   ),
   file_path,
-  hub_path
+  hub_path,
+  config_target_data = NULL
 ) {
   target_type <- rlang::arg_match(target_type)
 
-  if (target_type == "time-series") {
-    target_tbl[["observation"]] <- NULL
+  # Determine columns to check for uniqueness
+  if (!is.null(config_target_data)) {
+    # Config mode: use observable unit from config
+    check_cols <- get_obs_unit_from_config(
+      config_target_data,
+      target_type,
+      include_as_of = target_type == "time-series"
+    )
+    # For oracle-output, include output_type columns if present
+    if (
+      target_type == "oracle-output" &&
+        hubUtils::get_has_output_type_ids(config_target_data)
+    ) {
+      check_cols <- c(check_cols, "output_type", "output_type_id")
+    }
   } else {
-    target_tbl[["oracle_value"]] <- NULL
-    target_tbl[["as_of"]] <- NULL
+    # Inference mode: remove value columns and check remaining for duplicates
+    cols_to_remove <- switch(
+      target_type,
+      `time-series` = "observation",
+      `oracle-output` = c("oracle_value", "as_of")
+    )
+    # Only remove columns that actually exist
+    cols_to_remove <- intersect(cols_to_remove, colnames(target_tbl))
+    check_cols <- setdiff(colnames(target_tbl), cols_to_remove)
   }
 
-  duplicates <- duplicated(target_tbl)
+  # Check for duplicates on the determined columns
+  duplicates <- duplicated(target_tbl[, check_cols, drop = FALSE])
   check <- !any(duplicates)
 
   if (check) {
@@ -38,9 +70,15 @@ check_target_tbl_rows_unique <- function(
     duplicate_rows <- NULL
   } else {
     duplicate_rows <- which(duplicates)
-    details <- cli::format_inline(
-      "Rows containing duplicate combinations: {.val {duplicate_rows}}"
-    )
+    if (!is.null(config_target_data)) {
+      details <- cli::format_inline(
+        "Rows containing duplicate value combinations across columns defined in {.file target-data.json}: {.val {duplicate_rows}}" # nolint: line_length_linter
+      )
+    } else {
+      details <- cli::format_inline(
+        "Rows containing duplicate value combinations: {.val {duplicate_rows}}"
+      )
+    }
   }
 
   capture_check_cnd(

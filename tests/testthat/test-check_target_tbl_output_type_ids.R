@@ -275,3 +275,39 @@ test_that("check_target_tbl_output_type_ids works with 2 dist targets", {
     "pmf"
   )
 })
+
+# v6 config-based validation ----
+test_that("check_target_tbl_output_type_ids works with v6 config", {
+  skip_if_not_installed("hubUtils", minimum_version = "0.1.0")
+
+  hub_path <- system.file("testhubs/v6/target_file", package = "hubUtils")
+  config_target_data <- hubUtils::read_config(hub_path, "target-data")
+
+  # Valid oracle-output
+  target_tbl <- read_target_file("oracle-output.csv", hub_path)
+  target_tbl_chr <- hubData::coerce_to_character(target_tbl)
+
+  valid_oo <- check_target_tbl_output_type_ids(
+    target_tbl_chr,
+    target_type = "oracle-output",
+    file_path = "oracle-output.csv",
+    hub_path = hub_path,
+    config_target_data = config_target_data
+  )
+  expect_s3_class(valid_oo, "check_success")
+
+  # Invalid oracle-output - remove some output_type_id rows to create incomplete set
+  target_tbl_incomplete <- target_tbl[-(1:10), ] # Remove first 10 rows
+  target_tbl_incomplete_chr <- hubData::coerce_to_character(
+    target_tbl_incomplete
+  )
+
+  invalid_oo <- check_target_tbl_output_type_ids(
+    target_tbl_incomplete_chr,
+    target_type = "oracle-output",
+    file_path = "oracle-output.csv",
+    hub_path = hub_path,
+    config_target_data = config_target_data
+  )
+  expect_s3_class(invalid_oo, "check_error")
+})

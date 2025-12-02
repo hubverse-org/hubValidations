@@ -8,7 +8,8 @@ check_target_tbl_rows_unique(
   target_tbl,
   target_type = c("time-series", "oracle-output"),
   file_path,
-  hub_path
+  hub_path,
+  config_target_data = NULL
 )
 }
 \arguments{
@@ -30,6 +31,10 @@ For more details consult the
 in the \code{arrow} package.
 The hub must be fully configured with valid \code{admin.json} and \code{tasks.json}
 files within the \code{hub-config} directory.}
+
+\item{config_target_data}{Optional. A \code{target-data.json} config object. If
+provided, validation uses deterministic schema from config. If \code{NULL}
+(default), validation uses inference from \code{tasks.json}.}
 }
 \value{
 Depending on whether validation has succeeded, one of:
@@ -44,10 +49,20 @@ Returned object also inherits from subclass \verb{<hub_check>}.
 Check that there are no duplicate rows in target data files being validated.
 }
 \details{
-If datasets are versioned, multiple observations are allowed in \code{time-series}
-target data, so long as they have different \code{as_of} values. The \code{as_of} column
-is therefore included when determining duplicates.
-In \code{oracle-output} data, there should be only a single observation,
-regardless of the \code{as_of} value so the column it is not be included when
+Row uniqueness is determined by checking for duplicate combinations of
+key columns (excluding value columns).
+
+\strong{With \code{target-data.json} config:}
+Columns to check are determined from the config's \code{observable_unit}
+specification. For \code{oracle-output} data with output type IDs, the
+\code{output_type} and \code{output_type_id} columns are also included in the
+uniqueness check.
+
+\strong{Without \code{target-data.json} config:}
+For \code{time-series} data, if versioned, multiple observations are allowed
+so long as they have different \code{as_of} values. The \code{as_of} column is
+therefore included when determining duplicates.
+For \code{oracle-output} data, there should be only a single observation,
+regardless of the \code{as_of} value, so the column is not included when
 determining duplicates.
 }

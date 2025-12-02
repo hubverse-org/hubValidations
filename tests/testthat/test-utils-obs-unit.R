@@ -8,15 +8,15 @@ test_that("get_obs_unit works with oracle-output (v5 inference mode)", {
   expect_type(obs_unit, "character")
   expect_setequal(obs_unit, c("location", "target_end_date", "target"))
 
-  # With as_of column - should always include it in inference mode
+  # With as_of column - should include it when include_as_of = TRUE
   tbl$as_of <- as.Date("2024-01-15")
-  obs_unit_with_as_of <- get_obs_unit(tbl, config_tasks)
+  obs_unit_with_as_of <- get_obs_unit(tbl, config_tasks, include_as_of = TRUE)
   expect_setequal(
     obs_unit_with_as_of,
     c("location", "target_end_date", "target", "as_of")
   )
 
-  # include_as_of parameter should have no effect in inference mode
+  # include_as_of = FALSE should exclude as_of even in inference mode
   as_of_false <- get_obs_unit(
     tbl,
     config_tasks,
@@ -24,7 +24,8 @@ test_that("get_obs_unit works with oracle-output (v5 inference mode)", {
     target_type = NULL,
     include_as_of = FALSE
   )
-  expect_true("as_of" %in% as_of_false)
+  expect_false("as_of" %in% as_of_false)
+  expect_setequal(as_of_false, c("location", "target_end_date", "target"))
 })
 
 test_that("get_obs_unit validates required parameters in inference mode", {
@@ -61,9 +62,9 @@ test_that("get_obs_unit works with time-series (v5 inference mode)", {
   expect_type(obs_unit, "character")
   expect_setequal(obs_unit, c("target_end_date", "target", "location"))
 
-  # With as_of column
+  # With as_of column - should include it when include_as_of = TRUE
   tbl$as_of <- as.Date("2024-01-15")
-  obs_unit_with_as_of <- get_obs_unit(tbl, config_tasks)
+  obs_unit_with_as_of <- get_obs_unit(tbl, config_tasks, include_as_of = TRUE)
   expect_setequal(
     obs_unit_with_as_of,
     c("target_end_date", "target", "location", "as_of")
@@ -180,9 +181,13 @@ test_that("group_by_obs_unit works with v5 oracle-output", {
     c("location", "target_end_date", "target")
   )
 
-  # With as_of
+  # With as_of - should include it when include_as_of = TRUE
   tbl$as_of <- as.Date("2024-01-15")
-  grouped_with_as_of <- group_by_obs_unit(tbl, config_tasks)
+  grouped_with_as_of <- group_by_obs_unit(
+    tbl,
+    config_tasks,
+    include_as_of = TRUE
+  )
   expect_true("as_of" %in% dplyr::group_vars(grouped_with_as_of))
 })
 

@@ -40,7 +40,7 @@ Imports:
     fs,
     gh,
     hubAdmin (>= 1.9.0),
-    hubData (>= 2.0.0.9000),
+    hubData (>= 2.0.0.9001),
     hubUtils (>= 1.1.0),
     jsonlite,
     jsonvalidate,
