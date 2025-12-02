@@ -173,7 +173,7 @@ check_target_tbl_colnames <- function(
         cli::format_inline(
           "Column name validation for time-series data in inference mode is
           limited. For robust validation, create a {.file target-data.json}
-          config file."
+          config file. See {.href [`target-data.json` documentation](https://docs.hubverse.io/en/latest/user-guide/hub-config.html#hub-target-data-configuration-target-data-json-file)}"
         )
       )
     }
