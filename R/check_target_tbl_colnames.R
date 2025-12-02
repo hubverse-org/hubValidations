@@ -24,8 +24,8 @@
 #' type is performed by `check_target_tbl_coltypes()`.
 #'
 #' Inference mode validation for time-series data is limited. For robust
-#' validation, create a `target-data.json` config file. See 
-#' [`target-data.json` schema](https://docs.hubverse.io/en/latest/user-guide/hub-config.html#hub-target-data-configuration-target-data-json-file) 
+#' validation, create a `target-data.json` config file. See
+#' [`target-data.json` schema](https://docs.hubverse.io/en/latest/user-guide/hub-config.html#hub-target-data-configuration-target-data-json-file) # nolint: line_length_linter.
 #' for more information on the json schema scpecifics.
 #'
 #' @param target_tbl A tibble/data.frame of the contents of the target data file
@@ -173,7 +173,7 @@ check_target_tbl_colnames <- function(
         cli::format_inline(
           "Column name validation for time-series data in inference mode is
           limited. For robust validation, create a {.file target-data.json}
-          config file. See {.href [`target-data.json` documentation](https://docs.hubverse.io/en/latest/user-guide/hub-config.html#hub-target-data-configuration-target-data-json-file)}"
+          config file. See {.href [`target-data.json` documentation](https://docs.hubverse.io/en/latest/user-guide/hub-config.html#hub-target-data-configuration-target-data-json-file)}" # nolint: line_length_linter.
         )
       )
     }
