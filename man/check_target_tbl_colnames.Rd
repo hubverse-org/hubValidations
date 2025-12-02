@@ -10,7 +10,8 @@ check_target_tbl_colnames(
   target_type = c("time-series", "oracle-output"),
   file_path,
   hub_path,
-  config_target_data = NULL
+  config_target_data = NULL,
+  date_col = NULL
 )
 }
 \arguments{
@@ -36,6 +37,12 @@ files within the \code{hub-config} directory.}
 \item{config_target_data}{Optional. A \code{target-data.json} config object. If
 provided, validation uses deterministic schema from config. If \code{NULL}
 (default), validation uses inference from \code{tasks.json}.}
+
+\item{date_col}{Optional. Name of the date column in target data (e.g.,
+\code{"target_end_date"}) representing the date observations actually occurred.
+Only relevant when it is not a task ID defined in \code{tasks.json}.
+Enables deterministic validation in inference mode. Ignored when
+\code{config_target_data} is provided.}
 }
 \value{
 Depending on whether validation has succeeded, one of:
@@ -58,9 +65,22 @@ file is provided:
 Expected columns are determined directly from the configuration. The target
 table must contain exactly the columns defined in the config.
 
-\strong{Without \code{target-data.json} config:}
+\strong{Without \code{target-data.json} config (inference mode):}
 Expected columns are inferred from the task ID configuration in \code{tasks.json},
 allowed columns according to the target type, and expectations based on the
 detected output types in the target data. Additional optional columns
-(e.g., \code{as_of}) are allowed.
+(e.g., \code{as_of}) are allowed for time-series data.
+
+\strong{Note on date columns:} Target data always contains a date column (e.g.,
+\code{target_end_date}) representing when observations occurred. However, in
+horizon-based forecast hubs, task IDs may only define \code{origin_date}
+and \code{horizon} (with target dates calculated from these). In such cases,
+provide \code{date_col} to enable deterministic validation of the date column
+when it is not a valid task ID. Validation of date column existence and
+type is performed by \code{check_target_tbl_coltypes()}.
+
+Inference mode validation for time-series data is limited. For robust
+validation, create a \code{target-data.json} config file. See
+\href{https://docs.hubverse.io/en/latest/user-guide/hub-config.html#hub-target-data-configuration-target-data-json-file}{\code{target-data.json} schema}
+for more information on the json schema scpecifics.
 }

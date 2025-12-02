@@ -1,5 +1,12 @@
 #' Validate the contents of a submitted target data file.
 #'
+#' @param date_col Optional name of the column containing the date observations
+#' actually occurred (e.g., `"target_end_date"`) to be interpreted as date.
+#' Useful when this column does not correspond to a valid task ID (e.g.,
+#' calculated from other task IDs like `origin_date + horizon`) for: (1) correct
+#' schema creation, particularly when it's also a partitioning column, and (2)
+#' more robust column name validation when `target-data.json` config does not
+#' exist. Ignored when `target-data.json` exists.
 #' @inherit validate_target_file params return
 #' @inheritParams check_target_tbl_coltypes
 #' @details
@@ -55,6 +62,7 @@ validate_target_data <- function(
   validations_cfg_path = NULL,
   round_id = "default"
 ) {
+  checkmate::assert_string(date_col, null.ok = TRUE)
   target_type <- rlang::arg_match(target_type)
   output_type_id_datatype <- rlang::arg_match(output_type_id_datatype)
 
@@ -102,7 +110,8 @@ validate_target_data <- function(
       target_type = target_type,
       file_path = file_path,
       hub_path = hub_path,
-      config_target_data = config_target_data
+      config_target_data = config_target_data,
+      date_col = date_col
     ),
     file_path
   )

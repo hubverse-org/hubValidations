@@ -27,7 +27,7 @@ task_id_cols_to_validate <- function(tbl, config_tasks) {
 #' @param target_type Target type: `"time-series"` or `"oracle-output"`.
 #' @param include_as_of Logical indicating whether to include `as_of` in the
 #'   observation unit. `as_of` is only added if this is `TRUE` AND the data
-#'   is versioned (per `hubUtils::get_versioned()`).
+#'   is versioned (per `hubUtils::get_versioned()`). Default set to `FALSE`.
 #' @return A character vector of columns that define the observation unit.
 #' @noRd
 get_obs_unit_from_config <- function(
@@ -87,19 +87,30 @@ get_obs_unit_from_tbl <- function(tbl, config_tasks, include_as_of = TRUE) {
 #' Determines the observation unit for target data, which defines the unique
 #' combinations of columns that identify each independent observation.
 #'
-#' When `config_target_data` is provided, uses `get_obs_unit_from_config()`
-#' to extract the observable unit from the target-data.json configuration.
+#' This function supports two modes:
 #'
-#' When `config_target_data` is `NULL`, uses `get_obs_unit_from_tbl()` to
-#' infer the observation unit from task identifier columns and the presence
-#' of `as_of` in the table.
+#' **Config mode** (when `config_target_data` is provided):
+#' Uses `get_obs_unit_from_config()` to extract the observable unit from the
+#' target-data.json configuration. Requires `target_type` to be specified.
+#' The `tbl` and `config_tasks` parameters are ignored in this mode.
+#'
+#' **Inference mode** (when `config_target_data` is `NULL`):
+#' Uses `get_obs_unit_from_tbl()` to infer the observation unit from task
+#' identifier columns and the presence of `as_of` in the table. Requires both
+#' `tbl` and `config_tasks` to be specified. The `target_type` parameter is
+#' ignored in this mode.
 #'
 #' @param tbl A target data frame (oracle output or time-series target data).
+#'   Required when `config_target_data` is `NULL` (inference mode). Ignored
+#'   when `config_target_data` is provided (config mode).
 #' @param config_tasks A list of task configurations from the hub config.
+#'   Required when `config_target_data` is `NULL` (inference mode). Ignored
+#'   when `config_target_data` is provided (config mode).
 #' @param config_target_data Optional target-data.json config object. When `NULL`,
-#'   falls back to inference behavior based on task IDs.
-#' @param target_type Optional target type: `"time-series"` or `"oracle-output"`.
-#'   Required when `config_target_data` is provided.
+#'   uses inference mode. When provided, uses config mode.
+#' @param target_type Target type: `"time-series"` or `"oracle-output"`.
+#'   Required when `config_target_data` is provided (config mode). Ignored
+#'   when `config_target_data` is `NULL` (inference mode).
 #' @param include_as_of Logical indicating whether to include `as_of` in the
 #'   observation unit. When `config_target_data` is provided, `as_of` is only
 #'   added if this is `TRUE` AND the data is versioned (per
@@ -109,19 +120,31 @@ get_obs_unit_from_tbl <- function(tbl, config_tasks, include_as_of = TRUE) {
 #' @return A character vector of columns that define the observation unit.
 #' @noRd
 get_obs_unit <- function(
-  tbl,
-  config_tasks,
+  tbl = NULL,
+  config_tasks = NULL,
   config_target_data = NULL,
   target_type = NULL,
   include_as_of = FALSE
 ) {
   if (!is.null(config_target_data)) {
+    # Config mode - validate required parameters
+    if (is.null(target_type)) {
+      cli::cli_abort(
+        "{.arg target_type} must be provided when {.arg config_target_data} is supplied."
+      )
+    }
     get_obs_unit_from_config(
       config_target_data,
       target_type,
       include_as_of
     )
   } else {
+    # Inference mode - validate required parameters
+    if (is.null(tbl) || is.null(config_tasks)) {
+      cli::cli_abort(
+        "{.arg tbl} and {.arg config_tasks} must be provided when {.arg config_target_data} is NULL."
+      )
+    }
     get_obs_unit_from_tbl(tbl, config_tasks, include_as_of)
   }
 }
@@ -132,12 +155,16 @@ get_obs_unit <- function(
 #' table grouped by those columns, suitable for downstream validation or
 #' summarisation.
 #'
+#' Supports both config mode (when `config_target_data` is provided) and
+#' inference mode (when `config_target_data` is `NULL`). See `get_obs_unit()`
+#' for details on parameter requirements for each mode.
+#'
 #' @inheritParams get_obs_unit
 #' @return A grouped tibble, grouped by observation unit.
 #' @noRd
 group_by_obs_unit <- function(
-  tbl,
-  config_tasks,
+  tbl = NULL,
+  config_tasks = NULL,
   config_target_data = NULL,
   target_type = NULL,
   include_as_of = FALSE

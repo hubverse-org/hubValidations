@@ -23,9 +23,11 @@ being validated.}
 \item{target_type}{Type of target data to retrieve matching files. One of "time-series" or
 "oracle-output". Defaults to "time-series".}
 
-\item{date_col}{Optional column name to be interpreted as date. Default is \code{NULL}.
-Useful when the required date column is a partitioning column in the target data
-and does not have the same name as a date typed task ID variable in the config.}
+\item{date_col}{Optional column name to be interpreted as date for schema
+creation. Useful when the date column does not correspond to a valid task ID
+(e.g., calculated from other task IDs like \code{origin_date + horizon}), particularly when
+it is also a partitioning column. Ignored when
+\code{target-data.json} config is provided.}
 
 \item{na}{A character vector of strings to interpret as missing values. Only
 applies to CSV files. The default is \code{c("NA", "")}. Useful when actual character

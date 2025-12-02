@@ -17,6 +17,11 @@
 #'
 #' @param target_tbl A tibble/data.frame of the contents of the target data file
 #' being validated.
+#' @param date_col Optional column name to be interpreted as date for schema
+#' creation. Useful when the date column does not correspond to a valid task ID
+#' (e.g., calculated from other task IDs like `origin_date + horizon`), particularly when
+#' it is also a partitioning column. Ignored when
+#' `target-data.json` config is provided.
 #' @inherit check_target_tbl_colnames params return
 #' @inheritParams hubData::connect_target_oracle_output
 #' @inheritParams hubData::connect_target_timeseries
@@ -41,22 +46,29 @@ check_target_tbl_coltypes <- function(
   file_path,
   hub_path
 ) {
+  checkmate::assert_string(date_col, null.ok = TRUE)
   target_type <- rlang::arg_match(target_type)
   output_type_id_datatype <- rlang::arg_match(output_type_id_datatype)
 
+  # Suppress warnings about missing date columns from schema creation
+  # as we explicitly check for date column presence below
   schema <- switch(
     target_type,
-    `time-series` = hubData::create_timeseries_schema(
-      hub_path = hub_path,
-      date_col = date_col,
-      na = na,
-      r_schema = TRUE
+    `time-series` = suppressWarnings(
+      hubData::create_timeseries_schema(
+        hub_path = hub_path,
+        date_col = date_col,
+        na = na,
+        r_schema = TRUE
+      )
     ),
-    `oracle-output` = hubData::create_oracle_output_schema(
-      hub_path = hub_path,
-      na = na,
-      r_schema = TRUE,
-      output_type_id_datatype = output_type_id_datatype
+    `oracle-output` = suppressWarnings(
+      hubData::create_oracle_output_schema(
+        hub_path = hub_path,
+        na = na,
+        r_schema = TRUE,
+        output_type_id_datatype = output_type_id_datatype
+      )
     )
   )[colnames(target_tbl)]
 
@@ -88,6 +100,22 @@ check_target_tbl_coltypes <- function(
       paste(collapse = ", ") %>%
       paste0(".") %>%
       cli::format_inline()
+  }
+
+  # Check for at least one date column (excluding as_of)
+  col_names <- colnames(target_tbl)
+  date_cols <- purrr::keep(
+    col_names,
+    ~ inherits(target_tbl[[.x]], "Date") && .x != "as_of"
+  )
+  if (length(date_cols) == 0L) {
+    details <- c(
+      details,
+      cli::format_inline(
+        "Target data does not contain a {.cls Date} column (excluding {.val as_of})."
+      )
+    )
+    check <- FALSE
   }
 
   # Enhance message to reference config when available
