@@ -3,7 +3,8 @@ linters: linters_with_defaults(
     commented_code_linter = NULL,
     object_length_linter = object_length_linter(length = 50L),
     cyclocomp_linter = cyclocomp_linter(complexity_limit = 20L),
-    pipe_consistency_linter = NULL  # TODO: Re-enable after migrating %>% to |>
+    pipe_consistency_linter = NULL,  # TODO: Re-enable after migrating %>% to |>
+    return_linter = NULL  # TODO: Remove explicit returns package-wide
   )
 exclusions: list(
     "tests/testthat/helper.R"
