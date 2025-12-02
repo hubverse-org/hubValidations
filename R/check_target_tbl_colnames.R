@@ -24,7 +24,9 @@
 #' type is performed by `check_target_tbl_coltypes()`.
 #'
 #' Inference mode validation for time-series data is limited. For robust
-#' validation, create a `target-data.json` config file.
+#' validation, create a `target-data.json` config file. See 
+#' [`target-data.json` schema](https://docs.hubverse.io/en/latest/user-guide/hub-config.html#hub-target-data-configuration-target-data-json-file) 
+#' for more information on the json schema scpecifics.
 #'
 #' @param target_tbl A tibble/data.frame of the contents of the target data file
 #' being validated.
