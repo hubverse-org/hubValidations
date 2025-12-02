@@ -99,4 +99,5 @@ Inference mode validation for time-series data is limited. For robust
 validation, create a `target-data.json` config file. See
 [`target-data.json`
 schema](https://docs.hubverse.io/en/latest/user-guide/hub-config.html#hub-target-data-configuration-target-data-json-file)
-for more information on the json schema scpecifics.
+\# nolint: line_length_linter. for more information on the json schema
+scpecifics.

@@ -13,7 +13,8 @@ check_target_tbl_output_type_ids(
   target_tbl_chr,
   target_type = c("oracle-output", "time-series"),
   file_path,
-  hub_path
+  hub_path,
+  config_target_data = NULL
 )
 ```
 
@@ -48,6 +49,12 @@ check_target_tbl_output_type_ids(
   package. The hub must be fully configured with valid `admin.json` and
   `tasks.json` files within the `hub-config` directory.
 
+- config_target_data:
+
+  Optional. A `target-data.json` config object. If provided, validation
+  uses deterministic schema from config. If `NULL` (default), validation
+  uses inference from `tasks.json`.
+
 ## Value
 
 Depending on whether validation has succeeded, one of:
@@ -57,3 +64,19 @@ Depending on whether validation has succeeded, one of:
 - `<error/check_error>` condition class object.
 
 Returned object also inherits from subclass `<hub_check>`.
+
+## Details
+
+When checking for completeness of distributional output types, data is
+grouped by observation unit to verify each unit has the complete set of
+output_type_id values.
+
+**With `target-data.json` config:** Observable unit is determined from
+the config's `observable_unit` specification.
+
+**Without `target-data.json` config:** Observable unit is inferred from
+task ID columns present in the data.
+
+The `as_of` column is NOT included in the grouping. Oracle data is
+designed to contain a single version per observable unit with a
+one-to-one mapping to model output data.
