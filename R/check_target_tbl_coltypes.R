@@ -52,23 +52,25 @@ check_target_tbl_coltypes <- function(
 
   # Suppress warnings about missing date columns from schema creation
   # as we explicitly check for date column presence below
-  schema <- suppressWarnings(
-    switch(
-      target_type,
-      `time-series` = hubData::create_timeseries_schema(
+  schema <- switch(
+    target_type,
+    `time-series` = suppressWarnings(
+      hubData::create_timeseries_schema(
         hub_path = hub_path,
         date_col = date_col,
         na = na,
         r_schema = TRUE
-      ),
-      `oracle-output` = hubData::create_oracle_output_schema(
+      )
+    ),
+    `oracle-output` = suppressWarnings(
+      hubData::create_oracle_output_schema(
         hub_path = hub_path,
         na = na,
         r_schema = TRUE,
         output_type_id_datatype = output_type_id_datatype
       )
-    )[colnames(target_tbl)]
-  )
+    )
+  )[colnames(target_tbl)]
 
   tbl_types <- purrr::map_chr(
     target_tbl,

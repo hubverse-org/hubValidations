@@ -13,9 +13,9 @@ test_that("check_target_tbl_colnames works on time-series data", {
     hub_path
   )
   expect_s3_class(valid_ts, "check_success")
-  expect_equal(
+  expect_match(
     cli::ansi_strip(valid_ts$message) |> stringr::str_squish(),
-    "Column names are consistent with expected column names for time-series target type data. Column name validation for time-series data in inference mode is limited. For robust validation, create a 'target-data.json' config file." # nolint: line_length_linter.
+    "Column names are consistent with expected column names for time-series target type data\\. Column name validation for time-series data in inference mode is limited\\. For robust validation, create a .?target-data\\.json.? config file\\. See .?target-data\\.json.? documentation" # nolint: line_length_linter.
   )
 
   # Providing a time-series target tbl will throw errors when checking for oracle-output
@@ -42,9 +42,9 @@ test_that("check_target_tbl_colnames works on time-series data", {
     hub_path
   )
   expect_s3_class(invalid_ts, "check_error")
-  expect_equal(
+  expect_match(
     cli::ansi_strip(invalid_ts$message) |> stringr::str_squish(),
-    "Column names must be consistent with expected column names for time-series target type data. Required column \"target\" is missing. | Invalid column \"value\" detected. | Column name validation for time-series data in inference mode is limited. For robust validation, create a 'target-data.json' config file." # nolint: line_length_linter
+    "Column names must be consistent with expected column names for time-series target type data\\. Required column \"target\" is missing\\. \\| Invalid column \"value\" detected\\. \\| Column name validation for time-series data in inference mode is limited\\. For robust validation, create a .?target-data\\.json.? config file\\. See .?target-data\\.json.? documentation" # nolint: line_length_linter
   )
 })
 
@@ -77,9 +77,9 @@ test_that("check_target_tbl_colnames works on oracle data", {
     hub_path
   )
   expect_s3_class(invalid_ts, "check_error")
-  expect_equal(
+  expect_match(
     cli::ansi_strip(invalid_ts$message) |> stringr::str_squish(),
-    "Column names must be consistent with expected column names for time-series target type data. Required column \"observation\" is missing. | Invalid columns \"output_type\", \"output_type_id\", and \"oracle_value\" detected. | Column name validation for time-series data in inference mode is limited. For robust validation, create a 'target-data.json' config file." # nolint: line_length_linter
+    "Column names must be consistent with expected column names for time-series target type data\\. Required column \"observation\" is missing\\. \\| Invalid columns \"output_type\", \"output_type_id\", and \"oracle_value\" detected\\. \\| Column name validation for time-series data in inference mode is limited\\. For robust validation, create a .?target-data\\.json.? config file\\. See .?target-data\\.json.? documentation" # nolint: line_length_linter
   )
 
   target_tbl <- cbind(target_tbl, value = 0L) |>
@@ -143,7 +143,7 @@ test_that("check_target_tbl_colnames works with null target keys", {
     hub_path
   )
   expect_s3_class(valid_ts, "check_success")
-  expect_equal(
+  expect_match(
     cli::ansi_strip(valid_ts$message) |> stringr::str_squish(),
     "Column names are consistent with expected column names for time-series target type data. Column name validation for time-series data in inference mode is limited. For robust validation, create a 'target-data.json' config file." # nolint: line_length_linter.
   )

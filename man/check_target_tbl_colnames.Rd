@@ -80,5 +80,7 @@ when it is not a valid task ID. Validation of date column existence and
 type is performed by \code{check_target_tbl_coltypes()}.
 
 Inference mode validation for time-series data is limited. For robust
-validation, create a \code{target-data.json} config file.
+validation, create a \code{target-data.json} config file. See
+\href{https://docs.hubverse.io/en/latest/user-guide/hub-config.html#hub-target-data-configuration-target-data-json-file}{\code{target-data.json} schema}
+for more information on the json schema scpecifics.
 }
