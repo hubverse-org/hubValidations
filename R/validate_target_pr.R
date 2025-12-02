@@ -184,6 +184,12 @@ validate_target_pr <- function(
         return(validations)
       }
 
+      # When config exists, ignore user-provided date_col and use config value
+      # (schema creation functions will extract it from config)
+      if (hubUtils::has_target_data_config(hub_path)) {
+        date_col <- NULL
+      }
+
       if (file_modification_check != "none") {
         file_modifications <- purrr::map(
           filetypes_to_validate,

@@ -50,6 +50,7 @@ check_target_dataset_rows_unique <- function(
     ),
     "oracle-output" = hubData::connect_target_oracle_output(
       hub_path = hub_path,
+      date_col = date_col,
       na = na,
       output_type_id_datatype = output_type_id_datatype
     )

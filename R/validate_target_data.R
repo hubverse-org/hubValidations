@@ -103,6 +103,12 @@ validate_target_data <- function(
     NULL
   }
 
+  # When config exists, ignore user-provided date_col and use config value
+  # (schema creation functions will extract it from config)
+  if (!is.null(config_target_data)) {
+    date_col <- NULL
+  }
+
   # -- Standard checks ----
   checks$target_tbl_colnames <- try_check(
     check_target_tbl_colnames(

@@ -65,6 +65,7 @@ check_target_tbl_coltypes <- function(
     `oracle-output` = suppressWarnings(
       hubData::create_oracle_output_schema(
         hub_path = hub_path,
+        date_col = date_col,
         na = na,
         r_schema = TRUE,
         output_type_id_datatype = output_type_id_datatype

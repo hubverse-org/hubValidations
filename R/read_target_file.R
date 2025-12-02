@@ -73,6 +73,7 @@ read_target_file <- function(
       ),
       `oracle-output` = hubData::create_oracle_output_schema(
         hub_path = hub_path,
+        date_col = date_col,
         na = na
       )
     )
