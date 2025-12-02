@@ -7,7 +7,7 @@
       -- time-series.csv ----
       
       v [target_file_read]: target file could be read successfully.
-      v [target_tbl_colnames]: Column names are consistent with expected column names for time-series target type data.
+      v [target_tbl_colnames]: Column names are consistent with expected column names for time-series target type data.  Column name validation for time-series data in inference mode is limited. For robust validation, create a 'target-data.json' config file. See `target-data.json` documentation (<https://docs.hubverse.io/en/latest/user-guide/hub-config.html#hub-target-data-configuration-target-data-json-file>)
       v [target_tbl_coltypes]: Column data types match time-series target schema.
       v [target_tbl_ts_targets]: time-series targets are all valid.
       v [target_tbl_rows_unique]: time-series target data rows are unique.
@@ -41,7 +41,7 @@
       -- time-series/target=wk%20flu%20hosp%20rate/part-0.parquet ----
       
       v [target_file_read]: target file could be read successfully.
-      v [target_tbl_colnames]: Column names are consistent with expected column names for time-series target type data.
+      v [target_tbl_colnames]: Column names are consistent with expected column names for time-series target type data.  Column name validation for time-series data in inference mode is limited. For robust validation, create a 'target-data.json' config file. See `target-data.json` documentation (<https://docs.hubverse.io/en/latest/user-guide/hub-config.html#hub-target-data-configuration-target-data-json-file>)
       v [target_tbl_coltypes]: Column data types match time-series target schema.
       v [target_tbl_ts_targets]: time-series targets are all valid.
       v [target_tbl_rows_unique]: time-series target data rows are unique.
