@@ -81,6 +81,6 @@ type is performed by \code{check_target_tbl_coltypes()}.
 
 Inference mode validation for time-series data is limited. For robust
 validation, create a \code{target-data.json} config file. See
-\href{https://docs.hubverse.io/en/latest/user-guide/hub-config.html#hub-target-data-configuration-target-data-json-file}{\code{target-data.json} schema}
+\href{https://docs.hubverse.io/en/latest/user-guide/hub-config.html#hub-target-data-configuration-target-data-json-file}{\code{target-data.json} schema} # nolint: line_length_linter.
 for more information on the json schema scpecifics.
 }
