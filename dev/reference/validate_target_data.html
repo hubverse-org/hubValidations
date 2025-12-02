@@ -92,9 +92,13 @@ file relative to the <code>target-data</code> directory.</p></dd>
 
 
 <dt id="arg-date-col">date_col<a class="anchor" aria-label="anchor" href="#arg-date-col"></a></dt>
-<dd><p>Optional column name to be interpreted as date. Default is <code>NULL</code>.
-Useful when the required date column is a partitioning column in the target data
-and does not have the same name as a date typed task ID variable in the config.</p></dd>
+<dd><p>Optional name of the column containing the date observations
+actually occurred (e.g., <code>"target_end_date"</code>) to be interpreted as date.
+Useful when this column does not correspond to a valid task ID (e.g.,
+calculated from other task IDs like <code>origin_date + horizon</code>) for: (1) correct
+schema creation, particularly when it's also a partitioning column, and (2)
+more robust column name validation when <code>target-data.json</code> config does not
+exist. Ignored when <code>target-data.json</code> exists.</p></dd>
 
 
 <dt id="arg-na">na<a class="anchor" aria-label="anchor" href="#arg-na"></a></dt>
@@ -206,7 +210,10 @@ see <a href="https://hubverse-org.github.io/hubValidations/articles/hub-validati
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_file_read]</span>: target file could be read successfully.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_colnames]</span>: Column names are consistent with expected column names</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   for <span style="color: #00BB00;">time-series</span> target type data.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   for <span style="color: #00BB00;">time-series</span> target type data.  Column name validation for time-series</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   data in inference mode is limited. For robust validation, create a</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">target-data.json</span> config file. See `target-data.json` documentation</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   (<span style="color: #0000BB; font-style: italic;">&lt;https://docs.hubverse.io/en/latest/user-guide/hub-config.html#hub-target-data-configuration-target-data-json-file&gt;</span>)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_coltypes]</span>: Column data types match time-series target schema.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_ts_targets]</span>: <span style="color: #00BB00;">time-series</span> targets are all valid.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_rows_unique]</span>: <span style="color: #00BB00;">time-series</span> target data rows are unique.</span>
@@ -246,7 +253,10 @@ see <a href="https://hubverse-org.github.io/hubValidations/articles/hub-validati
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_file_read]</span>: target file could be read successfully.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_colnames]</span>: Column names are consistent with expected column names</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   for <span style="color: #00BB00;">time-series</span> target type data.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   for <span style="color: #00BB00;">time-series</span> target type data.  Column name validation for time-series</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   data in inference mode is limited. For robust validation, create a</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">target-data.json</span> config file. See `target-data.json` documentation</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   (<span style="color: #0000BB; font-style: italic;">&lt;https://docs.hubverse.io/en/latest/user-guide/hub-config.html#hub-target-data-configuration-target-data-json-file&gt;</span>)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_coltypes]</span>: Column data types match time-series target schema.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_ts_targets]</span>: <span style="color: #00BB00;">time-series</span> targets are all valid.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_rows_unique]</span>: <span style="color: #00BB00;">time-series</span> target data rows are unique.</span>

@@ -82,9 +82,11 @@ being validated.</p></dd>
 
 
 <dt id="arg-date-col">date_col<a class="anchor" aria-label="anchor" href="#arg-date-col"></a></dt>
-<dd><p>Optional column name to be interpreted as date. Default is <code>NULL</code>.
-Useful when the required date column is a partitioning column in the target data
-and does not have the same name as a date typed task ID variable in the config.</p></dd>
+<dd><p>Optional column name to be interpreted as date for schema
+creation. Useful when the date column does not correspond to a valid task ID
+(e.g., calculated from other task IDs like <code>origin_date + horizon</code>), particularly when
+it is also a partitioning column. Ignored when
+<code>target-data.json</code> config is provided.</p></dd>
 
 
 <dt id="arg-na">na<a class="anchor" aria-label="anchor" href="#arg-na"></a></dt>
@@ -135,6 +137,19 @@ files within the <code>hub-config</code> directory.</p></dd>
     <p>Depending on whether validation has succeeded, one of:</p><ul><li><p><code>&lt;message/check_success&gt;</code> condition class object.</p></li>
 <li><p><code>&lt;error/check_error&gt;</code> condition class object.</p></li>
 </ul><p>Returned object also inherits from subclass <code>&lt;hub_check&gt;</code>.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>Column type validation depends on whether a <code>target-data.json</code> configuration
+file is provided:</p>
+<p><strong>With <code>target-data.json</code> config:</strong>
+Expected column types are determined directly from the schema defined in
+the configuration. Validation is performed against the schema specifications
+in <code>target-data.json</code>.</p>
+<p><strong>Without <code>target-data.json</code> config:</strong>
+Expected column types are determined from the dataset itself and validated
+for internal consistency across files, which mainly applies to partitioned
+datasets.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

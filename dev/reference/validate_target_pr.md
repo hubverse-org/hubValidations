@@ -65,10 +65,14 @@ validate_target_pr(
 
 - date_col:
 
-  Optional column name to be interpreted as date. Default is `NULL`.
-  Useful when the required date column is a partitioning column in the
-  target data and does not have the same name as a date typed task ID
-  variable in the config.
+  Optional name of the column containing the date observations actually
+  occurred (e.g., `"target_end_date"`) to be interpreted as date. Useful
+  when this column does not correspond to a valid task ID (e.g.,
+  calculated from other task IDs like `origin_date + horizon`) for: (1)
+  correct schema creation, particularly when it's also a partitioning
+  column, and (2) more robust column name validation when
+  `target-data.json` config does not exist. Ignored when
+  `target-data.json` exists.
 
 - na:
 

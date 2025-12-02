@@ -33,10 +33,11 @@ check_target_dataset_rows_unique(
 
 - date_col:
 
-  Optional column name to be interpreted as date. Default is `NULL`.
-  Useful when the required date column is a partitioning column in the
-  target data and does not have the same name as a date typed task ID
-  variable in the config.
+  Optional column name to be interpreted as date for dataset connection.
+  Useful when the date column does not correspond to a valid task ID
+  (e.g., calculated from other task IDs like `origin_date + horizon`),
+  particularly when it is also a partitioning column. Ignored when
+  `target-data.json` config is provided.
 
 - output_type_id_datatype:
 

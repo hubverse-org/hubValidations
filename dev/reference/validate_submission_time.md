@@ -64,6 +64,6 @@ validate_submission_time(hub_path, file_path)
 #> ── 2022-10-08-team1-goodmodel.csv ────
 #> 
 #> ✖ [submission_time]: Submission time must be within accepted submission window
-#>   for round.  Current time "2025-11-27 09:31:05 UTC" is outside window
+#>   for round.  Current time "2025-12-02 08:51:59 UTC" is outside window
 #>   2022-10-02 EDT--2022-10-09 23:59:59 EDT.
 ```

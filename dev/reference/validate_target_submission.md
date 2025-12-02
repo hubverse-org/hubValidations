@@ -48,10 +48,14 @@ validate_target_submission(
 
 - date_col:
 
-  Optional column name to be interpreted as date. Default is `NULL`.
-  Useful when the required date column is a partitioning column in the
-  target data and does not have the same name as a date typed task ID
-  variable in the config.
+  Optional name of the column containing the date observations actually
+  occurred (e.g., `"target_end_date"`) to be interpreted as date. Useful
+  when this column does not correspond to a valid task ID (e.g.,
+  calculated from other task IDs like `origin_date + horizon`) for: (1)
+  correct schema creation, particularly when it's also a partitioning
+  column, and (2) more robust column name validation when
+  `target-data.json` config does not exist. Ignored when
+  `target-data.json` exists.
 
 - round_id:
 
@@ -150,7 +154,10 @@ validate_target_submission(
 #> ✔ [target_file_ext]: Target data file extension is valid.
 #> ✔ [target_file_read]: target file could be read successfully.
 #> ✔ [target_tbl_colnames]: Column names are consistent with expected column names
-#>   for time-series target type data.
+#>   for time-series target type data.  Column name validation for time-series
+#>   data in inference mode is limited. For robust validation, create a
+#>   target-data.json config file. See `target-data.json` documentation
+#>   (<https://docs.hubverse.io/en/latest/user-guide/hub-config.html#hub-target-data-configuration-target-data-json-file>)
 #> ✔ [target_tbl_coltypes]: Column data types match time-series target schema.
 #> ✔ [target_tbl_ts_targets]: time-series targets are all valid.
 #> ✔ [target_tbl_rows_unique]: time-series target data rows are unique.
@@ -181,7 +188,10 @@ validate_target_submission(
 #> ✔ [target_file_ext]: Hive-partitioned target data file extension is valid.
 #> ✔ [target_file_read]: target file could be read successfully.
 #> ✔ [target_tbl_colnames]: Column names are consistent with expected column names
-#>   for time-series target type data.
+#>   for time-series target type data.  Column name validation for time-series
+#>   data in inference mode is limited. For robust validation, create a
+#>   target-data.json config file. See `target-data.json` documentation
+#>   (<https://docs.hubverse.io/en/latest/user-guide/hub-config.html#hub-target-data-configuration-target-data-json-file>)
 #> ✔ [target_tbl_coltypes]: Column data types match time-series target schema.
 #> ✔ [target_tbl_ts_targets]: time-series targets are all valid.
 #> ✔ [target_tbl_rows_unique]: time-series target data rows are unique.

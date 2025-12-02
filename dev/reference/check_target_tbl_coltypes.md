@@ -32,10 +32,11 @@ check_target_tbl_coltypes(
 
 - date_col:
 
-  Optional column name to be interpreted as date. Default is `NULL`.
-  Useful when the required date column is a partitioning column in the
-  target data and does not have the same name as a date typed task ID
-  variable in the config.
+  Optional column name to be interpreted as date for schema creation.
+  Useful when the date column does not correspond to a valid task ID
+  (e.g., calculated from other task IDs like `origin_date + horizon`),
+  particularly when it is also a partitioning column. Ignored when
+  `target-data.json` config is provided.
 
 - na:
 
@@ -92,3 +93,16 @@ Depending on whether validation has succeeded, one of:
 - `<error/check_error>` condition class object.
 
 Returned object also inherits from subclass `<hub_check>`.
+
+## Details
+
+Column type validation depends on whether a `target-data.json`
+configuration file is provided:
+
+**With `target-data.json` config:** Expected column types are determined
+directly from the schema defined in the configuration. Validation is
+performed against the schema specifications in `target-data.json`.
+
+**Without `target-data.json` config:** Expected column types are
+determined from the dataset itself and validated for internal
+consistency across files, which mainly applies to partitioned datasets.

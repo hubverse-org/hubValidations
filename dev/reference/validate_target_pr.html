@@ -111,9 +111,13 @@ behaviour so use with care.</p></dd>
 
 
 <dt id="arg-date-col">date_col<a class="anchor" aria-label="anchor" href="#arg-date-col"></a></dt>
-<dd><p>Optional column name to be interpreted as date. Default is <code>NULL</code>.
-Useful when the required date column is a partitioning column in the target data
-and does not have the same name as a date typed task ID variable in the config.</p></dd>
+<dd><p>Optional name of the column containing the date observations
+actually occurred (e.g., <code>"target_end_date"</code>) to be interpreted as date.
+Useful when this column does not correspond to a valid task ID (e.g.,
+calculated from other task IDs like <code>origin_date + horizon</code>) for: (1) correct
+schema creation, particularly when it's also a partitioning column, and (2)
+more robust column name validation when <code>target-data.json</code> config does not
+exist. Ignored when <code>target-data.json</code> exists.</p></dd>
 
 
 <dt id="arg-na">na<a class="anchor" aria-label="anchor" href="#arg-na"></a></dt>
