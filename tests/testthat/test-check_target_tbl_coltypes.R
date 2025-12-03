@@ -414,3 +414,78 @@ test_that("check_target_tbl_coltypes works with partitioned v6 hub", {
     "target-data\\.json.*`observation` should be <double> not <character>."
   )
 })
+
+test_that("check_target_tbl_coltypes works with date_col parameter for oracle-output", {
+  skip_if_not_installed("hubData", minimum_version = "2.0.0.9002")
+  hub_path <- use_example_hub_editable("file")
+
+  # Modify tasks.json to remove target_end_date as a task ID
+  config <- hubUtils::read_config(hub_path)
+  config$rounds[[1]]$model_tasks[[1]]$task_ids$target_end_date <- NULL
+  hubAdmin::write_config(config, hub_path, overwrite = TRUE, silent = TRUE)
+
+  target_tbl <- read_target_file("oracle-output.csv", hub_path)
+
+  # With date_col specified and correct type - should pass
+  valid_with_date_col <- check_target_tbl_coltypes(
+    target_tbl,
+    target_type = "oracle-output",
+    date_col = "target_end_date",
+    file_path = "oracle-output.csv",
+    hub_path = hub_path
+  )
+  expect_s3_class(valid_with_date_col, "check_success")
+
+  # Without date_col but date column exists - should also pass
+  valid_without_date_col <- check_target_tbl_coltypes(
+    target_tbl,
+    target_type = "oracle-output",
+    file_path = "oracle-output.csv",
+    hub_path = hub_path
+  )
+  expect_s3_class(valid_without_date_col, "check_success")
+
+  # With date_col but column is wrong type - should fail with both errors
+  # Write to disk so create_oracle_output_schema() sees the wrong type
+  target_tbl$target_end_date <- as.character(target_tbl$target_end_date)
+  .local_safe_overwrite(
+    function(path) arrow::write_csv_arrow(target_tbl, path),
+    fs::path(hub_path, "target-data", "oracle-output.csv")
+  )
+
+  invalid_wrong_type <- check_target_tbl_coltypes(
+    target_tbl,
+    target_type = "oracle-output",
+    date_col = "target_end_date",
+    file_path = "oracle-output.csv",
+    hub_path = hub_path
+  )
+
+  expect_s3_class(invalid_wrong_type, "check_failure")
+  expect_match(
+    cli::ansi_strip(invalid_wrong_type$message),
+    "`target_end_date` should be <Date> not <character>"
+  )
+  expect_match(
+    cli::ansi_strip(invalid_wrong_type$message),
+    "Target data does not contain a <Date> column"
+  )
+
+  # Specifying date_col that doesn't exist in file should error
+  target_tbl$target_end_date <- NULL
+  .local_safe_overwrite(
+    function(path) arrow::write_csv_arrow(target_tbl, path),
+    fs::path(hub_path, "target-data", "oracle-output.csv")
+  )
+
+  expect_error(
+    check_target_tbl_coltypes(
+      target_tbl,
+      target_type = "oracle-output",
+      date_col = "target_end_date",
+      file_path = "oracle-output.csv",
+      hub_path = hub_path
+    ),
+    "target_end_date.*not found"
+  )
+})

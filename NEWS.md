@@ -6,6 +6,9 @@
   - `check_target_tbl_colnames()` and `check_target_tbl_coltypes()` now use deterministic validation when `target-data.json` config is available, with error messages explicitly referencing the config file.
 * Enhanced `check_target_tbl_rows_unique()`, `check_target_tbl_output_type_ids()`, and `check_target_tbl_oracle_value()` to support `target-data.json` configuration (#282).
 * Fixed bug where the `as_of` column was incorrectly included in oracle-output validation grouping. Oracle data is designed to contain a single version per observable unit with a one-to-one mapping to model output data, so including `as_of` in uniqueness checks could introduce false positives (#282).
+* Added `date_col` parameter support for oracle-output target data validation (#290).
+  - `check_target_tbl_coltypes()`, `check_target_dataset_rows_unique()`, and `read_target_file()` now pass `date_col` to oracle-output schema and connection functions, providing consistent handling of partitioned date columns across both time-series and oracle-output target types.
+  - When `target-data.json` config exists, user-provided `date_col` is ignored and the config value is used instead.
 
 # hubValidations 0.12.1
 
