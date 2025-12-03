@@ -11,7 +11,8 @@ test_that("check_target_tbl_values works with time-series data", {
     target_tbl_chr,
     target_type = "time-series",
     file_path,
-    hub_path
+    hub_path,
+    allow_extra_dates = FALSE
   )
 
   expect_s3_class(valid_ts, "check_success")
@@ -29,7 +30,8 @@ test_that("check_target_tbl_values works with time-series data", {
     target_tbl_chr,
     target_type = "time-series",
     file_path,
-    hub_path
+    hub_path,
+    allow_extra_dates = FALSE
   )
 
   expect_s3_class(invalid_ts, "check_error")
@@ -60,7 +62,8 @@ test_that("check_target_tbl_values works with time-series data", {
     target_tbl_chr,
     target_type = "time-series",
     file_path,
-    hub_path
+    hub_path,
+    allow_extra_dates = FALSE
   )
   expect_s3_class(invalid_ts, "check_error")
   expect_equal(
@@ -97,7 +100,8 @@ test_that("check_target_tbl_values skips when necessary", {
     target_tbl_chr,
     target_type = "time-series",
     file_path,
-    hub_path
+    hub_path,
+    allow_extra_dates = FALSE
   )
 
   expect_s3_class(skipped_ts, "check_info")
@@ -121,7 +125,8 @@ test_that("check_target_tbl_values works with oracle-output data", {
     target_tbl_chr,
     target_type = "oracle-output",
     file_path,
-    hub_path
+    hub_path,
+    allow_extra_dates = FALSE
   )
 
   expect_s3_class(valid_oracle, "check_success")
@@ -139,7 +144,8 @@ test_that("check_target_tbl_values works with oracle-output data", {
     target_tbl_chr,
     target_type = "oracle-output",
     file_path,
-    hub_path
+    hub_path,
+    allow_extra_dates = FALSE
   )
 
   expect_s3_class(invalid_oracle, "check_error")
@@ -167,4 +173,233 @@ test_that("check_target_tbl_values works with oracle-output data", {
       "oracle_value"
     )
   )
+})
+
+# Date relaxation tests ----
+test_that("allow_extra_dates = TRUE allows future dates in time-series", {
+  hub_path <- use_example_hub_readonly("file", v = 5)
+  target_tbl_chr <- read_target_file("time-series.csv", hub_path) |>
+    hubData::coerce_to_character()
+  file_path <- "time-series.csv"
+
+  # Add a future date that's not in tasks.json
+  target_tbl_chr$target_end_date[1] <- "2099-12-31"
+
+  # With allow_extra_dates = TRUE (default) and explicit date_col, this should succeed
+  # (v5 hub has no config, so date_col must be provided explicitly)
+  result <- check_target_tbl_values(
+    target_tbl_chr,
+    target_type = "time-series",
+    file_path,
+    hub_path,
+    date_col = "target_end_date",
+    allow_extra_dates = TRUE
+  )
+
+  expect_s3_class(result, "check_success")
+  expect_match(
+    cli::ansi_strip(result$message),
+    "`target_tbl_chr` contains valid values/value combinations"
+  )
+  expect_match(
+    cli::ansi_strip(result$message),
+    "Date column \"target_end_date\" excluded from validation"
+  )
+})
+
+test_that("allow_extra_dates = FALSE rejects future dates in time-series", {
+  hub_path <- use_example_hub_readonly("file", v = 5)
+  target_tbl_chr <- read_target_file("time-series.csv", hub_path) |>
+    hubData::coerce_to_character()
+  file_path <- "time-series.csv"
+
+  # Add a future date that's not in tasks.json
+  target_tbl_chr$target_end_date[1] <- "2099-12-31"
+
+  # With allow_extra_dates = FALSE, this should fail
+  result <- check_target_tbl_values(
+    target_tbl_chr,
+    target_type = "time-series",
+    file_path,
+    hub_path,
+    date_col = "target_end_date",
+    allow_extra_dates = FALSE
+  )
+
+  expect_s3_class(result, "check_error")
+  expect_match(
+    cli::ansi_strip(result$message),
+    "contains invalid values/value combinations"
+  )
+  expect_s3_class(result$error_tbl, "tbl_df")
+})
+
+test_that("allow_extra_dates still validates non-date columns in time-series", {
+  hub_path <- use_example_hub_readonly("file", v = 5)
+  target_tbl_chr <- read_target_file("time-series.csv", hub_path) |>
+    hubData::coerce_to_character()
+  file_path <- "time-series.csv"
+
+  # Add a future date (should be allowed) AND invalid location (should fail)
+  target_tbl_chr$target_end_date[1] <- "2099-12-31"
+  target_tbl_chr$location[1] <- "invalid_location"
+
+  result <- check_target_tbl_values(
+    target_tbl_chr,
+    target_type = "time-series",
+    file_path,
+    hub_path,
+    date_col = "target_end_date",
+    allow_extra_dates = TRUE
+  )
+
+  # Should fail due to invalid location, not the date
+  expect_s3_class(result, "check_error")
+  expect_match(
+    cli::ansi_strip(result$message),
+    "invalid_location"
+  )
+  expect_s3_class(result$error_tbl, "tbl_df")
+  expect_true("invalid_location" %in% result$error_tbl$location)
+})
+
+test_that("allow_extra_dates is ignored for oracle-output (always strict)", {
+  hub_path <- use_example_hub_readonly("file", v = 5)
+  target_tbl_chr <- read_target_file("oracle-output.csv", hub_path) |>
+    hubData::coerce_to_character()
+  file_path <- "oracle-output.csv"
+
+  # Add a date that's not in tasks.json
+  target_tbl_chr$target_end_date[1] <- "2099-12-31"
+
+  # Even with allow_extra_dates = TRUE and date_col provided, oracle-output should fail
+  # because date relaxation is only for time-series
+  result <- check_target_tbl_values(
+    target_tbl_chr,
+    target_type = "oracle-output",
+    file_path,
+    hub_path,
+    date_col = "target_end_date",
+    allow_extra_dates = TRUE
+  )
+
+  expect_s3_class(result, "check_error")
+  expect_match(
+    cli::ansi_strip(result$message),
+    "contains invalid values/value combinations"
+  )
+})
+
+test_that("explicit date_col parameter works for hubs without config", {
+  hub_path <- use_example_hub_readonly("file", v = 5)
+  target_tbl_chr <- read_target_file("time-series.csv", hub_path) |>
+    hubData::coerce_to_character()
+  file_path <- "time-series.csv"
+
+  # Add a future date
+  target_tbl_chr$target_end_date[1] <- "2099-12-31"
+
+  # Explicitly provide date_col (in real usage this would be for hubs without target-data.json)
+  result <- check_target_tbl_values(
+    target_tbl_chr,
+    target_type = "time-series",
+    file_path,
+    hub_path,
+    date_col = "target_end_date",
+    allow_extra_dates = TRUE
+  )
+
+  # Should succeed because date relaxation is enabled
+  expect_s3_class(result, "check_success")
+  expect_match(
+    cli::ansi_strip(result$message),
+    "Date column \"target_end_date\" excluded from validation"
+  )
+})
+
+test_that("date column extracted from target-data.json config in v6 hubs", {
+  hub_path <- use_example_hub_readonly("file", v = 6)
+  target_tbl_chr <- read_target_file("time-series.csv", hub_path) |>
+    hubData::coerce_to_character()
+  file_path <- "time-series.csv"
+
+  # Add a future date
+  target_tbl_chr$target_end_date[1] <- "2099-12-31"
+
+  # Read config for v6 hub
+  config_target_data <- hubUtils::read_config(hub_path, "target-data")
+
+  # With v6 hub, date column should be extracted from config
+  result <- check_target_tbl_values(
+    target_tbl_chr,
+    target_type = "time-series",
+    file_path,
+    hub_path,
+    allow_extra_dates = TRUE,
+    config_target_data = config_target_data
+  )
+
+  # Should succeed because date relaxation is enabled and date column is from config
+  expect_s3_class(result, "check_success")
+  expect_match(
+    cli::ansi_strip(result$message),
+    "Date column \"target_end_date\" excluded from validation"
+  )
+})
+
+test_that("allow_extra_dates = FALSE still catches invalid location values", {
+  hub_path <- use_example_hub_readonly("file", v = 5)
+  target_tbl_chr <- read_target_file("time-series.csv", hub_path) |>
+    hubData::coerce_to_character()
+  file_path <- "time-series.csv"
+
+  # Add invalid location
+  target_tbl_chr$location[1] <- "invalid_location"
+
+  # With allow_extra_dates = FALSE (strict validation), should catch the invalid location
+  result <- check_target_tbl_values(
+    target_tbl_chr,
+    target_type = "time-series",
+    file_path,
+    hub_path,
+    allow_extra_dates = FALSE
+  )
+
+  expect_s3_class(result, "check_error")
+  expect_match(
+    cli::ansi_strip(result$message),
+    "invalid_location"
+  )
+  expect_s3_class(result$error_tbl, "tbl_df")
+  expect_true("invalid_location" %in% result$error_tbl$location)
+})
+
+test_that("allow_extra_dates = FALSE catches all invalid values including dates", {
+  hub_path <- use_example_hub_readonly("file", v = 5)
+  target_tbl_chr <- read_target_file("time-series.csv", hub_path) |>
+    hubData::coerce_to_character()
+  file_path <- "time-series.csv"
+
+  # Add invalid date, location, and target
+  target_tbl_chr$target_end_date[1] <- "2099-12-31"
+  target_tbl_chr$location[2] <- "invalid_location"
+  target_tbl_chr$target[3] <- "invalid_target"
+
+  # With allow_extra_dates = FALSE, should catch ALL invalid values
+  result <- check_target_tbl_values(
+    target_tbl_chr,
+    target_type = "time-series",
+    file_path,
+    hub_path,
+    allow_extra_dates = FALSE
+  )
+
+  expect_s3_class(result, "check_error")
+  expect_match(
+    cli::ansi_strip(result$message),
+    "contains invalid values/value combinations"
+  )
+  expect_s3_class(result$error_tbl, "tbl_df")
+  # Should have caught at least 3 rows with errors
+  expect_gte(nrow(result$error_tbl), 3)
 })
