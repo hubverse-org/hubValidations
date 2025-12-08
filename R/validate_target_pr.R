@@ -123,6 +123,7 @@ validate_target_pr <- function(
     "Date"
   ),
   date_col = NULL,
+  allow_extra_dates = FALSE,
   na = c("NA", ""),
   round_id = "default",
   validations_cfg_path = NULL,
@@ -241,6 +242,7 @@ validate_target_pr <- function(
             file_path = .x,
             target_type = "time-series",
             date_col = date_col,
+            allow_extra_dates = allow_extra_dates,
             na = na,
             output_type_id_datatype = output_type_id_datatype,
             validations_cfg_path = validations_cfg_path,
@@ -290,6 +292,7 @@ validate_target_pr <- function(
             file_path = .x,
             target_type = "oracle-output",
             date_col = date_col,
+            allow_extra_dates = allow_extra_dates,
             na = na,
             output_type_id_datatype = output_type_id_datatype,
             validations_cfg_path = validations_cfg_path,

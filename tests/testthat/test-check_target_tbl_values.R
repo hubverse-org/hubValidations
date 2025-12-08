@@ -185,7 +185,7 @@ test_that("allow_extra_dates = TRUE allows future dates in time-series", {
   # Add a future date that's not in tasks.json
   target_tbl_chr$target_end_date[1] <- "2099-12-31"
 
-  # With allow_extra_dates = TRUE (default) and explicit date_col, this should succeed
+  # With allow_extra_dates = TRUE and explicit date_col, this should succeed
   # (v5 hub has no config, so date_col must be provided explicitly)
   result <- check_target_tbl_values(
     target_tbl_chr,
@@ -402,4 +402,32 @@ test_that("allow_extra_dates = FALSE catches all invalid values including dates"
   expect_s3_class(result$error_tbl, "tbl_df")
   # Should have caught at least 3 rows with errors
   expect_gte(nrow(result$error_tbl), 3)
+})
+
+# Default behavior tests ----
+test_that("default behavior is strict (allow_extra_dates = FALSE)", {
+  hub_path <- use_example_hub_readonly("file", v = 5)
+  target_tbl_chr <- read_target_file("time-series.csv", hub_path) |>
+    hubData::coerce_to_character()
+  file_path <- "time-series.csv"
+
+  # Add a future date that's not in tasks.json
+  target_tbl_chr$target_end_date[1] <- "2099-12-31"
+
+  # Default behavior (no allow_extra_dates specified) should be strict
+  # and reject the invalid date
+  result <- check_target_tbl_values(
+    target_tbl_chr,
+    target_type = "time-series",
+    file_path,
+    hub_path
+  )
+
+  # Should fail because default is strict validation
+
+  expect_s3_class(result, "check_error")
+  expect_match(
+    cli::ansi_strip(result$message),
+    "contains invalid values/value combinations"
+  )
 })

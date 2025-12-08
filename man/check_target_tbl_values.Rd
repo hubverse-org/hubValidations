@@ -10,7 +10,7 @@ check_target_tbl_values(
   file_path,
   hub_path,
   date_col = NULL,
-  allow_extra_dates = TRUE,
+  allow_extra_dates = FALSE,
   config_target_data = NULL
 )
 }
@@ -39,7 +39,7 @@ Only used when target-data.json config does not exist. When target-data.json
 exists, date column is extracted from config (this parameter is ignored).
 If cannot determine date column, date relaxation is skipped.}
 
-\item{allow_extra_dates}{Logical. If TRUE (default) and target_type is
+\item{allow_extra_dates}{Logical. If TRUE and target_type is
 "time-series", allows date values not in tasks.json. Other task ID columns
 are still strictly validated. Ignored for oracle-output (always strict).}
 

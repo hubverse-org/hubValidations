@@ -9,6 +9,7 @@ validate_target_data(
   file_path,
   target_type = c("time-series", "oracle-output"),
   date_col = NULL,
+  allow_extra_dates = FALSE,
   na = c("NA", ""),
   output_type_id_datatype = c("from_config", "auto", "character", "double", "integer",
     "logical", "Date"),
@@ -27,8 +28,8 @@ in the \code{arrow} package.
 The hub must be fully configured with valid \code{admin.json} and \code{tasks.json}
 files within the \code{hub-config} directory.}
 
-\item{file_path}{A character string representing the path to the target data
-file relative to the \code{target-data} directory.}
+\item{file_path}{A character string representing the path to the target data file
+relative to the \code{target-data} directory.}
 
 \item{target_type}{Type of target data to retrieve matching files. One of "time-series" or
 "oracle-output". Defaults to "time-series".}
@@ -40,6 +41,10 @@ calculated from other task IDs like \code{origin_date + horizon}) for: (1) corre
 schema creation, particularly when it's also a partitioning column, and (2)
 more robust column name validation when \code{target-data.json} config does not
 exist. Ignored when \code{target-data.json} exists.}
+
+\item{allow_extra_dates}{Logical. If TRUE and target_type is
+"time-series", allows date values not in tasks.json. Other task ID columns
+are still strictly validated. Ignored for oracle-output (always strict).}
 
 \item{na}{A character vector of strings to interpret as missing values. Only
 applies to CSV files. The default is \code{c("NA", "")}. Useful when actual character

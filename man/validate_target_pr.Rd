@@ -11,6 +11,7 @@ validate_target_pr(
   output_type_id_datatype = c("from_config", "auto", "character", "double", "integer",
     "logical", "Date"),
   date_col = NULL,
+  allow_extra_dates = FALSE,
   na = c("NA", ""),
   round_id = "default",
   validations_cfg_path = NULL,
@@ -57,6 +58,10 @@ calculated from other task IDs like \code{origin_date + horizon}) for: (1) corre
 schema creation, particularly when it's also a partitioning column, and (2)
 more robust column name validation when \code{target-data.json} config does not
 exist. Ignored when \code{target-data.json} exists.}
+
+\item{allow_extra_dates}{Logical. If TRUE and target_type is
+"time-series", allows date values not in tasks.json. Other task ID columns
+are still strictly validated. Ignored for oracle-output (always strict).}
 
 \item{na}{A character vector of strings to interpret as missing values. Only
 applies to CSV files. The default is \code{c("NA", "")}. Useful when actual character
