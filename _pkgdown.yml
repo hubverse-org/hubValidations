@@ -63,21 +63,17 @@ navbar:
    articles:
     text: Articles
     menu:
-    - text: Structure of hub_validations class objects
+    - text: hub_validations class structure
       href: articles/hub-validations-class.html
-    - text: -------
-    - text: "Validation for hub admins through CI"
-    - text: Validating Pull Requests on GitHub
+    - text: Validating model output PRs
       href: articles/validate-pr.html
-    - text: -------
-    - text: "Validation for submitting teams"
-    - text: Validating submissions locally
+    - text: Validating target data PRs
+      href: articles/validate-target-pr.html
+    - text: Validating hub data locally
       href: articles/validate-submission.html
-    - text: -------
-    - text: "Custom validation checks"
-    - text: Writing custom validation functions
+    - text: Writing custom checks
       href: articles/writing-custom-fns.html
-    - text: Deploying custom validation functions
+    - text: Deploying custom checks
       href: articles/deploying-custom-functions.html
 development:
   mode: auto

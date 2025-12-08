@@ -1,5 +1,5 @@
 ---
-title: "Validating submissions locally"
+title: "Validating hub data locally"
 ---
 
 ```{r, include = FALSE}
@@ -13,11 +13,17 @@ knitr::opts_chunk$set(
 library(hubValidations)
 ```
 
+While most hubs will have automated validation systems set up to check contributions via Pull Requests, `hubValidations` also provides functionality for validating files locally before submitting them.
+
+This article covers local validation of:
+
+- [**Model output files**](#validating-model-output-files-with-validate_submission) using `validate_submission()`
+- [**Model metadata files**](#validating-model-metadata-files-with-validate_model_metadata) using `validate_model_metadata()`
+- [**Target data files**](#validating-target-data-files-with-validate_target_submission) using `validate_target_submission()` and `validate_target_dataset()`
+
 ## Validating model output files with `validate_submission()`
 
-While most hubs will have automated validation systems set up to check contributions during submission, `hubValidations` also provides functionality for validating files locally before submitting them.
-
-For this, **submitting teams can use `validate_submission()` to validate their model output files prior to submitting.**
+**Submitting teams can use `validate_submission()` to validate their model output files prior to submitting.**
 
 The function takes a relative path, relative to the model output directory, as argument `file_path`, performs a series of standard validation checks and returns their results in the form of a `hub_validations` S3 class object.
 
@@ -173,11 +179,211 @@ arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")
 ```
 
 
+## Validating target data files with `validate_target_submission()`
+
+Target data files can also be validated locally before submitting using `validate_target_submission()`.
+
+The function validates both file-level properties (file name, extension, location) and the contents of the target data file. It takes a relative path (relative to the `target-data` directory) as argument `file_path` and the `target_type` (either `"time-series"` or `"oracle-output"`).
+
+### Configuring target data validation
+
+For the most robust validation, hubs should include a `target-data.json` configuration file in their `hub-config` directory. When present, this config provides deterministic validation by explicitly defining the date column, column names and types, and observable unit structure.
+
+For hubs without a `target-data.json` config, the **`date_col`** parameter can be used to specify the name of the column containing observation dates (e.g., `"target_end_date"`). This is important for correct schema creation, particularly when the date column is also used for partitioning. When `target-data.json` exists, any user-provided `date_col` is ignored in favour of the config value.
+
+### Relaxed date validation for time-series data
+
+By default, date values in time-series target data are validated strictly against the dates defined in `tasks.json`. However, target data often contains historical observations with dates beyond the hub's configured modeling rounds.
+
+Setting **`allow_extra_dates = TRUE`** relaxes date validation for time-series data, allowing historical observations while still strictly validating other task ID values. Oracle-output data always uses strict date validation regardless of this setting.
+
+Here's an example demonstrating this feature. First, we create a copy of a hub and add a row with a date not defined in `tasks.json`:
+
+```{r}
+# Create a temporary copy of the hub
+tmp_hub <- withr::local_tempdir()
+fs::dir_copy(
+
+  system.file("testhubs/v5/target_file", package = "hubUtils"),
+  tmp_hub
+)
+hub_path <- fs::path(tmp_hub, "target_file")
+
+# Read the time-series data and add a row with an extra date
+ts_data <- read.csv(fs::path(hub_path, "target-data", "time-series.csv"))
+extra_row <- ts_data[1, ]
+extra_row$target_end_date <- "1999-01-01"
+ts_data <- rbind(extra_row, ts_data)
+write.csv(ts_data, fs::path(hub_path, "target-data", "time-series.csv"), row.names = FALSE)
+```
+
+With the default `allow_extra_dates = FALSE`, validation fails because the date is not in `tasks.json`:
+
+```{r, error=TRUE}
+v <- validate_target_submission(
+  hub_path,
+  file_path = "time-series.csv",
+  target_type = "time-series",
+  date_col = "target_end_date"
+)
+v
+```
+
+Setting `allow_extra_dates = TRUE` allows the extra date while still validating other task IDs:
+
+```{r}
+v <- validate_target_submission(
+  hub_path,
+  file_path = "time-series.csv",
+  target_type = "time-series",
+  date_col = "target_end_date",
+  allow_extra_dates = TRUE
+)
+v
+```
+
+Note the message indicating the date column was excluded from validation.
+
+### Single file target datasets
+
+For hubs with single file target datasets (e.g., `target-data/time-series.csv`):
+
+```{r}
+hub_path <- system.file("testhubs/v6/target_file", package = "hubUtils")
+
+validate_target_submission(
+  hub_path,
+  file_path = "time-series.csv",
+  target_type = "time-series"
+)
+```
+
+```{r}
+validate_target_submission(
+  hub_path,
+  file_path = "oracle-output.csv",
+  target_type = "oracle-output"
+)
+```
+
+### Partitioned target datasets
+
+For hubs with partitioned target datasets stored as directories:
+
+```{r}
+hub_path <- system.file("testhubs/v6/target_dir", package = "hubUtils")
+
+validate_target_submission(
+  hub_path,
+  file_path = "time-series/target=wk%20flu%20hosp%20rate/part-0.parquet",
+  target_type = "time-series"
+)
+```
+
+### Validating without a `target-data.json` config
+
+For hubs without a `target-data.json` config (e.g., v5 hubs), you can specify the date column manually:
+
+```{r}
+hub_path <- system.file("testhubs/v5/target_file", package = "hubUtils")
+
+validate_target_submission(
+  hub_path,
+  file_path = "time-series.csv",
+  target_type = "time-series",
+  date_col = "target_end_date"
+)
+```
+
+### Validating the entire target dataset
+
+To validate dataset-level properties across all files of a target type, use `validate_target_dataset()`:
+
+```{r}
+hub_path <- system.file("testhubs/v6/target_file", package = "hubUtils")
+
+validate_target_dataset(hub_path, target_type = "time-series")
+
+validate_target_dataset(hub_path, target_type = "oracle-output")
+```
+
+This checks that the dataset exists, is unique, has consistent file extensions, and contains unique rows across all files.
+
+### Checking for errors with `check_for_errors()`
+
+You can use `check_for_errors()` to determine whether validation passed or failed overall.
+
+For successful validation:
+
+```{r}
+hub_path <- system.file("testhubs/v6/target_file", package = "hubUtils")
+
+v <- validate_target_submission(
+  hub_path,
+  file_path = "time-series.csv",
+  target_type = "time-series"
+)
+check_for_errors(v)
+```
+
+When validation fails, `check_for_errors()` throws an error summarising the failing checks:
+
+```{r, error=TRUE}
+# Using the modified hub from the allow_extra_dates example above
+v_fail <- validate_target_submission(
+  fs::path(tmp_hub, "target_file"),
+  file_path = "time-series.csv",
+  target_type = "time-series",
+  date_col = "target_end_date"
+)
+check_for_errors(v_fail)
+```
+
+### `validate_target_submission` check details
+
+```{r, echo=FALSE}
+arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")) %>%
+  dplyr::filter(
+    .data$`parent fun` %in% c(
+      "validate_target_file",
+      "validate_target_data"
+    ),
+    !.data$optional
+  ) %>%
+  dplyr::select(-"parent fun", -"check fun", -"optional") %>%
+  dplyr::mutate("Extra info" = dplyr::case_when(
+    is.na(.data$`Extra info`) ~ "",
+    TRUE ~ .data$`Extra info`
+  )) %>%
+  knitr::kable(caption = "Details of checks performed by `validate_target_submission()`") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+  column_spec(1, bold = TRUE)
+```
+
+### `validate_target_dataset` check details
+
+```{r, echo=FALSE}
+arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")) %>%
+  dplyr::filter(
+    .data$`parent fun` == "validate_target_dataset",
+    !.data$optional
+  ) %>%
+  dplyr::select(-"parent fun", -"check fun", -"optional") %>%
+  dplyr::mutate("Extra info" = dplyr::case_when(
+    is.na(.data$`Extra info`) ~ "",
+    TRUE ~ .data$`Extra info`
+  )) %>%
+  knitr::kable(caption = "Details of checks performed by `validate_target_dataset()`") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+  column_spec(1, bold = TRUE)
+```
+
+
 <div class="alert alert-info" role="note">
 
 #### Custom checks
 
-The standard checks discussed here are the checks deployed by default by the `validate_submission` or `validate_model_metadata` functions. 
+The standard checks discussed here are the checks deployed by default by the `validate_submission`, `validate_model_metadata`, `validate_target_submission` and `validate_target_dataset` functions.
 For more information on deploying optional/custom functions or functions that require configuration please check the article on [including custom functions](deploying-custom-functions.html) (`vignette("articles/deploying-custom-functions")`).
 
 </div>
