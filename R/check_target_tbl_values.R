@@ -60,7 +60,10 @@ check_target_tbl_values <- function(
       )
     } else {
       # Remove date column from validation
-      target_tbl_chr <- target_tbl_chr[setdiff(names(target_tbl_chr), date_col_to_exclude)]
+      target_tbl_chr <- target_tbl_chr[setdiff(
+        names(target_tbl_chr),
+        date_col_to_exclude
+      )]
     }
   }
 
