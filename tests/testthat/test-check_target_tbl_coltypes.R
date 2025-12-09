@@ -489,3 +489,72 @@ test_that("check_target_tbl_coltypes works with date_col parameter for oracle-ou
     "target_end_date.*not found"
   )
 })
+
+# Invalid date format validation ----
+test_that("CSV files with invalid date strings fail at read time", {
+  hub_path <- use_example_hub_editable("file")
+
+  # Create CSV with invalid date values
+  # nolint start: commas_linter
+  invalid_data <- tibble::tribble(
+    ~target            , ~target_end_date , ~location , ~observation ,
+    "wk flu hosp rate" , "2024-01-01"     , "US"      ,          100 ,
+    "wk flu hosp rate" , "not-a-date"     , "US"      ,          200 ,
+    "wk flu hosp rate" , "2024-13-45"     , "US"      ,          300
+  )
+  # nolint end
+
+  csv_path <- fs::path(hub_path, "target-data", "time-series.csv")
+  arrow::write_csv_arrow(invalid_data, csv_path)
+
+  # Arrow should throw an error when trying to parse invalid dates
+  expect_error(
+    read_target_file("time-series.csv", hub_path),
+    "invalid value"
+  )
+})
+
+test_that("Parquet files with invalid date strings fail type validation", {
+  hub_path <- use_example_hub_editable("file")
+
+  # Create a data frame with character date column containing invalid values
+  # and write as parquet (parquet preserves types, so we write as character)
+  # nolint start: commas_linter
+  invalid_data <- tibble::tribble(
+    ~target            , ~target_end_date , ~location , ~observation ,
+    "wk flu hosp rate" , "2024-01-01"     , "US"      ,          100 ,
+    "wk flu hosp rate" , "not-a-date"     , "US"      ,          200 ,
+    "wk flu hosp rate" , "2024-13-45"     , "US"      ,          300
+  )
+  # nolint end
+
+  # Remove CSV file to avoid "multiple time-series data" error
+  fs::file_delete(fs::path(hub_path, "target-data", "time-series.csv"))
+
+  parquet_path <- fs::path(hub_path, "target-data", "time-series.parquet")
+  arrow::write_parquet(invalid_data, parquet_path)
+
+  # Reading parquet with schema coercion fails silently - column stays character
+  target_tbl <- read_target_file("time-series.parquet", hub_path)
+
+  # The column should be character (failed to coerce to Date)
+  expect_true(is.character(target_tbl$target_end_date))
+
+  # check_target_tbl_coltypes should catch the type mismatch
+  result <- check_target_tbl_coltypes(
+    target_tbl,
+    target_type = "time-series",
+    file_path = "time-series.parquet",
+    hub_path = hub_path
+  )
+
+  expect_s3_class(result, "check_failure")
+  expect_match(
+    cli::ansi_strip(result$message),
+    "`target_end_date` should be <Date> not <character>"
+  )
+  expect_match(
+    cli::ansi_strip(result$message),
+    "Target data does not contain a <Date> column"
+  )
+})

@@ -44,7 +44,7 @@ If cannot determine date column, date relaxation is skipped.}
 are still strictly validated. Ignored for oracle-output (always strict).}
 
 \item{config_target_data}{Target data configuration object from
-\code{read_config(hub_path, "target-data")}, or NULL if config does not exist.
+\code{read_config(hub_path, "target-data")}, or NULL (default) if config does not exist.
 When target-data.json exists, this should be provided to enable date column
 extraction for date relaxation. If NULL and date_col is not provided, date
 relaxation cannot be applied and a warning will be issued if allow_extra_dates
