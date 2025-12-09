@@ -45,7 +45,6 @@ check_target_tbl_values <- function(
     date_col_to_exclude <- determine_date_col(
       date_col = date_col,
       config_target_data = config_target_data,
-      target_type = target_type,
       target_tbl_chr = target_tbl_chr
     )
 
@@ -610,7 +609,6 @@ has_conf_cols <- function(target_tbl, config_tasks) {
 #'   `config_target_data` is NULL.
 #' @param config_target_data Target data configuration from target-data.json,
 #'   or NULL if config doesn't exist.
-#' @param target_type Target type ("time-series" or "oracle-output").
 #' @param target_tbl_chr Target data table with character columns.
 #'
 #' @return Character string with date column name, or NULL if cannot determine.
@@ -618,7 +616,6 @@ has_conf_cols <- function(target_tbl, config_tasks) {
 determine_date_col <- function(
   date_col = NULL,
   config_target_data = NULL,
-  target_type = NULL,
   target_tbl_chr = NULL
 ) {
   # Priority 1: Extract from target-data.json config
