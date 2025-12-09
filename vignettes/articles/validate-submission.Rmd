@@ -187,9 +187,45 @@ The function validates both file-level properties (file name, extension, locatio
 
 ### Configuring target data validation
 
-For the most robust validation, hubs should include a `target-data.json` configuration file in their `hub-config` directory. When present, this config provides deterministic validation by explicitly defining the date column, column names and types, and observable unit structure.
+For the most robust validation, hubs should include a `target-data.json` configuration file in their `hub-config` directory (available from schema version 6.0.0 onwards). When present, this config provides deterministic validation by explicitly defining the date column, column names and types, and observable unit structure.
 
 For hubs without a `target-data.json` config, the **`date_col`** parameter can be used to specify the name of the column containing observation dates (e.g., `"target_end_date"`). This is important for correct schema creation, particularly when the date column is also used for partitioning. When `target-data.json` exists, any user-provided `date_col` is ignored in favour of the config value.
+
+### Single file target datasets
+
+For hubs with single file target datasets (e.g., `target-data/time-series.csv`):
+
+```{r}
+hub_path <- system.file("testhubs/v6/target_file", package = "hubUtils")
+
+validate_target_submission(
+  hub_path,
+  file_path = "time-series.csv",
+  target_type = "time-series"
+)
+```
+
+```{r}
+validate_target_submission(
+  hub_path,
+  file_path = "oracle-output.csv",
+  target_type = "oracle-output"
+)
+```
+
+### Partitioned target datasets
+
+For hubs with partitioned target datasets stored as directories:
+
+```{r}
+hub_path <- system.file("testhubs/v6/target_dir", package = "hubUtils")
+
+validate_target_submission(
+  hub_path,
+  file_path = "time-series/target=wk%20flu%20hosp%20rate/part-0.parquet",
+  target_type = "time-series"
+)
+```
 
 ### Relaxed date validation for time-series data
 
@@ -203,7 +239,6 @@ Here's an example demonstrating this feature. First, we create a copy of a hub a
 # Create a temporary copy of the hub
 tmp_hub <- withr::local_tempdir()
 fs::dir_copy(
-
   system.file("testhubs/v5/target_file", package = "hubUtils"),
   tmp_hub
 )
@@ -243,42 +278,6 @@ v
 ```
 
 Note the message indicating the date column was excluded from validation.
-
-### Single file target datasets
-
-For hubs with single file target datasets (e.g., `target-data/time-series.csv`):
-
-```{r}
-hub_path <- system.file("testhubs/v6/target_file", package = "hubUtils")
-
-validate_target_submission(
-  hub_path,
-  file_path = "time-series.csv",
-  target_type = "time-series"
-)
-```
-
-```{r}
-validate_target_submission(
-  hub_path,
-  file_path = "oracle-output.csv",
-  target_type = "oracle-output"
-)
-```
-
-### Partitioned target datasets
-
-For hubs with partitioned target datasets stored as directories:
-
-```{r}
-hub_path <- system.file("testhubs/v6/target_dir", package = "hubUtils")
-
-validate_target_submission(
-  hub_path,
-  file_path = "time-series/target=wk%20flu%20hosp%20rate/part-0.parquet",
-  target_type = "time-series"
-)
-```
 
 ### Validating without a `target-data.json` config
 
