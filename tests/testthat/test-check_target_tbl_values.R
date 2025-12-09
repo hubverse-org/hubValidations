@@ -203,7 +203,7 @@ test_that("allow_extra_dates = TRUE allows future dates in time-series", {
   )
   expect_match(
     cli::ansi_strip(result$message),
-    "Date column \"target_end_date\" excluded from validation"
+    "Date column \"target_end_date\" excluded from value validation"
   )
 })
 
@@ -313,7 +313,7 @@ test_that("explicit date_col parameter works for hubs without config", {
   expect_s3_class(result, "check_success")
   expect_match(
     cli::ansi_strip(result$message),
-    "Date column \"target_end_date\" excluded from validation"
+    "Date column \"target_end_date\" excluded from value validation"
   )
 })
 
@@ -343,7 +343,7 @@ test_that("date column extracted from target-data.json config in v6 hubs", {
   expect_s3_class(result, "check_success")
   expect_match(
     cli::ansi_strip(result$message),
-    "Date column \"target_end_date\" excluded from validation"
+    "Date column \"target_end_date\" excluded from value validation"
   )
 })
 

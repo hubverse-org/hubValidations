@@ -85,7 +85,7 @@ check_target_tbl_values <- function(
     details <- c(
       details,
       cli::format_inline(
-        "Date column {.val {date_col_to_exclude}} excluded from validation."
+        "Date column {.val {date_col_to_exclude}} excluded from value validation."
       )
     )
   }
