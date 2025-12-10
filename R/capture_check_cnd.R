@@ -43,13 +43,22 @@
 #'   msg_subject = "{.var round_id}", msg_attribute = "valid.", error = TRUE,
 #'   details = "Must be one of {.val {c('A', 'B')}}, not {.val C}"
 #' )
-capture_check_cnd <- function(check, file_path, msg_subject, msg_attribute,
-                              msg_verbs = c("is", "must be"), error = FALSE,
-                              details = NULL, ...) {
+capture_check_cnd <- function(
+  check,
+  file_path,
+  msg_subject,
+  msg_attribute,
+  msg_verbs = c("is", "must be"),
+  error = FALSE,
+  details = NULL,
+  ...
+) {
   if (!rlang::is_character(msg_verbs, 2L)) {
-    cli::cli_abort("{.arg msg_verbs} must be a character vector of length 2,
+    cli::cli_abort(
+      "{.arg msg_verbs} must be a character vector of length 2,
                        not class {.cls {class(msg_verbs)}}
-                       of length {length(msg_verbs)}")
+                       of length {length(msg_verbs)}"
+    )
   }
   call <- rlang::caller_call()
   if (!is.null(call)) {
@@ -121,5 +130,63 @@ capture_check_info <- function(file_path, msg, call = rlang::caller_call()) {
     call = call,
     message = cli::format_inline(msg),
     use_cli_format = TRUE
+  )
+}
+
+#' Capture a validation warning condition
+#'
+#' Capture a warning about the validation process. Unlike check results
+#' (success/failure/error), validation warnings are informational messages
+#' about the validation process itself rather than validation outcomes.
+#'
+#' Validation warnings can be attached at two levels:
+#' - **Validation-level**: Stored as an attribute on `hub_validations` objects,
+#'   printed prominently by default.
+#' - **Check-level**: Stored in a `warnings` field on individual check results,
+#'   printed only when `verbose = TRUE`.
+#'
+#' @param msg Character string. The warning message. Accepts text that can be
+#'   interpreted and formatted by [cli::format_inline()].
+#' @param where Optional. Character string indicating the location or context
+#'   of the warning (e.g., file path, `"hub-config"`). Used as metadata.
+#' @param call The defused call of the function that generated the warning.
+#'   Use to override default which uses the caller call. See [rlang::stack]
+#'   for more details.
+#' @param ... Additional named fields to include in the warning condition object.
+#'   Useful for attaching structured data (e.g., `config_files = c("tasks.json")`).
+#'
+#' @return A `<warning/validation_warning>` condition class object.
+#' @export
+#'
+#' @examples
+#' # Simple warning
+#' capture_validation_warning(
+#'   msg = "Configuration files were modified"
+#' )
+#'
+#' # Warning with location and additional structured data
+#' config_files <- c("tasks.json", "admin.json")
+#' capture_validation_warning(
+#'   msg = "Config files modified: {.path {config_files}}",
+#'   where = "hub-config",
+#'   config_files = config_files
+#' )
+capture_validation_warning <- function(
+  msg,
+  where = NULL,
+  call = rlang::caller_call(),
+  ...
+) {
+  if (!is.null(call)) {
+    call <- rlang::call_name(call)
+  }
+
+  rlang::warning_cnd(
+    "validation_warning",
+    where = where,
+    call = call,
+    message = cli::format_inline(msg),
+    use_cli_format = TRUE,
+    ...
   )
 }

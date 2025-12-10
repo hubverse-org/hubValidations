@@ -151,13 +151,53 @@ Is ignored when checking model metadata files as well as when `file_modification
 <div class="alert alert-warning" role="note">
 
 #### Warning
-  
+
  Note that to establish **relative** submission windows when performing  modification/deletion checks and `allow_submit_window_mods` is `TRUE`, the reference date is taken as the `round_id` extracted from the file path.
- This is because we cannot extract dates from columns of deleted files. 
- If hub submission window reference dates do not match round IDs in file paths, currently `allow_submit_window_mods` will not work correctly and is best set to `FALSE`. 
- This only relates to hubs/rounds where submission windows are determined relative to a reference date and not when explicit submission window start and end dates are provided in the config. 
- 
+ This is because we cannot extract dates from columns of deleted files.
+ If hub submission window reference dates do not match round IDs in file paths, currently `allow_submit_window_mods` will not work correctly and is best set to `FALSE`.
+ This only relates to hubs/rounds where submission windows are determined relative to a reference date and not when explicit submission window start and end dates are provided in the config.
+
  For more details on submission window config see [Setting up `"submission_due"`](https://docs.hubverse.io/en/latest/quickstart-hub-admin/tasks-config.html#setting-up-submissions-due) in the hubverse hubDocs.
+
+</div>
+
+### Hub config modification warnings
+
+When a pull request modifies hub configuration files (files in `hub-config/`), `validate_pr()` attaches a validation-level warning to alert maintainers.
+This warning is displayed prominently at the top of the validation output:
+
+```{r, echo = FALSE}
+validations <- new_hub_validations()
+validations$valid_config <- capture_check_cnd(
+  check = TRUE,
+  file_path = "ci-testhub-simple",
+  msg_subject = "All hub config files",
+  msg_attribute = "valid."
+)
+attr(validations, "warnings") <- list(
+  capture_validation_warning(
+    msg = "Hub config files modified: {.path tasks.json}.
+    Config changes may affect validation of existing model output and target data.
+    Please review carefully for consistency.",
+    where = "hub-config"
+  )
+)
+validations
+```
+
+<div class="alert alert-info" role="note">
+
+#### Why this matters
+
+Modifications to hub configuration files can have significant implications:
+
+- **`tasks.json` changes** may alter which task ID values, output types, or rounds are considered valid, potentially invalidating previously accepted model outputs or changing validation behavior for future submissions.
+- **`admin.json` changes** may affect hub metadata or model output directory settings.
+- **Schema changes** may alter model metadata validation rules.
+
+This warning does not cause validation to fail but serves as a reminder to carefully review configuration changes for consistency with existing hub data.
+
+For comprehensive hub integrity checking beyond PR validation, see [issue #83](https://github.com/hubverse-org/hubValidations/issues/83) which tracks planned functionality for periodic hub health and integrity scanning.
 
 </div>
 

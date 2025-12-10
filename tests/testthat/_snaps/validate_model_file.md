@@ -114,12 +114,12 @@
       [35m-- [4m[1m2022-10-08-team1-goodmodel.csv[22m[24m ----[39m
       
       [1m[22m[32mv[39m [90m[file_exists][39m: File exists at path [34mmodel-output/team1-goodmodel/2022-10-08-team1-goodmodel.csv[39m.
-      [32mv[39m [90m[file_name][39m: File name [34m"2022-10-08-team1-goodmodel.csv"[39m is valid.
-      [32mv[39m [90m[file_location][39m: File directory name matches `model_id` metadata in file name.
-      [32mv[39m [90m[round_id_valid][39m: `round_id` is valid.
-      [32mv[39m [90m[file_format][39m: File is accepted hub format.
-      [32mv[39m [90m[file_n][39m: Number of accepted model output files per round met.
-      [32mv[39m [90m[metadata_exists][39m: Metadata file exists at path [34mmodel-metadata/team1-goodmodel.yaml[39m.
+      [1m[22m[32mv[39m [90m[file_name][39m: File name [34m"2022-10-08-team1-goodmodel.csv"[39m is valid.
+      [1m[22m[32mv[39m [90m[file_location][39m: File directory name matches `model_id` metadata in file name.
+      [1m[22m[32mv[39m [90m[round_id_valid][39m: `round_id` is valid.
+      [1m[22m[32mv[39m [90m[file_format][39m: File is accepted hub format.
+      [1m[22m[32mv[39m [90m[file_n][39m: Number of accepted model output files per round met.
+      [1m[22m[32mv[39m [90m[metadata_exists][39m: Metadata file exists at path [34mmodel-metadata/team1-goodmodel.yaml[39m.
 
 ---
 
@@ -140,12 +140,12 @@
       [35m-- [4m[1m2022-10-15-hub-baseline.csv[22m[24m ----[39m
       
       [1m[22m[32mv[39m [90m[file_exists][39m: File exists at path [34mmodel-output/team1-goodmodel/2022-10-15-hub-baseline.csv[39m.
-      [32mv[39m [90m[file_name][39m: File name [34m"2022-10-15-hub-baseline.csv"[39m is valid.
-      [31mx[39m [90m[file_location][39m: File directory name must match `model_id` metadata in file name.  File should be submitted to directory [34m"hub-baseline"[39m not [34m"team1-goodmodel"[39m
-      [32mv[39m [90m[round_id_valid][39m: `round_id` is valid.
-      [32mv[39m [90m[file_format][39m: File is accepted hub format.
-      [32mv[39m [90m[file_n][39m: Number of accepted model output files per round met.
-      [32mv[39m [90m[metadata_exists][39m: Metadata file exists at path [34mmodel-metadata/hub-baseline.yml[39m.
+      [1m[22m[32mv[39m [90m[file_name][39m: File name [34m"2022-10-15-hub-baseline.csv"[39m is valid.
+      [1m[22m[31mx[39m [90m[file_location][39m: File directory name must match `model_id` metadata in file name.  File should be submitted to directory [34m"hub-baseline"[39m not [34m"team1-goodmodel"[39m
+      [1m[22m[32mv[39m [90m[round_id_valid][39m: `round_id` is valid.
+      [1m[22m[32mv[39m [90m[file_format][39m: File is accepted hub format.
+      [1m[22m[32mv[39m [90m[file_n][39m: Number of accepted model output files per round met.
+      [1m[22m[32mv[39m [90m[metadata_exists][39m: Metadata file exists at path [34mmodel-metadata/hub-baseline.yml[39m.
 
 # validate_model_file print method work [unicode]
 
@@ -198,12 +198,12 @@
       [35m── [4m[1m2022-10-08-team1-goodmodel.csv[22m[24m ────[39m
       
       [1m[22m[32m✔[39m [90m[file_exists][39m: File exists at path [34mmodel-output/team1-goodmodel/2022-10-08-team1-goodmodel.csv[39m.
-      [32m✔[39m [90m[file_name][39m: File name [34m"2022-10-08-team1-goodmodel.csv"[39m is valid.
-      [32m✔[39m [90m[file_location][39m: File directory name matches `model_id` metadata in file name.
-      [32m✔[39m [90m[round_id_valid][39m: `round_id` is valid.
-      [32m✔[39m [90m[file_format][39m: File is accepted hub format.
-      [32m✔[39m [90m[file_n][39m: Number of accepted model output files per round met.
-      [32m✔[39m [90m[metadata_exists][39m: Metadata file exists at path [34mmodel-metadata/team1-goodmodel.yaml[39m.
+      [1m[22m[32m✔[39m [90m[file_name][39m: File name [34m"2022-10-08-team1-goodmodel.csv"[39m is valid.
+      [1m[22m[32m✔[39m [90m[file_location][39m: File directory name matches `model_id` metadata in file name.
+      [1m[22m[32m✔[39m [90m[round_id_valid][39m: `round_id` is valid.
+      [1m[22m[32m✔[39m [90m[file_format][39m: File is accepted hub format.
+      [1m[22m[32m✔[39m [90m[file_n][39m: Number of accepted model output files per round met.
+      [1m[22m[32m✔[39m [90m[metadata_exists][39m: Metadata file exists at path [34mmodel-metadata/team1-goodmodel.yaml[39m.
 
 ---
 
@@ -224,10 +224,10 @@
       [35m── [4m[1m2022-10-15-hub-baseline.csv[22m[24m ────[39m
       
       [1m[22m[32m✔[39m [90m[file_exists][39m: File exists at path [34mmodel-output/team1-goodmodel/2022-10-15-hub-baseline.csv[39m.
-      [32m✔[39m [90m[file_name][39m: File name [34m"2022-10-15-hub-baseline.csv"[39m is valid.
-      [31m✖[39m [90m[file_location][39m: File directory name must match `model_id` metadata in file name.  File should be submitted to directory [34m"hub-baseline"[39m not [34m"team1-goodmodel"[39m
-      [32m✔[39m [90m[round_id_valid][39m: `round_id` is valid.
-      [32m✔[39m [90m[file_format][39m: File is accepted hub format.
-      [32m✔[39m [90m[file_n][39m: Number of accepted model output files per round met.
-      [32m✔[39m [90m[metadata_exists][39m: Metadata file exists at path [34mmodel-metadata/hub-baseline.yml[39m.
+      [1m[22m[32m✔[39m [90m[file_name][39m: File name [34m"2022-10-15-hub-baseline.csv"[39m is valid.
+      [1m[22m[31m✖[39m [90m[file_location][39m: File directory name must match `model_id` metadata in file name.  File should be submitted to directory [34m"hub-baseline"[39m not [34m"team1-goodmodel"[39m
+      [1m[22m[32m✔[39m [90m[round_id_valid][39m: `round_id` is valid.
+      [1m[22m[32m✔[39m [90m[file_format][39m: File is accepted hub format.
+      [1m[22m[32m✔[39m [90m[file_n][39m: Number of accepted model output files per round met.
+      [1m[22m[32m✔[39m [90m[metadata_exists][39m: Metadata file exists at path [34mmodel-metadata/hub-baseline.yml[39m.
 
