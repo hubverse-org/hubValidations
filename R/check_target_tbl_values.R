@@ -4,6 +4,19 @@
 #' task IDs or output types defined in the hub configuration.
 #' @param target_tbl_chr A tibble/data.frame of the contents of the target data file
 #' being validated. All columns should be coerced to character.
+#' @param date_col Optional. Name of the date column (e.g., "target_end_date").
+#'   Only used when target-data.json config does not exist. When target-data.json
+#'   exists, date column is extracted from config (this parameter is ignored).
+#'   If cannot determine date column, date relaxation is skipped.
+#' @param allow_extra_dates Logical. If TRUE and target_type is
+#'   "time-series", allows date values not in tasks.json. Other task ID columns
+#'   are still strictly validated. Ignored for oracle-output (always strict).
+#' @param config_target_data Target data configuration object from
+#'   `read_config(hub_path, "target-data")`, or NULL (default) if config does not exist.
+#'   When target-data.json exists, this should be provided to enable date column
+#'   extraction for date relaxation. If NULL and date_col is not provided, date
+#'   relaxation cannot be applied and a warning will be issued if allow_extra_dates
+#'   is TRUE.
 #' @inheritParams check_target_file_name
 #' @inheritParams check_target_tbl_colnames
 #' @inherit check_tbl_colnames params return
@@ -16,10 +29,42 @@ check_target_tbl_values <- function(
     "oracle-output"
   ),
   file_path,
-  hub_path
+  hub_path,
+  date_col = NULL,
+  allow_extra_dates = FALSE,
+  config_target_data = NULL
 ) {
   target_type <- rlang::arg_match(target_type)
   config_tasks <- read_config(hub_path)
+
+  # Only determine and exclude date column if allow_extra_dates is TRUE
+  # and target_type is time-series
+  # When FALSE, we want strict validation on all columns including dates
+  if (allow_extra_dates && identical(target_type, "time-series")) {
+    # Determine date column from config or user parameter
+    date_col_to_exclude <- determine_date_col(
+      date_col = date_col,
+      config_target_data = config_target_data,
+      target_tbl_chr = target_tbl_chr
+    )
+
+    # Warn if date relaxation requested but date column can't be determined
+    if (is.null(date_col_to_exclude)) {
+      cli::cli_warn(
+        c(
+          "{.arg allow_extra_dates} is {.val TRUE} but date column cannot be determined.",
+          "i" = "Provide {.arg config_target_data} or {.arg date_col} to enable date relaxation.",
+          "i" = "Date validation will use strict mode."
+        )
+      )
+    } else {
+      # Remove date column from validation
+      target_tbl_chr <- target_tbl_chr[setdiff(
+        names(target_tbl_chr),
+        date_col_to_exclude
+      )]
+    }
+  }
 
   # If no task IDs and output types are present in the target_tbl_chr, we can skip the check
   if (!has_conf_cols(target_tbl_chr, config_tasks)) {
@@ -34,6 +79,16 @@ check_target_tbl_values <- function(
   }
 
   details <- NULL
+
+  # Add note if date column was excluded
+  if (exists("date_col_to_exclude") && !is.null(date_col_to_exclude)) {
+    details <- c(
+      details,
+      cli::format_inline(
+        "Date column {.val {date_col_to_exclude}} excluded from value validation."
+      )
+    )
+  }
 
   invalid_tbl <- detect_invalid_target_vals(target_tbl_chr, config_tasks)
 
@@ -543,4 +598,48 @@ has_task_ids <- function(target_tbl, config_tasks) {
 
 has_conf_cols <- function(target_tbl, config_tasks) {
   length(target_cols_to_validate(target_tbl, config_tasks)) > 0L
+}
+
+#' Determine date column for validation relaxation
+#'
+#' Deterministically identifies the date column from either target-data.json
+#' config or user-provided parameter. Config takes absolute precedence when it exists.
+#'
+#' @param date_col Optional user-provided date column name. Only used when
+#'   `config_target_data` is NULL.
+#' @param config_target_data Target data configuration from target-data.json,
+#'   or NULL if config doesn't exist.
+#' @param target_tbl_chr Target data table with character columns.
+#'
+#' @return Character string with date column name, or NULL if cannot determine.
+#' @noRd
+determine_date_col <- function(
+  date_col = NULL,
+  config_target_data = NULL,
+  target_tbl_chr = NULL
+) {
+  # Priority 1: Extract from target-data.json config
+  # Config is SOLE SOURCE when it exists
+  if (!is.null(config_target_data)) {
+    # Use hubUtils to get date column from config (date column is global, not dataset-specific)
+    date_col_from_config <- hubUtils::get_date_col(config_target_data)
+    return(date_col_from_config)
+  }
+
+  # Priority 2: User-provided parameter (hubs without target-data.json)
+  # Only used when config doesn't exist
+  if (!is.null(date_col)) {
+    if (date_col %in% colnames(target_tbl_chr)) {
+      return(date_col)
+    } else {
+      cli::cli_warn(
+        "Provided {.arg date_col} {.val {date_col}} not found in target data. Date relaxation will be skipped."
+      )
+      return(NULL)
+    }
+  }
+
+  # Priority 3: Could not determine - return NULL
+  # Date relaxation will be skipped
+  return(NULL)
 }

@@ -9,6 +9,11 @@
 * Added `date_col` parameter support for oracle-output target data validation (#290).
   - `check_target_tbl_coltypes()`, `check_target_dataset_rows_unique()`, and `read_target_file()` now pass `date_col` to oracle-output schema and connection functions, providing consistent handling of partitioned date columns across both time-series and oracle-output target types.
   - When `target-data.json` config exists, user-provided `date_col` is ignored and the config value is used instead.
+* `check_target_tbl_values()` now supports relaxed date validation for time-series target data (#274).
+  - When `allow_extra_dates = TRUE`, date values are not required to match tasks.json, allowing historical observations while validating other task IDs strictly. This behavior is controlled by the new `allow_extra_dates` parameter (default `FALSE`).
+  - Oracle-output target data always uses strict validation regardless of the `allow_extra_dates` setting.
+  - Date column identification is deterministic: extracted from `target-data.json` config when available, otherwise from the `date_col` parameter.
+  - The `allow_extra_dates` parameter is also available in `validate_target_data()`, `validate_target_submission()`, and `validate_target_pr()`.
 
 # hubValidations 0.12.1
 

@@ -7,6 +7,7 @@
 #' schema creation, particularly when it's also a partitioning column, and (2)
 #' more robust column name validation when `target-data.json` config does not
 #' exist. Ignored when `target-data.json` exists.
+#' @inheritParams check_target_tbl_values
 #' @inherit validate_target_file params return
 #' @inheritParams check_target_tbl_coltypes
 #' @details
@@ -49,6 +50,7 @@ validate_target_data <- function(
   file_path,
   target_type = c("time-series", "oracle-output"),
   date_col = NULL,
+  allow_extra_dates = FALSE,
   na = c("NA", ""),
   output_type_id_datatype = c(
     "from_config",
@@ -170,7 +172,10 @@ validate_target_data <- function(
       target_tbl_chr = target_tbl_chr,
       target_type = target_type,
       file_path = file_path,
-      hub_path = hub_path
+      hub_path = hub_path,
+      date_col = date_col,
+      allow_extra_dates = allow_extra_dates,
+      config_target_data = config_target_data
     ),
     file_path
   )

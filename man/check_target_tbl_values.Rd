@@ -8,7 +8,10 @@ check_target_tbl_values(
   target_tbl_chr,
   target_type = c("time-series", "oracle-output"),
   file_path,
-  hub_path
+  hub_path,
+  date_col = NULL,
+  allow_extra_dates = FALSE,
+  config_target_data = NULL
 )
 }
 \arguments{
@@ -30,6 +33,22 @@ For more details consult the
 in the \code{arrow} package.
 The hub must be fully configured with valid \code{admin.json} and \code{tasks.json}
 files within the \code{hub-config} directory.}
+
+\item{date_col}{Optional. Name of the date column (e.g., "target_end_date").
+Only used when target-data.json config does not exist. When target-data.json
+exists, date column is extracted from config (this parameter is ignored).
+If cannot determine date column, date relaxation is skipped.}
+
+\item{allow_extra_dates}{Logical. If TRUE and target_type is
+"time-series", allows date values not in tasks.json. Other task ID columns
+are still strictly validated. Ignored for oracle-output (always strict).}
+
+\item{config_target_data}{Target data configuration object from
+\code{read_config(hub_path, "target-data")}, or NULL (default) if config does not exist.
+When target-data.json exists, this should be provided to enable date column
+extraction for date relaxation. If NULL and date_col is not provided, date
+relaxation cannot be applied and a warning will be issued if allow_extra_dates
+is TRUE.}
 }
 \value{
 Depending on whether validation has succeeded, one of:

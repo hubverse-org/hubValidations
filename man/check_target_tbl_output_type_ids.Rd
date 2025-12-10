@@ -32,9 +32,12 @@ in the \code{arrow} package.
 The hub must be fully configured with valid \code{admin.json} and \code{tasks.json}
 files within the \code{hub-config} directory.}
 
-\item{config_target_data}{Optional. A \code{target-data.json} config object. If
-provided, validation uses deterministic schema from config. If \code{NULL}
-(default), validation uses inference from \code{tasks.json}.}
+\item{config_target_data}{Target data configuration object from
+\code{read_config(hub_path, "target-data")}, or NULL (default) if config does not exist.
+When target-data.json exists, this should be provided to enable date column
+extraction for date relaxation. If NULL and date_col is not provided, date
+relaxation cannot be applied and a warning will be issued if allow_extra_dates
+is TRUE.}
 }
 \value{
 Depending on whether validation has succeeded, one of:

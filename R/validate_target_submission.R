@@ -53,6 +53,7 @@ validate_target_submission <- function(
     "oracle-output"
   ),
   date_col = NULL,
+  allow_extra_dates = FALSE,
   round_id = "default",
   na = c("NA", ""),
   output_type_id_datatype = c(
@@ -100,6 +101,7 @@ validate_target_submission <- function(
     file_path = file_path,
     target_type = target_type,
     date_col = date_col,
+    allow_extra_dates = allow_extra_dates,
     na = na,
     output_type_id_datatype = output_type_id_datatype,
     validations_cfg_path = validations_cfg_path,

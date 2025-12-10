@@ -9,6 +9,7 @@ validate_target_submission(
   file_path,
   target_type = c("time-series", "oracle-output"),
   date_col = NULL,
+  allow_extra_dates = FALSE,
   round_id = "default",
   na = c("NA", ""),
   output_type_id_datatype = c("from_config", "auto", "character", "double", "integer",
@@ -41,6 +42,10 @@ calculated from other task IDs like \code{origin_date + horizon}) for: (1) corre
 schema creation, particularly when it's also a partitioning column, and (2)
 more robust column name validation when \code{target-data.json} config does not
 exist. Ignored when \code{target-data.json} exists.}
+
+\item{allow_extra_dates}{Logical. If TRUE and target_type is
+"time-series", allows date values not in tasks.json. Other task ID columns
+are still strictly validated. Ignored for oracle-output (always strict).}
 
 \item{round_id}{Character string. Not generally relevant to target datasets
 but can be used to specify a specific block of custom validation checks.
