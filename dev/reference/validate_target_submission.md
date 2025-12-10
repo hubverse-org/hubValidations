@@ -11,6 +11,7 @@ validate_target_submission(
   file_path,
   target_type = c("time-series", "oracle-output"),
   date_col = NULL,
+  allow_extra_dates = FALSE,
   round_id = "default",
   na = c("NA", ""),
   output_type_id_datatype = c("from_config", "auto", "character", "double", "integer",
@@ -56,6 +57,12 @@ validate_target_submission(
   column, and (2) more robust column name validation when
   `target-data.json` config does not exist. Ignored when
   `target-data.json` exists.
+
+- allow_extra_dates:
+
+  Logical. If TRUE and target_type is "time-series", allows date values
+  not in tasks.json. Other task ID columns are still strictly validated.
+  Ignored for oracle-output (always strict).
 
 - round_id:
 

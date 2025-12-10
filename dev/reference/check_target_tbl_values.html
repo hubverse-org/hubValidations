@@ -59,7 +59,10 @@ task IDs or output types defined in the hub configuration.</p>
 <span>  <span class="va">target_tbl_chr</span>,</span>
 <span>  target_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"time-series"</span>, <span class="st">"oracle-output"</span><span class="op">)</span>,</span>
 <span>  <span class="va">file_path</span>,</span>
-<span>  <span class="va">hub_path</span></span>
+<span>  <span class="va">hub_path</span>,</span>
+<span>  date_col <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  allow_extra_dates <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  config_target_data <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -92,6 +95,28 @@ For more details consult the
 in the <code>arrow</code> package.
 The hub must be fully configured with valid <code>admin.json</code> and <code>tasks.json</code>
 files within the <code>hub-config</code> directory.</p></dd>
+
+
+<dt id="arg-date-col">date_col<a class="anchor" aria-label="anchor" href="#arg-date-col"></a></dt>
+<dd><p>Optional. Name of the date column (e.g., "target_end_date").
+Only used when target-data.json config does not exist. When target-data.json
+exists, date column is extracted from config (this parameter is ignored).
+If cannot determine date column, date relaxation is skipped.</p></dd>
+
+
+<dt id="arg-allow-extra-dates">allow_extra_dates<a class="anchor" aria-label="anchor" href="#arg-allow-extra-dates"></a></dt>
+<dd><p>Logical. If TRUE and target_type is
+"time-series", allows date values not in tasks.json. Other task ID columns
+are still strictly validated. Ignored for oracle-output (always strict).</p></dd>
+
+
+<dt id="arg-config-target-data">config_target_data<a class="anchor" aria-label="anchor" href="#arg-config-target-data"></a></dt>
+<dd><p>Target data configuration object from
+<code>read_config(hub_path, "target-data")</code>, or NULL (default) if config does not exist.
+When target-data.json exists, this should be provided to enable date column
+extraction for date relaxation. If NULL and date_col is not provided, date
+relaxation cannot be applied and a warning will be issued if allow_extra_dates
+is TRUE.</p></dd>
 
 </dl></div>
     <div class="section level2">

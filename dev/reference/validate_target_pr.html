@@ -59,6 +59,7 @@
 <span>  output_type_id_datatype <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"from_config"</span>, <span class="st">"auto"</span>, <span class="st">"character"</span>, <span class="st">"double"</span>, <span class="st">"integer"</span>,</span>
 <span>    <span class="st">"logical"</span>, <span class="st">"Date"</span><span class="op">)</span>,</span>
 <span>  date_col <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  allow_extra_dates <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"NA"</span>, <span class="st">""</span><span class="op">)</span>,</span>
 <span>  round_id <span class="op">=</span> <span class="st">"default"</span>,</span>
 <span>  validations_cfg_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -118,6 +119,12 @@ calculated from other task IDs like <code>origin_date + horizon</code>) for: (1)
 schema creation, particularly when it's also a partitioning column, and (2)
 more robust column name validation when <code>target-data.json</code> config does not
 exist. Ignored when <code>target-data.json</code> exists.</p></dd>
+
+
+<dt id="arg-allow-extra-dates">allow_extra_dates<a class="anchor" aria-label="anchor" href="#arg-allow-extra-dates"></a></dt>
+<dd><p>Logical. If TRUE and target_type is
+"time-series", allows date values not in tasks.json. Other task ID columns
+are still strictly validated. Ignored for oracle-output (always strict).</p></dd>
 
 
 <dt id="arg-na">na<a class="anchor" aria-label="anchor" href="#arg-na"></a></dt>

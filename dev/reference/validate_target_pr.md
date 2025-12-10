@@ -12,6 +12,7 @@ validate_target_pr(
   output_type_id_datatype = c("from_config", "auto", "character", "double", "integer",
     "logical", "Date"),
   date_col = NULL,
+  allow_extra_dates = FALSE,
   na = c("NA", ""),
   round_id = "default",
   validations_cfg_path = NULL,
@@ -73,6 +74,12 @@ validate_target_pr(
   column, and (2) more robust column name validation when
   `target-data.json` config does not exist. Ignored when
   `target-data.json` exists.
+
+- allow_extra_dates:
+
+  Logical. If TRUE and target_type is "time-series", allows date values
+  not in tasks.json. Other task ID columns are still strictly validated.
+  Ignored for oracle-output (always strict).
 
 - na:
 

@@ -57,9 +57,12 @@ check_target_tbl_oracle_value(
 
 - config_target_data:
 
-  Optional. A `target-data.json` config object. If provided, validation
-  uses deterministic schema from config. If `NULL` (default), validation
-  uses inference from `tasks.json`.
+  Target data configuration object from
+  `read_config(hub_path, "target-data")`, or NULL (default) if config
+  does not exist. When target-data.json exists, this should be provided
+  to enable date column extraction for date relaxation. If NULL and
+  date_col is not provided, date relaxation cannot be applied and a
+  warning will be issued if allow_extra_dates is TRUE.
 
 ## Value
 
