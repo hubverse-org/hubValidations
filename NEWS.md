@@ -2,6 +2,11 @@
 
 ## Enhancements
 
+* Added validation warning infrastructure for informational messages that don't affect validation results (#292).
+  - `validate_pr()` now displays a warning when hub config files are modified in a pull request, alerting maintainers to review changes that may affect validation of existing data.
+  - Validation-level warnings are displayed prominently in a box at the top of print output.
+  - Check-level warnings can be displayed inline with their checks using `print(x, show_check_warnings = TRUE)`.
+  - `check_for_errors()` gains a `show_warnings` parameter to control display of check-level warnings.
 * Enhanced target data column validation to support `target-data.json` configuration (#280).
   - `check_target_tbl_colnames()` and `check_target_tbl_coltypes()` now use deterministic validation when `target-data.json` config is available, with error messages explicitly referencing the config file.
 * Enhanced `check_target_tbl_rows_unique()`, `check_target_tbl_output_type_ids()`, and `check_target_tbl_oracle_value()` to support `target-data.json` configuration (#282).

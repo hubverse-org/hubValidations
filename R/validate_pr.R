@@ -196,6 +196,12 @@ validate_pr <- function(
         )
       inform_unvalidated_files(pr_df)
 
+      # Check for config file modifications and attach as warning
+      config_warning <- check_pr_config_modified(pr_df)
+      if (!is.null(config_warning)) {
+        attr(validations, "warnings") <- list(config_warning)
+      }
+
       model_output_files <- pr_df$rel_path[
         pr_df$model_output & pr_df$status != "removed"
       ]
@@ -421,4 +427,30 @@ check_pr_modf_del_file <- function(
       error = error
     )
   }
+}
+
+# Check for config file modifications in a PR and return a warning if found.
+# Returns an exec_warning condition object if config files modified, NULL otherwise.
+check_pr_config_modified <- function(pr_df) {
+  config_dir <- "hub-config"
+
+  # Identify config files that were modified (not just added)
+  config_files <- pr_df$filename[
+    fs::path_has_parent(pr_df$filename, config_dir) &
+      pr_df$status %in% c("modified", "renamed")
+  ]
+
+  if (length(config_files) == 0L) {
+    return(NULL)
+  }
+
+  capture_validation_warning(
+    msg = cli::format_inline(
+      "Hub config file{?s} modified: {.path {basename(config_files)}}.
+      Config changes may affect validation of existing model output and
+      target data. Please review carefully for consistency."
+    ),
+    where = config_dir,
+    config_files = config_files
+  )
 }

@@ -283,18 +283,18 @@
       [35m-- [4m[1m2022-10-08-team1-goodmodel.csv[22m[24m ----[39m
       
       [1m[22m[32mv[39m [90m[file_read][39m: File could be read successfully.
-      [32mv[39m [90m[valid_round_id_col][39m: `round_id_col` name is valid.
-      [32mv[39m [90m[unique_round_id][39m: `round_id` column [34m"origin_date"[39m contains a single, unique round ID value.
-      [32mv[39m [90m[match_round_id][39m: All `round_id_col` [34m"origin_date"[39m values match submission `round_id` from file name.
-      [32mv[39m [90m[colnames][39m: Column names are consistent with expected round task IDs and std column names.
-      [32mv[39m [90m[col_types][39m: Column data types match hub schema.
-      [32mv[39m [90m[valid_vals][39m: `tbl` contains valid values/value combinations.
-      [36mi[39m [90m[derived_task_id_vals][39m: No derived task IDs to check. Skipping derived task ID value check.
-      [32mv[39m [90m[rows_unique][39m: All combinations of task ID column/`output_type`/`output_type_id` values are unique.
-      [32mv[39m [90m[req_vals][39m: Required task ID/output type/output type ID combinations all present.
-      [32mv[39m [90m[value_col_valid][39m: Values in column `value` all valid with respect to modeling task config.
-      [32mv[39m [90m[value_col_non_desc][39m: Quantile or cdf `value` values increase when ordered by `output_type_id`.
-      [36mi[39m [90m[value_col_sum1][39m: No pmf output types to check for sum of 1. Check skipped.
+      [1m[22m[32mv[39m [90m[valid_round_id_col][39m: `round_id_col` name is valid.
+      [1m[22m[32mv[39m [90m[unique_round_id][39m: `round_id` column [34m"origin_date"[39m contains a single, unique round ID value.
+      [1m[22m[32mv[39m [90m[match_round_id][39m: All `round_id_col` [34m"origin_date"[39m values match submission `round_id` from file name.
+      [1m[22m[32mv[39m [90m[colnames][39m: Column names are consistent with expected round task IDs and std column names.
+      [1m[22m[32mv[39m [90m[col_types][39m: Column data types match hub schema.
+      [1m[22m[32mv[39m [90m[valid_vals][39m: `tbl` contains valid values/value combinations.
+      [1m[22m[36mi[39m [90m[derived_task_id_vals][39m: No derived task IDs to check. Skipping derived task ID value check.
+      [1m[22m[32mv[39m [90m[rows_unique][39m: All combinations of task ID column/`output_type`/`output_type_id` values are unique.
+      [1m[22m[32mv[39m [90m[req_vals][39m: Required task ID/output type/output type ID combinations all present.
+      [1m[22m[32mv[39m [90m[value_col_valid][39m: Values in column `value` all valid with respect to modeling task config.
+      [1m[22m[32mv[39m [90m[value_col_non_desc][39m: Quantile or cdf `value` values increase when ordered by `output_type_id`.
+      [1m[22m[36mi[39m [90m[value_col_sum1][39m: No pmf output types to check for sum of 1. Check skipped.
 
 # validate_model_data print method work [unicode]
 
@@ -327,18 +327,18 @@
       [35m── [4m[1m2022-10-08-team1-goodmodel.csv[22m[24m ────[39m
       
       [1m[22m[32m✔[39m [90m[file_read][39m: File could be read successfully.
-      [32m✔[39m [90m[valid_round_id_col][39m: `round_id_col` name is valid.
-      [32m✔[39m [90m[unique_round_id][39m: `round_id` column [34m"origin_date"[39m contains a single, unique round ID value.
-      [32m✔[39m [90m[match_round_id][39m: All `round_id_col` [34m"origin_date"[39m values match submission `round_id` from file name.
-      [32m✔[39m [90m[colnames][39m: Column names are consistent with expected round task IDs and std column names.
-      [32m✔[39m [90m[col_types][39m: Column data types match hub schema.
-      [32m✔[39m [90m[valid_vals][39m: `tbl` contains valid values/value combinations.
-      [36mℹ[39m [90m[derived_task_id_vals][39m: No derived task IDs to check. Skipping derived task ID value check.
-      [32m✔[39m [90m[rows_unique][39m: All combinations of task ID column/`output_type`/`output_type_id` values are unique.
-      [32m✔[39m [90m[req_vals][39m: Required task ID/output type/output type ID combinations all present.
-      [32m✔[39m [90m[value_col_valid][39m: Values in column `value` all valid with respect to modeling task config.
-      [32m✔[39m [90m[value_col_non_desc][39m: Quantile or cdf `value` values increase when ordered by `output_type_id`.
-      [36mℹ[39m [90m[value_col_sum1][39m: No pmf output types to check for sum of 1. Check skipped.
+      [1m[22m[32m✔[39m [90m[valid_round_id_col][39m: `round_id_col` name is valid.
+      [1m[22m[32m✔[39m [90m[unique_round_id][39m: `round_id` column [34m"origin_date"[39m contains a single, unique round ID value.
+      [1m[22m[32m✔[39m [90m[match_round_id][39m: All `round_id_col` [34m"origin_date"[39m values match submission `round_id` from file name.
+      [1m[22m[32m✔[39m [90m[colnames][39m: Column names are consistent with expected round task IDs and std column names.
+      [1m[22m[32m✔[39m [90m[col_types][39m: Column data types match hub schema.
+      [1m[22m[32m✔[39m [90m[valid_vals][39m: `tbl` contains valid values/value combinations.
+      [1m[22m[36mℹ[39m [90m[derived_task_id_vals][39m: No derived task IDs to check. Skipping derived task ID value check.
+      [1m[22m[32m✔[39m [90m[rows_unique][39m: All combinations of task ID column/`output_type`/`output_type_id` values are unique.
+      [1m[22m[32m✔[39m [90m[req_vals][39m: Required task ID/output type/output type ID combinations all present.
+      [1m[22m[32m✔[39m [90m[value_col_valid][39m: Values in column `value` all valid with respect to modeling task config.
+      [1m[22m[32m✔[39m [90m[value_col_non_desc][39m: Quantile or cdf `value` values increase when ordered by `output_type_id`.
+      [1m[22m[36mℹ[39m [90m[value_col_sum1][39m: No pmf output types to check for sum of 1. Check skipped.
 
 # validate_model_data errors correctly
 

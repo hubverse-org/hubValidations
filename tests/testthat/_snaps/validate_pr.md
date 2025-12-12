@@ -165,6 +165,14 @@
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
        - attr(*, "class")= chr [1:2] "hub_validations" "list"
+       - attr(*, "warnings")=List of 1
+        ..$ :List of 5
+        .. ..$ message       : chr "Hub config files modified: 'admin.json', 'model-metadata-schema.json', and 'tasks.json'.\n      Config changes "| __truncated__
+        .. ..$ where         : chr "hub-config"
+        .. ..$ config_files  : chr [1:3] "hub-config/admin.json" "hub-config/model-metadata-schema.json" "hub-config/tasks.json"
+        .. ..$ call          : chr "check_pr_config_modified"
+        .. ..$ use_cli_format: logi TRUE
+        .. ..- attr(*, "class")= chr [1:4] "validation_warning" "rlang_warning" "warning" "condition"
 
 # validate_pr works on invalid PR
 
@@ -252,6 +260,14 @@
         ..$ call          : chr "check_tbl_colnames"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_error" "hub_check" "rlang_error" "error" ...
+       - attr(*, "warnings")=List of 1
+        ..$ :List of 5
+        .. ..$ message       : chr "Hub config files modified: 'admin.json', 'model-metadata-schema.json', and 'tasks.json'.\n      Config changes "| __truncated__
+        .. ..$ where         : chr "hub-config"
+        .. ..$ config_files  : chr [1:3] "hub-config/admin.json" "hub-config/model-metadata-schema.json" "hub-config/tasks.json"
+        .. ..$ call          : chr "check_pr_config_modified"
+        .. ..$ use_cli_format: logi TRUE
+        .. ..- attr(*, "class")= chr [1:4] "validation_warning" "rlang_warning" "warning" "condition"
 
 # validate_pr flags modifications and deletions in PR
 
@@ -599,6 +615,14 @@
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
        - attr(*, "class")= chr [1:2] "hub_validations" "list"
+       - attr(*, "warnings")=List of 1
+        ..$ :List of 5
+        .. ..$ message       : chr "Hub config files modified: 'admin.json', 'model-metadata-schema.json', and 'tasks.json'.\n      Config changes "| __truncated__
+        .. ..$ where         : chr "hub-config"
+        .. ..$ config_files  : chr [1:3] "hub-config/admin.json" "hub-config/model-metadata-schema.json" "hub-config/tasks.json"
+        .. ..$ call          : chr "check_pr_config_modified"
+        .. ..$ use_cli_format: logi TRUE
+        .. ..- attr(*, "class")= chr [1:4] "validation_warning" "rlang_warning" "warning" "condition"
 
 ---
 
@@ -946,6 +970,14 @@
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
        - attr(*, "class")= chr [1:2] "hub_validations" "list"
+       - attr(*, "warnings")=List of 1
+        ..$ :List of 5
+        .. ..$ message       : chr "Hub config files modified: 'admin.json', 'model-metadata-schema.json', and 'tasks.json'.\n      Config changes "| __truncated__
+        .. ..$ where         : chr "hub-config"
+        .. ..$ config_files  : chr [1:3] "hub-config/admin.json" "hub-config/model-metadata-schema.json" "hub-config/tasks.json"
+        .. ..$ call          : chr "check_pr_config_modified"
+        .. ..$ use_cli_format: logi TRUE
+        .. ..- attr(*, "class")= chr [1:4] "validation_warning" "rlang_warning" "warning" "condition"
 
 ---
 
@@ -1287,6 +1319,14 @@
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
        - attr(*, "class")= chr [1:2] "hub_validations" "list"
+       - attr(*, "warnings")=List of 1
+        ..$ :List of 5
+        .. ..$ message       : chr "Hub config files modified: 'admin.json', 'model-metadata-schema.json', and 'tasks.json'.\n      Config changes "| __truncated__
+        .. ..$ where         : chr "hub-config"
+        .. ..$ config_files  : chr [1:3] "hub-config/admin.json" "hub-config/model-metadata-schema.json" "hub-config/tasks.json"
+        .. ..$ call          : chr "check_pr_config_modified"
+        .. ..$ use_cli_format: logi TRUE
+        .. ..- attr(*, "class")= chr [1:4] "validation_warning" "rlang_warning" "warning" "condition"
 
 ---
 
@@ -1610,6 +1650,14 @@
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
        - attr(*, "class")= chr [1:2] "hub_validations" "list"
+       - attr(*, "warnings")=List of 1
+        ..$ :List of 5
+        .. ..$ message       : chr "Hub config files modified: 'admin.json', 'model-metadata-schema.json', and 'tasks.json'.\n      Config changes "| __truncated__
+        .. ..$ where         : chr "hub-config"
+        .. ..$ config_files  : chr [1:3] "hub-config/admin.json" "hub-config/model-metadata-schema.json" "hub-config/tasks.json"
+        .. ..$ call          : chr "check_pr_config_modified"
+        .. ..$ use_cli_format: logi TRUE
+        .. ..- attr(*, "class")= chr [1:4] "validation_warning" "rlang_warning" "warning" "condition"
 
 ---
 
@@ -1949,6 +1997,14 @@
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
        - attr(*, "class")= chr [1:2] "hub_validations" "list"
+       - attr(*, "warnings")=List of 1
+        ..$ :List of 5
+        .. ..$ message       : chr "Hub config files modified: 'admin.json', 'model-metadata-schema.json', and 'tasks.json'.\n      Config changes "| __truncated__
+        .. ..$ where         : chr "hub-config"
+        .. ..$ config_files  : chr [1:3] "hub-config/admin.json" "hub-config/model-metadata-schema.json" "hub-config/tasks.json"
+        .. ..$ call          : chr "check_pr_config_modified"
+        .. ..$ use_cli_format: logi TRUE
+        .. ..- attr(*, "class")= chr [1:4] "validation_warning" "rlang_warning" "warning" "condition"
 
 # validate_pr handles errors in determining submission window & file renaming
 

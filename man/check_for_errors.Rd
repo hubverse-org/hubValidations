@@ -4,13 +4,17 @@
 \alias{check_for_errors}
 \title{Raise conditions stored in a \code{hub_validations} S3 object}
 \usage{
-check_for_errors(x, verbose = FALSE)
+check_for_errors(x, verbose = FALSE, show_warnings = FALSE)
 }
 \arguments{
 \item{x}{A \code{hub_validations} object}
 
 \item{verbose}{Logical. If \code{TRUE}, print the results of all checks prior to
 raising condition and summarising \code{hub_validations} S3 object check results.}
+
+\item{show_warnings}{Logical. If \code{TRUE}, print check-level warnings inline
+with their checks. Validation-level warnings are always printed. Default
+\code{FALSE}.}
 }
 \value{
 An error if one of the elements of \code{x} is of class \code{check_failure},

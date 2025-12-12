@@ -4,13 +4,47 @@
 \alias{print.hub_validations}
 \title{Print results of \code{validate_...()} function as a bullet list}
 \usage{
-\method{print}{hub_validations}(x, ...)
+\method{print}{hub_validations}(x, show_check_warnings = FALSE, ...)
 }
 \arguments{
-\item{x}{An object of class \code{hub_validations} or any of it's subclasses.}
+\item{x}{An object of class \code{hub_validations} or any of its subclasses.}
+
+\item{show_check_warnings}{Logical. If \code{TRUE}, prints check-level warnings
+inline with their checks. Validation-level warnings are always printed.
+Default \code{FALSE}.}
 
 \item{...}{Unused argument present for class consistency}
 }
+\value{
+Returns \code{x} invisibly.
+}
 \description{
-Print results of \code{validate_...()} function as a bullet list
+Prints a formatted summary of validation results. Validation-level warnings
+(attached to the \code{hub_validations} object) are always displayed prominently
+in a box at the top. Check-level warnings (attached to individual checks)
+are only shown when \code{show_check_warnings = TRUE}.
+}
+\examples{
+hub_path <- system.file("testhubs/simple", package = "hubValidations")
+v <- validate_submission(
+  hub_path,
+  file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+)
+
+# Default print
+print(v)
+
+# Show check-level warnings (if any)
+print(v, show_check_warnings = TRUE)
+
+# Example with validation-level warning
+v_with_warning <- v
+attr(v_with_warning, "warnings") <- list(
+  capture_validation_warning(
+    msg = "Example validation-level warning message.",
+    where = "example"
+  )
+)
+print(v_with_warning)
+
 }
