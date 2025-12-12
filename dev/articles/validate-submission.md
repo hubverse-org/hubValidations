@@ -1,16 +1,33 @@
-# Validating submissions locally
+# Validating hub data locally
 
 ``` r
 library(hubValidations)
 ```
 
-## Validating model output files with `validate_submission()`
-
 While most hubs will have automated validation systems set up to check
-contributions during submission, `hubValidations` also provides
+contributions via Pull Requests, `hubValidations` also provides
 functionality for validating files locally before submitting them.
 
-For this, **submitting teams can use
+This article covers local validation of:
+
+- [**Model output
+  files**](#validating-model-output-files-with-validate_submission)
+  using
+  [`validate_submission()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_submission.md)
+- [**Model metadata
+  files**](#validating-model-metadata-files-with-validate_model_metadata)
+  using
+  [`validate_model_metadata()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_model_metadata.md)
+- [**Target data
+  files**](#validating-target-data-files-with-validate_target_submission)
+  using
+  [`validate_target_submission()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_target_submission.md)
+  and
+  [`validate_target_dataset()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_target_dataset.md)
+
+## Validating model output files with `validate_submission()`
+
+**Submitting teams can use
 [`validate_submission()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_submission.md)
 to validate their model output files prior to submitting.**
 
@@ -67,7 +84,7 @@ validate_submission(hub_path,
 #>   `output_type_id`.
 #> ℹ [value_col_sum1]: No pmf output types to check for sum of 1. Check skipped.
 #> ✖ [submission_time]: Submission time must be within accepted submission window
-#>   for round.  Current time "2025-12-10 19:03:48 UTC" is outside window
+#>   for round.  Current time "2025-12-12 13:30:21 UTC" is outside window
 #>   2022-10-02 EDT--2022-10-09 23:59:59 EDT.
 ```
 
@@ -120,7 +137,7 @@ validate_submission(hub_path,
 #>   submission `round_id` from file name.  `round_id` value 2022-10-08 does not
 #>   match submission `round_id` "2022-10-15"
 #> ✖ [submission_time]: Submission time must be within accepted submission window
-#>   for round.  Current time "2025-12-10 19:03:50 UTC" is outside window
+#>   for round.  Current time "2025-12-12 13:30:23 UTC" is outside window
 #>   2022-10-02 EDT--2022-10-09 23:59:59 EDT.
 ```
 
@@ -149,7 +166,7 @@ validate_submission(hub_path,
 #> ── 2022-10-08-team1-goodmodel.csv ────
 #> 
 #> ✖ [submission_time]: Submission time must be within accepted submission window
-#>   for round.  Current time "2025-12-10 19:03:51 UTC" is outside window
+#>   for round.  Current time "2025-12-12 13:30:24 UTC" is outside window
 #>   2022-10-02 EDT--2022-10-09 23:59:59 EDT.
 #> Error in `check_for_errors()`:
 #> ! 
@@ -340,11 +357,429 @@ including how to access more information on individual checks, see
 Details of checks performed by
 [`validate_model_metadata()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_model_metadata.md)
 
+## Validating target data files with `validate_target_submission()`
+
+Target data files can also be validated locally before submitting using
+[`validate_target_submission()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_target_submission.md).
+
+The function validates both file-level properties (file name, extension,
+location) and the contents of the target data file. It takes a relative
+path (relative to the `target-data` directory) as argument `file_path`
+and the `target_type` (either `"time-series"` or `"oracle-output"`).
+
+### Configuring target data validation
+
+For the most robust validation, hubs should include a `target-data.json`
+configuration file in their `hub-config` directory (available from
+schema version 6.0.0 onwards). When present, this config provides
+deterministic validation by explicitly defining the date column, column
+names and types, and observable unit structure.
+
+For hubs without a `target-data.json` config, the **`date_col`**
+parameter can be used to specify the name of the column containing
+observation dates (e.g., `"target_end_date"`). This is important for
+correct schema creation, particularly when the date column is also used
+for partitioning. When `target-data.json` exists, any user-provided
+`date_col` is ignored in favour of the config value.
+
+### Single file target datasets
+
+For hubs with single file target datasets (e.g.,
+`target-data/time-series.csv`):
+
+``` r
+hub_path <- system.file("testhubs/v6/target_file", package = "hubUtils")
+
+validate_target_submission(
+  hub_path,
+  file_path = "time-series.csv",
+  target_type = "time-series"
+)
+#> 
+#> ── target_file ────
+#> 
+#> ✔ [valid_config]: All hub config files are valid.
+#> 
+#> 
+#> ── time-series.csv ────
+#> 
+#> 
+#> 
+#> ✔ [target_file_exists]: File exists at path target-data/time-series.csv.
+#> ℹ [target_partition_file_name]: Target file path not hive-partitioned. Check
+#>   skipped.
+#> ✔ [target_file_ext]: Target data file extension is valid.
+#> ✔ [target_file_read]: target file could be read successfully.
+#> ✔ [target_tbl_colnames]: Column names are consistent with expected column names
+#>   for time-series target type data.
+#> ✔ [target_tbl_coltypes]: Column data types match time-series target schema
+#>   defined in `target-data.json` config.
+#> ✔ [target_tbl_ts_targets]: time-series targets are all valid.
+#> ✔ [target_tbl_rows_unique]: time-series target data rows are unique.
+#> ✔ [target_tbl_values]: `target_tbl_chr` contains valid values/value
+#>   combinations.
+#> ℹ [target_tbl_output_type_ids]: Check not applicable to time-series target
+#>   data. Skipped.
+#> ℹ [target_tbl_oracle_value]: Check not applicable to time-series target data.
+#>   Skipped.
+```
+
+``` r
+validate_target_submission(
+  hub_path,
+  file_path = "oracle-output.csv",
+  target_type = "oracle-output"
+)
+#> 
+#> ── target_file ────
+#> 
+#> ✔ [valid_config]: All hub config files are valid.
+#> 
+#> 
+#> ── oracle-output.csv ────
+#> 
+#> 
+#> 
+#> ✔ [target_file_exists]: File exists at path target-data/oracle-output.csv.
+#> ℹ [target_partition_file_name]: Target file path not hive-partitioned. Check
+#>   skipped.
+#> ✔ [target_file_ext]: Target data file extension is valid.
+#> ✔ [target_file_read]: target file could be read successfully.
+#> ✔ [target_tbl_colnames]: Column names are consistent with expected column names
+#>   for oracle-output target type data.
+#> ✔ [target_tbl_coltypes]: Column data types match oracle-output target schema
+#>   defined in `target-data.json` config.
+#> ℹ [target_tbl_ts_targets]: Check not applicable to oracle-output target data.
+#>   Skipped.
+#> ✔ [target_tbl_rows_unique]: oracle-output target data rows are unique.
+#> ✔ [target_tbl_values]: `target_tbl_chr` contains valid values/value
+#>   combinations.
+#> ✔ [target_tbl_output_type_ids]: oracle-output `target_tbl` contains valid
+#>   complete output_type_id values.
+#> ✔ [target_tbl_oracle_value]: oracle-output `target_tbl` contains valid oracle
+#>   values.
+```
+
+### Partitioned target datasets
+
+For hubs with partitioned target datasets stored as directories:
+
+``` r
+hub_path <- system.file("testhubs/v6/target_dir", package = "hubUtils")
+
+validate_target_submission(
+  hub_path,
+  file_path = "time-series/target=wk%20flu%20hosp%20rate/part-0.parquet",
+  target_type = "time-series"
+)
+#> 
+#> ── target_dir ────
+#> 
+#> ✔ [valid_config]: All hub config files are valid.
+#> 
+#> 
+#> ── time-series/target=wk%20flu%20hosp%20rate/part-0.parquet ────
+#> 
+#> 
+#> 
+#> ✔ [target_file_exists]: File exists at path
+#>   target-data/time-series/target=wk%20flu%20hosp%20rate/part-0.parquet.
+#> ✔ [target_partition_file_name]: Hive-style partition file path segments are
+#>   valid.
+#> ✔ [target_file_ext]: Hive-partitioned target data file extension is valid.
+#> ✔ [target_file_read]: target file could be read successfully.
+#> ✔ [target_tbl_colnames]: Column names are consistent with expected column names
+#>   for time-series target type data.
+#> ✔ [target_tbl_coltypes]: Column data types match time-series target schema
+#>   defined in `target-data.json` config.
+#> ✔ [target_tbl_ts_targets]: time-series targets are all valid.
+#> ✔ [target_tbl_rows_unique]: time-series target data rows are unique.
+#> ✔ [target_tbl_values]: `target_tbl_chr` contains valid values/value
+#>   combinations.
+#> ℹ [target_tbl_output_type_ids]: Check not applicable to time-series target
+#>   data. Skipped.
+#> ℹ [target_tbl_oracle_value]: Check not applicable to time-series target data.
+#>   Skipped.
+```
+
+### Relaxed date validation for time-series data
+
+By default, date values in time-series target data are validated
+strictly against the dates defined in `tasks.json`. However, target data
+often contains historical observations with dates beyond the hub’s
+configured modeling rounds.
+
+Setting **`allow_extra_dates = TRUE`** relaxes date validation for
+time-series data, allowing historical observations while still strictly
+validating other task ID values. Oracle-output data always uses strict
+date validation regardless of this setting.
+
+Here’s an example demonstrating this feature. First, we create a copy of
+a hub and add a row with a date not defined in `tasks.json`:
+
+``` r
+# Create a temporary copy of the hub
+tmp_hub <- withr::local_tempdir()
+fs::dir_copy(
+  system.file("testhubs/v5/target_file", package = "hubUtils"),
+  tmp_hub
+)
+hub_path <- fs::path(tmp_hub, "target_file")
+
+# Read the time-series data and add a row with an extra date
+ts_data <- read.csv(fs::path(hub_path, "target-data", "time-series.csv"))
+extra_row <- ts_data[1, ]
+extra_row$target_end_date <- "1999-01-01"
+ts_data <- rbind(extra_row, ts_data)
+write.csv(ts_data, fs::path(hub_path, "target-data", "time-series.csv"), row.names = FALSE)
+```
+
+With the default `allow_extra_dates = FALSE`, validation fails because
+the date is not in `tasks.json`:
+
+``` r
+v <- validate_target_submission(
+  hub_path,
+  file_path = "time-series.csv",
+  target_type = "time-series",
+  date_col = "target_end_date"
+)
+v
+#> 
+#> ── target_file ────
+#> 
+#> ✔ [valid_config]: All hub config files are valid.
+#> 
+#> 
+#> ── time-series.csv ────
+#> 
+#> 
+#> 
+#> ✔ [target_file_exists]: File exists at path target-data/time-series.csv.
+#> ℹ [target_partition_file_name]: Target file path not hive-partitioned. Check
+#>   skipped.
+#> ✔ [target_file_ext]: Target data file extension is valid.
+#> ✔ [target_file_read]: target file could be read successfully.
+#> ✔ [target_tbl_colnames]: Column names are consistent with expected column names
+#>   for time-series target type data.  Column name validation for time-series
+#>   data in inference mode is limited. For robust validation, create a
+#>   target-data.json config file. See `target-data.json` documentation
+#>   (<https://docs.hubverse.io/en/latest/user-guide/hub-config.html#hub-target-data-configuration-target-data-json-file>)
+#> ✔ [target_tbl_coltypes]: Column data types match time-series target schema.
+#> ✔ [target_tbl_ts_targets]: time-series targets are all valid.
+#> ✔ [target_tbl_rows_unique]: time-series target data rows are unique.
+#> ⓧ [target_tbl_values]: `target_tbl_chr` contains invalid values/value
+#>   combinations.  Column `target_end_date` contains invalid value "1999-01-01".
+#>   See `error_tbl` for details.
+```
+
+Setting `allow_extra_dates = TRUE` allows the extra date while still
+validating other task IDs:
+
+``` r
+v <- validate_target_submission(
+  hub_path,
+  file_path = "time-series.csv",
+  target_type = "time-series",
+  date_col = "target_end_date",
+  allow_extra_dates = TRUE
+)
+v
+#> 
+#> ── target_file ────
+#> 
+#> ✔ [valid_config]: All hub config files are valid.
+#> 
+#> 
+#> ── time-series.csv ────
+#> 
+#> 
+#> 
+#> ✔ [target_file_exists]: File exists at path target-data/time-series.csv.
+#> ℹ [target_partition_file_name]: Target file path not hive-partitioned. Check
+#>   skipped.
+#> ✔ [target_file_ext]: Target data file extension is valid.
+#> ✔ [target_file_read]: target file could be read successfully.
+#> ✔ [target_tbl_colnames]: Column names are consistent with expected column names
+#>   for time-series target type data.  Column name validation for time-series
+#>   data in inference mode is limited. For robust validation, create a
+#>   target-data.json config file. See `target-data.json` documentation
+#>   (<https://docs.hubverse.io/en/latest/user-guide/hub-config.html#hub-target-data-configuration-target-data-json-file>)
+#> ✔ [target_tbl_coltypes]: Column data types match time-series target schema.
+#> ✔ [target_tbl_ts_targets]: time-series targets are all valid.
+#> ✔ [target_tbl_rows_unique]: time-series target data rows are unique.
+#> ✔ [target_tbl_values]: `target_tbl_chr` contains valid values/value
+#>   combinations.  Date column "target_end_date" excluded from value validation.
+#> ℹ [target_tbl_output_type_ids]: Check not applicable to time-series target
+#>   data. Skipped.
+#> ℹ [target_tbl_oracle_value]: Check not applicable to time-series target data.
+#>   Skipped.
+```
+
+Note the message indicating the date column was excluded from
+validation.
+
+### Validating without a `target-data.json` config
+
+For hubs without a `target-data.json` config (e.g., v5 hubs), you can
+specify the date column manually:
+
+``` r
+hub_path <- system.file("testhubs/v5/target_file", package = "hubUtils")
+
+validate_target_submission(
+  hub_path,
+  file_path = "time-series.csv",
+  target_type = "time-series",
+  date_col = "target_end_date"
+)
+#> 
+#> ── target_file ────
+#> 
+#> ✔ [valid_config]: All hub config files are valid.
+#> 
+#> 
+#> ── time-series.csv ────
+#> 
+#> 
+#> 
+#> ✔ [target_file_exists]: File exists at path target-data/time-series.csv.
+#> ℹ [target_partition_file_name]: Target file path not hive-partitioned. Check
+#>   skipped.
+#> ✔ [target_file_ext]: Target data file extension is valid.
+#> ✔ [target_file_read]: target file could be read successfully.
+#> ✔ [target_tbl_colnames]: Column names are consistent with expected column names
+#>   for time-series target type data.  Column name validation for time-series
+#>   data in inference mode is limited. For robust validation, create a
+#>   target-data.json config file. See `target-data.json` documentation
+#>   (<https://docs.hubverse.io/en/latest/user-guide/hub-config.html#hub-target-data-configuration-target-data-json-file>)
+#> ✔ [target_tbl_coltypes]: Column data types match time-series target schema.
+#> ✔ [target_tbl_ts_targets]: time-series targets are all valid.
+#> ✔ [target_tbl_rows_unique]: time-series target data rows are unique.
+#> ✔ [target_tbl_values]: `target_tbl_chr` contains valid values/value
+#>   combinations.
+#> ℹ [target_tbl_output_type_ids]: Check not applicable to time-series target
+#>   data. Skipped.
+#> ℹ [target_tbl_oracle_value]: Check not applicable to time-series target data.
+#>   Skipped.
+```
+
+### Validating the entire target dataset
+
+To validate dataset-level properties across all files of a target type,
+use
+[`validate_target_dataset()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_target_dataset.md):
+
+``` r
+hub_path <- system.file("testhubs/v6/target_file", package = "hubUtils")
+
+validate_target_dataset(hub_path, target_type = "time-series")
+#> 
+#> ── time-series.csv ────
+#> 
+#> ✔ [target_dataset_exists]: time-series dataset detected.
+#> ✔ [target_dataset_unique]: target-data directory contains single unique
+#>   time-series dataset.
+#> ✔ [target_dataset_file_ext_unique]: time-series dataset files share single
+#>   unique file format.
+#> ✔ [target_dataset_rows_unique]: time-series target dataset rows are unique.
+
+validate_target_dataset(hub_path, target_type = "oracle-output")
+#> 
+#> ── oracle-output.csv ────
+#> 
+#> ✔ [target_dataset_exists]: oracle-output dataset detected.
+#> ✔ [target_dataset_unique]: target-data directory contains single unique
+#>   oracle-output dataset.
+#> ✔ [target_dataset_file_ext_unique]: oracle-output dataset files share single
+#>   unique file format.
+#> ✔ [target_dataset_rows_unique]: oracle-output target dataset rows are unique.
+```
+
+This checks that the dataset exists, is unique, has consistent file
+extensions, and contains unique rows across all files.
+
+### Checking for errors with `check_for_errors()`
+
+You can use
+[`check_for_errors()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_for_errors.md)
+to determine whether validation passed or failed overall.
+
+For successful validation:
+
+``` r
+hub_path <- system.file("testhubs/v6/target_file", package = "hubUtils")
+
+v <- validate_target_submission(
+  hub_path,
+  file_path = "time-series.csv",
+  target_type = "time-series"
+)
+check_for_errors(v)
+#> ✔ All validation checks have been successful.
+```
+
+When validation fails,
+[`check_for_errors()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_for_errors.md)
+throws an error summarising the failing checks:
+
+``` r
+# Using the modified hub from the allow_extra_dates example above
+v_fail <- validate_target_submission(
+  fs::path(tmp_hub, "target_file"),
+  file_path = "time-series.csv",
+  target_type = "time-series",
+  date_col = "target_end_date"
+)
+check_for_errors(v_fail)
+#> 
+#> ── time-series.csv ────
+#> 
+#> ⓧ [target_tbl_values]: `target_tbl_chr` contains invalid values/value
+#>   combinations.  Column `target_end_date` contains invalid value "1999-01-01".
+#>   See `error_tbl` for details.
+#> Error in `check_for_errors()`:
+#> ! 
+#> The validation checks produced some failures/errors reported above.
+```
+
+### `validate_target_submission` check details
+
+| Name                       | Check                                                                                                                                             | Early return | Fail output   | Extra info |
+|:---------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------|:-------------|:--------------|:-----------|
+| target_file_exists         | File exists at `file_path` provided.                                                                                                              | TRUE         | check_error   |            |
+| target_partition_file_name | Hive-style partition file path segments are valid and can be parsed successfully. Skipped if target dataset not hive-partitioned.                 | TRUE         | check_error   |            |
+| target_file_ext            | Target data file extension is valid.                                                                                                              | TRUE         | check_error   |            |
+| target_file_read           | Target data file can be read successfully.                                                                                                        | TRUE         | check_error   |            |
+| target_tbl_colnames        | Target data file has the correct column names according to target type.                                                                           | TRUE         | check_error   |            |
+| target_tbl_coltypes        | Target data file has the correct column types according to target type.                                                                           | TRUE         | check_error   |            |
+| target_tbl_ts_targets      | Targets in a time-series target data file are valid. Only performed on `time-series` data files.                                                  | TRUE         | check_error   |            |
+| target_tbl_rows_unique     | Target data file rows are all unique.                                                                                                             | FALSE        | check_failure |            |
+| target_tbl_values          | Task ID columns in a target data file have valid task ID values.                                                                                  | TRUE         | check_error   |            |
+| target_tbl_output_type_ids | Output type ID values in a target data file are valid and complete. Only performed when the target data file contains an `output_type_id` column. | TRUE         | check_error   |            |
+| target_tbl_oracle_value    | Oracle values in a target data file are valid. Only performed on `oracle output` data files.                                                      | FALSE        | check_failure |            |
+
+Details of checks performed by
+[`validate_target_submission()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_target_submission.md)
+
+### `validate_target_dataset` check details
+
+| Name                           | Check                                                                | Early return | Fail output   | Extra info |
+|:-------------------------------|:---------------------------------------------------------------------|:-------------|:--------------|:-----------|
+| target_dataset_exists          | Target dataset can be successfully detected for a given target type. | TRUE         | check_error   |            |
+| target_dataset_unique          | A single unique target dataset exists for a given target type.       | TRUE         | check_error   |            |
+| target_dataset_file_ext_unique | All files of a given target type share a single unique file format.  | TRUE         | check_error   |            |
+| target_dataset_rows_unique     | Target dataset rows are all unique.                                  | FALSE        | check_failure |            |
+
+Details of checks performed by
+[`validate_target_dataset()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_target_dataset.md)
+
 #### Custom checks
 
 The standard checks discussed here are the checks deployed by default by
-the `validate_submission` or `validate_model_metadata` functions. For
-more information on deploying optional/custom functions or functions
+the `validate_submission`, `validate_model_metadata`,
+`validate_target_submission` and `validate_target_dataset` functions.
+For more information on deploying optional/custom functions or functions
 that require configuration please check the article on [including custom
 functions](https://hubverse-org.github.io/hubValidations/dev/articles/deploying-custom-functions.md)
 ([`vignette("articles/deploying-custom-functions")`](https://hubverse-org.github.io/hubValidations/dev/articles/deploying-custom-functions.md)).

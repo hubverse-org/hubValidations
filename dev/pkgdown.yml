@@ -6,8 +6,9 @@ articles:
   articles/hub-validations-class: hub-validations-class.html
   articles/validate-pr: validate-pr.html
   articles/validate-submission: validate-submission.html
+  articles/validate-target-pr: validate-target-pr.html
   articles/writing-custom-fns: writing-custom-fns.html
-last_built: 2025-12-10T19:02Z
+last_built: 2025-12-12T13:29Z
 urls:
   reference: https://hubverse-org.github.io/hubValidations/reference
   article: https://hubverse-org.github.io/hubValidations/articles

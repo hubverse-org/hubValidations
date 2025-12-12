@@ -164,7 +164,7 @@ v
 #>   `output_type_id`.
 #> ℹ [value_col_sum1]: No pmf output types to check for sum of 1. Check skipped.
 #> ✖ [submission_time]: Submission time must be within accepted submission window
-#>   for round.  Current time "2025-12-10 19:03:32 UTC" is outside window
+#>   for round.  Current time "2025-12-12 13:30:05 UTC" is outside window
 #>   2022-10-02 EDT--2022-10-09 23:59:59 EDT.
 ```
 

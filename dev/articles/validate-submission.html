@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Validating submissions locally • hubValidations</title>
+<title>Validating hub data locally • hubValidations</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
 <link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
 <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
@@ -15,7 +15,7 @@
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Validating submissions locally">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Validating hub data locally">
 <meta name="robots" content="noindex">
 </head>
 <body>
@@ -43,17 +43,12 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/hub-validations-class.html">Structure of hub_validations class objects</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Validation for hub admins through CI</h6></li>
-    <li><a class="dropdown-item" href="../articles/validate-pr.html">Validating Pull Requests on GitHub</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Validation for submitting teams</h6></li>
-    <li><a class="dropdown-item" href="../articles/validate-submission.html">Validating submissions locally</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Custom validation checks</h6></li>
-    <li><a class="dropdown-item" href="../articles/writing-custom-fns.html">Writing custom validation functions</a></li>
-    <li><a class="dropdown-item" href="../articles/deploying-custom-functions.html">Deploying custom validation functions</a></li>
+<li><a class="dropdown-item" href="../articles/hub-validations-class.html">hub_validations class structure</a></li>
+    <li><a class="dropdown-item" href="../articles/validate-pr.html">Validating model output PRs</a></li>
+    <li><a class="dropdown-item" href="../articles/validate-target-pr.html">Validating target data PRs</a></li>
+    <li><a class="dropdown-item" href="../articles/validate-submission.html">Validating hub data locally</a></li>
+    <li><a class="dropdown-item" href="../articles/writing-custom-fns.html">Writing custom checks</a></li>
+    <li><a class="dropdown-item" href="../articles/deploying-custom-functions.html">Deploying custom checks</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -70,7 +65,7 @@
 <script src="validate-submission_files/kePrint-0.0.1/kePrint.js"></script><link href="validate-submission_files/lightable-0.0.1/lightable.css" rel="stylesheet">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Validating submissions locally</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Validating hub data locally</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/hubverse-org/hubValidations/blob/main/vignettes/articles/validate-submission.Rmd" class="external-link"><code>vignettes/articles/validate-submission.Rmd</code></a></small>
@@ -81,17 +76,33 @@
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/hubverse-org/hubValidations" class="external-link">hubValidations</a></span><span class="op">)</span></span></code></pre></div>
+<p>While most hubs will have automated validation systems set up to
+check contributions via Pull Requests, <code>hubValidations</code> also
+provides functionality for validating files locally before submitting
+them.</p>
+<p>This article covers local validation of:</p>
+<ul>
+<li>
+<a href="#validating-model-output-files-with-validate_submission"><strong>Model
+output files</strong></a> using <code><a href="../reference/validate_submission.html">validate_submission()</a></code>
+</li>
+<li>
+<a href="#validating-model-metadata-files-with-validate_model_metadata"><strong>Model
+metadata files</strong></a> using
+<code><a href="../reference/validate_model_metadata.html">validate_model_metadata()</a></code>
+</li>
+<li>
+<a href="#validating-target-data-files-with-validate_target_submission"><strong>Target
+data files</strong></a> using <code><a href="../reference/validate_target_submission.html">validate_target_submission()</a></code>
+and <code><a href="../reference/validate_target_dataset.html">validate_target_dataset()</a></code>
+</li>
+</ul>
 <div class="section level2">
 <h2 id="validating-model-output-files-with-validate_submission">Validating model output files with
 <code>validate_submission()</code><a class="anchor" aria-label="anchor" href="#validating-model-output-files-with-validate_submission"></a>
 </h2>
-<p>While most hubs will have automated validation systems set up to
-check contributions during submission, <code>hubValidations</code> also
-provides functionality for validating files locally before submitting
-them.</p>
-<p>For this, <strong>submitting teams can use
-<code><a href="../reference/validate_submission.html">validate_submission()</a></code> to validate their model output files
-prior to submitting.</strong></p>
+<p><strong>Submitting teams can use <code><a href="../reference/validate_submission.html">validate_submission()</a></code>
+to validate their model output files prior to submitting.</strong></p>
 <p>The function takes a relative path, relative to the model output
 directory, as argument <code>file_path</code>, performs a series of
 standard validation checks and returns their results in the form of a
@@ -144,7 +155,7 @@ standard validation checks and returns their results in the form of a
 <span><span class="co">#&gt;   `output_type_id`.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[value_col_sum1]</span>: No pmf output types to check for sum of 1. Check skipped.</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[submission_time]</span>: Submission time must be within accepted submission window</span></span>
-<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2025-12-10 19:03:48 UTC"</span> is outside window</span></span>
+<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2025-12-12 13:30:21 UTC"</span> is outside window</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span></span></code></pre></div>
 <p>For more details on the structure of
 <code>&lt;hub_validations&gt;</code> objects, including how to access
@@ -194,7 +205,7 @@ and the function re-run for validation to proceed further.</p>
 <span><span class="co">#&gt;   submission `round_id` from file name.  `round_id` value <span style="color: #0000BB;">2022-10-08</span> does not</span></span>
 <span><span class="co">#&gt;   match submission `round_id` <span style="color: #0000BB;">"2022-10-15"</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[submission_time]</span>: Submission time must be within accepted submission window</span></span>
-<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2025-12-10 19:03:50 UTC"</span> is outside window</span></span>
+<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2025-12-12 13:30:23 UTC"</span> is outside window</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -222,7 +233,7 @@ will be summarised.</p>
 <span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">2022-10-08-team1-goodmodel.csv</span><span style="color: #BB00BB;"> ────</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[submission_time]</span>: Submission time must be within accepted submission window</span></span>
-<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2025-12-10 19:03:51 UTC"</span> is outside window</span></span>
+<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2025-12-12 13:30:24 UTC"</span> is outside window</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `check_for_errors()`:</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> </span></span>
@@ -1211,12 +1222,685 @@ check_error
 </tr>
 </tbody>
 </table>
+</div>
+</div>
+<div class="section level2">
+<h2 id="validating-target-data-files-with-validate_target_submission">Validating target data files with
+<code>validate_target_submission()</code><a class="anchor" aria-label="anchor" href="#validating-target-data-files-with-validate_target_submission"></a>
+</h2>
+<p>Target data files can also be validated locally before submitting
+using <code><a href="../reference/validate_target_submission.html">validate_target_submission()</a></code>.</p>
+<p>The function validates both file-level properties (file name,
+extension, location) and the contents of the target data file. It takes
+a relative path (relative to the <code>target-data</code> directory) as
+argument <code>file_path</code> and the <code>target_type</code> (either
+<code>"time-series"</code> or <code>"oracle-output"</code>).</p>
+<div class="section level3">
+<h3 id="configuring-target-data-validation">Configuring target data validation<a class="anchor" aria-label="anchor" href="#configuring-target-data-validation"></a>
+</h3>
+<p>For the most robust validation, hubs should include a
+<code>target-data.json</code> configuration file in their
+<code>hub-config</code> directory (available from schema version 6.0.0
+onwards). When present, this config provides deterministic validation by
+explicitly defining the date column, column names and types, and
+observable unit structure.</p>
+<p>For hubs without a <code>target-data.json</code> config, the
+<strong><code>date_col</code></strong> parameter can be used to specify
+the name of the column containing observation dates (e.g.,
+<code>"target_end_date"</code>). This is important for correct schema
+creation, particularly when the date column is also used for
+partitioning. When <code>target-data.json</code> exists, any
+user-provided <code>date_col</code> is ignored in favour of the config
+value.</p>
+</div>
+<div class="section level3">
+<h3 id="single-file-target-datasets">Single file target datasets<a class="anchor" aria-label="anchor" href="#single-file-target-datasets"></a>
+</h3>
+<p>For hubs with single file target datasets (e.g.,
+<code>target-data/time-series.csv</code>):</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">hub_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"testhubs/v6/target_file"</span>, package <span class="op">=</span> <span class="st">"hubUtils"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/validate_target_submission.html">validate_target_submission</a></span><span class="op">(</span></span>
+<span>  <span class="va">hub_path</span>,</span>
+<span>  file_path <span class="op">=</span> <span class="st">"time-series.csv"</span>,</span>
+<span>  target_type <span class="op">=</span> <span class="st">"time-series"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">target_file</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_config]</span>: All hub config files are valid.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">time-series.csv</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_file_exists]</span>: File exists at path <span style="color: #0000BB;">target-data/time-series.csv</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[target_partition_file_name]</span>: Target file path not hive-partitioned. Check</span></span>
+<span><span class="co">#&gt;   skipped.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_file_ext]</span>: Target data file extension is valid.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_file_read]</span>: target file could be read successfully.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_colnames]</span>: Column names are consistent with expected column names</span></span>
+<span><span class="co">#&gt;   for <span style="color: #00BB00;">time-series</span> target type data.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_coltypes]</span>: Column data types match time-series target schema</span></span>
+<span><span class="co">#&gt;   defined in `target-data.json` config.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_ts_targets]</span>: <span style="color: #00BB00;">time-series</span> targets are all valid.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_rows_unique]</span>: <span style="color: #00BB00;">time-series</span> target data rows are unique.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_values]</span>: `target_tbl_chr` contains valid values/value</span></span>
+<span><span class="co">#&gt;   combinations.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[target_tbl_output_type_ids]</span>: Check not applicable to <span style="color: #00BB00;">time-series</span> target</span></span>
+<span><span class="co">#&gt;   data. Skipped.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[target_tbl_oracle_value]</span>: Check not applicable to <span style="color: #00BB00;">time-series</span> target data.</span></span>
+<span><span class="co">#&gt;   Skipped.</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/validate_target_submission.html">validate_target_submission</a></span><span class="op">(</span></span>
+<span>  <span class="va">hub_path</span>,</span>
+<span>  file_path <span class="op">=</span> <span class="st">"oracle-output.csv"</span>,</span>
+<span>  target_type <span class="op">=</span> <span class="st">"oracle-output"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">target_file</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_config]</span>: All hub config files are valid.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">oracle-output.csv</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_file_exists]</span>: File exists at path <span style="color: #0000BB;">target-data/oracle-output.csv</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[target_partition_file_name]</span>: Target file path not hive-partitioned. Check</span></span>
+<span><span class="co">#&gt;   skipped.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_file_ext]</span>: Target data file extension is valid.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_file_read]</span>: target file could be read successfully.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_colnames]</span>: Column names are consistent with expected column names</span></span>
+<span><span class="co">#&gt;   for <span style="color: #00BB00;">oracle-output</span> target type data.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_coltypes]</span>: Column data types match oracle-output target schema</span></span>
+<span><span class="co">#&gt;   defined in `target-data.json` config.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[target_tbl_ts_targets]</span>: Check not applicable to <span style="color: #00BB00;">oracle-output</span> target data.</span></span>
+<span><span class="co">#&gt;   Skipped.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_rows_unique]</span>: <span style="color: #00BB00;">oracle-output</span> target data rows are unique.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_values]</span>: `target_tbl_chr` contains valid values/value</span></span>
+<span><span class="co">#&gt;   combinations.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_output_type_ids]</span>: <span style="color: #00BB00;">oracle-output</span> `target_tbl` contains valid</span></span>
+<span><span class="co">#&gt;   complete output_type_id values.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_oracle_value]</span>: <span style="color: #00BB00;">oracle-output</span> `target_tbl` contains valid oracle</span></span>
+<span><span class="co">#&gt;   values.</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="partitioned-target-datasets">Partitioned target datasets<a class="anchor" aria-label="anchor" href="#partitioned-target-datasets"></a>
+</h3>
+<p>For hubs with partitioned target datasets stored as directories:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">hub_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"testhubs/v6/target_dir"</span>, package <span class="op">=</span> <span class="st">"hubUtils"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/validate_target_submission.html">validate_target_submission</a></span><span class="op">(</span></span>
+<span>  <span class="va">hub_path</span>,</span>
+<span>  file_path <span class="op">=</span> <span class="st">"time-series/target=wk%20flu%20hosp%20rate/part-0.parquet"</span>,</span>
+<span>  target_type <span class="op">=</span> <span class="st">"time-series"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">target_dir</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_config]</span>: All hub config files are valid.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">time-series/target=wk%20flu%20hosp%20rate/part-0.parquet</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_file_exists]</span>: File exists at path</span></span>
+<span><span class="co">#&gt;   <span style="color: #0000BB;">target-data/time-series/target=wk%20flu%20hosp%20rate/part-0.parquet</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_partition_file_name]</span>: Hive-style partition file path segments are</span></span>
+<span><span class="co">#&gt;   valid.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_file_ext]</span>: Hive-partitioned target data file extension is valid.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_file_read]</span>: target file could be read successfully.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_colnames]</span>: Column names are consistent with expected column names</span></span>
+<span><span class="co">#&gt;   for <span style="color: #00BB00;">time-series</span> target type data.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_coltypes]</span>: Column data types match time-series target schema</span></span>
+<span><span class="co">#&gt;   defined in `target-data.json` config.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_ts_targets]</span>: <span style="color: #00BB00;">time-series</span> targets are all valid.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_rows_unique]</span>: <span style="color: #00BB00;">time-series</span> target data rows are unique.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_values]</span>: `target_tbl_chr` contains valid values/value</span></span>
+<span><span class="co">#&gt;   combinations.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[target_tbl_output_type_ids]</span>: Check not applicable to <span style="color: #00BB00;">time-series</span> target</span></span>
+<span><span class="co">#&gt;   data. Skipped.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[target_tbl_oracle_value]</span>: Check not applicable to <span style="color: #00BB00;">time-series</span> target data.</span></span>
+<span><span class="co">#&gt;   Skipped.</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="relaxed-date-validation-for-time-series-data">Relaxed date validation for time-series data<a class="anchor" aria-label="anchor" href="#relaxed-date-validation-for-time-series-data"></a>
+</h3>
+<p>By default, date values in time-series target data are validated
+strictly against the dates defined in <code>tasks.json</code>. However,
+target data often contains historical observations with dates beyond the
+hub’s configured modeling rounds.</p>
+<p>Setting <strong><code>allow_extra_dates = TRUE</code></strong>
+relaxes date validation for time-series data, allowing historical
+observations while still strictly validating other task ID values.
+Oracle-output data always uses strict date validation regardless of this
+setting.</p>
+<p>Here’s an example demonstrating this feature. First, we create a copy
+of a hub and add a row with a date not defined in
+<code>tasks.json</code>:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Create a temporary copy of the hub</span></span>
+<span><span class="va">tmp_hub</span> <span class="op">&lt;-</span> <span class="fu">withr</span><span class="fu">::</span><span class="fu"><a href="https://withr.r-lib.org/reference/with_tempfile.html" class="external-link">local_tempdir</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/copy.html" class="external-link">dir_copy</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"testhubs/v5/target_file"</span>, package <span class="op">=</span> <span class="st">"hubUtils"</span><span class="op">)</span>,</span>
+<span>  <span class="va">tmp_hub</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">hub_path</span> <span class="op">&lt;-</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/path.html" class="external-link">path</a></span><span class="op">(</span><span class="va">tmp_hub</span>, <span class="st">"target_file"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Read the time-series data and add a row with an extra date</span></span>
+<span><span class="va">ts_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/path.html" class="external-link">path</a></span><span class="op">(</span><span class="va">hub_path</span>, <span class="st">"target-data"</span>, <span class="st">"time-series.csv"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">extra_row</span> <span class="op">&lt;-</span> <span class="va">ts_data</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span></span>
+<span><span class="va">extra_row</span><span class="op">$</span><span class="va">target_end_date</span> <span class="op">&lt;-</span> <span class="st">"1999-01-01"</span></span>
+<span><span class="va">ts_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">extra_row</span>, <span class="va">ts_data</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="va">ts_data</span>, <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/path.html" class="external-link">path</a></span><span class="op">(</span><span class="va">hub_path</span>, <span class="st">"target-data"</span>, <span class="st">"time-series.csv"</span><span class="op">)</span>, row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<p>With the default <code>allow_extra_dates = FALSE</code>, validation
+fails because the date is not in <code>tasks.json</code>:</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">v</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/validate_target_submission.html">validate_target_submission</a></span><span class="op">(</span></span>
+<span>  <span class="va">hub_path</span>,</span>
+<span>  file_path <span class="op">=</span> <span class="st">"time-series.csv"</span>,</span>
+<span>  target_type <span class="op">=</span> <span class="st">"time-series"</span>,</span>
+<span>  date_col <span class="op">=</span> <span class="st">"target_end_date"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">v</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">target_file</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_config]</span>: All hub config files are valid.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">time-series.csv</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_file_exists]</span>: File exists at path <span style="color: #0000BB;">target-data/time-series.csv</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[target_partition_file_name]</span>: Target file path not hive-partitioned. Check</span></span>
+<span><span class="co">#&gt;   skipped.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_file_ext]</span>: Target data file extension is valid.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_file_read]</span>: target file could be read successfully.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_colnames]</span>: Column names are consistent with expected column names</span></span>
+<span><span class="co">#&gt;   for <span style="color: #00BB00;">time-series</span> target type data.  Column name validation for time-series</span></span>
+<span><span class="co">#&gt;   data in inference mode is limited. For robust validation, create a</span></span>
+<span><span class="co">#&gt;   <span style="color: #0000BB;">target-data.json</span> config file. See `target-data.json` documentation</span></span>
+<span><span class="co">#&gt;   (<span style="color: #0000BB; font-style: italic;">&lt;https://docs.hubverse.io/en/latest/user-guide/hub-config.html#hub-target-data-configuration-target-data-json-file&gt;</span>)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_coltypes]</span>: Column data types match time-series target schema.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_ts_targets]</span>: <span style="color: #00BB00;">time-series</span> targets are all valid.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_rows_unique]</span>: <span style="color: #00BB00;">time-series</span> target data rows are unique.</span></span>
+<span><span class="co">#&gt; <span style="color: #BB0000;">ⓧ</span> <span style="color: #B2B2B2;">[target_tbl_values]</span>: `target_tbl_chr` contains invalid values/value</span></span>
+<span><span class="co">#&gt;   combinations.  Column `target_end_date` contains invalid value <span style="color: #0000BB;">"1999-01-01"</span>.</span></span>
+<span><span class="co">#&gt;   See `error_tbl` for details.</span></span></code></pre></div>
+<p>Setting <code>allow_extra_dates = TRUE</code> allows the extra date
+while still validating other task IDs:</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">v</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/validate_target_submission.html">validate_target_submission</a></span><span class="op">(</span></span>
+<span>  <span class="va">hub_path</span>,</span>
+<span>  file_path <span class="op">=</span> <span class="st">"time-series.csv"</span>,</span>
+<span>  target_type <span class="op">=</span> <span class="st">"time-series"</span>,</span>
+<span>  date_col <span class="op">=</span> <span class="st">"target_end_date"</span>,</span>
+<span>  allow_extra_dates <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">v</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">target_file</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_config]</span>: All hub config files are valid.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">time-series.csv</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_file_exists]</span>: File exists at path <span style="color: #0000BB;">target-data/time-series.csv</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[target_partition_file_name]</span>: Target file path not hive-partitioned. Check</span></span>
+<span><span class="co">#&gt;   skipped.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_file_ext]</span>: Target data file extension is valid.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_file_read]</span>: target file could be read successfully.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_colnames]</span>: Column names are consistent with expected column names</span></span>
+<span><span class="co">#&gt;   for <span style="color: #00BB00;">time-series</span> target type data.  Column name validation for time-series</span></span>
+<span><span class="co">#&gt;   data in inference mode is limited. For robust validation, create a</span></span>
+<span><span class="co">#&gt;   <span style="color: #0000BB;">target-data.json</span> config file. See `target-data.json` documentation</span></span>
+<span><span class="co">#&gt;   (<span style="color: #0000BB; font-style: italic;">&lt;https://docs.hubverse.io/en/latest/user-guide/hub-config.html#hub-target-data-configuration-target-data-json-file&gt;</span>)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_coltypes]</span>: Column data types match time-series target schema.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_ts_targets]</span>: <span style="color: #00BB00;">time-series</span> targets are all valid.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_rows_unique]</span>: <span style="color: #00BB00;">time-series</span> target data rows are unique.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_values]</span>: `target_tbl_chr` contains valid values/value</span></span>
+<span><span class="co">#&gt;   combinations.  Date column <span style="color: #0000BB;">"target_end_date"</span> excluded from value validation.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[target_tbl_output_type_ids]</span>: Check not applicable to <span style="color: #00BB00;">time-series</span> target</span></span>
+<span><span class="co">#&gt;   data. Skipped.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[target_tbl_oracle_value]</span>: Check not applicable to <span style="color: #00BB00;">time-series</span> target data.</span></span>
+<span><span class="co">#&gt;   Skipped.</span></span></code></pre></div>
+<p>Note the message indicating the date column was excluded from
+validation.</p>
+</div>
+<div class="section level3">
+<h3 id="validating-without-a-target-data-json-config">Validating without a <code>target-data.json</code> config<a class="anchor" aria-label="anchor" href="#validating-without-a-target-data-json-config"></a>
+</h3>
+<p>For hubs without a <code>target-data.json</code> config (e.g., v5
+hubs), you can specify the date column manually:</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">hub_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"testhubs/v5/target_file"</span>, package <span class="op">=</span> <span class="st">"hubUtils"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/validate_target_submission.html">validate_target_submission</a></span><span class="op">(</span></span>
+<span>  <span class="va">hub_path</span>,</span>
+<span>  file_path <span class="op">=</span> <span class="st">"time-series.csv"</span>,</span>
+<span>  target_type <span class="op">=</span> <span class="st">"time-series"</span>,</span>
+<span>  date_col <span class="op">=</span> <span class="st">"target_end_date"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">target_file</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_config]</span>: All hub config files are valid.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">time-series.csv</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_file_exists]</span>: File exists at path <span style="color: #0000BB;">target-data/time-series.csv</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[target_partition_file_name]</span>: Target file path not hive-partitioned. Check</span></span>
+<span><span class="co">#&gt;   skipped.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_file_ext]</span>: Target data file extension is valid.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_file_read]</span>: target file could be read successfully.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_colnames]</span>: Column names are consistent with expected column names</span></span>
+<span><span class="co">#&gt;   for <span style="color: #00BB00;">time-series</span> target type data.  Column name validation for time-series</span></span>
+<span><span class="co">#&gt;   data in inference mode is limited. For robust validation, create a</span></span>
+<span><span class="co">#&gt;   <span style="color: #0000BB;">target-data.json</span> config file. See `target-data.json` documentation</span></span>
+<span><span class="co">#&gt;   (<span style="color: #0000BB; font-style: italic;">&lt;https://docs.hubverse.io/en/latest/user-guide/hub-config.html#hub-target-data-configuration-target-data-json-file&gt;</span>)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_coltypes]</span>: Column data types match time-series target schema.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_ts_targets]</span>: <span style="color: #00BB00;">time-series</span> targets are all valid.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_rows_unique]</span>: <span style="color: #00BB00;">time-series</span> target data rows are unique.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_values]</span>: `target_tbl_chr` contains valid values/value</span></span>
+<span><span class="co">#&gt;   combinations.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[target_tbl_output_type_ids]</span>: Check not applicable to <span style="color: #00BB00;">time-series</span> target</span></span>
+<span><span class="co">#&gt;   data. Skipped.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[target_tbl_oracle_value]</span>: Check not applicable to <span style="color: #00BB00;">time-series</span> target data.</span></span>
+<span><span class="co">#&gt;   Skipped.</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="validating-the-entire-target-dataset">Validating the entire target dataset<a class="anchor" aria-label="anchor" href="#validating-the-entire-target-dataset"></a>
+</h3>
+<p>To validate dataset-level properties across all files of a target
+type, use <code><a href="../reference/validate_target_dataset.html">validate_target_dataset()</a></code>:</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">hub_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"testhubs/v6/target_file"</span>, package <span class="op">=</span> <span class="st">"hubUtils"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/validate_target_dataset.html">validate_target_dataset</a></span><span class="op">(</span><span class="va">hub_path</span>, target_type <span class="op">=</span> <span class="st">"time-series"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">time-series.csv</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_dataset_exists]</span>: <span style="color: #00BB00;">time-series</span> dataset detected.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_dataset_unique]</span>: <span style="color: #0000BB;">target-data</span> directory contains single unique</span></span>
+<span><span class="co">#&gt;   <span style="color: #00BB00;">time-series</span> dataset.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_dataset_file_ext_unique]</span>: <span style="color: #00BB00;">time-series</span> dataset files share single</span></span>
+<span><span class="co">#&gt;   unique file format.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_dataset_rows_unique]</span>: <span style="color: #00BB00;">time-series</span> target dataset rows are unique.</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/validate_target_dataset.html">validate_target_dataset</a></span><span class="op">(</span><span class="va">hub_path</span>, target_type <span class="op">=</span> <span class="st">"oracle-output"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">oracle-output.csv</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_dataset_exists]</span>: <span style="color: #00BB00;">oracle-output</span> dataset detected.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_dataset_unique]</span>: <span style="color: #0000BB;">target-data</span> directory contains single unique</span></span>
+<span><span class="co">#&gt;   <span style="color: #00BB00;">oracle-output</span> dataset.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_dataset_file_ext_unique]</span>: <span style="color: #00BB00;">oracle-output</span> dataset files share single</span></span>
+<span><span class="co">#&gt;   unique file format.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_dataset_rows_unique]</span>: <span style="color: #00BB00;">oracle-output</span> target dataset rows are unique.</span></span></code></pre></div>
+<p>This checks that the dataset exists, is unique, has consistent file
+extensions, and contains unique rows across all files.</p>
+</div>
+<div class="section level3">
+<h3 id="checking-for-errors-with-check_for_errors-1">Checking for errors with <code>check_for_errors()</code><a class="anchor" aria-label="anchor" href="#checking-for-errors-with-check_for_errors-1"></a>
+</h3>
+<p>You can use <code><a href="../reference/check_for_errors.html">check_for_errors()</a></code> to determine whether
+validation passed or failed overall.</p>
+<p>For successful validation:</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">hub_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"testhubs/v6/target_file"</span>, package <span class="op">=</span> <span class="st">"hubUtils"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">v</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/validate_target_submission.html">validate_target_submission</a></span><span class="op">(</span></span>
+<span>  <span class="va">hub_path</span>,</span>
+<span>  file_path <span class="op">=</span> <span class="st">"time-series.csv"</span>,</span>
+<span>  target_type <span class="op">=</span> <span class="st">"time-series"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/check_for_errors.html">check_for_errors</a></span><span class="op">(</span><span class="va">v</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> All validation checks have been successful.</span></span></code></pre></div>
+<p>When validation fails, <code><a href="../reference/check_for_errors.html">check_for_errors()</a></code> throws an
+error summarising the failing checks:</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Using the modified hub from the allow_extra_dates example above</span></span>
+<span><span class="va">v_fail</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/validate_target_submission.html">validate_target_submission</a></span><span class="op">(</span></span>
+<span>  <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/path.html" class="external-link">path</a></span><span class="op">(</span><span class="va">tmp_hub</span>, <span class="st">"target_file"</span><span class="op">)</span>,</span>
+<span>  file_path <span class="op">=</span> <span class="st">"time-series.csv"</span>,</span>
+<span>  target_type <span class="op">=</span> <span class="st">"time-series"</span>,</span>
+<span>  date_col <span class="op">=</span> <span class="st">"target_end_date"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/check_for_errors.html">check_for_errors</a></span><span class="op">(</span><span class="va">v_fail</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">time-series.csv</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #BB0000;">ⓧ</span> <span style="color: #B2B2B2;">[target_tbl_values]</span>: `target_tbl_chr` contains invalid values/value</span></span>
+<span><span class="co">#&gt;   combinations.  Column `target_end_date` contains invalid value <span style="color: #0000BB;">"1999-01-01"</span>.</span></span>
+<span><span class="co">#&gt;   See `error_tbl` for details.</span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `check_for_errors()`:</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> </span></span>
+<span><span class="co">#&gt; The validation checks produced some failures/errors reported above.</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="validate_target_submission-check-details">
+<code>validate_target_submission</code> check details<a class="anchor" aria-label="anchor" href="#validate_target_submission-check-details"></a>
+</h3>
+<table class="table table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<caption>
+Details of checks performed by <code><a href="../reference/validate_target_submission.html">validate_target_submission()</a></code>
+</caption>
+<thead><tr>
+<th style="text-align:left;">
+Name
+</th>
+<th style="text-align:left;">
+Check
+</th>
+<th style="text-align:left;">
+Early return
+</th>
+<th style="text-align:left;">
+Fail output
+</th>
+<th style="text-align:left;">
+Extra info
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+target_file_exists
+</td>
+<td style="text-align:left;">
+File exists at <code>file_path</code> provided.
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:left;">
+check_error
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+target_partition_file_name
+</td>
+<td style="text-align:left;">
+Hive-style partition file path segments are valid and can be parsed
+successfully. Skipped if target dataset not hive-partitioned.
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:left;">
+check_error
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+target_file_ext
+</td>
+<td style="text-align:left;">
+Target data file extension is valid.
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:left;">
+check_error
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+target_file_read
+</td>
+<td style="text-align:left;">
+Target data file can be read successfully.
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:left;">
+check_error
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+target_tbl_colnames
+</td>
+<td style="text-align:left;">
+Target data file has the correct column names according to target type.
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:left;">
+check_error
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+target_tbl_coltypes
+</td>
+<td style="text-align:left;">
+Target data file has the correct column types according to target type.
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:left;">
+check_error
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+target_tbl_ts_targets
+</td>
+<td style="text-align:left;">
+Targets in a time-series target data file are valid. Only performed on
+<code>time-series</code> data files.
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:left;">
+check_error
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+target_tbl_rows_unique
+</td>
+<td style="text-align:left;">
+Target data file rows are all unique.
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+check_failure
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+target_tbl_values
+</td>
+<td style="text-align:left;">
+Task ID columns in a target data file have valid task ID values.
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:left;">
+check_error
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+target_tbl_output_type_ids
+</td>
+<td style="text-align:left;">
+Output type ID values in a target data file are valid and complete. Only
+performed when the target data file contains
+an <code>output_type_id</code> column.
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:left;">
+check_error
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+target_tbl_oracle_value
+</td>
+<td style="text-align:left;">
+Oracle values in a target data file are valid. Only performed on
+<code>oracle output</code> data files.
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+check_failure
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level3">
+<h3 id="validate_target_dataset-check-details">
+<code>validate_target_dataset</code> check details<a class="anchor" aria-label="anchor" href="#validate_target_dataset-check-details"></a>
+</h3>
+<table class="table table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<caption>
+Details of checks performed by <code><a href="../reference/validate_target_dataset.html">validate_target_dataset()</a></code>
+</caption>
+<thead><tr>
+<th style="text-align:left;">
+Name
+</th>
+<th style="text-align:left;">
+Check
+</th>
+<th style="text-align:left;">
+Early return
+</th>
+<th style="text-align:left;">
+Fail output
+</th>
+<th style="text-align:left;">
+Extra info
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+target_dataset_exists
+</td>
+<td style="text-align:left;">
+Target dataset can be successfully detected for a given target type.
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:left;">
+check_error
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+target_dataset_unique
+</td>
+<td style="text-align:left;">
+A single unique target dataset exists for a given target type.
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:left;">
+check_error
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+target_dataset_file_ext_unique
+</td>
+<td style="text-align:left;">
+All files of a given target type share a single unique file format.
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:left;">
+check_error
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+target_dataset_rows_unique
+</td>
+<td style="text-align:left;">
+Target dataset rows are all unique.
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+check_failure
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+</tbody>
+</table>
 <div class="section level4 alert alert-info" role="note">
 <h4 id="custom-checks">Custom checks<a class="anchor" aria-label="anchor" href="#custom-checks"></a>
 </h4>
 <p>The standard checks discussed here are the checks deployed by default
-by the <code>validate_submission</code> or
-<code>validate_model_metadata</code> functions. For more information on
+by the <code>validate_submission</code>,
+<code>validate_model_metadata</code>,
+<code>validate_target_submission</code> and
+<code>validate_target_dataset</code> functions. For more information on
 deploying optional/custom functions or functions that require
 configuration please check the article on <a href="deploying-custom-functions.html">including custom functions</a>
 (<code><a href="../articles/deploying-custom-functions.html">vignette("articles/deploying-custom-functions")</a></code>).</p>

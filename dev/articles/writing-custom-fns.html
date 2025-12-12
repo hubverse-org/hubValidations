@@ -43,17 +43,12 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/hub-validations-class.html">Structure of hub_validations class objects</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Validation for hub admins through CI</h6></li>
-    <li><a class="dropdown-item" href="../articles/validate-pr.html">Validating Pull Requests on GitHub</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Validation for submitting teams</h6></li>
-    <li><a class="dropdown-item" href="../articles/validate-submission.html">Validating submissions locally</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Custom validation checks</h6></li>
-    <li><a class="dropdown-item" href="../articles/writing-custom-fns.html">Writing custom validation functions</a></li>
-    <li><a class="dropdown-item" href="../articles/deploying-custom-functions.html">Deploying custom validation functions</a></li>
+<li><a class="dropdown-item" href="../articles/hub-validations-class.html">hub_validations class structure</a></li>
+    <li><a class="dropdown-item" href="../articles/validate-pr.html">Validating model output PRs</a></li>
+    <li><a class="dropdown-item" href="../articles/validate-target-pr.html">Validating target data PRs</a></li>
+    <li><a class="dropdown-item" href="../articles/validate-submission.html">Validating hub data locally</a></li>
+    <li><a class="dropdown-item" href="../articles/writing-custom-fns.html">Writing custom checks</a></li>
+    <li><a class="dropdown-item" href="../articles/deploying-custom-functions.html">Deploying custom checks</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -152,7 +147,7 @@ you have an existing hub, you can work in there.</p>
 <span><span class="fu"><a href="../reference/create_custom_check.html">create_custom_check</a></span><span class="op">(</span><span class="st">"cstm_check_tbl_basic"</span>,</span>
 <span>  hub_path <span class="op">=</span> <span class="va">hub_path</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Directory <span style="color: #0000BB;">/tmp/RtmpbwOcer/file22c281953d4/src/validations/R</span> created.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Directory <span style="color: #0000BB;">/tmp/RtmpDMo264/file21be6fb569a4/src/validations/R</span> created.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Custom validation check template function file <span style="color: #0000BB;">"cstm_check_tbl_basic.R"</span> created.</span></span>
 <span><span class="co">#&gt; → Edit the function template to add your custom check logic.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> See the <span style="color: #00BB00;">Writing custom check functions</span> article for more information.</span></span>
@@ -279,14 +274,18 @@ including in function deployment configuration but <a href="deploying-custom-fun
 be overridden through a function’s <code>args</code>
 configuration</strong></a> in <code>validations.yml</code> during
 deployment.</p>
-<p><strong>All <code>validate_*()</code> functions will contain the
-following five objects in their caller environment:</strong></p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="model-output-validation">Model output validation<a class="anchor" aria-label="anchor" href="#model-output-validation"></a>
+</h2>
+<p><strong>All model output <code>validate_*()</code> functions will
+contain the following objects in their caller environment:</strong></p>
 <ul>
 <li>
 <strong><code>file_path</code></strong>: character string of path to
 file being validated relative to the <code>model-output</code>
-directory.<br>
-</li>
+directory.</li>
 <li>
 <strong><code>hub_path</code></strong>: character string of path to
 hub.</li>
@@ -307,12 +306,10 @@ additional objects:</strong></p>
 <ul>
 <li>
 <strong><code>tbl</code></strong>: a tibble of the model output data
-being validated.<br>
-</li>
+being validated.</li>
 <li>
 <strong><code>tbl_chr</code></strong>: a tibble of the model output
-data being validated with all columns coerced to character type.<br>
-</li>
+data being validated with all columns coerced to character type.</li>
 <li>
 <strong><code>round_id_col</code></strong>: character string of name
 of <code>tbl</code> column containing <code>round_id</code> information.
@@ -332,6 +329,68 @@ type of <code>output_type_id</code> column.</li>
 argument, i.e. the names of task IDs whose values depend on other task
 IDs.</li>
 </ul>
+</div>
+<div class="section level2">
+<h2 id="target-data-validation">Target data validation<a class="anchor" aria-label="anchor" href="#target-data-validation"></a>
+</h2>
+<p><strong>All target data <code>validate_*()</code> functions will
+contain the following objects in their caller environment:</strong></p>
+<ul>
+<li>
+<strong><code>hub_path</code></strong>: character string of path to
+hub.</li>
+<li>
+<strong><code>file_path</code></strong>: character string of path to
+file being validated relative to the <code>target-data</code>
+directory.</li>
+<li>
+<strong><code>validations_cfg_path</code></strong>: character string
+of path to <code>validations.yml</code> file. Defaults to
+<code>hub-config/validations.yml</code>.</li>
+<li>
+<strong><code>round_id</code></strong>: character string. Not
+generally relevant to target datasets but can be used to specify a
+specific block of custom validation checks. Otherwise best set to
+<code>"default"</code>.</li>
+</ul>
+<p><strong><code><a href="../reference/validate_target_data.html">validate_target_data()</a></code> will contain the
+following additional objects:</strong></p>
+<ul>
+<li>
+<strong><code>target_tbl</code></strong>: a tibble of the target
+data being validated.</li>
+<li>
+<strong><code>target_tbl_chr</code></strong>: a tibble of the target
+data being validated with all columns coerced to character type.</li>
+<li>
+<strong><code>target_type</code></strong>: character string. The
+type of target data being validated, either <code>"time-series"</code>
+or <code>"oracle-output"</code>.</li>
+<li>
+<strong><code>config_target_data</code></strong>: the parsed
+<code>target-data.json</code> config if available, otherwise
+<code>NULL</code>.</li>
+<li>
+<strong><code>date_col</code></strong>: character string or
+<code>NULL</code>. Optional name of the column containing the date
+observations actually occurred.</li>
+<li>
+<strong><code>allow_extra_dates</code></strong>: logical. Whether to
+allow extra dates in the target data beyond those defined in the hub
+config.</li>
+<li>
+<strong><code>output_type_id_datatype</code></strong>: character
+string. The value of the <code>output_type_id_datatype</code>
+argument.</li>
+</ul>
+<p><strong><code><a href="../reference/validate_target_dataset.html">validate_target_dataset()</a></code> will contain the
+following additional objects:</strong></p>
+<ul>
+<li>
+<strong><code>target_type</code></strong>: character string. The
+type of target data being validated, either <code>"time-series"</code>
+or <code>"oracle-output"</code>.</li>
+</ul>
 <p>The <code>args</code> configuration can be used to override objects
 from the caller environment as well as defaults during deployment.</p>
 <div class="alert alert-info" role="note">
@@ -339,7 +398,6 @@ from the caller environment as well as defaults during deployment.</p>
 not all need to be specified as arguments</strong> in the function
 definition. <strong>Only the ones that your custom function actually
 requires as inputs</strong>.</p>
-</div>
 </div>
 <div class="section level3">
 <h3 id="additional-arguments">Additional arguments<a class="anchor" aria-label="anchor" href="#additional-arguments"></a>
@@ -399,7 +457,7 @@ the same fashion as custom functions, i.e. through the
 <span id="cb4-37"><a href="#cb4-37" tabindex="-1"></a>        <span class="at">msg_verbs =</span> <span class="fu">c</span>(<span class="st">"all match"</span>, <span class="st">"do not all match"</span>), <span class="at">msg_attribute =</span> cli<span class="sc">::</span><span class="fu">format_inline</span>(<span class="st">"expected period of {.val {timediff}}."</span>), </span>
 <span id="cb4-38"><a href="#cb4-38" tabindex="-1"></a>        <span class="at">details =</span> details)</span>
 <span id="cb4-39"><a href="#cb4-39" tabindex="-1"></a>}</span>
-<span id="cb4-40"><a href="#cb4-40" tabindex="-1"></a><span class="sc">&lt;</span>bytecode<span class="sc">:</span> <span class="dv">0x55ec4cfb5998</span><span class="sc">&gt;</span></span>
+<span id="cb4-40"><a href="#cb4-40" tabindex="-1"></a><span class="sc">&lt;</span>bytecode<span class="sc">:</span> <span class="dv">0x55e6bee2fa08</span><span class="sc">&gt;</span></span>
 <span id="cb4-41"><a href="#cb4-41" tabindex="-1"></a><span class="er">&lt;</span>environment<span class="sc">:</span> namespace<span class="sc">:</span>hubValidations<span class="sc">&gt;</span></span></code></pre></div>
 <p>You can add an example extra argument with
 <code>extra_args = TRUE</code> when creating the custom check function
@@ -566,7 +624,7 @@ model output <code>tbl</code> contains data for <code>cdf</code> and
 <span id="cb10-25"><a href="#cb10-25" tabindex="-1"></a>        <span class="at">msg_verbs =</span> <span class="fu">c</span>(<span class="st">"increase"</span>, <span class="st">"do not all increase"</span>), <span class="at">msg_attribute =</span> <span class="st">"when ordered by {.var output_type_id}."</span>, </span>
 <span id="cb10-26"><a href="#cb10-26" tabindex="-1"></a>        <span class="at">details =</span> details, <span class="at">error_tbl =</span> error_tbl)</span>
 <span id="cb10-27"><a href="#cb10-27" tabindex="-1"></a>}</span>
-<span id="cb10-28"><a href="#cb10-28" tabindex="-1"></a><span class="sc">&lt;</span>bytecode<span class="sc">:</span> <span class="dv">0x55ec50227010</span><span class="sc">&gt;</span></span>
+<span id="cb10-28"><a href="#cb10-28" tabindex="-1"></a><span class="sc">&lt;</span>bytecode<span class="sc">:</span> <span class="dv">0x55e6c20bb3a8</span><span class="sc">&gt;</span></span>
 <span id="cb10-29"><a href="#cb10-29" tabindex="-1"></a><span class="er">&lt;</span>environment<span class="sc">:</span> namespace<span class="sc">:</span>hubValidations<span class="sc">&gt;</span></span></code></pre></div>
 <p>You can add a pre-condition check block of code with argument
 <code>conditional = TRUE</code> when creating the custom check function

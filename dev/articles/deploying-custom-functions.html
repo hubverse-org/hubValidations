@@ -43,17 +43,12 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/hub-validations-class.html">Structure of hub_validations class objects</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Validation for hub admins through CI</h6></li>
-    <li><a class="dropdown-item" href="../articles/validate-pr.html">Validating Pull Requests on GitHub</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Validation for submitting teams</h6></li>
-    <li><a class="dropdown-item" href="../articles/validate-submission.html">Validating submissions locally</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Custom validation checks</h6></li>
-    <li><a class="dropdown-item" href="../articles/writing-custom-fns.html">Writing custom validation functions</a></li>
-    <li><a class="dropdown-item" href="../articles/deploying-custom-functions.html">Deploying custom validation functions</a></li>
+<li><a class="dropdown-item" href="../articles/hub-validations-class.html">hub_validations class structure</a></li>
+    <li><a class="dropdown-item" href="../articles/validate-pr.html">Validating model output PRs</a></li>
+    <li><a class="dropdown-item" href="../articles/validate-target-pr.html">Validating target data PRs</a></li>
+    <li><a class="dropdown-item" href="../articles/validate-submission.html">Validating hub data locally</a></li>
+    <li><a class="dropdown-item" href="../articles/writing-custom-fns.html">Writing custom checks</a></li>
+    <li><a class="dropdown-item" href="../articles/deploying-custom-functions.html">Deploying custom checks</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -158,14 +153,18 @@ including in function deployment configuration but <a href="deploying-custom-fun
 be overridden through a function’s <code>args</code>
 configuration</strong></a> in <code>validations.yml</code> during
 deployment.</p>
-<p><strong>All <code>validate_*()</code> functions will contain the
-following five objects in their caller environment:</strong></p>
+</div>
+</div>
+<div class="section level3">
+<h3 id="model-output-validation">Model output validation<a class="anchor" aria-label="anchor" href="#model-output-validation"></a>
+</h3>
+<p><strong>All model output <code>validate_*()</code> functions will
+contain the following objects in their caller environment:</strong></p>
 <ul>
 <li>
 <strong><code>file_path</code></strong>: character string of path to
 file being validated relative to the <code>model-output</code>
-directory.<br>
-</li>
+directory.</li>
 <li>
 <strong><code>hub_path</code></strong>: character string of path to
 hub.</li>
@@ -186,12 +185,10 @@ additional objects:</strong></p>
 <ul>
 <li>
 <strong><code>tbl</code></strong>: a tibble of the model output data
-being validated.<br>
-</li>
+being validated.</li>
 <li>
 <strong><code>tbl_chr</code></strong>: a tibble of the model output
-data being validated with all columns coerced to character type.<br>
-</li>
+data being validated with all columns coerced to character type.</li>
 <li>
 <strong><code>round_id_col</code></strong>: character string of name
 of <code>tbl</code> column containing <code>round_id</code> information.
@@ -210,6 +207,68 @@ type of <code>output_type_id</code> column.</li>
 <code>NULL</code>. The value of the <code>derived_task_ids</code>
 argument, i.e. the names of task IDs whose values depend on other task
 IDs.</li>
+</ul>
+</div>
+<div class="section level3">
+<h3 id="target-data-validation">Target data validation<a class="anchor" aria-label="anchor" href="#target-data-validation"></a>
+</h3>
+<p><strong>All target data <code>validate_*()</code> functions will
+contain the following objects in their caller environment:</strong></p>
+<ul>
+<li>
+<strong><code>hub_path</code></strong>: character string of path to
+hub.</li>
+<li>
+<strong><code>file_path</code></strong>: character string of path to
+file being validated relative to the <code>target-data</code>
+directory.</li>
+<li>
+<strong><code>validations_cfg_path</code></strong>: character string
+of path to <code>validations.yml</code> file. Defaults to
+<code>hub-config/validations.yml</code>.</li>
+<li>
+<strong><code>round_id</code></strong>: character string. Not
+generally relevant to target datasets but can be used to specify a
+specific block of custom validation checks. Otherwise best set to
+<code>"default"</code>.</li>
+</ul>
+<p><strong><code><a href="../reference/validate_target_data.html">validate_target_data()</a></code> will contain the
+following additional objects:</strong></p>
+<ul>
+<li>
+<strong><code>target_tbl</code></strong>: a tibble of the target
+data being validated.</li>
+<li>
+<strong><code>target_tbl_chr</code></strong>: a tibble of the target
+data being validated with all columns coerced to character type.</li>
+<li>
+<strong><code>target_type</code></strong>: character string. The
+type of target data being validated, either <code>"time-series"</code>
+or <code>"oracle-output"</code>.</li>
+<li>
+<strong><code>config_target_data</code></strong>: the parsed
+<code>target-data.json</code> config if available, otherwise
+<code>NULL</code>.</li>
+<li>
+<strong><code>date_col</code></strong>: character string or
+<code>NULL</code>. Optional name of the column containing the date
+observations actually occurred.</li>
+<li>
+<strong><code>allow_extra_dates</code></strong>: logical. Whether to
+allow extra dates in the target data beyond those defined in the hub
+config.</li>
+<li>
+<strong><code>output_type_id_datatype</code></strong>: character
+string. The value of the <code>output_type_id_datatype</code>
+argument.</li>
+</ul>
+<p><strong><code><a href="../reference/validate_target_dataset.html">validate_target_dataset()</a></code> will contain the
+following additional objects:</strong></p>
+<ul>
+<li>
+<strong><code>target_type</code></strong>: character string. The
+type of target data being validated, either <code>"time-series"</code>
+or <code>"oracle-output"</code>.</li>
 </ul>
 <p>The <code>args</code> configuration can be used to override objects
 from the caller environment as well as defaults during deployment.</p>
@@ -271,7 +330,6 @@ file.</p>
 <span>      <span class="va">custom_check</span><span class="op">:</span></span>
 <span>        <span class="va">fn</span><span class="op">:</span> <span class="st">"cstm_check_tbl_example"</span></span>
 <span>        <span class="va">source</span><span class="op">:</span> <span class="st">"src/validations/R/cstm_check_tbl_example.R"</span></span></code></pre>
-</div>
 </div>
 <div class="section level4">
 <h4 id="round-specific-configuration">Round specific configuration<a class="anchor" aria-label="anchor" href="#round-specific-configuration"></a>
