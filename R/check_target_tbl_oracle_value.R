@@ -70,8 +70,16 @@ check_target_tbl_oracle_value <- function(
   config_tasks <- read_config(hub_path)
 
   check_vals <- check_oracle_value_vals(target_tbl)
-  check_cdf <- check_cdf_oracle_value(target_tbl, config_tasks, config_target_data)
-  check_pmf <- check_pmf_oracle_value(target_tbl, config_tasks, config_target_data)
+  check_cdf <- check_cdf_oracle_value(
+    target_tbl,
+    config_tasks,
+    config_target_data
+  )
+  check_pmf <- check_pmf_oracle_value(
+    target_tbl,
+    config_tasks,
+    config_target_data
+  )
 
   details <- details_summarise_oracle_value_checks(
     check_vals,
@@ -136,7 +144,11 @@ check_oracle_value_vals <- function(tbl) {
 #' or `NULL`.
 #' @noRd
 #' @importFrom dplyr near left_join
-check_pmf_oracle_value <- function(tbl, config_tasks, config_target_data = NULL) {
+check_pmf_oracle_value <- function(
+  tbl,
+  config_tasks,
+  config_target_data = NULL
+) {
   tbl <- tbl[tbl$output_type == "pmf", ]
 
   # For oracle-output, as_of should NOT be included in grouping.
@@ -181,7 +193,11 @@ check_pmf_oracle_value <- function(tbl, config_tasks, config_target_data = NULL)
 #' @param config_target_data Optional config from target-data.json.
 #' @return A data frame of rows violating CDF monotonicity, or `NULL`.
 #' @noRd
-check_cdf_oracle_value <- function(tbl, config_tasks, config_target_data = NULL) {
+check_cdf_oracle_value <- function(
+  tbl,
+  config_tasks,
+  config_target_data = NULL
+) {
   tbl <- tbl[tbl$output_type == "cdf", ]
   # Gather expected unique vectors of output_type_id values from config
   output_type_ids <- extract_output_type_id_vals(

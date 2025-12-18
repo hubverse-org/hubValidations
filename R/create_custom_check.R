@@ -52,11 +52,17 @@
 #'   )
 #'   cat(readLines("src/validations/R/check_full.R"), sep = "\n")
 #' })
-create_custom_check <- function(name, hub_path = ".",
-                                r_dir = "src/validations/R",
-                                error = FALSE, conditional = FALSE,
-                                error_object = FALSE, config = FALSE,
-                                extra_args = FALSE, overwrite = FALSE) {
+create_custom_check <- function(
+  name,
+  hub_path = ".",
+  r_dir = "src/validations/R",
+  error = FALSE,
+  conditional = FALSE,
+  error_object = FALSE,
+  config = FALSE,
+  extra_args = FALSE,
+  overwrite = FALSE
+) {
   checkmate::assert_character(name, len = 1L)
   checkmate::assert_scalar(hub_path)
   checkmate::assert_directory_exists(hub_path)
@@ -81,8 +87,10 @@ create_custom_check <- function(name, hub_path = ".",
 
   check_path <- fs::path(r_dir, paste0(name, ".R"))
   if (fs::file_exists(check_path) && !overwrite) {
-    cli::cli_abort("File {.path {check_path}} already exists.
-                   Use {.code overwrite = TRUE} to overwrite.")
+    cli::cli_abort(
+      "File {.path {check_path}} already exists.
+                   Use {.code overwrite = TRUE} to overwrite."
+    )
     return(invisible(FALSE))
   }
 
@@ -102,7 +110,9 @@ create_custom_check <- function(name, hub_path = ".",
   cli::cli_alert_success(
     "Custom validation check template function file {.val {name}.R} created."
   )
-  cli::cli_bullets(c(">" = "Edit the function template to add your custom check logic."))
+  cli::cli_bullets(c(
+    ">" = "Edit the function template to add your custom check logic."
+  ))
   cli::cli_alert_info(
     "See the {.field Writing custom check functions} article for more information.
     ({.url https://hubverse-org.github.io/hubValidations/articles/writing-custom-fns.html})"
@@ -114,7 +124,8 @@ create_custom_check <- function(name, hub_path = ".",
 # licensed under MIT License.
 # See https://github.com/r-lib/usethis/blob/2cc9e5a4e5e3034399fafb65d871eec352d83a15/R/template.R#L10
 create_template_fn <- function(data) {
-  template_path <- system.file("templates/custom_check_template",
+  template_path <- system.file(
+    "templates/custom_check_template",
     package = "hubValidations"
   )
   readLines(template_path, encoding = "UTF-8", warn = FALSE) |>

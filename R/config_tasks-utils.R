@@ -15,8 +15,11 @@ get_round_output_types <- function(config_tasks, round_id) {
   )
 }
 
-get_round_output_type_names <- function(config_tasks, round_id,
-                                        collapse = TRUE) {
+get_round_output_type_names <- function(
+  config_tasks,
+  round_id,
+  collapse = TRUE
+) {
   out <- get_round_output_types(config_tasks, round_id) %>%
     purrr::map(names)
 
@@ -29,10 +32,14 @@ get_round_output_type_names <- function(config_tasks, round_id,
 }
 
 # get all task_ids values
-get_round_config_values <- function(config_tasks, round_id,
-                                    derived_task_ids = get_config_derived_task_ids(
-                                      config_tasks, round_id
-                                    )) {
+get_round_config_values <- function(
+  config_tasks,
+  round_id,
+  derived_task_ids = get_config_derived_task_ids(
+    config_tasks,
+    round_id
+  )
+) {
   model_tasks <- hubUtils::get_round_model_tasks(config_tasks, round_id)
   task_id_names <- setdiff(
     hubUtils::get_round_task_id_names(config_tasks, round_id),
@@ -56,7 +63,8 @@ get_round_config_values <- function(config_tasks, round_id,
   output_type_id_values <- purrr::map(
     output_type_names,
     \(.x) get_output_type_id_values(.x, model_tasks)
-  ) %>% purrr::flatten_chr()
+  ) %>%
+    purrr::flatten_chr()
 
   output_types <- list(
     output_type = output_type_names,

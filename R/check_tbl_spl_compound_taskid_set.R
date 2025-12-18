@@ -37,24 +37,34 @@
 #' for more details.
 #' @export
 check_tbl_spl_compound_taskid_set <- function(
-    tbl, round_id, file_path, hub_path,
-    derived_task_ids = get_hub_derived_task_ids(hub_path)) {
+  tbl,
+  round_id,
+  file_path,
+  hub_path,
+  derived_task_ids = get_hub_derived_task_ids(hub_path)
+) {
   config_tasks <- read_config(hub_path, "tasks")
 
-  if (isFALSE(has_spls_tbl(tbl)) || isFALSE(hubUtils::is_v3_config(config_tasks))) {
+  if (
+    isFALSE(has_spls_tbl(tbl)) || isFALSE(hubUtils::is_v3_config(config_tasks))
+  ) {
     return(skip_v3_spl_check(file_path))
   }
 
   compound_taskid_set <- get_tbl_compound_taskid_set(
-    tbl, config_tasks, round_id,
-    compact = FALSE, error = FALSE,
+    tbl,
+    config_tasks,
+    round_id,
+    compact = FALSE,
+    error = FALSE,
     derived_task_ids = derived_task_ids
   )
 
   check <- purrr::map_lgl(
     compound_taskid_set,
     ~ is.null(attr(.x, "errors"))
-  ) |> all()
+  ) |>
+    all()
 
   capture_check_cnd(
     check = check,

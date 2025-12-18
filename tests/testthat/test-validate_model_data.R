@@ -41,7 +41,8 @@ test_that("validate_model_data with config function works", {
   )
   expect_snapshot(
     validate_model_data(
-      hub_path, file_path,
+      hub_path,
+      file_path,
       validations_cfg_path = system.file(
         "testhubs/flusight/hub-config/validations.yml",
         package = "hubValidations"
@@ -61,7 +62,6 @@ cli::test_that_cli("validate_model_data print method work", {
   )
   # File with validation error
   validate_model_data(hub_path, file_path, round_id_col = "random_col")
-
 })
 
 

@@ -4,9 +4,11 @@ test_that("opt_check_tbl_col_timediff works", {
   tbl <- hubValidations::read_model_out_file(file_path, hub_path)
   tbl$target_end_date <- tbl$forecast_date + lubridate::weeks(2)
 
-
   expect_snapshot(
-    opt_check_tbl_col_timediff(tbl, file_path, hub_path,
+    opt_check_tbl_col_timediff(
+      tbl,
+      file_path,
+      hub_path,
       t0_colname = "forecast_date",
       t1_colname = "target_end_date",
       timediff = lubridate::weeks(2)
@@ -15,7 +17,10 @@ test_that("opt_check_tbl_col_timediff works", {
 
   tbl_chr <- hubData::coerce_to_character(tbl)
   expect_snapshot(
-    opt_check_tbl_col_timediff(tbl_chr, file_path, hub_path,
+    opt_check_tbl_col_timediff(
+      tbl_chr,
+      file_path,
+      hub_path,
       t0_colname = "forecast_date",
       t1_colname = "target_end_date",
       timediff = lubridate::weeks(2)
@@ -24,7 +29,10 @@ test_that("opt_check_tbl_col_timediff works", {
 
   tbl$target_end_date[1] <- tbl$forecast_date[1] + lubridate::weeks(1)
   expect_snapshot(
-    opt_check_tbl_col_timediff(tbl, file_path, hub_path,
+    opt_check_tbl_col_timediff(
+      tbl,
+      file_path,
+      hub_path,
       t0_colname = "forecast_date",
       t1_colname = "target_end_date",
       timediff = lubridate::weeks(2)
@@ -40,7 +48,10 @@ test_that("opt_check_tbl_col_timediff fails correctly", {
   tbl$target_end_date <- tbl$forecast_date + lubridate::weeks(2)
 
   expect_snapshot(
-    opt_check_tbl_col_timediff(tbl, file_path, hub_path,
+    opt_check_tbl_col_timediff(
+      tbl,
+      file_path,
+      hub_path,
       t0_colname = "forecast_date",
       t1_colname = "target_end_dates",
       timediff = lubridate::weeks(2)
@@ -49,7 +60,10 @@ test_that("opt_check_tbl_col_timediff fails correctly", {
   )
 
   expect_snapshot(
-    opt_check_tbl_col_timediff(tbl, file_path, hub_path,
+    opt_check_tbl_col_timediff(
+      tbl,
+      file_path,
+      hub_path,
       t0_colname = "forecast_date",
       t1_colname = c("target_end_date", "forecast_date"),
       timediff = lubridate::weeks(2)
@@ -58,7 +72,10 @@ test_that("opt_check_tbl_col_timediff fails correctly", {
   )
 
   expect_snapshot(
-    opt_check_tbl_col_timediff(tbl, file_path, hub_path,
+    opt_check_tbl_col_timediff(
+      tbl,
+      file_path,
+      hub_path,
       t0_colname = "forecast_date",
       t1_colname = "target_end_date",
       timediff = 14L
@@ -67,15 +84,23 @@ test_that("opt_check_tbl_col_timediff fails correctly", {
   )
 
   schema <- c(
-    forecast_date = "Date", target = "character", horizon = "integer",
-    location = "character", output_type = "character", output_type_id = "character",
-    value = "double", target_end_date = "character"
+    forecast_date = "Date",
+    target = "character",
+    horizon = "integer",
+    location = "character",
+    output_type = "character",
+    output_type_id = "character",
+    value = "double",
+    target_end_date = "character"
   )
   local_mocked_bindings(
     create_hub_schema = function(...) schema
   )
   expect_snapshot(
-    opt_check_tbl_col_timediff(tbl, file_path, hub_path,
+    opt_check_tbl_col_timediff(
+      tbl,
+      file_path,
+      hub_path,
       t0_colname = "forecast_date",
       t1_colname = "target_end_date",
       timediff = lubridate::weeks(2)
@@ -94,7 +119,10 @@ test_that("handling of NAs in opt_check_tbl_col_timediff works", {
   # This should pass
   tbl$forecast_date[1] <- NA
   expect_s3_class(
-    opt_check_tbl_col_timediff(tbl, file_path, hub_path,
+    opt_check_tbl_col_timediff(
+      tbl,
+      file_path,
+      hub_path,
       t0_colname = "forecast_date",
       t1_colname = "target_end_date",
       timediff = lubridate::weeks(2)
@@ -106,7 +134,10 @@ test_that("handling of NAs in opt_check_tbl_col_timediff works", {
   # This should pass
   tbl$target_end_date[1:3] <- NA
   expect_s3_class(
-    opt_check_tbl_col_timediff(tbl, file_path, hub_path,
+    opt_check_tbl_col_timediff(
+      tbl,
+      file_path,
+      hub_path,
       t0_colname = "forecast_date",
       t1_colname = "target_end_date"
     ),
@@ -117,7 +148,10 @@ test_that("handling of NAs in opt_check_tbl_col_timediff works", {
   # This should be skipped
   tbl$target_end_date <- NA
   expect_snapshot(
-    opt_check_tbl_col_timediff(tbl, file_path, hub_path,
+    opt_check_tbl_col_timediff(
+      tbl,
+      file_path,
+      hub_path,
       t0_colname = "forecast_date",
       t1_colname = "target_end_date"
     )

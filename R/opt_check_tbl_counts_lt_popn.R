@@ -26,10 +26,15 @@
 #' # Single target key list
 #' targets <- list("target" = "wk ahead inc flu hosp")
 #' opt_check_tbl_counts_lt_popn(tbl, file_path, hub_path, targets = targets)
-opt_check_tbl_counts_lt_popn <- function(tbl, file_path, hub_path, targets = NULL,
-                                         popn_file_path = "auxiliary-data/locations.csv",
-                                         popn_col = "population",
-                                         location_col = "location") {
+opt_check_tbl_counts_lt_popn <- function(
+  tbl,
+  file_path,
+  hub_path,
+  targets = NULL,
+  popn_file_path = "auxiliary-data/locations.csv",
+  popn_col = "population",
+  location_col = "location"
+) {
   checkmate::assert_choice(location_col, choices = names(tbl))
   tbl$row_id <- seq_along(tbl[[location_col]])
 
@@ -52,7 +57,8 @@ opt_check_tbl_counts_lt_popn <- function(tbl, file_path, hub_path, targets = NUL
       "File not found at {.path {popn_file_path}}"
     )
   }
-  popn <- switch(fs::path_ext(popn_full_path),
+  popn <- switch(
+    fs::path_ext(popn_full_path),
     csv = arrow::read_csv_arrow(popn_full_path),
     parquet = arrow::read_parquet(popn_full_path),
     arrow = arrow::read_feather(popn_full_path)
@@ -77,7 +83,9 @@ opt_check_tbl_counts_lt_popn <- function(tbl, file_path, hub_path, targets = NUL
   if (check) {
     details <- NULL
   } else {
-    details <- cli::format_inline("Affected rows: {.val {tbl$row_id[!compare]}}.")
+    details <- cli::format_inline(
+      "Affected rows: {.val {tbl$row_id[!compare]}}."
+    )
   }
 
   n_loc <- length(unique(tbl[[location_col]])) # nolint: object_usage_linter
@@ -100,7 +108,8 @@ assert_target_keys <- function(targets, hub_path, file_path) {
     valid_target_keys <- validate_target_key(targets, hub_path, file_path)
   } else {
     valid_target_keys <- purrr::map_lgl(
-      targets, ~ validate_target_key(.x, hub_path, file_path)
+      targets,
+      ~ validate_target_key(.x, hub_path, file_path)
     )
   }
   if (all(valid_target_keys)) {
@@ -110,9 +119,11 @@ assert_target_keys <- function(targets, hub_path, file_path) {
     cli::cli_abort("Target does not match any round target keys.")
   } else {
     n <- sum(valid_target_keys) # nolint: object_usage_linter
-    cli::cli_abort("{cli::qty(n)}Target{?s} with ind{?ex/ices}
+    cli::cli_abort(
+      "{cli::qty(n)}Target{?s} with ind{?ex/ices}
                        {.val {which(!valid_target_keys)}}
-                       {cli::qty(n)} do{?es/} not match any round target keys.")
+                       {cli::qty(n)} do{?es/} not match any round target keys."
+    )
   }
 }
 
@@ -124,10 +135,7 @@ validate_target_key <- function(target, hub_path, file_path) {
 }
 
 filter_expr <- function(filter) {
-  paste(paste0(".data$", names(filter)),
-    filter,
-    sep = " %in% "
-  ) %>%
+  paste(paste0(".data$", names(filter)), filter, sep = " %in% ") %>%
     paste(collapse = ";") %>%
     rlang::parse_exprs()
 }
@@ -145,6 +153,7 @@ filter_targets <- function(tbl, targets) {
     purrr::map(
       targets,
       ~ dplyr::filter(tbl, !!!filter_expr(.x))
-    ) %>% purrr::list_rbind()
+    ) %>%
+      purrr::list_rbind()
   }
 }

@@ -15,9 +15,14 @@
 #' See [hubverse documentation on samples](https://docs.hubverse.io/en/latest/user-guide/sample-output-type.html)
 #' for more details.
 #' @export
-check_tbl_spl_n <- function(tbl, round_id, file_path, hub_path,
-                            compound_taskid_set = NULL,
-                            derived_task_ids = get_hub_derived_task_ids(hub_path, round_id)) {
+check_tbl_spl_n <- function(
+  tbl,
+  round_id,
+  file_path,
+  hub_path,
+  compound_taskid_set = NULL,
+  derived_task_ids = get_hub_derived_task_ids(hub_path, round_id)
+) {
   if (!is.null(compound_taskid_set) && isTRUE(is.na(compound_taskid_set))) {
     cli::cli_abort("Valid {.var compound_taskid_set} must be provided.")
   }
@@ -29,11 +34,17 @@ check_tbl_spl_n <- function(tbl, round_id, file_path, hub_path,
     )
   }
 
-  if (isFALSE(has_spls_tbl(tbl)) || isFALSE(hubUtils::is_v3_config(config_tasks))) {
+  if (
+    isFALSE(has_spls_tbl(tbl)) || isFALSE(hubUtils::is_v3_config(config_tasks))
+  ) {
     return(skip_v3_spl_check(file_path))
   }
 
-  hash_tbl <- spl_hash_tbl(tbl, round_id, config_tasks, compound_taskid_set,
+  hash_tbl <- spl_hash_tbl(
+    tbl,
+    round_id,
+    config_tasks,
+    compound_taskid_set,
     derived_task_ids = derived_task_ids
   )
   n_ranges <- get_round_spl_n_ranges(config_tasks, round_id)
@@ -83,7 +94,9 @@ check_tbl_spl_n <- function(tbl, round_id, file_path, hub_path,
     errors <- NULL
   } else {
     errors <- n_mismatch_errors(
-      n_tbl, hash_tbl, tbl
+      n_tbl,
+      hash_tbl,
+      tbl
     )
     details <- n_mismatch_details(n_tbl)
   }
@@ -149,8 +162,10 @@ n_mismatch_errors <- function(n_tbl, hash_tbl, tbl) {
 
 
 n_mismatch_details <- function(n_tbl) {
-  cat_msg <- function(compound_idx, type) { # nolint: object_usage_linter
-    switch(type,
+  cat_msg <- function(compound_idx, type) {
+    # nolint: object_usage_linter
+    switch(
+      type,
       less = paste0(
         "File contains less than the minimum required number of samples per task ",
         "for compound idx{?s} {.val {compound_idx}}"
@@ -159,7 +174,8 @@ n_mismatch_details <- function(n_tbl) {
         "File contains more than the maximum required number of samples per task ",
         "for compound idx{?s} {.val {compound_idx}}"
       )
-    ) %>% cli::format_inline()
+    ) %>%
+      cli::format_inline()
   }
 
   purrr::map(

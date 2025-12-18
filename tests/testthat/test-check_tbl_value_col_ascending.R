@@ -38,7 +38,12 @@ test_that("check_tbl_value_col_ascending errors correctly", {
   tbl$value[c(1, 10)] <- 150
 
   expect_snapshot(
-    str(check_tbl_value_col_ascending(tbl, file_path, hub_path, file_meta$round_id))
+    str(check_tbl_value_col_ascending(
+      tbl,
+      file_path,
+      hub_path,
+      file_meta$round_id
+    ))
   )
 
   hub_path <- system.file("testhubs/flusight", package = "hubUtils")
@@ -53,7 +58,12 @@ test_that("check_tbl_value_col_ascending errors correctly", {
 
   expect_snapshot(
     str(
-      check_tbl_value_col_ascending(tbl_error, file_path, hub_path, file_meta$round_id)
+      check_tbl_value_col_ascending(
+        tbl_error,
+        file_path,
+        hub_path,
+        file_meta$round_id
+      )
     )
   )
   expect_snapshot(
@@ -91,7 +101,8 @@ test_that("(#78) check_tbl_value_col_ascending will sort even if the data doesn'
 
   # Duplicating the simple test hub ---------------------------------------
   hub_path <- withr::local_tempdir()
-  fs::dir_copy(system.file("testhubs/simple", package = "hubValidations"),
+  fs::dir_copy(
+    system.file("testhubs/simple", package = "hubValidations"),
     hub_path,
     overwrite = TRUE
   )
@@ -117,12 +128,19 @@ test_that("(#78) check_tbl_value_col_ascending will sort even if the data doesn'
     ifelse(x == "quantile", "cdf", x)
   }
   tbl <- read_model_out_file(file_path, hub_path) %>%
-    dplyr::mutate(output_type_id = make_unsortable(.data[["output_type_id"]])) %>%
+    dplyr::mutate(
+      output_type_id = make_unsortable(.data[["output_type_id"]])
+    ) %>%
     dplyr::mutate(output_type = convert_to_cdf(.data[["output_type"]])) %>%
     hubData::coerce_to_character()
 
   # validating when it is sorted -----------------------------------------
-  res <- check_tbl_value_col_ascending(tbl, file_path, hub_path, file_meta$round_id)
+  res <- check_tbl_value_col_ascending(
+    tbl,
+    file_path,
+    hub_path,
+    file_meta$round_id
+  )
   expect_s3_class(res, "check_success")
   expect_null(res$error_tbl)
 
@@ -168,7 +186,12 @@ test_that("(#78) check_tbl_value_col_ascending works when output type IDs differ
   tbl <- read_model_out_file(file_path, hub_path, coerce_types = "chr")
   file_meta <- parse_file_name(file_path)
 
-  res_ok <- check_tbl_value_col_ascending(tbl, file_path, hub_path, file_meta$round_id)
+  res_ok <- check_tbl_value_col_ascending(
+    tbl,
+    file_path,
+    hub_path,
+    file_meta$round_id
+  )
   expect_s3_class(res_ok, "check_success")
   expect_null(res_ok$error_tbl)
 })
@@ -183,7 +206,12 @@ test_that("(#189) check_tbl_value_col_ascending ignores derived task IDs", {
   # `derived_task_ids`.
   tbl[1, "target_end_date"] <- "random_date"
 
-  res_ok <- check_tbl_value_col_ascending(tbl, file_path, hub_path, file_meta$round_id)
+  res_ok <- check_tbl_value_col_ascending(
+    tbl,
+    file_path,
+    hub_path,
+    file_meta$round_id
+  )
   expect_s3_class(res_ok, "check_success")
   expect_null(res_ok$error_tbl)
 })

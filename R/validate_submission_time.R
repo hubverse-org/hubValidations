@@ -8,10 +8,14 @@
 #' hub_path <- system.file("testhubs/simple", package = "hubValidations")
 #' file_path <- "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
 #' validate_submission_time(hub_path, file_path)
-validate_submission_time <- function(hub_path, file_path, ref_date_from = c(
-                                       "file_path", # nolint
-                                       "file"
-                                     )) {
+validate_submission_time <- function(
+  hub_path,
+  file_path,
+  ref_date_from = c(
+    "file_path", # nolint
+    "file"
+  )
+) {
   checks <- new_hub_validations()
 
   checks$submission_time <- try_check(

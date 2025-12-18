@@ -26,9 +26,7 @@ try_check <- function(expr, file_path) {
 }
 
 get_expr_call_name <- function(expr) {
-  call_name <- try(rlang::call_name(rlang::expr(expr)),
-    silent = TRUE
-  )
+  call_name <- try(rlang::call_name(rlang::expr(expr)), silent = TRUE)
   if (inherits(call_name, "try-error")) {
     return(NA)
   }
@@ -37,6 +35,7 @@ get_expr_call_name <- function(expr) {
 
 clean_msg <- function(msg) {
   stringr::str_replace_all(
-    msg, c("\\{" = "[", "\\}" = "]")
+    msg,
+    c("\\{" = "[", "\\}" = "]")
   )
 }

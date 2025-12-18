@@ -29,11 +29,17 @@
 #'   compact = FALSE
 #' )
 #'
-get_tbl_compound_taskid_set <- function(tbl, config_tasks, round_id,
-                                        compact = TRUE, error = TRUE,
-                                        derived_task_ids = get_config_derived_task_ids(
-                                          config_tasks, round_id
-                                        )) {
+get_tbl_compound_taskid_set <- function(
+  tbl,
+  config_tasks,
+  round_id,
+  compact = TRUE,
+  error = TRUE,
+  derived_task_ids = get_config_derived_task_ids(
+    config_tasks,
+    round_id
+  )
+) {
   if (!inherits(tbl, "tbl_df")) {
     tbl <- dplyr::as_tibble(tbl)
   }
@@ -62,7 +68,9 @@ get_tbl_compound_taskid_set <- function(tbl, config_tasks, round_id,
       if (nrow(.x) == 0L) {
         return(NULL)
       }
-      dplyr::inner_join(tbl, .x[, names(.x) != out_tid],
+      dplyr::inner_join(
+        tbl,
+        .x[, names(.x) != out_tid],
         by = setdiff(names(tbl), out_tid)
       )
     }
@@ -70,9 +78,15 @@ get_tbl_compound_taskid_set <- function(tbl, config_tasks, round_id,
 
   call <- rlang::current_env()
   tbl_compound_taskids <- purrr::map2(
-    mt_tbls, mt_compound_taskids, function(.x, .y) {
-      get_mt_compound_taskid_set(.x, .y, config_tasks,
-        error = error, call = call
+    mt_tbls,
+    mt_compound_taskids,
+    function(.x, .y) {
+      get_mt_compound_taskid_set(
+        .x,
+        .y,
+        config_tasks,
+        error = error,
+        call = call
       )
     }
   ) %>%
@@ -86,8 +100,13 @@ get_tbl_compound_taskid_set <- function(tbl, config_tasks, round_id,
 }
 
 # Detect the compound_taskid_set for a tbl for a single modeling task.
-get_mt_compound_taskid_set <- function(tbl, config_comp_tids, config_tasks,
-                                       error = TRUE, call = NULL) {
+get_mt_compound_taskid_set <- function(
+  tbl,
+  config_comp_tids,
+  config_tasks,
+  error = TRUE,
+  call = NULL
+) {
   if (any(is.null(tbl), is.null(config_comp_tids))) {
     return(NULL)
   }
@@ -95,7 +114,9 @@ get_mt_compound_taskid_set <- function(tbl, config_comp_tids, config_tasks,
   if (nrow(tbl) == 0L) {
     return(NULL)
   }
-  if (is.null(call)) call <- rlang::current_env()
+  if (is.null(call)) {
+    call <- rlang::current_env()
+  }
   out_tid <- hubUtils::std_colnames["output_type_id"]
   task_ids <- hubUtils::get_task_id_names(config_tasks)
 
@@ -131,10 +152,13 @@ get_mt_compound_taskid_set <- function(tbl, config_comp_tids, config_tasks,
   # For a task id to be considered a compound_taskid, a unique value must be TRUE
   # at the sample level and we need to ensure it's not a false positive.
   # Here we combine the two checks.
-  is_compound_taskid <- apply(spl_uniq[, task_ids], 1,
+  is_compound_taskid <- apply(
+    spl_uniq[, task_ids],
+    1,
     function(x) x & tbl_non_uniq[, task_ids],
     simplify = FALSE
-  ) |> purrr::reduce(rbind)
+  ) |>
+    purrr::reduce(rbind)
 
   output_type_ids <- spl_uniq[["output_type_id"]]
 
@@ -157,7 +181,10 @@ get_mt_compound_taskid_set <- function(tbl, config_comp_tids, config_tasks,
     # Attach error attributes
     attributes(tbl_comp_tids) <- list(
       errors = get_comp_tid_sample_ids(is_compound_taskid, output_type_ids),
-      msg = cli::format_inline(error_msg, " See `errors` attribute for details.")
+      msg = cli::format_inline(
+        error_msg,
+        " See `errors` attribute for details."
+      )
     )
     return(tbl_comp_tids)
   }
@@ -181,10 +208,13 @@ get_mt_compound_taskid_set <- function(tbl, config_comp_tids, config_tasks,
     errors <- get_comp_tid_sample_ids(is_compound_taskid, output_type_ids) |>
       purrr::map(function(.x) {
         if (any(.x$tbl_comp_tids %in% invalid_tbl_comp_tids)) {
-          c(list(
-            config_comp_tids = config_comp_tids,
-            invalid_tbl_comp_tids = invalid_tbl_comp_tids
-          ), .x)
+          c(
+            list(
+              config_comp_tids = config_comp_tids,
+              invalid_tbl_comp_tids = invalid_tbl_comp_tids
+            ),
+            .x
+          )
         }
       }) |>
       purrr::compact()
@@ -206,10 +236,7 @@ true_to_names_vector <- function(x, cols = NULL, unique = TRUE) {
   if (unique) {
     x <- unique(x)
   }
-  v <- apply(x, 1,
-    function(x) names(x)[x],
-    simplify = FALSE
-  )
+  v <- apply(x, 1, function(x) names(x)[x], simplify = FALSE)
   v
 }
 
@@ -217,12 +244,16 @@ true_to_names_vector <- function(x, cols = NULL, unique = TRUE) {
 # set detected from a sample compound task id membership matrix.
 #  Should be used at the modeling task level.
 get_comp_tid_sample_ids <- function(is_compound_taskid, output_type_ids) {
-  is_compound_taskid <- tibble::as_tibble(is_compound_taskid) |> dplyr::group_by_all()
+  is_compound_taskid <- tibble::as_tibble(is_compound_taskid) |>
+    dplyr::group_by_all()
 
   purrr::map2(
-    .x = dplyr::group_map(is_compound_taskid, ~ list(
-      output_type_ids = output_type_ids[as.integer(rownames(.x))]
-    )),
+    .x = dplyr::group_map(
+      is_compound_taskid,
+      ~ list(
+        output_type_ids = output_type_ids[as.integer(rownames(.x))]
+      )
+    ),
     .y = true_to_names_vector(dplyr::group_keys(is_compound_taskid)),
     ~ c(list(tbl_comp_tids = .y), .x)
   )

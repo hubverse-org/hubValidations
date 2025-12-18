@@ -27,9 +27,12 @@ test_that("Fully featured file content matches snapshot", {
   withr::with_tempdir({
     # Create the custom check file with all logical arguments set to TRUE
     suppressMessages(
-      create_custom_check("check_full",
-        error = TRUE, conditional = TRUE,
-        error_object = TRUE, config = TRUE,
+      create_custom_check(
+        "check_full",
+        error = TRUE,
+        conditional = TRUE,
+        error_object = TRUE,
+        config = TRUE,
         extra_args = TRUE
       )
     )
@@ -58,14 +61,22 @@ test_that("file content with non-default locations matches snapshot", {
 
     # Create the custom check file with non-default locations
     suppressMessages(
-      create_custom_check("check_non_default",
-        hub_path = hub_path, r_dir = non_default_r_dir,
-        error = FALSE, conditional = TRUE,
-        error_object = FALSE, extra_args = TRUE
+      create_custom_check(
+        "check_non_default",
+        hub_path = hub_path,
+        r_dir = non_default_r_dir,
+        error = FALSE,
+        conditional = TRUE,
+        error_object = FALSE,
+        extra_args = TRUE
       )
     )
     # Define the file path in the custom directory
-    check_file_path <- fs::path(hub_path, non_default_r_dir, "check_non_default.R")
+    check_file_path <- fs::path(
+      hub_path,
+      non_default_r_dir,
+      "check_non_default.R"
+    )
 
     # Ensure the file was created
     expect_true(fs::file_exists(check_file_path))
@@ -105,9 +116,7 @@ test_that("create_custom_check fails with non-existent hub_path", {
 
 test_that("create_custom_check fails with invalid r_dir", {
   expect_error(
-    create_custom_check("check",
-      r_dir = c("dir1", "dir2")
-    ),
+    create_custom_check("check", r_dir = c("dir1", "dir2")),
     "Assertion on 'r_dir' failed: Must have length 1"
   )
 })
