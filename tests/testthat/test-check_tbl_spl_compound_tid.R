@@ -21,7 +21,10 @@ test_that("check_tbl_spl_compound_tid works", {
     check_tbl_spl_compound_tid(tbl_error, round_id, file_path, hub_path)
   )
   error_check <- check_tbl_spl_compound_tid(
-    tbl_error, round_id, file_path, hub_path
+    tbl_error,
+    round_id,
+    file_path,
+    hub_path
   )
 
   expect_snapshot(error_check$errors)
@@ -49,7 +52,8 @@ test_that("Overriding compound_taskid_set in check_tbl_spl_compound_tid works", 
     NULL,
     c("reference_date", "horizon")
   )
-  tbl_coarse <- create_spl_file("2022-10-22",
+  tbl_coarse <- create_spl_file(
+    "2022-10-22",
     compound_taskid_set = compound_taskid_set,
     write = FALSE,
     out_datatype = "chr",
@@ -65,7 +69,11 @@ test_that("Overriding compound_taskid_set in check_tbl_spl_compound_tid works", 
 
   # Validation providing coarser compound taskid set succeeds
   expect_snapshot(
-    check_tbl_spl_compound_tid(tbl_coarse, round_id, file_path, hub_path,
+    check_tbl_spl_compound_tid(
+      tbl_coarse,
+      round_id,
+      file_path,
+      hub_path,
       compound_taskid_set = compound_taskid_set
     )
   )
@@ -84,16 +92,28 @@ test_that("Ignoring derived_task_ids in check_tbl_spl_compound_tid works", {
   # `derived_task_ids`.
   tbl[1, "target_end_date"] <- "random_date"
   expect_snapshot(
-    check_tbl_spl_compound_tid(tbl, round_id, file_path, hub_path,
+    check_tbl_spl_compound_tid(
+      tbl,
+      round_id,
+      file_path,
+      hub_path,
       derived_task_ids = "target_end_date"
     )
   )
   # Check that ignoring derived task ids returns same result as not ignoring.
   expect_equal(
-    check_tbl_spl_compound_tid(tbl, round_id, file_path, hub_path,
+    check_tbl_spl_compound_tid(
+      tbl,
+      round_id,
+      file_path,
+      hub_path,
       derived_task_ids = "target_end_date"
     ),
-    check_tbl_spl_compound_tid(tbl_orig, round_id, file_path, hub_path,
+    check_tbl_spl_compound_tid(
+      tbl_orig,
+      round_id,
+      file_path,
+      hub_path,
       derived_task_ids = "target_end_date"
     )
   )

@@ -12,7 +12,12 @@
 #' returned.
 #' Returned object also inherits from subclass `<hub_check>`.
 #' @export
-check_valid_round_id_col <- function(tbl, file_path, hub_path, round_id_col = NULL) {
+check_valid_round_id_col <- function(
+  tbl,
+  file_path,
+  hub_path,
+  round_id_col = NULL
+) {
   if (is.null(round_id_col)) {
     if (is_round_id_from_variable(file_path, hub_path)) {
       round_id_col <- get_file_round_id_col(file_path, hub_path)
@@ -42,9 +47,11 @@ check_valid_round_id_col <- function(tbl, file_path, hub_path, round_id_col = NU
       details <- NULL
     } else {
       task_id_vars <- names(tbl)[!names(tbl) %in% hubUtils::std_colnames] # nolint: object_usage_linter
-      details <- cli::format_inline("Must be one of
+      details <- cli::format_inline(
+        "Must be one of
                                       {.val {task_id_vars}} not
-                                      {.val {round_id_col}}.")
+                                      {.val {round_id_col}}."
+      )
     }
   }
 

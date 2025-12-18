@@ -13,10 +13,14 @@
 #'
 #' @importFrom lubridate %within%
 #' @export
-check_submission_time <- function(hub_path, file_path, ref_date_from = c(
-                                    "file", # nolint
-                                    "file_path"
-                                  )) {
+check_submission_time <- function(
+  hub_path,
+  file_path,
+  ref_date_from = c(
+    "file", # nolint
+    "file_path"
+  )
+) {
   submission_window <- get_submission_window(hub_path, file_path, ref_date_from)
   check <- Sys.time() %within% submission_window
 
@@ -39,16 +43,23 @@ check_submission_time <- function(hub_path, file_path, ref_date_from = c(
   )
 }
 
-get_submission_window <- function(hub_path, file_path, ref_date_from = c(
-                                    "file",  # nolint
-                                    "file_path"
-                                  )) {
+get_submission_window <- function(
+  hub_path,
+  file_path,
+  ref_date_from = c(
+    "file", # nolint
+    "file_path"
+  )
+) {
   ref_date_from <- rlang::arg_match(ref_date_from)
-  submission_config <- get_file_round_config(file_path, hub_path)[["submissions_due"]]
+  submission_config <- get_file_round_config(file_path, hub_path)[[
+    "submissions_due"
+  ]]
   hub_tz <- get_hub_timezone(hub_path)
 
   if (!is.null(submission_config[["relative_to"]])) {
-    relative_date <- switch(ref_date_from,
+    relative_date <- switch(
+      ref_date_from,
       file_path = {
         as.Date(get_file_round_id(file_path))
       },
@@ -70,9 +81,7 @@ get_submission_window <- function(hub_path, file_path, ref_date_from = c(
   }
 
   submit_window_start <- lubridate::ymd(start, tz = hub_tz)
-  submit_window_end <- lubridate::ymd_hms(paste(end, "23:59:59"),
-    tz = hub_tz
-  )
+  submit_window_end <- lubridate::ymd_hms(paste(end, "23:59:59"), tz = hub_tz)
 
   lubridate::interval(
     start = submit_window_start,
@@ -80,10 +89,14 @@ get_submission_window <- function(hub_path, file_path, ref_date_from = c(
   )
 }
 
-file_within_submission_window <- function(hub_path, file_path, ref_date_from = c(
-                                            "file", # nolint
-                                            "file_path"
-                                          )) {
+file_within_submission_window <- function(
+  hub_path,
+  file_path,
+  ref_date_from = c(
+    "file", # nolint
+    "file_path"
+  )
+) {
   submission_window <- get_submission_window(hub_path, file_path, ref_date_from)
   Sys.time() %within% submission_window
 }

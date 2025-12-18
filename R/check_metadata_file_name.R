@@ -35,8 +35,10 @@ check_metadata_file_name <- function(file_path, hub_path = ".") {
   if (check) {
     details <- NULL
   } else {
-    details <- cli::format_inline("File name was {.val {basename(file_path)}},
-                                   but {.var model_id} was {.val {model_id}}.")
+    details <- cli::format_inline(
+      "File name was {.val {basename(file_path)}},
+                                   but {.var model_id} was {.val {model_id}}."
+    )
   }
 
   return(

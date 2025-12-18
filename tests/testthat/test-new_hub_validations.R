@@ -5,7 +5,6 @@ test_that("new_hub_validations works", {
     c("hub_validations")
   )
 
-
   hub_path <- system.file("testhubs/simple", package = "hubValidations")
   file_path <- "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
 

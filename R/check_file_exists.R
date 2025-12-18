@@ -5,11 +5,16 @@
 #' @inherit check_valid_round_id return
 #'
 #' @export
-check_file_exists <- function(file_path, hub_path = ".",
-                              subdir = c(
-                                "model-output", "model-metadata",
-                                "hub-config", "target-data"
-                              )) {
+check_file_exists <- function(
+  file_path,
+  hub_path = ".",
+  subdir = c(
+    "model-output",
+    "model-metadata",
+    "hub-config",
+    "target-data"
+  )
+) {
   subdir <- match.arg(subdir)
   abs_path <- abs_file_path(file_path, hub_path, subdir)
   rel_path <- rel_file_path(file_path, hub_path, subdir) # nolint: object_usage_linter

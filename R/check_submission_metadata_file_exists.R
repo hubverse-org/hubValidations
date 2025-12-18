@@ -5,31 +5,34 @@
 #' @export
 check_submission_metadata_file_exists <- function(file_path, hub_path = ".") {
   metadata_file_path <- try(
-    get_metadata_file_name(hub_path,
-      file_path,
-      ext = "auto"
-    ),
+    get_metadata_file_name(hub_path, file_path, ext = "auto"),
     silent = TRUE
   )
 
   check <- !inherits(metadata_file_path, "try-error")
 
   if (check) {
-    rel_path <- rel_file_path(metadata_file_path, # nolint: object_usage_linter
+    rel_path <- rel_file_path(
+      metadata_file_path, # nolint: object_usage_linter
       hub_path,
       subdir = "model-metadata"
     )
     msg_attribute <- cli::format_inline("at path {.path {rel_path}}.")
   } else {
-    metadata_file_paths <- get_metadata_file_name(hub_path,
+    metadata_file_paths <- get_metadata_file_name(
+      hub_path,
       file_path,
       ext = "both"
     )
-    rel_paths <- rel_file_path(metadata_file_paths, hub_path, # nolint: object_usage_linter
+    rel_paths <- rel_file_path(
+      metadata_file_paths,
+      hub_path, # nolint: object_usage_linter
       subdir = "model-metadata"
     )
-    msg_attribute <- cli::format_inline("at path {.path {rel_paths[1]}} or
-                                           {.path {rel_paths[2]}}.")
+    msg_attribute <- cli::format_inline(
+      "at path {.path {rel_paths[1]}} or
+                                           {.path {rel_paths[2]}}."
+    )
   }
 
   capture_check_cnd(

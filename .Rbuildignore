@@ -19,3 +19,5 @@
 ^\.lintr$
 ^claude\.md$
 ^\.claude$
+^[.]?air[.]toml$
+^\.vscode$

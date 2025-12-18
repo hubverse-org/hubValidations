@@ -197,30 +197,38 @@
 #'   round_id = "2023-05-08",
 #'   derived_task_ids = NULL
 #' )
-expand_model_out_grid <- function(config_tasks,
-                                  round_id,
-                                  required_vals_only = FALSE,
-                                  force_output_types = FALSE,
-                                  all_character = FALSE,
-                                  output_type_id_datatype = c(
-                                    "from_config", "auto", "character",
-                                    "double", "integer",
-                                    "logical", "Date"
-                                  ),
-                                  as_arrow_table = FALSE,
-                                  bind_model_tasks = TRUE,
-                                  include_sample_ids = FALSE,
-                                  compound_taskid_set = NULL,
-                                  output_types = NULL,
-                                  derived_task_ids = get_config_derived_task_ids(
-                                    config_tasks, round_id
-                                  )) {
+expand_model_out_grid <- function(
+  config_tasks,
+  round_id,
+  required_vals_only = FALSE,
+  force_output_types = FALSE,
+  all_character = FALSE,
+  output_type_id_datatype = c(
+    "from_config",
+    "auto",
+    "character",
+    "double",
+    "integer",
+    "logical",
+    "Date"
+  ),
+  as_arrow_table = FALSE,
+  bind_model_tasks = TRUE,
+  include_sample_ids = FALSE,
+  compound_taskid_set = NULL,
+  output_types = NULL,
+  derived_task_ids = get_config_derived_task_ids(
+    config_tasks,
+    round_id
+  )
+) {
   checkmate::assert_list(compound_taskid_set, null.ok = TRUE)
   output_type_id_datatype <- rlang::arg_match(output_type_id_datatype)
   output_types <- validate_output_types(output_types, config_tasks, round_id)
   derived_task_ids <- validate_derived_task_ids(
     derived_task_ids,
-    config_tasks, round_id
+    config_tasks,
+    round_id
   )
   round_config <- get_round_config(config_tasks, round_id)
   # Create a logical variable to control what is returned by expand_model_task_grid.
@@ -253,7 +261,8 @@ expand_model_out_grid <- function(config_tasks,
 
   # Expand output grid individually for each modeling task.
   grid <- purrr::map2(
-    task_id_l, output_type_l,
+    task_id_l,
+    output_type_l,
     ~ expand_model_task_grid(
       task_id_values = .x,
       output_type_values = .y,
@@ -352,9 +361,11 @@ extract_property_values <- function(x, required_vals_only = FALSE) {
 #' zero row grid, which is what this function does. We use the value of
 #' `all_output_types` to distinguish between these two scenarios.
 #' @noRd
-expand_model_task_grid <- function(task_id_values,
-                                   output_type_values,
-                                   all_output_types = TRUE) {
+expand_model_task_grid <- function(
+  task_id_values,
+  output_type_values,
+  all_output_types = TRUE
+) {
   if (length(output_type_values) == 0 && all_output_types) {
     return(
       expand.grid(
@@ -406,9 +417,7 @@ fix_round_id <- function(x, round_id, round_config, round_ids) {
   if (!round_config[["round_id_from_variable"]] || is.null(round_id)) {
     return(x)
   }
-  round_id <- rlang::arg_match(round_id,
-    values = round_ids
-  )
+  round_id <- rlang::arg_match(round_id, values = round_ids)
   round_id_var <- round_config[["round_id"]]
 
   # Iterate over each `model_task` object and set the `required` value in the
@@ -452,10 +461,13 @@ fix_round_id <- function(x, round_id, round_config, round_ids) {
 #' arrow table, otherwise a list of processed tibbles or arrow tables.
 #' @noRd
 process_model_task_grids <- function(
-    x, config_tasks, all_character,
-    as_arrow_table = TRUE,
-    bind_model_tasks = TRUE,
-    output_type_id_datatype = output_type_id_datatype) {
+  x,
+  config_tasks,
+  all_character,
+  as_arrow_table = TRUE,
+  bind_model_tasks = TRUE,
+  output_type_id_datatype = output_type_id_datatype
+) {
   if (bind_model_tasks) {
     # To bind multiple modeling task grids together, we need to ensure they contain
     # the same columns. Any missing columns are padded with NAs.
@@ -476,7 +488,8 @@ process_model_task_grids <- function(
 
   if (all_character) {
     x <- purrr::map(
-      x, ~ hubData::coerce_to_character(
+      x,
+      ~ hubData::coerce_to_character(
         .x,
         as_arrow_table = as_arrow_table
       )
@@ -546,9 +559,11 @@ pad_missing_cols <- function(x, all_cols) {
 #' @noRd
 null_taskids_to_na <- function(model_task) {
   to_na <- purrr::map_lgl(
-    model_task, ~ all(purrr::map_lgl(.x, is.null))
+    model_task,
+    ~ all(purrr::map_lgl(.x, is.null))
   )
-  purrr::modify_if(model_task,
+  purrr::modify_if(
+    model_task,
     .p = to_na,
     ~ list(
       required = NA,
@@ -573,9 +588,14 @@ null_taskids_to_na <- function(model_task) {
 #'  element contains the `output_type_id`s in a standardised format (i.e. having
 #'  `required` and `optional` vectors of values.
 #' @noRd
-extract_round_output_type_ids <- function(x, config_tid, force_output_types = FALSE) {
+extract_round_output_type_ids <- function(
+  x,
+  config_tid,
+  force_output_types = FALSE
+) {
   purrr::map(
-    x, ~ extract_model_task_output_type_ids(
+    x,
+    ~ extract_model_task_output_type_ids(
       .x,
       config_tid,
       force_output_types
@@ -602,8 +622,11 @@ extract_round_output_type_ids <- function(x, config_tid, force_output_types = FA
 #' @returns a named list of standardised `output_type_id` objects, one element
 #' for each output type in a given the model task.
 #' @noRd
-extract_model_task_output_type_ids <- function(x, config_tid,
-                                               force_output_types = FALSE) {
+extract_model_task_output_type_ids <- function(
+  x,
+  config_tid,
+  force_output_types = FALSE
+) {
   purrr::map(
     x,
     function(output_type) {
@@ -633,9 +656,11 @@ extract_model_task_output_type_ids <- function(x, config_tid,
 #' @returns A standardised `output_type_id` object that has a `required` and
 #' `optional` element.
 #' @noRd
-process_output_type_ids <- function(output_type_ids,
-                                    force_output_types,
-                                    is_required) {
+process_output_type_ids <- function(
+  output_type_ids,
+  force_output_types,
+  is_required
+) {
   is_std <- std_output_type_ids(output_type_ids)
   if (is_std && !force_output_types) {
     return(output_type_ids)

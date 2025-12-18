@@ -11,9 +11,17 @@
 #' @inherit check_tbl_values params
 #' @inherit check_tbl_col_types return
 #' @export
-check_tbl_value_col_ascending <- function(tbl, file_path, hub_path, round_id,
-                                          derived_task_ids = get_hub_derived_task_ids(hub_path)) {
-  check_output_types <- intersect(c("cdf", "quantile"), unique(tbl[["output_type"]]))
+check_tbl_value_col_ascending <- function(
+  tbl,
+  file_path,
+  hub_path,
+  round_id,
+  derived_task_ids = get_hub_derived_task_ids(hub_path)
+) {
+  check_output_types <- intersect(
+    c("cdf", "quantile"),
+    unique(tbl[["output_type"]])
+  )
 
   # Exit early if there are no values to check
   if (length(check_output_types) == 0L) {
@@ -38,8 +46,10 @@ check_tbl_value_col_ascending <- function(tbl, file_path, hub_path, round_id,
     check_output_types,
     \(.x) {
       check_values_ascending_by_output_type(
-        .x, tbl,
-        config_tasks, round_id,
+        .x,
+        tbl,
+        config_tasks,
+        round_id,
         derived_task_ids
       )
     }
@@ -72,9 +82,13 @@ check_tbl_value_col_ascending <- function(tbl, file_path, hub_path, round_id,
 #' reduce memory pressure.
 #' @param output_type the output type(s) to check. Must be a character vector
 #' @noRd
-check_values_ascending_by_output_type <- function(output_type, tbl,
-                                                  config_tasks, round_id,
-                                                  derived_task_ids) {
+check_values_ascending_by_output_type <- function(
+  output_type,
+  tbl,
+  config_tasks,
+  round_id,
+  derived_task_ids
+) {
   # FIX for <https://github.com/hubverse-org/hubValidations/issues/78>
   # This function splits the table by model task (via
   # `expand_model_out_grid(bind_model_tasks = FALSE)`) and then performs an
@@ -106,7 +120,10 @@ check_values_ascending <- function(tbl) {
   tbl[["value"]] <- as.numeric(tbl[["value"]])
 
   # group by all of the target columns
-  check_tbl <- dplyr::group_by(tbl, dplyr::across(dplyr::all_of(group_cols))) %>%
+  check_tbl <- dplyr::group_by(
+    tbl,
+    dplyr::across(dplyr::all_of(group_cols))
+  ) %>%
     dplyr::summarise(non_asc = any(diff(.data[["value"]]) < 0))
 
   if (!any(check_tbl$non_asc)) {

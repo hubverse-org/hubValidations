@@ -21,7 +21,10 @@ test_that("try_check works", {
 
   expect_snapshot(
     try_check(
-      opt_check_tbl_horizon_timediff(tbl, file_path, hub_path,
+      opt_check_tbl_horizon_timediff(
+        tbl,
+        file_path,
+        hub_path,
         t0_colname = "random_col1",
         t1_colname = "random_col1",
         horizon_colname = "horizon",

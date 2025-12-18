@@ -5,9 +5,7 @@ test_that("expand_model_out_grid works correctly", {
   config_tasks <- attr(hub_con, "config_tasks")
 
   expect_snapshot(str(
-    expand_model_out_grid(config_tasks,
-      round_id = "2023-01-02"
-    )
+    expand_model_out_grid(config_tasks, round_id = "2023-01-02")
   ))
   expect_snapshot(str(
     expand_model_out_grid(
@@ -133,7 +131,6 @@ test_that("Setting of round_id value works correctly", {
     as.Date("2022-10-29")
   )
 
-
   # Test in hub with single round
   hub_con <- hubData::connect_hub(
     system.file("testhubs/flusight", package = "hubUtils")
@@ -160,27 +157,31 @@ test_that("expand_model_out_grid output controls work correctly", {
   config_tasks <- attr(hub_con, "config_tasks")
 
   expect_snapshot(str(
-    expand_model_out_grid(config_tasks,
+    expand_model_out_grid(
+      config_tasks,
       round_id = "2023-01-02",
       all_character = TRUE
     )
   ))
   expect_snapshot(
-    expand_model_out_grid(config_tasks,
+    expand_model_out_grid(
+      config_tasks,
       round_id = "2023-01-02",
       all_character = TRUE,
       as_arrow_table = TRUE
     )
   )
   expect_snapshot(str(
-    expand_model_out_grid(config_tasks,
+    expand_model_out_grid(
+      config_tasks,
       round_id = "2023-01-02",
       required_vals_only = TRUE,
       all_character = TRUE
     )
   ))
   expect_snapshot(
-    expand_model_out_grid(config_tasks,
+    expand_model_out_grid(
+      config_tasks,
       round_id = "2023-01-02",
       required_vals_only = TRUE,
       all_character = TRUE,
@@ -188,7 +189,8 @@ test_that("expand_model_out_grid output controls work correctly", {
     )
   )
   expect_snapshot(str(
-    expand_model_out_grid(config_tasks,
+    expand_model_out_grid(
+      config_tasks,
       round_id = "2023-01-02",
       required_vals_only = TRUE,
       all_character = TRUE,
@@ -197,7 +199,8 @@ test_that("expand_model_out_grid output controls work correctly", {
     )
   ))
   expect_snapshot(
-    expand_model_out_grid(config_tasks,
+    expand_model_out_grid(
+      config_tasks,
       round_id = "2023-01-02",
       required_vals_only = TRUE,
       all_character = TRUE,
@@ -210,25 +213,26 @@ test_that("expand_model_out_grid output controls work correctly", {
 
 test_that("expand_model_out_grid output controls with samples work correctly", {
   # Hub with sample output type
-  config_tasks <- read_config_file(system.file("config", "tasks.json",
+  config_tasks <- read_config_file(system.file(
+    "config",
+    "tasks.json",
     package = "hubValidations"
   ))
 
-
   expect_snapshot(
-    expand_model_out_grid(config_tasks,
-      round_id = "2022-12-26"
-    )
+    expand_model_out_grid(config_tasks, round_id = "2022-12-26")
   )
   expect_snapshot(
-    expand_model_out_grid(config_tasks,
+    expand_model_out_grid(
+      config_tasks,
       round_id = "2022-12-26",
       include_sample_ids = TRUE
     ) %>%
       dplyr::filter(.data$output_type == "sample")
   )
   expect_snapshot(
-    expand_model_out_grid(config_tasks,
+    expand_model_out_grid(
+      config_tasks,
       round_id = "2022-12-26",
       include_sample_ids = TRUE,
       required_vals_only = TRUE,
@@ -236,7 +240,8 @@ test_that("expand_model_out_grid output controls with samples work correctly", {
     )
   )
   expect_snapshot(
-    expand_model_out_grid(config_tasks,
+    expand_model_out_grid(
+      config_tasks,
       round_id = "2022-12-26",
       include_sample_ids = TRUE,
       required_vals_only = TRUE,
@@ -245,19 +250,19 @@ test_that("expand_model_out_grid output controls with samples work correctly", {
   )
   # Hub with sample output type and compound task ID structure
   config_tasks <- read_config_file(
-    system.file("config", "tasks-comp-tid.json",
-      package = "hubValidations"
-    )
+    system.file("config", "tasks-comp-tid.json", package = "hubValidations")
   )
   expect_snapshot(
-    expand_model_out_grid(config_tasks,
+    expand_model_out_grid(
+      config_tasks,
       round_id = "2022-12-26",
       include_sample_ids = TRUE,
       bind_model_tasks = FALSE
     )
   )
   expect_snapshot(
-    expand_model_out_grid(config_tasks,
+    expand_model_out_grid(
+      config_tasks,
       round_id = "2022-12-26",
       include_sample_ids = TRUE,
       required_vals_only = TRUE
@@ -268,19 +273,19 @@ test_that("expand_model_out_grid output controls with samples work correctly", {
     test_path("testdata", "configs", "tasks-samples-old-schema.json")
   )
   expect_snapshot(
-    expand_model_out_grid(config_tasks,
-      round_id = "2022-12-26"
-    )
+    expand_model_out_grid(config_tasks, round_id = "2022-12-26")
   )
   # check that included sample IDs are not generated for older versions
   # of the sample specification
   expect_equal(
-    expand_model_out_grid(config_tasks,
+    expand_model_out_grid(
+      config_tasks,
       round_id = "2022-12-26",
       include_sample_ids = TRUE,
       bind_model_tasks = FALSE
     )[[1]],
-    expand_model_out_grid(config_tasks,
+    expand_model_out_grid(
+      config_tasks,
       round_id = "2022-12-26",
       include_sample_ids = FALSE,
       bind_model_tasks = FALSE
@@ -301,13 +306,12 @@ test_that("expand_model_out_grid output controls with samples work correctly", {
 
   # Override config compound_taskid_set
   config_tasks <- read_config_file(
-    system.file("config", "tasks-comp-tid.json",
-      package = "hubValidations"
-    )
+    system.file("config", "tasks-comp-tid.json", package = "hubValidations")
   )
   # Create coarser samples
   expect_snapshot(
-    expand_model_out_grid(config_tasks,
+    expand_model_out_grid(
+      config_tasks,
       round_id = "2022-12-26",
       include_sample_ids = TRUE,
       compound_taskid_set = list(
@@ -318,7 +322,8 @@ test_that("expand_model_out_grid output controls with samples work correctly", {
   )
   # Create finer samples
   expect_snapshot(
-    expand_model_out_grid(config_tasks,
+    expand_model_out_grid(
+      config_tasks,
       round_id = "2022-12-26",
       include_sample_ids = TRUE,
       compound_taskid_set = list(
@@ -329,7 +334,8 @@ test_that("expand_model_out_grid output controls with samples work correctly", {
   )
   # Create samples with full compound_taskid_set
   expect_snapshot(
-    expand_model_out_grid(config_tasks,
+    expand_model_out_grid(
+      config_tasks,
       round_id = "2022-12-26",
       include_sample_ids = TRUE,
       compound_taskid_set = list(
@@ -343,12 +349,11 @@ test_that("expand_model_out_grid output controls with samples work correctly", {
 
 test_that("expand_model_out_grid output type subsetting works", {
   config_tasks <- read_config_file(
-    system.file("config", "tasks-comp-tid.json",
-      package = "hubValidations"
-    )
+    system.file("config", "tasks-comp-tid.json", package = "hubValidations")
   )
   expect_snapshot(
-    expand_model_out_grid(config_tasks,
+    expand_model_out_grid(
+      config_tasks,
       round_id = "2022-12-26",
       include_sample_ids = TRUE,
       bind_model_tasks = FALSE,
@@ -357,7 +362,8 @@ test_that("expand_model_out_grid output type subsetting works", {
   )
 
   expect_snapshot(
-    expand_model_out_grid(config_tasks,
+    expand_model_out_grid(
+      config_tasks,
       round_id = "2022-12-26",
       include_sample_ids = TRUE,
       bind_model_tasks = FALSE,
@@ -366,7 +372,8 @@ test_that("expand_model_out_grid output type subsetting works", {
   )
 
   expect_snapshot(
-    expand_model_out_grid(config_tasks,
+    expand_model_out_grid(
+      config_tasks,
       round_id = "2022-12-26",
       include_sample_ids = TRUE,
       bind_model_tasks = TRUE,
@@ -376,7 +383,8 @@ test_that("expand_model_out_grid output type subsetting works", {
 
   # If a valid output type is provided, invalid ones just ignored
   expect_snapshot(
-    expand_model_out_grid(config_tasks,
+    expand_model_out_grid(
+      config_tasks,
       round_id = "2022-12-26",
       include_sample_ids = FALSE,
       bind_model_tasks = TRUE,
@@ -387,7 +395,8 @@ test_that("expand_model_out_grid output type subsetting works", {
 
   # If no valid output type provided, errors
   expect_snapshot(
-    expand_model_out_grid(config_tasks,
+    expand_model_out_grid(
+      config_tasks,
       round_id = "2022-12-26",
       include_sample_ids = FALSE,
       bind_model_tasks = FALSE,
@@ -401,7 +410,8 @@ test_that("force_output_types works as expected with v4", {
   # Try with v4 config where samples are optional
   config_tasks <- read_config_file(
     test_path(
-      "testdata", "configs",
+      "testdata",
+      "configs",
       "tasks-samples-v4.json"
     )
   )
@@ -421,7 +431,8 @@ test_that("force_output_types works as expected with v4", {
   expect_snapshot(v4_opt_spls)
   # With forcing, a grid that includes sample output type ids as required.
 
-  v4_opt_spls_force <- expand_model_out_grid(config_tasks,
+  v4_opt_spls_force <- expand_model_out_grid(
+    config_tasks,
     round_id = "2022-10-22",
     include_sample_ids = FALSE,
     bind_model_tasks = FALSE,
@@ -434,7 +445,8 @@ test_that("force_output_types works as expected with v4", {
 
   # With forcing, ensure include_sample_ids still works and issues compound_idx
   # warning.
-  v4_opt_spls_force_spl_idx <- expand_model_out_grid(config_tasks,
+  v4_opt_spls_force_spl_idx <- expand_model_out_grid(
+    config_tasks,
     round_id = "2022-10-22",
     include_sample_ids = TRUE,
     bind_model_tasks = FALSE,
@@ -442,7 +454,8 @@ test_that("force_output_types works as expected with v4", {
     derived_task_ids = "target_end_date",
     required_vals_only = TRUE,
     force_output_types = TRUE
-  ) |> suppressWarnings()
+  ) |>
+    suppressWarnings()
   expect_snapshot(v4_opt_spls_force_spl_idx)
 
   # test optional point estimate - median ----
@@ -473,7 +486,10 @@ test_that("force_output_types works as expected with v4", {
   expect_snapshot(v4_opt_mdn_force)
 
   # test optional output type with output type IDs - quantile ----
-  config_tasks <- read_config(system.file("testhubs", "v4", "flusight",
+  config_tasks <- read_config(system.file(
+    "testhubs",
+    "v4",
+    "flusight",
     package = "hubUtils"
   ))
   # Without forcing output_types, should be list of zero dim tbls
@@ -523,7 +539,8 @@ test_that("force_output_types works as expected with v4", {
 test_that("force_output_types works as expected with v3", {
   # Test behaviour with v3 config where median is optional
   v3_config_tasks <- read_config(test_path("testdata", "hub-spl"))
-  v3_req <- expand_model_out_grid(v3_config_tasks,
+  v3_req <- expand_model_out_grid(
+    v3_config_tasks,
     round_id = "2022-10-22",
     include_sample_ids = FALSE,
     bind_model_tasks = TRUE,
@@ -533,7 +550,8 @@ test_that("force_output_types works as expected with v3", {
   )
   expect_equal(dim(v3_req), c(0L, 0L))
 
-  v3_forced <- expand_model_out_grid(v3_config_tasks,
+  v3_forced <- expand_model_out_grid(
+    v3_config_tasks,
     round_id = "2022-10-22",
     include_sample_ids = FALSE,
     bind_model_tasks = TRUE,
@@ -546,7 +564,8 @@ test_that("force_output_types works as expected with v3", {
   expect_equal(dim(v3_forced), c(4L, 5L))
   expect_snapshot(v3_forced)
 
-  v3_forced_all <- expand_model_out_grid(v3_config_tasks,
+  v3_forced_all <- expand_model_out_grid(
+    v3_config_tasks,
     round_id = "2022-10-22",
     include_sample_ids = FALSE,
     bind_model_tasks = TRUE,
@@ -563,7 +582,8 @@ test_that("expand_model_out_grid derived_task_ids ignoring works", {
   config_tasks <- read_config(test_path("testdata", "hub-spl"))
 
   expect_snapshot(
-    expand_model_out_grid(config_tasks,
+    expand_model_out_grid(
+      config_tasks,
       round_id = "2022-10-22",
       include_sample_ids = FALSE,
       bind_model_tasks = TRUE,
@@ -572,7 +592,8 @@ test_that("expand_model_out_grid derived_task_ids ignoring works", {
     )
   )
   expect_snapshot(
-    expand_model_out_grid(config_tasks,
+    expand_model_out_grid(
+      config_tasks,
       round_id = "2022-10-22",
       include_sample_ids = TRUE,
       bind_model_tasks = TRUE,
@@ -583,7 +604,8 @@ test_that("expand_model_out_grid derived_task_ids ignoring works", {
   )
 
   expect_snapshot(
-    expand_model_out_grid(config_tasks,
+    expand_model_out_grid(
+      config_tasks,
       round_id = "2022-10-22",
       include_sample_ids = FALSE,
       bind_model_tasks = FALSE,
@@ -593,7 +615,6 @@ test_that("expand_model_out_grid derived_task_ids ignoring works", {
     error = TRUE
   )
 })
-
 
 
 test_that("expand_model_out_grid errors correctly", {
@@ -646,11 +667,8 @@ test_that("expand_model_out_grid errors correctly", {
     error = TRUE
   )
 
-
   config_tasks <- read_config_file(
-    system.file("config", "tasks-comp-tid.json",
-      package = "hubValidations"
-    )
+    system.file("config", "tasks-comp-tid.json", package = "hubValidations")
   )
   expect_snapshot(
     expand_model_out_grid(
@@ -751,7 +769,8 @@ test_that("v4 required output type ID values extracted correctly", {
       round_id = round_id,
       output_types = "pmf",
       required_vals_only = TRUE
-    ), 0L
+    ),
+    0L
   )
 
   force_pmf <- expand_model_out_grid(

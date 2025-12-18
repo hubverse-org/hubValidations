@@ -15,16 +15,21 @@ test_that("check_tbl_spl_n works", {
   )
 
   # Check failure when sample n not consistent across compound_idx outside ----
-  tbl_const_error <- tbl[-which(
-    tbl$output_type == "sample" & tbl$output_type_id %in% c("1", "102")
-  ), ]
+  tbl_const_error <- tbl[
+    -which(
+      tbl$output_type == "sample" & tbl$output_type_id %in% c("1", "102")
+    ),
+  ]
 
   expect_snapshot(
     check_tbl_spl_n(tbl_const_error, round_id, file_path, hub_path)
   )
 
   const_error_check <- check_tbl_spl_n(
-    tbl_const_error, round_id, file_path, hub_path
+    tbl_const_error,
+    round_id,
+    file_path,
+    hub_path
   )
 
   expect_snapshot(const_error_check$errors)
@@ -32,33 +37,47 @@ test_that("check_tbl_spl_n works", {
   # Ensure other checks pass
   expect_s3_class(
     check_tbl_spl_non_compound_tid(
-      tbl_const_error, round_id,
-      file_path, hub_path
+      tbl_const_error,
+      round_id,
+      file_path,
+      hub_path
     ),
     c("check_success")
   )
   expect_s3_class(
     check_tbl_spl_compound_tid(
-      tbl_const_error, round_id,
-      file_path, hub_path
+      tbl_const_error,
+      round_id,
+      file_path,
+      hub_path
     ),
     c("check_success")
   )
 
-
   # Check failure when all compound_idx outside range ----
-  tbl_min_error <- tbl[-which(
-    tbl$output_type == "sample" & tbl$output_type_id %in% c(
-      "1", "102", "201", "301", "5201"
-    )
-  ), ]
+  tbl_min_error <- tbl[
+    -which(
+      tbl$output_type == "sample" &
+        tbl$output_type_id %in%
+          c(
+            "1",
+            "102",
+            "201",
+            "301",
+            "5201"
+          )
+    ),
+  ]
 
   expect_snapshot(
     check_tbl_spl_n(tbl_min_error, round_id, file_path, hub_path)
   )
 
   min_error_check <- check_tbl_spl_n(
-    tbl_min_error, round_id, file_path, hub_path
+    tbl_min_error,
+    round_id,
+    file_path,
+    hub_path
   )
 
   expect_snapshot(min_error_check$errors)
@@ -76,7 +95,8 @@ test_that("Overriding compound_taskid_set in check_tbl_spl_n works", {
     NULL,
     c("reference_date", "horizon")
   )
-  tbl_coarse <- create_spl_file("2022-10-22",
+  tbl_coarse <- create_spl_file(
+    "2022-10-22",
     compound_taskid_set = compound_taskid_set,
     write = FALSE,
     out_datatype = "chr",
@@ -97,13 +117,18 @@ test_that("Overriding compound_taskid_set in check_tbl_spl_n works", {
   # compound_idx values are as expected because the compound_taskid_set matches
   # that used to generate the data.
   expect_snapshot(
-    check_tbl_spl_n(tbl_coarse, round_id, file_path, hub_path,
+    check_tbl_spl_n(
+      tbl_coarse,
+      round_id,
+      file_path,
+      hub_path,
       compound_taskid_set = compound_taskid_set
     )
   )
 
   # Create 100 spls of each compound idx
-  tbl_full <- create_spl_file("2022-10-22",
+  tbl_full <- create_spl_file(
+    "2022-10-22",
     compound_taskid_set = compound_taskid_set,
     write = FALSE,
     out_datatype = "chr"
@@ -111,7 +136,11 @@ test_that("Overriding compound_taskid_set in check_tbl_spl_n works", {
 
   # This succeeds!
   expect_snapshot(
-    check_tbl_spl_n(tbl_full, round_id, file_path, hub_path,
+    check_tbl_spl_n(
+      tbl_full,
+      round_id,
+      file_path,
+      hub_path,
       compound_taskid_set = compound_taskid_set
     )
   )
@@ -119,11 +148,17 @@ test_that("Overriding compound_taskid_set in check_tbl_spl_n works", {
   # If we remove one sample, the check will fail because of an inconsistent
   # number of samples per compound_idx (Most will have 100 but one will only
   # have 99)
-  tbl_minus_1 <- tbl_full[-which(
-    tbl_full$output_type_id == "1"
-  ), ]
+  tbl_minus_1 <- tbl_full[
+    -which(
+      tbl_full$output_type_id == "1"
+    ),
+  ]
   expect_snapshot(
-    check_tbl_spl_n(tbl_minus_1, round_id, file_path, hub_path,
+    check_tbl_spl_n(
+      tbl_minus_1,
+      round_id,
+      file_path,
+      hub_path,
       compound_taskid_set = compound_taskid_set
     )
   )
@@ -143,16 +178,28 @@ test_that("Ignoring derived_task_ids in check_tbl_spl_n works", {
   # `derived_task_ids`.
   tbl[1, "target_end_date"] <- "random_date"
   expect_snapshot(
-    check_tbl_spl_n(tbl, round_id, file_path, hub_path,
+    check_tbl_spl_n(
+      tbl,
+      round_id,
+      file_path,
+      hub_path,
       derived_task_ids = "target_end_date"
     )
   )
   # Check that ignoring derived task ids returns same result as not ignoring.
   expect_equal(
-    check_tbl_spl_n(tbl, round_id, file_path, hub_path,
+    check_tbl_spl_n(
+      tbl,
+      round_id,
+      file_path,
+      hub_path,
       derived_task_ids = "target_end_date"
     ),
-    check_tbl_spl_n(tbl_orig, round_id, file_path, hub_path,
+    check_tbl_spl_n(
+      tbl_orig,
+      round_id,
+      file_path,
+      hub_path,
       derived_task_ids = "target_end_date"
     )
   )
