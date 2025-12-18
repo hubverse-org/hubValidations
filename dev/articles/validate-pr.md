@@ -193,6 +193,14 @@ v <- validate_pr(
 #> • "random-file.txt"
 
 v
+#> ┌──────────────────────────────────────────────────────────────────────────┐
+#> │ ⚠ Warnings                                                               │
+#> │ • Hub config files modified: admin.json,                                 │
+#> │   model-metadata-schema.json, and tasks.json. Config changes             │
+#> │   may affect validation of existing model output and target data. Please │
+#> │   review carefully for consistency.                                      │
+#> └──────────────────────────────────────────────────────────────────────────┘
+#> 
 #> 
 #> ── mod_del_hub ────
 #> 
@@ -350,6 +358,47 @@ For more details on submission window config see [Setting up
 `"submission_due"`](https://docs.hubverse.io/en/latest/quickstart-hub-admin/tasks-config.html#setting-up-submissions-due)
 in the hubverse hubDocs.
 
+### Hub config modification warnings
+
+When a pull request modifies hub configuration files (files in
+`hub-config/`),
+[`validate_pr()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_pr.md)
+attaches a validation-level warning to alert maintainers. This warning
+is displayed prominently at the top of the validation output:
+
+    #> ┌──────────────────────────────────────────────────────────────────────┐
+    #> │ ⚠ Warnings                                                           │
+    #> │ • Hub config files modified: tasks.json. Config changes may affect   │
+    #> │   validation of existing model output and target data. Please review │
+    #> │   carefully for consistency.                                         │
+    #> └──────────────────────────────────────────────────────────────────────┘
+    #> 
+    #> ── ci-testhub-simple ────
+    #> 
+    #> ✔ [valid_config]: All hub config files is valid.
+
+#### Why this matters
+
+Modifications to hub configuration files can have significant
+implications:
+
+- **`tasks.json` changes** may alter which task ID values, output types,
+  or rounds are considered valid, potentially invalidating previously
+  accepted model outputs or changing validation behavior for future
+  submissions.
+- **`admin.json` changes** may affect hub metadata or model output
+  directory settings.
+- **Schema changes** may alter model metadata validation rules.
+
+This warning does not cause validation to fail but serves as a reminder
+to carefully review configuration changes for consistency with existing
+hub data.
+
+For comprehensive hub integrity checking beyond PR validation, see
+[issue \#83](https://github.com/hubverse-org/hubValidations/issues/83)
+which tracks planned functionality for periodic hub health and integrity
+scanning.
+
 ## Checking for validation failures with `check_for_errors()`
 
 [`check_for_errors()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_for_errors.md)
@@ -385,6 +434,14 @@ v_fail <- validate_pr(
 #> • "hub-config/tasks.json"
 
 check_for_errors(v_fail)
+#> ┌──────────────────────────────────────────────────────────────────────────┐
+#> │ ⚠ Warnings                                                               │
+#> │ • Hub config files modified: admin.json,                                 │
+#> │   model-metadata-schema.json, and tasks.json. Config changes             │
+#> │   may affect validation of existing model output and target data. Please │
+#> │   review carefully for consistency.                                      │
+#> └──────────────────────────────────────────────────────────────────────────┘
+#> 
 #> 
 #> ── 2022-10-22-hub-baseline.parquet ────
 #> 
@@ -424,6 +481,14 @@ v_pass <- validate_pr(
 #> • "hub-config/tasks.json"
 
 check_for_errors(v_pass)
+#> ┌──────────────────────────────────────────────────────────────────────────┐
+#> │ ⚠ Warnings                                                               │
+#> │ • Hub config files modified: admin.json,                                 │
+#> │   model-metadata-schema.json, and tasks.json. Config changes             │
+#> │   may affect validation of existing model output and target data. Please │
+#> │   review carefully for consistency.                                      │
+#> └──────────────────────────────────────────────────────────────────────────┘
+#> 
 #> ✔ All validation checks have been successful.
 ```
 
@@ -468,12 +533,16 @@ check_for_errors(v_fail, verbose = TRUE)
 #> 
 #> 
 #> ── Overall validation result ───────────────────────────────────────────────────
-#> 
+#> ┌──────────────────────────────────────────────────────────────────────────┐
+#> │ ⚠ Warnings                                                               │
+#> │ • Hub config files modified: admin.json,                                 │
+#> │   model-metadata-schema.json, and tasks.json. Config changes             │
+#> │   may affect validation of existing model output and target data. Please │
+#> │   review carefully for consistency.                                      │
+#> └──────────────────────────────────────────────────────────────────────────┘
 #> 
 #> 
 #> ── 2022-10-22-hub-baseline.parquet ────
-#> 
-#> 
 #> 
 #> ⓧ [colnames]: Column names must be consistent with expected round task IDs and
 #>   std column names.  Expected column "age_group" not present in file.
@@ -492,45 +561,30 @@ check_for_errors(v_pass, verbose = TRUE)
 #> ── 2022-10-22-team1-goodmodel.csv ────
 #> 
 #> ✔ [file_exists]: File exists at path
-#>   model-output/team1-goodmodel/2022-10-22-team1-goodmodel.csv.
-#> ✔ [file_name]: File name "2022-10-22-team1-goodmodel.csv" is valid.
-#> ✔ [file_location]: File directory name matches `model_id` metadata in file
-#>   name.
-#> ✔ [round_id_valid]: `round_id` is valid.
-#> ✔ [file_format]: File is accepted hub format.
-#> ✔ [file_n]: Number of accepted model output files per round met.
-#> ✔ [metadata_exists]: Metadata file exists at path
-#>   model-metadata/team1-goodmodel.yaml.
-#> ✔ [file_read]: File could be read successfully.
-#> ✔ [valid_round_id_col]: `round_id_col` name is valid.
-#> ✔ [unique_round_id]: `round_id` column "origin_date" contains a single, unique
-#>   round ID value.
-#> ✔ [match_round_id]: All `round_id_col` "origin_date" values match submission
-#>   `round_id` from file name.
-#> ✔ [colnames]: Column names are consistent with expected round task IDs and std
-#>   column names.
-#> ✔ [col_types]: Column data types match hub schema.
-#> ✔ [valid_vals]: `tbl` contains valid values/value combinations.
-#> ℹ [derived_task_id_vals]: No derived task IDs to check. Skipping derived task
-#>   ID value check.
-#> ✔ [rows_unique]: All combinations of task ID
-#>   column/`output_type`/`output_type_id` values are unique.
-#> ✔ [req_vals]: Required task ID/output type/output type ID combinations all
-#>   present.
-#> ✔ [value_col_valid]: Values in column `value` all valid with respect to
-#>   modeling task config.
-#> ✔ [value_col_non_desc]: Quantile or cdf `value` values increase when ordered by
-#>   `output_type_id`.
-#> ℹ [value_col_sum1]: No pmf output types to check for sum of 1. Check skipped.
-#> ℹ [spl_compound_taskid_set]: No v3 samples found in model output data to check.
-#>   Skipping `check_tbl_spl_compound_taskid_set` check.
-#> ℹ [spl_compound_tid]: No v3 samples found in model output data to check.
-#>   Skipping `check_tbl_spl_compound_tid` check.
-#> ℹ [spl_non_compound_tid]: No v3 samples found in model output data to check.
-#>   Skipping `check_tbl_spl_non_compound_tid` check.
-#> ℹ [spl_n]: No v3 samples found in model output data to check. Skipping
+#>   model-output/team1-goodmodel/2022-10-22-team1-goodmodel.csv.✔ [file_name]: File name "2022-10-22-team1-goodmodel.csv" is valid.✔ [file_location]: File directory name matches `model_id` metadata in file
+#>   name.✔ [round_id_valid]: `round_id` is valid.✔ [file_format]: File is accepted hub format.✔ [file_n]: Number of accepted model output files per round met.✔ [metadata_exists]: Metadata file exists at path
+#>   model-metadata/team1-goodmodel.yaml.✔ [file_read]: File could be read successfully.✔ [valid_round_id_col]: `round_id_col` name is valid.✔ [unique_round_id]: `round_id` column "origin_date" contains a single, unique
+#>   round ID value.✔ [match_round_id]: All `round_id_col` "origin_date" values match submission
+#>   `round_id` from file name.✔ [colnames]: Column names are consistent with expected round task IDs and std
+#>   column names.✔ [col_types]: Column data types match hub schema.✔ [valid_vals]: `tbl` contains valid values/value combinations.ℹ [derived_task_id_vals]: No derived task IDs to check. Skipping derived task
+#>   ID value check.✔ [rows_unique]: All combinations of task ID
+#>   column/`output_type`/`output_type_id` values are unique.✔ [req_vals]: Required task ID/output type/output type ID combinations all
+#>   present.✔ [value_col_valid]: Values in column `value` all valid with respect to
+#>   modeling task config.✔ [value_col_non_desc]: Quantile or cdf `value` values increase when ordered by
+#>   `output_type_id`.ℹ [value_col_sum1]: No pmf output types to check for sum of 1. Check skipped.ℹ [spl_compound_taskid_set]: No v3 samples found in model output data to check.
+#>   Skipping `check_tbl_spl_compound_taskid_set` check.ℹ [spl_compound_tid]: No v3 samples found in model output data to check.
+#>   Skipping `check_tbl_spl_compound_tid` check.ℹ [spl_non_compound_tid]: No v3 samples found in model output data to check.
+#>   Skipping `check_tbl_spl_non_compound_tid` check.ℹ [spl_n]: No v3 samples found in model output data to check. Skipping
 #>   `check_tbl_spl_n` check.
 #> ── Overall validation result ───────────────────────────────────────────────────
+#> ┌──────────────────────────────────────────────────────────────────────────┐
+#> │ ⚠ Warnings                                                               │
+#> │ • Hub config files modified: admin.json,                                 │
+#> │   model-metadata-schema.json, and tasks.json. Config changes             │
+#> │   may affect validation of existing model output and target data. Please │
+#> │   review carefully for consistency.                                      │
+#> └──────────────────────────────────────────────────────────────────────────┘
+#> 
 #> ✔ All validation checks have been successful.
 ```
 

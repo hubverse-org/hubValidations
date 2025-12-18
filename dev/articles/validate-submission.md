@@ -84,7 +84,7 @@ validate_submission(hub_path,
 #>   `output_type_id`.
 #> ℹ [value_col_sum1]: No pmf output types to check for sum of 1. Check skipped.
 #> ✖ [submission_time]: Submission time must be within accepted submission window
-#>   for round.  Current time "2025-12-12 13:30:21 UTC" is outside window
+#>   for round.  Current time "2025-12-18 08:39:26 UTC" is outside window
 #>   2022-10-02 EDT--2022-10-09 23:59:59 EDT.
 ```
 
@@ -137,7 +137,7 @@ validate_submission(hub_path,
 #>   submission `round_id` from file name.  `round_id` value 2022-10-08 does not
 #>   match submission `round_id` "2022-10-15"
 #> ✖ [submission_time]: Submission time must be within accepted submission window
-#>   for round.  Current time "2025-12-12 13:30:23 UTC" is outside window
+#>   for round.  Current time "2025-12-18 08:39:27 UTC" is outside window
 #>   2022-10-02 EDT--2022-10-09 23:59:59 EDT.
 ```
 
@@ -166,7 +166,7 @@ validate_submission(hub_path,
 #> ── 2022-10-08-team1-goodmodel.csv ────
 #> 
 #> ✖ [submission_time]: Submission time must be within accepted submission window
-#>   for round.  Current time "2025-12-12 13:30:24 UTC" is outside window
+#>   for round.  Current time "2025-12-18 08:39:28 UTC" is outside window
 #>   2022-10-02 EDT--2022-10-09 23:59:59 EDT.
 #> Error in `check_for_errors()`:
 #> ! 
@@ -328,11 +328,8 @@ validate_model_metadata(hub_path,
 #> ── team1-goodmodel.yaml ────
 #> 
 #> ✔ [metadata_file_exists]: File exists at path
-#>   model-metadata/team1-goodmodel.yaml.
-#> ✔ [metadata_file_ext]: Metadata file extension is "yml" or "yaml".
-#> ✔ [metadata_file_location]: Metadata file directory name matches
-#>   "model-metadata".
-#> ⓧ [metadata_matches_schema]: Metadata file contents must be consistent with
+#>   model-metadata/team1-goodmodel.yaml.✔ [metadata_file_ext]: Metadata file extension is "yml" or "yaml".✔ [metadata_file_location]: Metadata file directory name matches
+#>   "model-metadata".ⓧ [metadata_matches_schema]: Metadata file contents must be consistent with
 #>   schema specifications.  - must have required property 'model_details' . -
 #>   must NOT have additional properties; saw unexpected property
 #>   'models_details'. - must NOT have additional properties; saw unexpected
@@ -688,12 +685,9 @@ validate_target_dataset(hub_path, target_type = "oracle-output")
 #> 
 #> ── oracle-output.csv ────
 #> 
-#> ✔ [target_dataset_exists]: oracle-output dataset detected.
-#> ✔ [target_dataset_unique]: target-data directory contains single unique
-#>   oracle-output dataset.
-#> ✔ [target_dataset_file_ext_unique]: oracle-output dataset files share single
-#>   unique file format.
-#> ✔ [target_dataset_rows_unique]: oracle-output target dataset rows are unique.
+#> ✔ [target_dataset_exists]: oracle-output dataset detected.✔ [target_dataset_unique]: target-data directory contains single unique
+#>   oracle-output dataset.✔ [target_dataset_file_ext_unique]: oracle-output dataset files share single
+#>   unique file format.✔ [target_dataset_rows_unique]: oracle-output target dataset rows are unique.
 ```
 
 This checks that the dataset exists, is unique, has consistent file

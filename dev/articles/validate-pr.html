@@ -257,6 +257,14 @@ within their allowed submission window.</p>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> <span style="color: #0000BB;">"random-file.txt"</span></span></span>
 <span></span>
 <span><span class="va">v</span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">┌──────────────────────────────────────────────────────────────────────────┐</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">│</span> <span style="color: #BBBB00;">⚠</span> <span style="font-weight: bold;">Warnings</span>                                                               <span style="color: #BBBB00;">│</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">│</span> • Hub config files modified: <span style="color: #0000BB;">admin.json</span>,                                 <span style="color: #BBBB00;">│</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">│</span>   <span style="color: #0000BB;">model-metadata-schema.json</span>, and <span style="color: #0000BB;">tasks.json</span>. Config changes             <span style="color: #BBBB00;">│</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">│</span>   may affect validation of existing model output and target data. Please <span style="color: #BBBB00;">│</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">│</span>   review carefully for consistency.                                      <span style="color: #BBBB00;">│</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">└──────────────────────────────────────────────────────────────────────────┘</span></span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">mod_del_hub</span><span style="color: #BB00BB;"> ────</span></span></span>
 <span><span class="co">#&gt; </span></span>
@@ -426,6 +434,49 @@ end dates are provided in the config.</p>
 up <code>"submission_due"</code></a> in the hubverse hubDocs.</p>
 </div>
 </div>
+<div class="section level3">
+<h3 id="hub-config-modification-warnings">Hub config modification warnings<a class="anchor" aria-label="anchor" href="#hub-config-modification-warnings"></a>
+</h3>
+<p>When a pull request modifies hub configuration files (files in
+<code>hub-config/</code>), <code><a href="../reference/validate_pr.html">validate_pr()</a></code> attaches a
+validation-level warning to alert maintainers. This warning is displayed
+prominently at the top of the validation output:</p>
+<pre><code><span><span class="co">#&gt; <span style="color: #BBBB00;">┌──────────────────────────────────────────────────────────────────────┐</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">│</span> <span style="color: #BBBB00;">⚠</span> <span style="font-weight: bold;">Warnings</span>                                                           <span style="color: #BBBB00;">│</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">│</span> • Hub config files modified: <span style="color: #0000BB;">tasks.json</span>. Config changes may affect   <span style="color: #BBBB00;">│</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">│</span>   validation of existing model output and target data. Please review <span style="color: #BBBB00;">│</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">│</span>   carefully for consistency.                                         <span style="color: #BBBB00;">│</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">└──────────────────────────────────────────────────────────────────────┘</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">ci-testhub-simple</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_config]</span>: All hub config files is valid.</span></span></code></pre>
+<div class="section level4 alert alert-info" role="note">
+<h4 id="why-this-matters">Why this matters<a class="anchor" aria-label="anchor" href="#why-this-matters"></a>
+</h4>
+<p>Modifications to hub configuration files can have significant
+implications:</p>
+<ul>
+<li>
+<strong><code>tasks.json</code> changes</strong> may alter which
+task ID values, output types, or rounds are considered valid,
+potentially invalidating previously accepted model outputs or changing
+validation behavior for future submissions.</li>
+<li>
+<strong><code>admin.json</code> changes</strong> may affect hub
+metadata or model output directory settings.</li>
+<li>
+<strong>Schema changes</strong> may alter model metadata validation
+rules.</li>
+</ul>
+<p>This warning does not cause validation to fail but serves as a
+reminder to carefully review configuration changes for consistency with
+existing hub data.</p>
+<p>For comprehensive hub integrity checking beyond PR validation, see <a href="https://github.com/hubverse-org/hubValidations/issues/83" class="external-link">issue
+#83</a> which tracks planned functionality for periodic hub health and
+integrity scanning.</p>
+</div>
+</div>
 </div>
 <div class="section level2">
 <h2 id="checking-for-validation-failures-with-check_for_errors">Checking for validation failures with
@@ -444,7 +495,7 @@ errors/failures.</p>
 <code>&lt;error/check_exec_error&gt;</code> condition class objects, the
 function throws an error and prints the messages from the failing
 checks.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">temp_hub</span> <span class="op">&lt;-</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/path.html" class="external-link">path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"invalid_sb_hub"</span><span class="op">)</span></span>
 <span><span class="fu">gert</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/gert/reference/git_fetch.html" class="external-link">git_clone</a></span><span class="op">(</span></span>
 <span>  url <span class="op">=</span> <span class="st">"https://github.com/hubverse-org/ci-testhub-simple"</span>,</span>
@@ -465,6 +516,14 @@ checks.</p>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> <span style="color: #0000BB;">"hub-config/tasks.json"</span></span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/check_for_errors.html">check_for_errors</a></span><span class="op">(</span><span class="va">v_fail</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">┌──────────────────────────────────────────────────────────────────────────┐</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">│</span> <span style="color: #BBBB00;">⚠</span> <span style="font-weight: bold;">Warnings</span>                                                               <span style="color: #BBBB00;">│</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">│</span> • Hub config files modified: <span style="color: #0000BB;">admin.json</span>,                                 <span style="color: #BBBB00;">│</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">│</span>   <span style="color: #0000BB;">model-metadata-schema.json</span>, and <span style="color: #0000BB;">tasks.json</span>. Config changes             <span style="color: #BBBB00;">│</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">│</span>   may affect validation of existing model output and target data. Please <span style="color: #BBBB00;">│</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">│</span>   review carefully for consistency.                                      <span style="color: #BBBB00;">│</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">└──────────────────────────────────────────────────────────────────────────┘</span></span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">2022-10-22-hub-baseline.parquet</span><span style="color: #BB00BB;"> ────</span></span></span>
 <span><span class="co">#&gt; </span></span>
@@ -480,7 +539,7 @@ checks.</p>
 <p>If all validations checks pass, <code><a href="../reference/check_for_errors.html">check_for_errors()</a></code>
 returns <code>TRUE</code> silently and prints:</p>
 <pre><code>✔ All validation checks have been successful.</code></pre>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">temp_hub</span> <span class="op">&lt;-</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/path.html" class="external-link">path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"valid_sb_hub"</span><span class="op">)</span></span>
 <span><span class="fu">gert</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/gert/reference/git_fetch.html" class="external-link">git_clone</a></span><span class="op">(</span></span>
 <span>  url <span class="op">=</span> <span class="st">"https://github.com/hubverse-org/ci-testhub-simple"</span>,</span>
@@ -501,6 +560,14 @@ returns <code>TRUE</code> silently and prints:</p>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> <span style="color: #0000BB;">"hub-config/tasks.json"</span></span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/check_for_errors.html">check_for_errors</a></span><span class="op">(</span><span class="va">v_pass</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">┌──────────────────────────────────────────────────────────────────────────┐</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">│</span> <span style="color: #BBBB00;">⚠</span> <span style="font-weight: bold;">Warnings</span>                                                               <span style="color: #BBBB00;">│</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">│</span> • Hub config files modified: <span style="color: #0000BB;">admin.json</span>,                                 <span style="color: #BBBB00;">│</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">│</span>   <span style="color: #0000BB;">model-metadata-schema.json</span>, and <span style="color: #0000BB;">tasks.json</span>. Config changes             <span style="color: #BBBB00;">│</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">│</span>   may affect validation of existing model output and target data. Please <span style="color: #BBBB00;">│</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">│</span>   review carefully for consistency.                                      <span style="color: #BBBB00;">│</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">└──────────────────────────────────────────────────────────────────────────┘</span></span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> All validation checks have been successful.</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -509,7 +576,7 @@ returns <code>TRUE</code> silently and prints:</p>
 <p>If printing the results of all checks is preferred instead of just
 summarising the results of checks that failed, argument
 <code>verbose</code> can be set to <code>TRUE</code>.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/check_for_errors.html">check_for_errors</a></span><span class="op">(</span><span class="va">v_fail</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── <span style="font-weight: bold;">Individual check results</span> ──</span></span>
@@ -544,12 +611,16 @@ summarising the results of checks that failed, argument
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Overall validation result</span> <span style="color: #00BBBB;">───────────────────────────────────────────────────</span></span></span>
-<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">┌──────────────────────────────────────────────────────────────────────────┐</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">│</span> <span style="color: #BBBB00;">⚠</span> <span style="font-weight: bold;">Warnings</span>                                                               <span style="color: #BBBB00;">│</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">│</span> • Hub config files modified: <span style="color: #0000BB;">admin.json</span>,                                 <span style="color: #BBBB00;">│</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">│</span>   <span style="color: #0000BB;">model-metadata-schema.json</span>, and <span style="color: #0000BB;">tasks.json</span>. Config changes             <span style="color: #BBBB00;">│</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">│</span>   may affect validation of existing model output and target data. Please <span style="color: #BBBB00;">│</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">│</span>   review carefully for consistency.                                      <span style="color: #BBBB00;">│</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">└──────────────────────────────────────────────────────────────────────────┘</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">2022-10-22-hub-baseline.parquet</span><span style="color: #BB00BB;"> ────</span></span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">ⓧ</span> <span style="color: #B2B2B2;">[colnames]</span>: Column names must be consistent with expected round task IDs and</span></span>
 <span><span class="co">#&gt;   std column names.  Expected column <span style="color: #0000BB;">"age_group"</span> not present in file.</span></span>
@@ -568,45 +639,30 @@ summarising the results of checks that failed, argument
 <span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">2022-10-22-team1-goodmodel.csv</span><span style="color: #BB00BB;"> ────</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_exists]</span>: File exists at path</span></span>
-<span><span class="co">#&gt;   <span style="color: #0000BB;">model-output/team1-goodmodel/2022-10-22-team1-goodmodel.csv</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_name]</span>: File name <span style="color: #0000BB;">"2022-10-22-team1-goodmodel.csv"</span> is valid.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_location]</span>: File directory name matches `model_id` metadata in file</span></span>
-<span><span class="co">#&gt;   name.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[round_id_valid]</span>: `round_id` is valid.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_format]</span>: File is accepted hub format.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_n]</span>: Number of accepted model output files per round met.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[metadata_exists]</span>: Metadata file exists at path</span></span>
-<span><span class="co">#&gt;   <span style="color: #0000BB;">model-metadata/team1-goodmodel.yaml</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_read]</span>: File could be read successfully.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_round_id_col]</span>: `round_id_col` name is valid.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[unique_round_id]</span>: `round_id` column <span style="color: #0000BB;">"origin_date"</span> contains a single, unique</span></span>
-<span><span class="co">#&gt;   round ID value.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[match_round_id]</span>: All `round_id_col` <span style="color: #0000BB;">"origin_date"</span> values match submission</span></span>
-<span><span class="co">#&gt;   `round_id` from file name.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[colnames]</span>: Column names are consistent with expected round task IDs and std</span></span>
-<span><span class="co">#&gt;   column names.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[col_types]</span>: Column data types match hub schema.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_vals]</span>: `tbl` contains valid values/value combinations.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[derived_task_id_vals]</span>: No derived task IDs to check. Skipping derived task</span></span>
-<span><span class="co">#&gt;   ID value check.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[rows_unique]</span>: All combinations of task ID</span></span>
-<span><span class="co">#&gt;   column/`output_type`/`output_type_id` values are unique.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[req_vals]</span>: Required task ID/output type/output type ID combinations all</span></span>
-<span><span class="co">#&gt;   present.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[value_col_valid]</span>: Values in column `value` all valid with respect to</span></span>
-<span><span class="co">#&gt;   modeling task config.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[value_col_non_desc]</span>: Quantile or cdf `value` values increase when ordered by</span></span>
-<span><span class="co">#&gt;   `output_type_id`.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[value_col_sum1]</span>: No pmf output types to check for sum of 1. Check skipped.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[spl_compound_taskid_set]</span>: No v3 samples found in model output data to check.</span></span>
-<span><span class="co">#&gt;   Skipping `check_tbl_spl_compound_taskid_set` check.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[spl_compound_tid]</span>: No v3 samples found in model output data to check.</span></span>
-<span><span class="co">#&gt;   Skipping `check_tbl_spl_compound_tid` check.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[spl_non_compound_tid]</span>: No v3 samples found in model output data to check.</span></span>
-<span><span class="co">#&gt;   Skipping `check_tbl_spl_non_compound_tid` check.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[spl_n]</span>: No v3 samples found in model output data to check. Skipping</span></span>
+<span><span class="co">#&gt;   <span style="color: #0000BB;">model-output/team1-goodmodel/2022-10-22-team1-goodmodel.csv</span>.<span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_name]</span>: File name <span style="color: #0000BB;">"2022-10-22-team1-goodmodel.csv"</span> is valid.<span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_location]</span>: File directory name matches `model_id` metadata in file</span></span>
+<span><span class="co">#&gt;   name.<span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[round_id_valid]</span>: `round_id` is valid.<span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_format]</span>: File is accepted hub format.<span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_n]</span>: Number of accepted model output files per round met.<span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[metadata_exists]</span>: Metadata file exists at path</span></span>
+<span><span class="co">#&gt;   <span style="color: #0000BB;">model-metadata/team1-goodmodel.yaml</span>.<span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_read]</span>: File could be read successfully.<span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_round_id_col]</span>: `round_id_col` name is valid.<span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[unique_round_id]</span>: `round_id` column <span style="color: #0000BB;">"origin_date"</span> contains a single, unique</span></span>
+<span><span class="co">#&gt;   round ID value.<span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[match_round_id]</span>: All `round_id_col` <span style="color: #0000BB;">"origin_date"</span> values match submission</span></span>
+<span><span class="co">#&gt;   `round_id` from file name.<span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[colnames]</span>: Column names are consistent with expected round task IDs and std</span></span>
+<span><span class="co">#&gt;   column names.<span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[col_types]</span>: Column data types match hub schema.<span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_vals]</span>: `tbl` contains valid values/value combinations.<span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[derived_task_id_vals]</span>: No derived task IDs to check. Skipping derived task</span></span>
+<span><span class="co">#&gt;   ID value check.<span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[rows_unique]</span>: All combinations of task ID</span></span>
+<span><span class="co">#&gt;   column/`output_type`/`output_type_id` values are unique.<span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[req_vals]</span>: Required task ID/output type/output type ID combinations all</span></span>
+<span><span class="co">#&gt;   present.<span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[value_col_valid]</span>: Values in column `value` all valid with respect to</span></span>
+<span><span class="co">#&gt;   modeling task config.<span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[value_col_non_desc]</span>: Quantile or cdf `value` values increase when ordered by</span></span>
+<span><span class="co">#&gt;   `output_type_id`.<span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[value_col_sum1]</span>: No pmf output types to check for sum of 1. Check skipped.<span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[spl_compound_taskid_set]</span>: No v3 samples found in model output data to check.</span></span>
+<span><span class="co">#&gt;   Skipping `check_tbl_spl_compound_taskid_set` check.<span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[spl_compound_tid]</span>: No v3 samples found in model output data to check.</span></span>
+<span><span class="co">#&gt;   Skipping `check_tbl_spl_compound_tid` check.<span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[spl_non_compound_tid]</span>: No v3 samples found in model output data to check.</span></span>
+<span><span class="co">#&gt;   Skipping `check_tbl_spl_non_compound_tid` check.<span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[spl_n]</span>: No v3 samples found in model output data to check. Skipping</span></span>
 <span><span class="co">#&gt;   `check_tbl_spl_n` check.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Overall validation result</span> <span style="color: #00BBBB;">───────────────────────────────────────────────────</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">┌──────────────────────────────────────────────────────────────────────────┐</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">│</span> <span style="color: #BBBB00;">⚠</span> <span style="font-weight: bold;">Warnings</span>                                                               <span style="color: #BBBB00;">│</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">│</span> • Hub config files modified: <span style="color: #0000BB;">admin.json</span>,                                 <span style="color: #BBBB00;">│</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">│</span>   <span style="color: #0000BB;">model-metadata-schema.json</span>, and <span style="color: #0000BB;">tasks.json</span>. Config changes             <span style="color: #BBBB00;">│</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">│</span>   may affect validation of existing model output and target data. Please <span style="color: #BBBB00;">│</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">│</span>   review carefully for consistency.                                      <span style="color: #BBBB00;">│</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">└──────────────────────────────────────────────────────────────────────────┘</span></span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> All validation checks have been successful.</span></span></code></pre></div>
 </div>
 </div>
