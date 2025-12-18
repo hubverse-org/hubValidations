@@ -6,7 +6,8 @@ test_that("validate_submission works", {
   # File that passes validation
   expect_snapshot(
     str(
-      validate_submission(hub_path,
+      validate_submission(
+        hub_path,
         file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv",
         skip_submit_window_check = TRUE,
         skip_check_config = TRUE
@@ -14,7 +15,8 @@ test_that("validate_submission works", {
     )
   )
   expect_s3_class(
-    validate_submission(hub_path,
+    validate_submission(
+      hub_path,
       file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv",
       skip_submit_window_check = TRUE,
       skip_check_config = TRUE
@@ -26,7 +28,8 @@ test_that("validate_submission works", {
   # Missing file
   expect_snapshot(
     str(
-      validate_submission(hub_path,
+      validate_submission(
+        hub_path,
         file_path = "team1-goodmodel/2022-10-15-team1-goodmodel.csv",
         skip_submit_window_check = TRUE,
         skip_check_config = TRUE
@@ -34,7 +37,8 @@ test_that("validate_submission works", {
     )
   )
   expect_s3_class(
-    validate_submission(hub_path,
+    validate_submission(
+      hub_path,
       file_path = "team1-goodmodel/2022-10-15-team1-goodmodel.csv",
       skip_submit_window_check = TRUE,
       skip_check_config = TRUE
@@ -45,7 +49,8 @@ test_that("validate_submission works", {
   # Wrong submission location & missing data column (age_group)
   expect_snapshot(
     str(
-      validate_submission(hub_path,
+      validate_submission(
+        hub_path,
         file_path = "team1-goodmodel/2022-10-15-hub-baseline.csv",
         skip_submit_window_check = TRUE,
         skip_check_config = TRUE
@@ -53,14 +58,14 @@ test_that("validate_submission works", {
     )
   )
   expect_s3_class(
-    validate_submission(hub_path,
+    validate_submission(
+      hub_path,
       file_path = "team1-goodmodel/2022-10-15-hub-baseline.csv",
       skip_submit_window_check = TRUE,
       skip_check_config = TRUE
     ),
     c("hub_validations")
   )
-
 
   expect_snapshot(
     str(
@@ -77,14 +82,16 @@ test_that("validate_submission works", {
   # File that passes validation & checks config
   expect_snapshot(
     str(
-      validate_submission(hub_path,
+      validate_submission(
+        hub_path,
         file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv",
         skip_submit_window_check = TRUE
       )
     )
   )
   expect_s3_class(
-    validate_submission(hub_path,
+    validate_submission(
+      hub_path,
       file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv",
       skip_submit_window_check = TRUE
     ),
@@ -102,7 +109,8 @@ test_that("validate_submission submission within window works", {
   )
   expect_snapshot(
     str(
-      validate_submission(hub_path,
+      validate_submission(
+        hub_path,
         file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
       )[["submission_time"]]
     )
@@ -119,7 +127,8 @@ test_that("validate_submission submission outside window fails correctly", {
   )
   expect_snapshot(
     str(
-      validate_submission(hub_path,
+      validate_submission(
+        hub_path,
         file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
       )[["submission_time"]]
     )

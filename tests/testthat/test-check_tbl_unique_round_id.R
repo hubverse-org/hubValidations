@@ -13,7 +13,8 @@ test_that("check_tbl_unique_round_id works", {
   expect_snapshot(
     check_tbl_unique_round_id(
       tbl = tbl,
-      file_path = file_path, hub_path = hub_path,
+      file_path = file_path,
+      hub_path = hub_path,
       round_id_col = "origin_date"
     )
   )

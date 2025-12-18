@@ -76,7 +76,14 @@ check_target_tbl_output_type_ids <- function(
     # validate each output type separately.
     check_list <- purrr::map(
       purrr::set_names(output_types),
-      \(.x) check_td_output_type_ids(.x, target_tbl_chr, config_tasks, config_target_data)
+      \(.x) {
+        check_td_output_type_ids(
+          .x,
+          target_tbl_chr,
+          config_tasks,
+          config_target_data
+        )
+      }
     )
     invalid_output_types <- !purrr::map_lgl(check_list, "check")
     check <- !any(invalid_output_types)
@@ -128,7 +135,12 @@ check_td_output_type_ids <- function(
       missing = NULL
     )
   } else {
-    check_dist_output_type_ids(output_type, tbl, config_tasks, config_target_data)
+    check_dist_output_type_ids(
+      output_type,
+      tbl,
+      config_tasks,
+      config_target_data
+    )
   }
 }
 #' Check distributional output type IDs against configuration `output_type_id` set
@@ -188,7 +200,12 @@ check_dist_output_type_ids <- function(
 #' @return A data frame of missing support rows, grouped by non-unique columns.
 #' @importFrom dplyr group_by across all_of reframe
 #' @noRd
-diff_output_type_ids <- function(tbl, output_type_ids, config_tasks, config_target_data = NULL) {
+diff_output_type_ids <- function(
+  tbl,
+  output_type_ids,
+  config_tasks,
+  config_target_data = NULL
+) {
   tbl <- tbl[tbl$output_type_id %in% output_type_ids, ]
   if (nrow(tbl) == 0L) {
     return(NULL)

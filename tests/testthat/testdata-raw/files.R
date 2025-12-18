@@ -7,7 +7,8 @@ round_id <- "2022-10-15"
 submit_dir <- fs::path(hub_path, "model-output", model_id)
 tmpl_file <- fs::dir_ls(submit_dir)[1]
 
-df <- switch(fs::path_ext(tmpl_file),
+df <- switch(
+  fs::path_ext(tmpl_file),
   csv = arrow::read_csv_arrow(tmpl_file),
   parquet = arrow::read_parquet(tmpl_file),
   arrow = arrow::read_feather(tmpl_file)
@@ -32,14 +33,16 @@ set.seed(123)
 create_spl_file("2022-10-22")
 
 # Coarser samples ----
-create_spl_file("2022-10-29",
+create_spl_file(
+  "2022-10-29",
   compound_taskid_set = list(
     NULL,
     c("reference_date", "location")
   )
 )
 
-create_spl_file("2022-11-05",
+create_spl_file(
+  "2022-11-05",
   compound_taskid_set = list(
     NULL,
     c("reference_date", "horizon")

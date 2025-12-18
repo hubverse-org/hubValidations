@@ -34,7 +34,11 @@ derived_taskids_to_na <- function(model_task, derived_task_ids) {
 #' If any `derived_task_ids` are not valid task IDs, a warning is thrown.
 #' If any `derived_task_ids` have required values, an error is thrown.
 #' @noRd
-validate_derived_task_ids <- function(derived_task_ids, config_tasks, round_id) {
+validate_derived_task_ids <- function(
+  derived_task_ids,
+  config_tasks,
+  round_id
+) {
   checkmate::assert_character(derived_task_ids, null.ok = TRUE)
   if (is.null(derived_task_ids)) {
     return(NULL)

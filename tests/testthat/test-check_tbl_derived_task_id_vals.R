@@ -7,13 +7,19 @@ test_that("check_tbl_derived_task_ids_vals works", {
   # Check should succeed
   expect_snapshot(
     check_tbl_derived_task_id_vals(
-      tbl, round_id, file_path, hub_path
+      tbl,
+      round_id,
+      file_path,
+      hub_path
     )
   )
   # Check should skip
   expect_snapshot(
     check_tbl_derived_task_id_vals(
-      tbl, round_id, file_path, hub_path,
+      tbl,
+      round_id,
+      file_path,
+      hub_path,
       derived_task_ids = NULL
     )
   )
@@ -22,7 +28,10 @@ test_that("check_tbl_derived_task_ids_vals works", {
   # Check should fail
   expect_snapshot(
     check_tbl_derived_task_id_vals(
-      tbl, round_id, file_path, hub_path
+      tbl,
+      round_id,
+      file_path,
+      hub_path
     )
   )
 })

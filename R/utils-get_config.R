@@ -18,7 +18,9 @@ get_config_derived_task_ids <- function(config_tasks, round_id = NULL) {
     return(derived_task_ids_hub)
   }
   round_idx <- hubUtils::get_round_idx(config_tasks, round_id)
-  derived_tasks_ids_round <- config_tasks[["rounds"]][[round_idx]]$derived_task_ids
+  derived_tasks_ids_round <- config_tasks[["rounds"]][[
+    round_idx
+  ]]$derived_task_ids
   if (!is.null(derived_tasks_ids_round)) {
     return(derived_tasks_ids_round)
   }

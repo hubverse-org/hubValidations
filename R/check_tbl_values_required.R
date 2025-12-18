@@ -11,8 +11,13 @@
 #' case and derived task IDs are not specified, the dependent nature of derived
 #' task ID values will result in **false validation errors when validating
 #' required values**.
-check_tbl_values_required <- function(tbl, round_id, file_path, hub_path,
-                                      derived_task_ids = get_hub_derived_task_ids(hub_path)) {
+check_tbl_values_required <- function(
+  tbl,
+  round_id,
+  file_path,
+  hub_path,
+  derived_task_ids = get_hub_derived_task_ids(hub_path)
+) {
   tbl[["value"]] <- NULL
   config_tasks <- read_config(hub_path, "tasks")
 
@@ -32,7 +37,9 @@ check_tbl_values_required <- function(tbl, round_id, file_path, hub_path,
     # To support back-compatibility and use existing infrastructure we need to:
     # 1. Determine the output types that are are being submitted
     output_types <- get_submission_required_output_types(
-      tbl, config_tasks, round_id
+      tbl,
+      config_tasks,
+      round_id
     )
     # 2. Force all output types being submitted to be required, regardless of whether
     # they are optional in the config.
@@ -79,10 +86,14 @@ check_tbl_values_required <- function(tbl, round_id, file_path, hub_path,
   )
 }
 
-check_required_output_type_by_modeling_task <- function(tbl, config_tasks,
-                                                        round_id, output_type,
-                                                        derived_task_ids,
-                                                        force_output_types) {
+check_required_output_type_by_modeling_task <- function(
+  tbl,
+  config_tasks,
+  round_id,
+  output_type,
+  derived_task_ids,
+  force_output_types
+) {
   req <- expand_model_out_grid(
     config_tasks,
     round_id = round_id,
@@ -115,7 +126,12 @@ check_required_output_type_by_modeling_task <- function(tbl, config_tasks,
     purrr::list_rbind()
 }
 
-check_modeling_task_values_required <- function(tbl, req, full, derived_task_ids) {
+check_modeling_task_values_required <- function(
+  tbl,
+  req,
+  full,
+  derived_task_ids
+) {
   # Check whether `tbl` is empty. This occurs when data has not been submitted for a
   # specific model task. There are two situations that affect how check is assessed:
   # 1. If the columns in `req` match the columns in tbl, the model task is considered
@@ -161,8 +177,10 @@ check_modeling_task_values_required <- function(tbl, req, full, derived_task_ids
     # exists in the tbl subset.
     purrr::map(
       ~ missing_required(
-        x = tbl[.x, ], mask = req_mask[.x, , drop = FALSE],
-        req, full
+        x = tbl[.x, ],
+        mask = req_mask[.x, , drop = FALSE],
+        req,
+        full
       )
     )
 
@@ -201,7 +219,8 @@ get_opt_col_list <- function(x, mask, full, req) {
       opt_val_combs,
       ~ get_opt_cols(mask, .x, all_opt_cols)
     )
-  ) %>% unique()
+  ) %>%
+    unique()
 }
 
 # Identify missing required values for optional value combinations.
@@ -216,14 +235,17 @@ missing_req_rows <- function(opt_cols, x, mask, req, full) {
   # To ensure we focus on applicable required values (which may differ across
   # modeling tasks) we first subset rows from the full combination of values that
   # match a concatenated id of optional value combinations in x.
-  applicaple_full <- dplyr::inner_join(full, unique(x[, opt_colnms]),
+  applicaple_full <- dplyr::inner_join(
+    full,
+    unique(x[, opt_colnms]),
     by = opt_colnms
   )
   # Then we subset req for only the value combinations that are applicable to the
   # values being validated. This gives a table of expected required values and
   # avoids erroneously returning missing required values that are not applicable
   # to a given model task or output type.
-  expected_req <- dplyr::inner_join(req,
+  expected_req <- dplyr::inner_join(
+    req,
     applicaple_full[, names(req)],
     by = names(req)
   ) %>%
@@ -232,7 +254,9 @@ missing_req_rows <- function(opt_cols, x, mask, req, full) {
   # Finally, we compare the expected required values for the optional value
   # combination we are validating to those in x and return any expected rows
   # that are not included in x.
-  missing <- dplyr::anti_join(expected_req, x[, names(expected_req)],
+  missing <- dplyr::anti_join(
+    expected_req,
+    x[, names(expected_req)],
     by = names(expected_req)
   )
   if (nrow(missing) != 0L) {
@@ -258,7 +282,8 @@ are_required_vals <- function(tbl, req) {
   req <- req[, names(tbl)]
 
   req_vals <- purrr::map2(
-    tbl, purrr::map(req, unique),
+    tbl,
+    purrr::map(req, unique),
     ~ .x %in% .y
   )
   do.call(cbind, req_vals)
@@ -328,13 +353,15 @@ get_required_output_types <- function(x, mask, full, req) {
   join_colnames <- names(cols)[cols]
 
   applicaple_full <- dplyr::inner_join(
-    full, unique(x[, join_colnames]),
+    full,
+    unique(x[, join_colnames]),
     by = join_colnames
   )
 
   join_colnames <- names(cols)[!cols]
   dplyr::inner_join(
-    unique(applicaple_full[, join_colnames]), req,
+    unique(applicaple_full[, join_colnames]),
+    req,
     by = join_colnames
   )[[hubUtils::std_colnames["output_type"]]] %>%
     unique()

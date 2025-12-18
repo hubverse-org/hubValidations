@@ -13,8 +13,10 @@ check_file_format <- function(file_path, hub_path, round_id) {
   if (check) {
     details <- NULL
   } else {
-    details <- cli::format_inline("Must be one of {.val {file_formats}}
-                                      not {.val {file_format}}")
+    details <- cli::format_inline(
+      "Must be one of {.val {file_formats}}
+                                      not {.val {file_format}}"
+    )
   }
 
   capture_check_cnd(

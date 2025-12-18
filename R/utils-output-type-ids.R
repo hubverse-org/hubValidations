@@ -150,8 +150,12 @@ null_output_type_ids <- function(is_required) {
 #' @returns If valid, the input `output_types` is returned. Otherwise, an error is
 #' thrown.
 #' @noRd
-validate_output_types <- function(output_types, config_tasks, round_id,
-                                  call = rlang::caller_call()) {
+validate_output_types <- function(
+  output_types,
+  config_tasks,
+  round_id,
+  call = rlang::caller_call()
+) {
   checkmate::assert_character(output_types, null.ok = TRUE)
   if (is.null(output_types)) {
     return(NULL)

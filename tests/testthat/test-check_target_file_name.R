@@ -10,7 +10,9 @@ test_that("check_target_file_name on valid hive-partitioned paths works", {
 })
 
 test_that("check_target_file_name on invalid hive-partitioned paths works", {
-  error_check <- check_target_file_name(file_path = "time-series/=/=error/good-file.csv")
+  error_check <- check_target_file_name(
+    file_path = "time-series/=/=error/good-file.csv"
+  )
   expect_s3_class(error_check, "check_error")
   expect_equal(
     cli::ansi_strip(error_check$message),

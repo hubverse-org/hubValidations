@@ -47,7 +47,10 @@ check_values_sum1 <- function(tbl) {
   group_cols <- names(tbl)[!names(tbl) %in% hubUtils::std_colnames]
   tbl[["value"]] <- as.numeric(tbl[["value"]])
 
-  check_tbl <- dplyr::group_by(tbl, dplyr::across(dplyr::all_of(group_cols))) %>%
+  check_tbl <- dplyr::group_by(
+    tbl,
+    dplyr::across(dplyr::all_of(group_cols))
+  ) %>%
     dplyr::arrange("output_type_id", .by_group = TRUE) %>%
     dplyr::summarise(sum1 = isTRUE(all.equal(sum(.data[["value"]]), 1L)))
 

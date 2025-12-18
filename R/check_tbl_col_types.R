@@ -11,26 +11,38 @@
 #'
 #' Returned object also inherits from subclass `<hub_check>`.
 #' @export
-check_tbl_col_types <- function(tbl, file_path, hub_path,
-                                output_type_id_datatype = c(
-                                  "from_config", "auto", "character",
-                                  "double", "integer",
-                                  "logical", "Date"
-                                )) {
+check_tbl_col_types <- function(
+  tbl,
+  file_path,
+  hub_path,
+  output_type_id_datatype = c(
+    "from_config",
+    "auto",
+    "character",
+    "double",
+    "integer",
+    "logical",
+    "Date"
+  )
+) {
   output_type_id_datatype <- rlang::arg_match(output_type_id_datatype)
   config_tasks <- read_config(hub_path, "tasks")
 
-  schema <- create_hub_schema(config_tasks,
+  schema <- create_hub_schema(
+    config_tasks,
     partitions = NULL,
     r_schema = TRUE,
     output_type_id_datatype = output_type_id_datatype
   )[names(tbl)]
 
-  tbl_types <- purrr::map_chr(tbl, ~ if (inherits(.x, "numeric")) {
-    typeof(.x)
-  } else {
-    paste(class(.x), collapse = "/")
-  })
+  tbl_types <- purrr::map_chr(
+    tbl,
+    ~ if (inherits(.x, "numeric")) {
+      typeof(.x)
+    } else {
+      paste(class(.x), collapse = "/")
+    }
+  )
   compare_types <- schema == tbl_types
 
   check <- all(compare_types)
@@ -40,9 +52,13 @@ check_tbl_col_types <- function(tbl, file_path, hub_path,
   } else {
     invalid_cols <- names(compare_types)[!compare_types]
     details <- paste0(
-      "{.var ", invalid_cols,
-      "} should be {.val ", schema[invalid_cols],
-      "} not {.val ", tbl_types[invalid_cols], "}"
+      "{.var ",
+      invalid_cols,
+      "} should be {.val ",
+      schema[invalid_cols],
+      "} not {.val ",
+      tbl_types[invalid_cols],
+      "}"
     ) %>%
       paste(collapse = ", ") %>%
       paste0(".") %>%

@@ -33,12 +33,17 @@
 #' validate_model_metadata(hub_path,
 #'   file_path = "team1-goodmodel.yaml"
 #' )
-validate_model_metadata <- function(hub_path, file_path, round_id = "default",
-                                    validations_cfg_path = NULL) {
+validate_model_metadata <- function(
+  hub_path,
+  file_path,
+  round_id = "default",
+  validations_cfg_path = NULL
+) {
   checks <- new_hub_validations()
 
   checks$metadata_schema_exists <- try_check(
-    check_metadata_schema_exists(hub_path), file_path
+    check_metadata_schema_exists(hub_path),
+    file_path
   )
   if (is_any_error(checks$metadata_schema_exists)) {
     return(checks)
@@ -48,19 +53,25 @@ validate_model_metadata <- function(hub_path, file_path, round_id = "default",
     check_metadata_file_exists(
       file_path = file_path,
       hub_path = hub_path
-    ), file_path
+    ),
+    file_path
   )
   if (is_any_error(checks$metadata_file_exists)) {
     return(checks)
   }
 
   checks$metadata_file_ext <- try_check(
-    check_metadata_file_ext(file_path), file_path
+    check_metadata_file_ext(file_path),
+    file_path
   )
   checks$metadata_file_location <- try_check(
-    check_metadata_file_location(file_path), file_path
+    check_metadata_file_location(file_path),
+    file_path
   )
-  if (is_any_error(checks$metadata_file_location) || is_any_error(checks$metadata_file_ext)) {
+  if (
+    is_any_error(checks$metadata_file_location) ||
+      is_any_error(checks$metadata_file_ext)
+  ) {
     return(checks)
   }
 
@@ -68,7 +79,8 @@ validate_model_metadata <- function(hub_path, file_path, round_id = "default",
     check_metadata_matches_schema(
       file_path = file_path,
       hub_path = hub_path
-    ), file_path
+    ),
+    file_path
   )
   if (is_any_error(checks$metadata_matches_schema)) {
     return(checks)
@@ -79,13 +91,16 @@ validate_model_metadata <- function(hub_path, file_path, round_id = "default",
     check_metadata_file_name(
       file_path = file_path,
       hub_path = hub_path
-    ), file_path
+    ),
+    file_path
   )
   if (is_any_error(checks$metadata_file_name)) {
     return(checks)
   }
 
-  custom_checks <- execute_custom_checks(validations_cfg_path = validations_cfg_path)
+  custom_checks <- execute_custom_checks(
+    validations_cfg_path = validations_cfg_path
+  )
   checks <- combine(checks, custom_checks)
 
   checks

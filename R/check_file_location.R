@@ -24,8 +24,10 @@ check_file_location <- function(file_path) {
     check = check,
     file_path = file_path,
     msg_subject = "File directory name",
-    msg_attribute = cli::format_inline("{.var model_id}
-                                           metadata in file name."),
+    msg_attribute = cli::format_inline(
+      "{.var model_id}
+                                           metadata in file name."
+    ),
     msg_verbs = c("matches", "must match"),
     details = details
   )

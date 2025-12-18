@@ -9,16 +9,23 @@ test_that("get_tbl_compound_taskid_set works", {
   )
   config_tasks <- read_config(hub_path, "tasks")
 
-
   expect_snapshot(
-    get_tbl_compound_taskid_set(tbl, config_tasks, round_id,
-      compact = TRUE, error = TRUE
+    get_tbl_compound_taskid_set(
+      tbl,
+      config_tasks,
+      round_id,
+      compact = TRUE,
+      error = TRUE
     )
   )
 
   expect_snapshot(
-    get_tbl_compound_taskid_set(tbl, config_tasks, round_id,
-      compact = FALSE, error = TRUE
+    get_tbl_compound_taskid_set(
+      tbl,
+      config_tasks,
+      round_id,
+      compact = FALSE,
+      error = TRUE
     )
   )
 })
@@ -36,27 +43,43 @@ test_that("get_tbl_compound_taskid_set errors correctly", {
 
   tbl_error_dups[which(tbl_error_dups$output_type_id == "2"), "horizon"] <- "0"
   expect_snapshot(
-    get_tbl_compound_taskid_set(tbl_error_dups, config_tasks, round_id,
-      compact = TRUE, error = TRUE
+    get_tbl_compound_taskid_set(
+      tbl_error_dups,
+      config_tasks,
+      round_id,
+      compact = TRUE,
+      error = TRUE
     ),
     error = TRUE
   )
 
   expect_snapshot(
-    get_tbl_compound_taskid_set(tbl_error_dups, config_tasks, round_id,
-      compact = TRUE, error = FALSE
+    get_tbl_compound_taskid_set(
+      tbl_error_dups,
+      config_tasks,
+      round_id,
+      compact = TRUE,
+      error = FALSE
     )
   )
 })
 
 test_that("test get_tbl_compound_taskid_set utilities", {
-  x <- structure(list(
-    reference_date = TRUE, target = FALSE, horizon = FALSE,
-    location = TRUE, target_end_date = FALSE
-  ), class = c(
-    "tbl_df",
-    "tbl", "data.frame"
-  ), row.names = c(NA, -1L))
+  x <- structure(
+    list(
+      reference_date = TRUE,
+      target = FALSE,
+      horizon = FALSE,
+      location = TRUE,
+      target_end_date = FALSE
+    ),
+    class = c(
+      "tbl_df",
+      "tbl",
+      "data.frame"
+    ),
+    row.names = c(NA, -1L)
+  )
 
   expect_equal(
     true_to_names_vector(x, cols = "location"),

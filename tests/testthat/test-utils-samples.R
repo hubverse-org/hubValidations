@@ -46,25 +46,26 @@ test_that("spl_hash_tbl for compiling sample properties works", {
   # samples above
   expect_equal(non_compound_taskid_hash, spl_1_ctid_hash_tbl$hash_non_comp_tid)
 
-
   # Test that the function detects inconsistencies in a
   # non_compound_taskid_set var ----
   spl_1_nctid <- tbl_spl[tbl_spl$output_type_id == "1", ]
   # Introduce inconsistency in non_compound_task_id variable `horizon` of sample 1
   spl_1_nctid$horizon[1] <- "1"
   spl_1_nctid_hash_tbl <- spl_hash_tbl(spl_1_nctid, round_id, config_tasks)
-  expect_false(spl_1_nctid_hash_tbl$hash_non_comp_tid == non_compound_taskid_hash)
+  expect_false(
+    spl_1_nctid_hash_tbl$hash_non_comp_tid == non_compound_taskid_hash
+  )
   # The sample still only correponds to a single compound_idx
   expect_equal(spl_1_nctid_hash_tbl$n_compound_idx, 1L)
   # The most frequent compound_idx is still the same as before
   expect_equal(spl_1_nctid_hash_tbl$compound_idx, "2")
 
-
   # Check that function returns zero row and column dataframes when tbl
   # contains no samples ----
   no_spl_hash <- spl_hash_tbl(
     tbl[tbl$output_type != "sample", ],
-    round_id, config_tasks
+    round_id,
+    config_tasks
   )
   expect_equal(nrow(no_spl_hash), 0L)
   expect_equal(ncol(no_spl_hash), 0L)

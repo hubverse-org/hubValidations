@@ -28,7 +28,8 @@ test_that("check_tbl_values works", {
 })
 
 
-test_that("check_tbl_values consistent across numeric & character output type id columns & does not ignore trailing zeros", { # nolint: line_length_linter
+test_that("check_tbl_values consistent across numeric & character output type id columns & does not ignore trailing zeros", {
+  # nolint: line_length_linter
   # Hub with both character & numeric output type ids & trailing zeros in
   # numeric output type id
   hub_path <- test_path("testdata/hub-chr")
@@ -54,7 +55,6 @@ test_that("check_tbl_values consistent across numeric & character output type id
     c("check_error", "hub_check", "rlang_error", "error", "condition"),
     exact = TRUE
   )
-
 
   # File with only numeric output type ids.
   # Contains Number that is coerced
@@ -121,7 +121,6 @@ test_that("check_tbl_values consistent across numeric & character output type id
     exact = TRUE
   )
 
-
   # File with only numeric output type ids.
   # Contains Number that is coerced
   # to 0.1 by `as.character` as well as by `arrow::cast`.
@@ -185,7 +184,10 @@ test_that("check_tbl_values works with v3 spec samples", {
     )
   )
 
-  tbl[utils::head(which(tbl$output_type == "sample"), 2), "horizon"] <- c("11", "12")
+  tbl[utils::head(which(tbl$output_type == "sample"), 2), "horizon"] <- c(
+    "11",
+    "12"
+  )
   expect_snapshot(
     check_tbl_values(
       tbl = tbl,
@@ -210,16 +212,28 @@ test_that("Ignoring derived_task_ids in check_tbl_values works", {
   # `derived_task_ids`.
   tbl[1, "target_end_date"] <- "random_date"
   expect_snapshot(
-    check_tbl_values(tbl, round_id, file_path, hub_path,
+    check_tbl_values(
+      tbl,
+      round_id,
+      file_path,
+      hub_path,
       derived_task_ids = "target_end_date"
     )
   )
   # Check that ignoring derived task ids returns same result as not ignoring.
   expect_equal(
-    check_tbl_values(tbl, round_id, file_path, hub_path,
+    check_tbl_values(
+      tbl,
+      round_id,
+      file_path,
+      hub_path,
       derived_task_ids = "target_end_date"
     ),
-    check_tbl_values(tbl_orig, round_id, file_path, hub_path,
+    check_tbl_values(
+      tbl_orig,
+      round_id,
+      file_path,
+      hub_path,
       derived_task_ids = "target_end_date"
     )
   )
@@ -229,21 +243,37 @@ test_that("Ignoring derived_task_ids in check_tbl_values works", {
   # Trigger invalid value combination error
   tbl[2, "output_type"] <- tbl_orig[2, "output_type"] <- "pmf"
   expect_snapshot(
-    check_tbl_values(tbl, round_id, file_path, hub_path,
+    check_tbl_values(
+      tbl,
+      round_id,
+      file_path,
+      hub_path,
       derived_task_ids = "target_end_date"
     )
   )
   expect_snapshot(
-    check_tbl_values(tbl, round_id, file_path, hub_path,
+    check_tbl_values(
+      tbl,
+      round_id,
+      file_path,
+      hub_path,
       derived_task_ids = "target_end_date"
     )$error_tbl
   )
 
   expect_equal(
-    check_tbl_values(tbl, round_id, file_path, hub_path,
+    check_tbl_values(
+      tbl,
+      round_id,
+      file_path,
+      hub_path,
       derived_task_ids = "target_end_date"
     ),
-    check_tbl_values(tbl_orig, round_id, file_path, hub_path,
+    check_tbl_values(
+      tbl_orig,
+      round_id,
+      file_path,
+      hub_path,
       derived_task_ids = "target_end_date"
     )
   )

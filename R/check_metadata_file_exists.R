@@ -9,7 +9,8 @@
 #' @export
 check_metadata_file_exists <- function(hub_path = ".", file_path) {
   check_file_exists(
-    hub_path = hub_path, subdir = "model-metadata",
+    hub_path = hub_path,
+    subdir = "model-metadata",
     file_path = file_path
   )
 }

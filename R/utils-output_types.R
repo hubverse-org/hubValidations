@@ -6,8 +6,7 @@ get_round_required_output_type_names <- function(config_tasks, round_id) {
   names(is_required)[is_required] |> unique()
 }
 
-get_submission_required_output_types <- function(tbl, config_tasks,
-                                                 round_id) {
+get_submission_required_output_types <- function(tbl, config_tasks, round_id) {
   tbl_output_types <- get_tbl_output_types(tbl)
   required_output_types <- get_round_required_output_type_names(
     config_tasks,

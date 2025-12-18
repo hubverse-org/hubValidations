@@ -19,10 +19,15 @@
 #' Returned object also inherits from subclass `<hub_check>`.
 #' @export
 check_tbl_derived_task_id_vals <- function(
-    tbl, round_id, file_path, hub_path,
-    derived_task_ids = get_hub_derived_task_ids(
-      hub_path, round_id
-    )) {
+  tbl,
+  round_id,
+  file_path,
+  hub_path,
+  derived_task_ids = get_hub_derived_task_ids(
+    hub_path,
+    round_id
+  )
+) {
   if (is.null(derived_task_ids)) {
     return(
       capture_check_info(
@@ -40,7 +45,9 @@ check_tbl_derived_task_id_vals <- function(
   )[derived_task_ids]
 
   setdiff_vals <- purrr::map2(
-    tbl[derived_task_ids], derived_task_id_vals, setdiff
+    tbl[derived_task_ids],
+    derived_task_id_vals,
+    setdiff
   )
 
   invalid_derived_task_ids <- lengths(setdiff_vals) > 0L
@@ -56,8 +63,11 @@ check_tbl_derived_task_id_vals <- function(
       seq_along(invalid_vals),
       \(.x) {
         paste0(
-          "{.arg {names(invalid_vals)[", .x,
-          "]}}: {.val {invalid_vals[[", .x, "]]}}"
+          "{.arg {names(invalid_vals)[",
+          .x,
+          "]}}: {.val {invalid_vals[[",
+          .x,
+          "]]}}"
         )
       }
     )

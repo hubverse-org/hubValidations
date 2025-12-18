@@ -14,7 +14,6 @@ test_that("non-hive valid extensions return check_success", {
     "Target data file extension is valid."
   )
 
-
   parquet_ok <- check_target_file_ext_valid("time-series.parquet")
   expect_s3_class(parquet_ok, "check_success")
   expect_equal(

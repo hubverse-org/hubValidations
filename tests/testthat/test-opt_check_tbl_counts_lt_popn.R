@@ -31,19 +31,28 @@ test_that("opt_check_tbl_counts_lt_popn fails correctly", {
   )
 
   expect_snapshot(
-    opt_check_tbl_counts_lt_popn(tbl, file_path, hub_path,
+    opt_check_tbl_counts_lt_popn(
+      tbl,
+      file_path,
+      hub_path,
       popn_file_path = "random/path.csv"
     ),
     error = TRUE
   )
   expect_snapshot(
-    opt_check_tbl_counts_lt_popn(tbl, file_path, hub_path,
+    opt_check_tbl_counts_lt_popn(
+      tbl,
+      file_path,
+      hub_path,
       location_col = "random_col"
     ),
     error = TRUE
   )
   expect_snapshot(
-    opt_check_tbl_counts_lt_popn(tbl, file_path, hub_path,
+    opt_check_tbl_counts_lt_popn(
+      tbl,
+      file_path,
+      hub_path,
       popn_col = "random_col"
     ),
     error = TRUE

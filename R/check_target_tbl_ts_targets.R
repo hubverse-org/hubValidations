@@ -16,11 +16,15 @@
 #' @inherit check_tbl_colnames params return
 #' @inheritParams hubData::get_target_path
 #' @export
-check_target_tbl_ts_targets <- function(target_tbl,
-                                        target_type = c(
-                                          "time-series", "oracle-output"
-                                        ),
-                                        file_path, hub_path) {
+check_target_tbl_ts_targets <- function(
+  target_tbl,
+  target_type = c(
+    "time-series",
+    "oracle-output"
+  ),
+  file_path,
+  hub_path
+) {
   target_type <- rlang::arg_match(target_type)
   if (target_type == "oracle-output") {
     return(
@@ -105,11 +109,17 @@ check_target_tbl_ts_targets <- function(target_tbl,
   capture_check_cnd(
     check = check,
     file_path = file_path,
-    msg_subject = cli::format_inline("{.field time-series} {cli::qty(length(ts_targets))} target{?s}"),
+    msg_subject = cli::format_inline(
+      "{.field time-series} {cli::qty(length(ts_targets))} target{?s}"
+    ),
     msg_attribute = "",
     msg_verbs = c(
-      cli::format_inline("{cli::qty(length(ts_targets))} {?is/are} {?all }valid."),
-      cli::format_inline("{cli::qty(length(ts_targets))} {?is/are} not {?all }valid.")
+      cli::format_inline(
+        "{cli::qty(length(ts_targets))} {?is/are} {?all }valid."
+      ),
+      cli::format_inline(
+        "{cli::qty(length(ts_targets))} {?is/are} not {?all }valid."
+      )
     ),
     details = details,
     error = TRUE

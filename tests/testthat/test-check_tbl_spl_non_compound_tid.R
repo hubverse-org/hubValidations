@@ -11,17 +11,21 @@ test_that("check_tbl_spl_non_compound_tid works", {
     check_tbl_spl_non_compound_tid(tbl, round_id, file_path, hub_path)
   )
 
-
-  tbl_error <- tbl[-c(
-    which(tbl$output_type == "sample" & tbl$output_type_id == "1")[1],
-    which(tbl$output_type == "sample" & tbl$output_type_id == "102")[1]
-  ), ]
+  tbl_error <- tbl[
+    -c(
+      which(tbl$output_type == "sample" & tbl$output_type_id == "1")[1],
+      which(tbl$output_type == "sample" & tbl$output_type_id == "102")[1]
+    ),
+  ]
 
   expect_snapshot(
     check_tbl_spl_non_compound_tid(tbl_error, round_id, file_path, hub_path)
   )
   error_check <- check_tbl_spl_non_compound_tid(
-    tbl_error, round_id, file_path, hub_path
+    tbl_error,
+    round_id,
+    file_path,
+    hub_path
   )
 
   expect_snapshot(error_check$errors)
@@ -64,7 +68,11 @@ test_that("Overriding compound_taskid_set in check_tbl_spl_compound_tid works", 
   # Validation providing coarser compound taskid set consistent with the data
   # also succeeds.
   expect_snapshot(
-    check_tbl_spl_non_compound_tid(tbl_coarse, round_id, file_path, hub_path,
+    check_tbl_spl_non_compound_tid(
+      tbl_coarse,
+      round_id,
+      file_path,
+      hub_path,
       compound_taskid_set = compound_taskid_set
     )
   )
@@ -83,16 +91,28 @@ test_that("Ignoring derived_task_ids in check_tbl_spl_compound_tid works", {
   # `derived_task_ids`.
   tbl[1, "target_end_date"] <- "random_date"
   expect_snapshot(
-    check_tbl_spl_non_compound_tid(tbl, round_id, file_path, hub_path,
+    check_tbl_spl_non_compound_tid(
+      tbl,
+      round_id,
+      file_path,
+      hub_path,
       derived_task_ids = "target_end_date"
     )
   )
   # Check that ignoring derived task ids returns same result as not ignoring.
   expect_equal(
-    check_tbl_spl_non_compound_tid(tbl, round_id, file_path, hub_path,
+    check_tbl_spl_non_compound_tid(
+      tbl,
+      round_id,
+      file_path,
+      hub_path,
       derived_task_ids = "target_end_date"
     ),
-    check_tbl_spl_non_compound_tid(tbl_orig, round_id, file_path, hub_path,
+    check_tbl_spl_non_compound_tid(
+      tbl_orig,
+      round_id,
+      file_path,
+      hub_path,
       derived_task_ids = "target_end_date"
     )
   )

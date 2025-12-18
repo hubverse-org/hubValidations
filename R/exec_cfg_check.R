@@ -7,16 +7,19 @@
 #' @param caller_call [call] the call of the calling function.
 #'   This is usually generated from `rlang::caller_call()`
 #' @noRd
-exec_cfg_check <- function(check_name, validations_cfg, caller_env, caller_call) {
+exec_cfg_check <- function(
+  check_name,
+  validations_cfg,
+  caller_env,
+  caller_call
+) {
   fn_cfg <- validations_cfg[[check_name]]
   from_pkg <- !is.null(fn_cfg[["pkg"]])
   from_src <- !is.null(fn_cfg[["source"]])
   if (from_pkg) {
     # if the function is from a package, assume the package is installed and
     # extract it from that package.
-    fn <- get(fn_cfg[["fn"]],
-      envir = getNamespace(fn_cfg[["pkg"]])
-    )
+    fn <- get(fn_cfg[["fn"]], envir = getNamespace(fn_cfg[["pkg"]]))
   } else if (from_src) {
     # TODO: Validate source script.
     # if it's a source script, we need to source the script locally to make
@@ -27,9 +30,12 @@ exec_cfg_check <- function(check_name, validations_cfg, caller_env, caller_call)
     fn <- get(fn_cfg[["fn"]])
   } else {
     path <- rlang::env_get(env = caller_env, nm = "validations_cfg_path") # nolint
-    msg <- c("Custom validation function {.var {check_name}}",
-             "must specify either a {.arg pkg} or {.arg script} in {.path {path}}")
-    cli::cli_abort(paste(msg, collapse = " "),
+    msg <- c(
+      "Custom validation function {.var {check_name}}",
+      "must specify either a {.arg pkg} or {.arg script} in {.path {path}}"
+    )
+    cli::cli_abort(
+      paste(msg, collapse = " "),
       call = caller_call,
       class = "custom_validation_cfg_malformed"
     )

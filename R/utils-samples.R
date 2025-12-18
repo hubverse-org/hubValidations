@@ -23,10 +23,16 @@
 #' - the sample idx
 #' - a hash of the values of non_compound_taskids in each sample
 #' @noRd
-spl_hash_tbl <- function(tbl, round_id, config_tasks, compound_taskid_set = NULL,
-                         derived_task_ids = get_config_derived_task_ids(
-                           config_tasks, round_id
-                         )) {
+spl_hash_tbl <- function(
+  tbl,
+  round_id,
+  config_tasks,
+  compound_taskid_set = NULL,
+  derived_task_ids = get_config_derived_task_ids(
+    config_tasks,
+    round_id
+  )
+) {
   tbl <- tbl[tbl$output_type == "sample", names(tbl) != "value"]
   if (!is.null(derived_task_ids)) {
     tbl[, derived_task_ids] <- NA_character_
@@ -78,9 +84,11 @@ spl_hash_tbl <- function(tbl, round_id, config_tasks, compound_taskid_set = NULL
   }
 
   purrr::map2(
-    mt_tbls, mt_compound_taskids,
+    mt_tbls,
+    mt_compound_taskids,
     ~ get_mt_spl_hash_tbl(
-      tbl = .x, compound_taskids = .y,
+      tbl = .x,
+      compound_taskids = .y,
       round_task_ids = hubUtils::get_round_task_id_names(
         config_tasks,
         round_id
@@ -159,8 +167,12 @@ sample_properties_tbl <- function(x, non_compound_taskids) {
 
 # Get output type IDs (`sample_idx`s`) associated with a given hash from the
 # sample hash table
-get_hash_out_type_ids <- function(hash_tbl, hash, hash_type = "hash_non_comp_tid",
-                                  n = NULL) {
+get_hash_out_type_ids <- function(
+  hash_tbl,
+  hash,
+  hash_type = "hash_non_comp_tid",
+  n = NULL
+) {
   has_hash <- hash_tbl[[hash_type]] %in% hash
   out <- hash_tbl$output_type_id[has_hash]
 
@@ -258,13 +270,22 @@ skip_v3_spl_check <- function(file_path, call = rlang::caller_call()) {
 #' @returns A list of output type data frames with sample IDs added to the output
 #' type ID column.
 #' @noRd
-add_sample_idx <- function(x, round_config, config_tid, compound_taskid_set = NULL) {
-  if (!is.null(compound_taskid_set) && length(compound_taskid_set) != length(x)) {
+add_sample_idx <- function(
+  x,
+  round_config,
+  config_tid,
+  compound_taskid_set = NULL
+) {
+  if (
+    !is.null(compound_taskid_set) && length(compound_taskid_set) != length(x)
+  ) {
     cli::cli_abort(
-      c("x" = "The length of {.var compound_taskid_set}
+      c(
+        "x" = "The length of {.var compound_taskid_set}
       ({.val {length(compound_taskid_set)}})
       must match the number of modeling tasks ({.val {length(x)}})
-        in the round."),
+        in the round."
+      ),
       call = rlang::caller_call()
     )
   }
@@ -274,7 +295,9 @@ add_sample_idx <- function(x, round_config, config_tid, compound_taskid_set = NU
     # Check that the modeling task config has a v3 sample configuration
     config_has_v3_spl <- purrr::pluck(
       round_config[["model_tasks"]][[i]],
-      "output_type", "sample", "output_type_id_params"
+      "output_type",
+      "sample",
+      "output_type_id_params"
     ) %>%
       is.null() %>%
       isFALSE()
@@ -316,8 +339,14 @@ add_sample_idx <- function(x, round_config, config_tid, compound_taskid_set = NU
 #'
 #' @returns A data frame with sample IDs added to the output type ID column.
 #' @noRd
-add_mt_sample_idx <- function(x, config, start_idx = 0L, config_tid, comp_tids = NULL,
-                              call = rlang::caller_call(2)) {
+add_mt_sample_idx <- function(
+  x,
+  config,
+  start_idx = 0L,
+  config_tid,
+  comp_tids = NULL,
+  call = rlang::caller_call(2)
+) {
   x_names <- names(x)
   task_ids <- setdiff(names(x), hubUtils::std_colnames)
 
@@ -365,7 +394,6 @@ add_mt_sample_idx <- function(x, config, start_idx = 0L, config_tid, comp_tids =
   }
   # subset to compound task IDs that are present in spl
   comp_tids <- intersect(comp_tids, names(spl))
-
 
   # Create a unique sample ID for each unique combinations of values of compound
   # task ID set columns and join to the subset of sample output type rows.

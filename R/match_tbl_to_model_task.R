@@ -22,12 +22,17 @@
 #'   round_id = "2022-10-22",
 #'   output_types = "sample"
 #' )
-match_tbl_to_model_task <- function(tbl, config_tasks, round_id,
-                                    output_types = NULL,
-                                    derived_task_ids = get_config_derived_task_ids(
-                                      config_tasks, round_id
-                                    ),
-                                    all_character = TRUE) {
+match_tbl_to_model_task <- function(
+  tbl,
+  config_tasks,
+  round_id,
+  output_types = NULL,
+  derived_task_ids = get_config_derived_task_ids(
+    config_tasks,
+    round_id
+  ),
+  all_character = TRUE
+) {
   if (hubUtils::is_v3_config(config_tasks)) {
     tbl[tbl$output_type == "sample", "output_type_id"] <- NA
   }
@@ -62,6 +67,7 @@ join_tbl_to_model_task <- function(full, tbl, subset_to_tbl_cols = TRUE) {
         match_tbl <- match_tbl[, join_cols]
       }
       match_tbl
-    }, join_cols = join_cols
+    },
+    join_cols = join_cols
   )
 }

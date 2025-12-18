@@ -1,5 +1,9 @@
-simple_example_check <- function(file_path = "test/file.csv", check, error,
-                                 exec_error = FALSE) {
+simple_example_check <- function(
+  file_path = "test/file.csv",
+  check,
+  error,
+  exec_error = FALSE
+) {
   if (error) {
     details <- "Early return"
   } else {

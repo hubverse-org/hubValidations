@@ -18,9 +18,14 @@
 #' See [hubverse documentation on samples](https://docs.hubverse.io/en/latest/user-guide/sample-output-type.html)
 #' for more details.
 #' @export
-check_tbl_spl_compound_tid <- function(tbl, round_id, file_path, hub_path,
-                                       compound_taskid_set = NULL,
-                                       derived_task_ids = get_hub_derived_task_ids(hub_path, round_id)) {
+check_tbl_spl_compound_tid <- function(
+  tbl,
+  round_id,
+  file_path,
+  hub_path,
+  compound_taskid_set = NULL,
+  derived_task_ids = get_hub_derived_task_ids(hub_path, round_id)
+) {
   if (!is.null(compound_taskid_set) && isTRUE(is.na(compound_taskid_set))) {
     cli::cli_abort("Valid {.var compound_taskid_set} must be provided.")
   }
@@ -32,11 +37,17 @@ check_tbl_spl_compound_tid <- function(tbl, round_id, file_path, hub_path,
     )
   }
 
-  if (isFALSE(has_spls_tbl(tbl)) || isFALSE(hubUtils::is_v3_config(config_tasks))) {
+  if (
+    isFALSE(has_spls_tbl(tbl)) || isFALSE(hubUtils::is_v3_config(config_tasks))
+  ) {
     return(skip_v3_spl_check(file_path))
   }
 
-  hash_tbl <- spl_hash_tbl(tbl, round_id, config_tasks, compound_taskid_set,
+  hash_tbl <- spl_hash_tbl(
+    tbl,
+    round_id,
+    config_tasks,
+    compound_taskid_set,
     derived_task_ids = derived_task_ids
   )
   n_tbl <- hash_tbl[hash_tbl$n_compound_idx > 1L, ]
@@ -48,7 +59,11 @@ check_tbl_spl_compound_tid <- function(tbl, round_id, file_path, hub_path,
     errors <- NULL
   } else {
     errors <- comptid_mismatch(
-      n_tbl, tbl, config_tasks, round_id, compound_taskid_set
+      n_tbl,
+      tbl,
+      config_tasks,
+      round_id,
+      compound_taskid_set
     )
     output_type_ids <- purrr::map(errors, ~ .x$output_type_id) %>% # nolint: object_usage_linter
       purrr::flatten_chr() %>%
@@ -74,7 +89,13 @@ check_tbl_spl_compound_tid <- function(tbl, round_id, file_path, hub_path,
   )
 }
 
-comptid_mismatch <- function(n_tbl, tbl, config_tasks, round_id, compound_taskid_set) {
+comptid_mismatch <- function(
+  n_tbl,
+  tbl,
+  config_tasks,
+  round_id,
+  compound_taskid_set
+) {
   tbl <- tbl[tbl$output_type == "sample", ]
   purrr::map(
     seq_along(n_tbl$output_type_id),

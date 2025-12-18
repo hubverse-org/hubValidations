@@ -5,8 +5,13 @@
 #' @inheritParams expand_model_out_grid
 #' @inherit check_tbl_colnames return
 #' @export
-check_tbl_values <- function(tbl, round_id, file_path, hub_path,
-                             derived_task_ids = get_hub_derived_task_ids(hub_path, round_id)) {
+check_tbl_values <- function(
+  tbl,
+  round_id,
+  file_path,
+  hub_path,
+  derived_task_ids = get_hub_derived_task_ids(hub_path, round_id)
+) {
   config_tasks <- read_config(hub_path, "tasks")
 
   valid_tbl <- tbl %>%
@@ -14,7 +19,8 @@ check_tbl_values <- function(tbl, round_id, file_path, hub_path,
     split(f = tbl$output_type) %>%
     purrr::imap(
       ~ check_values_by_output_type(
-        tbl = .x, output_type = .y,
+        tbl = .x,
+        output_type = .y,
         config_tasks = config_tasks,
         round_id = round_id,
         derived_task_ids = derived_task_ids
@@ -29,7 +35,9 @@ check_tbl_values <- function(tbl, round_id, file_path, hub_path,
     error_tbl <- NULL
   } else {
     error_summary <- summarise_invalid_values(
-      valid_tbl, config_tasks, round_id,
+      valid_tbl,
+      config_tasks,
+      round_id,
       derived_task_ids
     )
     details <- error_summary$msg
@@ -58,8 +66,13 @@ check_tbl_values <- function(tbl, round_id, file_path, hub_path,
   )
 }
 
-check_values_by_output_type <- function(tbl, output_type, config_tasks, round_id,
-                                        derived_task_ids = NULL) {
+check_values_by_output_type <- function(
+  tbl,
+  output_type,
+  config_tasks,
+  round_id,
+  derived_task_ids = NULL
+) {
   if (!is.null(derived_task_ids)) {
     tbl[, derived_task_ids] <- NA_character_
   }
@@ -85,7 +98,8 @@ check_values_by_output_type <- function(tbl, output_type, config_tasks, round_id
   }
 
   dplyr::left_join(
-    tbl, accepted_vals,
+    tbl,
+    accepted_vals,
     by = setdiff(names(tbl), c("value", "rowid"))
   )
 }
@@ -97,18 +111,24 @@ check_values_by_output_type <- function(tbl, output_type, config_tasks, round_id
 # First we report any invalid values in the tbl that do not match any values in the
 # config. Second we report any rows that contain valid values but in invalid
 # combinations.
-summarise_invalid_values <- function(valid_tbl, config_tasks, round_id,
-                                     derived_task_ids) {
+summarise_invalid_values <- function(
+  valid_tbl,
+  config_tasks,
+  round_id,
+  derived_task_ids
+) {
   # Chack for invalid values
   cols <- setdiff(names(valid_tbl), c("value", "valid", "rowid"))
   uniq_tbl <- purrr::map(valid_tbl[cols], unique)
   uniq_config <- get_round_config_values(
-    config_tasks, round_id,
+    config_tasks,
+    round_id,
     derived_task_ids
   )[cols]
 
   invalid_vals <- purrr::map2(
-    uniq_tbl, uniq_config,
+    uniq_tbl,
+    uniq_config,
     ~ .x[!.x %in% .y]
   ) %>%
     purrr::compact()
