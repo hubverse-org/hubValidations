@@ -36,14 +36,22 @@
 #' hub_path <- system.file("testhubs/simple", package = "hubValidations")
 #' file_path <- "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
 #' validate_model_data(hub_path, file_path)
-validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
-                                output_type_id_datatype = c(
-                                  "from_config", "auto", "character",
-                                  "double", "integer",
-                                  "logical", "Date"
-                                ),
-                                validations_cfg_path = NULL,
-                                derived_task_ids = NULL) {
+validate_model_data <- function(
+  hub_path,
+  file_path,
+  round_id_col = NULL,
+  output_type_id_datatype = c(
+    "from_config",
+    "auto",
+    "character",
+    "double",
+    "integer",
+    "logical",
+    "Date"
+  ),
+  validations_cfg_path = NULL,
+  derived_task_ids = NULL
+) {
   checks <- new_hub_validations()
 
   file_meta <- parse_file_name(file_path)
@@ -55,7 +63,8 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
     check_file_read(
       file_path = file_path,
       hub_path = hub_path
-    ), file_path
+    ),
+    file_path
   )
   if (is_any_error(checks$file_read)) {
     return(checks)
@@ -86,7 +95,8 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
       round_id_col = round_id_col,
       file_path = file_path,
       hub_path = hub_path
-    ), file_path
+    ),
+    file_path
   )
 
   # check_valid_round_id_col is run at the top of this function and if it does
@@ -98,7 +108,8 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
       round_id_col = round_id_col,
       file_path = file_path,
       hub_path = hub_path
-    ), file_path
+    ),
+    file_path
   )
   if (is_any_error(checks$unique_round_id)) {
     return(checks)
@@ -110,7 +121,8 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
       round_id_col = round_id_col,
       file_path = file_path,
       hub_path = hub_path
-    ), file_path
+    ),
+    file_path
   )
   if (is_any_error(checks$match_round_id)) {
     return(checks)
@@ -119,7 +131,8 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
   # Get derived task IDs if not specified
   if (is.null(derived_task_ids)) {
     derived_task_ids <- get_hub_derived_task_ids(
-      hub_path, round_id
+      hub_path,
+      round_id
     )
   } else {
     derived_task_ids <- validate_derived_task_ids(
@@ -136,7 +149,8 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
       round_id = round_id,
       file_path = file_path,
       hub_path = hub_path
-    ), file_path
+    ),
+    file_path
   )
   if (is_any_error(checks$colnames)) {
     return(checks)
@@ -148,7 +162,8 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
       file_path = file_path,
       hub_path = hub_path,
       output_type_id_datatype = output_type_id_datatype
-    ), file_path
+    ),
+    file_path
   )
 
   # -- Row level checks ----
@@ -164,7 +179,8 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
       file_path = file_path,
       hub_path = hub_path,
       derived_task_ids = derived_task_ids
-    ), file_path
+    ),
+    file_path
   )
   if (is_any_error(checks$valid_vals)) {
     return(checks)
@@ -177,7 +193,8 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
       file_path = file_path,
       hub_path = hub_path,
       derived_task_ids = derived_task_ids
-    ), file_path
+    ),
+    file_path
   )
 
   checks$rows_unique <- try_check(
@@ -185,7 +202,8 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
       tbl_chr,
       file_path = file_path,
       hub_path = hub_path
-    ), file_path
+    ),
+    file_path
   )
 
   checks$req_vals <- try_check(
@@ -195,7 +213,8 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
       file_path = file_path,
       hub_path = hub_path,
       derived_task_ids = derived_task_ids
-    ), file_path
+    ),
+    file_path
   )
 
   # -- Value column checks ----
@@ -206,7 +225,8 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
       file_path = file_path,
       hub_path = hub_path,
       derived_task_ids = derived_task_ids
-    ), file_path
+    ),
+    file_path
   )
 
   checks$value_col_non_desc <- try_check(
@@ -216,14 +236,16 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
       hub_path = hub_path,
       round_id = round_id,
       derived_task_ids = derived_task_ids
-    ), file_path
+    ),
+    file_path
   )
 
   checks$value_col_sum1 <- try_check(
     check_tbl_value_col_sum1(
       tbl,
       file_path = file_path
-    ), file_path
+    ),
+    file_path
   )
 
   # -- v3 sample checks ----
@@ -235,7 +257,8 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
         file_path = file_path,
         hub_path = hub_path,
         derived_task_ids = derived_task_ids
-      ), file_path
+      ),
+      file_path
     )
     if (is_any_error(checks$spl_compound_taskid_set)) {
       return(checks)
@@ -250,7 +273,8 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
         hub_path = hub_path,
         compound_taskid_set = compound_taskid_set,
         derived_task_ids = derived_task_ids
-      ), file_path
+      ),
+      file_path
     )
     if (is_any_error(checks$spl_compound_tid)) {
       return(checks)
@@ -263,7 +287,8 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
         hub_path = hub_path,
         compound_taskid_set = compound_taskid_set,
         derived_task_ids = derived_task_ids
-      ), file_path
+      ),
+      file_path
     )
     if (is_any_error(checks$spl_non_compound_tid)) {
       return(checks)
@@ -276,7 +301,8 @@ validate_model_data <- function(hub_path, file_path, round_id_col = NULL,
         hub_path = hub_path,
         compound_taskid_set = compound_taskid_set,
         derived_task_ids = derived_task_ids
-      ), file_path
+      ),
+      file_path
     )
   }
 

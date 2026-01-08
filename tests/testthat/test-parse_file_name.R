@@ -15,7 +15,6 @@ test_that("parse_file_name works", {
     )
   )
 
-
   expect_snapshot(
     parse_file_name(
       "hub-baseline.yml",
@@ -42,7 +41,10 @@ test_that("parse_file_name works", {
   file_meta <- parse_file_name(file_path)
   expect_equal(
     basename(file_path),
-    paste(file_meta$round_id, file_meta$team_abbr, file_meta$model_abbr,
+    paste(
+      file_meta$round_id,
+      file_meta$team_abbr,
+      file_meta$model_abbr,
       sep = "-"
     ) %>%
       paste(file_meta$ext, sep = ".")

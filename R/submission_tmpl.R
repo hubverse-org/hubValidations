@@ -175,27 +175,34 @@
 #'   round_id = "2022-10-01",
 #'   output_types = "quantile"
 #' )
-submission_tmpl <- function(path, round_id,
-                            required_vals_only = FALSE,
-                            force_output_types = FALSE,
-                            complete_cases_only = TRUE,
-                            compound_taskid_set = NULL,
-                            output_types = NULL,
-                            derived_task_ids = NULL,
-                            hub_con = deprecated(),
-                            config_tasks = deprecated()) {
+submission_tmpl <- function(
+  path,
+  round_id,
+  required_vals_only = FALSE,
+  force_output_types = FALSE,
+  complete_cases_only = TRUE,
+  compound_taskid_set = NULL,
+  output_types = NULL,
+  derived_task_ids = NULL,
+  hub_con = deprecated(),
+  config_tasks = deprecated()
+) {
   config_tasks <- switch_get_config(hub_con, config_tasks, path)
 
   if (is.null(derived_task_ids)) {
     derived_task_ids <- get_config_derived_task_ids(
-      config_tasks, round_id
+      config_tasks,
+      round_id
     )
   } else {
     derived_task_ids <- validate_derived_task_ids(
-      derived_task_ids, config_tasks, round_id
+      derived_task_ids,
+      config_tasks,
+      round_id
     )
   }
-  tmpl_df <- expand_model_out_grid(config_tasks,
+  tmpl_df <- expand_model_out_grid(
+    config_tasks,
     round_id = round_id,
     required_vals_only = required_vals_only,
     include_sample_ids = TRUE,
@@ -221,7 +228,11 @@ submission_tmpl <- function(path, round_id,
       derived_task_ids = derived_task_ids,
       force_output_types = TRUE
     )
-    output_cols <- hubUtils::std_colnames[c("output_type", "output_type_id", "value")]
+    output_cols <- hubUtils::std_colnames[c(
+      "output_type",
+      "output_type_id",
+      "value"
+    )]
     tmpl_df <- tmpl_df[setdiff(names(tmpl_df), output_cols)] |>
       unique()
   }
@@ -249,7 +260,8 @@ submission_tmpl <- function(path, round_id,
     # complete_cases_only == FALSE
     if (any(na_cols != hubUtils::std_colnames["value"])) {
       message_opt_tasks(
-        na_cols, n_model_tasks(config_tasks, round_id)
+        na_cols,
+        n_model_tasks(config_tasks, round_id)
       )
     }
     tmpl_df
@@ -262,8 +274,10 @@ n_model_tasks <- function(config_tasks, round_id) {
 
 message_opt_tasks <- function(na_cols, n_mt) {
   na_cols <- na_cols[na_cols != "value"]
-  msg <- c("!" = "{cli::qty(length(na_cols))}Column{?s} {.val {na_cols}}
-           whose values are all optional included as all {.code NA} column{?s}.")
+  msg <- c(
+    "!" = "{cli::qty(length(na_cols))}Column{?s} {.val {na_cols}}
+           whose values are all optional included as all {.code NA} column{?s}."
+  )
   if (n_mt > 1L) {
     msg <- c(
       msg,
@@ -290,11 +304,12 @@ subset_complete_cases <- function(tmpl_df) {
   na_output_type_idx <- which(
     tmpl_df[[hubUtils::std_colnames["output_type"]]] %in% c("mean", "median")
   )
-  cols <- !names(tmpl_df) %in% hubUtils::std_colnames[c(
-    "output_type_id",
-    "value",
-    "model_id"
-  )]
+  cols <- !names(tmpl_df) %in%
+    hubUtils::std_colnames[c(
+      "output_type_id",
+      "value",
+      "model_id"
+    )]
   compl_cases[na_output_type_idx] <- stats::complete.cases(
     tmpl_df[na_output_type_idx, cols]
   )
@@ -304,10 +319,14 @@ subset_complete_cases <- function(tmpl_df) {
 # This function handles issuing deprecation warnings for older arguments
 # and returns a config_tasks list according to the input argument.
 switch_get_config <- function(hub_con, config_tasks, path) {
-  input_arg <- rlang::check_exclusive(hub_con, config_tasks, path,
+  input_arg <- rlang::check_exclusive(
+    hub_con,
+    config_tasks,
+    path,
     .frame = parent.frame()
   )
-  switch(input_arg,
+  switch(
+    input_arg,
     hub_con = {
       # Signal the deprecation to the user
       lifecycle::deprecate_warn(

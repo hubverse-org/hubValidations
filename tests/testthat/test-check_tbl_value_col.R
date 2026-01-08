@@ -57,16 +57,28 @@ test_that("Ignoring derived_task_ids in check_tbl_value_col works", {
   # `derived_task_ids`.
   tbl[1, "target_end_date"] <- "random_date"
   expect_snapshot(
-    check_tbl_value_col(tbl, round_id, file_path, hub_path,
+    check_tbl_value_col(
+      tbl,
+      round_id,
+      file_path,
+      hub_path,
       derived_task_ids = "target_end_date"
     )
   )
   # Check that ignoring derived task ids returns same result as not ignoring.
   expect_equal(
-    check_tbl_value_col(tbl, round_id, file_path, hub_path,
+    check_tbl_value_col(
+      tbl,
+      round_id,
+      file_path,
+      hub_path,
       derived_task_ids = "target_end_date"
     ),
-    check_tbl_value_col(tbl_orig, round_id, file_path, hub_path,
+    check_tbl_value_col(
+      tbl_orig,
+      round_id,
+      file_path,
+      hub_path,
       derived_task_ids = "target_end_date"
     )
   )

@@ -1,27 +1,37 @@
 test_that("capture_check_cnd works", {
   expect_snapshot(
     capture_check_cnd(
-      check = TRUE, file_path = "test/file.csv",
-      msg_subject = "{.var round_id}", msg_attribute = "valid.", error = FALSE
+      check = TRUE,
+      file_path = "test/file.csv",
+      msg_subject = "{.var round_id}",
+      msg_attribute = "valid.",
+      error = FALSE
     )
   )
   expect_snapshot(
     capture_check_cnd(
-      check = FALSE, file_path = "test/file.csv",
-      msg_subject = "{.var round_id}", msg_attribute = "valid.", error = FALSE,
+      check = FALSE,
+      file_path = "test/file.csv",
+      msg_subject = "{.var round_id}",
+      msg_attribute = "valid.",
+      error = FALSE,
       details = "Must be one of {.val {c('A', 'B')}}, not {.val C}"
     )
   )
   expect_snapshot(
     capture_check_cnd(
-      check = FALSE, file_path = "test/file.csv",
-      msg_subject = "{.var round_id}", msg_attribute = "valid.", error = TRUE,
+      check = FALSE,
+      file_path = "test/file.csv",
+      msg_subject = "{.var round_id}",
+      msg_attribute = "valid.",
+      error = TRUE,
       details = "Must be one of 'A' or 'B', not 'C'"
     )
   )
   expect_snapshot(
     capture_check_cnd(
-      check = TRUE, file_path = "test/file.csv",
+      check = TRUE,
+      file_path = "test/file.csv",
       msg_subject = "Column names",
       msg_attribute = "consistent with expected round task IDs and std column names.",
       msg_verbs = c("are", "must be")
@@ -29,7 +39,8 @@ test_that("capture_check_cnd works", {
   )
   expect_snapshot(
     capture_check_cnd(
-      check = FALSE, file_path = "test/file.csv",
+      check = FALSE,
+      file_path = "test/file.csv",
       msg_subject = "Column names",
       msg_attribute = "consistent with expected round task IDs and std column names.",
       msg_verbs = c("are", "must always be")
@@ -38,7 +49,8 @@ test_that("capture_check_cnd works", {
   expect_snapshot(
     str(
       capture_check_cnd(
-        check = FALSE, file_path = "test/file.csv",
+        check = FALSE,
+        file_path = "test/file.csv",
         msg_subject = "Column names",
         msg_attribute = "consistent with expected round task IDs and std column names.",
         msg_verbs = c("are", "must always be")
@@ -50,7 +62,8 @@ test_that("capture_check_cnd works", {
 test_that("capture_check_cnd fails correctly", {
   expect_snapshot(
     capture_check_cnd(
-      check = FALSE, file_path = "test/file.csv",
+      check = FALSE,
+      file_path = "test/file.csv",
       msg_subject = "Column names",
       msg_attribute = "consistent with expected round task IDs and std column names.",
       msg_verbs = 1:2
@@ -59,7 +72,8 @@ test_that("capture_check_cnd fails correctly", {
   )
   expect_snapshot(
     capture_check_cnd(
-      check = FALSE, file_path = "test/file.csv",
+      check = FALSE,
+      file_path = "test/file.csv",
       msg_subject = "Column names",
       msg_attribute = "consistent with expected round task IDs and std column names.",
       msg_verbs = c("are")

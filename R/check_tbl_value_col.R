@@ -8,8 +8,13 @@
 #' @inheritParams check_tbl_spl_compound_taskid_set
 #' @inheritParams expand_model_out_grid
 #' @export
-check_tbl_value_col <- function(tbl, round_id, file_path, hub_path,
-                                derived_task_ids = get_hub_derived_task_ids(hub_path, round_id)) {
+check_tbl_value_col <- function(
+  tbl,
+  round_id,
+  file_path,
+  hub_path,
+  derived_task_ids = get_hub_derived_task_ids(hub_path, round_id)
+) {
   config_tasks <- read_config(hub_path, "tasks")
 
   tbl[, names(tbl) != "value"] <- hubData::coerce_to_character(
@@ -23,7 +28,8 @@ check_tbl_value_col <- function(tbl, round_id, file_path, hub_path,
     purrr::imap(
       \(.x, .y) {
         check_value_col_by_output_type(
-          tbl = .x, output_type = .y,
+          tbl = .x,
+          output_type = .y,
           config_tasks = config_tasks,
           round_id = round_id,
           derived_task_ids = derived_task_ids
@@ -44,18 +50,27 @@ check_tbl_value_col <- function(tbl, round_id, file_path, hub_path,
   )
 }
 
-check_value_col_by_output_type <- function(tbl, output_type,
-                                           config_tasks, round_id,
-                                           derived_task_ids = NULL) {
+check_value_col_by_output_type <- function(
+  tbl,
+  output_type,
+  config_tasks,
+  round_id,
+  derived_task_ids = NULL
+) {
   purrr::map2(
-    .x = match_tbl_to_model_task(tbl, config_tasks,
-      round_id, output_type,
+    .x = match_tbl_to_model_task(
+      tbl,
+      config_tasks,
+      round_id,
+      output_type,
       derived_task_ids = derived_task_ids
     ),
     .y = get_round_output_types(config_tasks, round_id),
     \(.x, .y) {
       compare_values_to_config(
-        tbl = .x, output_type_config = .y, output_type = output_type
+        tbl = .x,
+        output_type_config = .y,
+        output_type = output_type
       )
     }
   ) %>%

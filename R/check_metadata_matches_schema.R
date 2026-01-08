@@ -22,13 +22,17 @@ check_metadata_matches_schema <- function(file_path, hub_path = ".") {
         subdir = "hub-config",
         file_path = "model-metadata-schema.json"
       )
-      schema_json <- jsonlite::read_json(abs_metadata_schema_path,
+      schema_json <- jsonlite::read_json(
+        abs_metadata_schema_path,
         auto_unbox = TRUE
       ) %>%
         jsonlite::toJSON(auto_unbox = TRUE)
 
-      valid <- jsonvalidate::json_validate(metadata_json, schema_json,
-        engine = "ajv", verbose = TRUE,
+      valid <- jsonvalidate::json_validate(
+        metadata_json,
+        schema_json,
+        engine = "ajv",
+        verbose = TRUE,
         greedy = TRUE
       )
 
@@ -39,8 +43,11 @@ check_metadata_matches_schema <- function(file_path, hub_path = ".") {
             m = dplyr::case_when(
               .data$keyword == "required" ~ paste("-", .data$message, "."),
               .data$keyword == "additionalProperties" ~ paste0(
-                "- ", .data$message, "; saw unexpected property '",
-                .data$params$additionalProperty, "'."
+                "- ",
+                .data$message,
+                "; saw unexpected property '",
+                .data$params$additionalProperty,
+                "'."
               ),
               TRUE ~ paste("-", .data$instancePath, .data$message, ".")
             )

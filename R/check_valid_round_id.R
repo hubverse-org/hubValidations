@@ -13,8 +13,10 @@ check_valid_round_id <- function(round_id, file_path, hub_path = ".") {
   round_ids <- hubUtils::get_round_ids(config_tasks = config_tasks)
   check <- round_id %in% round_ids
   if (!check) {
-    details <- cli::format_inline("Must be one of {.val {round_ids}},
-                                  NOT {.val {round_id}}")
+    details <- cli::format_inline(
+      "Must be one of {.val {round_ids}},
+                                  NOT {.val {round_id}}"
+    )
   } else {
     details <- NULL
   }

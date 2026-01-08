@@ -8,8 +8,12 @@ test_that("check_target_dataset_file_ext_unique works", {
   # check_target_dataset_unique().
   fs::file_create(fs::path(hub_path, "target-data", "time-series.csv"))
   fs::dir_create(fs::path(hub_path, "target-data", "time-series"))
-  fs::file_create(fs::path(hub_path, "target-data", "time-series", "file_1.csv"))
-
+  fs::file_create(fs::path(
+    hub_path,
+    "target-data",
+    "time-series",
+    "file_1.csv"
+  ))
 
   valid_check <- check_target_dataset_file_ext_unique(
     hub_path,
@@ -31,8 +35,18 @@ test_that("check_target_dataset_file_ext_unique works", {
   )
 
   fs::dir_create(fs::path(hub_path, "target-data", "oracle-output"))
-  fs::file_create(fs::path(hub_path, "target-data", "oracle-output", "file_1.csv"))
-  fs::file_create(fs::path(hub_path, "target-data", "oracle-output", "file_2.csv"))
+  fs::file_create(fs::path(
+    hub_path,
+    "target-data",
+    "oracle-output",
+    "file_1.csv"
+  ))
+  fs::file_create(fs::path(
+    hub_path,
+    "target-data",
+    "oracle-output",
+    "file_2.csv"
+  ))
 
   valid_check_oo <- check_target_dataset_file_ext_unique(
     hub_path,
@@ -44,8 +58,12 @@ test_that("check_target_dataset_file_ext_unique works", {
     "oracle-output dataset files share single unique file format."
   )
 
-
-  fs::file_create(fs::path(hub_path, "target-data", "time-series", "file_2.parquet"))
+  fs::file_create(fs::path(
+    hub_path,
+    "target-data",
+    "time-series",
+    "file_2.parquet"
+  ))
   fs::file_create(fs::path(hub_path, "target-data", "time-series", "README"))
 
   error_check <- check_target_dataset_file_ext_unique(

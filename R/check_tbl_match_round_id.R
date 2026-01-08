@@ -2,10 +2,17 @@
 #'
 #' @inherit check_tbl_unique_round_id params details return
 #' @export
-check_tbl_match_round_id <- function(tbl, file_path, hub_path,
-                                     round_id_col = NULL) {
+check_tbl_match_round_id <- function(
+  tbl,
+  file_path,
+  hub_path,
+  round_id_col = NULL
+) {
   check_round_id_col <- check_valid_round_id_col(
-    tbl, file_path, hub_path, round_id_col
+    tbl,
+    file_path,
+    hub_path,
+    round_id_col
   )
 
   if (is_info(check_round_id_col)) {

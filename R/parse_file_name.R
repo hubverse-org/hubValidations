@@ -25,7 +25,10 @@
 #' @examples
 #' parse_file_name("hub-baseline/2022-10-15-hub-baseline.csv")
 #' parse_file_name("hub-baseline/2022-10-15-hub-baseline.gzip.parquet")
-parse_file_name <- function(file_path, file_type = c("model_output", "model_metadata")) {
+parse_file_name <- function(
+  file_path,
+  file_type = c("model_output", "model_metadata")
+) {
   file_type <- rlang::arg_match(file_type)
   checkmate::assert_string(file_path)
   file_name <- tools::file_path_sans_ext(basename(file_path))
@@ -47,7 +50,8 @@ parse_file_name <- function(file_path, file_type = c("model_output", "model_meta
     model_id = paste(split_res[2], split_res[3], sep = "-"),
     ext = fs::path_ext(file_path),
     compression_ext = compression_ext
-  ) %>% purrr::compact()
+  ) %>%
+    purrr::compact()
 }
 
 # Split file name into round_id, team_abbr and model_abbr
@@ -58,10 +62,7 @@ split_filename <- function(file_name, file_type) {
   )
   split_res <- stringr::str_extract_all(file_name, split_pattern) |> unlist()
 
-  exp_n <- switch(file_type,
-    model_output = 3L,
-    model_metadata = 2L
-  )
+  exp_n <- switch(file_type, model_output = 3L, model_metadata = 2L)
 
   if (length(split_res) != exp_n) {
     cli::cli_abort(
@@ -84,15 +85,16 @@ validate_filename_contents <- function(file_name, call = rlang::caller_env()) {
   invalid_contents <- isFALSE(grepl(pattern, file_name))
 
   if (invalid_contents) {
-
     invalid_char <- stringr::str_remove_all(file_name, "[A-Za-z0-9_-]+") |> # nolint: object_usage_linter
       strsplit("") |>
       unlist() |>
       unique()
 
     cli::cli_abort(
-      c("x" = "File name {.file {file_name}} contains character{?s}
-        {.val {invalid_char}} that {?is/are} not allowed"),
+      c(
+        "x" = "File name {.file {file_name}} contains character{?s}
+        {.val {invalid_char}} that {?is/are} not allowed"
+      ),
       call = call
     )
   }
@@ -100,32 +102,38 @@ validate_filename_contents <- function(file_name, call = rlang::caller_env()) {
 
 # Function that validates a hubverse file name matches expected pattern:
 # [round_id]-[team_abbr]-[model_abbr]
-validate_filename_pattern <- function(file_name, file_type,
-                                      call = rlang::caller_env()) {
-  pattern <- switch(file_type,
+validate_filename_pattern <- function(
+  file_name,
+  file_type,
+  call = rlang::caller_env()
+) {
+  pattern <- switch(
+    file_type,
     model_output = "^((\\d{4}-\\d{2}-\\d{2})|[A-Za-z0-9_]+)-([A-Za-z0-9_]+)-([A-Za-z0-9_]+)$",
     model_metadata = "^([A-Za-z0-9_]+)-([A-Za-z0-9_]+)$"
   )
 
-
-  expected_pattern <- switch(file_type, # nolint: object_usage_linter
+  expected_pattern <- switch(
+    file_type, # nolint: object_usage_linter
     model_output = "[round_id]-[team_abbr]-[model_abbr]",
     model_metadata = "[team_abbr]-[model_abbr]"
   )
 
-
-  info_url <- switch(file_type, # nolint: object_usage_linter
+  info_url <- switch(
+    file_type, # nolint: object_usage_linter
     model_output = "https://docs.hubverse.io/en/latest/user-guide/model-output.html#directory-structure",
     model_metadata = "https://docs.hubverse.io/en/latest/user-guide/model-metadata.html#directory-structure"
   )
 
   if (!grepl(pattern, file_name)) {
     cli::cli_abort(
-      c("x" = "File name {.file {file_name}} does not match expected pattern of
+      c(
+        "x" = "File name {.file {file_name}} does not match expected pattern of
       {.field {expected_pattern}}. Please consult
       {.href [documentation on file name requirements
       ]({info_url})}
-      for details."),
+      for details."
+      ),
       call = call
     )
   }
@@ -133,17 +141,22 @@ validate_filename_pattern <- function(file_name, file_type,
 
 # Function that validates a hubverse file name compression extension.
 # Returns NULL if empty string or compression_ext if valid.
-validate_compression_ext <- function(compression_ext, call = rlang::caller_env()) {
+validate_compression_ext <- function(
+  compression_ext,
+  call = rlang::caller_env()
+) {
   if (compression_ext == "") {
     return(NULL)
   }
   if (!compression_ext %in% compress_codec) {
     cli::cli_abort(
-      c("x" = "Compression extension {.val {compression_ext}} is not valid.
+      c(
+        "x" = "Compression extension {.val {compression_ext}} is not valid.
       Must be one of {.val {compress_codec}}.
       Please consult {.href [documentation on file name requirements
       ](https://docs.hubverse.io/en/latest/user-guide/model-output.html#directory-structure)}
-      for details."),
+      for details."
+      ),
       call = call
     )
   }

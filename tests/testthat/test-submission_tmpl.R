@@ -2,15 +2,11 @@ test_that("submission_tmpl works correctly with path to hub", {
   hub_path <- system.file("testhubs/flusight", package = "hubUtils")
 
   expect_snapshot(str(
-    submission_tmpl(hub_path,
-      round_id = "2023-01-30"
-    )
+    submission_tmpl(hub_path, round_id = "2023-01-30")
   ))
 
   expect_snapshot(str(
-    submission_tmpl(hub_path,
-      round_id = "2023-01-16"
-    )
+    submission_tmpl(hub_path, round_id = "2023-01-16")
   ))
   expect_equal(
     unique(suppressMessages(
@@ -40,7 +36,6 @@ test_that("submission_tmpl works correctly with path to hub", {
     )),
     as.Date("2022-12-19")
   )
-
 
   expect_snapshot(str(
     submission_tmpl(
@@ -90,7 +85,6 @@ test_that("submission_tmpl works correctly with path to hub", {
     )
   ))
 
-
   expect_snapshot(str(
     submission_tmpl(
       hub_path,
@@ -101,9 +95,7 @@ test_that("submission_tmpl works correctly with path to hub", {
 })
 
 test_that("submission_tmpl works correctly with path to task config file", {
-  config_path <- system.file("config", "tasks.json",
-    package = "hubValidations"
-  )
+  config_path <- system.file("config", "tasks.json", package = "hubValidations")
   expect_snapshot(
     submission_tmpl(
       config_path,
@@ -114,12 +106,8 @@ test_that("submission_tmpl works correctly with path to task config file", {
   hub_path <- system.file("testhubs/flusight", package = "hubUtils")
   config_path <- file.path(hub_path, "hub-config", "tasks.json")
   expect_equal(
-    submission_tmpl(hub_path,
-      round_id = "2023-01-30"
-    ),
-    submission_tmpl(config_path,
-      round_id = "2023-01-30"
-    )
+    submission_tmpl(hub_path, round_id = "2023-01-30"),
+    submission_tmpl(config_path, round_id = "2023-01-30")
   )
 })
 
@@ -140,7 +128,9 @@ test_that("submission_tmpl works correctly with deprecated args", {
   # Using config_tasks instead of hub_con
   expect_snapshot(
     submission_tmpl(
-      config_tasks = read_config_file(system.file("config", "tasks.json",
+      config_tasks = read_config_file(system.file(
+        "config",
+        "tasks.json",
         package = "hubValidations"
       )),
       round_id = "2022-12-26"
@@ -169,7 +159,9 @@ test_that("submission_tmpl errors correctly", {
     regexp = "does not exist."
   )
 
-  config_path <- system.file("config", "tasks-comp-tid.json",
+  config_path <- system.file(
+    "config",
+    "tasks-comp-tid.json",
     package = "hubValidations"
   )
   expect_snapshot(
@@ -186,7 +178,9 @@ test_that("submission_tmpl errors correctly", {
 })
 
 test_that("submission_tmpl output type subsetting works", {
-  config_path <- system.file("config", "tasks-comp-tid.json",
+  config_path <- system.file(
+    "config",
+    "tasks-comp-tid.json",
     package = "hubValidations"
   )
   # Subsetting for a single output type
@@ -209,7 +203,9 @@ test_that("submission_tmpl output type subsetting works", {
 })
 
 test_that("submission_tmpl handles samples correctly", {
-  config_path <- system.file("config", "tasks-comp-tid.json",
+  config_path <- system.file(
+    "config",
+    "tasks-comp-tid.json",
     package = "hubValidations"
   )
   expect_snapshot(
@@ -302,7 +298,8 @@ test_that("submission_tmpl ignoring derived task ids works", {
 
 test_that("submission_tmpl force_output_types works", {
   config_path <- test_path(
-    "testdata", "configs",
+    "testdata",
+    "configs",
     "tasks-samples-v4.json"
   )
   # When force_output_types is not set, all output_types are optional, a
@@ -329,7 +326,8 @@ test_that("submission_tmpl force_output_types works", {
       )
     },
     "all optional values"
-  ) |> suppressMessages()
+  ) |>
+    suppressMessages()
   expect_equal(dim(req_non_force), c(4L, 9L))
   expect_equal(unique(req_non_force$output_type), NA_character_)
 
@@ -347,7 +345,8 @@ test_that("submission_tmpl force_output_types works", {
       )
     },
     "all optional values"
-  ) |> suppressMessages()
+  ) |>
+    suppressMessages()
   expect_equal(dim(req_force), c(4L, 9L))
   expect_equal(unique(req_force$output_type), "sample")
 })
@@ -424,7 +423,8 @@ test_that("submission_tmpl works with SubTreeFileSystems", {
     path = s3_hub_path,
     round_id = "2022-10-01",
     output_types = "quantile"
-  ) |> suppressMessages()
+  ) |>
+    suppressMessages()
 
   expect_s3_class(s3_hub_tmpl, "tbl_df")
   expect_equal(dim(s3_hub_tmpl), c(4968L, 7L))
@@ -436,7 +436,8 @@ test_that("submission_tmpl works with SubTreeFileSystems", {
     path = s3_config_path,
     round_id = "2022-10-01",
     output_types = "quantile"
-  ) |> suppressMessages()
+  ) |>
+    suppressMessages()
 
   expect_equal(s3_config_tmpl, s3_hub_tmpl)
 
