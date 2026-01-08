@@ -113,17 +113,19 @@ validate_filename_pattern <- function(
     model_metadata = "^([A-Za-z0-9_]+)-([A-Za-z0-9_]+)$"
   )
 
+  # nolint start: object_usage_linter
   expected_pattern <- switch(
-    file_type, # nolint: object_usage_linter
+    file_type,
     model_output = "[round_id]-[team_abbr]-[model_abbr]",
     model_metadata = "[team_abbr]-[model_abbr]"
   )
 
   info_url <- switch(
-    file_type, # nolint: object_usage_linter
+    file_type,
     model_output = "https://docs.hubverse.io/en/latest/user-guide/model-output.html#directory-structure",
     model_metadata = "https://docs.hubverse.io/en/latest/user-guide/model-metadata.html#directory-structure"
   )
+  # nolint end
 
   if (!grepl(pattern, file_name)) {
     cli::cli_abort(

@@ -162,8 +162,8 @@ n_mismatch_errors <- function(n_tbl, hash_tbl, tbl) {
 
 
 n_mismatch_details <- function(n_tbl) {
+  # nolint start: object_usage_linter
   cat_msg <- function(compound_idx, type) {
-    # nolint: object_usage_linter
     switch(
       type,
       less = paste0(
@@ -177,6 +177,7 @@ n_mismatch_details <- function(n_tbl) {
     ) |>
       cli::format_inline()
   }
+  # nolint end
 
   purrr::map(
     c("less", "more"),
