@@ -46,7 +46,7 @@ match_tbl_to_model_task <- function(
     bind_model_tasks = FALSE,
     output_types = output_types,
     derived_task_ids = derived_task_ids
-  ) %>%
+  ) |>
     join_tbl_to_model_task(tbl, subset_to_tbl_cols = FALSE)
 }
 

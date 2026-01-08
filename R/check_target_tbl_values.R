@@ -279,7 +279,7 @@ extract_target_data_vals <- function(
       # vector of unique values for each column name.
       purrr::modify_depth(.depth = 1, ~ unique(unlist(.x, use.names = FALSE)))
   }
-  return(out)
+  out
 }
 
 
@@ -641,5 +641,5 @@ determine_date_col <- function(
 
   # Priority 3: Could not determine - return NULL
   # Date relaxation will be skipped
-  return(NULL)
+  NULL
 }

@@ -63,7 +63,7 @@ check_tbl_values_required <- function(
       derived_task_ids = derived_task_ids,
       force_output_types = force_output_types
     )
-  }) %>%
+  }) |>
     purrr::list_rbind()
 
   check <- nrow(missing_df) == 0L
@@ -122,7 +122,7 @@ check_required_output_type_by_modeling_task <- function(
     combine_mt_inputs(tbl, req, full),
     check_modeling_task_values_required,
     derived_task_ids = derived_task_ids
-  ) %>%
+  ) |>
     purrr::list_rbind()
 }
 
@@ -208,7 +208,7 @@ get_opt_col_list <- function(x, mask, full, req) {
   min_opt_col <- ncol(x) - ncol(req)
   all_opt_cols <- setdiff(names(x), names(req)) # nolint: object_usage_linter
 
-  opt_vals <- get_opt_vals(x, mask) %>%
+  opt_vals <- get_opt_vals(x, mask) |>
     ignore_optional_output_type(x, mask, full, req)
 
   opt_val_combs <- get_opt_val_combs(opt_vals, min_opt_col)
@@ -219,7 +219,7 @@ get_opt_col_list <- function(x, mask, full, req) {
       opt_val_combs,
       ~ get_opt_cols(mask, .x, all_opt_cols)
     )
-  ) %>%
+  ) |>
     unique()
 }
 
@@ -248,7 +248,7 @@ missing_req_rows <- function(opt_cols, x, mask, req, full) {
     req,
     applicaple_full[, names(req)],
     by = names(req)
-  ) %>%
+  ) |>
     unique()
 
   # Finally, we compare the expected required values for the optional value
@@ -273,7 +273,7 @@ map_missing_req_rows <- function(opt_cols_list, x, mask, req, full) {
   purrr::map(
     opt_cols_list,
     ~ missing_req_rows(.x, x, mask, req, full)
-  ) %>%
+  ) |>
     purrr::list_rbind()
 }
 
@@ -327,8 +327,8 @@ get_opt_val_combs <- function(opt_vals, min_opt_col = 0L) {
     purrr::map(
       seq(1, length(opt_vals)) - 1L,
       ~ combn(opt_vals, m = .x, simplify = FALSE)
-    ) %>%
-      unlist(recursive = FALSE) %>%
+    ) |>
+      unlist(recursive = FALSE) |>
       purrr::compact()
   )
 }
@@ -363,7 +363,7 @@ get_required_output_types <- function(x, mask, full, req) {
     unique(applicaple_full[, join_colnames]),
     req,
     by = join_colnames
-  )[[hubUtils::std_colnames["output_type"]]] %>%
+  )[[hubUtils::std_colnames["output_type"]]] |>
     unique()
 }
 
@@ -389,7 +389,7 @@ all_na_colnames <- function(x) {
 
 split_na_req <- function(req) {
   na_idx <- which(is.na(req), arr.ind = TRUE)
-  req[na_idx[, "row"], ] %>%
+  req[na_idx[, "row"], ] |>
     split(na_idx[, "col"])
 }
 

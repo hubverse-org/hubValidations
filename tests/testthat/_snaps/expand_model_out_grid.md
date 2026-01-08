@@ -113,9 +113,9 @@
 ---
 
     Code
-      str(expand_model_out_grid(jsonlite::fromJSON(test_path("testdata", "configs",
-        "both_null_tasks.json"), simplifyVector = TRUE, simplifyDataFrame = FALSE),
-      round_id = "2023-11-26") %>% dplyr::filter(is.na(horizon)))
+      str(dplyr::filter(expand_model_out_grid(jsonlite::fromJSON(test_path("testdata",
+        "configs", "both_null_tasks.json"), simplifyVector = TRUE, simplifyDataFrame = FALSE),
+      round_id = "2023-11-26"), is.na(horizon)))
     Output
       tibble [24 x 7] (S3: tbl_df/tbl/data.frame)
        $ origin_date   : Date[1:24], format: "2023-11-26" "2023-11-26" ...
@@ -129,9 +129,9 @@
 ---
 
     Code
-      str(expand_model_out_grid(jsonlite::fromJSON(test_path("testdata", "configs",
-        "both_null_tasks_swap.json"), simplifyVector = TRUE, simplifyDataFrame = FALSE),
-      round_id = "2023-11-26") %>% dplyr::filter(is.na(horizon)))
+      str(dplyr::filter(expand_model_out_grid(jsonlite::fromJSON(test_path("testdata",
+        "configs", "both_null_tasks_swap.json"), simplifyVector = TRUE,
+      simplifyDataFrame = FALSE), round_id = "2023-11-26"), is.na(horizon)))
     Output
       tibble [24 x 7] (S3: tbl_df/tbl/data.frame)
        $ origin_date   : Date[1:24], format: "2023-11-26" "2023-11-26" ...
@@ -267,8 +267,8 @@
 ---
 
     Code
-      expand_model_out_grid(config_tasks, round_id = "2022-12-26",
-        include_sample_ids = TRUE) %>% dplyr::filter(.data$output_type == "sample")
+      dplyr::filter(expand_model_out_grid(config_tasks, round_id = "2022-12-26",
+        include_sample_ids = TRUE), .data$output_type == "sample")
     Output
       # A tibble: 6 x 6
         forecast_date target               horizon location output_type output_type_id
@@ -400,9 +400,9 @@
 ---
 
     Code
-      expand_model_out_grid(hubUtils::read_config_file(test_path("testdata",
-        "configs", "tasks-samples-2mt.json")), round_id = "2022-12-26",
-      include_sample_ids = TRUE) %>% dplyr::filter(.data$output_type == "sample")
+      dplyr::filter(expand_model_out_grid(hubUtils::read_config_file(test_path(
+        "testdata", "configs", "tasks-samples-2mt.json")), round_id = "2022-12-26",
+      include_sample_ids = TRUE), .data$output_type == "sample")
     Output
       # A tibble: 12 x 6
          forecast_date target              horizon location output_type output_type_id
@@ -846,9 +846,9 @@
 ---
 
     Code
-      str(expand_model_out_grid(jsonlite::fromJSON(test_path("testdata", "configs",
-        "both_null_tasks_all.json"), simplifyVector = TRUE, simplifyDataFrame = FALSE),
-      round_id = "2023-11-26") %>% dplyr::filter(is.na(horizon)))
+      str(dplyr::filter(expand_model_out_grid(jsonlite::fromJSON(test_path("testdata",
+        "configs", "both_null_tasks_all.json"), simplifyVector = TRUE,
+      simplifyDataFrame = FALSE), round_id = "2023-11-26"), is.na(horizon)))
     Condition
       Error in `map2()`:
       i In index: 3.

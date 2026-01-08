@@ -23,7 +23,7 @@
 #' )
 #' as_hub_validations(x)
 new_hub_validations <- function(...) {
-  x <- rlang::dots_list(...) %>%
+  x <- rlang::dots_list(...) |>
     purrr::compact()
 
   validate_internal_class(x, class = "hub_check")

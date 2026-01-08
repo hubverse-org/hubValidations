@@ -53,7 +53,7 @@ check_tbl_value_col_ascending <- function(
         derived_task_ids
       )
     }
-  ) %>%
+  ) |>
     purrr::list_rbind()
 
   check <- nrow(error_tbl) == 0L
@@ -100,10 +100,10 @@ check_values_ascending_by_output_type <- function(
     round_id = round_id,
     output_types = output_type,
     derived_task_ids = derived_task_ids
-  ) %>%
+  ) |>
     purrr::compact()
 
-  purrr::map(model_task_tbls, check_values_ascending) %>%
+  purrr::map(model_task_tbls, check_values_ascending) |>
     purrr::list_rbind()
 }
 
@@ -123,7 +123,7 @@ check_values_ascending <- function(tbl) {
   check_tbl <- dplyr::group_by(
     tbl,
     dplyr::across(dplyr::all_of(group_cols))
-  ) %>%
+  ) |>
     dplyr::summarise(non_asc = any(diff(.data[["value"]]) < 0))
 
   if (!any(check_tbl$non_asc)) {
@@ -132,8 +132,8 @@ check_values_ascending <- function(tbl) {
 
   output_type <- unique(tbl["output_type"]) # nolint: object_usage_linter
 
-  dplyr::filter(check_tbl, .data[["non_asc"]]) %>%
-    dplyr::select(-dplyr::all_of("non_asc")) %>%
-    dplyr::ungroup() %>%
+  dplyr::filter(check_tbl, .data[["non_asc"]]) |>
+    dplyr::select(-dplyr::all_of("non_asc")) |>
+    dplyr::ungroup() |>
     dplyr::mutate(.env$output_type)
 }

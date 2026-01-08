@@ -65,9 +65,9 @@ check_tbl_spl_compound_tid <- function(
       round_id,
       compound_taskid_set
     )
-    output_type_ids <- purrr::map(errors, ~ .x$output_type_id) %>% # nolint: object_usage_linter
-      purrr::flatten_chr() %>%
-      unique() %>%
+    output_type_ids <- purrr::map(errors, ~ .x$output_type_id) |> # nolint: object_usage_linter
+      purrr::flatten_chr() |>
+      unique() |>
       sort()
 
     details <- cli::format_inline(
@@ -102,11 +102,11 @@ comptid_mismatch <- function(
     ~ {
       x <- n_tbl[.x, ]
       compound_taskids <- compound_taskid_set[[x$mt_id]]
-      spl <- tbl[tbl$output_type_id == x$output_type_id, compound_taskids] %>%
+      spl <- tbl[tbl$output_type_id == x$output_type_id, compound_taskids] |>
         unique()
 
-      values <- spl[, purrr::map_lgl(spl, ~ length(unique(.x)) > 1L)] %>%
-        as.list() %>%
+      values <- spl[, purrr::map_lgl(spl, ~ length(unique(.x)) > 1L)] |>
+        as.list() |>
         purrr::map(unique)
 
       list(

@@ -7,8 +7,8 @@
 #'
 #' @export
 check_config_hub_valid <- function(hub_path) {
-  valid_config <- validate_hub_config(hub_path) %>%
-    suppressMessages() %>%
+  valid_config <- validate_hub_config(hub_path) |>
+    suppressMessages() |>
     suppressWarnings()
 
   check <- all(unlist(valid_config))

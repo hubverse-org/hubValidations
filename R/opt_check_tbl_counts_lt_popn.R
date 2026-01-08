@@ -135,8 +135,8 @@ validate_target_key <- function(target, hub_path, file_path) {
 }
 
 filter_expr <- function(filter) {
-  paste(paste0(".data$", names(filter)), filter, sep = " %in% ") %>%
-    paste(collapse = ";") %>%
+  paste(paste0(".data$", names(filter)), filter, sep = " %in% ") |>
+    paste(collapse = ";") |>
     rlang::parse_exprs()
 }
 
@@ -153,7 +153,7 @@ filter_targets <- function(tbl, targets) {
     purrr::map(
       targets,
       ~ dplyr::filter(tbl, !!!filter_expr(.x))
-    ) %>%
+    ) |>
       purrr::list_rbind()
   }
 }

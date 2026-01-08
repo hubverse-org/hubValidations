@@ -117,7 +117,7 @@ create_custom_check <- function(
     "See the {.field Writing custom check functions} article for more information.
     ({.url https://hubverse-org.github.io/hubValidations/articles/writing-custom-fns.html})"
   )
-  return(invisible(TRUE))
+  invisible(TRUE)
 }
 
 # Much of the following functionality is heavily based on usethis function `use_template()`

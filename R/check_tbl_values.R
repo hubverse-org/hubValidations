@@ -14,9 +14,9 @@ check_tbl_values <- function(
 ) {
   config_tasks <- read_config(hub_path, "tasks")
 
-  valid_tbl <- tbl %>%
-    tibble::rowid_to_column() %>%
-    split(f = tbl$output_type) %>%
+  valid_tbl <- tbl |>
+    tibble::rowid_to_column() |>
+    split(f = tbl$output_type) |>
     purrr::imap(
       ~ check_values_by_output_type(
         tbl = .x,
@@ -25,7 +25,7 @@ check_tbl_values <- function(
         round_id = round_id,
         derived_task_ids = derived_task_ids
       )
-    ) %>%
+    ) |>
     purrr::list_rbind()
 
   check <- !any(is.na(valid_tbl$valid))
@@ -130,7 +130,7 @@ summarise_invalid_values <- function(
     uniq_tbl,
     uniq_config,
     ~ .x[!.x %in% .y]
-  ) %>%
+  ) |>
     purrr::compact()
 
   if (length(invalid_vals) != 0L) {
@@ -140,7 +140,7 @@ summarise_invalid_values <- function(
         "Column {.var {.y}} contains invalid {cli::qty(length(.x))}
         value{?s} {.val {.x}}."
       )
-    ) %>%
+    ) |>
       paste(collapse = " ")
   } else {
     invalid_vals_msg <- NULL
@@ -150,8 +150,8 @@ summarise_invalid_values <- function(
   invalid_val_idx <- purrr::imap(
     invalid_vals,
     ~ which(valid_tbl[[.y]] %in% .x)
-  ) %>%
-    unlist(use.names = FALSE) %>%
+  ) |>
+    unlist(use.names = FALSE) |>
     unique()
   invalid_row_idx <- which(is.na(valid_tbl$valid))
   # Ignore rows which have already been reported for invalid values

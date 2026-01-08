@@ -24,7 +24,7 @@ check_tbl_value_col <- function(
     tbl[, derived_task_ids] <- NA_character_
   }
 
-  details <- split(tbl, f = tbl$output_type) %>%
+  details <- split(tbl, f = tbl$output_type) |>
     purrr::imap(
       \(.x, .y) {
         check_value_col_by_output_type(
@@ -35,7 +35,7 @@ check_tbl_value_col <- function(
           derived_task_ids = derived_task_ids
         )
       }
-    ) %>%
+    ) |>
     unlist(use.names = TRUE)
 
   check <- is.null(details)
@@ -73,7 +73,7 @@ check_value_col_by_output_type <- function(
         output_type = output_type
       )
     }
-  ) %>%
+  ) |>
     unlist(use.names = TRUE)
 }
 

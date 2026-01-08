@@ -15,15 +15,15 @@
 #'
 #' Details of checks performed by `validate_target_dataset()`
 #' ```{r, echo = FALSE}
-#' arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")) %>%
-#' dplyr::filter(.data$`parent fun` == "validate_target_dataset", !.data$optional) %>%
-#'   dplyr::select(-"parent fun", -"check fun", -"optional") %>%
+#' arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations"))  |>
+#' dplyr::filter(.data$`parent fun` == "validate_target_dataset", !.data$optional)  |>
+#'   dplyr::select(-"parent fun", -"check fun", -"optional")  |>
 #'   dplyr::mutate("Extra info" = dplyr::case_when(
 #'     is.na(.data$`Extra info`) ~ "",
 #'     TRUE ~ .data$`Extra info`
-#'   )) %>%
-#'   knitr::kable() %>%
-#'   kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+#'   ))  |>
+#'   knitr::kable()  |>
+#'   kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))  |>
 #'   kableExtra::column_spec(1, bold = TRUE)
 #' ```
 #' @examples

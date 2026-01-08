@@ -67,7 +67,7 @@ If validation fails, an error will be thrown and the failing checks will be summ
 ```{r, error=TRUE}
 validate_submission(hub_path,
   file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
-) %>%
+)  |>
   check_for_errors()
 ```
 
@@ -84,7 +84,7 @@ This results in the previous valid file (except for failing the validation windo
 validate_submission(hub_path,
   file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv",
   skip_submit_window_check = TRUE
-) %>%
+)  |>
   check_for_errors()
 ```
 
@@ -124,18 +124,18 @@ If you're unsure if this is the case for your hub or which task IDs are derived,
 
 ```{r, echo=FALSE}
 library(kableExtra)
-arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")) %>%
+arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations"))  |>
   dplyr::filter(
     .data$`parent fun` != "validate_model_metadata",
     !.data$optional
-  ) %>%
-  dplyr::select(-"parent fun", -"check fun", -"optional") %>%
+  )  |>
+  dplyr::select(-"parent fun", -"check fun", -"optional")  |>
   dplyr::mutate("Extra info" = dplyr::case_when(
     is.na(.data$`Extra info`) ~ "",
     TRUE ~ .data$`Extra info`
-  )) %>%
-  knitr::kable(caption = "Details of checks performed by `validate_submission()`") %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+  ))  |>
+  knitr::kable(caption = "Details of checks performed by `validate_submission()`")  |>
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))  |>
   column_spec(1, bold = TRUE)
 ```
 
@@ -163,18 +163,18 @@ For more details on the structure of `<hub_validations>` objects, including how 
 
 ```{r, echo=FALSE}
 library(kableExtra)
-arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")) %>%
+arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations"))  |>
   dplyr::filter(
     .data$`parent fun` == "validate_model_metadata",
     !.data$optional
-  ) %>%
-  dplyr::select(-"parent fun", -"check fun", -"optional") %>%
+  )  |>
+  dplyr::select(-"parent fun", -"check fun", -"optional")  |>
   dplyr::mutate("Extra info" = dplyr::case_when(
     is.na(.data$`Extra info`) ~ "",
     TRUE ~ .data$`Extra info`
-  )) %>%
-  knitr::kable(caption = "Details of checks performed by `validate_model_metadata()`") %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+  ))  |>
+  knitr::kable(caption = "Details of checks performed by `validate_model_metadata()`")  |>
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))  |>
   column_spec(1, bold = TRUE)
 ```
 
@@ -341,39 +341,39 @@ check_for_errors(v_fail)
 ### `validate_target_submission` check details
 
 ```{r, echo=FALSE}
-arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")) %>%
+arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations"))  |>
   dplyr::filter(
     .data$`parent fun` %in% c(
       "validate_target_file",
       "validate_target_data"
     ),
     !.data$optional
-  ) %>%
-  dplyr::select(-"parent fun", -"check fun", -"optional") %>%
+  )  |>
+  dplyr::select(-"parent fun", -"check fun", -"optional")  |>
   dplyr::mutate("Extra info" = dplyr::case_when(
     is.na(.data$`Extra info`) ~ "",
     TRUE ~ .data$`Extra info`
-  )) %>%
-  knitr::kable(caption = "Details of checks performed by `validate_target_submission()`") %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+  ))  |>
+  knitr::kable(caption = "Details of checks performed by `validate_target_submission()`")  |>
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))  |>
   column_spec(1, bold = TRUE)
 ```
 
 ### `validate_target_dataset` check details
 
 ```{r, echo=FALSE}
-arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")) %>%
+arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations"))  |>
   dplyr::filter(
     .data$`parent fun` == "validate_target_dataset",
     !.data$optional
-  ) %>%
-  dplyr::select(-"parent fun", -"check fun", -"optional") %>%
+  )  |>
+  dplyr::select(-"parent fun", -"check fun", -"optional")  |>
   dplyr::mutate("Extra info" = dplyr::case_when(
     is.na(.data$`Extra info`) ~ "",
     TRUE ~ .data$`Extra info`
-  )) %>%
-  knitr::kable(caption = "Details of checks performed by `validate_target_dataset()`") %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+  ))  |>
+  knitr::kable(caption = "Details of checks performed by `validate_target_dataset()`")  |>
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))  |>
   column_spec(1, bold = TRUE)
 ```
 

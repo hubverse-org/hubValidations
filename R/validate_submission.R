@@ -28,7 +28,7 @@
 #' Details of checks performed by `validate_submission()`
 #'
 #' ```{r, echo = FALSE}
-#' arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")) %>%
+#' arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations"))  |>
 #' dplyr::filter(
 #'  .data$`parent fun` %in% c(
 #'                              "validate_submission_time",
@@ -37,14 +37,14 @@
 #'                            ) |
 #'  .data$`check fun` == "check_config_hub_valid",
 #'  !.data$optional
-#'  ) %>%
-#'   dplyr::select(-"parent fun", -"check fun", -"optional") %>%
+#'  )  |>
+#'   dplyr::select(-"parent fun", -"check fun", -"optional")  |>
 #'   dplyr::mutate("Extra info" = dplyr::case_when(
 #'     is.na(.data$`Extra info`) ~ "",
 #'     TRUE ~ .data$`Extra info`
-#'   )) %>%
-#'   knitr::kable() %>%
-#'   kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+#'   ))  |>
+#'   knitr::kable()  |>
+#'   kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))  |>
 #'   kableExtra::column_spec(1, bold = TRUE)
 #' ```
 #'

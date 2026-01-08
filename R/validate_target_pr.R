@@ -38,19 +38,19 @@
 #'
 #' Details of checks performed by `validate_target_dataset()`
 #' ```{r, echo = FALSE}
-#' arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")) %>%
+#' arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations"))  |>
 #' dplyr::filter(
 #'  .data$`parent fun` == "validate_target_dataset" |
 #'  .data$`check fun` == "check_config_hub_valid",
 #'  !.data$optional
-#'  ) %>%
-#'   dplyr::select(-"parent fun", -"check fun", -"optional") %>%
+#'  )  |>
+#'   dplyr::select(-"parent fun", -"check fun", -"optional")  |>
 #'   dplyr::mutate("Extra info" = dplyr::case_when(
 #'     is.na(.data$`Extra info`) ~ "",
 #'     TRUE ~ .data$`Extra info`
-#'   )) %>%
-#'   knitr::kable() %>%
-#'   kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+#'   ))  |>
+#'   knitr::kable()  |>
+#'   kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))  |>
 #'   kableExtra::column_spec(1, bold = TRUE)
 #' ```
 #'
@@ -58,23 +58,23 @@
 #'
 #' Details of checks performed by `validate_target_submission()`
 #' ```{r, echo = FALSE}
-#' arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")) %>%
+#' arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations"))  |>
 #' dplyr::filter(.data$`parent fun` %in% c(
 #'                                          "validate_target_file",
 #'                                          "validate_target_data"
 #'                                        )
-#'              ) %>%
-#'   dplyr::select(-"parent fun", -"check fun") %>%
+#'              )  |>
+#'   dplyr::select(-"parent fun", -"check fun")  |>
 #'   dplyr::mutate("Extra info" = dplyr::case_when(
 #'     is.na(.data$`Extra info`) ~ "",
 #'     TRUE ~ .data$`Extra info`
-#'   )) %>%
-#'   knitr::kable() %>%
+#'   ))  |>
+#'   knitr::kable()  |>
 #'   kableExtra::kable_styling(
 #'      bootstrap_options = c(
 #'          "striped", "hover", "condensed", "responsive"
 #'        )
-#'      ) %>%
+#'      )  |>
 #'   kableExtra::column_spec(1, bold = TRUE)
 #' ```
 #' @return An object of class `target_validations`.
@@ -154,7 +154,7 @@ validate_target_pr <- function(
           .data$filename,
           ~ is_target_type_file(.x, "oracle-output")
         ),
-      ) %>%
+      ) |>
         dplyr::mutate(
           rel_path = dplyr::case_when(
             .data$timeseries | .data$oracle_output ~
@@ -200,7 +200,7 @@ validate_target_pr <- function(
             alert = file_modification_check,
             allow_submit_window_mods = FALSE
           )
-        ) %>%
+        ) |>
           purrr::reduce(combine)
       } else {
         file_modifications <- NULL
@@ -249,8 +249,8 @@ validate_target_pr <- function(
             round_id = round_id,
             skip_check_config = TRUE
           )
-        ) %>%
-          purrr::list_flatten() %>%
+        ) |>
+          purrr::list_flatten() |>
           as_target_validations()
       } else {
         ts_vals <- NULL
@@ -299,8 +299,8 @@ validate_target_pr <- function(
             round_id = round_id,
             skip_check_config = TRUE
           )
-        ) %>%
-          purrr::list_flatten() %>%
+        ) |>
+          purrr::list_flatten() |>
           as_target_validations()
       } else {
         oo_vals <- NULL
@@ -330,7 +330,7 @@ validate_target_pr <- function(
       )
     }
   )
-  return(validations)
+  validations
 }
 
 # Check if file is a standalone target data file named exactly as the target type.

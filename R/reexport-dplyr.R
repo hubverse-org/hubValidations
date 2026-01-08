@@ -2,7 +2,7 @@
 #'
 #' @rdname pipe
 #' @keywords internal
-#' @name  %>%
+#' @name %>%
 #' @importFrom dplyr %>%
 #' @export
 #' @param lhs A value or the magrittr placeholder.

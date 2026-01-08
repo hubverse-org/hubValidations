@@ -10,8 +10,8 @@
 try_check <- function(expr, file_path) {
   check <- try(expr, silent = TRUE)
   if (inherits(check, "try-error")) {
-    msg <- as.character(check) %>%
-      cli::ansi_strip() %>%
+    msg <- as.character(check) |>
+      cli::ansi_strip() |>
       clean_msg()
 
     return(

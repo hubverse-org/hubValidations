@@ -58,11 +58,11 @@ validate_derived_task_ids <- function(
   model_tasks <- hubUtils::get_round_model_tasks(config_tasks, round_id)
   has_required <- purrr::map(
     model_tasks,
-    ~ .x[["task_ids"]][valid_task_ids] %>%
+    ~ .x[["task_ids"]][valid_task_ids] |>
       purrr::map_lgl(
         ~ !is.null(.x$required)
       )
-  ) %>%
+  ) |>
     purrr::reduce(`|`)
   if (any(has_required)) {
     cli::cli_abort(

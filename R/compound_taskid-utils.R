@@ -89,8 +89,11 @@ get_tbl_compound_taskid_set <- function(
         call = call
       )
     }
-  ) %>%
-    purrr::set_names(seq_along(.))
+  )
+  tbl_compound_taskids <- purrr::set_names(
+    tbl_compound_taskids,
+    seq_along(tbl_compound_taskids)
+  )
 
   if (compact) {
     tbl_compound_taskids <- purrr::compact(tbl_compound_taskids)

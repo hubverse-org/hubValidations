@@ -50,7 +50,7 @@ parse_file_name <- function(
     model_id = paste(split_res[2], split_res[3], sep = "-"),
     ext = fs::path_ext(file_path),
     compression_ext = compression_ext
-  ) %>%
+  ) |>
     purrr::compact()
 }
 

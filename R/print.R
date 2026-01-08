@@ -118,8 +118,8 @@ print_validation_warnings <- function(warnings) {
   format_warning <- function(msg) {
     # Squish whitespace and wrap to console width (minus room for box borders)
     wrap_width <- max(cli::console_width() - 6, 40)
-    wrapped <- msg %>%
-      stringr::str_squish() %>%
+    wrapped <- msg |>
+      stringr::str_squish() |>
       stringr::str_wrap(width = wrap_width)
 
     # Split into lines
@@ -134,7 +134,7 @@ print_validation_warnings <- function(warnings) {
   }
 
   # Format all warnings
-  warning_lines <- purrr::map(warning_messages, format_warning) %>%
+  warning_lines <- purrr::map(warning_messages, format_warning) |>
     unlist()
 
   cat(

@@ -41,7 +41,7 @@ stand_up_custom_check_hub <- function(
   new_yaml <- fs::path(new_path, "hub-config", "validations.yml")
   fs::file_copy(yaml_path, new_yaml, overwrite = TRUE)
   # nolint end
-  return(new_path)
+  new_path
 }
 
 # Create global target config_tasks for testing. Defaults to using task.json

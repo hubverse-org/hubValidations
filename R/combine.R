@@ -10,7 +10,7 @@ combine <- function(...) {
 
 #' @export
 combine.hub_validations <- function(...) {
-  objects <- rlang::list2(...) %>%
+  objects <- rlang::list2(...) |>
     purrr::compact()
   validate_internal_class(objects, class = "hub_validations")
 
@@ -22,8 +22,8 @@ combine.hub_validations <- function(...) {
   }
 
   # Merge warnings attributes from all objects
-  warnings <- purrr::map(objects, ~ attr(.x, "warnings")) %>%
-    purrr::list_flatten() %>%
+  warnings <- purrr::map(objects, ~ attr(.x, "warnings")) |>
+    purrr::list_flatten() |>
     purrr::compact()
 
   structure(
@@ -40,7 +40,7 @@ combine.hub_validations <- function(...) {
 
 #' @export
 combine.target_validations <- function(...) {
-  objects <- rlang::list2(...) %>%
+  objects <- rlang::list2(...) |>
     purrr::compact()
   validate_internal_class(objects, class = "target_validations")
 
@@ -52,8 +52,8 @@ combine.target_validations <- function(...) {
   }
 
   # Merge warnings attributes from all objects
-  warnings <- purrr::map(objects, ~ attr(.x, "warnings")) %>%
-    purrr::list_flatten() %>%
+  warnings <- purrr::map(objects, ~ attr(.x, "warnings")) |>
+    purrr::list_flatten() |>
     purrr::compact()
 
   structure(

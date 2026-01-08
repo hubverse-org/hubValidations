@@ -50,8 +50,8 @@ spl_hash_tbl <- function(
     compound_taskid_set = compound_taskid_set,
     output_types = "sample",
     derived_task_ids = derived_task_ids
-  ) %>%
-    stats::setNames(seq_along(.))
+  )
+  mt_spl_grid <- stats::setNames(mt_spl_grid, seq_along(mt_spl_grid))
 
   # Iterate over each modeling task expanded grid.
   # First rename the output_type_id column in the expanded grid to compound_idx
@@ -94,10 +94,10 @@ spl_hash_tbl <- function(
         round_id
       )
     )
-  ) %>%
-    purrr::compact() %>%
+  ) |>
+    purrr::compact() |>
     # add an mt_id column to each tbl that indicates the modeling task group
-    purrr::imap(~ dplyr::mutate(.x, mt_id = as.integer(.y))) %>%
+    purrr::imap(~ dplyr::mutate(.x, mt_id = as.integer(.y))) |>
     purrr::list_rbind()
 }
 
@@ -126,10 +126,10 @@ get_mt_spl_hash_tbl <- function(tbl, compound_taskids, round_task_ids) {
     compound_taskids
   )
 
-  tbl <- tbl %>%
+  tbl <- tbl |>
     dplyr::group_by(
       .data$output_type_id
-    ) %>%
+    ) |>
     # arrange by non_compound_taskids to ensure consistent ordering of values
     # when creating hashes of non_compound_taskid values.
     dplyr::arrange(
@@ -138,10 +138,10 @@ get_mt_spl_hash_tbl <- function(tbl, compound_taskids, round_task_ids) {
     )
 
   # split tbl by sample idx (contained in the output_type_id column)
-  split(tbl, f = tbl$output_type_id) %>%
+  split(tbl, f = tbl$output_type_id) |>
     purrr::map(
       ~ sample_properties_tbl(.x, non_compound_taskids)
-    ) %>%
+    ) |>
     purrr::list_rbind()
 }
 
@@ -232,7 +232,7 @@ has_spls_mt <- function(mt) {
 # Check whether a round configuration has a sample output type in any of it's
 # model tasks. Returns a list with a logical value for each model task.
 has_spls_round <- function(config_tasks, round_id) {
-  hubUtils::get_round_model_tasks(config_tasks, round_id) %>%
+  hubUtils::get_round_model_tasks(config_tasks, round_id) |>
     purrr::map_lgl(~ has_spls_mt(.x))
 }
 
@@ -298,8 +298,8 @@ add_sample_idx <- function(
       "output_type",
       "sample",
       "output_type_id_params"
-    ) %>%
-      is.null() %>%
+    ) |>
+      is.null() |>
       isFALSE()
 
     # Check that x (the output df) has a sample output type (e.g. samples could be
@@ -397,24 +397,25 @@ add_mt_sample_idx <- function(
 
   # Create a unique sample ID for each unique combinations of values of compound
   # task ID set columns and join to the subset of sample output type rows.
-  spl <- unique(spl[, comp_tids, drop = FALSE]) %>%
-    dplyr::mutate(
-      output_type = "sample",
-      output_type_id = seq_len(nrow(.)) + start_idx
-    ) %>%
-    dplyr::left_join(spl, by = comp_tids)
+  spl_unique <- unique(spl[, comp_tids, drop = FALSE])
+  spl_unique <- dplyr::mutate(
+    spl_unique,
+    output_type = "sample",
+    output_type_id = seq_len(nrow(spl_unique)) + start_idx
+  )
+  spl <- dplyr::left_join(spl_unique, spl, by = comp_tids)
 
   if (!is.null(type) && type == "character") {
     spl[[config_tid]] <- sprintf("s%s", spl[[config_tid]])
   }
 
-  x[x[["output_type"]] != "sample", ] %>%
+  x[x[["output_type"]] != "sample", ] |>
     rbind(spl[, x_names, drop = FALSE])
 }
 
 # Get the number of unique samples in a model out table.
 get_sample_n <- function(x, config_tid) {
-  x[x[["output_type"]] == "sample", config_tid, drop = TRUE] %>%
-    unique() %>%
+  x[x[["output_type"]] == "sample", config_tid, drop = TRUE] |>
+    unique() |>
     length()
 }
