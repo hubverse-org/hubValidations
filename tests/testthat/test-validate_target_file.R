@@ -35,7 +35,7 @@ test_that("validate_target_file works with partitioned parquet target data file"
   # time-series CSV file
   res_ts <- validate_target_file(
     hub_path,
-    file_path = "time-series/target=wk%20flu%20hosp%20rate/part-0.parquet"
+    file_path = "time-series/target=flu_hosp_rate/part-0.parquet"
   )
   expect_s3_class(res_ts, "hub_validations")
   expect_named(

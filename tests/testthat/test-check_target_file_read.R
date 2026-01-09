@@ -53,7 +53,7 @@ test_that("check_target_file_read works with csv data", {
 
   # Break quoting (unclosed quote) ----
   lines <- readLines(source_target_path)
-  lines[3] <- '"2020-01-11,wk inc flu hosp,15,0' # missing closing quote
+  lines[3] <- '"2020-01-11,flu_hosp_inc,15,0' # missing closing quote
   writeLines(lines, target_path)
 
   unclosed_quote_csv <- check_target_file_read(
@@ -204,7 +204,7 @@ test_that("check_target_file_read works on partitioned data", {
   )
 
   # Should read successfully
-  file_path <- "time-series/target=wk%20flu%20hosp%20rate/part-0.parquet"
+  file_path <- "time-series/target=flu_hosp_rate/part-0.parquet"
   valid_partitioned <- check_target_file_read(
     file_path = file_path,
     hub_path = hub_path

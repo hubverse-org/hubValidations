@@ -28,9 +28,9 @@
       res_ts
     Message
       
-      -- time-series/target=wk%20flu%20hosp%20rate/part-0.parquet ----
+      -- time-series/target=flu_hosp_rate/part-0.parquet ----
       
-      v [target_file_exists]: File exists at path 'target-data/time-series/target=wk%20flu%20hosp%20rate/part-0.parquet'.
+      v [target_file_exists]: File exists at path 'target-data/time-series/target=flu_hosp_rate/part-0.parquet'.
       v [target_partition_file_name]: Hive-style partition file path segments are valid.
       v [target_file_ext]: Hive-partitioned target data file extension is valid.
 

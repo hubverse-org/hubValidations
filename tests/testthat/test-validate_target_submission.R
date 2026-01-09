@@ -71,7 +71,7 @@ test_that("validate_target_submission works on multi-file time-series target dat
 
   res_ts <- validate_target_submission(
     hub_path,
-    file_path = "time-series/target=wk%20flu%20hosp%20rate/part-0.parquet",
+    file_path = "time-series/target=flu_hosp_rate/part-0.parquet",
     target_type = "time-series"
   )
   expect_s3_class(res_ts, c("target_validations", "hub_validations"))
@@ -135,7 +135,7 @@ test_that("validate_target_submission returns early as expected", {
   early_return_ts <- validate_target_submission(
     hub_path,
     # Use non-existent file to trigger early return file existence check
-    file_path = "time-series/target=wk%20flu%20hosp%20rate/part-0.parquet",
+    file_path = "time-series/target=flu_hosp_rate/part-0.parquet",
     target_type = "time-series"
   )
   expect_s3_class(early_return_ts, c("target_validations", "hub_validations"))

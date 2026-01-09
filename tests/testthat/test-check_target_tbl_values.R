@@ -50,7 +50,7 @@ test_that("check_target_tbl_values works with time-series data", {
   )
   expect_equal(
     invalid_ts$error_tbl$target,
-    c("wk inc flu hosp", "random_target")
+    c("flu_hosp_inc", "random_target")
   )
 
   # Check that function still works when `target_tbl_chr` has errors in every row and
@@ -160,7 +160,7 @@ test_that("check_target_tbl_values works with oracle-output data", {
   )
   expect_equal(
     invalid_oracle$error_tbl$target,
-    c("wk flu hosp rate", "random_target")
+    c("flu_hosp_rate", "random_target")
   )
   expect_named(
     invalid_oracle$error_tbl,

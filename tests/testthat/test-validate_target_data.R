@@ -61,7 +61,7 @@ test_that("validate_target_data works on multi-file time-series target data file
 
   res_ts <- validate_target_data(
     hub_path,
-    file_path = "time-series/target=wk%20flu%20hosp%20rate/part-0.parquet",
+    file_path = "time-series/target=flu_hosp_rate/part-0.parquet",
     target_type = "time-series"
   )
   expect_s3_class(res_ts, c("target_validations", "hub_validations"))

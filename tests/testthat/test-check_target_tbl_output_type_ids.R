@@ -53,7 +53,7 @@ test_that("check_target_tbl_output_type_ids works", {
   )
   expect_equal(
     invalid_oo$missing$target,
-    "wk flu hosp rate category"
+    "flu_hosp_rate_cat"
   )
   expect_equal(
     invalid_oo$missing$output_type,
@@ -268,7 +268,7 @@ test_that("check_target_tbl_output_type_ids works with 2 dist targets", {
   )
   expect_equal(
     sort(invalid_dist_2$missing$target),
-    c("wk flu death rate category", "wk flu hosp rate category")
+    c("flu_hosp_rate_cat", "wk flu death rate category")
   )
   expect_equal(
     unique(invalid_dist_2$missing$output_type),

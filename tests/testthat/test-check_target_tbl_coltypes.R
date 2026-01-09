@@ -133,14 +133,14 @@ test_that("check_target_tbl_coltypes works with partitioned v6 hub", {
 
   hub_path <- system.file("testhubs/v6/target_dir", package = "hubUtils")
   target_tbl <- read_target_file(
-    "time-series/target=wk%20flu%20hosp%20rate/part-0.parquet",
+    "time-series/target=flu_hosp_rate/part-0.parquet",
     hub_path
   )
 
   valid_ts <- check_target_tbl_coltypes(
     target_tbl,
     target_type = "time-series",
-    file_path = "time-series/target=wk%20flu%20hosp%20rate/part-0.parquet",
+    file_path = "time-series/target=flu_hosp_rate/part-0.parquet",
     hub_path = hub_path
   )
   expect_s3_class(valid_ts, "check_success")
@@ -155,7 +155,7 @@ test_that("check_target_tbl_coltypes works with partitioned v6 hub", {
   invalid_ts <- check_target_tbl_coltypes(
     target_tbl,
     target_type = "time-series",
-    file_path = "time-series/target=wk%20flu%20hosp%20rate/part-0.parquet",
+    file_path = "time-series/target=flu_hosp_rate/part-0.parquet",
     hub_path = hub_path
   )
 
@@ -382,14 +382,14 @@ test_that("check_target_tbl_coltypes works with partitioned v6 hub", {
 
   hub_path <- system.file("testhubs/v6/target_dir", package = "hubUtils")
   target_tbl <- read_target_file(
-    "time-series/target=wk%20flu%20hosp%20rate/part-0.parquet",
+    "time-series/target=flu_hosp_rate/part-0.parquet",
     hub_path
   )
 
   valid_ts <- check_target_tbl_coltypes(
     target_tbl,
     target_type = "time-series",
-    file_path = "time-series/target=wk%20flu%20hosp%20rate/part-0.parquet",
+    file_path = "time-series/target=flu_hosp_rate/part-0.parquet",
     hub_path = hub_path
   )
   expect_s3_class(valid_ts, "check_success")
@@ -404,7 +404,7 @@ test_that("check_target_tbl_coltypes works with partitioned v6 hub", {
   invalid_ts <- check_target_tbl_coltypes(
     target_tbl,
     target_type = "time-series",
-    file_path = "time-series/target=wk%20flu%20hosp%20rate/part-0.parquet",
+    file_path = "time-series/target=flu_hosp_rate/part-0.parquet",
     hub_path = hub_path
   )
 
