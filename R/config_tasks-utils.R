@@ -20,11 +20,11 @@ get_round_output_type_names <- function(
   round_id,
   collapse = TRUE
 ) {
-  out <- get_round_output_types(config_tasks, round_id) %>%
+  out <- get_round_output_types(config_tasks, round_id) |>
     purrr::map(names)
 
   if (collapse) {
-    purrr::flatten_chr(out) %>%
+    purrr::flatten_chr(out) |>
       unique()
   } else {
     out
@@ -63,7 +63,7 @@ get_round_config_values <- function(
   output_type_id_values <- purrr::map(
     output_type_names,
     \(.x) get_output_type_id_values(.x, model_tasks)
-  ) %>%
+  ) |>
     purrr::flatten_chr()
 
   output_types <- list(
@@ -77,9 +77,9 @@ get_task_id_values <- function(task_id, model_tasks) {
   purrr::map(
     model_tasks,
     ~ .x[["task_ids"]][[task_id]]
-  ) %>%
-    unlist(use.names = FALSE) %>%
-    unique() %>%
+  ) |>
+    unlist(use.names = FALSE) |>
+    unique() |>
     as.character()
 }
 
@@ -87,9 +87,9 @@ get_output_type_id_values <- function(output_type, model_tasks) {
   out <- purrr::map(
     model_tasks,
     ~ .x[["output_type"]][[output_type]][["output_type_id"]]
-  ) %>%
-    unlist(use.names = FALSE) %>%
-    unique() %>%
+  ) |>
+    unlist(use.names = FALSE) |>
+    unique() |>
     as.character()
 
   if (length(out) == 0L) {

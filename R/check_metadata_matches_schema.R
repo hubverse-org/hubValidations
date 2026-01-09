@@ -25,7 +25,7 @@ check_metadata_matches_schema <- function(file_path, hub_path = ".") {
       schema_json <- jsonlite::read_json(
         abs_metadata_schema_path,
         auto_unbox = TRUE
-      ) %>%
+      ) |>
         jsonlite::toJSON(auto_unbox = TRUE)
 
       valid <- jsonvalidate::json_validate(
@@ -38,7 +38,7 @@ check_metadata_matches_schema <- function(file_path, hub_path = ".") {
 
       check <- as.logical(unclass(valid))
       if (!valid) {
-        msgs <- attr(valid, "errors") %>%
+        msgs <- attr(valid, "errors") |>
           dplyr::transmute(
             m = dplyr::case_when(
               .data$keyword == "required" ~ paste("-", .data$message, "."),
@@ -51,7 +51,7 @@ check_metadata_matches_schema <- function(file_path, hub_path = ".") {
               ),
               TRUE ~ paste("-", .data$instancePath, .data$message, ".")
             )
-          ) %>%
+          ) |>
           dplyr::pull(.data$m)
       } else {
         msgs <- NULL

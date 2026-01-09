@@ -117,8 +117,8 @@ test_that("(#78) check_tbl_value_col_ascending will sort even if the data doesn'
   # with character sorting.
   outputs$cdf$output_type_id$required <- make_unsortable(otid)
   cfg$rounds[[1]]$model_tasks[[1]]$output_type <- outputs
-  jsonlite::toJSON(cfg) %>%
-    jsonlite::prettify() %>%
+  jsonlite::toJSON(cfg) |>
+    jsonlite::prettify() |>
     writeLines(fs::path(hub_path, "hub-config", "tasks.json"))
 
   # Updating the data to match the config --------------------------------
@@ -127,11 +127,11 @@ test_that("(#78) check_tbl_value_col_ascending will sort even if the data doesn'
   convert_to_cdf <- function(x) {
     ifelse(x == "quantile", "cdf", x)
   }
-  tbl <- read_model_out_file(file_path, hub_path) %>%
+  tbl <- read_model_out_file(file_path, hub_path) |>
     dplyr::mutate(
       output_type_id = make_unsortable(.data[["output_type_id"]])
-    ) %>%
-    dplyr::mutate(output_type = convert_to_cdf(.data[["output_type"]])) %>%
+    ) |>
+    dplyr::mutate(output_type = convert_to_cdf(.data[["output_type"]])) |>
     hubData::coerce_to_character()
 
   # validating when it is sorted -----------------------------------------

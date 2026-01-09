@@ -60,7 +60,7 @@
 #'
 #' Details of checks performed by `validate_submission()`
 #' ```{r, echo = FALSE}
-#' arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")) %>%
+#' arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations"))  |>
 #' dplyr::filter(
 #'  .data$`parent fun` %in% c(
 #'                              "validate_submission_time",
@@ -69,14 +69,14 @@
 #'                            ) |
 #'  .data$`check fun` == "check_config_hub_valid",
 #'  !.data$optional
-#'  ) %>%
-#'   dplyr::select(-"parent fun", -"check fun", -"optional") %>%
+#'  )  |>
+#'   dplyr::select(-"parent fun", -"check fun", -"optional")  |>
 #'   dplyr::mutate("Extra info" = dplyr::case_when(
 #'     is.na(.data$`Extra info`) ~ "",
 #'     TRUE ~ .data$`Extra info`
-#'   )) %>%
-#'   knitr::kable() %>%
-#'   kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+#'   ))  |>
+#'   knitr::kable()  |>
+#'   kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))  |>
 #'   kableExtra::column_spec(1, bold = TRUE)
 #' ```
 #'
@@ -84,19 +84,19 @@
 #'
 #' Details of checks performed by `validate_model_metadata()`
 #' ```{r, echo = FALSE}
-#' arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations")) %>%
-#' dplyr::filter(.data$`parent fun` == "validate_model_metadata") %>%
-#'   dplyr::select(-"parent fun", -"check fun") %>%
+#' arrow::read_csv_arrow(system.file("check_table.csv", package = "hubValidations"))  |>
+#' dplyr::filter(.data$`parent fun` == "validate_model_metadata")  |>
+#'   dplyr::select(-"parent fun", -"check fun")  |>
 #'   dplyr::mutate("Extra info" = dplyr::case_when(
 #'     is.na(.data$`Extra info`) ~ "",
 #'     TRUE ~ .data$`Extra info`
-#'   )) %>%
-#'   knitr::kable() %>%
+#'   ))  |>
+#'   knitr::kable()  |>
 #'   kableExtra::kable_styling(
 #'      bootstrap_options = c(
 #'          "striped", "hover", "condensed", "responsive"
 #'        )
-#'      ) %>%
+#'      )  |>
 #'   kableExtra::column_spec(1, bold = TRUE)
 #' ```
 #' @return An object of class `hub_validations`.
@@ -184,7 +184,7 @@ validate_pr <- function(
           ~ fs::path_has_parent(.x, model_metadata_dir) &&
             stringr::str_detect(.x, "README", negate = TRUE)
         ),
-      ) %>%
+      ) |>
         dplyr::mutate(
           rel_path = dplyr::case_when(
             .data$model_output ~ fs::path_rel(.data$filename, model_output_dir),
@@ -218,7 +218,7 @@ validate_pr <- function(
             alert = file_modification_check,
             allow_submit_window_mods = allow_submit_window_mods
           )
-        ) %>%
+        ) |>
           purrr::reduce(combine)
       } else {
         file_modifications <- NULL
@@ -235,8 +235,8 @@ validate_pr <- function(
           derived_task_ids = derived_task_ids,
           skip_check_config = TRUE
         )
-      ) %>%
-        purrr::list_flatten() %>%
+      ) |>
+        purrr::list_flatten() |>
         as_hub_validations()
 
       model_metadata_vals <- purrr::map(
@@ -246,8 +246,8 @@ validate_pr <- function(
           file_path = .x,
           validations_cfg_path = validations_cfg_path
         )
-      ) %>%
-        purrr::list_flatten() %>%
+      ) |>
+        purrr::list_flatten() |>
         as_hub_validations()
 
       validations <- combine(
@@ -272,7 +272,7 @@ validate_pr <- function(
       )
     }
   )
-  return(validations)
+  validations
 }
 
 # Sends message reporting any files with changes in PR that were not validated.
@@ -286,7 +286,7 @@ inform_unvalidated_files <- function(
     return(invisible(NULL))
   }
 
-  ignored_bullets <- sprintf("{.val %s}", ignored_files) %>%
+  ignored_bullets <- sprintf("{.val %s}", ignored_files) |>
     purrr::set_names(rep("*", length(ignored_files)))
 
   cli::cli_inform(
@@ -344,7 +344,7 @@ check_pr_modf_del_files <- function(
       allow_submit_window_mods = allow_submit_window_mods,
       alert = alert
     )
-  ) %>%
+  ) |>
     purrr::compact()
 
   if (file_type %in% c("timeseries", "oracle_output")) {
@@ -377,8 +377,8 @@ check_pr_modf_del_file <- function(
     )
     # If check fails return exec error class object
     if (inherits(allow_mod, "try-error")) {
-      msg <- as.character(allow_mod) %>%
-        cli::ansi_strip() %>%
+      msg <- as.character(allow_mod) |>
+        cli::ansi_strip() |>
         clean_msg()
       return(
         capture_exec_error(

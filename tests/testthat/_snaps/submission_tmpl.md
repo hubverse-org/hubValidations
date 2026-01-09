@@ -253,7 +253,7 @@
 ---
 
     Code
-      submission_tmpl(config_path, round_id = "2022-12-26") %>% dplyr::filter(.data$
+      dplyr::filter(submission_tmpl(config_path, round_id = "2022-12-26"), .data$
         output_type == "sample")
     Output
       # A tibble: 6 x 7

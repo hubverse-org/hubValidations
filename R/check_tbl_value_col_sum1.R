@@ -50,16 +50,16 @@ check_values_sum1 <- function(tbl) {
   check_tbl <- dplyr::group_by(
     tbl,
     dplyr::across(dplyr::all_of(group_cols))
-  ) %>%
-    dplyr::arrange("output_type_id", .by_group = TRUE) %>%
+  ) |>
+    dplyr::arrange("output_type_id", .by_group = TRUE) |>
     dplyr::summarise(sum1 = isTRUE(all.equal(sum(.data[["value"]]), 1L)))
 
   if (all(check_tbl$sum1)) {
     return(NULL)
   }
 
-  dplyr::filter(check_tbl, !.data[["sum1"]]) %>%
-    dplyr::select(-dplyr::all_of("sum1")) %>%
-    dplyr::ungroup() %>%
+  dplyr::filter(check_tbl, !.data[["sum1"]]) |>
+    dplyr::select(-dplyr::all_of("sum1")) |>
+    dplyr::ungroup() |>
     dplyr::mutate(output_type = "pmf")
 }

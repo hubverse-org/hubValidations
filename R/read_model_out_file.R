@@ -62,13 +62,13 @@ read_model_out_file <- function(
     },
     parquet = {
       if (coerce_types == "hub") {
-        arrow::read_parquet(full_path) %>%
+        arrow::read_parquet(full_path) |>
           coerce_to_hub_schema(
             config_tasks = read_config(hub_path, "tasks"),
             output_type_id_datatype = output_type_id_datatype
           )
       } else if (coerce_types == "chr") {
-        arrow::read_parquet(full_path) %>%
+        arrow::read_parquet(full_path) |>
           hubData::coerce_to_character()
       } else {
         arrow::read_parquet(full_path)
@@ -76,13 +76,13 @@ read_model_out_file <- function(
     },
     arrow = {
       if (coerce_types == "hub") {
-        arrow::read_feather(full_path) %>%
+        arrow::read_feather(full_path) |>
           coerce_to_hub_schema(
             config_tasks = read_config(hub_path, "tasks"),
             output_type_id_datatype = output_type_id_datatype
           )
       } else if (coerce_types == "chr") {
-        arrow::read_feather(full_path) %>%
+        arrow::read_feather(full_path) |>
           hubData::coerce_to_character()
       } else {
         arrow::read_feather(full_path)
@@ -116,7 +116,7 @@ create_model_out_schema <- function(
     purrr::map(
       names(schema),
       ~ arrow::field(.x, type = arrow::utf8())
-    ) %>%
+    ) |>
       arrow::schema()
   })
 }

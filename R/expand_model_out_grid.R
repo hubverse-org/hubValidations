@@ -237,16 +237,16 @@ expand_model_out_grid <- function(
 
   task_id_l <- purrr::map(
     round_config[["model_tasks"]],
-    ~ .x[["task_ids"]] %>%
-      derived_taskids_to_na(derived_task_ids) %>%
+    ~ .x[["task_ids"]] |>
+      derived_taskids_to_na(derived_task_ids) |>
       null_taskids_to_na()
-  ) %>%
+  ) |>
     # Fix round_id value to current round_id in round_id variable column
     fix_round_id(
       round_id = round_id,
       round_config = round_config,
       round_ids = hubUtils::get_round_ids(config_tasks)
-    ) %>%
+    ) |>
     extract_property_values(required_vals_only = required_vals_only)
 
   # Get output type id property according to config schema version
@@ -254,9 +254,9 @@ expand_model_out_grid <- function(
   # retired
   config_tid <- hubUtils::get_config_tid(config_tasks = config_tasks)
 
-  output_type_l <- subset_round_output_types(round_config, output_types) %>%
-    extract_round_output_type_ids(config_tid, force_output_types) %>%
-    extract_property_values(required_vals_only = required_vals_only) %>%
+  output_type_l <- subset_round_output_types(round_config, output_types) |>
+    extract_round_output_type_ids(config_tid, force_output_types) |>
+    extract_property_values(required_vals_only = required_vals_only) |>
     purrr::map(~ purrr::compact(.x))
 
   # Expand output grid individually for each modeling task.
@@ -330,7 +330,7 @@ subset_mt_output_types <- function(model_task, output_types) {
 #' @noRd
 extract_property_values <- function(x, required_vals_only = FALSE) {
   if (required_vals_only) {
-    purrr::map(x, ~ .x %>% purrr::map(~ .x[["required"]]))
+    purrr::map(x, ~ .x |> purrr::map(~ .x[["required"]]))
   } else {
     purrr::modify_depth(x, .depth = 2, ~ unlist(.x, use.names = FALSE))
   }
@@ -389,10 +389,10 @@ expand_model_task_grid <- function(
         output_type_id = .x # expand the output type ID values into the
         # `output_type_id` column
       )
-    ) %>%
-      purrr::compact() %>%
+    ) |>
+      purrr::compact() |>
       expand.grid(stringsAsFactors = FALSE)
-  ) %>%
+  ) |>
     purrr::list_rbind()
 }
 
@@ -471,8 +471,8 @@ process_model_task_grids <- function(
   if (bind_model_tasks) {
     # To bind multiple modeling task grids together, we need to ensure they contain
     # the same columns. Any missing columns are padded with NAs.
-    all_cols <- purrr::map(x, ~ names(.x)) %>%
-      unlist() %>%
+    all_cols <- purrr::map(x, ~ names(.x)) |>
+      unlist() |>
       unique()
 
     schema_cols <- names(
@@ -506,9 +506,9 @@ process_model_task_grids <- function(
     )
   }
   if (bind_model_tasks) {
-    return(do.call(rbind, x))
+    do.call(rbind, x)
   } else {
-    return(x)
+    x
   }
 }
 
@@ -536,9 +536,9 @@ pad_missing_cols <- function(x, all_cols) {
       return(x)
     }
 
-    missing_cols <- as.list(rep(NA, length(missing_colnames))) %>%
-      stats::setNames(missing_colnames) %>%
-      as.data.frame() %>%
+    missing_cols <- as.list(rep(NA, length(missing_colnames))) |>
+      stats::setNames(missing_colnames) |>
+      as.data.frame() |>
       arrow::arrow_table()
 
     return(cbind(x, missing_cols)[, all_cols])

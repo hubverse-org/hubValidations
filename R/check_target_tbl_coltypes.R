@@ -97,9 +97,9 @@ check_target_tbl_coltypes <- function(
       "} not {.cls ",
       tbl_types[invalid_cols],
       "}"
-    ) %>%
-      paste(collapse = ", ") %>%
-      paste0(".") %>%
+    ) |>
+      paste(collapse = ", ") |>
+      paste0(".") |>
       cli::format_inline()
   }
 

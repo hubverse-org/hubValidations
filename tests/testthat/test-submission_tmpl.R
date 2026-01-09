@@ -218,7 +218,7 @@ test_that("submission_tmpl handles samples correctly", {
     submission_tmpl(
       config_path,
       round_id = "2022-12-26"
-    ) %>%
+    ) |>
       dplyr::filter(.data$output_type == "sample")
   )
 
@@ -231,7 +231,7 @@ test_that("submission_tmpl handles samples correctly", {
     submission_tmpl(
       config_path,
       round_id = "2022-12-26"
-    ) %>%
+    ) |>
       dplyr::filter(.data$output_type == "sample")
   )
 

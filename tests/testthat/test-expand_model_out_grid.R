@@ -81,7 +81,7 @@ test_that("expand_model_out_grid works correctly", {
           simplifyDataFrame = FALSE
         ),
         round_id = "2023-11-26"
-      ) %>%
+      ) |>
         dplyr::filter(is.na(horizon))
     )
   )
@@ -99,7 +99,7 @@ test_that("expand_model_out_grid works correctly", {
           simplifyDataFrame = FALSE
         ),
         round_id = "2023-11-26"
-      ) %>%
+      ) |>
         dplyr::filter(is.na(horizon))
     )
   )
@@ -227,7 +227,7 @@ test_that("expand_model_out_grid output controls with samples work correctly", {
       config_tasks,
       round_id = "2022-12-26",
       include_sample_ids = TRUE
-    ) %>%
+    ) |>
       dplyr::filter(.data$output_type == "sample")
   )
   expect_snapshot(
@@ -300,7 +300,7 @@ test_that("expand_model_out_grid output controls with samples work correctly", {
       ),
       round_id = "2022-12-26",
       include_sample_ids = TRUE
-    ) %>%
+    ) |>
       dplyr::filter(.data$output_type == "sample")
   )
 
@@ -661,7 +661,7 @@ test_that("expand_model_out_grid errors correctly", {
           simplifyDataFrame = FALSE
         ),
         round_id = "2023-11-26"
-      ) %>%
+      ) |>
         dplyr::filter(is.na(horizon))
     ),
     error = TRUE

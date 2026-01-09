@@ -28,7 +28,7 @@
 #'   target_file_ext_valid = check_target_file_ext_valid(file_path)
 #' )
 new_target_validations <- function(...) {
-  x <- rlang::dots_list(...) %>%
+  x <- rlang::dots_list(...) |>
     purrr::compact()
 
   validate_internal_class(x, class = "hub_check")

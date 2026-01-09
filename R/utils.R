@@ -3,10 +3,10 @@ get_file_target_metadata <- function(hub_path, file_path) {
 
   purrr::map(
     round_config[["model_tasks"]],
-    ~ .x[["target_metadata"]] %>%
+    ~ .x[["target_metadata"]] |>
       purrr::map(~ .x[["target_keys"]])
-  ) %>%
-    unlist(recursive = FALSE) %>%
+  ) |>
+    unlist(recursive = FALSE) |>
     unique()
 }
 

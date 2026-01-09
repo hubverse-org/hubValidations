@@ -41,15 +41,13 @@ check_metadata_file_name <- function(file_path, hub_path = ".") {
     )
   }
 
-  return(
-    capture_check_cnd(
-      check = check,
-      file_path = file_path,
-      msg_subject = "Metadata file name",
-      msg_attribute = "the {.var model_id} specified within the metadata file.",
-      msg_verbs = c("matches", "must match"),
-      details = details,
-      error = TRUE
-    )
+  capture_check_cnd(
+    check = check,
+    file_path = file_path,
+    msg_subject = "Metadata file name",
+    msg_attribute = "the {.var model_id} specified within the metadata file.",
+    msg_verbs = c("matches", "must match"),
+    details = details,
+    error = TRUE
   )
 }

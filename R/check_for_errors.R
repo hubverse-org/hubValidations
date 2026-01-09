@@ -42,5 +42,5 @@ check_for_errors <- function(x, verbose = FALSE, show_warnings = FALSE) {
   # Print validation-level warnings before success message
   print_validation_warnings(validation_warnings)
   cli::cli_alert_success("All validation checks have been successful.")
-  return(invisible(TRUE))
+  invisible(TRUE)
 }

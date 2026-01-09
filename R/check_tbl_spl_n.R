@@ -49,7 +49,7 @@ check_tbl_spl_n <- function(
   )
   n_ranges <- get_round_spl_n_ranges(config_tasks, round_id)
 
-  n_tbl <- dplyr::group_by(hash_tbl, .data$compound_idx) %>%
+  n_tbl <- dplyr::group_by(hash_tbl, .data$compound_idx) |>
     dplyr::summarise(
       n = dplyr::n_distinct(.data$output_type_id),
       mt_id = unique(.data$mt_id)
@@ -78,13 +78,13 @@ check_tbl_spl_n <- function(
 
   # Next check that all compound_idx have a number of samples within the
   # range required by the sample config.
-  n_tbl <- n_tbl %>%
-    dplyr::left_join(n_ranges, by = "mt_id") %>%
+  n_tbl <- n_tbl |>
+    dplyr::left_join(n_ranges, by = "mt_id") |>
     dplyr::mutate(
       less = .data$n < .data$n_min,
       more = .data$n > .data$n_max,
       out_range = .data$less | .data$more
-    ) %>%
+    ) |>
     dplyr::filter(.data$out_range)
 
   check <- nrow(n_tbl) == 0L
@@ -134,7 +134,7 @@ get_round_spl_n_ranges <- function(config_tasks, round_id) {
         )
       }
     }
-  ) %>%
+  ) |>
     purrr::list_rbind()
 }
 
@@ -148,7 +148,7 @@ n_mismatch_errors <- function(n_tbl, hash_tbl, tbl) {
         tbl$output_type_id == spl_d,
         setdiff(names(tbl), c("output_type_id", "value", "output_type"))
       ]
-      row <- n_tbl[n_tbl$compound_idx == .x, ] %>% as.vector()
+      row <- n_tbl[n_tbl$compound_idx == .x, ] |> as.vector()
       list(
         compound_idx = .x,
         n = row$n,
@@ -162,8 +162,8 @@ n_mismatch_errors <- function(n_tbl, hash_tbl, tbl) {
 
 
 n_mismatch_details <- function(n_tbl) {
+  # nolint start: object_usage_linter
   cat_msg <- function(compound_idx, type) {
-    # nolint: object_usage_linter
     switch(
       type,
       less = paste0(
@@ -174,9 +174,10 @@ n_mismatch_details <- function(n_tbl) {
         "File contains more than the maximum required number of samples per task ",
         "for compound idx{?s} {.val {compound_idx}}"
       )
-    ) %>%
+    ) |>
       cli::format_inline()
   }
+  # nolint end
 
   purrr::map(
     c("less", "more"),
@@ -188,8 +189,8 @@ n_mismatch_details <- function(n_tbl) {
         cat_msg(compound_idx, .x)
       }
     }
-  ) %>%
-    purrr::compact() %>%
-    c("See {.var errors} attribute for details.") %>%
+  ) |>
+    purrr::compact() |>
+    c("See {.var errors} attribute for details.") |>
     paste(collapse = ". ")
 }

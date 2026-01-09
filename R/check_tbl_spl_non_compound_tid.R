@@ -53,7 +53,7 @@ check_tbl_spl_non_compound_tid <- function(
     hash_tbl,
     n = dplyr::n_distinct(.data$hash_non_comp_tid),
     mt_id = unique(.data$mt_id)
-  ) %>%
+  ) |>
     dplyr::filter(.data$n > 1L)
 
   check <- nrow(n_tbl) == 0L
@@ -70,7 +70,7 @@ check_tbl_spl_non_compound_tid <- function(
       round_id,
       compound_taskid_set
     )
-    output_type_ids <- purrr::map(errors, ~ .x$output_type_ids) %>% # nolint: object_usage_linter
+    output_type_ids <- purrr::map(errors, ~ .x$output_type_ids) |> # nolint: object_usage_linter
       unlist(use.names = FALSE)
 
     details <- cli::format_inline(
@@ -110,9 +110,9 @@ non_comptid_mismatch_errors <- function(
   purrr::map(
     mt_ids,
     function(.x, hash_tbl, tbl, compound_taskid_set) {
-      mt_hashes <- hash_tbl$hash_non_comp_tid[hash_tbl$mt_id == .x] %>%
-        table() %>%
-        sort(decreasing = TRUE) %>%
+      mt_hashes <- hash_tbl$hash_non_comp_tid[hash_tbl$mt_id == .x] |>
+        table() |>
+        sort(decreasing = TRUE) |>
         names()
 
       spl_id <- get_hash_out_type_ids(

@@ -102,7 +102,7 @@ capture_check_cnd <- function(
       )
     }
   }
-  return(res)
+  res
 }
 
 #' Capture a simple info message condition
