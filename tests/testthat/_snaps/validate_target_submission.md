@@ -56,7 +56,7 @@
       
       v [valid_config]: All hub config files are valid.
       
-      -- time-series/target=wk%20flu%20hosp%20rate/part-0.parquet ----
+      -- time-series/target=flu_hosp_rate/part-0.parquet ----
       
-      (x) [target_file_exists]: File does not exist at path 'target-data/time-series/target=wk%20flu%20hosp%20rate/part-0.parquet'.
+      (x) [target_file_exists]: File does not exist at path 'target-data/time-series/target=flu_hosp_rate/part-0.parquet'.
 

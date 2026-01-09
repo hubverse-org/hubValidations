@@ -165,7 +165,7 @@ test_that("read_target_file works with split timeseries file.", {
 
   # read in one of the time-series file with hub schema
   file <- read_target_file(
-    "time-series/target-wk_inc_flu_hosp.csv",
+    "time-series/target-flu_hosp_inc.csv",
     dir_hub_path
   )
   expect_s3_class(file, "tbl_df")
@@ -195,7 +195,7 @@ test_that("read_target_file works with split timeseries file.", {
 
   # read in one of the time-series file with all character columns
   chr_file <- read_target_file(
-    "time-series/target-wk_inc_flu_hosp.csv",
+    "time-series/target-flu_hosp_inc.csv",
     dir_hub_path,
     coerce_types = "chr"
   )
@@ -231,7 +231,7 @@ test_that("connect_target_timeseries with HIVE-PARTTIONED data works on local hu
 
   # read in one of the time-series file with hub schema
   file <- read_target_file(
-    "time-series/target=wk%20inc%20flu%20hosp/part-0.parquet",
+    "time-series/target=flu_hosp_inc/part-0.parquet",
     hub_path = dir_hub_path
   )
   expected_dims <- c(33L, 4L)
@@ -261,7 +261,7 @@ test_that("connect_target_timeseries with HIVE-PARTTIONED data works on local hu
   )
   # read in one of the time-series file as all character
   file_chr <- read_target_file(
-    "time-series/target=wk%20inc%20flu%20hosp/part-0.parquet",
+    "time-series/target=flu_hosp_inc/part-0.parquet",
     hub_path = dir_hub_path,
     coerce_types = "chr"
   )
@@ -283,7 +283,7 @@ test_that("connect_target_timeseries with HIVE-PARTTIONED data works on local hu
   arrow::write_dataset(dat, dir, partitioning = "target", format = "csv")
   # read in one of the time-series file with hub schema
   file <- read_target_file(
-    "time-series/target=wk%20inc%20flu%20hosp/part-0.csv",
+    "time-series/target=flu_hosp_inc/part-0.csv",
     hub_path = dir_hub_path
   )
 
@@ -309,7 +309,7 @@ test_that("connect_target_timeseries with HIVE-PARTTIONED data works on local hu
   )
   # read in one of the time-series file as all character
   file_chr <- read_target_file(
-    "time-series/target=wk%20inc%20flu%20hosp/part-0.csv",
+    "time-series/target=flu_hosp_inc/part-0.csv",
     hub_path = dir_hub_path,
     coerce_types = "chr"
   )

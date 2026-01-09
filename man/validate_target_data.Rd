@@ -173,7 +173,7 @@ validate_target_data(hub_path,
 )
 hub_path <- system.file("testhubs/v5/target_dir", package = "hubUtils")
 validate_target_data(hub_path,
-  file_path = "time-series/target=wk\%20flu\%20hosp\%20rate/part-0.parquet",
+  file_path = "time-series/target=flu_hosp_rate/part-0.parquet",
   target_type = "time-series"
 )
 validate_target_data(hub_path,

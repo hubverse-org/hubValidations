@@ -75,7 +75,7 @@ test_that("check_target_dataset_rows_unique works time-series data", {
     structure(
       list(
         target_end_date = structure(19287, class = "Date"),
-        target = "wk inc flu hosp",
+        target = "flu_hosp_inc",
         location = "02",
         count = 3L
       ),
@@ -114,7 +114,7 @@ test_that("check_target_dataset_rows_unique works time-series data", {
     structure(
       list(
         target_end_date = structure(19287, class = "Date"),
-        target = "wk inc flu hosp",
+        target = "flu_hosp_inc",
         location = "02",
         as_of = structure(20298, class = "Date"),
         count = 3L
@@ -216,7 +216,7 @@ test_that("check_target_dataset_rows_unique works with hive partitioned parquet 
       list(
         target_end_date = structure(19287, class = "Date"),
         location = "02",
-        target = "wk inc flu hosp",
+        target = "flu_hosp_inc",
         count = 3L
       ),
       class = c("tbl_df", "tbl", "data.frame"),
@@ -259,7 +259,7 @@ test_that("check_target_dataset_rows_unique works with hive partitioned parquet 
         target_end_date = structure(19287, class = "Date"),
         location = "02",
         as_of = structure(20298, class = "Date"),
-        target = "wk inc flu hosp",
+        target = "flu_hosp_inc",
         count = 3L
       ),
       class = c("tbl_df", "tbl", "data.frame"),
@@ -341,7 +341,7 @@ test_that("check_target_dataset_rows_unique works on oracle-output data", {
       list(
         location = "US",
         target_end_date = structure(19287, class = "Date"),
-        target = "wk flu hosp rate",
+        target = "flu_hosp_rate",
         output_type = "cdf",
         output_type_id = "1",
         count = 3L
@@ -381,7 +381,7 @@ test_that("check_target_dataset_rows_unique works on oracle-output data", {
       list(
         location = "US",
         target_end_date = structure(19287, class = "Date"),
-        target = "wk flu hosp rate",
+        target = "flu_hosp_rate",
         output_type = "cdf",
         output_type_id = "1",
         count = 4L
@@ -483,7 +483,7 @@ test_that("check_target_dataset_rows_unique works with hive partitioned parquet 
         target_end_date = structure(19287, class = "Date"),
         output_type = "cdf",
         output_type_id = "1",
-        target = "wk flu hosp rate",
+        target = "flu_hosp_rate",
         count = 3L
       ),
       class = c("tbl_df", "tbl", "data.frame"),
@@ -529,7 +529,7 @@ test_that("check_target_dataset_rows_unique works with hive partitioned parquet 
         target_end_date = structure(19287, class = "Date"),
         output_type = "cdf",
         output_type_id = "1",
-        target = "wk flu hosp rate",
+        target = "flu_hosp_rate",
         count = 4L
       ),
       class = c("tbl_df", "tbl", "data.frame"),
