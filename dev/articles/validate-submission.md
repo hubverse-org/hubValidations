@@ -84,7 +84,7 @@ validate_submission(hub_path,
 #>   `output_type_id`.
 #> ℹ [value_col_sum1]: No pmf output types to check for sum of 1. Check skipped.
 #> ✖ [submission_time]: Submission time must be within accepted submission window
-#>   for round.  Current time "2026-01-08 08:59:13 UTC" is outside window
+#>   for round.  Current time "2026-01-09 08:31:49 UTC" is outside window
 #>   2022-10-02 EDT--2022-10-09 23:59:59 EDT.
 ```
 
@@ -137,7 +137,7 @@ validate_submission(hub_path,
 #>   submission `round_id` from file name.  `round_id` value 2022-10-08 does not
 #>   match submission `round_id` "2022-10-15"
 #> ✖ [submission_time]: Submission time must be within accepted submission window
-#>   for round.  Current time "2026-01-08 08:59:15 UTC" is outside window
+#>   for round.  Current time "2026-01-09 08:31:50 UTC" is outside window
 #>   2022-10-02 EDT--2022-10-09 23:59:59 EDT.
 ```
 
@@ -160,13 +160,13 @@ be summarised.
 ``` r
 validate_submission(hub_path,
   file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
-) %>%
+)  |>
   check_for_errors()
 #> 
 #> ── 2022-10-08-team1-goodmodel.csv ────
 #> 
 #> ✖ [submission_time]: Submission time must be within accepted submission window
-#>   for round.  Current time "2026-01-08 08:59:16 UTC" is outside window
+#>   for round.  Current time "2026-01-09 08:31:52 UTC" is outside window
 #>   2022-10-02 EDT--2022-10-09 23:59:59 EDT.
 #> Error in `check_for_errors()`:
 #> ! 
@@ -186,7 +186,7 @@ validation window check) now passing overall validation.
 validate_submission(hub_path,
   file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv",
   skip_submit_window_check = TRUE
-) %>%
+)  |>
   check_for_errors()
 #> ✔ All validation checks have been successful.
 ```
