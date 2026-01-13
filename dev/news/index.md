@@ -1,5 +1,77 @@
 # Changelog
 
+## hubValidations (development version)
+
+## hubValidations 0.13.0
+
+### Enhancements
+
+- Added validation warning infrastructure for informational messages
+  that don’t affect validation results
+  ([\#292](https://github.com/hubverse-org/hubValidations/issues/292)).
+  - [`validate_pr()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_pr.md)
+    now displays a warning when hub config files are modified in a pull
+    request, alerting maintainers to review changes that may affect
+    validation of existing data.
+  - Validation-level warnings are displayed prominently in a box at the
+    top of print output.
+  - Check-level warnings can be displayed inline with their checks using
+    `print(x, show_check_warnings = TRUE)`.
+  - [`check_for_errors()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_for_errors.md)
+    gains a `show_warnings` parameter to control display of check-level
+    warnings.
+- Enhanced target data column validation to support `target-data.json`
+  configuration
+  ([\#280](https://github.com/hubverse-org/hubValidations/issues/280)).
+  - [`check_target_tbl_colnames()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_target_tbl_colnames.md)
+    and
+    [`check_target_tbl_coltypes()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_target_tbl_coltypes.md)
+    now use deterministic validation when `target-data.json` config is
+    available, with error messages explicitly referencing the config
+    file.
+- Enhanced
+  [`check_target_tbl_rows_unique()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_target_tbl_rows_unique.md),
+  [`check_target_tbl_output_type_ids()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_target_tbl_output_type_ids.md),
+  and
+  [`check_target_tbl_oracle_value()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_target_tbl_oracle_value.md)
+  to support `target-data.json` configuration
+  ([\#282](https://github.com/hubverse-org/hubValidations/issues/282)).
+- Fixed bug where the `as_of` column was incorrectly included in
+  oracle-output validation grouping. Oracle data is designed to contain
+  a single version per observable unit with a one-to-one mapping to
+  model output data, so including `as_of` in uniqueness checks could
+  introduce false positives
+  ([\#282](https://github.com/hubverse-org/hubValidations/issues/282)).
+- Added `date_col` parameter support for oracle-output target data
+  validation
+  ([\#290](https://github.com/hubverse-org/hubValidations/issues/290)).
+  - [`check_target_tbl_coltypes()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_target_tbl_coltypes.md),
+    [`check_target_dataset_rows_unique()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_target_dataset_rows_unique.md),
+    and
+    [`read_target_file()`](https://hubverse-org.github.io/hubValidations/dev/reference/read_target_file.md)
+    now pass `date_col` to oracle-output schema and connection
+    functions, providing consistent handling of partitioned date columns
+    across both time-series and oracle-output target types.
+  - When `target-data.json` config exists, user-provided `date_col` is
+    ignored and the config value is used instead.
+- [`check_target_tbl_values()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_target_tbl_values.md)
+  now supports relaxed date validation for time-series target data
+  ([\#274](https://github.com/hubverse-org/hubValidations/issues/274)).
+  - When `allow_extra_dates = TRUE`, date values are not required to
+    match tasks.json, allowing historical observations while validating
+    other task IDs strictly. This behavior is controlled by the new
+    `allow_extra_dates` parameter (default `FALSE`).
+  - Oracle-output target data always uses strict validation regardless
+    of the `allow_extra_dates` setting.
+  - Date column identification is deterministic: extracted from
+    `target-data.json` config when available, otherwise from the
+    `date_col` parameter.
+  - The `allow_extra_dates` parameter is also available in
+    [`validate_target_data()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_target_data.md),
+    [`validate_target_submission()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_target_submission.md),
+    and
+    [`validate_target_pr()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_target_pr.md).
+
 ## hubValidations 0.12.1
 
 ### Bug fixes
