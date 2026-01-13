@@ -98,7 +98,7 @@ test_that("check_target_tbl_ts_targets works with NULL target_keys", {
   expect_s3_class(invalid_null, "check_error")
   expect_equal(
     cli::ansi_strip(invalid_null$message) |> stringr::str_squish(),
-    "time-series target is not valid. Global target \"wk flu hosp rate category\" inferred from hub config is invalid. Time-series target data not appropriate. Valid time-series targets must be step-ahead and their target type must be one of \"continuous\", \"discrete\", \"binary\", and \"compositional\"." # nolint: line_length_linter
+    "time-series target is not valid. Global target \"flu_hosp_rate_cat\" inferred from hub config is invalid. Time-series target data not appropriate. Valid time-series targets must be step-ahead and their target type must be one of \"continuous\", \"discrete\", \"binary\", and \"compositional\"." # nolint: line_length_linter
   )
 })
 
