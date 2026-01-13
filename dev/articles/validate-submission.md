@@ -84,7 +84,7 @@ validate_submission(hub_path,
 #>   `output_type_id`.
 #> ℹ [value_col_sum1]: No pmf output types to check for sum of 1. Check skipped.
 #> ✖ [submission_time]: Submission time must be within accepted submission window
-#>   for round.  Current time "2026-01-09 08:31:49 UTC" is outside window
+#>   for round.  Current time "2026-01-13 10:23:41 UTC" is outside window
 #>   2022-10-02 EDT--2022-10-09 23:59:59 EDT.
 ```
 
@@ -137,7 +137,7 @@ validate_submission(hub_path,
 #>   submission `round_id` from file name.  `round_id` value 2022-10-08 does not
 #>   match submission `round_id` "2022-10-15"
 #> ✖ [submission_time]: Submission time must be within accepted submission window
-#>   for round.  Current time "2026-01-09 08:31:50 UTC" is outside window
+#>   for round.  Current time "2026-01-13 10:23:43 UTC" is outside window
 #>   2022-10-02 EDT--2022-10-09 23:59:59 EDT.
 ```
 
@@ -166,7 +166,7 @@ validate_submission(hub_path,
 #> ── 2022-10-08-team1-goodmodel.csv ────
 #> 
 #> ✖ [submission_time]: Submission time must be within accepted submission window
-#>   for round.  Current time "2026-01-09 08:31:52 UTC" is outside window
+#>   for round.  Current time "2026-01-13 10:23:44 UTC" is outside window
 #>   2022-10-02 EDT--2022-10-09 23:59:59 EDT.
 #> Error in `check_for_errors()`:
 #> ! 
@@ -466,7 +466,7 @@ hub_path <- system.file("testhubs/v6/target_dir", package = "hubUtils")
 
 validate_target_submission(
   hub_path,
-  file_path = "time-series/target=wk%20flu%20hosp%20rate/part-0.parquet",
+  file_path = "time-series/target=flu_hosp_rate/part-0.parquet",
   target_type = "time-series"
 )
 #> 
@@ -475,12 +475,12 @@ validate_target_submission(
 #> ✔ [valid_config]: All hub config files are valid.
 #> 
 #> 
-#> ── time-series/target=wk%20flu%20hosp%20rate/part-0.parquet ────
+#> ── time-series/target=flu_hosp_rate/part-0.parquet ────
 #> 
 #> 
 #> 
 #> ✔ [target_file_exists]: File exists at path
-#>   target-data/time-series/target=wk%20flu%20hosp%20rate/part-0.parquet.
+#>   target-data/time-series/target=flu_hosp_rate/part-0.parquet.
 #> ✔ [target_partition_file_name]: Hive-style partition file path segments are
 #>   valid.
 #> ✔ [target_file_ext]: Hive-partitioned target data file extension is valid.
