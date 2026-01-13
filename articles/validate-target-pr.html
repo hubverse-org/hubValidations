@@ -67,7 +67,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Validating Target Data Pull Requests on GitHub</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/hubverse-org/hubValidations/blob/main/vignettes/articles/validate-target-pr.Rmd" class="external-link"><code>vignettes/articles/validate-target-pr.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/hubverse-org/hubValidations/blob/v0.13.0/vignettes/articles/validate-target-pr.Rmd" class="external-link"><code>vignettes/articles/validate-target-pr.Rmd</code></a></small>
       <div class="d-none name"><code>validate-target-pr.Rmd</code></div>
     </div>
 
@@ -137,7 +137,7 @@ file:</p>
 <span><span class="op">)</span></span>
 <span><span class="fu">gert</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/gert/reference/git_branch.html" class="external-link">git_branch_checkout</a></span><span class="op">(</span><span class="st">"add-file-oracle-output"</span>, repo <span class="op">=</span> <span class="va">ci_target_hub_path</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Creating local branch add-file-oracle-output from origin/add-file-oracle-output</span></span>
-<span><span class="co">#&gt; &lt;git repository&gt;: /tmp/RtmpjzniJf/file24666eda4e30/target[@add-file-oracle-output]</span></span>
+<span><span class="co">#&gt; &lt;git repository&gt;: /tmp/RtmptLHLLa/file23d419c13086/target[@add-file-oracle-output]</span></span>
 <span></span>
 <span><span class="va">v</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/validate_target_pr.html">validate_target_pr</a></span><span class="op">(</span></span>
 <span>  hub_path <span class="op">=</span> <span class="va">ci_target_hub_path</span>,</span>
@@ -261,7 +261,7 @@ validation failure:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">gert</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/gert/reference/git_branch.html" class="external-link">git_branch_checkout</a></span><span class="op">(</span><span class="st">"delete-target-dir-files"</span>, repo <span class="op">=</span> <span class="va">ci_target_hub_path</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Creating local branch delete-target-dir-files from origin/delete-target-dir-files</span></span>
-<span><span class="co">#&gt; &lt;git repository&gt;: /tmp/RtmpjzniJf/file24666eda4e30/target[@delete-target-dir-files]</span></span>
+<span><span class="co">#&gt; &lt;git repository&gt;: /tmp/RtmptLHLLa/file23d419c13086/target[@delete-target-dir-files]</span></span>
 <span></span>
 <span><span class="va">v_mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/validate_target_pr.html">validate_target_pr</a></span><span class="op">(</span></span>
 <span>  hub_path <span class="op">=</span> <span class="va">ci_target_hub_path</span>,</span>
@@ -320,7 +320,7 @@ error:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">gert</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/gert/reference/git_branch.html" class="external-link">git_branch_checkout</a></span><span class="op">(</span><span class="st">"remove-ts-add-oo"</span>, repo <span class="op">=</span> <span class="va">ci_target_hub_path</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Creating local branch remove-ts-add-oo from origin/remove-ts-add-oo</span></span>
-<span><span class="co">#&gt; &lt;git repository&gt;: /tmp/RtmpjzniJf/file24666eda4e30/target[@remove-ts-add-oo]</span></span>
+<span><span class="co">#&gt; &lt;git repository&gt;: /tmp/RtmptLHLLa/file23d419c13086/target[@remove-ts-add-oo]</span></span>
 <span></span>
 <span><span class="va">v_del</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/validate_target_pr.html">validate_target_pr</a></span><span class="op">(</span></span>
 <span>  hub_path <span class="op">=</span> <span class="va">ci_target_hub_path</span>,</span>
