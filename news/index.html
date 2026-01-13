@@ -7,7 +7,7 @@
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/hubverse-org/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubValidations</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.12.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.13.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -20,17 +20,12 @@
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/hub-validations-class.html">Structure of hub_validations class objects</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Validation for hub admins through CI</h6></li>
-    <li><a class="dropdown-item" href="../articles/validate-pr.html">Validating Pull Requests on GitHub</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Validation for submitting teams</h6></li>
-    <li><a class="dropdown-item" href="../articles/validate-submission.html">Validating submissions locally</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Custom validation checks</h6></li>
-    <li><a class="dropdown-item" href="../articles/writing-custom-fns.html">Writing custom validation functions</a></li>
-    <li><a class="dropdown-item" href="../articles/deploying-custom-functions.html">Deploying custom validation functions</a></li>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/hub-validations-class.html">hub_validations class structure</a></li>
+    <li><a class="dropdown-item" href="../articles/validate-pr.html">Validating model output PRs</a></li>
+    <li><a class="dropdown-item" href="../articles/validate-target-pr.html">Validating target data PRs</a></li>
+    <li><a class="dropdown-item" href="../articles/validate-submission.html">Validating hub data locally</a></li>
+    <li><a class="dropdown-item" href="../articles/writing-custom-fns.html">Writing custom checks</a></li>
+    <li><a class="dropdown-item" href="../articles/deploying-custom-functions.html">Deploying custom checks</a></li>
   </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/hubverse-org/hubValidations/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
@@ -42,9 +37,41 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/hubverse-org/hubValidations/blob/v0.12.1/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/hubverse-org/hubValidations/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.13.0" id="hubvalidations-0130">hubValidations 0.13.0<a class="anchor" aria-label="anchor" href="#hubvalidations-0130"></a></h2>
+<div class="section level3">
+<h3 id="enhancements-0-13-0">Enhancements<a class="anchor" aria-label="anchor" href="#enhancements-0-13-0"></a></h3>
+<ul><li>Added validation warning infrastructure for informational messages that don’t affect validation results (<a href="https://github.com/hubverse-org/hubValidations/issues/292" class="external-link">#292</a>).
+<ul><li>
+<code><a href="../reference/validate_pr.html">validate_pr()</a></code> now displays a warning when hub config files are modified in a pull request, alerting maintainers to review changes that may affect validation of existing data.</li>
+<li>Validation-level warnings are displayed prominently in a box at the top of print output.</li>
+<li>Check-level warnings can be displayed inline with their checks using <code>print(x, show_check_warnings = TRUE)</code>.</li>
+<li>
+<code><a href="../reference/check_for_errors.html">check_for_errors()</a></code> gains a <code>show_warnings</code> parameter to control display of check-level warnings.</li>
+</ul></li>
+<li>Enhanced target data column validation to support <code>target-data.json</code> configuration (<a href="https://github.com/hubverse-org/hubValidations/issues/280" class="external-link">#280</a>).
+<ul><li>
+<code><a href="../reference/check_target_tbl_colnames.html">check_target_tbl_colnames()</a></code> and <code><a href="../reference/check_target_tbl_coltypes.html">check_target_tbl_coltypes()</a></code> now use deterministic validation when <code>target-data.json</code> config is available, with error messages explicitly referencing the config file.</li>
+</ul></li>
+<li>Enhanced <code><a href="../reference/check_target_tbl_rows_unique.html">check_target_tbl_rows_unique()</a></code>, <code><a href="../reference/check_target_tbl_output_type_ids.html">check_target_tbl_output_type_ids()</a></code>, and <code><a href="../reference/check_target_tbl_oracle_value.html">check_target_tbl_oracle_value()</a></code> to support <code>target-data.json</code> configuration (<a href="https://github.com/hubverse-org/hubValidations/issues/282" class="external-link">#282</a>).</li>
+<li>Fixed bug where the <code>as_of</code> column was incorrectly included in oracle-output validation grouping. Oracle data is designed to contain a single version per observable unit with a one-to-one mapping to model output data, so including <code>as_of</code> in uniqueness checks could introduce false positives (<a href="https://github.com/hubverse-org/hubValidations/issues/282" class="external-link">#282</a>).</li>
+<li>Added <code>date_col</code> parameter support for oracle-output target data validation (<a href="https://github.com/hubverse-org/hubValidations/issues/290" class="external-link">#290</a>).
+<ul><li>
+<code><a href="../reference/check_target_tbl_coltypes.html">check_target_tbl_coltypes()</a></code>, <code><a href="../reference/check_target_dataset_rows_unique.html">check_target_dataset_rows_unique()</a></code>, and <code><a href="../reference/read_target_file.html">read_target_file()</a></code> now pass <code>date_col</code> to oracle-output schema and connection functions, providing consistent handling of partitioned date columns across both time-series and oracle-output target types.</li>
+<li>When <code>target-data.json</code> config exists, user-provided <code>date_col</code> is ignored and the config value is used instead.</li>
+</ul></li>
+<li>
+<code><a href="../reference/check_target_tbl_values.html">check_target_tbl_values()</a></code> now supports relaxed date validation for time-series target data (<a href="https://github.com/hubverse-org/hubValidations/issues/274" class="external-link">#274</a>).
+<ul><li>When <code>allow_extra_dates = TRUE</code>, date values are not required to match tasks.json, allowing historical observations while validating other task IDs strictly. This behavior is controlled by the new <code>allow_extra_dates</code> parameter (default <code>FALSE</code>).</li>
+<li>Oracle-output target data always uses strict validation regardless of the <code>allow_extra_dates</code> setting.</li>
+<li>Date column identification is deterministic: extracted from <code>target-data.json</code> config when available, otherwise from the <code>date_col</code> parameter.</li>
+<li>The <code>allow_extra_dates</code> parameter is also available in <code><a href="../reference/validate_target_data.html">validate_target_data()</a></code>, <code><a href="../reference/validate_target_submission.html">validate_target_submission()</a></code>, and <code><a href="../reference/validate_target_pr.html">validate_target_pr()</a></code>.</li>
+</ul></li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.12.1" id="hubvalidations-0121">hubValidations 0.12.1<a class="anchor" aria-label="anchor" href="#hubvalidations-0121"></a></h2>
 <div class="section level3">

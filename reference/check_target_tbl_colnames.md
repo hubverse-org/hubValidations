@@ -10,7 +10,9 @@ check_target_tbl_colnames(
   target_tbl,
   target_type = c("time-series", "oracle-output"),
   file_path,
-  hub_path
+  hub_path,
+  config_target_data = NULL,
+  date_col = NULL
 )
 ```
 
@@ -45,6 +47,20 @@ check_target_tbl_colnames(
   package. The hub must be fully configured with valid `admin.json` and
   `tasks.json` files within the `hub-config` directory.
 
+- config_target_data:
+
+  Optional. A `target-data.json` config object. If provided, validation
+  uses deterministic schema from config. If `NULL` (default), validation
+  uses inference from `tasks.json`.
+
+- date_col:
+
+  Optional. Name of the date column in target data (e.g.,
+  `"target_end_date"`) representing the date observations actually
+  occurred. Only relevant when it is not a task ID defined in
+  `tasks.json`. Enables deterministic validation in inference mode.
+  Ignored when `config_target_data` is provided.
+
 ## Value
 
 Depending on whether validation has succeeded, one of:
@@ -54,3 +70,34 @@ Depending on whether validation has succeeded, one of:
 - `<error/check_error>` condition class object.
 
 Returned object also inherits from subclass `<hub_check>`.
+
+## Details
+
+Column name validation depends on whether a `target-data.json`
+configuration file is provided:
+
+**With `target-data.json` config:** Expected columns are determined
+directly from the configuration. The target table must contain exactly
+the columns defined in the config.
+
+**Without `target-data.json` config (inference mode):** Expected columns
+are inferred from the task ID configuration in `tasks.json`, allowed
+columns according to the target type, and expectations based on the
+detected output types in the target data. Additional optional columns
+(e.g., `as_of`) are allowed for time-series data.
+
+**Note on date columns:** Target data always contains a date column
+(e.g., `target_end_date`) representing when observations occurred.
+However, in horizon-based forecast hubs, task IDs may only define
+`origin_date` and `horizon` (with target dates calculated from these).
+In such cases, provide `date_col` to enable deterministic validation of
+the date column when it is not a valid task ID. Validation of date
+column existence and type is performed by
+[`check_target_tbl_coltypes()`](https://hubverse-org.github.io/hubValidations/reference/check_target_tbl_coltypes.md).
+
+Inference mode validation for time-series data is limited. For robust
+validation, create a `target-data.json` config file. See
+[`target-data.json`
+schema](https://docs.hubverse.io/en/latest/user-guide/hub-config.html#hub-target-data-configuration-target-data-json-file)
+\# nolint: line_length_linter. for more information on the json schema
+scpecifics.

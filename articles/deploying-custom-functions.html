@@ -25,7 +25,7 @@
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/hubverse-org/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubValidations</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.12.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.13.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,17 +42,12 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/hub-validations-class.html">Structure of hub_validations class objects</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Validation for hub admins through CI</h6></li>
-    <li><a class="dropdown-item" href="../articles/validate-pr.html">Validating Pull Requests on GitHub</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Validation for submitting teams</h6></li>
-    <li><a class="dropdown-item" href="../articles/validate-submission.html">Validating submissions locally</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Custom validation checks</h6></li>
-    <li><a class="dropdown-item" href="../articles/writing-custom-fns.html">Writing custom validation functions</a></li>
-    <li><a class="dropdown-item" href="../articles/deploying-custom-functions.html">Deploying custom validation functions</a></li>
+<li><a class="dropdown-item" href="../articles/hub-validations-class.html">hub_validations class structure</a></li>
+    <li><a class="dropdown-item" href="../articles/validate-pr.html">Validating model output PRs</a></li>
+    <li><a class="dropdown-item" href="../articles/validate-target-pr.html">Validating target data PRs</a></li>
+    <li><a class="dropdown-item" href="../articles/validate-submission.html">Validating hub data locally</a></li>
+    <li><a class="dropdown-item" href="../articles/writing-custom-fns.html">Writing custom checks</a></li>
+    <li><a class="dropdown-item" href="../articles/deploying-custom-functions.html">Deploying custom checks</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -67,7 +62,7 @@
 
 
 <script src="deploying-custom-functions_files/kePrint-0.0.1/kePrint.js"></script><link href="deploying-custom-functions_files/lightable-0.0.1/lightable.css" rel="stylesheet">
-<link href="deploying-custom-functions_files/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+<link href="deploying-custom-functions_files/htmltools-fill-0.5.9/fill.css" rel="stylesheet">
 <script src="deploying-custom-functions_files/htmlwidgets-1.6.4/htmlwidgets.js"></script><link href="deploying-custom-functions_files/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet">
 <script src="deploying-custom-functions_files/datatables-binding-0.34.0/datatables.js"></script><link href="deploying-custom-functions_files/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
 <link href="deploying-custom-functions_files/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet">
@@ -77,7 +72,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Deploying custom validation functions</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/hubverse-org/hubValidations/blob/v0.12.1/vignettes/articles/deploying-custom-functions.Rmd" class="external-link"><code>vignettes/articles/deploying-custom-functions.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/hubverse-org/hubValidations/blob/main/vignettes/articles/deploying-custom-functions.Rmd" class="external-link"><code>vignettes/articles/deploying-custom-functions.Rmd</code></a></small>
       <div class="d-none name"><code>deploying-custom-functions.Rmd</code></div>
     </div>
 
@@ -157,14 +152,18 @@ including in function deployment configuration but <a href="deploying-custom-fun
 be overridden through a function’s <code>args</code>
 configuration</strong></a> in <code>validations.yml</code> during
 deployment.</p>
-<p><strong>All <code>validate_*()</code> functions will contain the
-following five objects in their caller environment:</strong></p>
+</div>
+</div>
+<div class="section level3">
+<h3 id="model-output-validation">Model output validation<a class="anchor" aria-label="anchor" href="#model-output-validation"></a>
+</h3>
+<p><strong>All model output <code>validate_*()</code> functions will
+contain the following objects in their caller environment:</strong></p>
 <ul>
 <li>
 <strong><code>file_path</code></strong>: character string of path to
 file being validated relative to the <code>model-output</code>
-directory.<br>
-</li>
+directory.</li>
 <li>
 <strong><code>hub_path</code></strong>: character string of path to
 hub.</li>
@@ -185,12 +184,10 @@ additional objects:</strong></p>
 <ul>
 <li>
 <strong><code>tbl</code></strong>: a tibble of the model output data
-being validated.<br>
-</li>
+being validated.</li>
 <li>
 <strong><code>tbl_chr</code></strong>: a tibble of the model output
-data being validated with all columns coerced to character type.<br>
-</li>
+data being validated with all columns coerced to character type.</li>
 <li>
 <strong><code>round_id_col</code></strong>: character string of name
 of <code>tbl</code> column containing <code>round_id</code> information.
@@ -209,6 +206,68 @@ type of <code>output_type_id</code> column.</li>
 <code>NULL</code>. The value of the <code>derived_task_ids</code>
 argument, i.e. the names of task IDs whose values depend on other task
 IDs.</li>
+</ul>
+</div>
+<div class="section level3">
+<h3 id="target-data-validation">Target data validation<a class="anchor" aria-label="anchor" href="#target-data-validation"></a>
+</h3>
+<p><strong>All target data <code>validate_*()</code> functions will
+contain the following objects in their caller environment:</strong></p>
+<ul>
+<li>
+<strong><code>hub_path</code></strong>: character string of path to
+hub.</li>
+<li>
+<strong><code>file_path</code></strong>: character string of path to
+file being validated relative to the <code>target-data</code>
+directory.</li>
+<li>
+<strong><code>validations_cfg_path</code></strong>: character string
+of path to <code>validations.yml</code> file. Defaults to
+<code>hub-config/validations.yml</code>.</li>
+<li>
+<strong><code>round_id</code></strong>: character string. Not
+generally relevant to target datasets but can be used to specify a
+specific block of custom validation checks. Otherwise best set to
+<code>"default"</code>.</li>
+</ul>
+<p><strong><code><a href="../reference/validate_target_data.html">validate_target_data()</a></code> will contain the
+following additional objects:</strong></p>
+<ul>
+<li>
+<strong><code>target_tbl</code></strong>: a tibble of the target
+data being validated.</li>
+<li>
+<strong><code>target_tbl_chr</code></strong>: a tibble of the target
+data being validated with all columns coerced to character type.</li>
+<li>
+<strong><code>target_type</code></strong>: character string. The
+type of target data being validated, either <code>"time-series"</code>
+or <code>"oracle-output"</code>.</li>
+<li>
+<strong><code>config_target_data</code></strong>: the parsed
+<code>target-data.json</code> config if available, otherwise
+<code>NULL</code>.</li>
+<li>
+<strong><code>date_col</code></strong>: character string or
+<code>NULL</code>. Optional name of the column containing the date
+observations actually occurred.</li>
+<li>
+<strong><code>allow_extra_dates</code></strong>: logical. Whether to
+allow extra dates in the target data beyond those defined in the hub
+config.</li>
+<li>
+<strong><code>output_type_id_datatype</code></strong>: character
+string. The value of the <code>output_type_id_datatype</code>
+argument.</li>
+</ul>
+<p><strong><code><a href="../reference/validate_target_dataset.html">validate_target_dataset()</a></code> will contain the
+following additional objects:</strong></p>
+<ul>
+<li>
+<strong><code>target_type</code></strong>: character string. The
+type of target data being validated, either <code>"time-series"</code>
+or <code>"oracle-output"</code>.</li>
 </ul>
 <p>The <code>args</code> configuration can be used to override objects
 from the caller environment as well as defaults during deployment.</p>
@@ -270,7 +329,6 @@ file.</p>
 <span>      <span class="va">custom_check</span><span class="op">:</span></span>
 <span>        <span class="va">fn</span><span class="op">:</span> <span class="st">"cstm_check_tbl_example"</span></span>
 <span>        <span class="va">source</span><span class="op">:</span> <span class="st">"src/validations/R/cstm_check_tbl_example.R"</span></span></code></pre>
-</div>
 </div>
 <div class="section level4">
 <h4 id="round-specific-configuration">Round specific configuration<a class="anchor" aria-label="anchor" href="#round-specific-configuration"></a>
@@ -458,7 +516,7 @@ Action.</p>
 <p>Functions from these packages can be used in your custom checks
 without specifying them as additional dependencies.</p>
 <div class="datatables html-widget html-fill-item" id="htmlwidget-ac96cb3ee4656e2e9ec3" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"filter":"none","vertical":false,"data":[["arrow","askpass","assertthat","backports","base64enc","base64url","bigD","bit","bit64","bitops","bslib","cachem","checkmate","cli","clipr","commonmark","config","crayon","curl","data.table","digest","dplyr","evaluate","farver","fastmap","fontawesome","fs","generics","gh","gitcreds","glue","gt","highr","hms","htmltools","htmlwidgets","httr","httr2","hubAdmin","hubData","hubUtils","hubValidations","ini","jquerylib","jsonlite","jsonvalidate","juicyjuice","knitr","labeling","lifecycle","litedown","lubridate","magrittr","markdown","memoise","mime","MMWRweek","openssl","pillar","pkgconfig","purrr","R6","rappdirs","RColorBrewer","Rcpp","reactable","reactR","readr","rlang","rmarkdown","sass","scales","stringi","stringr","sys","tibble","tidyselect","timechange","tinytex","tzdb","utf8","V8","vctrs","viridisLite","vroom","whisker","withr","xfun","xml2","yaml","zoltr"],["22.0.0","1.2.1","0.2.1","1.5.0","0.1-3","1.4","0.3.1","4.6.0","4.6.0-1","1.0-9","0.9.0","1.1.0","2.3.3","3.6.5","0.8.0","2.0.0","0.3.2","1.5.3","7.0.0","1.17.8","0.6.38","1.1.4","1.0.5","2.1.2","1.2.0","0.5.3","1.6.6","0.1.4","1.5.0","0.1.2","1.8.0","1.1.0","0.11","1.1.4","0.5.8.1","1.6.4","1.4.7","1.2.1","1.8.0.9000","1.5.0.9000","1.1.0","0.12.1","0.3.1","0.1.4","2.0.0","1.5.0","0.1.0","1.50","0.4.3","1.0.4","0.8","1.9.4","2.0.4","2.0","2.0.1","0.13","0.1.3","2.3.4","1.11.1","2.0.3","1.2.0","2.6.1","0.3.3","1.1-3","1.1.0","0.4.4","0.6.1","2.1.6","1.1.6","2.30","0.4.10","1.4.0","1.8.7","1.6.0","3.4.3","3.3.0","1.2.1","0.3.0","0.57","0.5.0","1.2.6","8.0.1","0.6.5","0.4.2","1.6.6","0.4.1","3.0.2","0.54","1.5.0","2.3.10","1.0.2"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>package<\/th>\n      <th>version<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"name":"package","targets":0},{"name":"version","targets":1}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"filter":"none","vertical":false,"data":[["arrow","askpass","assertthat","backports","base64enc","base64url","bigD","bit","bit64","bitops","bslib","cachem","checkmate","cli","clipr","commonmark","config","crayon","curl","data.table","digest","dplyr","evaluate","farver","fastmap","fontawesome","fs","generics","gh","gitcreds","glue","gt","highr","hms","htmltools","htmlwidgets","httr","httr2","hubAdmin","hubData","hubUtils","hubValidations","ini","jquerylib","jsonlite","jsonvalidate","juicyjuice","knitr","labeling","lifecycle","litedown","lubridate","magrittr","markdown","memoise","mime","MMWRweek","openssl","pillar","pkgconfig","purrr","R6","rappdirs","RColorBrewer","Rcpp","reactable","reactR","readr","rlang","rmarkdown","sass","scales","stringi","stringr","sys","tibble","tidyselect","timechange","tinytex","tzdb","utf8","V8","vctrs","viridisLite","vroom","whisker","withr","xfun","xml2","yaml","zoltr"],["22.0.0.1","1.2.1","0.2.1","1.5.0","0.1-3","1.4","0.3.1","4.6.0","4.6.0-1","1.0-9","0.9.0","1.1.0","2.3.3","3.6.5","0.8.0","2.0.0","0.3.2","1.5.3","7.0.0","1.18.0","0.6.39","1.1.4","1.0.5","2.1.2","1.2.0","0.5.3","1.6.6","0.1.4","1.5.0","0.1.2","1.8.0","1.2.0","0.11","1.1.4","0.5.9","1.6.4","1.4.7","1.2.2","1.9.0.9000","2.1.0.9000","1.2.0.9000","0.13.0","0.3.1","0.1.4","2.0.0","1.5.0","0.1.0","1.51","0.4.3","1.0.5","0.9","1.9.4","2.0.4","2.0","2.0.1","0.13","0.1.3","2.3.4","1.11.1","2.0.3","1.2.1","2.6.1","0.3.3","1.1-3","1.1.1","0.4.5","0.6.1","2.1.6","1.1.7","2.30","0.4.10","1.4.0","1.8.7","1.6.0","3.4.3","3.3.1","1.2.1","0.3.0","0.58","0.5.0","1.2.6","8.0.1","0.6.5","0.4.2","1.6.7","0.4.1","3.0.2","0.55","1.5.1","2.3.12","1.0.2"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>package<\/th>\n      <th>version<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"name":"package","targets":0},{"name":"version","targets":1}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div class="section level3">
 <h3 id="additional-dependencies">Additional dependencies<a class="anchor" aria-label="anchor" href="#additional-dependencies"></a>

@@ -25,7 +25,7 @@ sorted by the output_type_id set defined in the hub config.
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/hubverse-org/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubValidations</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.12.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.13.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,17 +38,12 @@ sorted by the output_type_id set defined in the hub config.
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/hub-validations-class.html">Structure of hub_validations class objects</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Validation for hub admins through CI</h6></li>
-    <li><a class="dropdown-item" href="../articles/validate-pr.html">Validating Pull Requests on GitHub</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Validation for submitting teams</h6></li>
-    <li><a class="dropdown-item" href="../articles/validate-submission.html">Validating submissions locally</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Custom validation checks</h6></li>
-    <li><a class="dropdown-item" href="../articles/writing-custom-fns.html">Writing custom validation functions</a></li>
-    <li><a class="dropdown-item" href="../articles/deploying-custom-functions.html">Deploying custom validation functions</a></li>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/hub-validations-class.html">hub_validations class structure</a></li>
+    <li><a class="dropdown-item" href="../articles/validate-pr.html">Validating model output PRs</a></li>
+    <li><a class="dropdown-item" href="../articles/validate-target-pr.html">Validating target data PRs</a></li>
+    <li><a class="dropdown-item" href="../articles/validate-submission.html">Validating hub data locally</a></li>
+    <li><a class="dropdown-item" href="../articles/writing-custom-fns.html">Writing custom checks</a></li>
+    <li><a class="dropdown-item" href="../articles/deploying-custom-functions.html">Deploying custom checks</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/hubverse-org/hubValidations/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
@@ -60,7 +55,7 @@ sorted by the output_type_id set defined in the hub config.
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Check that oracle values in an oracle output target data file are valid</h1>
-      <small class="dont-index">Source: <a href="https://github.com/hubverse-org/hubValidations/blob/v0.12.1/R/check_target_tbl_oracle_value.R" class="external-link"><code>R/check_target_tbl_oracle_value.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/hubverse-org/hubValidations/blob/main/R/check_target_tbl_oracle_value.R" class="external-link"><code>R/check_target_tbl_oracle_value.R</code></a></small>
       <div class="d-none name"><code>check_target_tbl_oracle_value.Rd</code></div>
     </div>
 
@@ -80,7 +75,8 @@ sorted by the <code>output_type_id</code> set defined in the hub config.</p></li
 <span>  <span class="va">target_tbl</span>,</span>
 <span>  target_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"oracle-output"</span>, <span class="st">"time-series"</span><span class="op">)</span>,</span>
 <span>  <span class="va">file_path</span>,</span>
-<span>  <span class="va">hub_path</span></span>
+<span>  <span class="va">hub_path</span>,</span>
+<span>  config_target_data <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -114,12 +110,33 @@ in the <code>arrow</code> package.
 The hub must be fully configured with valid <code>admin.json</code> and <code>tasks.json</code>
 files within the <code>hub-config</code> directory.</p></dd>
 
+
+<dt id="arg-config-target-data">config_target_data<a class="anchor" aria-label="anchor" href="#arg-config-target-data"></a></dt>
+<dd><p>Target data configuration object from
+<code>read_config(hub_path, "target-data")</code>, or NULL (default) if config does not exist.
+When target-data.json exists, this should be provided to enable date column
+extraction for date relaxation. If NULL and date_col is not provided, date
+relaxation cannot be applied and a warning will be issued if allow_extra_dates
+is TRUE.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>Depending on whether validation has succeeded, one of:</p><ul><li><p><code>&lt;message/check_success&gt;</code> condition class object.</p></li>
 <li><p><code>&lt;error/check_failure&gt;</code> condition class object.</p></li>
 </ul><p>Returned object also inherits from subclass <code>&lt;hub_check&gt;</code>.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>When validating oracle values, data is grouped by observation unit to check
+PMF sums and CDF monotonicity within each unit.</p>
+<p><strong>With <code>target-data.json</code> config:</strong>
+Observable unit is determined from the config's <code>observable_unit</code> specification.</p>
+<p><strong>Without <code>target-data.json</code> config:</strong>
+Observable unit is inferred from task ID columns present in the data.</p>
+<p>The <code>as_of</code> column is NOT included in the grouping. Oracle data is designed to
+contain a single version per observable unit with a one-to-one mapping to model
+output data.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

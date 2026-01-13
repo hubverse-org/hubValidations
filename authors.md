@@ -17,16 +17,16 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/hubverse-org/hubValidations/blob/v0.12.1/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/hubverse-org/hubValidations/blob/main/DESCRIPTION)
 
-Krystalli A, Ray E, Gruson H (2025). *hubValidations: Testing framework
-for hubverse hub validations*. R package version 0.12.1,
+Krystalli A, Ray E, Gruson H (2026). *hubValidations: Testing framework
+for hubverse hub validations*. R package version 0.13.0,
 <https://github.com/hubverse-org/hubValidations>.
 
     @Manual{,
       title = {hubValidations: Testing framework for hubverse hub validations},
       author = {Anna Krystalli and Evan Ray and Hugo Gruson},
-      year = {2025},
-      note = {R package version 0.12.1},
+      year = {2026},
+      note = {R package version 0.13.0},
       url = {https://github.com/hubverse-org/hubValidations},
     }

@@ -113,8 +113,10 @@ result, the check name and message of each check:
 - `ⓧ` indicates a check that downstream checks depend on failed, causing
   early return of the validation process (a `<error/check_error>`
   condition class object was returned)
-- `☒` indicates an execution error occured and the check was not able to
-  complete (a `<error/check_exec_error>` condition class object was
+- `!` indicates an execution warning occurred during a check (a
+  `<warning/check_exec_warn>` condition class object was returned)
+- `█` indicates an execution error occurred and the check was not able
+  to complete (a `<error/check_exec_error>` condition class object was
   returned). Will cause early return if expected check failure output
   was a `<error/check_error>`.
 - `ℹ` indicates a check was skipped (a `<message/check_info>` condition
@@ -164,12 +166,46 @@ v
 #>   `output_type_id`.
 #> ℹ [value_col_sum1]: No pmf output types to check for sum of 1. Check skipped.
 #> ✖ [submission_time]: Submission time must be within accepted submission window
-#>   for round.  Current time "2025-11-18 15:53:17 UTC" is outside window
+#>   for round.  Current time "2026-01-13 15:04:47 UTC" is outside window
 #>   2022-10-02 EDT--2022-10-09 23:59:59 EDT.
 ```
 
 Note that the submission window check is always performed and reported
 last.
+
+### Validation warnings
+
+Some validation functions may attach warnings to a `hub_validations`
+object. These are informational messages about conditions that may
+warrant attention but do not affect the validation result. There are two
+levels of warnings:
+
+- **Validation-level warnings** are attached to the `hub_validations`
+  object itself and are always displayed prominently at the top of the
+  print output in a box. For example,
+  [`validate_pr()`](https://hubverse-org.github.io/hubValidations/reference/validate_pr.md)
+  attaches a validation-level warning when hub configuration files have
+  been modified in a pull request.
+
+- **Check-level warnings** are attached to individual check results and
+  provide additional context about a specific check. By default,
+  check-level warnings are hidden. To display them, use
+  `print(v, show_check_warnings = TRUE)`. They appear indented below
+  their associated check result.
+
+Here is an example showing both warning levels with
+`show_check_warnings = TRUE`:
+
+    #> ┌────────────────────────────────────────────────────────────────────┐
+    #> │ ⚠ Warnings                                                         │
+    #> │ • Hub config files modified: tasks.json. Config changes may affect │
+    #> │   validation. Please review carefully.                             │
+    #> └────────────────────────────────────────────────────────────────────┘
+    #> 
+    #> ── 2022-10-08-hub-baseline.csv ────
+    #> 
+    #> ✔ [file_exists]: File exists.
+    #>     ! Check-level warning: additional context about this check.
 
 ## Structure of a `<hub_check>` object
 
@@ -225,11 +261,14 @@ str(utils::head(v))
 Each `<hub_check>` objects contains the following elements:
 
 - `message`: the result message containing details about the check.
-- `where:`: there the check was performed, usually the model output file
+- `where`: where the check was performed, usually the model output file
   name.
 - `call`: the function used to perform the check.
 - `use_cli_format`: whether the message is formatted using cli format,
   almost always TRUE.
+- `warnings`: (optional) a list of check-level warning conditions
+  providing additional context about the check. See the [Validation
+  warnings](#validation-warnings) section above.
 
 ## Extra information
 

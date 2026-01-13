@@ -9,6 +9,7 @@
 <url><loc>https://hubverse-org.github.io/hubValidations/articles/index.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/articles/validate-pr.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/articles/validate-submission.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubValidations/articles/validate-target-pr.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/articles/writing-custom-fns.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/authors.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/index.html</loc></url>
@@ -17,6 +18,7 @@
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/capture_check_info.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/capture_exec_error.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/capture_exec_warning.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubValidations/reference/capture_validation_warning.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/check_config_hub_valid.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/check_file_exists.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/check_file_format.html</loc></url>

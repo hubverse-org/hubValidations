@@ -10,7 +10,10 @@ check_target_tbl_values(
   target_tbl_chr,
   target_type = c("time-series", "oracle-output"),
   file_path,
-  hub_path
+  hub_path,
+  date_col = NULL,
+  allow_extra_dates = FALSE,
+  config_target_data = NULL
 )
 ```
 
@@ -44,6 +47,28 @@ check_target_tbl_values(
   GCS)](https://arrow.apache.org/docs/r/articles/fs.html) in the `arrow`
   package. The hub must be fully configured with valid `admin.json` and
   `tasks.json` files within the `hub-config` directory.
+
+- date_col:
+
+  Optional. Name of the date column (e.g., "target_end_date"). Only used
+  when target-data.json config does not exist. When target-data.json
+  exists, date column is extracted from config (this parameter is
+  ignored). If cannot determine date column, date relaxation is skipped.
+
+- allow_extra_dates:
+
+  Logical. If TRUE and target_type is "time-series", allows date values
+  not in tasks.json. Other task ID columns are still strictly validated.
+  Ignored for oracle-output (always strict).
+
+- config_target_data:
+
+  Target data configuration object from
+  `read_config(hub_path, "target-data")`, or NULL (default) if config
+  does not exist. When target-data.json exists, this should be provided
+  to enable date column extraction for date relaxation. If NULL and
+  date_col is not provided, date relaxation cannot be applied and a
+  warning will be issued if allow_extra_dates is TRUE.
 
 ## Value
 

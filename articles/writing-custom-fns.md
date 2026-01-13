@@ -76,7 +76,7 @@ hub_path <- withr::local_tempdir()
 create_custom_check("cstm_check_tbl_basic",
   hub_path = hub_path
 )
-#> ✔ Directory /tmp/Rtmpad9sEX/file21243169755c/src/validations/R created.
+#> ✔ Directory /tmp/RtmpZecSRt/file24bb12fd1bf1/src/validations/R created.
 #> ✔ Custom validation check template function file "cstm_check_tbl_basic.R" created.
 #> → Edit the function template to add your custom check logic.
 #> ℹ See the Writing custom check functions article for more information.
@@ -199,11 +199,13 @@ deployment configuration but [**can be overridden through a function’s
 configuration**](https://hubverse-org.github.io/hubValidations/articles/deploying-custom-functions.html#deploying-optional-hubvalidations-functions)
 in `validations.yml` during deployment.
 
-**All `validate_*()` functions will contain the following five objects
-in their caller environment:**
+## Model output validation
+
+**All model output `validate_*()` functions will contain the following
+objects in their caller environment:**
 
 - **`file_path`**: character string of path to file being validated
-  relative to the `model-output` directory.  
+  relative to the `model-output` directory.
 - **`hub_path`**: character string of path to hub.
 - **`round_id`**: character string of `round_id` derived from the model
   file name.
@@ -215,9 +217,9 @@ in their caller environment:**
 **[`validate_model_data()`](https://hubverse-org.github.io/hubValidations/reference/validate_model_data.md)
 will contain the following additional objects:**
 
-- **`tbl`**: a tibble of the model output data being validated.  
+- **`tbl`**: a tibble of the model output data being validated.
 - **`tbl_chr`**: a tibble of the model output data being validated with
-  all columns coerced to character type.  
+  all columns coerced to character type.
 - **`round_id_col`**: character string of name of `tbl` column
   containing `round_id` information. Defaults to `NULL` and usually
   determined from the `tasks.json` config if applicable unless
@@ -233,6 +235,43 @@ will contain the following additional objects:**
 - **`derived_task_ids`**: character vector or `NULL`. The value of the
   `derived_task_ids` argument, i.e. the names of task IDs whose values
   depend on other task IDs.
+
+## Target data validation
+
+**All target data `validate_*()` functions will contain the following
+objects in their caller environment:**
+
+- **`hub_path`**: character string of path to hub.
+- **`file_path`**: character string of path to file being validated
+  relative to the `target-data` directory.
+- **`validations_cfg_path`**: character string of path to
+  `validations.yml` file. Defaults to `hub-config/validations.yml`.
+- **`round_id`**: character string. Not generally relevant to target
+  datasets but can be used to specify a specific block of custom
+  validation checks. Otherwise best set to `"default"`.
+
+**[`validate_target_data()`](https://hubverse-org.github.io/hubValidations/reference/validate_target_data.md)
+will contain the following additional objects:**
+
+- **`target_tbl`**: a tibble of the target data being validated.
+- **`target_tbl_chr`**: a tibble of the target data being validated with
+  all columns coerced to character type.
+- **`target_type`**: character string. The type of target data being
+  validated, either `"time-series"` or `"oracle-output"`.
+- **`config_target_data`**: the parsed `target-data.json` config if
+  available, otherwise `NULL`.
+- **`date_col`**: character string or `NULL`. Optional name of the
+  column containing the date observations actually occurred.
+- **`allow_extra_dates`**: logical. Whether to allow extra dates in the
+  target data beyond those defined in the hub config.
+- **`output_type_id_datatype`**: character string. The value of the
+  `output_type_id_datatype` argument.
+
+**[`validate_target_dataset()`](https://hubverse-org.github.io/hubValidations/reference/validate_target_dataset.md)
+will contain the following additional objects:**
+
+- **`target_type`**: character string. The type of target data being
+  validated, either `"time-series"` or `"oracle-output"`.
 
 The `args` configuration can be used to override objects from the caller
 environment as well as defaults during deployment.
@@ -300,7 +339,7 @@ function (tbl, file_path, hub_path, t0_colname, t1_colname, timediff = lubridate
         msg_verbs = c("all match", "do not all match"), msg_attribute = cli::format_inline("expected period of {.val {timediff}}."), 
         details = details)
 }
-<bytecode: 0x55cc6bf32028>
+<bytecode: 0x55aad268bf70>
 <environment: namespace:hubValidations>
 ```
 
@@ -462,10 +501,11 @@ function (tbl, file_path, hub_path, round_id, derived_task_ids = get_hub_derived
     if (!is.null(derived_task_ids)) {
         tbl[derived_task_ids] <- NA_character_
     }
-    error_tbl <- purrr::map(check_output_types, function(.x) {
-        check_values_ascending_by_output_type(.x, tbl, config_tasks, 
-            round_id, derived_task_ids)
-    }) %>% purrr::list_rbind()
+    error_tbl <- purrr::list_rbind(purrr::map(check_output_types, 
+        function(.x) {
+            check_values_ascending_by_output_type(.x, tbl, config_tasks, 
+                round_id, derived_task_ids)
+        }))
     check <- nrow(error_tbl) == 0L
     if (check) {
         details <- NULL
@@ -478,7 +518,7 @@ function (tbl, file_path, hub_path, round_id, derived_task_ids = get_hub_derived
         msg_verbs = c("increase", "do not all increase"), msg_attribute = "when ordered by {.var output_type_id}.", 
         details = details, error_tbl = error_tbl)
 }
-<bytecode: 0x55cc6f257ae0>
+<bytecode: 0x55aad53a33b8>
 <environment: namespace:hubValidations>
 ```
 

@@ -9,7 +9,7 @@ target type"><meta property="og:image" content="https://hubverse-org.github.io/h
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/hubverse-org/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubValidations</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.12.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.13.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,17 +22,12 @@ target type"><meta property="og:image" content="https://hubverse-org.github.io/h
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/hub-validations-class.html">Structure of hub_validations class objects</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Validation for hub admins through CI</h6></li>
-    <li><a class="dropdown-item" href="../articles/validate-pr.html">Validating Pull Requests on GitHub</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Validation for submitting teams</h6></li>
-    <li><a class="dropdown-item" href="../articles/validate-submission.html">Validating submissions locally</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Custom validation checks</h6></li>
-    <li><a class="dropdown-item" href="../articles/writing-custom-fns.html">Writing custom validation functions</a></li>
-    <li><a class="dropdown-item" href="../articles/deploying-custom-functions.html">Deploying custom validation functions</a></li>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/hub-validations-class.html">hub_validations class structure</a></li>
+    <li><a class="dropdown-item" href="../articles/validate-pr.html">Validating model output PRs</a></li>
+    <li><a class="dropdown-item" href="../articles/validate-target-pr.html">Validating target data PRs</a></li>
+    <li><a class="dropdown-item" href="../articles/validate-submission.html">Validating hub data locally</a></li>
+    <li><a class="dropdown-item" href="../articles/writing-custom-fns.html">Writing custom checks</a></li>
+    <li><a class="dropdown-item" href="../articles/deploying-custom-functions.html">Deploying custom checks</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/hubverse-org/hubValidations/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
@@ -44,7 +39,7 @@ target type"><meta property="og:image" content="https://hubverse-org.github.io/h
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Check that a target data file has the correct column types according to target type</h1>
-      <small class="dont-index">Source: <a href="https://github.com/hubverse-org/hubValidations/blob/v0.12.1/R/check_target_tbl_coltypes.R" class="external-link"><code>R/check_target_tbl_coltypes.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/hubverse-org/hubValidations/blob/main/R/check_target_tbl_coltypes.R" class="external-link"><code>R/check_target_tbl_coltypes.R</code></a></small>
       <div class="d-none name"><code>check_target_tbl_coltypes.Rd</code></div>
     </div>
 
@@ -82,9 +77,11 @@ being validated.</p></dd>
 
 
 <dt id="arg-date-col">date_col<a class="anchor" aria-label="anchor" href="#arg-date-col"></a></dt>
-<dd><p>Optional column name to be interpreted as date. Default is <code>NULL</code>.
-Useful when the required date column is a partitioning column in the target data
-and does not have the same name as a date typed task ID variable in the config.</p></dd>
+<dd><p>Optional column name to be interpreted as date for schema
+creation. Useful when the date column does not correspond to a valid task ID
+(e.g., calculated from other task IDs like <code>origin_date + horizon</code>), particularly when
+it is also a partitioning column. Ignored when
+<code>target-data.json</code> config is provided.</p></dd>
 
 
 <dt id="arg-na">na<a class="anchor" aria-label="anchor" href="#arg-na"></a></dt>
@@ -135,6 +132,19 @@ files within the <code>hub-config</code> directory.</p></dd>
     <p>Depending on whether validation has succeeded, one of:</p><ul><li><p><code>&lt;message/check_success&gt;</code> condition class object.</p></li>
 <li><p><code>&lt;error/check_error&gt;</code> condition class object.</p></li>
 </ul><p>Returned object also inherits from subclass <code>&lt;hub_check&gt;</code>.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>Column type validation depends on whether a <code>target-data.json</code> configuration
+file is provided:</p>
+<p><strong>With <code>target-data.json</code> config:</strong>
+Expected column types are determined directly from the schema defined in
+the configuration. Validation is performed against the schema specifications
+in <code>target-data.json</code>.</p>
+<p><strong>Without <code>target-data.json</code> config:</strong>
+Expected column types are determined from the dataset itself and validated
+for internal consistency across files, which mainly applies to partitioned
+datasets.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

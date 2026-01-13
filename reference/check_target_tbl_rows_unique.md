@@ -10,7 +10,8 @@ check_target_tbl_rows_unique(
   target_tbl,
   target_type = c("time-series", "oracle-output"),
   file_path,
-  hub_path
+  hub_path,
+  config_target_data = NULL
 )
 ```
 
@@ -45,6 +46,12 @@ check_target_tbl_rows_unique(
   package. The hub must be fully configured with valid `admin.json` and
   `tasks.json` files within the `hub-config` directory.
 
+- config_target_data:
+
+  Optional. A `target-data.json` config object. If provided, validation
+  uses deterministic schema from config. If `NULL` (default), validation
+  uses inference from `tasks.json`.
+
 ## Value
 
 Depending on whether validation has succeeded, one of:
@@ -57,9 +64,17 @@ Returned object also inherits from subclass `<hub_check>`.
 
 ## Details
 
-If datasets are versioned, multiple observations are allowed in
-`time-series` target data, so long as they have different `as_of`
-values. The `as_of` column is therefore included when determining
-duplicates. In `oracle-output` data, there should be only a single
-observation, regardless of the `as_of` value so the column it is not be
-included when determining duplicates.
+Row uniqueness is determined by checking for duplicate combinations of
+key columns (excluding value columns).
+
+**With `target-data.json` config:** Columns to check are determined from
+the config's `observable_unit` specification. For `oracle-output` data
+with output type IDs, the `output_type` and `output_type_id` columns are
+also included in the uniqueness check.
+
+**Without `target-data.json` config:** For `time-series` data, if
+versioned, multiple observations are allowed so long as they have
+different `as_of` values. The `as_of` column is therefore included when
+determining duplicates. For `oracle-output` data, there should be only a
+single observation, regardless of the `as_of` value, so the column is
+not included when determining duplicates.

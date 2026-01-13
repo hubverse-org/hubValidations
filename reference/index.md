@@ -279,6 +279,9 @@ checks.
 - [`capture_exec_warning()`](https://hubverse-org.github.io/hubValidations/reference/capture_exec_warning.md)
   : Capture an execution warning condition
 
+- [`capture_validation_warning()`](https://hubverse-org.github.io/hubValidations/reference/capture_validation_warning.md)
+  : Capture a validation warning condition
+
 - [`is_success()`](https://hubverse-org.github.io/hubValidations/reference/is_success.md)
   [`is_failure()`](https://hubverse-org.github.io/hubValidations/reference/is_success.md)
   [`is_error()`](https://hubverse-org.github.io/hubValidations/reference/is_success.md)
@@ -330,13 +333,6 @@ Methods for `<hub_validations>` S3 objects and subclasses.
   :
 
   Print results of `validate_...()` function as a bullet list
-
-- [`print(`*`<pr_hub_validations>`*`)`](https://hubverse-org.github.io/hubValidations/reference/print.pr_hub_validations.md)
-  :
-
-  Print results of
-  [`validate_pr()`](https://hubverse-org.github.io/hubValidations/reference/validate_pr.md)
-  function as a bullet list
 
 - [`combine()`](https://hubverse-org.github.io/hubValidations/reference/combine.md)
   :

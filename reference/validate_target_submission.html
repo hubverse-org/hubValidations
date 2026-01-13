@@ -11,7 +11,7 @@ contents of the file."><meta property="og:image" content="https://hubverse-org.g
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/hubverse-org/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubValidations</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.12.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.13.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -24,17 +24,12 @@ contents of the file."><meta property="og:image" content="https://hubverse-org.g
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/hub-validations-class.html">Structure of hub_validations class objects</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Validation for hub admins through CI</h6></li>
-    <li><a class="dropdown-item" href="../articles/validate-pr.html">Validating Pull Requests on GitHub</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Validation for submitting teams</h6></li>
-    <li><a class="dropdown-item" href="../articles/validate-submission.html">Validating submissions locally</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Custom validation checks</h6></li>
-    <li><a class="dropdown-item" href="../articles/writing-custom-fns.html">Writing custom validation functions</a></li>
-    <li><a class="dropdown-item" href="../articles/deploying-custom-functions.html">Deploying custom validation functions</a></li>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/hub-validations-class.html">hub_validations class structure</a></li>
+    <li><a class="dropdown-item" href="../articles/validate-pr.html">Validating model output PRs</a></li>
+    <li><a class="dropdown-item" href="../articles/validate-target-pr.html">Validating target data PRs</a></li>
+    <li><a class="dropdown-item" href="../articles/validate-submission.html">Validating hub data locally</a></li>
+    <li><a class="dropdown-item" href="../articles/writing-custom-fns.html">Writing custom checks</a></li>
+    <li><a class="dropdown-item" href="../articles/deploying-custom-functions.html">Deploying custom checks</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/hubverse-org/hubValidations/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
@@ -46,7 +41,7 @@ contents of the file."><meta property="og:image" content="https://hubverse-org.g
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Validate a submitted target data file.</h1>
-      <small class="dont-index">Source: <a href="https://github.com/hubverse-org/hubValidations/blob/v0.12.1/R/validate_target_submission.R" class="external-link"><code>R/validate_target_submission.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/hubverse-org/hubValidations/blob/main/R/validate_target_submission.R" class="external-link"><code>R/validate_target_submission.R</code></a></small>
       <div class="d-none name"><code>validate_target_submission.Rd</code></div>
     </div>
 
@@ -63,6 +58,7 @@ contents of the file.</p>
 <span>  <span class="va">file_path</span>,</span>
 <span>  target_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"time-series"</span>, <span class="st">"oracle-output"</span><span class="op">)</span>,</span>
 <span>  date_col <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  allow_extra_dates <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  round_id <span class="op">=</span> <span class="st">"default"</span>,</span>
 <span>  na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"NA"</span>, <span class="st">""</span><span class="op">)</span>,</span>
 <span>  output_type_id_datatype <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"from_config"</span>, <span class="st">"auto"</span>, <span class="st">"character"</span>, <span class="st">"double"</span>, <span class="st">"integer"</span>,</span>
@@ -99,9 +95,19 @@ file relative to the <code>target-data</code> directory.</p></dd>
 
 
 <dt id="arg-date-col">date_col<a class="anchor" aria-label="anchor" href="#arg-date-col"></a></dt>
-<dd><p>Optional column name to be interpreted as date. Default is <code>NULL</code>.
-Useful when the required date column is a partitioning column in the target data
-and does not have the same name as a date typed task ID variable in the config.</p></dd>
+<dd><p>Optional name of the column containing the date observations
+actually occurred (e.g., <code>"target_end_date"</code>) to be interpreted as date.
+Useful when this column does not correspond to a valid task ID (e.g.,
+calculated from other task IDs like <code>origin_date + horizon</code>) for: (1) correct
+schema creation, particularly when it's also a partitioning column, and (2)
+more robust column name validation when <code>target-data.json</code> config does not
+exist. Ignored when <code>target-data.json</code> exists.</p></dd>
+
+
+<dt id="arg-allow-extra-dates">allow_extra_dates<a class="anchor" aria-label="anchor" href="#arg-allow-extra-dates"></a></dt>
+<dd><p>Logical. If TRUE and target_type is
+"time-series", allows date values not in tasks.json. Other task ID columns
+are still strictly validated. Ignored for oracle-output (always strict).</p></dd>
 
 
 <dt id="arg-round-id">round_id<a class="anchor" aria-label="anchor" href="#arg-round-id"></a></dt>
@@ -247,7 +253,10 @@ see <a href="https://hubverse-org.github.io/hubValidations/articles/hub-validati
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_file_ext]</span>: Target data file extension is valid.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_file_read]</span>: target file could be read successfully.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_colnames]</span>: Column names are consistent with expected column names</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   for <span style="color: #00BB00;">time-series</span> target type data.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   for <span style="color: #00BB00;">time-series</span> target type data.  Column name validation for time-series</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   data in inference mode is limited. For robust validation, create a</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">target-data.json</span> config file. See `target-data.json` documentation</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   (<span style="color: #0000BB; font-style: italic;">&lt;https://docs.hubverse.io/en/latest/user-guide/hub-config.html#hub-target-data-configuration-target-data-json-file&gt;</span>)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_coltypes]</span>: Column data types match time-series target schema.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_ts_targets]</span>: <span style="color: #00BB00;">time-series</span> targets are all valid.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_rows_unique]</span>: <span style="color: #00BB00;">time-series</span> target data rows are unique.</span>
@@ -261,7 +270,7 @@ see <a href="https://hubverse-org.github.io/hubValidations/articles/hub-validati
 <span class="r-in"><span><span class="va">hub_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"testhubs/v5/target_dir"</span>, package <span class="op">=</span> <span class="st">"hubUtils"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">validate_target_submission</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">hub_path</span>,</span></span>
-<span class="r-in"><span>  file_path <span class="op">=</span> <span class="st">"time-series/target=wk%20flu%20hosp%20rate/part-0.parquet"</span>,</span></span>
+<span class="r-in"><span>  file_path <span class="op">=</span> <span class="st">"time-series/target=flu_hosp_rate/part-0.parquet"</span>,</span></span>
 <span class="r-in"><span>  target_type <span class="op">=</span> <span class="st">"time-series"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
@@ -269,16 +278,19 @@ see <a href="https://hubverse-org.github.io/hubValidations/articles/hub-validati
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_config]</span>: All hub config files are valid.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">time-series/target=wk%20flu%20hosp%20rate/part-0.parquet</span><span style="color: #BB00BB;"> ────</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">time-series/target=flu_hosp_rate/part-0.parquet</span><span style="color: #BB00BB;"> ────</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_file_exists]</span>: File exists at path</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">target-data/time-series/target=wk%20flu%20hosp%20rate/part-0.parquet</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">target-data/time-series/target=flu_hosp_rate/part-0.parquet</span>.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_partition_file_name]</span>: Hive-style partition file path segments are</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   valid.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_file_ext]</span>: Hive-partitioned target data file extension is valid.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_file_read]</span>: target file could be read successfully.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_colnames]</span>: Column names are consistent with expected column names</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   for <span style="color: #00BB00;">time-series</span> target type data.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   for <span style="color: #00BB00;">time-series</span> target type data.  Column name validation for time-series</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   data in inference mode is limited. For robust validation, create a</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">target-data.json</span> config file. See `target-data.json` documentation</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   (<span style="color: #0000BB; font-style: italic;">&lt;https://docs.hubverse.io/en/latest/user-guide/hub-config.html#hub-target-data-configuration-target-data-json-file&gt;</span>)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_coltypes]</span>: Column data types match time-series target schema.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_ts_targets]</span>: <span style="color: #00BB00;">time-series</span> targets are all valid.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_rows_unique]</span>: <span style="color: #00BB00;">time-series</span> target data rows are unique.</span>

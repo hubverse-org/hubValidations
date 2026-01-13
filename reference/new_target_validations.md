@@ -61,13 +61,13 @@ as_target_validations(x)
 #> 
 #> ℹ [target_file_name]: Target file path not hive-partitioned. Check skipped.
 #> ✔ [target_file_ext_valid]: Target data file extension is valid.
-file_path <- "time-series/target=wk%20flu%20hosp%20rate/part-0.parquet"
+file_path <- "time-series/target=flu_hosp_rate/part-0.parquet"
 new_target_validations(
   target_file_name = check_target_file_name(file_path),
   target_file_ext_valid = check_target_file_ext_valid(file_path)
 )
 #> 
-#> ── time-series/target=wk%20flu%20hosp%20rate/part-0.parquet ────
+#> ── time-series/target=flu_hosp_rate/part-0.parquet ────
 #> 
 #> ✔ [target_file_name]: Hive-style partition file path segments are valid.
 #> ✔ [target_file_ext_valid]: Hive-partitioned target data file extension is

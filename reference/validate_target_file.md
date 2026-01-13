@@ -95,13 +95,13 @@ validate_target_file(hub_path,
 #> ✔ [target_file_ext]: Target data file extension is valid.
 hub_path <- system.file("testhubs/v5/target_dir", package = "hubUtils")
 validate_target_file(hub_path,
-  file_path = "time-series/target=wk%20flu%20hosp%20rate/part-0.parquet"
+  file_path = "time-series/target=flu_hosp_rate/part-0.parquet"
 )
 #> 
-#> ── time-series/target=wk%20flu%20hosp%20rate/part-0.parquet ────
+#> ── time-series/target=flu_hosp_rate/part-0.parquet ────
 #> 
 #> ✔ [target_file_exists]: File exists at path
-#>   target-data/time-series/target=wk%20flu%20hosp%20rate/part-0.parquet.
+#>   target-data/time-series/target=flu_hosp_rate/part-0.parquet.
 #> ✔ [target_partition_file_name]: Hive-style partition file path segments are
 #>   valid.
 #> ✔ [target_file_ext]: Hive-partitioned target data file extension is valid.

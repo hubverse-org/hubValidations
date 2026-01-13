@@ -25,7 +25,7 @@
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/hubverse-org/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubValidations</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.12.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.13.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,17 +42,12 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/hub-validations-class.html">Structure of hub_validations class objects</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Validation for hub admins through CI</h6></li>
-    <li><a class="dropdown-item" href="../articles/validate-pr.html">Validating Pull Requests on GitHub</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Validation for submitting teams</h6></li>
-    <li><a class="dropdown-item" href="../articles/validate-submission.html">Validating submissions locally</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Custom validation checks</h6></li>
-    <li><a class="dropdown-item" href="../articles/writing-custom-fns.html">Writing custom validation functions</a></li>
-    <li><a class="dropdown-item" href="../articles/deploying-custom-functions.html">Deploying custom validation functions</a></li>
+<li><a class="dropdown-item" href="../articles/hub-validations-class.html">hub_validations class structure</a></li>
+    <li><a class="dropdown-item" href="../articles/validate-pr.html">Validating model output PRs</a></li>
+    <li><a class="dropdown-item" href="../articles/validate-target-pr.html">Validating target data PRs</a></li>
+    <li><a class="dropdown-item" href="../articles/validate-submission.html">Validating hub data locally</a></li>
+    <li><a class="dropdown-item" href="../articles/writing-custom-fns.html">Writing custom checks</a></li>
+    <li><a class="dropdown-item" href="../articles/deploying-custom-functions.html">Deploying custom checks</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -72,7 +67,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Structure of hub_validations class objects</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/hubverse-org/hubValidations/blob/v0.12.1/vignettes/articles/hub-validations-class.Rmd" class="external-link"><code>vignettes/articles/hub-validations-class.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/hubverse-org/hubValidations/blob/main/vignettes/articles/hub-validations-class.Rmd" class="external-link"><code>vignettes/articles/hub-validations-class.Rmd</code></a></small>
       <div class="d-none name"><code>hub-validations-class.Rmd</code></div>
     </div>
 
@@ -197,7 +192,11 @@ failed, causing early return of the validation process (a
 <code>&lt;error/check_error&gt;</code> condition class object was
 returned)</li>
 <li>
-<code>☒</code> indicates an execution error occured and the check
+<code>!</code> indicates an execution warning occurred during a
+check (a <code>&lt;warning/check_exec_warn&gt;</code> condition class
+object was returned)</li>
+<li>
+<code>█</code> indicates an execution error occurred and the check
 was not able to complete (a <code>&lt;error/check_exec_error&gt;</code>
 condition class object was returned). Will cause early return if
 expected check failure output was a
@@ -251,10 +250,42 @@ returned)</li>
 <span><span class="co">#&gt;   `output_type_id`.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[value_col_sum1]</span>: No pmf output types to check for sum of 1. Check skipped.</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[submission_time]</span>: Submission time must be within accepted submission window</span></span>
-<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2025-11-18 15:53:17 UTC"</span> is outside window</span></span>
+<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2026-01-13 15:04:47 UTC"</span> is outside window</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span></span></code></pre></div>
 <p>Note that the submission window check is always performed and
 reported last.</p>
+<div class="section level3">
+<h3 id="validation-warnings">Validation warnings<a class="anchor" aria-label="anchor" href="#validation-warnings"></a>
+</h3>
+<p>Some validation functions may attach warnings to a
+<code>hub_validations</code> object. These are informational messages
+about conditions that may warrant attention but do not affect the
+validation result. There are two levels of warnings:</p>
+<ul>
+<li><p><strong>Validation-level warnings</strong> are attached to the
+<code>hub_validations</code> object itself and are always displayed
+prominently at the top of the print output in a box. For example,
+<code><a href="../reference/validate_pr.html">validate_pr()</a></code> attaches a validation-level warning when hub
+configuration files have been modified in a pull request.</p></li>
+<li><p><strong>Check-level warnings</strong> are attached to individual
+check results and provide additional context about a specific check. By
+default, check-level warnings are hidden. To display them, use
+<code>print(v, show_check_warnings = TRUE)</code>. They appear indented
+below their associated check result.</p></li>
+</ul>
+<p>Here is an example showing both warning levels with
+<code>show_check_warnings = TRUE</code>:</p>
+<pre><code><span><span class="co">#&gt; <span style="color: #BBBB00;">┌────────────────────────────────────────────────────────────────────┐</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">│</span> <span style="color: #BBBB00;">⚠</span> <span style="font-weight: bold;">Warnings</span>                                                         <span style="color: #BBBB00;">│</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">│</span> • Hub config files modified: <span style="color: #0000BB;">tasks.json</span>. Config changes may affect <span style="color: #BBBB00;">│</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">│</span>   validation. Please review carefully.                             <span style="color: #BBBB00;">│</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">└────────────────────────────────────────────────────────────────────┘</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">2022-10-08-hub-baseline.csv</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_exists]</span>: File exists.</span></span>
+<span><span class="co">#&gt;     <span style="color: #BBBB00;">!</span><span style="color: #555555;"> Check-level warning: additional context about this check.</span></span></span></code></pre>
+</div>
 </div>
 <div class="section level2">
 <h2 id="structure-of-a-hub_check-object">Structure of a <code>&lt;hub_check&gt;</code> object<a class="anchor" aria-label="anchor" href="#structure-of-a-hub_check-object"></a>
@@ -262,7 +293,7 @@ reported last.</p>
 <p>Let’s look more closely at the structure of the first few elements of
 the <code>hub_validations</code> object retuned by
 <code><a href="../reference/validate_submission.html">validate_submission()</a></code></p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">v</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/validate_submission.html">validate_submission</a></span><span class="op">(</span><span class="va">hub_path</span>,</span>
 <span>  file_path <span class="op">=</span> <span class="st">"team1-goodmodel/2022-10-08-team1-goodmodel.csv"</span></span>
 <span><span class="op">)</span></span>
@@ -312,13 +343,16 @@ elements:</p>
 <code>message</code>: the result message containing details about
 the check.</li>
 <li>
-<code>where:</code>: there the check was performed, usually the
-model output file name.</li>
+<code>where</code>: where the check was performed, usually the model
+output file name.</li>
 <li>
 <code>call</code>: the function used to perform the check.</li>
 <li>
 <code>use_cli_format</code>: whether the message is formatted using
 cli format, almost always TRUE.</li>
+<li>
+<code>warnings</code>: (optional) a list of check-level warning
+conditions providing additional context about the check. See the <a href="#validation-warnings">Validation warnings</a> section above.</li>
 </ul>
 </div>
 <div class="section level2">
@@ -336,7 +370,7 @@ details of the invalid value combinations in the rows affected.</p>
 <p>To access <code>error_tbl</code> from the output of
 <code><a href="../reference/validate_submission.html">validate_submission()</a></code> stored in an object <code>v</code>,
 you would use:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">v</span><span class="op">$</span><span class="va">valid_vals</span><span class="op">$</span><span class="va">error_tbl</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
