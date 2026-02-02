@@ -42,7 +42,7 @@ validate_model_metadata <- function(
   checks <- new_hub_validations()
 
   checks$metadata_schema_exists <- try_check(
-    check_metadata_schema_exists(hub_path),
+    check_metadata_schema_exists(hub_path, file_path),
     file_path
   )
   if (is_any_error(checks$metadata_schema_exists)) {

@@ -49,7 +49,7 @@ The pertinent section of the workflow is:
         shell: Rscript {0}
 ```
 
-where `validate_target_pr()` is called on the contents of the current Pull Request, the results (an S3 `<target_validations>` class object) are stored in `v` and then `check_for_errors()` is used to signal whether overall validations have passed or failed and summarise any validation failures.
+where `validate_target_pr()` is called on the contents of the current Pull Request, the results (an S3 `<target_validations_collection>` class object) are stored in `v` and then `check_for_errors()` is used to signal whether overall validations have passed or failed and summarise any validation failures.
 
 ### Example: Validating a Pull Request
 
@@ -131,6 +131,15 @@ v_mod
 check_for_errors(v_mod)
 ```
 
+#### Accessing modification check results
+
+When modification/deletion checks are enabled, each affected file creates an entry in the returned collection named by the file's path. The check within each entry is named `valid_file_status` (reflecting that we validate the file's git status).
+
+```{r, eval=FALSE}
+# Access the file status check for a deleted file
+v_mod[["oracle-output/output_type=sample/part-0.parquet"]][["valid_file_status"]]
+```
+
 ### Allowing deletion of entire target type datasets
 
 By default, deletion of an entire target type dataset (i.e., all files of a target type) in a PR is not allowed.
@@ -165,11 +174,11 @@ check_for_errors(v_del_allowed)
 
 ## Checking for validation failures with `check_for_errors()`
 
-`check_for_errors()` is used to inspect a `target_validations` class object, determine whether overall validations have passed or failed and summarise any detected errors/failures.
+`check_for_errors()` is used to inspect a `target_validations_collection` class object, determine whether overall validations have passed or failed and summarise any detected errors/failures.
 
 ### Validation failure
 
-If any elements of the `target_validations` object contain `<error/check_error>`, `<warning/check_warning>` or `<error/check_exec_error>` condition class objects, the function throws an error and prints the messages from the failing checks.
+If any elements of the `target_validations_collection` object contain `<error/check_error>`, `<warning/check_warning>` or `<error/check_exec_error>` condition class objects, the function throws an error and prints the messages from the failing checks.
 
 ### Validation success
 
@@ -183,6 +192,24 @@ All validation checks have been successful.
 
 If printing the results of all checks is preferred instead of just summarising the results of checks that failed, argument `verbose` can be set to `TRUE`.
 
+
+## Accessing validation results by file
+
+The `validate_target_pr()` function returns a `target_validations_collection` object, which is a named list where each element contains the validation results for a specific file or dataset.
+You can access results for individual files using standard list subsetting:
+
+```{r}
+# See all file paths in the collection
+names(v)
+
+# Access all checks for a specific file
+v[["oracle-output.csv"]]
+
+# Access a specific check result
+v[["oracle-output.csv"]]$target_file_exists
+```
+
+This structure is particularly useful when you need to programmatically inspect specific checks or extract error details from failed validations.
 
 ## `validate_target_pr` check details
 

@@ -40,6 +40,7 @@ check_target_dataset_rows_unique <- function(
   hub_path
 ) {
   target_type <- rlang::arg_match(target_type)
+  # Use target_type as file_path (required for valid target_validations object)
 
   ds <- switch(
     target_type,
@@ -83,12 +84,9 @@ check_target_dataset_rows_unique <- function(
     )
   }
 
-  file_path <- basename(
-    hubData::get_target_path(hub_path, target_type)
-  )
   capture_check_cnd(
     check = check,
-    file_path = file_path,
+    file_path = target_type,
     msg_subject = cli::format_inline(
       "{.field {target_type}} target dataset rows"
     ),

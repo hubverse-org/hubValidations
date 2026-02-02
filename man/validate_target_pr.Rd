@@ -63,10 +63,8 @@ exist. Ignored when \code{target-data.json} exists.}
 "time-series", allows date values not in tasks.json. Other task ID columns
 are still strictly validated. Ignored for oracle-output (always strict).}
 
-\item{na}{A character vector of strings to interpret as missing values. Only
-applies to CSV files. The default is \code{c("NA", "")}. Useful when actual character
-string \code{"NA"} values are used in the data. In such a case, use empty cells to
-indicate missing values in your files and set \code{na = ""}.}
+\item{na}{Character vector of strings to interpret as missing values when
+reading data files. Passed to the underlying file reader.}
 
 \item{round_id}{Character string. Not generally relevant to target datasets
 but can be used to specify a specific block of custom validation checks.
@@ -95,7 +93,10 @@ Defaults to \verb{"none}".}
 target type dataset (i.e. all files of a target type) in the PR. Defaults to \code{FALSE}.}
 }
 \value{
-An object of class \code{target_validations}.
+An object of class \code{target_validations_collection}, a collection of
+validation results. The collection includes entries for hub config
+validation (\code{"hub-config"}), target dataset type validation (\code{"time-series"},
+\code{"oracle-output"}), and individual file validations (named by file path).
 }
 \description{
 Validates target data files in a Pull Request.
@@ -112,6 +113,13 @@ previously submitted target data files are allowed.
 This behaviour can be modified through
 arguments \code{file_modification_check}, which controls whether modification/deletion
 checks are performed and what is returned if modifications/deletions are detected.
+
+When modification/deletion checks are enabled, each affected file creates an
+entry in the returned collection named by the file's path. The check within
+each entry is named \code{valid_file_status} (reflecting that we validate the
+file's git status).
+For example, to access the check for a deleted file:
+\code{collection[["oracle-output/output_type=sample/part-0.parquet"]][["valid_file_status"]]}.
 \subsection{Checks on target dataset}{
 
 Details of checks performed by \code{validate_target_dataset()}\if{html}{\out{<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">}}\if{html}{\out{

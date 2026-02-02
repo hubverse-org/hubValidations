@@ -5,9 +5,9 @@
     Output
       Classes 'hub_validations', 'list'  hidden list of 5
        $ metadata_schema_exists :List of 4
-        ..$ message       : chr "File exists at path 'hub-config/model-metadata-schema.json'. \n "
-        ..$ where         : chr "model-metadata-schema.json"
-        ..$ call          : chr "check_file_exists"
+        ..$ message       : chr "Model metadata schema file exists at path 'hub-config/model-metadata-schema.json'. \n "
+        ..$ where         : chr "team1-goodmodel.yaml"
+        ..$ call          : chr "check_metadata_schema_exists"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ metadata_file_exists   :List of 4
@@ -36,6 +36,7 @@
         ..$ call          : chr "check_metadata_matches_schema"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_error" "hub_check" "rlang_error" "error" ...
+       - attr(*, "where")= chr "team1-goodmodel.yaml"
 
 ---
 
@@ -44,9 +45,9 @@
     Output
       List of 6
        $ metadata_schema_exists :List of 4
-        ..$ message       : chr "File exists at path 'hub-config/model-metadata-schema.json'. \n "
-        ..$ where         : chr "model-metadata-schema.json"
-        ..$ call          : chr "check_file_exists"
+        ..$ message       : chr "Model metadata schema file exists at path 'hub-config/model-metadata-schema.json'. \n "
+        ..$ where         : chr "hub-baseline.yml"
+        ..$ call          : chr "check_metadata_schema_exists"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ metadata_file_exists   :List of 4
@@ -80,6 +81,7 @@
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        - attr(*, "class")= chr [1:2] "hub_validations" "list"
+       - attr(*, "where")= chr "hub-baseline.yml"
 
 ---
 
@@ -88,9 +90,9 @@
     Output
       Classes 'hub_validations', 'list'  hidden list of 5
        $ metadata_schema_exists :List of 4
-        ..$ message       : chr "File exists at path 'hub-config/model-metadata-schema.json'. \n "
-        ..$ where         : chr "model-metadata-schema.json"
-        ..$ call          : chr "check_file_exists"
+        ..$ message       : chr "Model metadata schema file exists at path 'hub-config/model-metadata-schema.json'. \n "
+        ..$ where         : chr "hub-baseline-no-abbrs-or-model_id.yml"
+        ..$ call          : chr "check_metadata_schema_exists"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ metadata_file_exists   :List of 4
@@ -119,6 +121,7 @@
         ..$ call          : chr "check_metadata_matches_schema"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_error" "hub_check" "rlang_error" "error" ...
+       - attr(*, "where")= chr "hub-baseline-no-abbrs-or-model_id.yml"
 
 ---
 
@@ -127,9 +130,9 @@
     Output
       Classes 'hub_validations', 'list'  hidden list of 2
        $ metadata_schema_exists:List of 4
-        ..$ message       : chr "File exists at path 'hub-config/model-metadata-schema.json'. \n "
-        ..$ where         : chr "model-metadata-schema.json"
-        ..$ call          : chr "check_file_exists"
+        ..$ message       : chr "Model metadata schema file exists at path 'hub-config/model-metadata-schema.json'. \n "
+        ..$ where         : chr "2020-10-06-random-path.csv"
+        ..$ call          : chr "check_metadata_schema_exists"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ metadata_file_exists  :List of 6
@@ -140,4 +143,5 @@
         ..$ call          : chr "check_file_exists"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_error" "hub_check" "rlang_error" "error" ...
+       - attr(*, "where")= chr "2020-10-06-random-path.csv"
 

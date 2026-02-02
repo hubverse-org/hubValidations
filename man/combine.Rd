@@ -7,11 +7,17 @@
 combine(...)
 }
 \arguments{
-\item{...}{\code{hub_validations} S3 class objects to be concatenated.}
+\item{...}{\code{hub_validations} or \code{target_validations} S3 class objects to be
+concatenated. NULL values are ignored. Empty objects are filtered out when
+combining multiple inputs, but a single empty input is returned as-is.}
 }
 \value{
-a \code{hub_validations} S3 class object.
+A \code{hub_validations} or \code{target_validations} S3 class object
+(preserving the input class), or NULL if no valid inputs provided.
 }
 \description{
-Concatenate \code{hub_validations} S3 class objects
+Combines multiple \code{hub_validations} (or \code{target_validations}) objects into
+one. All objects must have the same class and \code{where} attribute (i.e., be
+validations for the same subject). Subclasses like \code{target_validations} are
+preserved.
 }

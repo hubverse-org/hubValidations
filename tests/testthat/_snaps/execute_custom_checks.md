@@ -12,6 +12,7 @@
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        - attr(*, "class")= chr [1:2] "hub_validations" "list"
+       - attr(*, "where")= chr "hub-ensemble/2023-05-08-hub-ensemble.parquet"
 
 ---
 
@@ -28,6 +29,7 @@
         ..$ call          : NULL
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_error" "error" ...
+       - attr(*, "where")= chr "hub-ensemble/2023-05-08-hub-ensemble.parquet"
 
 # execute_custom_checks sourcing functions from scripts works
 
@@ -35,7 +37,7 @@
       validations_src_external
     Message
       
-      -- 2023-05-08-hub-ensemble.parquet ----
+      -- hub-ensemble/2023-05-08-hub-ensemble.parquet ----
       
       i [src_check_works]: Sourcing custom functions WORKS! Also "Extra arguments passed"!!
 
@@ -45,7 +47,7 @@
       early_ret_custom
     Message
       
-      -- 2023-05-08-hub-ensemble.parquet ----
+      -- hub-ensemble/2023-05-08-hub-ensemble.parquet ----
       
       (x) [check_1]: Check failed !  Early return
 
@@ -55,7 +57,7 @@
       early_ret_exec_error
     Message
       
-      -- 2023-05-08-hub-ensemble.parquet ----
+      -- hub-ensemble/2023-05-08-hub-ensemble.parquet ----
       
       # [check_1]: Stop! Early return because of exec error.
 
@@ -65,7 +67,7 @@
       no_early_ret_custom
     Message
       
-      -- 2023-05-08-hub-ensemble.parquet ----
+      -- hub-ensemble/2023-05-08-hub-ensemble.parquet ----
       
       x [check_1]: Check failed !
       v [check_2]: Check passed !

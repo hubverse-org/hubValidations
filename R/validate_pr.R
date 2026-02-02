@@ -39,6 +39,13 @@
 #' and `allow_submit_window_mods`, which controls whether modifications/deletions
 #' of model output files are allowed within their submission windows.
 #'
+#' When modification/deletion checks are enabled, each affected file creates an
+#' entry in the returned collection named by the file's path. The check within
+#' each entry is named `valid_file_status` (reflecting that we validate the
+#' file's git status).
+#' For example, to access the check for a deleted file:
+#' `collection[["team1-goodmodel/2022-10-15-team1-goodmodel.csv"]][["valid_file_status"]]`.
+#'
 #' Note that to establish **relative** submission windows when performing
 #' modification/deletion checks and `allow_submit_window_mods`
 #' is `TRUE`, the reference date is taken as the `round_id` extracted from
@@ -99,7 +106,10 @@
 #'      )  |>
 #'   kableExtra::column_spec(1, bold = TRUE)
 #' ```
-#' @return An object of class `hub_validations`.
+#' @return An object of class `hub_validations_collection`, a collection of
+#'   validation results. The collection includes entries for hub config
+#'   validation (`"hub-config"`) and file-specific validations (named by
+#'   file path).
 #' @export
 #'
 #' @examples
@@ -152,17 +162,20 @@ validate_pr <- function(
   output_type_id_datatype <- rlang::arg_match(output_type_id_datatype)
   model_output_dir <- get_hub_model_output_dir(hub_path) # nolint: object_name_linter
   model_metadata_dir <- "model-metadata" # nolint: object_name_linter
-  validations <- new_hub_validations()
 
-  validations$valid_config <- try_check(
-    check_config_hub_valid(hub_path),
-    file_path = basename(hub_path)
+  # Check hub config first - return early if invalid
+  config_validations <- new_hub_validations(
+    valid_config = try_check(
+      check_config_hub_valid(hub_path),
+      file_path = "hub-config"
+    )
   )
-  if (is_any_error(validations$valid_config)) {
-    return(validations)
+  if (is_any_error(config_validations)) {
+    return(new_hub_validations_collection(config_validations))
   }
 
-  tryCatch(
+  # nolint next: object_usage_linter
+  file_validations <- tryCatch(
     {
       pr_files <- gh::gh(
         "/repos/{gh_repo}/pulls/{pr_number}/files",
@@ -196,11 +209,8 @@ validate_pr <- function(
         )
       inform_unvalidated_files(pr_df)
 
-      # Check for config file modifications and attach as warning
+      # Check for config file modifications
       config_warning <- check_pr_config_modified(pr_df)
-      if (!is.null(config_warning)) {
-        attr(validations, "warnings") <- list(config_warning)
-      }
 
       model_output_files <- pr_df$rel_path[
         pr_df$model_output & pr_df$status != "removed"
@@ -209,70 +219,79 @@ validate_pr <- function(
         pr_df$model_metadata & pr_df$status != "removed"
       ]
 
-      if (file_modification_check != "none") {
-        file_modifications <- purrr::map(
-          c("model_output", "model_metadata"),
-          ~ check_pr_modf_del_files(
-            pr_df,
-            file_type = .x,
-            alert = file_modification_check,
-            allow_submit_window_mods = allow_submit_window_mods
+      # Validate model output files (returns collections)
+      model_output_collections <- purrr::map(
+        model_output_files,
+        \(.x) {
+          validate_submission(
+            hub_path,
+            file_path = .x,
+            output_type_id_datatype = output_type_id_datatype,
+            validations_cfg_path = validations_cfg_path,
+            skip_submit_window_check = skip_submit_window_check,
+            derived_task_ids = derived_task_ids,
+            skip_check_config = TRUE
           )
-        ) |>
-          purrr::reduce(combine)
+        }
+      )
+
+      # Validate model metadata files (returns hub_validations, wrap in collections)
+      model_metadata_collections <- purrr::map(
+        model_metadata_files,
+        \(.x) {
+          new_hub_validations_collection(
+            validate_model_metadata(
+              hub_path,
+              file_path = .x,
+              validations_cfg_path = validations_cfg_path
+            )
+          )
+        }
+      )
+
+      # Check for file modifications/deletions (returns collections)
+      mod_collections <- if (file_modification_check != "none") {
+        purrr::map(
+          c("model_output", "model_metadata"),
+          \(.x) {
+            check_valid_files_status(
+              pr_df,
+              file_type = .x,
+              alert = file_modification_check,
+              allow_submit_window_mods = allow_submit_window_mods
+            )
+          }
+        )
       } else {
-        file_modifications <- NULL
+        NULL
       }
 
-      model_output_vals <- purrr::map(
-        model_output_files,
-        ~ validate_submission(
-          hub_path,
-          file_path = .x,
-          output_type_id_datatype = output_type_id_datatype,
-          validations_cfg_path = validations_cfg_path,
-          skip_submit_window_check = skip_submit_window_check,
-          derived_task_ids = derived_task_ids,
-          skip_check_config = TRUE
-        )
-      ) |>
-        purrr::list_flatten() |>
-        as_hub_validations()
-
-      model_metadata_vals <- purrr::map(
-        model_metadata_files,
-        ~ validate_model_metadata(
-          hub_path,
-          file_path = .x,
-          validations_cfg_path = validations_cfg_path
-        )
-      ) |>
-        purrr::list_flatten() |>
-        as_hub_validations()
-
-      validations <- combine(
-        validations,
-        file_modifications,
-        model_output_vals,
-        model_metadata_vals
+      # Combine all collections
+      all_collections <- c(
+        list(new_hub_validations_collection(config_validations)),
+        model_output_collections,
+        model_metadata_collections,
+        mod_collections
       )
+      result <- purrr::reduce(all_collections, combine)
+      if (!is.null(config_warning)) {
+        attr(result, "warnings") <- list(config_warning)
+      }
+      result
     },
     error = function(e) {
       # This handler is used when an unrecoverable error is thrown. This can
       # happen when, e.g., the csv file cannot be parsed by read_csv(). In this
       # situation, we want to output all the validations until this point plus
       # this "unrecoverable" error.
-      e <- capture_exec_error(
-        file_path = gh_repo,
+      exec_error <- capture_exec_error(
+        file_path = paste0(gh_repo, "#", pr_number),
         msg = conditionMessage(e)
       )
-      validations <<- combine(
-        validations,
-        new_hub_validations(e)
-      )
+      error_validations <- new_hub_validations(exec_error = exec_error)
+      as_hub_validations_collection(list(config_validations, error_validations))
     }
   )
-  validations
 }
 
 # Sends message reporting any files with changes in PR that were not validated.
@@ -297,10 +316,13 @@ inform_unvalidated_files <- function(
     )
   )
 }
-# Checks for model output file modifications and model output & model metadata
-# file deletions/renaming. Returns an <error/check_error>⁠ condition class object if any
-# modification or deletion detected.
-check_pr_modf_del_files <- function(
+# Check that the git status of files in a PR is valid (i.e., files have not been
+# modified, deleted, or renamed when not allowed). Returns a hub_validations_collection
+# (or target_validations_collection for target file types).
+# The check name "valid_file_status" reflects that we're validating the git status.
+# The check class returned (check_info, check_failure, or check_error) depends on
+# the user's `file_modification_check` setting.
+check_valid_files_status <- function(
   pr_df,
   file_type = c(
     "model_output", # nolint
@@ -313,6 +335,7 @@ check_pr_modf_del_files <- function(
 ) {
   file_type <- rlang::arg_match(file_type)
   alert <- rlang::arg_match(alert)
+  is_target <- file_type %in% c("timeseries", "oracle_output")
 
   # subset pr_df to the file type being checked. We check model output and model
   # metadata files separately as model metadata files are only checked for
@@ -328,37 +351,47 @@ check_pr_modf_del_files <- function(
     df[df$status %in% c("removed", "renamed"), ]
   )
   if (nrow(df) == 0L) {
-    if (file_type %in% c("timeseries", "oracle_output")) {
-      return(new_target_validations())
+    if (is_target) {
+      return(new_target_validations_collection())
     } else {
-      return(new_hub_validations())
+      return(new_hub_validations_collection())
     }
   }
-  # Check whether modifications allowed and return notification object according
-  # to alert for any file that violates allowed mod/del rules.
-  out <- purrr::map(
-    .x = seq_len(nrow(df)),
-    ~ check_pr_modf_del_file(
-      df_row = df[.x, ],
-      file_type = file_type,
-      allow_submit_window_mods = allow_submit_window_mods,
-      alert = alert
-    )
+
+  # Check each file and wrap in validations (collection merger handles grouping)
+  validations <- purrr::map(
+    seq_len(nrow(df)),
+    \(.x) {
+      df_row <- df[.x, ]
+      check <- check_valid_file_status(
+        df_row = df_row,
+        file_type = file_type,
+        allow_submit_window_mods = allow_submit_window_mods,
+        alert = alert
+      )
+      if (is.null(check)) {
+        return(NULL)
+      }
+      if (is_target) {
+        new_target_validations(valid_file_status = check)
+      } else {
+        new_hub_validations(valid_file_status = check)
+      }
+    }
   ) |>
     purrr::compact()
 
-  if (file_type %in% c("timeseries", "oracle_output")) {
-    out <- as_target_validations(out)
+  if (is_target) {
+    as_target_validations_collection(validations)
   } else {
-    out <- as_hub_validations(out)
+    as_hub_validations_collection(validations)
   }
-  purrr::set_names(out, sprintf("%s_mod", file_type))
 }
 
 
-# Check individual file for non-allowed modification/deletion and return appropriate
-# notification object according to alert
-check_pr_modf_del_file <- function(
+# Check that the git status of an individual file is valid. Returns the appropriate
+# check object based on the alert setting, or NULL if the change is allowed.
+check_valid_file_status <- function(
   df_row,
   file_type,
   allow_submit_window_mods,

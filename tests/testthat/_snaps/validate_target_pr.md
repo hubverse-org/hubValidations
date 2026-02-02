@@ -4,16 +4,19 @@
       checks_single_target_file
     Message
       
-      -- target ----
+      -- hub-config ----
       
       v [valid_config]: All hub config files are valid.
       
-      -- oracle-output.csv ----
+      -- oracle-output ----
       
       v [target_dataset_exists]: oracle-output dataset detected.
       v [target_dataset_unique]: 'target-data' directory contains single unique oracle-output dataset.
       v [target_dataset_file_ext_unique]: oracle-output dataset files share single unique file format.
       v [target_dataset_rows_unique]: oracle-output target dataset rows are unique.
+      
+      -- oracle-output.csv ----
+      
       v [target_file_exists]: File exists at path 'target-data/oracle-output.csv'.
       i [target_partition_file_name]: Target file path not hive-partitioned. Check skipped.
       v [target_file_ext]: Target data file extension is valid.
@@ -32,7 +35,7 @@
       checks_dir_target_file
     Message
       
-      -- target ----
+      -- hub-config ----
       
       v [valid_config]: All hub config files are valid.
       
@@ -59,22 +62,22 @@
       
       -- oracle-output ----
       
-      v [target_dataset_exists_1]: oracle-output dataset detected.
-      v [target_dataset_unique_1]: 'target-data' directory contains single unique oracle-output dataset.
-      v [target_dataset_file_ext_unique_1]: oracle-output dataset files share single unique file format.
-      v [target_dataset_rows_unique_1]: oracle-output target dataset rows are unique.
+      v [target_dataset_exists]: oracle-output dataset detected.
+      v [target_dataset_unique]: 'target-data' directory contains single unique oracle-output dataset.
+      v [target_dataset_file_ext_unique]: oracle-output dataset files share single unique file format.
+      v [target_dataset_rows_unique]: oracle-output target dataset rows are unique.
       
       -- oracle-output/output_type=cdf/part-0.parquet ----
       
-      v [target_file_exists_1]: File exists at path 'target-data/oracle-output/output_type=cdf/part-0.parquet'.
-      v [target_partition_file_name_1]: Hive-style partition file path segments are valid.
-      v [target_file_ext_1]: Hive-partitioned target data file extension is valid.
-      v [target_file_read_1]: target file could be read successfully.
-      v [target_tbl_colnames_1]: Column names are consistent with expected column names for oracle-output target type data.
-      v [target_tbl_coltypes_1]: Column data types match oracle-output target schema.
-      i [target_tbl_ts_targets_1]: Check not applicable to oracle-output target data. Skipped.
-      v [target_tbl_rows_unique_1]: oracle-output target data rows are unique.
-      v [target_tbl_values_1]: `target_tbl_chr` contains valid values/value combinations.
-      v [target_tbl_output_type_ids_1]: oracle-output `target_tbl` contains valid complete output_type_id values.
-      v [target_tbl_oracle_value_1]: oracle-output `target_tbl` contains valid oracle values.
+      v [target_file_exists]: File exists at path 'target-data/oracle-output/output_type=cdf/part-0.parquet'.
+      v [target_partition_file_name]: Hive-style partition file path segments are valid.
+      v [target_file_ext]: Hive-partitioned target data file extension is valid.
+      v [target_file_read]: target file could be read successfully.
+      v [target_tbl_colnames]: Column names are consistent with expected column names for oracle-output target type data.
+      v [target_tbl_coltypes]: Column data types match oracle-output target schema.
+      i [target_tbl_ts_targets]: Check not applicable to oracle-output target data. Skipped.
+      v [target_tbl_rows_unique]: oracle-output target data rows are unique.
+      v [target_tbl_values]: `target_tbl_chr` contains valid values/value combinations.
+      v [target_tbl_output_type_ids]: oracle-output `target_tbl` contains valid complete output_type_id values.
+      v [target_tbl_oracle_value]: oracle-output `target_tbl` contains valid oracle values.
 

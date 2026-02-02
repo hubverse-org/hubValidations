@@ -93,7 +93,10 @@ If \code{NULL}, defaults to extracting derived task IDs from hub \code{task.json
 \code{\link[=get_hub_derived_task_ids]{get_hub_derived_task_ids()}} for more details.}
 }
 \value{
-An object of class \code{hub_validations}.
+An object of class \code{hub_validations_collection}, a collection of
+validation results. The collection includes entries for hub config
+validation (\code{"hub-config"}) and file-specific validations (named by
+file path).
 }
 \description{
 Validates model output and model metadata files in a Pull Request.
@@ -113,6 +116,13 @@ arguments \code{file_modification_check}, which controls whether modification/de
 checks are performed and what is returned if modifications/deletions are detected,
 and \code{allow_submit_window_mods}, which controls whether modifications/deletions
 of model output files are allowed within their submission windows.
+
+When modification/deletion checks are enabled, each affected file creates an
+entry in the returned collection named by the file's path. The check within
+each entry is named \code{valid_file_status} (reflecting that we validate the
+file's git status).
+For example, to access the check for a deleted file:
+\code{collection[["team1-goodmodel/2022-10-15-team1-goodmodel.csv"]][["valid_file_status"]]}.
 
 Note that to establish \strong{relative} submission windows when performing
 modification/deletion checks and \code{allow_submit_window_mods}

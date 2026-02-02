@@ -21,7 +21,7 @@ test_that("validate_submission works", {
       skip_submit_window_check = TRUE,
       skip_check_config = TRUE
     ),
-    c("hub_validations")
+    c("hub_validations_collection")
   )
 
   # File with validation error ----
@@ -43,7 +43,7 @@ test_that("validate_submission works", {
       skip_submit_window_check = TRUE,
       skip_check_config = TRUE
     ),
-    c("hub_validations")
+    c("hub_validations_collection")
   )
 
   # Wrong submission location & missing data column (age_group)
@@ -64,7 +64,7 @@ test_that("validate_submission works", {
       skip_submit_window_check = TRUE,
       skip_check_config = TRUE
     ),
-    c("hub_validations")
+    c("hub_validations_collection")
   )
 
   expect_snapshot(
@@ -95,7 +95,7 @@ test_that("validate_submission works", {
       file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv",
       skip_submit_window_check = TRUE
     ),
-    c("hub_validations")
+    c("hub_validations_collection")
   )
 })
 
@@ -103,6 +103,7 @@ test_that("validate_submission submission within window works", {
   skip_if_offline()
 
   hub_path <- system.file("testhubs/simple", package = "hubValidations")
+  file_path <- "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
 
   local_mocked_bindings(
     Sys.time = function(...) lubridate::as_datetime("2022-10-08 18:01:00 EEST")
@@ -111,8 +112,8 @@ test_that("validate_submission submission within window works", {
     str(
       validate_submission(
         hub_path,
-        file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
-      )[["submission_time"]]
+        file_path = file_path
+      )[[file_path]][["submission_time"]]
     )
   )
 })
@@ -121,6 +122,7 @@ test_that("validate_submission submission outside window fails correctly", {
   skip_if_offline()
 
   hub_path <- system.file("testhubs/simple", package = "hubValidations")
+  file_path <- "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
 
   local_mocked_bindings(
     Sys.time = function(...) lubridate::as_datetime("2023-10-08 18:01:00 EEST")
@@ -129,8 +131,8 @@ test_that("validate_submission submission outside window fails correctly", {
     str(
       validate_submission(
         hub_path,
-        file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
-      )[["submission_time"]]
+        file_path = file_path
+      )[[file_path]][["submission_time"]]
     )
   )
 })
@@ -152,12 +154,13 @@ test_that("validate_submission csv file read in and validated according to schem
 test_that("validate_submission fails when csv cannot be parsed according to schema.", {
   skip_if_offline()
 
+  file_path <- "hub-baseline/2023-05-01-hub-baseline.csv"
   expect_s3_class(
     validate_submission(
       hub_path = test_path("testdata/hub"),
-      file_path = "hub-baseline/2023-05-01-hub-baseline.csv",
+      file_path = file_path,
       skip_submit_window_check = TRUE
-    )[["file_read"]],
+    )[[file_path]][["file_read"]],
     c("check_error")
   )
 })
@@ -222,34 +225,37 @@ test_that("validate_submission works with v3 samples.", {
     )
   )
 
+  file_path_1 <- create_file_path("2022-10-22")
   v <- validate_submission(
     hub_path = test_path("testdata/hub-spl"),
-    create_file_path("2022-10-22"),
+    file_path_1,
     skip_submit_window_check = TRUE
   )
   expect_snapshot(
-    v$spl_compound_taskid_set$compound_taskid_set
+    v[[file_path_1]]$spl_compound_taskid_set$compound_taskid_set
   )
   expect_true(suppressMessages(check_for_errors(v)))
   # Coarser files validate successfully ----
   # compound_taskid_set = c("reference_date", "location")
+  file_path_2 <- create_file_path("2022-10-29")
   v_rl <- validate_submission(
     hub_path = test_path("testdata/hub-spl"),
-    create_file_path("2022-10-29"),
+    file_path_2,
     skip_submit_window_check = TRUE
   )
   expect_snapshot(
-    v_rl$spl_compound_taskid_set$compound_taskid_set
+    v_rl[[file_path_2]]$spl_compound_taskid_set$compound_taskid_set
   )
   expect_true(suppressMessages(check_for_errors(v_rl)))
   # compound_taskid_set = c("reference_date", "horizon")
+  file_path_3 <- create_file_path("2022-11-05")
   v_rh <- validate_submission(
     hub_path = test_path("testdata/hub-spl"),
-    create_file_path("2022-11-05"),
+    file_path_3,
     skip_submit_window_check = TRUE
   )
   expect_snapshot(
-    v_rh$spl_compound_taskid_set$compound_taskid_set
+    v_rh[[file_path_3]]$spl_compound_taskid_set$compound_taskid_set
   )
   expect_true(suppressMessages(check_for_errors(v_rh)))
 })
@@ -257,41 +263,44 @@ test_that("validate_submission works with v3 samples.", {
 test_that("validate_submission handles overriding output type id data type correctly.", {
   skip_if_offline()
 
+  file_path_1 <- "Tm-Md/2023-11-11-Tm-Md.parquet"
+  file_path_2 <- "Tm-Md/2023-11-18-Tm-Md.parquet"
+
   # Test with double output type id data type on parquet file
   # Getting character setting from config should pass
   expect_snapshot(
     validate_submission(
       hub_path = test_path("testdata/hub-it"),
-      file_path = "Tm-Md/2023-11-11-Tm-Md.parquet",
+      file_path = file_path_1,
       skip_submit_window_check = TRUE
-    )[["col_types"]]
+    )[[file_path_1]][["col_types"]]
   )
   # Should pass
   expect_snapshot(
     validate_submission(
       hub_path = test_path("testdata/hub-it"),
-      file_path = "Tm-Md/2023-11-11-Tm-Md.parquet",
+      file_path = file_path_1,
       skip_submit_window_check = TRUE,
       output_type_id_datatype = "double"
-    )[["col_types"]]
+    )[[file_path_1]][["col_types"]]
   )
   # Should pass
   expect_snapshot(
     validate_submission(
       hub_path = test_path("testdata/hub-it"),
-      file_path = "Tm-Md/2023-11-11-Tm-Md.parquet",
+      file_path = file_path_1,
       skip_submit_window_check = TRUE,
       output_type_id_datatype = "auto"
-    )[["col_types"]]
+    )[[file_path_1]][["col_types"]]
   )
   # Should fail with warning
   expect_snapshot(
     validate_submission(
       hub_path = test_path("testdata/hub-it"),
-      file_path = "Tm-Md/2023-11-11-Tm-Md.parquet",
+      file_path = file_path_1,
       skip_submit_window_check = TRUE,
       output_type_id_datatype = "character"
-    )[["col_types"]]
+    )[[file_path_1]][["col_types"]]
   )
 
   # Test with character output type id data type on parquet file
@@ -299,27 +308,27 @@ test_that("validate_submission handles overriding output type id data type corre
   expect_snapshot(
     validate_submission(
       hub_path = test_path("testdata/hub-it"),
-      file_path = "Tm-Md/2023-11-18-Tm-Md.parquet",
+      file_path = file_path_2,
       skip_submit_window_check = TRUE
-    )[["col_types"]]
+    )[[file_path_2]][["col_types"]]
   )
   # Should fail with warning
   expect_snapshot(
     validate_submission(
       hub_path = test_path("testdata/hub-it"),
-      file_path = "Tm-Md/2023-11-18-Tm-Md.parquet",
+      file_path = file_path_2,
       skip_submit_window_check = TRUE,
       output_type_id_datatype = "double"
-    )[["col_types"]]
+    )[[file_path_2]][["col_types"]]
   )
   # Should pass
   expect_snapshot(
     validate_submission(
       hub_path = test_path("testdata/hub-it"),
-      file_path = "Tm-Md/2023-11-18-Tm-Md.parquet",
+      file_path = file_path_2,
       skip_submit_window_check = TRUE,
       output_type_id_datatype = "character"
-    )[["col_types"]]
+    )[[file_path_2]][["col_types"]]
   )
 })
 
@@ -350,13 +359,14 @@ test_that("Ignoring derived_task_ids in validate_submission works", {
   local_mocked_bindings(
     read_model_out_file = function(...) tbl_mod
   )
+  file_path <- "flu-base/2022-10-22-flu-base.csv"
   expect_snapshot(
     validate_submission(
       hub_path = system.file("testhubs/samples", package = "hubValidations"),
-      file_path = "flu-base/2022-10-22-flu-base.csv",
+      file_path = file_path,
       skip_submit_window_check = TRUE,
       derived_task_ids = "target_end_date"
-    )[c(
+    )[[file_path]][c(
       "valid_vals",
       "req_vals",
       "value_col_valid",
@@ -391,9 +401,10 @@ test_that("validate_submission returns check_failure when duplicate files per ro
       )
     )
 
+  dup_file_path <- "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
   dup_model_out_val <- validate_submission(
     hub_path,
-    file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv",
+    file_path = dup_file_path,
     skip_submit_window_check = TRUE,
     skip_check_config = TRUE
   )
@@ -401,7 +412,7 @@ test_that("validate_submission returns check_failure when duplicate files per ro
     str(dup_model_out_val)
   )
   expect_snapshot(
-    dup_model_out_val[["file_n"]]
+    dup_model_out_val[[dup_file_path]][["file_n"]]
   )
 })
 
@@ -417,7 +428,11 @@ test_that("validate_submission works with v4 simple", {
     skip_submit_window_check = TRUE,
     skip_check_config = TRUE
   )
-  expect_s3_class(v4_simple, c("hub_validations", "list"), exact = TRUE)
+  expect_s3_class(
+    v4_simple,
+    c("hub_validations_collection", "list"),
+    exact = TRUE
+  )
   expect_true(suppressMessages(check_for_errors(v4_simple)))
 })
 
@@ -435,7 +450,11 @@ test_that("validate_submission works with v4 flusight (contains derived_task_ids
   )
 
   # TODO: Update snapshot when v4 flusight hub is updated
-  expect_s3_class(v4_missing_meta, c("hub_validations", "list"), exact = TRUE)
+  expect_s3_class(
+    v4_missing_meta,
+    c("hub_validations_collection", "list"),
+    exact = TRUE
+  )
   expect_snapshot(check_for_errors(v4_missing_meta), error = TRUE)
 
   # Check we get the same result when manually supplying derived_task_ids

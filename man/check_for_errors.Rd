@@ -7,7 +7,7 @@
 check_for_errors(x, verbose = FALSE, show_warnings = FALSE)
 }
 \arguments{
-\item{x}{A \code{hub_validations} object}
+\item{x}{A \code{hub_validations} object or \code{hub_validations_collection}}
 
 \item{verbose}{Logical. If \code{TRUE}, print the results of all checks prior to
 raising condition and summarising \code{hub_validations} S3 object check results.}

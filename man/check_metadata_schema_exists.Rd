@@ -4,7 +4,7 @@
 \alias{check_metadata_schema_exists}
 \title{Check whether a metadata schema file exists}
 \usage{
-check_metadata_schema_exists(hub_path = ".")
+check_metadata_schema_exists(hub_path = ".", file_path)
 }
 \arguments{
 \item{hub_path}{Either a character string path to a local Modeling Hub directory
@@ -16,6 +16,10 @@ For more details consult the
 in the \code{arrow} package.
 The hub must be fully configured with valid \code{admin.json} and \code{tasks.json}
 files within the \code{hub-config} directory.}
+
+\item{file_path}{Path to the model metadata file being validated. Used as
+the \verb{$where} in the returned check object, since this check is a
+prerequisite for validating that file.}
 }
 \value{
 Depending on whether validation has succeeded, one of:

@@ -3,7 +3,7 @@
     Code
       str(new_target_validations())
     Output
-       Named list()
+       list()
        - attr(*, "class")= chr [1:3] "target_validations" "hub_validations" "list"
 
 ---
@@ -26,6 +26,7 @@
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        - attr(*, "class")= chr [1:3] "target_validations" "hub_validations" "list"
+       - attr(*, "where")= chr "time-series.csv"
 
 # new_target_validations works with hive partitioned target files
 
@@ -47,4 +48,5 @@
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        - attr(*, "class")= chr [1:3] "target_validations" "hub_validations" "list"
+       - attr(*, "where")= chr "time-series/target=wk%20flu%20hosp%20rate/part-0.parquet"
 

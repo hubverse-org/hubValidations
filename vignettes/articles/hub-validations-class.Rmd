@@ -13,24 +13,31 @@ knitr::opts_chunk$set(
 library(hubValidations)
 ```
 
-The high level `validate_*()` family of functions all return a `<hub_validations>` S3 class object.
+The `validate_*()` family of functions return validation results as S3 class objects.
+Functions that validate multiple items (e.g., `validate_submission()`, `validate_pr()`) return a `<hub_validations_collection>`, while lower-level functions return a `<hub_validations>` object.
 
 ## Structure of `<hub_validations>` object
 
-A `hub_validations` object is effectively a list and represents the collected output of the series of checks performed by a higher level `validate_*()` function.
+A `hub_validations` object represents validation results for a single validation subject.
+Depending on context, this could be a file, a configuration directory (`hub-config`), or a target dataset type (`time-series`, `oracle-output`).
 
-Each named element of the list contains the result of an individual check and inherits from subclass `<hub_check>`. 
+It is a named list where each element contains the result of an individual check and inherits from subclass `<hub_check>`.
 The name of each element is the name of the check.
+The object also has a `where` attribute identifying what was validated.
 
-Let's examine an example output of a model output file validation using `validate_submission()`.
+Let's examine an example using `validate_model_data()`, which validates a single model output file's data:
 
 ```{r}
 hub_path <- system.file("testhubs/simple", package = "hubValidations")
 
-v <- validate_submission(hub_path,
+v <- validate_model_data(hub_path,
   file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
 )
 
+# The where attribute
+attr(v, "where")
+
+# Structure of the hub_validations object
 str(v, max.level = 1)
 ```
 
@@ -102,20 +109,16 @@ print(validations, show_check_warnings = TRUE)
 
 ## Structure of a `<hub_check>` object
 
-Let's look more closely at the structure of the first few elements of the `hub_validations` object retuned by `validate_submission()`
+Let's look more closely at the structure of the first few elements of the `hub_validations` object returned by `validate_model_data()`:
 
 ```{r}
-v <- validate_submission(hub_path,
-  file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
-)
-
 str(utils::head(v))
 ```
 
-Each `<hub_check>` objects contains the following elements:
+Each `<hub_check>` object contains the following elements:
 
 - `message`: the result message containing details about the check.
-- `where`: where the check was performed, usually the model output file name.
+- `where`: what was validated (corresponds to the `where` attribute of the parent `hub_validations` object).
 - `call`: the function used to perform the check.
 - `use_cli_format`: whether the message is formatted using cli format, almost always TRUE.
 - `warnings`: (optional) a list of check-level warning conditions providing additional context about the check. See the [Validation warnings](#validation-warnings) section above.
@@ -126,9 +129,47 @@ Some `<hub_check>` objects contain extra information about the failing check to 
 
 For example, the `<hub_check>` object returned for the `valid_vals` check, which checks that all columns in a model output file (excluding the `value` column) contain valid combinations of task ID / output type / output type ID values contains an additional element called `error_tbl`, with details of the invalid value combinations in the rows affected.
 
-To access `error_tbl` from the output of `validate_submission()` stored in an object `v`, you would use:
+To access `error_tbl` from a `hub_validations` object `v`, you would use:
 
 ```{r, eval=FALSE}
 v$valid_vals$error_tbl
 ```
+
+## Collection classes
+
+When validating multiple items (e.g., with `validate_submission()` or `validate_pr()`), results are organized hierarchically using collection classes.
+
+### `<hub_validations_collection>` class
+
+A `hub_validations_collection` is a named list where:
+
+- **Names** identify what was validated (e.g., `"hub-config"`, `"team1-goodmodel/2022-10-08-team1-goodmodel.csv"`)
+- **Elements** are `hub_validations` objects containing the checks for that item
+
+Let's look at an example using `validate_submission()`:
+
+```{r}
+v_collection <- validate_submission(hub_path,
+  file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+)
+
+# Class of the returned object
+class(v_collection)
+
+# Names show what was validated
+names(v_collection)
+
+# Subset to access a specific hub_validations object
+v_collection[["hub-config"]]
+
+# Access a specific check within a file's validations
+v_collection[["team1-goodmodel/2022-10-08-team1-goodmodel.csv"]]$file_exists
+```
+
+See `vignette("validate-pr")` for more examples of working with `hub_validations_collection` objects.
+
+### `<target_validations_collection>` class
+
+Similarly, `target_validations_collection` is used for target data validation results, where each element contains a `target_validations` object.
+See `vignette("validate-target-pr")` for examples of working with `target_validations_collection` objects returned by `validate_target_pr()`.
 

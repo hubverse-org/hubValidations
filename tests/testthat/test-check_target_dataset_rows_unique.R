@@ -21,7 +21,7 @@ test_that("check_target_dataset_rows_unique works time-series data", {
   expect_null(valid_ts$duplicate_df)
   expect_equal(
     valid_ts$where,
-    "time-series.csv"
+    "time-series"
   )
 
   # Test with valid versioned data with two as_of dates
@@ -293,7 +293,7 @@ test_that("check_target_dataset_rows_unique works on oracle-output data", {
   expect_null(valid_oo$duplicate_df)
   expect_equal(
     valid_oo$where,
-    "oracle-output.csv"
+    "oracle-output"
   )
 
   oo_dat_versioned <- oo_dat

@@ -115,9 +115,6 @@
       -- a.csv ----
       
       v [check1]: A is ok.
-      
-      -- b.csv ----
-      
       v [check2]: B is ok.
 
 # print.hub_validations works without warnings
