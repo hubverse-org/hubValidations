@@ -34,7 +34,12 @@ defaults to \code{hub-config/validations.yml}.}
 \value{
 An object of class \code{hub_validations}. Each named element contains
 a \code{hub_check} class object reflecting the result of a given check. Function
-will return early if a check returns an error.
+will return early if a check returns an error. The \code{where} attribute is set
+to \code{file_path}.
+
+For more details on the structure of \verb{<hub_validations>} objects, including
+how to access more information on individual checks,
+see \href{https://hubverse-org.github.io/hubValidations/articles/hub-validations-class.html}{article on \verb{<hub_validations>} S3 class objects}.
 }
 \description{
 Valid properties of a metadata file.

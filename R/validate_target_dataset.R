@@ -4,7 +4,8 @@
 #' @inheritParams check_target_dataset_unique
 #' @return An object of class `hub_validations`. Each named element contains
 #' a `hub_check` class object reflecting the result of a given check. Function
-#' will return early if a check returns an error.
+#' will return early if a check returns an error. The `where` attribute is set
+#' to `target_type` (e.g. `"oracle-output"`, `"time-series"`).
 #'
 #' For more details on the structure of `<hub_validations>` objects, including
 #' how to access more information on individual checks,
