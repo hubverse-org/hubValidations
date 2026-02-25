@@ -49,48 +49,7 @@ print.hub_validations <- function(x, show_check_warnings = FALSE, ...) {
     cli::cli_div(class = "hub_validations", theme = hub_validation_theme)
     cli::cli_h2(where)
 
-    # Print each check with its warnings inline
-    for (i in seq_along(x)) {
-      check <- x[[i]]
-      check_name <- names(x)[i]
-
-      # Determine bullet type
-      bullet <- dplyr::case_when(
-        inherits(check, "check_success") ~ "v",
-        inherits(check, "check_failure") ~ "x",
-        inherits(check, "check_exec_warn") ~ "!",
-        inherits(check, "check_error") ~ "circle_cross",
-        inherits(check, "check_exec_error") ~ "lower_block_8",
-        inherits(check, "check_info") ~ "i",
-        TRUE ~ "*"
-      )
-
-      # Print the check result
-      msg <- stats::setNames(
-        paste(
-          apply_cli_span_class(check_name, class = "check_name"),
-          check$message,
-          sep = ": "
-        ),
-        bullet
-      )
-      cli::cli_inform(msg)
-
-      # Print check-level warnings inline (indented)
-      if (
-        show_check_warnings &&
-          !is.null(check$warnings) &&
-          length(check$warnings) > 0
-      ) {
-        cli::cli_div(
-          theme = list(div = list(`margin-left` = 2, color = "silver"))
-        )
-        for (w in check$warnings) {
-          cli::cli_alert_warning(w$message)
-        }
-        cli::cli_end()
-      }
-    }
+    print_check(x, show_check_warnings)
 
     cli::cli_end()
   }
@@ -183,48 +142,7 @@ print.hub_validations_collection <- function(
       cli::cli_div(class = "hub_validations", theme = hub_validation_theme)
       cli::cli_h2(file_path)
 
-      # Print each check for this file
-      for (j in seq_along(file_validations)) {
-        check <- file_validations[[j]]
-        check_name <- names(file_validations)[j]
-
-        # Determine bullet type
-        bullet <- dplyr::case_when(
-          inherits(check, "check_success") ~ "v",
-          inherits(check, "check_failure") ~ "x",
-          inherits(check, "check_exec_warn") ~ "!",
-          inherits(check, "check_error") ~ "circle_cross",
-          inherits(check, "check_exec_error") ~ "lower_block_8",
-          inherits(check, "check_info") ~ "i",
-          TRUE ~ "*"
-        )
-
-        # Print the check result
-        msg <- stats::setNames(
-          paste(
-            apply_cli_span_class(check_name, class = "check_name"),
-            check$message,
-            sep = ": "
-          ),
-          bullet
-        )
-        cli::cli_inform(msg)
-
-        # Print check-level warnings inline (indented)
-        if (
-          show_check_warnings &&
-            !is.null(check$warnings) &&
-            length(check$warnings) > 0
-        ) {
-          cli::cli_div(
-            theme = list(div = list(`margin-left` = 2, color = "silver"))
-          )
-          for (w in check$warnings) {
-            cli::cli_alert_warning(w$message)
-          }
-          cli::cli_end()
-        }
-      }
+      print_check(file_validations, show_check_warnings)
       cli::cli_end()
     }
   }
@@ -275,6 +193,48 @@ hub_validation_theme <- list(
     }
   )
 )
+
+# Print individual checks with optional check-level warnings
+print_check <- function(checks, show_check_warnings = FALSE) {
+  for (i in seq_along(checks)) {
+    check <- checks[[i]]
+    check_name <- names(checks)[i]
+
+    bullet <- dplyr::case_when(
+      inherits(check, "check_success") ~ "v",
+      inherits(check, "check_failure") ~ "x",
+      inherits(check, "check_exec_warn") ~ "!",
+      inherits(check, "check_error") ~ "circle_cross",
+      inherits(check, "check_exec_error") ~ "lower_block_8",
+      inherits(check, "check_info") ~ "i",
+      TRUE ~ "*"
+    )
+
+    msg <- stats::setNames(
+      paste(
+        apply_cli_span_class(check_name, class = "check_name"),
+        check$message,
+        sep = ": "
+      ),
+      bullet
+    )
+    cli::cli_inform(msg)
+
+    if (
+      show_check_warnings &&
+        !is.null(check$warnings) &&
+        length(check$warnings) > 0
+    ) {
+      cli::cli_div(
+        theme = list(div = list(`margin-left` = 2, color = "silver"))
+      )
+      for (w in check$warnings) {
+        cli::cli_alert_warning(w$message)
+      }
+      cli::cli_end()
+    }
+  }
+}
 
 apply_cli_span_class <- function(x, class = "check_name") {
   paste0("{.", class, " ", x, "}")
