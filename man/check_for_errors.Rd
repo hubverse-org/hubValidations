@@ -2,15 +2,17 @@
 % Please edit documentation in R/check_for_errors.R
 \name{check_for_errors}
 \alias{check_for_errors}
-\title{Raise conditions stored in a \code{hub_validations} S3 object}
+\title{Raise conditions stored in validation objects}
 \usage{
 check_for_errors(x, verbose = FALSE, show_warnings = FALSE)
 }
 \arguments{
-\item{x}{A \code{hub_validations} object or \code{hub_validations_collection}}
+\item{x}{A \code{hub_validations} or \code{hub_validations_collection} object
+(including subclasses \code{target_validations} and
+\code{target_validations_collection}).}
 
 \item{verbose}{Logical. If \code{TRUE}, print the results of all checks prior to
-raising condition and summarising \code{hub_validations} S3 object check results.}
+raising condition and summarising validation object check results.}
 
 \item{show_warnings}{Logical. If \code{TRUE}, print check-level warnings inline
 with their checks. Validation-level warnings are always printed. Default
@@ -22,7 +24,17 @@ An error if one of the elements of \code{x} is of class \code{check_failure},
 \code{TRUE} invisibly otherwise.
 }
 \description{
-This is meant to be used in CI workflows to raise conditions from
-\code{hub_validations} objects but can also be useful locally to summarise the
-results of checks contained in a \code{hub_validations} S3 object.
+Checks validation objects for errors and raises conditions if any are found.
+Works with \code{hub_validations} and \code{hub_validations_collection} objects, as
+well as their subclasses (\code{target_validations} and
+\code{target_validations_collection}). Can be used in CI workflows to signal
+validation failures, or locally to summarise validation results.
+}
+\details{
+For more details on these classes, see
+\href{https://hubverse-org.github.io/hubValidations/articles/hub-validations-class.html}{article on \verb{<hub_validations>} S3 class objects}.
+}
+\seealso{
+\code{\link[=validate_submission]{validate_submission()}}, \code{\link[=validate_pr]{validate_pr()}},
+\code{\link[=validate_target_submission]{validate_target_submission()}}, \code{\link[=validate_target_pr]{validate_target_pr()}}
 }

@@ -1,12 +1,20 @@
-#' Raise conditions stored in a `hub_validations` S3 object
+#' Raise conditions stored in validation objects
 #'
-#' This is meant to be used in CI workflows to raise conditions from
-#' `hub_validations` objects but can also be useful locally to summarise the
-#' results of checks contained in a `hub_validations` S3 object.
+#' Checks validation objects for errors and raises conditions if any are found.
+#' Works with `hub_validations` and `hub_validations_collection` objects, as
+#' well as their subclasses (`target_validations` and
+#' `target_validations_collection`). Can be used in CI workflows to signal
+#' validation failures, or locally to summarise validation results.
 #'
-#' @param x A `hub_validations` object or `hub_validations_collection`
+#' For more details on these classes, see
+#' [article on `<hub_validations>` S3 class objects](
+#' https://hubverse-org.github.io/hubValidations/articles/hub-validations-class.html).
+#'
+#' @param x A `hub_validations` or `hub_validations_collection` object
+#'   (including subclasses `target_validations` and
+#'   `target_validations_collection`).
 #' @param verbose Logical. If `TRUE`, print the results of all checks prior to
-#' raising condition and summarising `hub_validations` S3 object check results.
+#' raising condition and summarising validation object check results.
 #' @param show_warnings Logical. If `TRUE`, print check-level warnings inline
 #' with their checks. Validation-level warnings are always printed. Default
 #' `FALSE`.
@@ -14,6 +22,8 @@
 #' @return An error if one of the elements of `x` is of class `check_failure`,
 #' `check_error`, `check_exec_error` or `check_exec_warning`.
 #' `TRUE` invisibly otherwise.
+#' @seealso [validate_submission()], [validate_pr()],
+#'   [validate_target_submission()], [validate_target_pr()]
 #'
 #' @export
 check_for_errors <- function(x, verbose = FALSE, show_warnings = FALSE) {
