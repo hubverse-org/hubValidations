@@ -1,6 +1,10 @@
 # Create new or convert list to `hub_validations` S3 class object
 
-Create new or convert list to `hub_validations` S3 class object
+A `hub_validations` object contains validation results for a single
+validation subject. Depending on context, this could be a file, a
+configuration directory (`hub-config`), or a target dataset type
+(`time-series`, `oracle-output`). All checks must have the same `$where`
+value, which is extracted and stored as the `where` attribute.
 
 ## Usage
 
@@ -15,16 +19,18 @@ as_hub_validations(x)
 - ...:
 
   named elements to be included. Each element must be an object which
-  inherits from class `<hub_check>`.
+  inherits from class `<hub_check>`. All checks must have the same
+  `$where` value.
 
 - x:
 
   a list of named elements. Each element must be an object which
-  inherits from class `<hub_check>`.
+  inherits from class `<hub_check>`. All checks must have the same
+  `$where` value.
 
 ## Value
 
-an S3 object of class `<hub_validations>`.
+an S3 object of class `<hub_validations>` with a `where` attribute.
 
 ## Functions
 
@@ -47,7 +53,7 @@ new_hub_validations(
   file_name = check_file_name(file_path)
 )
 #> 
-#> ── 2022-10-08-team1-goodmodel.csv ────
+#> ── team1-goodmodel/2022-10-08-team1-goodmodel.csv ────
 #> 
 #> ✔ [file_exists]: File exists at path
 #>   model-output/team1-goodmodel/2022-10-08-team1-goodmodel.csv.
@@ -58,7 +64,7 @@ x <- list(
 )
 as_hub_validations(x)
 #> 
-#> ── 2022-10-08-team1-goodmodel.csv ────
+#> ── team1-goodmodel/2022-10-08-team1-goodmodel.csv ────
 #> 
 #> ✔ [file_exists]: File exists at path
 #>   model-output/team1-goodmodel/2022-10-08-team1-goodmodel.csv.

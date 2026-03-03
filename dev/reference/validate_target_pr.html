@@ -123,10 +123,8 @@ are still strictly validated. Ignored for oracle-output (always strict).</p></dd
 
 
 <dt id="arg-na">na<a class="anchor" aria-label="anchor" href="#arg-na"></a></dt>
-<dd><p>A character vector of strings to interpret as missing values. Only
-applies to CSV files. The default is <code>c("NA", "")</code>. Useful when actual character
-string <code>"NA"</code> values are used in the data. In such a case, use empty cells to
-indicate missing values in your files and set <code>na = ""</code>.</p></dd>
+<dd><p>Character vector of strings to interpret as missing values when
+reading data files. Passed to the underlying file reader.</p></dd>
 
 
 <dt id="arg-round-id">round_id<a class="anchor" aria-label="anchor" href="#arg-round-id"></a></dt>
@@ -161,7 +159,10 @@ target type dataset (i.e. all files of a target type) in the PR. Defaults to <co
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>An object of class <code>target_validations</code>.</p>
+    <p>An object of class <code>target_validations_collection</code>, a collection of
+validation results. The collection includes entries for hub config
+validation (<code>"hub-config"</code>), target dataset type validation (<code>"time-series"</code>,
+<code>"oracle-output"</code>), and individual file validations (named by file path).</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -174,7 +175,13 @@ Any other files included in the PR are ignored but flagged in a message.</p>
 previously submitted target data files are allowed.
 This behaviour can be modified through
 arguments <code>file_modification_check</code>, which controls whether modification/deletion
-checks are performed and what is returned if modifications/deletions are detected.</p><div class="section">
+checks are performed and what is returned if modifications/deletions are detected.</p>
+<p>When modification/deletion checks are enabled, each affected file creates an
+entry in the returned collection named by the file's path. The check within
+each entry is named <code>valid_file_status</code> (reflecting that we validate the
+file's git status).
+For example, to access the check for a deleted file:
+<code>collection[["oracle-output/output_type=sample/part-0.parquet"]][["valid_file_status"]]</code>.</p><div class="section">
 <h3 id="checks-on-target-dataset">Checks on target dataset<a class="anchor" aria-label="anchor" href="#checks-on-target-dataset"></a></h3>
 
 

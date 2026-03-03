@@ -49,7 +49,13 @@ validate_model_metadata(
 
 An object of class `hub_validations`. Each named element contains a
 `hub_check` class object reflecting the result of a given check.
-Function will return early if a check returns an error.
+Function will return early if a check returns an error. The `where`
+attribute is set to `file_path`.
+
+For more details on the structure of `<hub_validations>` objects,
+including how to access more information on individual checks, see
+[article on `<hub_validations>` S3 class
+objects](https://hubverse-org.github.io/hubValidations/articles/hub-validations-class.html).
 
 ## Details
 
@@ -72,13 +78,10 @@ validate_model_metadata(hub_path,
   file_path = "hub-baseline.yml"
 )
 #> 
-#> ── model-metadata-schema.json ────
-#> 
-#> ✔ [metadata_schema_exists]: File exists at path
-#>   hub-config/model-metadata-schema.json.
-#> 
 #> ── hub-baseline.yml ────
 #> 
+#> ✔ [metadata_schema_exists]: Model metadata schema file exists at path
+#>   hub-config/model-metadata-schema.json.
 #> ✔ [metadata_file_exists]: File exists at path model-metadata/hub-baseline.yml.
 #> ✔ [metadata_file_ext]: Metadata file extension is "yml" or "yaml".
 #> ✔ [metadata_file_location]: Metadata file directory name matches
@@ -91,13 +94,10 @@ validate_model_metadata(hub_path,
   file_path = "team1-goodmodel.yaml"
 )
 #> 
-#> ── model-metadata-schema.json ────
-#> 
-#> ✔ [metadata_schema_exists]: File exists at path
-#>   hub-config/model-metadata-schema.json.
-#> 
 #> ── team1-goodmodel.yaml ────
 #> 
+#> ✔ [metadata_schema_exists]: Model metadata schema file exists at path
+#>   hub-config/model-metadata-schema.json.
 #> ✔ [metadata_file_exists]: File exists at path
 #>   model-metadata/team1-goodmodel.yaml.
 #> ✔ [metadata_file_ext]: Metadata file extension is "yml" or "yaml".

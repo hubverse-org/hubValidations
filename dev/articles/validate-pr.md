@@ -61,7 +61,8 @@ The pertinent section of the workflow is:
 where
 [`validate_pr()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_pr.md)
 is called on the contents of the current Pull Request, the results (an
-S3 `<hub_validations>` class object) is stored in `v` and then
+S3 `<hub_validations_collection>` class object) is stored in `v` and
+then
 [`check_for_errors()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_for_errors.md)
 used to signal whether overall validations have passed or failed and
 summarise any validation failures.
@@ -202,17 +203,15 @@ v
 #> └──────────────────────────────────────────────────────────────────────────┘
 #> 
 #> 
-#> ── mod_del_hub ────
+#> ── hub-config ────
 #> 
 #> ✔ [valid_config]: All hub config files are valid.
 #> 
 #> 
-#> ── 2022-10-08-hub-baseline.csv ────
+#> ── hub-baseline/2022-10-08-hub-baseline.csv ────
 #> 
 #> 
 #> 
-#> ⓧ [model_output_mod]: Previously submitted model output files must not be
-#>   modified.  model-output/hub-baseline/2022-10-08-hub-baseline.csv modified.
 #> ✔ [file_exists]: File exists at path
 #>   model-output/hub-baseline/2022-10-08-hub-baseline.csv.
 #> ✔ [file_name]: File name "2022-10-08-hub-baseline.csv" is valid.
@@ -252,13 +251,60 @@ v
 #>   Skipping `check_tbl_spl_non_compound_tid` check.
 #> ℹ [spl_n]: No v3 samples found in model output data to check. Skipping
 #>   `check_tbl_spl_n` check.
+#> ⓧ [valid_file_status]: Previously submitted model output files must not be
+#>   modified.  model-output/hub-baseline/2022-10-08-hub-baseline.csv modified.
 #> 
 #> 
-#> ── 2022-10-15-team1-goodmodel.csv ────
+#> ── team1-goodmodel/2022-10-22-team1-goodmodel.csv ────
 #> 
 #> 
 #> 
-#> ⓧ [model_output_mod_1]: Previously submitted model output files must not be
+#> ✔ [file_exists]: File exists at path
+#>   model-output/team1-goodmodel/2022-10-22-team1-goodmodel.csv.
+#> ✔ [file_name]: File name "2022-10-22-team1-goodmodel.csv" is valid.
+#> ✔ [file_location]: File directory name matches `model_id` metadata in file
+#>   name.
+#> ✔ [round_id_valid]: `round_id` is valid.
+#> ✔ [file_format]: File is accepted hub format.
+#> ✔ [file_n]: Number of accepted model output files per round met.
+#> ✖ [metadata_exists]: Metadata file does not exist at path
+#>   model-metadata/team1-goodmodel.yml or model-metadata/team1-goodmodel.yaml.
+#> ✔ [file_read]: File could be read successfully.
+#> ✔ [valid_round_id_col]: `round_id_col` name is valid.
+#> ✔ [unique_round_id]: `round_id` column "origin_date" contains a single, unique
+#>   round ID value.
+#> ✔ [match_round_id]: All `round_id_col` "origin_date" values match submission
+#>   `round_id` from file name.
+#> ✔ [colnames]: Column names are consistent with expected round task IDs and std
+#>   column names.
+#> ✔ [col_types]: Column data types match hub schema.
+#> ✔ [valid_vals]: `tbl` contains valid values/value combinations.
+#> ℹ [derived_task_id_vals]: No derived task IDs to check. Skipping derived task
+#>   ID value check.
+#> ✔ [rows_unique]: All combinations of task ID
+#>   column/`output_type`/`output_type_id` values are unique.
+#> ✔ [req_vals]: Required task ID/output type/output type ID combinations all
+#>   present.
+#> ✔ [value_col_valid]: Values in column `value` all valid with respect to
+#>   modeling task config.
+#> ✔ [value_col_non_desc]: Quantile or cdf `value` values increase when ordered by
+#>   `output_type_id`.
+#> ℹ [value_col_sum1]: No pmf output types to check for sum of 1. Check skipped.
+#> ℹ [spl_compound_taskid_set]: No v3 samples found in model output data to check.
+#>   Skipping `check_tbl_spl_compound_taskid_set` check.
+#> ℹ [spl_compound_tid]: No v3 samples found in model output data to check.
+#>   Skipping `check_tbl_spl_compound_tid` check.
+#> ℹ [spl_non_compound_tid]: No v3 samples found in model output data to check.
+#>   Skipping `check_tbl_spl_non_compound_tid` check.
+#> ℹ [spl_n]: No v3 samples found in model output data to check. Skipping
+#>   `check_tbl_spl_n` check.
+#> 
+#> 
+#> ── team1-goodmodel/2022-10-15-team1-goodmodel.csv ────
+#> 
+#> 
+#> 
+#> ⓧ [valid_file_status]: Previously submitted model output files must not be
 #>   removed.  model-output/team1-goodmodel/2022-10-15-team1-goodmodel.csv
 #>   removed.
 #> 
@@ -267,53 +313,8 @@ v
 #> 
 #> 
 #> 
-#> ⓧ [model_metadata_mod]: Previously submitted model metadata files must not be
+#> ⓧ [valid_file_status]: Previously submitted model metadata files must not be
 #>   removed.  model-metadata/team1-goodmodel.yaml removed.
-#> 
-#> 
-#> ── 2022-10-22-team1-goodmodel.csv ────
-#> 
-#> 
-#> 
-#> ✔ [file_exists_1]: File exists at path
-#>   model-output/team1-goodmodel/2022-10-22-team1-goodmodel.csv.
-#> ✔ [file_name_1]: File name "2022-10-22-team1-goodmodel.csv" is valid.
-#> ✔ [file_location_1]: File directory name matches `model_id` metadata in file
-#>   name.
-#> ✔ [round_id_valid_1]: `round_id` is valid.
-#> ✔ [file_format_1]: File is accepted hub format.
-#> ✔ [file_n_1]: Number of accepted model output files per round met.
-#> ✖ [metadata_exists_1]: Metadata file does not exist at path
-#>   model-metadata/team1-goodmodel.yml or model-metadata/team1-goodmodel.yaml.
-#> ✔ [file_read_1]: File could be read successfully.
-#> ✔ [valid_round_id_col_1]: `round_id_col` name is valid.
-#> ✔ [unique_round_id_1]: `round_id` column "origin_date" contains a single,
-#>   unique round ID value.
-#> ✔ [match_round_id_1]: All `round_id_col` "origin_date" values match submission
-#>   `round_id` from file name.
-#> ✔ [colnames_1]: Column names are consistent with expected round task IDs and
-#>   std column names.
-#> ✔ [col_types_1]: Column data types match hub schema.
-#> ✔ [valid_vals_1]: `tbl` contains valid values/value combinations.
-#> ℹ [derived_task_id_vals_1]: No derived task IDs to check. Skipping derived task
-#>   ID value check.
-#> ✔ [rows_unique_1]: All combinations of task ID
-#>   column/`output_type`/`output_type_id` values are unique.
-#> ✔ [req_vals_1]: Required task ID/output type/output type ID combinations all
-#>   present.
-#> ✔ [value_col_valid_1]: Values in column `value` all valid with respect to
-#>   modeling task config.
-#> ✔ [value_col_non_desc_1]: Quantile or cdf `value` values increase when ordered
-#>   by `output_type_id`.
-#> ℹ [value_col_sum1_1]: No pmf output types to check for sum of 1. Check skipped.
-#> ℹ [spl_compound_taskid_set_1]: No v3 samples found in model output data to
-#>   check. Skipping `check_tbl_spl_compound_taskid_set` check.
-#> ℹ [spl_compound_tid_1]: No v3 samples found in model output data to check.
-#>   Skipping `check_tbl_spl_compound_tid` check.
-#> ℹ [spl_non_compound_tid_1]: No v3 samples found in model output data to check.
-#>   Skipping `check_tbl_spl_non_compound_tid` check.
-#> ℹ [spl_n_1]: No v3 samples found in model output data to check. Skipping
-#>   `check_tbl_spl_n` check.
 ```
 
 These settings can be modified if required though the use of arguments
@@ -340,6 +341,21 @@ These settings can be modified if required though the use of arguments
   `FALSE` if modifications/deletions are not allowed, regardless of
   timing. Is ignored when checking model metadata files as well as when
   `file_modification_check` is set to `"none"`.
+
+#### Accessing modification check results
+
+When modification/deletion checks are enabled, each affected file
+creates an entry in the returned collection named by the file’s path.
+The check within each entry is named `valid_file_status` (reflecting
+that we validate the file’s git status).
+
+``` r
+# Access the file status check for a deleted file
+v[["team1-goodmodel/2022-10-15-team1-goodmodel.csv"]][["valid_file_status"]]
+
+# Access the file status check for a modified file
+v[["hub-baseline/2022-10-08-hub-baseline.csv"]][["valid_file_status"]]
+```
 
 #### Warning
 
@@ -402,13 +418,13 @@ scanning.
 ## Checking for validation failures with `check_for_errors()`
 
 [`check_for_errors()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_for_errors.md)
-is used to inspect a `hub_validations` class object, determine whether
-overall validations have passed or failed and summarise any detected
-errors/failures.
+is used to inspect a `hub_validations_collection` class object,
+determine whether overall validations have passed or failed and
+summarise any detected errors/failures.
 
 ### Validation failure
 
-If any elements of the `hub_validations` object contain
+If any elements of the `hub_validations_collection` object contain
 `<error/check_error>`, `<warning/check_warning>` or
 `<error/check_exec_error>` condition class objects, the function throws
 an error and prints the messages from the failing checks.
@@ -443,7 +459,7 @@ check_for_errors(v_fail)
 #> └──────────────────────────────────────────────────────────────────────────┘
 #> 
 #> 
-#> ── 2022-10-22-hub-baseline.parquet ────
+#> ── hub-baseline/2022-10-22-hub-baseline.parquet ────
 #> 
 #> ⓧ [colnames]: Column names must be consistent with expected round task IDs and
 #>   std column names.  Expected column "age_group" not present in file.
@@ -503,12 +519,12 @@ check_for_errors(v_fail, verbose = TRUE)
 #> 
 #> ── Individual check results ──
 #> 
-#> ── invalid_sb_hub ────
+#> ── hub-config ────
 #> 
 #> ✔ [valid_config]: All hub config files are valid.
 #> 
 #> 
-#> ── 2022-10-22-hub-baseline.parquet ────
+#> ── hub-baseline/2022-10-22-hub-baseline.parquet ────
 #> 
 #> 
 #> 
@@ -542,7 +558,7 @@ check_for_errors(v_fail, verbose = TRUE)
 #> └──────────────────────────────────────────────────────────────────────────┘
 #> 
 #> 
-#> ── 2022-10-22-hub-baseline.parquet ────
+#> ── hub-baseline/2022-10-22-hub-baseline.parquet ────
 #> 
 #> ⓧ [colnames]: Column names must be consistent with expected round task IDs and
 #>   std column names.  Expected column "age_group" not present in file.
@@ -555,10 +571,10 @@ check_for_errors(v_pass, verbose = TRUE)
 #> 
 #> ── Individual check results ──
 #> 
-#> ── valid_sb_hub ────
+#> ── hub-config ────
 #> 
 #> ✔ [valid_config]: All hub config files are valid.
-#> ── 2022-10-22-team1-goodmodel.csv ────
+#> ── team1-goodmodel/2022-10-22-team1-goodmodel.csv ────
 #> 
 #> ✔ [file_exists]: File exists at path
 #>   model-output/team1-goodmodel/2022-10-22-team1-goodmodel.csv.✔ [file_name]: File name "2022-10-22-team1-goodmodel.csv" is valid.✔ [file_location]: File directory name matches `model_id` metadata in file
@@ -587,6 +603,78 @@ check_for_errors(v_pass, verbose = TRUE)
 #> 
 #> ✔ All validation checks have been successful.
 ```
+
+## Accessing validation results by file
+
+The
+[`validate_pr()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_pr.md)
+function returns a `hub_validations_collection` object, which is a named
+list where each element contains the validation results for a specific
+file. You can access results for individual files using standard list
+subsetting:
+
+``` r
+# See all file paths in the collection
+names(v_pass)
+#> [1] "hub-config"                                    
+#> [2] "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
+
+# Access all checks for a specific file
+v_pass[["team1-goodmodel/2022-10-22-team1-goodmodel.csv"]]
+#> 
+#> ── team1-goodmodel/2022-10-22-team1-goodmodel.csv ────
+#> 
+#> ✔ [file_exists]: File exists at path
+#>   model-output/team1-goodmodel/2022-10-22-team1-goodmodel.csv.
+#> ✔ [file_name]: File name "2022-10-22-team1-goodmodel.csv" is valid.
+#> ✔ [file_location]: File directory name matches `model_id` metadata in file
+#>   name.
+#> ✔ [round_id_valid]: `round_id` is valid.
+#> ✔ [file_format]: File is accepted hub format.
+#> ✔ [file_n]: Number of accepted model output files per round met.
+#> ✔ [metadata_exists]: Metadata file exists at path
+#>   model-metadata/team1-goodmodel.yaml.
+#> ✔ [file_read]: File could be read successfully.
+#> ✔ [valid_round_id_col]: `round_id_col` name is valid.
+#> ✔ [unique_round_id]: `round_id` column "origin_date" contains a single, unique
+#>   round ID value.
+#> ✔ [match_round_id]: All `round_id_col` "origin_date" values match submission
+#>   `round_id` from file name.
+#> ✔ [colnames]: Column names are consistent with expected round task IDs and std
+#>   column names.
+#> ✔ [col_types]: Column data types match hub schema.
+#> ✔ [valid_vals]: `tbl` contains valid values/value combinations.
+#> ℹ [derived_task_id_vals]: No derived task IDs to check. Skipping derived task
+#>   ID value check.
+#> ✔ [rows_unique]: All combinations of task ID
+#>   column/`output_type`/`output_type_id` values are unique.
+#> ✔ [req_vals]: Required task ID/output type/output type ID combinations all
+#>   present.
+#> ✔ [value_col_valid]: Values in column `value` all valid with respect to
+#>   modeling task config.
+#> ✔ [value_col_non_desc]: Quantile or cdf `value` values increase when ordered by
+#>   `output_type_id`.
+#> ℹ [value_col_sum1]: No pmf output types to check for sum of 1. Check skipped.
+#> ℹ [spl_compound_taskid_set]: No v3 samples found in model output data to check.
+#>   Skipping `check_tbl_spl_compound_taskid_set` check.
+#> ℹ [spl_compound_tid]: No v3 samples found in model output data to check.
+#>   Skipping `check_tbl_spl_compound_tid` check.
+#> ℹ [spl_non_compound_tid]: No v3 samples found in model output data to check.
+#>   Skipping `check_tbl_spl_non_compound_tid` check.
+#> ℹ [spl_n]: No v3 samples found in model output data to check. Skipping
+#>   `check_tbl_spl_n` check.
+
+# Access a specific check result
+v_pass[["team1-goodmodel/2022-10-22-team1-goodmodel.csv"]]$file_exists
+#> <message/check_success>
+#> Message:
+#> File exists at path
+#> model-output/team1-goodmodel/2022-10-22-team1-goodmodel.csv.
+```
+
+This structure is particularly useful when you need to programmatically
+inspect specific checks or extract error details from failed
+validations.
 
 ## `validate_pr` check details
 

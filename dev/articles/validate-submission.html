@@ -106,7 +106,7 @@ to validate their model output files prior to submitting.</strong></p>
 <p>The function takes a relative path, relative to the model output
 directory, as argument <code>file_path</code>, performs a series of
 standard validation checks and returns their results in the form of a
-<code>hub_validations</code> S3 class object.</p>
+<code>hub_validations_collection</code> S3 class object.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">hub_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"testhubs/simple"</span>, package <span class="op">=</span> <span class="st">"hubValidations"</span><span class="op">)</span></span>
 <span></span>
@@ -114,12 +114,12 @@ standard validation checks and returns their results in the form of a
 <span>  file_path <span class="op">=</span> <span class="st">"team1-goodmodel/2022-10-08-team1-goodmodel.csv"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">simple</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">hub-config</span><span style="color: #BB00BB;"> ────</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_config]</span>: All hub config files are valid.</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">2022-10-08-team1-goodmodel.csv</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">team1-goodmodel/2022-10-08-team1-goodmodel.csv</span><span style="color: #BB00BB;"> ────</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
@@ -133,6 +133,9 @@ standard validation checks and returns their results in the form of a
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_n]</span>: Number of accepted model output files per round met.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[metadata_exists]</span>: Metadata file exists at path</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">model-metadata/team1-goodmodel.yaml</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[submission_time]</span>: Submission time must be within accepted submission window</span></span>
+<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2026-03-03 08:16:24 UTC"</span> is outside window</span></span>
+<span><span class="co">#&gt;   <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_read]</span>: File could be read successfully.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_round_id_col]</span>: `round_id_col` name is valid.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[unique_round_id]</span>: `round_id` column <span style="color: #0000BB;">"origin_date"</span> contains a single, unique</span></span>
@@ -153,10 +156,7 @@ standard validation checks and returns their results in the form of a
 <span><span class="co">#&gt;   modeling task config.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[value_col_non_desc]</span>: Quantile or cdf `value` values increase when ordered by</span></span>
 <span><span class="co">#&gt;   `output_type_id`.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[value_col_sum1]</span>: No pmf output types to check for sum of 1. Check skipped.</span></span>
-<span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[submission_time]</span>: Submission time must be within accepted submission window</span></span>
-<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2026-01-13 15:44:01 UTC"</span> is outside window</span></span>
-<span><span class="co">#&gt;   <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[value_col_sum1]</span>: No pmf output types to check for sum of 1. Check skipped.</span></span></code></pre></div>
 <p>For more details on the structure of
 <code>&lt;hub_validations&gt;</code> objects, including how to access
 more information on individual checks, see
@@ -177,12 +177,12 @@ and the function re-run for validation to proceed further.</p>
 <span>  file_path <span class="op">=</span> <span class="st">"team1-goodmodel/2022-10-15-hub-baseline.csv"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">simple</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">hub-config</span><span style="color: #BB00BB;"> ────</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_config]</span>: All hub config files are valid.</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">2022-10-15-hub-baseline.csv</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">team1-goodmodel/2022-10-15-hub-baseline.csv</span><span style="color: #BB00BB;"> ────</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
@@ -197,16 +197,16 @@ and the function re-run for validation to proceed further.</p>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_n]</span>: Number of accepted model output files per round met.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[metadata_exists]</span>: Metadata file exists at path</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">model-metadata/hub-baseline.yml</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[submission_time]</span>: Submission time must be within accepted submission window</span></span>
+<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2026-03-03 08:16:25 UTC"</span> is outside window</span></span>
+<span><span class="co">#&gt;   <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_read]</span>: File could be read successfully.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_round_id_col]</span>: `round_id_col` name is valid.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[unique_round_id]</span>: `round_id` column <span style="color: #0000BB;">"origin_date"</span> contains a single, unique</span></span>
 <span><span class="co">#&gt;   round ID value.</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">ⓧ</span> <span style="color: #B2B2B2;">[match_round_id]</span>: All `round_id_col` <span style="color: #0000BB;">"origin_date"</span> values must match</span></span>
 <span><span class="co">#&gt;   submission `round_id` from file name.  `round_id` value <span style="color: #0000BB;">2022-10-08</span> does not</span></span>
-<span><span class="co">#&gt;   match submission `round_id` <span style="color: #0000BB;">"2022-10-15"</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[submission_time]</span>: Submission time must be within accepted submission window</span></span>
-<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2026-01-13 15:44:02 UTC"</span> is outside window</span></span>
-<span><span class="co">#&gt;   <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span></span></code></pre></div>
+<span><span class="co">#&gt;   match submission `round_id` <span style="color: #0000BB;">"2022-10-15"</span></span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="execution-errors">Execution Errors<a class="anchor" aria-label="anchor" href="#execution-errors"></a>
@@ -220,7 +220,7 @@ validation purposes, this results in the same downstream effects as an
 <h3 id="checking-for-errors-with-check_for_errors">Checking for errors with <code>check_for_errors()</code><a class="anchor" aria-label="anchor" href="#checking-for-errors-with-check_for_errors"></a>
 </h3>
 <p>You can check whether your file will overall pass validation checks
-by passing the <code>hub_validations</code> object to
+by passing the validation results to
 <code><a href="../reference/check_for_errors.html">check_for_errors()</a></code>.</p>
 <p>If validation fails, an error will be thrown and the failing checks
 will be summarised.</p>
@@ -230,10 +230,10 @@ will be summarised.</p>
 <span><span class="op">)</span>  <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/check_for_errors.html">check_for_errors</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">2022-10-08-team1-goodmodel.csv</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">team1-goodmodel/2022-10-08-team1-goodmodel.csv</span><span style="color: #BB00BB;"> ────</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[submission_time]</span>: Submission time must be within accepted submission window</span></span>
-<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2026-01-13 15:44:03 UTC"</span> is outside window</span></span>
+<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2026-03-03 08:16:26 UTC"</span> is outside window</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `check_for_errors()`:</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> </span></span>
@@ -1052,16 +1052,10 @@ class object.</p>
 <span>  file_path <span class="op">=</span> <span class="st">"hub-baseline.yml"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">model-metadata-schema.json</span><span style="color: #BB00BB;"> ────</span></span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[metadata_schema_exists]</span>: File exists at path</span></span>
-<span><span class="co">#&gt;   <span style="color: #0000BB;">hub-config/model-metadata-schema.json</span>.</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">hub-baseline.yml</span><span style="color: #BB00BB;"> ────</span></span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[metadata_schema_exists]</span>: Model metadata schema file exists at path</span></span>
+<span><span class="co">#&gt;   <span style="color: #0000BB;">hub-config/model-metadata-schema.json</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[metadata_file_exists]</span>: File exists at path <span style="color: #0000BB;">model-metadata/hub-baseline.yml</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[metadata_file_ext]</span>: Metadata file extension is <span style="color: #0000BB;">"yml"</span> or <span style="color: #0000BB;">"yaml"</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[metadata_file_location]</span>: Metadata file directory name matches</span></span>
@@ -1075,13 +1069,10 @@ class object.</p>
 <span>  file_path <span class="op">=</span> <span class="st">"team1-goodmodel.yaml"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">model-metadata-schema.json</span><span style="color: #BB00BB;"> ────</span></span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[metadata_schema_exists]</span>: File exists at path</span></span>
-<span><span class="co">#&gt;   <span style="color: #0000BB;">hub-config/model-metadata-schema.json</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">team1-goodmodel.yaml</span><span style="color: #BB00BB;"> ────</span></span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[metadata_file_exists]</span>: File exists at path</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[metadata_schema_exists]</span>: Model metadata schema file exists at path</span></span>
+<span><span class="co">#&gt;   <span style="color: #0000BB;">hub-config/model-metadata-schema.json</span>.<span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[metadata_file_exists]</span>: File exists at path</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">model-metadata/team1-goodmodel.yaml</span>.<span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[metadata_file_ext]</span>: Metadata file extension is <span style="color: #0000BB;">"yml"</span> or <span style="color: #0000BB;">"yaml"</span>.<span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[metadata_file_location]</span>: Metadata file directory name matches</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">"model-metadata"</span>.<span style="color: #BB0000;">ⓧ</span> <span style="color: #B2B2B2;">[metadata_matches_schema]</span>: Metadata file contents must be consistent with</span></span>
 <span><span class="co">#&gt;   schema specifications.  - must have required property 'model_details' . -</span></span>
@@ -1264,7 +1255,7 @@ value.</p>
 <span>  target_type <span class="op">=</span> <span class="st">"time-series"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">target_file</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">hub-config</span><span style="color: #BB00BB;"> ────</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_config]</span>: All hub config files are valid.</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -1297,7 +1288,7 @@ value.</p>
 <span>  target_type <span class="op">=</span> <span class="st">"oracle-output"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">target_file</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">hub-config</span><span style="color: #BB00BB;"> ────</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_config]</span>: All hub config files are valid.</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -1338,7 +1329,7 @@ value.</p>
 <span>  target_type <span class="op">=</span> <span class="st">"time-series"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">target_dir</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">hub-config</span><span style="color: #BB00BB;"> ────</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_config]</span>: All hub config files are valid.</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -1407,7 +1398,7 @@ fails because the date is not in <code>tasks.json</code>:</p>
 <span><span class="op">)</span></span>
 <span><span class="va">v</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">target_file</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">hub-config</span><span style="color: #BB00BB;"> ────</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_config]</span>: All hub config files are valid.</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -1444,7 +1435,7 @@ while still validating other task IDs:</p>
 <span><span class="op">)</span></span>
 <span><span class="va">v</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">target_file</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">hub-config</span><span style="color: #BB00BB;"> ────</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_config]</span>: All hub config files are valid.</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -1490,7 +1481,7 @@ hubs), you can specify the date column manually:</p>
 <span>  date_col <span class="op">=</span> <span class="st">"target_end_date"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">target_file</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">hub-config</span><span style="color: #BB00BB;"> ────</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_config]</span>: All hub config files are valid.</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -1529,7 +1520,7 @@ type, use <code><a href="../reference/validate_target_dataset.html">validate_tar
 <span></span>
 <span><span class="fu"><a href="../reference/validate_target_dataset.html">validate_target_dataset</a></span><span class="op">(</span><span class="va">hub_path</span>, target_type <span class="op">=</span> <span class="st">"time-series"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">time-series.csv</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">time-series</span><span style="color: #BB00BB;"> ────</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_dataset_exists]</span>: <span style="color: #00BB00;">time-series</span> dataset detected.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_dataset_unique]</span>: <span style="color: #0000BB;">target-data</span> directory contains single unique</span></span>
@@ -1540,7 +1531,7 @@ type, use <code><a href="../reference/validate_target_dataset.html">validate_tar
 <span></span>
 <span><span class="fu"><a href="../reference/validate_target_dataset.html">validate_target_dataset</a></span><span class="op">(</span><span class="va">hub_path</span>, target_type <span class="op">=</span> <span class="st">"oracle-output"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">oracle-output.csv</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">oracle-output</span><span style="color: #BB00BB;"> ────</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_dataset_exists]</span>: <span style="color: #00BB00;">oracle-output</span> dataset detected.<span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_dataset_unique]</span>: <span style="color: #0000BB;">target-data</span> directory contains single unique</span></span>
 <span><span class="co">#&gt;   <span style="color: #00BB00;">oracle-output</span> dataset.<span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_dataset_file_ext_unique]</span>: <span style="color: #00BB00;">oracle-output</span> dataset files share single</span></span>

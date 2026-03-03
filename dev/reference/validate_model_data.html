@@ -121,7 +121,8 @@ If <code>NULL</code>, defaults to extracting derived task IDs from hub <code>tas
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>An object of class <code>hub_validations</code>. Each named element contains
 a <code>hub_check</code> class object reflecting the result of a given check. Function
-will return early if a check returns an error.</p>
+will return early if a check returns an error. The <code>where</code> attribute is set
+to <code>file_path</code>.</p>
 <p>For more details on the structure of <code>&lt;hub_validations&gt;</code> objects, including
 how to access more information on individual checks,
 see <a href="https://hubverse-org.github.io/hubValidations/articles/hub-validations-class.html">article on <code>&lt;hub_validations&gt;</code> S3 class objects</a>.</p>
@@ -234,7 +235,7 @@ the compound idx in question. </td>
 <span class="r-in"><span><span class="va">file_path</span> <span class="op">&lt;-</span> <span class="st">"team1-goodmodel/2022-10-08-team1-goodmodel.csv"</span></span></span>
 <span class="r-in"><span><span class="fu">validate_model_data</span><span class="op">(</span><span class="va">hub_path</span>, <span class="va">file_path</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">2022-10-08-team1-goodmodel.csv</span><span style="color: #BB00BB;"> ────</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">team1-goodmodel/2022-10-08-team1-goodmodel.csv</span><span style="color: #BB00BB;"> ────</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_read]</span>: File could be read successfully.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_round_id_col]</span>: `round_id_col` name is valid.</span>

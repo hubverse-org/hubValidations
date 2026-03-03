@@ -42,6 +42,51 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="hubvalidations-development-version">hubValidations (development version)<a class="anchor" aria-label="anchor" href="#hubvalidations-development-version"></a></h2>
+<div class="section level3">
+<h3 id="breaking-changes-development-version">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-development-version"></a></h3>
+<ul><li>
+<p><strong>Refactored validation class architecture for multi-file validation</strong> (<a href="https://github.com/hubverse-org/hubValidations/issues/294" class="external-link">#294</a>).</p>
+<p>Previously, functions like <code><a href="../reference/validate_pr.html">validate_pr()</a></code> that validate multiple files returned a flat <code>hub_validations</code> list where all checks were combined together. Duplicate check names were made unique by appending numeric suffixes (e.g., <code>file_exists</code>, <code>file_exists_1</code>, <code>file_exists_2</code>). This made it unclear which file each check related to and difficult to programmatically access results for a specific file.</p>
+<p>Now, multi-file validation results are organized hierarchically using new collection classes. Results are stored in a named list where names identify what was validated (file path, <code>"hub-config"</code>, or target type) and values are <code>hub_validations</code> objects containing the checks for that subject. This provides robust, intuitive access: <code>collection[["team1-goodmodel/2022-10-08-team1-goodmodel.csv"]]$file_exists</code>.</p>
+<p><strong>Affected functions</strong> (now return collection objects):</p>
+<ul><li>
+<code><a href="../reference/validate_submission.html">validate_submission()</a></code> returns <code>hub_validations_collection</code> (was <code>hub_validations</code>)</li>
+<li>
+<code><a href="../reference/validate_target_submission.html">validate_target_submission()</a></code> returns <code>target_validations_collection</code> (was <code>target_validations</code>)</li>
+<li>
+<code><a href="../reference/validate_pr.html">validate_pr()</a></code> returns <code>hub_validations_collection</code> (was <code>hub_validations</code>)</li>
+<li>
+<code><a href="../reference/validate_target_pr.html">validate_target_pr()</a></code> returns <code>target_validations_collection</code> (was <code>target_validations</code>)</li>
+</ul><p><strong>Migration required</strong>: Code that accesses validation results by name (e.g., <code>validations$file_exists</code>) must be updated to use the new hierarchical access pattern: <code>validations[["path/to/file.csv"]]$file_exists</code>.</p>
+<p><strong>Additional notes</strong>:</p>
+<ul><li>Hub config validation is included as a separate entry named <code>"hub-config"</code> in collection results.</li>
+<li>For target validation, dataset-level checks are grouped under their target type name (<code>"time-series"</code>, <code>"oracle-output"</code>).</li>
+<li>Lower-level functions (<code><a href="../reference/validate_model_data.html">validate_model_data()</a></code>, <code><a href="../reference/validate_model_file.html">validate_model_file()</a></code>, <code><a href="../reference/validate_model_metadata.html">validate_model_metadata()</a></code>, <code><a href="../reference/validate_target_data.html">validate_target_data()</a></code>, <code><a href="../reference/validate_target_file.html">validate_target_file()</a></code>, <code><a href="../reference/validate_target_dataset.html">validate_target_dataset()</a></code>) continue to return single <code>hub_validations</code> or <code>target_validations</code> objects.</li>
+</ul></li>
+<li><p><strong>File modification checks reorganized</strong>: Each modified/deleted file now gets its own entry in the collection with a standardized check name <code>valid_file_status</code>. Previously, these were grouped under <code>model_output_mod</code> or <code>model_metadata_mod</code> with numeric suffixes for multiple files. Access via <code>collection[["path/to/file"]]$valid_file_status</code>.</p></li>
+<li><p>Print methods now display full relative file paths (e.g., <code>team1-goodmodel/2022-10-08-team1-goodmodel.csv</code>) instead of basenames for model output files, providing better context.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="new-features-development-version">New Features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<ul><li>
+<p><strong>New collection classes</strong> for organizing multi-file validation results:</p>
+<ul><li>
+<code>hub_validations_collection</code>: A named list where names identify what was validated and values are <code>hub_validations</code> objects.</li>
+<li>
+<code>target_validations_collection</code>: Extends <code>hub_validations_collection</code> for target data validation results.</li>
+<li>New constructors: <code><a href="../reference/new_hub_validations_collection.html">new_hub_validations_collection()</a></code>, <code><a href="../reference/new_target_validations_collection.html">new_target_validations_collection()</a></code>, and corresponding <code>as_*</code> conversion functions.</li>
+</ul></li>
+<li><p><strong><code>hub_validations</code> objects now enforce consistency</strong>: All checks in a <code>hub_validations</code> object must have the same <code>$where</code> value. This value is extracted and stored as a <code>where</code> attribute on the object, identifying what was validated (e.g., file path, <code>"hub-config"</code>, or target type like <code>"time-series"</code>). Access via <code>attr(x, "where")</code>.</p></li>
+<li>
+<p><strong>New class utility methods</strong> for <code>hub_validations</code> (and subclasses like <code>target_validations</code>):</p>
+<ul><li>Subsetting with <code>[</code> preserves class and <code>where</code> attribute</li>
+<li>Assignment with <code>$&lt;-</code> and <code>[[&lt;-</code> validates that new checks have matching <code>where</code> values</li>
+<li>NULL assignment removes elements and clears <code>where</code> when empty</li>
+</ul></li>
+<li><p>Added print methods for collection classes that display results organized hierarchically by what was validated.</p></li>
+<li><p>Added <code><a href="../reference/combine.html">combine()</a></code> methods for collection classes that properly merge validations by <code>where</code> value.</p></li>
+<li><p><code><a href="../reference/check_for_errors.html">check_for_errors()</a></code> is now a generic with methods for both <code>hub_validations</code> and <code>hub_validations_collection</code> classes. For collections, errors are reported grouped by what was validated.</p></li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.13.0" id="hubvalidations-0130">hubValidations 0.13.0<a class="anchor" aria-label="anchor" href="#hubvalidations-0130"></a></h2>
@@ -88,7 +133,7 @@
 <ul><li>New functions: <code><a href="../reference/new_target_validations.html">new_target_validations()</a></code> and <code><a href="../reference/new_target_validations.html">as_target_validations()</a></code>
 </li>
 <li>
-<code><a href="../reference/combine.target_validations.html">combine.target_validations()</a></code> method for concatenating target validation objects</li>
+<code>combine.target_validations()</code> method for concatenating target validation objects</li>
 <li>Print method displays full file paths instead of basenames for better clarity when working with target data files</li>
 </ul></li>
 <li>Added utilities for working with hive-partitioned data file paths:

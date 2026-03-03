@@ -5,7 +5,7 @@ Check whether a metadata schema file exists
 ## Usage
 
 ``` r
-check_metadata_schema_exists(hub_path = ".")
+check_metadata_schema_exists(hub_path = ".", file_path)
 ```
 
 ## Arguments
@@ -23,6 +23,12 @@ check_metadata_schema_exists(hub_path = ".")
   GCS)](https://arrow.apache.org/docs/r/articles/fs.html) in the `arrow`
   package. The hub must be fully configured with valid `admin.json` and
   `tasks.json` files within the `hub-config` directory.
+
+- file_path:
+
+  Path to the model metadata file being validated. Used as the `$where`
+  in the returned check object, since this check is a prerequisite for
+  validating that file.
 
 ## Value
 

@@ -124,7 +124,10 @@ validate_pr(
 
 ## Value
 
-An object of class `hub_validations`.
+An object of class `hub_validations_collection`, a collection of
+validation results. The collection includes entries for hub config
+validation (`"hub-config"`) and file-specific validations (named by file
+path).
 
 ## Details
 
@@ -147,6 +150,13 @@ checks are performed and what is returned if modifications/deletions are
 detected, and `allow_submit_window_mods`, which controls whether
 modifications/deletions of model output files are allowed within their
 submission windows.
+
+When modification/deletion checks are enabled, each affected file
+creates an entry in the returned collection named by the file's path.
+The check within each entry is named `valid_file_status` (reflecting
+that we validate the file's git status). For example, to access the
+check for a deleted file:
+`collection[["team1-goodmodel/2022-10-15-team1-goodmodel.csv"]][["valid_file_status"]]`.
 
 Note that to establish **relative** submission windows when performing
 modification/deletion checks and `allow_submit_window_mods` is `TRUE`,

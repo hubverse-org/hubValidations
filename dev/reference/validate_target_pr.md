@@ -83,11 +83,8 @@ validate_target_pr(
 
 - na:
 
-  A character vector of strings to interpret as missing values. Only
-  applies to CSV files. The default is `c("NA", "")`. Useful when actual
-  character string `"NA"` values are used in the data. In such a case,
-  use empty cells to indicate missing values in your files and set
-  `na = ""`.
+  Character vector of strings to interpret as missing values when
+  reading data files. Passed to the underlying file reader.
 
 - round_id:
 
@@ -129,7 +126,11 @@ validate_target_pr(
 
 ## Value
 
-An object of class `target_validations`.
+An object of class `target_validations_collection`, a collection of
+validation results. The collection includes entries for hub config
+validation (`"hub-config"`), target dataset type validation
+(`"time-series"`, `"oracle-output"`), and individual file validations
+(named by file path).
 
 ## Details
 
@@ -145,6 +146,13 @@ previously submitted target data files are allowed. This behaviour can
 be modified through arguments `file_modification_check`, which controls
 whether modification/deletion checks are performed and what is returned
 if modifications/deletions are detected.
+
+When modification/deletion checks are enabled, each affected file
+creates an entry in the returned collection named by the file's path.
+The check within each entry is named `valid_file_status` (reflecting
+that we validate the file's git status). For example, to access the
+check for a deleted file:
+`collection[["oracle-output/output_type=sample/part-0.parquet"]][["valid_file_status"]]`.
 
 ### Checks on target dataset
 
