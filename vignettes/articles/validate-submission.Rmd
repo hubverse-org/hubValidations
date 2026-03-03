@@ -25,7 +25,7 @@ This article covers local validation of:
 
 **Submitting teams can use `validate_submission()` to validate their model output files prior to submitting.**
 
-The function takes a relative path, relative to the model output directory, as argument `file_path`, performs a series of standard validation checks and returns their results in the form of a `hub_validations` S3 class object.
+The function takes a relative path, relative to the model output directory, as argument `file_path`, performs a series of standard validation checks and returns their results in the form of a `hub_validations_collection` S3 class object.
 
 ```{r}
 hub_path <- system.file("testhubs/simple", package = "hubValidations")
@@ -60,7 +60,7 @@ If an execution error occurs in any of the checks, an `<error/check_exec_error>`
 
 ### Checking for errors with `check_for_errors()`
 
-You can check whether your file will overall pass validation checks by passing the `hub_validations` object to `check_for_errors()`. 
+You can check whether your file will overall pass validation checks by passing the validation results to `check_for_errors()`. 
 
 If validation fails, an error will be thrown and the failing checks will be summarised.
 

@@ -47,6 +47,7 @@
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        - attr(*, "class")= chr [1:2] "hub_validations" "list"
+       - attr(*, "where")= chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
 
 ---
 
@@ -62,6 +63,7 @@
         ..$ call          : chr "check_file_exists"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_error" "hub_check" "rlang_error" "error" ...
+       - attr(*, "where")= chr "team1-goodmodel/2022-10-15-team1-goodmodel.csv"
 
 # validate_model_file print method work [plain]
 
@@ -69,7 +71,7 @@
       validate_model_file(hub_path, file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv")
     Message
       
-      -- 2022-10-08-team1-goodmodel.csv ----
+      -- team1-goodmodel/2022-10-08-team1-goodmodel.csv ----
       
       v [file_exists]: File exists at path 'model-output/team1-goodmodel/2022-10-08-team1-goodmodel.csv'.
       v [file_name]: File name "2022-10-08-team1-goodmodel.csv" is valid.
@@ -85,7 +87,7 @@
       validate_model_file(hub_path, file_path = "team1-goodmodel/2022-10-15-team1-goodmodel.csv")
     Message
       
-      -- 2022-10-15-team1-goodmodel.csv ----
+      -- team1-goodmodel/2022-10-15-team1-goodmodel.csv ----
       
       (x) [file_exists]: File does not exist at path 'model-output/team1-goodmodel/2022-10-15-team1-goodmodel.csv'.
 
@@ -95,7 +97,7 @@
       validate_model_file(hub_path, file_path = "team1-goodmodel/2022-10-15-hub-baseline.csv")
     Message
       
-      -- 2022-10-15-hub-baseline.csv ----
+      -- team1-goodmodel/2022-10-15-hub-baseline.csv ----
       
       v [file_exists]: File exists at path 'model-output/team1-goodmodel/2022-10-15-hub-baseline.csv'.
       v [file_name]: File name "2022-10-15-hub-baseline.csv" is valid.
@@ -111,7 +113,7 @@
       validate_model_file(hub_path, file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv")
     Message
       
-      [35m-- [4m[1m2022-10-08-team1-goodmodel.csv[22m[24m ----[39m
+      [35m-- [4m[1mteam1-goodmodel/2022-10-08-team1-goodmodel.csv[22m[24m ----[39m
       
       [1m[22m[32mv[39m [90m[file_exists][39m: File exists at path [34mmodel-output/team1-goodmodel/2022-10-08-team1-goodmodel.csv[39m.
       [1m[22m[32mv[39m [90m[file_name][39m: File name [34m"2022-10-08-team1-goodmodel.csv"[39m is valid.
@@ -127,7 +129,7 @@
       validate_model_file(hub_path, file_path = "team1-goodmodel/2022-10-15-team1-goodmodel.csv")
     Message
       
-      [35m-- [4m[1m2022-10-15-team1-goodmodel.csv[22m[24m ----[39m
+      [35m-- [4m[1mteam1-goodmodel/2022-10-15-team1-goodmodel.csv[22m[24m ----[39m
       
       [1m[22m[31m(x)[39m [90m[file_exists][39m: File does not exist at path [34mmodel-output/team1-goodmodel/2022-10-15-team1-goodmodel.csv[39m.
 
@@ -137,7 +139,7 @@
       validate_model_file(hub_path, file_path = "team1-goodmodel/2022-10-15-hub-baseline.csv")
     Message
       
-      [35m-- [4m[1m2022-10-15-hub-baseline.csv[22m[24m ----[39m
+      [35m-- [4m[1mteam1-goodmodel/2022-10-15-hub-baseline.csv[22m[24m ----[39m
       
       [1m[22m[32mv[39m [90m[file_exists][39m: File exists at path [34mmodel-output/team1-goodmodel/2022-10-15-hub-baseline.csv[39m.
       [1m[22m[32mv[39m [90m[file_name][39m: File name [34m"2022-10-15-hub-baseline.csv"[39m is valid.
@@ -153,7 +155,7 @@
       validate_model_file(hub_path, file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv")
     Message
       
-      ── 2022-10-08-team1-goodmodel.csv ────
+      ── team1-goodmodel/2022-10-08-team1-goodmodel.csv ────
       
       ✔ [file_exists]: File exists at path 'model-output/team1-goodmodel/2022-10-08-team1-goodmodel.csv'.
       ✔ [file_name]: File name "2022-10-08-team1-goodmodel.csv" is valid.
@@ -169,7 +171,7 @@
       validate_model_file(hub_path, file_path = "team1-goodmodel/2022-10-15-team1-goodmodel.csv")
     Message
       
-      ── 2022-10-15-team1-goodmodel.csv ────
+      ── team1-goodmodel/2022-10-15-team1-goodmodel.csv ────
       
       ⓧ [file_exists]: File does not exist at path 'model-output/team1-goodmodel/2022-10-15-team1-goodmodel.csv'.
 
@@ -179,7 +181,7 @@
       validate_model_file(hub_path, file_path = "team1-goodmodel/2022-10-15-hub-baseline.csv")
     Message
       
-      ── 2022-10-15-hub-baseline.csv ────
+      ── team1-goodmodel/2022-10-15-hub-baseline.csv ────
       
       ✔ [file_exists]: File exists at path 'model-output/team1-goodmodel/2022-10-15-hub-baseline.csv'.
       ✔ [file_name]: File name "2022-10-15-hub-baseline.csv" is valid.
@@ -195,7 +197,7 @@
       validate_model_file(hub_path, file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv")
     Message
       
-      [35m── [4m[1m2022-10-08-team1-goodmodel.csv[22m[24m ────[39m
+      [35m── [4m[1mteam1-goodmodel/2022-10-08-team1-goodmodel.csv[22m[24m ────[39m
       
       [1m[22m[32m✔[39m [90m[file_exists][39m: File exists at path [34mmodel-output/team1-goodmodel/2022-10-08-team1-goodmodel.csv[39m.
       [1m[22m[32m✔[39m [90m[file_name][39m: File name [34m"2022-10-08-team1-goodmodel.csv"[39m is valid.
@@ -211,7 +213,7 @@
       validate_model_file(hub_path, file_path = "team1-goodmodel/2022-10-15-team1-goodmodel.csv")
     Message
       
-      [35m── [4m[1m2022-10-15-team1-goodmodel.csv[22m[24m ────[39m
+      [35m── [4m[1mteam1-goodmodel/2022-10-15-team1-goodmodel.csv[22m[24m ────[39m
       
       [1m[22m[31mⓧ[39m [90m[file_exists][39m: File does not exist at path [34mmodel-output/team1-goodmodel/2022-10-15-team1-goodmodel.csv[39m.
 
@@ -221,7 +223,7 @@
       validate_model_file(hub_path, file_path = "team1-goodmodel/2022-10-15-hub-baseline.csv")
     Message
       
-      [35m── [4m[1m2022-10-15-hub-baseline.csv[22m[24m ────[39m
+      [35m── [4m[1mteam1-goodmodel/2022-10-15-hub-baseline.csv[22m[24m ────[39m
       
       [1m[22m[32m✔[39m [90m[file_exists][39m: File exists at path [34mmodel-output/team1-goodmodel/2022-10-15-hub-baseline.csv[39m.
       [1m[22m[32m✔[39m [90m[file_name][39m: File name [34m"2022-10-15-hub-baseline.csv"[39m is valid.

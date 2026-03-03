@@ -11,9 +11,7 @@ check_target_dataset_unique <- function(
   )
 ) {
   target_type <- rlang::arg_match(target_type)
-  # Use target type as file_path to bgin with as it's not guaranteed a
-  # valid unique target path can be detected yet
-  file_path <- target_type
+  # Use target_type as file_path (required for valid target_validations object)
 
   target_path <- hubData::get_target_path(hub_path, target_type)
   target_n <- length(target_path)
@@ -21,7 +19,7 @@ check_target_dataset_unique <- function(
   if (target_n == 0L) {
     return(
       capture_check_info(
-        file_path = file_path,
+        file_path = target_type,
         cli::format_inline(
           "No {.field {target_type}} target type files detected in
         {.path target-data} directory. Check skipped."
@@ -37,15 +35,11 @@ check_target_dataset_unique <- function(
       "Multiple {.field {target_type}} datasets found:
       {.path {basename(target_path)}}"
     )
-  } else {
-    # If the check passes, return the relative path to the dataset,
-    # otherwise continue returning the target type
-    file_path <- basename(target_path)
   }
 
   capture_check_cnd(
     check = check,
-    file_path = file_path,
+    file_path = target_type,
     msg_subject = "{.path target-data} directory",
     msg_attribute = cli::format_inline(
       "single unique {.field {target_type}} dataset."

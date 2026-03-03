@@ -75,13 +75,10 @@ If \code{NULL}, defaults to extracting derived task IDs from hub \code{task.json
 \code{\link[=get_hub_derived_task_ids]{get_hub_derived_task_ids()}} for more details.}
 }
 \value{
-An object of class \code{hub_validations}. Each named element contains
-a \code{hub_check} class object reflecting the result of a given check. Function
-will return early if a check returns an error.
-
-For more details on the structure of \verb{<hub_validations>} objects, including
-how to access more information on individual checks,
-see \href{https://hubverse-org.github.io/hubValidations/articles/hub-validations-class.html}{article on \verb{<hub_validations>} S3 class objects}.
+A \code{hub_validations_collection} object containing validation results
+organized by file. The collection includes separate entries for hub config
+validation (keyed by \code{"hub-config"}) and file-specific validations (keyed by
+file path).
 }
 \description{
 Checks both file level properties like

@@ -24,7 +24,7 @@ test_that("validate_target_dataset works on single file target data", {
   )
   expect_equal(
     unique(purrr::map_chr(res_ts, ~ .x$where)),
-    "time-series.csv"
+    "time-series"
   )
   expect_message(
     check_for_errors(res_ts),
@@ -49,7 +49,7 @@ test_that("validate_target_dataset works on single file target data", {
   )
   expect_equal(
     unique(purrr::map_chr(res_oo, ~ .x$where)),
-    "oracle-output.csv"
+    "oracle-output"
   )
   expect_message(
     check_for_errors(res_oo),

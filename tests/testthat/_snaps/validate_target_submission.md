@@ -4,7 +4,7 @@
       res_ts
     Message
       
-      -- target_file ----
+      -- hub-config ----
       
       v [valid_config]: All hub config files are valid.
       
@@ -28,7 +28,7 @@
       res_oo
     Message
       
-      -- target_file ----
+      -- hub-config ----
       
       v [valid_config]: All hub config files are valid.
       
@@ -52,7 +52,7 @@
       early_return_ts
     Message
       
-      -- target_file ----
+      -- hub-config ----
       
       v [valid_config]: All hub config files are valid.
       

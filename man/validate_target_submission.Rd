@@ -32,8 +32,8 @@ files within the \code{hub-config} directory.}
 \item{file_path}{A character string representing the path to the target data
 file relative to the \code{target-data} directory.}
 
-\item{target_type}{Type of target data to retrieve matching files. One of "time-series" or
-"oracle-output". Defaults to "time-series".}
+\item{target_type}{Character string. The type of target data, either
+\code{"time-series"} or \code{"oracle-output"}.}
 
 \item{date_col}{Optional name of the column containing the date observations
 actually occurred (e.g., \code{"target_end_date"}) to be interpreted as date.
@@ -52,10 +52,8 @@ but can be used to specify a specific block of custom validation checks.
 Otherwise best set to \code{"default"} which will deploy the default custom
 validation checks.}
 
-\item{na}{A character vector of strings to interpret as missing values. Only
-applies to CSV files. The default is \code{c("NA", "")}. Useful when actual character
-string \code{"NA"} values are used in the data. In such a case, use empty cells to
-indicate missing values in your files and set \code{na = ""}.}
+\item{na}{Character vector of strings to interpret as missing values when
+reading data files. Passed to the underlying file reader.}
 
 \item{output_type_id_datatype}{character string. One of \code{"from_config"}, \code{"auto"},
 \code{"character"}, \code{"double"}, \code{"integer"}, \code{"logical"}, \code{"Date"}.
@@ -81,13 +79,10 @@ see \href{https://hubverse-org.github.io/hubValidations/articles/deploying-custo
 \item{skip_check_config}{Logical. Whether to skip the hub config validation check.}
 }
 \value{
-An object of class \code{hub_validations}. Each named element contains
-a \code{hub_check} class object reflecting the result of a given check. Function
-will return early if a check returns an error.
-
-For more details on the structure of \verb{<hub_validations>} objects, including
-how to access more information on individual checks,
-see \href{https://hubverse-org.github.io/hubValidations/articles/hub-validations-class.html}{article on \verb{<hub_validations>} S3 class objects}.
+A \code{target_validations_collection} object containing validation results
+organized by file. The collection includes separate entries for hub config
+validation (keyed by \code{"hub-config"}) and file-specific validations (keyed by
+file path).
 }
 \description{
 Checks both file level properties like

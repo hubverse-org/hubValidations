@@ -48,7 +48,7 @@ The pertinent section of the workflow is:
           hubValidations::check_for_errors(v, verbose = TRUE)
         shell: Rscript {0}
 ```
-where `validate_pr()` is called on the contents of the current Pull Request, the results (an S3 `<hub_validations>` class object) is stored in `v` and then `check_for_errors()` used to signal whether overall validations have passed or failed and summarise any validation failures.
+where `validate_pr()` is called on the contents of the current Pull Request, the results (an S3 `<hub_validations_collection>` class object) is stored in `v` and then `check_for_errors()` used to signal whether overall validations have passed or failed and summarise any validation failures.
 
 Here's an example of what the workflow looks like on GitHub:
 
@@ -143,10 +143,20 @@ These settings can be modified if required though the use of arguments `file_mod
   - **`"message"`**: Appends a `<message/check_info>` condition class object for each applicable modified/deleted file. Will not result in validation workflow failure.
   - **`"none"`**: No modification/deletion checks performed.
 
-- **`allow_submit_window_mods`** controls whether modifications/deletions of model output files are allowed within their submission windows. Is set to `TRUE` by default but can be set to `FALSE` if modifications/deletions are not allowed, regardless of timing. 
+- **`allow_submit_window_mods`** controls whether modifications/deletions of model output files are allowed within their submission windows. Is set to `TRUE` by default but can be set to `FALSE` if modifications/deletions are not allowed, regardless of timing.
 Is ignored when checking model metadata files as well as when `file_modification_check` is set to `"none"`.
 
+#### Accessing modification check results
 
+When modification/deletion checks are enabled, each affected file creates an entry in the returned collection named by the file's path. The check within each entry is named `valid_file_status` (reflecting that we validate the file's git status).
+
+```{r, eval=FALSE}
+# Access the file status check for a deleted file
+v[["team1-goodmodel/2022-10-15-team1-goodmodel.csv"]][["valid_file_status"]]
+
+# Access the file status check for a modified file
+v[["hub-baseline/2022-10-08-hub-baseline.csv"]][["valid_file_status"]]
+```
 
 <div class="alert alert-warning" role="note">
 
@@ -204,11 +214,11 @@ For comprehensive hub integrity checking beyond PR validation, see [issue #83](h
 
 ## Checking for validation failures with `check_for_errors()`
 
-`check_for_errors()` is used to inspect a `hub_validations` class object, determine whether overall validations have passed or failed and summarise any detected errors/failures.
+`check_for_errors()` is used to inspect a `hub_validations_collection` class object, determine whether overall validations have passed or failed and summarise any detected errors/failures.
 
 ### Validation failure
 
-If any elements of the `hub_validations` object contain `<error/check_error>`, `<warning/check_warning>` or `<error/check_exec_error>` condition class objects, the function throws an error and prints the messages from the failing checks.
+If any elements of the `hub_validations_collection` object contain `<error/check_error>`, `<warning/check_warning>` or `<error/check_exec_error>` condition class objects, the function throws an error and prints the messages from the failing checks.
 
 ```{r, error=TRUE}
 temp_hub <- fs::path(tempdir(), "invalid_sb_hub")
@@ -267,6 +277,24 @@ check_for_errors(v_pass, verbose = TRUE)
 ```
 
 
+
+## Accessing validation results by file
+
+The `validate_pr()` function returns a `hub_validations_collection` object, which is a named list where each element contains the validation results for a specific file.
+You can access results for individual files using standard list subsetting:
+
+```{r}
+# See all file paths in the collection
+names(v_pass)
+
+# Access all checks for a specific file
+v_pass[["team1-goodmodel/2022-10-22-team1-goodmodel.csv"]]
+
+# Access a specific check result
+v_pass[["team1-goodmodel/2022-10-22-team1-goodmodel.csv"]]$file_exists
+```
+
+This structure is particularly useful when you need to programmatically inspect specific checks or extract error details from failed validations.
 
 ## `validate_pr` check details
 

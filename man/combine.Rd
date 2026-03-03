@@ -2,16 +2,41 @@
 % Please edit documentation in R/combine.R
 \name{combine}
 \alias{combine}
-\title{Concatenate \code{hub_validations} S3 class objects}
+\alias{combine.hub_validations_collection}
+\title{Concatenate validation objects}
 \usage{
 combine(...)
+
+\method{combine}{hub_validations_collection}(...)
 }
 \arguments{
-\item{...}{\code{hub_validations} S3 class objects to be concatenated.}
+\item{...}{Validation objects to be concatenated. All objects must be of the
+same class. NULL values are ignored. Empty objects are filtered out when
+combining multiple inputs, but a single empty input is returned as-is.}
 }
 \value{
-a \code{hub_validations} S3 class object.
+An object of the same class as the inputs, or NULL if no valid
+inputs provided.
 }
 \description{
-Concatenate \code{hub_validations} S3 class objects
+Combines multiple validation objects of the same class into one. Works with
+both single-file validation objects (\code{hub_validations}, \code{target_validations})
+and multi-file collection objects (\code{hub_validations_collection},
+\code{target_validations_collection}). For more details on these classes,
+see \href{https://hubverse-org.github.io/hubValidations/articles/hub-validations-class.html}{article on \verb{<hub_validations>} S3 class objects}.
+}
+\details{
+For \code{hub_validations} objects, all inputs must share the same \code{where}
+attribute (i.e., be validations for the same subject).
+
+For \code{hub_validations_collection} objects, the individual \code{hub_validations}
+objects from all collections are extracted and grouped by their \code{where}
+attribute, combining validation results for the same subject.
+
+Subclasses (e.g., \code{target_validations}, \code{target_validations_collection}) are
+preserved.
+}
+\seealso{
+\code{\link[=new_hub_validations]{new_hub_validations()}}, \code{\link[=new_hub_validations_collection]{new_hub_validations_collection()}},
+\code{\link[=new_target_validations]{new_target_validations()}}, \code{\link[=new_target_validations_collection]{new_target_validations_collection()}}
 }

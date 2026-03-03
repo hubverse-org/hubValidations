@@ -5,7 +5,7 @@ test_that("check_target_dataset_exists works on single file target datasets", {
     target_type = "time-series"
   )
   expect_s3_class(res_ts, "check_success")
-  expect_equal(res_ts$where, "time-series.csv")
+  expect_equal(res_ts$where, "time-series")
   expect_equal(
     cli::ansi_strip(res_ts$message) |> stringr::str_squish(),
     "time-series dataset detected."
@@ -16,7 +16,7 @@ test_that("check_target_dataset_exists works on single file target datasets", {
     target_type = "oracle-output"
   )
   expect_s3_class(res_oo, "check_success")
-  expect_equal(res_oo$where, "oracle-output.csv")
+  expect_equal(res_oo$where, "oracle-output")
   expect_equal(
     cli::ansi_strip(res_oo$message) |> stringr::str_squish(),
     "oracle-output dataset detected."

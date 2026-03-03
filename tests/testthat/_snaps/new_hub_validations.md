@@ -3,7 +3,7 @@
     Code
       str(new_hub_validations())
     Output
-       Named list()
+       list()
        - attr(*, "class")= chr [1:2] "hub_validations" "list"
 
 ---
@@ -26,4 +26,5 @@
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        - attr(*, "class")= chr [1:2] "hub_validations" "list"
+       - attr(*, "where")= chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
 

@@ -61,7 +61,8 @@ If \code{NULL}, defaults to extracting derived task IDs from hub \code{task.json
 \value{
 An object of class \code{hub_validations}. Each named element contains
 a \code{hub_check} class object reflecting the result of a given check. Function
-will return early if a check returns an error.
+will return early if a check returns an error. The \code{where} attribute is set
+to \code{file_path}.
 
 For more details on the structure of \verb{<hub_validations>} objects, including
 how to access more information on individual checks,

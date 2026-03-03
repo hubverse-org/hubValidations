@@ -133,7 +133,7 @@ test_that("combine merges warnings from multiple hub_validations objects", {
   v2 <- new_hub_validations()
   v2$check2 <- capture_check_cnd(
     check = TRUE,
-    file_path = "b.csv",
+    file_path = "a.csv", # Same file_path as v1 - combining validations for different files is not allowed
     msg_subject = "B",
     msg_attribute = "ok."
   )

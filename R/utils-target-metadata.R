@@ -68,9 +68,9 @@ get_round_target_metadata <- function(model_task_grp, flatten = TRUE) {
 
 #' Extract `target_id` from list target metadata objects
 #'
-#' @param target_metadata A list of target metadata objects
-#' @return A character vector of `target_id` values. Usually the output of
-#' [get_target_metadata()].
+#' @param target_metadata A list of target metadata objects. Usually the output
+#'   of `get_target_metadata()`.
+#' @return A character vector of `target_id` values.
 #' @noRd
 get_target_ids <- function(target_metadata) {
   purrr::map_chr(target_metadata, ~ .x[["target_id"]])

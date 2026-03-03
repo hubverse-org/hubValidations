@@ -18,6 +18,7 @@ test_that("validate_pr works on valid PR", {
     )
   )
 
+  expect_s3_class(checks, "hub_validations_collection")
   expect_snapshot(str(checks))
   expect_invisible(suppressMessages(check_for_errors(checks)))
   expect_message(
@@ -46,6 +47,7 @@ test_that("validate_pr works on invalid PR", {
     )
   )
 
+  expect_s3_class(invalid_checks, "hub_validations_collection")
   expect_snapshot(str(invalid_checks))
 
   expect_error(
@@ -77,6 +79,7 @@ test_that("validate_pr flags modifications and deletions in PR", {
     )
   )
 
+  expect_s3_class(mod_checks_error, "hub_validations_collection")
   expect_snapshot(str(mod_checks_error))
   expect_error(
     suppressMessages(check_for_errors(mod_checks_error))
@@ -108,6 +111,7 @@ test_that("validate_pr flags modifications and deletions in PR", {
       file_modification_check = "failure"
     )
   )
+  expect_s3_class(mod_checks_warn, "hub_validations_collection")
   expect_snapshot(str(mod_checks_warn))
   expect_error(
     suppressMessages(check_for_errors(mod_checks_warn))
@@ -122,9 +126,39 @@ test_that("validate_pr flags modifications and deletions in PR", {
       file_modification_check = "message"
     )
   )
+  expect_s3_class(mod_checks_message, "hub_validations_collection")
   expect_snapshot(str(mod_checks_message))
+  # With file_modification_check = "message", modifications are check_info
+  # All file status checks use the standard name "valid_file_status"
+  # Modified files that are also validated will have both regular checks and valid_file_status
   expect_true(
-    suppressMessages(check_for_errors(mod_checks_message[1:5]))
+    "valid_file_status" %in%
+      names(mod_checks_message[["hub-baseline/2022-10-08-hub-baseline.csv"]])
+  )
+  expect_s3_class(
+    mod_checks_message[[
+      "hub-baseline/2022-10-08-hub-baseline.csv"
+    ]]$valid_file_status,
+    "check_info"
+  )
+  # Deleted files only have the valid_file_status check
+  expect_named(
+    mod_checks_message[["team1-goodmodel/2022-10-15-team1-goodmodel.csv"]],
+    "valid_file_status"
+  )
+  expect_s3_class(
+    mod_checks_message[[
+      "team1-goodmodel/2022-10-15-team1-goodmodel.csv"
+    ]]$valid_file_status,
+    "check_info"
+  )
+  expect_named(
+    mod_checks_message[["team1-goodmodel.yaml"]],
+    "valid_file_status"
+  )
+  expect_s3_class(
+    mod_checks_message[["team1-goodmodel.yaml"]]$valid_file_status,
+    "check_info"
   )
 
   mod_checks_none <- suppressMessages(
@@ -136,9 +170,16 @@ test_that("validate_pr flags modifications and deletions in PR", {
       file_modification_check = "none"
     )
   )
+  expect_s3_class(mod_checks_none, "hub_validations_collection")
   expect_snapshot(str(mod_checks_none))
-  expect_true(
-    suppressMessages(check_for_errors(mod_checks_none[1:5]))
+  # With file_modification_check = "none", no modification checks are added
+  expect_false(
+    "team1-goodmodel/2022-10-15-team1-goodmodel.csv" %in% names(mod_checks_none)
+  )
+  expect_false("team1-goodmodel.yaml" %in% names(mod_checks_none))
+  expect_false(
+    "valid_file_status" %in%
+      names(mod_checks_none[["hub-baseline/2022-10-08-hub-baseline.csv"]])
   )
 
   local_mocked_bindings(
@@ -153,6 +194,7 @@ test_that("validate_pr flags modifications and deletions in PR", {
       allow_submit_window_mods = TRUE
     )
   )
+  expect_s3_class(mod_checks_in_window, "hub_validations_collection")
   expect_snapshot(str(mod_checks_in_window))
 })
 
@@ -176,7 +218,8 @@ test_that("validate_pr handles errors in determining submission window & file re
       skip_submit_window_check = TRUE
     )
   )
-  expect_snapshot(str(mod_checks_exec_error[1:5]))
+  expect_s3_class(mod_checks_exec_error, "hub_validations_collection")
+  expect_snapshot(str(mod_checks_exec_error))
   expect_error(
     suppressMessages(check_for_errors(mod_checks_exec_error))
   )
@@ -203,6 +246,7 @@ test_that("validate_pr works on valid PR using v2.0.0 schema and old orgname", {
     )
   )
 
+  expect_s3_class(checks, "hub_validations_collection")
   expect_snapshot(str(checks))
   expect_invisible(suppressMessages(check_for_errors(checks)))
   expect_message(
@@ -233,21 +277,22 @@ test_that("validate_pr works on PR with more than 30 files", {
     )
   )
 
+  expect_s3_class(many_files_checks, "hub_validations_collection")
   # Expect errors due to invalid filenames (can't parse model metadata),
   # but all 35 files should be validated
   expect_error(
     suppressMessages(check_for_errors(many_files_checks))
   )
-  # Verify that all 35 files were processed (each should have validation checks)
-  files_checked <- purrr::map_chr(
-    many_files_checks,
-    ~ .x$where
-  ) |>
-    unique()
+  # With the new hierarchical structure, file paths are the names of the collection
+  files_checked <- names(many_files_checks)
 
   expected_files <- c(
-    "many_files_hub",
-    sprintf("test-model-%02d/2022-10-22-test-model-%02d.csv", 1:35, 1:35)
+    "hub-config",
+    sprintf(
+      "test-model-%02d/2022-10-22-test-model-%02d.csv",
+      1:35,
+      1:35
+    )
   )
 
   expect_equal(files_checked, expected_files)

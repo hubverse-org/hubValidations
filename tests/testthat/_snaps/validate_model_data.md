@@ -92,6 +92,7 @@
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
        - attr(*, "class")= chr [1:2] "hub_validations" "list"
+       - attr(*, "where")= chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
 
 ---
 
@@ -107,6 +108,7 @@
         ..$ call          : chr "check_file_read"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_error" "hub_check" "rlang_error" "error" ...
+       - attr(*, "where")= chr "2020-10-06-random-path.csv"
 
 ---
 
@@ -136,6 +138,7 @@
         ..$ call          : chr "check_tbl_unique_round_id"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_error" "hub_check" "rlang_error" "error" ...
+       - attr(*, "where")= chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
 
 ---
 
@@ -231,6 +234,7 @@
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
        - attr(*, "class")= chr [1:2] "hub_validations" "list"
+       - attr(*, "where")= chr "hub-ensemble/2023-05-08-hub-ensemble.parquet"
 
 # validate_model_data with config function works
 
@@ -258,7 +262,7 @@
       validate_model_data(hub_path, file_path)
     Message
       
-      -- 2022-10-08-team1-goodmodel.csv ----
+      -- team1-goodmodel/2022-10-08-team1-goodmodel.csv ----
       
       v [file_read]: File could be read successfully.
       v [valid_round_id_col]: `round_id_col` name is valid.
@@ -280,7 +284,7 @@
       validate_model_data(hub_path, file_path)
     Message
       
-      [35m-- [4m[1m2022-10-08-team1-goodmodel.csv[22m[24m ----[39m
+      [35m-- [4m[1mteam1-goodmodel/2022-10-08-team1-goodmodel.csv[22m[24m ----[39m
       
       [1m[22m[32mv[39m [90m[file_read][39m: File could be read successfully.
       [1m[22m[32mv[39m [90m[valid_round_id_col][39m: `round_id_col` name is valid.
@@ -302,7 +306,7 @@
       validate_model_data(hub_path, file_path)
     Message
       
-      ── 2022-10-08-team1-goodmodel.csv ────
+      ── team1-goodmodel/2022-10-08-team1-goodmodel.csv ────
       
       ✔ [file_read]: File could be read successfully.
       ✔ [valid_round_id_col]: `round_id_col` name is valid.
@@ -324,7 +328,7 @@
       validate_model_data(hub_path, file_path)
     Message
       
-      [35m── [4m[1m2022-10-08-team1-goodmodel.csv[22m[24m ────[39m
+      [35m── [4m[1mteam1-goodmodel/2022-10-08-team1-goodmodel.csv[22m[24m ────[39m
       
       [1m[22m[32m✔[39m [90m[file_read][39m: File could be read successfully.
       [1m[22m[32m✔[39m [90m[valid_round_id_col][39m: `round_id_col` name is valid.
@@ -482,4 +486,5 @@
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        - attr(*, "class")= chr [1:2] "hub_validations" "list"
+       - attr(*, "where")= chr "flu-base/2022-10-22-flu-base.csv"
 

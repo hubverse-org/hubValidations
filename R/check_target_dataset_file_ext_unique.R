@@ -11,13 +11,13 @@ check_target_dataset_file_ext_unique <- function(
   )
 ) {
   target_type <- rlang::arg_match(target_type)
+  # Use target_type as file_path (required for valid target_validations object)
   target_path <- hubData::get_target_path(hub_path, target_type)
-  file_path <- basename(target_path)
 
   if (length(target_path) == 0L) {
     return(
       capture_check_info(
-        file_path = file_path,
+        file_path = target_type,
         cli::format_inline(
           "No {.field {target_type}} target type files detected in
         {.code target-data} directory. Check skipped."
@@ -46,7 +46,7 @@ check_target_dataset_file_ext_unique <- function(
 
   capture_check_cnd(
     check = check,
-    file_path = file_path,
+    file_path = target_type,
     msg_subject = cli::format_inline(
       "{.field {target_type}} dataset files"
     ),

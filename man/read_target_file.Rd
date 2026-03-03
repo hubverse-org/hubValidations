@@ -53,7 +53,7 @@ a tibble of contents of the target data file.
 Read a single target data file
 }
 \examples{
-\dontshow{if (requireNamespace("curl", quietly = TRUE) && curl::has_internet()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("curl", quietly = TRUE) && curl::has_internet()) withAutoprint(\{ # examplesIf}
 # download example hub
 hub_path <- system.file("testhubs/v5/target_file",
   package = "hubUtils"

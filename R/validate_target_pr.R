@@ -19,6 +19,8 @@
 #' target type dataset (i.e. all files of a target type) in the PR. Defaults to `FALSE`.
 #' @inheritParams validate_target_dataset
 #' @inheritParams validate_target_submission
+#' @inheritParams validate_target_data
+#' @inheritParams check_target_tbl_values
 #' @details
 #'
 #' Only target data files are individually validated using
@@ -33,6 +35,12 @@
 #' arguments `file_modification_check`, which controls whether modification/deletion
 #' checks are performed and what is returned if modifications/deletions are detected.
 #'
+#' When modification/deletion checks are enabled, each affected file creates an
+#' entry in the returned collection named by the file's path. The check within
+#' each entry is named `valid_file_status` (reflecting that we validate the
+#' file's git status).
+#' For example, to access the check for a deleted file:
+#' `collection[["oracle-output/output_type=sample/part-0.parquet"]][["valid_file_status"]]`.
 #'
 #' ### Checks on target dataset
 #'
@@ -77,7 +85,10 @@
 #'      )  |>
 #'   kableExtra::column_spec(1, bold = TRUE)
 #' ```
-#' @return An object of class `target_validations`.
+#' @return An object of class `target_validations_collection`, a collection of
+#'   validation results. The collection includes entries for hub config
+#'   validation (`"hub-config"`), target dataset type validation (`"time-series"`,
+#'   `"oracle-output"`), and individual file validations (named by file path).
 #' @export
 #'
 #' @examples
@@ -136,23 +147,37 @@ validate_target_pr <- function(
   target_data_dir <- "target-data" # nolint: object_name_linter
   filetypes_to_validate <- c("timeseries", "oracle_output")
 
-  tryCatch(
+  # Check hub config first - return early if invalid
+  config_validations <- new_target_validations(
+    valid_config = try_check(
+      check_config_hub_valid(hub_path),
+      file_path = "hub-config"
+    )
+  )
+  if (is_any_error(config_validations)) {
+    return(new_target_validations_collection(config_validations))
+  }
+
+  # nolint next: object_usage_linter
+  file_validations <- tryCatch(
     {
       pr_files <- gh::gh(
         "/repos/{gh_repo}/pulls/{pr_number}/files",
         gh_repo = gh_repo,
-        pr_number = pr_number
+        pr_number = pr_number,
+        per_page = 100,
+        .limit = Inf
       )
       pr_df <- tibble::tibble(
-        filename = purrr::map_chr(pr_files, ~ .x$filename),
-        status = purrr::map_chr(pr_files, ~ .x$status),
+        filename = purrr::map_chr(pr_files, \(.x) .x$filename),
+        status = purrr::map_chr(pr_files, \(.x) .x$status),
         timeseries = purrr::map_lgl(
           .data$filename,
-          ~ is_target_type_file(.x, "time-series")
+          \(.x) is_target_type_file(.x, "time-series")
         ),
         oracle_output = purrr::map_lgl(
           .data$filename,
-          ~ is_target_type_file(.x, "oracle-output")
+          \(.x) is_target_type_file(.x, "oracle-output")
         ),
       ) |>
         dplyr::mutate(
@@ -165,24 +190,13 @@ validate_target_pr <- function(
         )
       inform_unvalidated_files(pr_df, filetypes_to_validate)
 
-      validations <- new_target_validations()
-
       # Return early if no target data files in PR
       if (!any(c(pr_df$timeseries, pr_df$oracle_output))) {
         cli::cli_alert_info(
           "No changes to target data files in PR #{pr_number} of {gh_repo}.
           Checks skipped."
         )
-        return(validations)
-      }
-
-      # Check config before proceeding
-      validations$valid_config <- try_check(
-        check_config_hub_valid(hub_path),
-        file_path = basename(hub_path)
-      )
-      if (is_any_error(validations$valid_config)) {
-        return(validations)
+        return(new_target_validations_collection())
       }
 
       # When config exists, ignore user-provided date_col and use config value
@@ -191,25 +205,10 @@ validate_target_pr <- function(
         date_col <- NULL
       }
 
-      if (file_modification_check != "none") {
-        file_modifications <- purrr::map(
-          filetypes_to_validate,
-          ~ check_pr_modf_del_files(
-            pr_df,
-            file_type = .x,
-            alert = file_modification_check,
-            allow_submit_window_mods = FALSE
-          )
-        ) |>
-          purrr::reduce(combine)
-      } else {
-        file_modifications <- NULL
-      }
-
       # Validate time-series data files ====
       # If any time-series files are included in the PR, even if removed, validate the
       # entire time-series target dataset once
-      skip_dataset_check <- skip_ds_check(
+      ts_skip_dataset <- skip_ds_check(
         hub_path,
         target_type = "time-series",
         allow_target_type_deletion = allow_target_type_deletion
@@ -217,8 +216,8 @@ validate_target_pr <- function(
       # If deletion of an entire dataset is allowed and there are no files of the
       # target_type left in the hub, skip the dataset check. Otherwise will return
       # a check error
-      if (any(pr_df$timeseries) && !skip_dataset_check) {
-        ts_dataset_vals <- try_check(
+      ts_dataset_collection <- if (any(pr_df$timeseries) && !ts_skip_dataset) {
+        ts_dataset_result <- try_check(
           validate_target_dataset(
             hub_path,
             target_type = "time-series",
@@ -227,19 +226,27 @@ validate_target_pr <- function(
           ),
           file_path = "time-series"
         )
+        # try_check returns target_validations on success, check_exec_error on failure
+        ts_validations <- if (inherits(ts_dataset_result, "hub_check")) {
+          new_target_validations(dataset_check = ts_dataset_result)
+        } else {
+          ts_dataset_result
+        }
+        new_target_validations_collection(ts_validations)
       } else {
-        ts_dataset_vals <- NULL
+        NULL
       }
+
       # Validate individual time-series files but only if not removed
       ts_files <- pr_df$rel_path[
         pr_df$timeseries & pr_df$status != "removed"
       ]
-      if (length(ts_files) > 0L) {
-        ts_vals <- purrr::map(
-          ts_files,
-          ~ validate_target_submission(
+      ts_file_collections <- purrr::map(
+        ts_files,
+        \(file_path) {
+          validate_target_submission(
             hub_path,
-            file_path = .x,
+            file_path = file_path,
             target_type = "time-series",
             date_col = date_col,
             allow_extra_dates = allow_extra_dates,
@@ -249,17 +256,13 @@ validate_target_pr <- function(
             round_id = round_id,
             skip_check_config = TRUE
           )
-        ) |>
-          purrr::list_flatten() |>
-          as_target_validations()
-      } else {
-        ts_vals <- NULL
-      }
+        }
+      )
 
       # Validate oracle-output data ====
       # If any oracle-output files are included in the PR, even if removed, validate the
       # entire oracle-output target dataset once
-      skip_dataset_check <- skip_ds_check(
+      oo_skip_dataset <- skip_ds_check(
         hub_path,
         target_type = "oracle-output",
         allow_target_type_deletion = allow_target_type_deletion
@@ -267,8 +270,10 @@ validate_target_pr <- function(
       # If deletion of an entire dataset is allowed and there are no files of the
       # target_type left in the hub, skip the dataset check. Otherwise will return
       # a check error
-      if (any(pr_df$oracle_output) && !skip_dataset_check) {
-        oo_dataset_vals <- try_check(
+      oo_dataset_collection <- if (
+        any(pr_df$oracle_output) && !oo_skip_dataset
+      ) {
+        oo_dataset_result <- try_check(
           validate_target_dataset(
             hub_path,
             target_type = "oracle-output",
@@ -277,19 +282,27 @@ validate_target_pr <- function(
           ),
           file_path = "oracle-output"
         )
+        # try_check returns target_validations on success, check_exec_error on failure
+        oo_validations <- if (inherits(oo_dataset_result, "hub_check")) {
+          new_target_validations(dataset_check = oo_dataset_result)
+        } else {
+          oo_dataset_result
+        }
+        new_target_validations_collection(oo_validations)
       } else {
-        oo_dataset_vals <- NULL
+        NULL
       }
-      # Validate individual time-series files but only if not removed
+
+      # Validate individual oracle-output files but only if not removed
       oo_files <- pr_df$rel_path[
         pr_df$oracle_output & pr_df$status != "removed"
       ]
-      if (length(oo_files) > 0L) {
-        oo_vals <- purrr::map(
-          oo_files,
-          ~ validate_target_submission(
+      oo_file_collections <- purrr::map(
+        oo_files,
+        \(file_path) {
+          validate_target_submission(
             hub_path,
-            file_path = .x,
+            file_path = file_path,
             target_type = "oracle-output",
             date_col = date_col,
             allow_extra_dates = allow_extra_dates,
@@ -299,38 +312,52 @@ validate_target_pr <- function(
             round_id = round_id,
             skip_check_config = TRUE
           )
-        ) |>
-          purrr::list_flatten() |>
-          as_target_validations()
+        }
+      )
+
+      # Check for file modifications/deletions (returns collections)
+      mod_collections <- if (file_modification_check != "none") {
+        purrr::map(
+          filetypes_to_validate,
+          \(.x) {
+            check_valid_files_status(
+              pr_df,
+              file_type = .x,
+              alert = file_modification_check,
+              allow_submit_window_mods = FALSE
+            )
+          }
+        )
       } else {
-        oo_vals <- NULL
+        NULL
       }
 
-      validations <- combine(
-        validations,
-        file_modifications,
-        ts_dataset_vals,
-        ts_vals,
-        oo_dataset_vals,
-        oo_vals
+      # Combine all collections
+      all_collections <- c(
+        list(new_target_validations_collection(config_validations)),
+        list(ts_dataset_collection),
+        ts_file_collections,
+        list(oo_dataset_collection),
+        oo_file_collections,
+        mod_collections
       )
+      purrr::reduce(all_collections, combine)
     },
     error = function(e) {
-      # This handler is used when an unrecoverable error is thrown. This can
-      # happen when, e.g., the csv file cannot be parsed by read_csv(). In this
+      # This handler is used when an unrecoverable error is thrown. In this
       # situation, we want to output all the validations until this point plus
       # this "unrecoverable" error.
-      e <- capture_exec_error(
-        file_path = gh_repo,
+      exec_error <- capture_exec_error(
+        file_path = paste0(gh_repo, "#", pr_number),
         msg = conditionMessage(e)
       )
-      validations <<- combine(
-        validations,
-        new_hub_validations(e)
-      )
+      error_validations <- new_target_validations(exec_error = exec_error)
+      as_target_validations_collection(list(
+        config_validations,
+        error_validations
+      ))
     }
   )
-  validations
 }
 
 # Check if file is a standalone target data file named exactly as the target type.

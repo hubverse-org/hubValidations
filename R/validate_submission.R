@@ -4,7 +4,7 @@
 #' file name, extension, location etc as well as model output data, i.e. the contents
 #' of the file.
 #'
-#' @inherit validate_model_data return params
+#' @inherit validate_model_data params
 #' @inheritParams hubData::create_hub_schema
 #' @inheritParams expand_model_out_grid
 #' @param skip_submit_window_check Logical. Whether to skip the submission window check.
@@ -17,6 +17,10 @@
 #' windows relative to the value in a date column in model output files.
 #' Not applicable when explicit submission window start and end dates are
 #' provided in the hub's config.
+#' @return A `hub_validations_collection` object containing validation results
+#'   organized by file. The collection includes separate entries for hub config
+#'   validation (keyed by `"hub-config"`) and file-specific validations (keyed by
+#'   file path).
 #' @export
 #' @details
 #' Note that it is **necessary for `derived_task_ids` to be specified if any
@@ -74,39 +78,41 @@ validate_submission <- function(
   ),
   derived_task_ids = NULL
 ) {
-  check_hub_config <- new_hub_validations()
   output_type_id_datatype <- rlang::arg_match(output_type_id_datatype)
 
+  # Config validation (separate from file validation)
+  config_validations <- NULL
   if (!skip_check_config) {
-    check_hub_config$valid_config <- try_check(
+    config_check <- try_check(
       check_config_hub_valid(hub_path),
-      file_path
+      "hub-config"
     )
-    if (not_pass(check_hub_config$valid_config)) {
-      return(check_hub_config)
+    config_validations <- new_hub_validations(valid_config = config_check)
+    if (not_pass(config_check)) {
+      return(new_hub_validations_collection(config_validations))
     }
   }
 
-  if (skip_submit_window_check) {
-    checks_submission_time <- new_hub_validations()
-  } else {
-    checks_submission_time <- validate_submission_time(
-      hub_path,
-      file_path,
-      ref_date_from = submit_window_ref_date_from
-    )
-  }
-
+  # File validations
   checks_file <- validate_model_file(
     hub_path = hub_path,
     file_path = file_path,
     validations_cfg_path = validations_cfg_path
   )
 
-  if (any(purrr::map_lgl(checks_file, ~ is_any_error(.x)))) {
-    return(
-      combine(check_hub_config, checks_file, checks_submission_time)
+  if (!skip_submit_window_check) {
+    checks_file$submission_time <- try_check(
+      check_submission_time(
+        hub_path = hub_path,
+        file_path = file_path,
+        ref_date_from = submit_window_ref_date_from
+      ),
+      file_path = file_path
     )
+  }
+
+  if (any(purrr::map_lgl(checks_file, \(.x) is_any_error(.x)))) {
+    return(new_hub_validations_collection(config_validations, checks_file))
   }
 
   checks_data <- validate_model_data(
@@ -118,5 +124,8 @@ validate_submission <- function(
     derived_task_ids = derived_task_ids
   )
 
-  combine(check_hub_config, checks_file, checks_data, checks_submission_time)
+  new_hub_validations_collection(
+    config_validations,
+    combine(checks_file, checks_data)
+  )
 }

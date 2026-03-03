@@ -5,7 +5,13 @@
 #' whether the "default" or a round specific configuration should be used for custom validations.
 #' @return An object of class `hub_validations`. Each named element contains
 #' a `hub_check` class object reflecting the result of a given check. Function
-#' will return early if a check returns an error.
+#' will return early if a check returns an error. The `where` attribute is set
+#' to `file_path`.
+#'
+#' For more details on the structure of `<hub_validations>` objects, including
+#' how to access more information on individual checks,
+#' see [article on `<hub_validations>` S3 class objects](
+#' https://hubverse-org.github.io/hubValidations/articles/hub-validations-class.html).
 #' @details
 #'
 #' Details of checks performed by `validate_model_metadata()`
@@ -42,7 +48,7 @@ validate_model_metadata <- function(
   checks <- new_hub_validations()
 
   checks$metadata_schema_exists <- try_check(
-    check_metadata_schema_exists(hub_path),
+    check_metadata_schema_exists(hub_path, file_path),
     file_path
   )
   if (is_any_error(checks$metadata_schema_exists)) {

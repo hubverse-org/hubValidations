@@ -4,7 +4,8 @@
 #' @inheritParams check_target_dataset_unique
 #' @return An object of class `hub_validations`. Each named element contains
 #' a `hub_check` class object reflecting the result of a given check. Function
-#' will return early if a check returns an error.
+#' will return early if a check returns an error. The `where` attribute is set
+#' to `target_type` (e.g. `"oracle-output"`, `"time-series"`).
 #'
 #' For more details on the structure of `<hub_validations>` objects, including
 #' how to access more information on individual checks,
@@ -50,6 +51,8 @@ validate_target_dataset <- function(
   round_id = "default"
 ) {
   target_type <- rlang::arg_match(target_type)
+  # target_type is used as the file_path for all dataset-level checks, which
+  # is required to create a valid target_validations object
   checks <- new_target_validations()
 
   checks$target_dataset_exists <- try_check(
@@ -57,8 +60,6 @@ validate_target_dataset <- function(
       hub_path = hub_path,
       target_type = target_type
     ),
-    # Use target type as file_path here as it's not guaranteed a
-    # valid target path can be detected yet
     target_type
   )
   if (is_any_error(checks$target_dataset_exists)) {
@@ -69,23 +70,17 @@ validate_target_dataset <- function(
       hub_path = hub_path,
       target_type = target_type
     ),
-    # Use target type as file_path here as it's not guaranteed a
-    # valid target path can be detected yet
     target_type
   )
   if (is_any_error(checks$target_dataset_unique)) {
     return(checks)
   }
-  # Now detection of a valid path is guaranteed so use the actual file path
-  # going forward
-  file_path <- basename(hubData::get_target_path(hub_path, target_type))
-
   checks$target_dataset_file_ext_unique <- try_check(
     check_target_dataset_file_ext_unique(
       hub_path = hub_path,
       target_type = target_type
     ),
-    file_path
+    target_type
   )
   if (is_any_error(checks$target_dataset_file_ext_unique)) {
     return(checks)
@@ -95,7 +90,7 @@ validate_target_dataset <- function(
       hub_path = hub_path,
       target_type = target_type
     ),
-    file_path
+    target_type
   )
 
   custom_checks <- execute_custom_checks(

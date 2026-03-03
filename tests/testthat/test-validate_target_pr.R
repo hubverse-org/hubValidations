@@ -22,18 +22,43 @@ test_that("validate_target_pr works on valid single oracle output file", {
     pr_number = 1L
   )
   expect_snapshot(checks_single_target_file)
+  expect_s3_class(checks_single_target_file, "target_validations_collection")
   expect_message(
     check_for_errors(checks_single_target_file),
     regexp = "All validation checks have been successful."
   )
+  # Collection is keyed by file path
   expect_named(
     checks_single_target_file,
+    c("hub-config", "oracle-output", "oracle-output.csv")
+  )
+  # Each file entry contains target_validations with individual checks
+  expect_s3_class(
+    checks_single_target_file[["oracle-output"]],
+    "target_validations"
+  )
+  expect_s3_class(
+    checks_single_target_file[["oracle-output.csv"]],
+    "target_validations"
+  )
+
+  # Verify check names within each entry
+  expect_named(
+    checks_single_target_file[["hub-config"]],
+    "valid_config"
+  )
+  expect_named(
+    checks_single_target_file[["oracle-output"]],
     c(
-      "valid_config",
       "target_dataset_exists",
       "target_dataset_unique",
       "target_dataset_file_ext_unique",
-      "target_dataset_rows_unique",
+      "target_dataset_rows_unique"
+    )
+  )
+  expect_named(
+    checks_single_target_file[["oracle-output.csv"]],
+    c(
       "target_file_exists",
       "target_partition_file_name",
       "target_file_ext",
@@ -46,21 +71,6 @@ test_that("validate_target_pr works on valid single oracle output file", {
       "target_tbl_output_type_ids",
       "target_tbl_oracle_value"
     )
-  )
-
-  filename_tbl <- purrr::map_chr(checks_single_target_file, ~ .x$where) |>
-    table()
-
-  structure(
-    c(file = 1L, `oracle-output.csv` = 15L),
-    dim = 2L,
-    dimnames = structure(
-      list(
-        c("file", "oracle-output.csv")
-      ),
-      names = ""
-    ),
-    class = "table"
   )
 })
 
@@ -78,73 +88,69 @@ test_that("validate_target_pr works on multiple valid dir oracle output files", 
     pr_number = 2L
   )
   expect_snapshot(checks_dir_target_file)
+  expect_s3_class(checks_dir_target_file, "target_validations_collection")
   expect_message(
     check_for_errors(checks_dir_target_file),
     regexp = "All validation checks have been successful."
   )
-  expect_named(
-    checks_dir_target_file,
-    c(
-      "valid_config",
-      "target_dataset_exists",
-      "target_dataset_unique",
-      "target_dataset_file_ext_unique",
-      "target_dataset_rows_unique",
-      "target_file_exists",
-      "target_partition_file_name",
-      "target_file_ext",
-      "target_file_read",
-      "target_tbl_colnames",
-      "target_tbl_coltypes",
-      "target_tbl_ts_targets",
-      "target_tbl_rows_unique",
-      "target_tbl_values",
-      "target_tbl_output_type_ids",
-      "target_tbl_oracle_value",
-      "target_dataset_exists_1",
-      "target_dataset_unique_1",
-      "target_dataset_file_ext_unique_1",
-      "target_dataset_rows_unique_1",
-      "target_file_exists_1",
-      "target_partition_file_name_1",
-      "target_file_ext_1",
-      "target_file_read_1",
-      "target_tbl_colnames_1",
-      "target_tbl_coltypes_1",
-      "target_tbl_ts_targets_1",
-      "target_tbl_rows_unique_1",
-      "target_tbl_values_1",
-      "target_tbl_output_type_ids_1",
-      "target_tbl_oracle_value_1"
-    )
+  # Collection is keyed by file path - has dataset checks and individual file checks
+  expected_names <- c(
+    "hub-config",
+    "time-series",
+    "time-series/target=wk%20inc%20flu%20hosp/part-0.parquet",
+    "oracle-output",
+    "oracle-output/output_type=cdf/part-0.parquet"
   )
+  expect_named(checks_dir_target_file, expected_names)
 
-  filename_tbl <- purrr::map_chr(checks_dir_target_file, ~ .x$where) |>
-    table()
+  # Each entry is a target_validations object
+  for (name in expected_names) {
+    expect_s3_class(checks_dir_target_file[[name]], "target_validations")
+  }
 
-  expect_equal(
-    filename_tbl,
-    structure(
-      c(
-        `oracle-output` = 4L,
-        `oracle-output/output_type=cdf/part-0.parquet` = 11L,
-        target = 1L,
-        `time-series` = 4L,
-        `time-series/target=wk%20inc%20flu%20hosp/part-0.parquet` = 11L
-      ),
-      dim = 5L,
-      dimnames = structure(
-        list(c(
-          "oracle-output",
-          "oracle-output/output_type=cdf/part-0.parquet",
-          "target",
-          "time-series",
-          "time-series/target=wk%20inc%20flu%20hosp/part-0.parquet"
-        )),
-        names = ""
-      ),
-      class = "table"
-    )
+  # Verify check names within each entry
+  expect_named(
+    checks_dir_target_file[["hub-config"]],
+    "valid_config"
+  )
+  # Dataset checks
+  dataset_check_names <- c(
+    "target_dataset_exists",
+    "target_dataset_unique",
+    "target_dataset_file_ext_unique",
+    "target_dataset_rows_unique"
+  )
+  expect_named(
+    checks_dir_target_file[["time-series"]],
+    dataset_check_names
+  )
+  expect_named(
+    checks_dir_target_file[["oracle-output"]],
+    dataset_check_names
+  )
+  # File checks
+  file_check_names <- c(
+    "target_file_exists",
+    "target_partition_file_name",
+    "target_file_ext",
+    "target_file_read",
+    "target_tbl_colnames",
+    "target_tbl_coltypes",
+    "target_tbl_ts_targets",
+    "target_tbl_rows_unique",
+    "target_tbl_values",
+    "target_tbl_output_type_ids",
+    "target_tbl_oracle_value"
+  )
+  expect_named(
+    checks_dir_target_file[[
+      "time-series/target=wk%20inc%20flu%20hosp/part-0.parquet"
+    ]],
+    file_check_names
+  )
+  expect_named(
+    checks_dir_target_file[["oracle-output/output_type=cdf/part-0.parquet"]],
+    file_check_names
   )
 })
 
@@ -180,7 +186,7 @@ test_that("validate_target_pr reports ignored files correctly", {
       gh_repo = "hubverse-org/ci-testhub-target",
       pr_number = 3L
     ))
-  expect_s3_class(checks_ignored_file, "target_validations")
+  expect_s3_class(checks_ignored_file, "target_validations_collection")
   expect_length(checks_ignored_file, 0L)
 })
 
@@ -197,15 +203,42 @@ test_that("validate_target_pr handles target dataset deletions appropriately", {
     pr_number = 4L
   )
 
+  expect_s3_class(checks_delete_ds_not_allowed, "target_validations_collection")
+  # Collection includes dataset and file validations
   expect_named(
     checks_delete_ds_not_allowed,
+    c("hub-config", "time-series", "oracle-output", "oracle-output.csv")
+  )
+  # The time-series dataset check should contain a check_error for missing dataset
+  ts_dataset_checks <- checks_delete_ds_not_allowed[["time-series"]]
+  expect_s3_class(ts_dataset_checks, "target_validations")
+  # Check that target_dataset_exists is a check_error
+  expect_s3_class(
+    ts_dataset_checks[["target_dataset_exists"]],
+    "check_error"
+  )
+  # Verify check names
+  expect_named(
+    checks_delete_ds_not_allowed[["hub-config"]],
+    "valid_config"
+  )
+  # time-series only has the exists check since it fails early
+  expect_named(
+    checks_delete_ds_not_allowed[["time-series"]],
+    "target_dataset_exists"
+  )
+  expect_named(
+    checks_delete_ds_not_allowed[["oracle-output"]],
     c(
-      "valid_config",
       "target_dataset_exists",
-      "target_dataset_exists_1",
       "target_dataset_unique",
       "target_dataset_file_ext_unique",
-      "target_dataset_rows_unique",
+      "target_dataset_rows_unique"
+    )
+  )
+  expect_named(
+    checks_delete_ds_not_allowed[["oracle-output.csv"]],
+    c(
       "target_file_exists",
       "target_partition_file_name",
       "target_file_ext",
@@ -218,17 +251,6 @@ test_that("validate_target_pr handles target dataset deletions appropriately", {
       "target_tbl_output_type_ids",
       "target_tbl_oracle_value"
     )
-  )
-  expect_s3_class(
-    checks_delete_ds_not_allowed[["target_dataset_exists"]],
-    "check_error"
-  )
-  filenames <- unique(
-    purrr::map_chr(checks_delete_ds_not_allowed, ~ .x$where)
-  )
-  expect_equal(
-    filenames,
-    c("target", "time-series", "oracle-output.csv")
   )
 
   # Now test with allow_target_type_deletion = TRUE
@@ -242,33 +264,11 @@ test_that("validate_target_pr handles target dataset deletions appropriately", {
     check_for_errors(checks_delete_ds_allowed),
     regexp = "All validation checks have been successful."
   )
-  expect_s3_class(checks_delete_ds_allowed, "target_validations")
+  expect_s3_class(checks_delete_ds_allowed, "target_validations_collection")
+  # When deletion is allowed, time-series check is skipped
   expect_named(
     checks_delete_ds_allowed,
-    c(
-      "valid_config",
-      "target_dataset_exists",
-      "target_dataset_unique",
-      "target_dataset_file_ext_unique",
-      "target_dataset_rows_unique",
-      "target_file_exists",
-      "target_partition_file_name",
-      "target_file_ext",
-      "target_file_read",
-      "target_tbl_colnames",
-      "target_tbl_coltypes",
-      "target_tbl_ts_targets",
-      "target_tbl_rows_unique",
-      "target_tbl_values",
-      "target_tbl_output_type_ids",
-      "target_tbl_oracle_value"
-    )
-  )
-
-  filenames <- unique(purrr::map_chr(checks_delete_ds_allowed, ~ .x$where))
-  expect_equal(
-    filenames,
-    c("target", "oracle-output.csv")
+    c("hub-config", "oracle-output", "oracle-output.csv")
   )
 })
 
@@ -288,22 +288,25 @@ test_that("validate_target_pr modification check settings work", {
     check_for_errors(checks_del_file_none),
     regexp = "All validation checks have been successful."
   )
-  expect_s3_class(checks_del_file_none, "target_validations")
+  expect_s3_class(checks_del_file_none, "target_validations_collection")
+  # With no modification check, only dataset validation is performed
   expect_named(
     checks_del_file_none,
+    c("hub-config", "oracle-output")
+  )
+  # Verify check names
+  expect_named(
+    checks_del_file_none[["hub-config"]],
+    "valid_config"
+  )
+  expect_named(
+    checks_del_file_none[["oracle-output"]],
     c(
-      "valid_config",
       "target_dataset_exists",
       "target_dataset_unique",
       "target_dataset_file_ext_unique",
       "target_dataset_rows_unique"
     )
-  )
-
-  filenames <- unique(purrr::map_chr(checks_del_file_none, ~ .x$where))
-  expect_equal(
-    filenames,
-    c("target", "oracle-output")
   )
 
   # Now test with file_modification_check = "failure"
@@ -313,18 +316,31 @@ test_that("validate_target_pr modification check settings work", {
     pr_number = 5L,
     file_modification_check = "failure"
   )
+  expect_s3_class(checks_del_file_fail, "target_validations_collection")
+  # Collection includes config, dataset validation, and the deleted file path
+  deleted_file_path <- "oracle-output/output_type=sample/part-0.parquet"
   expect_named(
     checks_del_file_fail,
+    c("hub-config", "oracle-output", deleted_file_path)
+  )
+  # Verify check names in each entry
+  expect_named(checks_del_file_fail[["hub-config"]], "valid_config")
+  expect_named(
+    checks_del_file_fail[["oracle-output"]],
     c(
-      "valid_config",
-      "oracle_output_mod",
       "target_dataset_exists",
       "target_dataset_unique",
       "target_dataset_file_ext_unique",
       "target_dataset_rows_unique"
     )
   )
-  expect_s3_class(checks_del_file_fail[["oracle_output_mod"]], "check_failure")
+  # The deleted file entry contains the valid_file_status check as a failure
+  expect_named(checks_del_file_fail[[deleted_file_path]], "valid_file_status")
+  expect_s3_class(
+    checks_del_file_fail[[deleted_file_path]][["valid_file_status"]],
+    "check_failure"
+  )
+
   expect_error(
     suppressMessages(check_for_errors(checks_del_file_fail)),
     regexp = "The validation checks produced some failures/errors reported above."

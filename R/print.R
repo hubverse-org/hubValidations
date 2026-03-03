@@ -45,63 +45,13 @@ print.hub_validations <- function(x, show_check_warnings = FALSE, ...) {
     msg <- cli::format_inline("Empty {.cls {class(x)[1]}}")
     cli::cli_inform(msg)
   } else {
-    print_file <- function(file_name, x, show_check_warnings) {
-      x <- x[get_filenames(x) == file_name]
+    where <- attr(x, "where")
+    cli::cli_div(class = "hub_validations", theme = hub_validation_theme)
+    cli::cli_h2(where)
 
-      cli::cli_div(class = "hub_validations", theme = hub_validation_theme)
-      cli::cli_h2(file_name)
+    print_check(x, show_check_warnings)
 
-      # Print each check with its warnings inline
-      for (i in seq_along(x)) {
-        check <- x[[i]]
-        check_name <- names(x)[i]
-
-        # Determine bullet type
-        bullet <- dplyr::case_when(
-          inherits(check, "check_success") ~ "v",
-          inherits(check, "check_failure") ~ "x",
-          inherits(check, "check_exec_warn") ~ "!",
-          inherits(check, "check_error") ~ "circle_cross",
-          inherits(check, "check_exec_error") ~ "lower_block_8",
-          inherits(check, "check_info") ~ "i",
-          TRUE ~ "*"
-        )
-
-        # Print the check result
-        msg <- stats::setNames(
-          paste(
-            apply_cli_span_class(check_name, class = "check_name"),
-            check$message,
-            sep = ": "
-          ),
-          bullet
-        )
-        cli::cli_inform(msg)
-
-        # Print check-level warnings inline (indented)
-        if (
-          show_check_warnings &&
-            !is.null(check$warnings) &&
-            length(check$warnings) > 0
-        ) {
-          cli::cli_div(
-            theme = list(div = list(`margin-left` = 2, color = "silver"))
-          )
-          for (w in check$warnings) {
-            cli::cli_alert_warning(w$message)
-          }
-          cli::cli_end()
-        }
-      }
-
-      cli::cli_end()
-    }
-
-    purrr::walk(
-      .x = get_filenames(x, unique = TRUE),
-      .f = function(file_name, x) print_file(file_name, x, show_check_warnings),
-      x = x
-    )
+    cli::cli_end()
   }
   invisible(x)
 }
@@ -155,19 +105,49 @@ print_validation_warnings <- function(warnings) {
 }
 
 
-# TODO: Code to consider implementing more hierarchical printing of messages.
-# Currently not implemented as pr_hub_validations class not implemented.
-#' Print results of `validate_pr()` function as a bullet list
+#' Print results of multi-file validation as a hierarchical bullet list
 #'
-#' @param x An object of class `pr_hub_validations`
+#' Prints a formatted summary of validation results from multiple files.
+#' Each file's validations are printed under a header showing the file path.
+#' Validation-level warnings (attached to the collection object) are displayed
+#' prominently in a box at the top.
+#'
+#' @param x An object of class `hub_validations_collection` or its subclasses.
+#' @param show_check_warnings Logical. If `TRUE`, prints check-level warnings
+#'   inline with their checks. Validation-level warnings are always printed.
+#'   Default `FALSE`.
 #' @param ... Unused argument present for class consistency
 #'
-#' @keywords internal
+#' @return Returns `x` invisibly.
 #' @export
-print.pr_hub_validations <- function(x, ...) {
-  purrr::map(x, print)
-}
+print.hub_validations_collection <- function(
+  x,
+  show_check_warnings = FALSE,
+  ...
+) {
+  # Print validation-level warnings prominently at top
+  print_validation_warnings(attr(x, "warnings"))
 
+  if (length(x) == 0L) {
+    msg <- cli::format_inline("Empty {.cls {class(x)[1]}}")
+    cli::cli_inform(msg)
+  } else {
+    # Iterate over each file's validations
+    file_paths <- names(x)
+    for (i in seq_along(x)) {
+      file_path <- file_paths[i]
+      file_validations <- x[[i]]
+
+      # Print file header
+      cli::cli_div(class = "hub_validations", theme = hub_validation_theme)
+      cli::cli_h2(file_path)
+
+      print_check(file_validations, show_check_warnings)
+      cli::cli_end()
+    }
+  }
+  invisible(x)
+}
 
 # cli theme for hub_validations objects that add a circle cross to be applied
 # to check_error objects
@@ -214,6 +194,48 @@ hub_validation_theme <- list(
   )
 )
 
+# Print individual checks with optional check-level warnings
+print_check <- function(checks, show_check_warnings = FALSE) {
+  for (i in seq_along(checks)) {
+    check <- checks[[i]]
+    check_name <- names(checks)[i]
+
+    bullet <- dplyr::case_when(
+      inherits(check, "check_success") ~ "v",
+      inherits(check, "check_failure") ~ "x",
+      inherits(check, "check_exec_warn") ~ "!",
+      inherits(check, "check_error") ~ "circle_cross",
+      inherits(check, "check_exec_error") ~ "lower_block_8",
+      inherits(check, "check_info") ~ "i",
+      TRUE ~ "*"
+    )
+
+    msg <- stats::setNames(
+      paste(
+        apply_cli_span_class(check_name, class = "check_name"),
+        check$message,
+        sep = ": "
+      ),
+      bullet
+    )
+    cli::cli_inform(msg)
+
+    if (
+      show_check_warnings &&
+        !is.null(check$warnings) &&
+        length(check$warnings) > 0
+    ) {
+      cli::cli_div(
+        theme = list(div = list(`margin-left` = 2, color = "silver"))
+      )
+      for (w in check$warnings) {
+        cli::cli_alert_warning(w$message)
+      }
+      cli::cli_end()
+    }
+  }
+}
+
 apply_cli_span_class <- function(x, class = "check_name") {
   paste0("{.", class, " ", x, "}")
 }
@@ -231,41 +253,4 @@ is_check_class <- function(
 ) {
   class <- rlang::arg_match(class)
   purrr::map_lgl(x, ~ rlang::inherits_any(.x, class))
-}
-
-#' Get filenames from hub validation object and it's subclasses
-#'
-#' @param x A validation object or one of it's subclasses
-#' @param unique Logical, whether to return unique filenames only
-#' @param ... Additional arguments passed to methods
-#' @noRd
-#' @keywords internal
-get_filenames <- function(x, unique = FALSE, ...) {
-  UseMethod("get_filenames")
-}
-
-#' @export
-#' @noRd
-#' @keywords internal
-get_filenames.default <- function(x, unique = FALSE, ...) {
-  # This is your original implementation
-  filenames <- fs::path_file(purrr::map_chr(x, "where"))
-  if (unique) {
-    unique(filenames)
-  } else {
-    filenames
-  }
-}
-
-#' @export
-#' @noRd
-#' @keywords internal
-get_filenames.target_validations <- function(x, unique = FALSE, ...) {
-  # Use full path instead of basename for target validations
-  filenames <- unname(purrr::map_chr(x, "where"))
-  if (unique) {
-    unique(filenames)
-  } else {
-    filenames
-  }
 }

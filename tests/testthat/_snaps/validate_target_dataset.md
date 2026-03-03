@@ -4,7 +4,7 @@
       res_ts
     Message
       
-      -- time-series.csv ----
+      -- time-series ----
       
       v [target_dataset_exists]: time-series dataset detected.
       v [target_dataset_unique]: 'target-data' directory contains single unique time-series dataset.
@@ -17,7 +17,7 @@
       res_oo
     Message
       
-      -- oracle-output.csv ----
+      -- oracle-output ----
       
       v [target_dataset_exists]: oracle-output dataset detected.
       v [target_dataset_unique]: 'target-data' directory contains single unique oracle-output dataset.

@@ -11,16 +11,21 @@ as_hub_validations(x)
 }
 \arguments{
 \item{...}{named elements to be included. Each element must be an object which
-inherits from class \verb{<hub_check>}.}
+inherits from class \verb{<hub_check>}. All checks must have the same \verb{$where} value.}
 
 \item{x}{a list of named elements. Each element must be an object which
-inherits from class \verb{<hub_check>}.}
+inherits from class \verb{<hub_check>}. All checks must have the same \verb{$where} value.}
 }
 \value{
-an S3 object of class \verb{<hub_validations>}.
+an S3 object of class \verb{<hub_validations>} with a \code{where} attribute.
 }
 \description{
-Create new or convert list to \code{hub_validations} S3 class object
+A \code{hub_validations} object contains validation results for a single
+validation subject. Depending on context, this could be a file, a
+configuration directory (\code{hub-config}), or a target dataset type
+(\code{time-series}, \code{oracle-output}).
+All checks must have the same \verb{$where} value, which is extracted and stored
+as the \code{where} attribute.
 }
 \section{Functions}{
 \itemize{

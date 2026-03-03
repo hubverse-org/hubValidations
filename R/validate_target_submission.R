@@ -3,9 +3,20 @@
 #' Checks both file level properties like
 #' file name, extension, location etc as well as target data, i.e. the
 #' contents of the file.
+#' @param target_type Character string. The type of target data, either
+#'   `"time-series"` or `"oracle-output"`.
+#' @param na Character vector of strings to interpret as missing values when
+#'   reading data files. Passed to the underlying file reader.
 #' @inheritParams validate_target_file
-#' @inherit validate_target_data return params
+#' @inheritParams validate_target_data
+#' @inheritParams check_target_tbl_values
 #' @inheritParams validate_submission
+#' @inheritParams hubData::create_hub_schema
+#' @inheritParams expand_model_out_grid
+#' @return A `target_validations_collection` object containing validation results
+#'   organized by file. The collection includes separate entries for hub config
+#'   validation (keyed by `"hub-config"`) and file-specific validations (keyed by
+#'   file path).
 #' @export
 #' @details
 #'
@@ -69,17 +80,19 @@ validate_target_submission <- function(
   skip_check_config = FALSE
 ) {
   checkmate::assert_string(date_col, null.ok = TRUE)
-  check_hub_config <- new_target_validations()
   target_type <- rlang::arg_match(target_type)
   output_type_id_datatype <- rlang::arg_match(output_type_id_datatype)
 
+  # Config validation (separate from file validation)
+  config_validations <- NULL
   if (!skip_check_config) {
-    check_hub_config$valid_config <- try_check(
+    config_check <- try_check(
       check_config_hub_valid(hub_path),
-      file_path
+      "hub-config"
     )
-    if (not_pass(check_hub_config$valid_config)) {
-      return(check_hub_config)
+    config_validations <- new_target_validations(valid_config = config_check)
+    if (not_pass(config_check)) {
+      return(new_target_validations_collection(config_validations))
     }
   }
 
@@ -90,10 +103,8 @@ validate_target_submission <- function(
     round_id = round_id
   )
 
-  if (any(purrr::map_lgl(checks_file, ~ is_any_error(.x)))) {
-    return(
-      combine(check_hub_config, checks_file)
-    )
+  if (any(purrr::map_lgl(checks_file, \(.x) is_any_error(.x)))) {
+    return(new_target_validations_collection(config_validations, checks_file))
   }
 
   checks_data <- validate_target_data(
@@ -108,5 +119,8 @@ validate_target_submission <- function(
     round_id = round_id
   )
 
-  combine(check_hub_config, checks_file, checks_data)
+  new_target_validations_collection(
+    config_validations,
+    combine(checks_file, checks_data)
+  )
 }
