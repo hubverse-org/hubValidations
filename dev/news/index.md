@@ -2,6 +2,8 @@
 
 ## hubValidations (development version)
 
+## hubValidations 2.0.0
+
 ### Breaking Changes
 
 - **Refactored validation class architecture for multi-file validation**

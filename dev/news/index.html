@@ -7,7 +7,7 @@
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/hubverse-org/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubValidations</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.13.0.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,8 +42,11 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="hubvalidations-development-version">hubValidations (development version)<a class="anchor" aria-label="anchor" href="#hubvalidations-development-version"></a></h2>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="2.0.0" id="hubvalidations-200">hubValidations 2.0.0<a class="anchor" aria-label="anchor" href="#hubvalidations-200"></a></h2>
 <div class="section level3">
-<h3 id="breaking-changes-development-version">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-development-version"></a></h3>
+<h3 id="breaking-changes-2-0-0">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-2-0-0"></a></h3>
 <ul><li>
 <p><strong>Refactored validation class architecture for multi-file validation</strong> (<a href="https://github.com/hubverse-org/hubValidations/issues/294" class="external-link">#294</a>).</p>
 <p>Previously, functions like <code><a href="../reference/validate_pr.html">validate_pr()</a></code> that validate multiple files returned a flat <code>hub_validations</code> list where all checks were combined together. Duplicate check names were made unique by appending numeric suffixes (e.g., <code>file_exists</code>, <code>file_exists_1</code>, <code>file_exists_2</code>). This made it unclear which file each check related to and difficult to programmatically access results for a specific file.</p>
@@ -67,7 +70,7 @@
 <li><p>Print methods now display full relative file paths (e.g., <code>team1-goodmodel/2022-10-08-team1-goodmodel.csv</code>) instead of basenames for model output files, providing better context.</p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="new-features-development-version">New Features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<h3 id="new-features-2-0-0">New Features<a class="anchor" aria-label="anchor" href="#new-features-2-0-0"></a></h3>
 <ul><li>
 <p><strong>New collection classes</strong> for organizing multi-file validation results:</p>
 <ul><li>
