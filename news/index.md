@@ -1,5 +1,112 @@
 # Changelog
 
+## hubValidations 2.0.0
+
+### Breaking Changes
+
+- **Refactored validation class architecture for multi-file validation**
+  ([\#294](https://github.com/hubverse-org/hubValidations/issues/294)).
+
+  Previously, functions like
+  [`validate_pr()`](https://hubverse-org.github.io/hubValidations/reference/validate_pr.md)
+  that validate multiple files returned a flat `hub_validations` list
+  where all checks were combined together. Duplicate check names were
+  made unique by appending numeric suffixes (e.g., `file_exists`,
+  `file_exists_1`, `file_exists_2`). This made it unclear which file
+  each check related to and difficult to programmatically access results
+  for a specific file.
+
+  Now, multi-file validation results are organized hierarchically using
+  new collection classes. Results are stored in a named list where names
+  identify what was validated (file path, `"hub-config"`, or target
+  type) and values are `hub_validations` objects containing the checks
+  for that subject. This provides robust, intuitive access:
+  `collection[["team1-goodmodel/2022-10-08-team1-goodmodel.csv"]]$file_exists`.
+
+  **Affected functions** (now return collection objects):
+
+  - [`validate_submission()`](https://hubverse-org.github.io/hubValidations/reference/validate_submission.md)
+    returns `hub_validations_collection` (was `hub_validations`)
+  - [`validate_target_submission()`](https://hubverse-org.github.io/hubValidations/reference/validate_target_submission.md)
+    returns `target_validations_collection` (was `target_validations`)
+  - [`validate_pr()`](https://hubverse-org.github.io/hubValidations/reference/validate_pr.md)
+    returns `hub_validations_collection` (was `hub_validations`)
+  - [`validate_target_pr()`](https://hubverse-org.github.io/hubValidations/reference/validate_target_pr.md)
+    returns `target_validations_collection` (was `target_validations`)
+
+  **Migration required**: Code that accesses validation results by name
+  (e.g., `validations$file_exists`) must be updated to use the new
+  hierarchical access pattern:
+  `validations[["path/to/file.csv"]]$file_exists`.
+
+  **Additional notes**:
+
+  - Hub config validation is included as a separate entry named
+    `"hub-config"` in collection results.
+  - For target validation, dataset-level checks are grouped under their
+    target type name (`"time-series"`, `"oracle-output"`).
+  - Lower-level functions
+    ([`validate_model_data()`](https://hubverse-org.github.io/hubValidations/reference/validate_model_data.md),
+    [`validate_model_file()`](https://hubverse-org.github.io/hubValidations/reference/validate_model_file.md),
+    [`validate_model_metadata()`](https://hubverse-org.github.io/hubValidations/reference/validate_model_metadata.md),
+    [`validate_target_data()`](https://hubverse-org.github.io/hubValidations/reference/validate_target_data.md),
+    [`validate_target_file()`](https://hubverse-org.github.io/hubValidations/reference/validate_target_file.md),
+    [`validate_target_dataset()`](https://hubverse-org.github.io/hubValidations/reference/validate_target_dataset.md))
+    continue to return single `hub_validations` or `target_validations`
+    objects.
+
+- **File modification checks reorganized**: Each modified/deleted file
+  now gets its own entry in the collection with a standardized check
+  name `valid_file_status`. Previously, these were grouped under
+  `model_output_mod` or `model_metadata_mod` with numeric suffixes for
+  multiple files. Access via
+  `collection[["path/to/file"]]$valid_file_status`.
+
+- Print methods now display full relative file paths (e.g.,
+  `team1-goodmodel/2022-10-08-team1-goodmodel.csv`) instead of basenames
+  for model output files, providing better context.
+
+### New Features
+
+- **New collection classes** for organizing multi-file validation
+  results:
+
+  - `hub_validations_collection`: A named list where names identify what
+    was validated and values are `hub_validations` objects.
+  - `target_validations_collection`: Extends
+    `hub_validations_collection` for target data validation results.
+  - New constructors:
+    [`new_hub_validations_collection()`](https://hubverse-org.github.io/hubValidations/reference/new_hub_validations_collection.md),
+    [`new_target_validations_collection()`](https://hubverse-org.github.io/hubValidations/reference/new_target_validations_collection.md),
+    and corresponding `as_*` conversion functions.
+
+- **`hub_validations` objects now enforce consistency**: All checks in a
+  `hub_validations` object must have the same `$where` value. This value
+  is extracted and stored as a `where` attribute on the object,
+  identifying what was validated (e.g., file path, `"hub-config"`, or
+  target type like `"time-series"`). Access via `attr(x, "where")`.
+
+- **New class utility methods** for `hub_validations` (and subclasses
+  like `target_validations`):
+
+  - Subsetting with `[` preserves class and `where` attribute
+  - Assignment with `$<-` and `[[<-` validates that new checks have
+    matching `where` values
+  - NULL assignment removes elements and clears `where` when empty
+
+- Added print methods for collection classes that display results
+  organized hierarchically by what was validated.
+
+- Added
+  [`combine()`](https://hubverse-org.github.io/hubValidations/reference/combine.md)
+  methods for collection classes that properly merge validations by
+  `where` value.
+
+- [`check_for_errors()`](https://hubverse-org.github.io/hubValidations/reference/check_for_errors.md)
+  is now a generic with methods for both `hub_validations` and
+  `hub_validations_collection` classes. For collections, errors are
+  reported grouped by what was validated.
+
 ## hubValidations 0.13.0
 
 ### Enhancements
@@ -90,8 +197,8 @@
     [`new_target_validations()`](https://hubverse-org.github.io/hubValidations/reference/new_target_validations.md)
     and
     [`as_target_validations()`](https://hubverse-org.github.io/hubValidations/reference/new_target_validations.md)
-  - [`combine.target_validations()`](https://hubverse-org.github.io/hubValidations/reference/combine.target_validations.md)
-    method for concatenating target validation objects
+  - `combine.target_validations()` method for concatenating target
+    validation objects
   - Print method displays full file paths instead of basenames for
     better clarity when working with target data files
 - Added utilities for working with hive-partitioned data file paths:

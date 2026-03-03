@@ -81,7 +81,8 @@ validate_model_data(
 
 An object of class `hub_validations`. Each named element contains a
 `hub_check` class object reflecting the result of a given check.
-Function will return early if a check returns an error.
+Function will return early if a check returns an error. The `where`
+attribute is set to `file_path`.
 
 For more details on the structure of `<hub_validations>` objects,
 including how to access more information on individual checks, see
@@ -125,7 +126,7 @@ hub_path <- system.file("testhubs/simple", package = "hubValidations")
 file_path <- "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
 validate_model_data(hub_path, file_path)
 #> 
-#> ── 2022-10-08-team1-goodmodel.csv ────
+#> ── team1-goodmodel/2022-10-08-team1-goodmodel.csv ────
 #> 
 #> ✔ [file_read]: File could be read successfully.
 #> ✔ [valid_round_id_col]: `round_id_col` name is valid.

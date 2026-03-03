@@ -4,47 +4,43 @@
 library(hubValidations)
 ```
 
-The high level `validate_*()` family of functions all return a
-`<hub_validations>` S3 class object.
+The `validate_*()` family of functions return validation results as S3
+class objects. Functions that validate multiple items (e.g.,
+[`validate_submission()`](https://hubverse-org.github.io/hubValidations/reference/validate_submission.md),
+[`validate_pr()`](https://hubverse-org.github.io/hubValidations/reference/validate_pr.md))
+return a `<hub_validations_collection>`, while lower-level functions
+return a `<hub_validations>` object.
 
 ## Structure of `<hub_validations>` object
 
-A `hub_validations` object is effectively a list and represents the
-collected output of the series of checks performed by a higher level
-`validate_*()` function.
+A `hub_validations` object represents validation results for a single
+validation subject. Depending on context, this could be a file, a
+configuration directory (`hub-config`), or a target dataset type
+(`time-series`, `oracle-output`).
 
-Each named element of the list contains the result of an individual
-check and inherits from subclass `<hub_check>`. The name of each element
-is the name of the check.
+It is a named list where each element contains the result of an
+individual check and inherits from subclass `<hub_check>`. The name of
+each element is the name of the check. The object also has a `where`
+attribute identifying what was validated.
 
-Let’s examine an example output of a model output file validation using
-[`validate_submission()`](https://hubverse-org.github.io/hubValidations/reference/validate_submission.md).
+Let’s examine an example using
+[`validate_model_data()`](https://hubverse-org.github.io/hubValidations/reference/validate_model_data.md),
+which validates a single model output file’s data:
 
 ``` r
 hub_path <- system.file("testhubs/simple", package = "hubValidations")
 
-v <- validate_submission(hub_path,
+v <- validate_model_data(hub_path,
   file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
 )
 
+# The where attribute
+attr(v, "where")
+#> [1] "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+
+# Structure of the hub_validations object
 str(v, max.level = 1)
-#> Classes 'hub_validations', 'list'  hidden list of 22
-#>  $ valid_config        :List of 4
-#>   ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-#>  $ file_exists         :List of 4
-#>   ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-#>  $ file_name           :List of 4
-#>   ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-#>  $ file_location       :List of 4
-#>   ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-#>  $ round_id_valid      :List of 4
-#>   ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-#>  $ file_format         :List of 4
-#>   ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-#>  $ file_n              :List of 4
-#>   ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-#>  $ metadata_exists     :List of 4
-#>   ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+#> List of 13
 #>  $ file_read           :List of 4
 #>   ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
 #>  $ valid_round_id_col  :List of 4
@@ -71,8 +67,8 @@ str(v, max.level = 1)
 #>   ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
 #>  $ value_col_sum1      :List of 4
 #>   ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
-#>  $ submission_time     :List of 6
-#>   ..- attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_error" "error" ...
+#>  - attr(*, "class")= chr [1:2] "hub_validations" "list"
+#>  - attr(*, "where")= chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
 ```
 
 The super class returned in each element depends on the status of the
@@ -125,25 +121,8 @@ result, the check name and message of each check:
 ``` r
 v
 #> 
-#> ── simple ────
+#> ── team1-goodmodel/2022-10-08-team1-goodmodel.csv ────
 #> 
-#> ✔ [valid_config]: All hub config files are valid.
-#> 
-#> 
-#> ── 2022-10-08-team1-goodmodel.csv ────
-#> 
-#> 
-#> 
-#> ✔ [file_exists]: File exists at path
-#>   model-output/team1-goodmodel/2022-10-08-team1-goodmodel.csv.
-#> ✔ [file_name]: File name "2022-10-08-team1-goodmodel.csv" is valid.
-#> ✔ [file_location]: File directory name matches `model_id` metadata in file
-#>   name.
-#> ✔ [round_id_valid]: `round_id` is valid.
-#> ✔ [file_format]: File is accepted hub format.
-#> ✔ [file_n]: Number of accepted model output files per round met.
-#> ✔ [metadata_exists]: Metadata file exists at path
-#>   model-metadata/team1-goodmodel.yaml.
 #> ✔ [file_read]: File could be read successfully.
 #> ✔ [valid_round_id_col]: `round_id_col` name is valid.
 #> ✔ [unique_round_id]: `round_id` column "origin_date" contains a single, unique
@@ -165,9 +144,6 @@ v
 #> ✔ [value_col_non_desc]: Quantile or cdf `value` values increase when ordered by
 #>   `output_type_id`.
 #> ℹ [value_col_sum1]: No pmf output types to check for sum of 1. Check skipped.
-#> ✖ [submission_time]: Submission time must be within accepted submission window
-#>   for round.  Current time "2026-01-13 15:37:09 UTC" is outside window
-#>   2022-10-02 EDT--2022-10-09 23:59:59 EDT.
 ```
 
 Note that the submission window check is always performed and reported
@@ -202,7 +178,7 @@ Here is an example showing both warning levels with
     #> │   validation. Please review carefully.                             │
     #> └────────────────────────────────────────────────────────────────────┘
     #> 
-    #> ── 2022-10-08-hub-baseline.csv ────
+    #> ── hub-baseline/2022-10-08-hub-baseline.csv ────
     #> 
     #> ✔ [file_exists]: File exists.
     #>     ! Check-level warning: additional context about this check.
@@ -210,59 +186,57 @@ Here is an example showing both warning levels with
 ## Structure of a `<hub_check>` object
 
 Let’s look more closely at the structure of the first few elements of
-the `hub_validations` object retuned by
-[`validate_submission()`](https://hubverse-org.github.io/hubValidations/reference/validate_submission.md)
+the `hub_validations` object returned by
+[`validate_model_data()`](https://hubverse-org.github.io/hubValidations/reference/validate_model_data.md):
 
 ``` r
-v <- validate_submission(hub_path,
-  file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
-)
-
 str(utils::head(v))
 #> List of 6
-#>  $ valid_config  :List of 4
-#>   ..$ message       : chr "All hub config files are valid. \n "
-#>   ..$ where         : chr "simple"
-#>   ..$ call          : chr "check_config_hub_valid"
-#>   ..$ use_cli_format: logi TRUE
-#>   ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-#>  $ file_exists   :List of 4
-#>   ..$ message       : chr "File exists at path \033[34mmodel-output/team1-goodmodel/2022-10-08-team1-goodmodel.csv\033[39m. \n "
+#>  $ file_read         :List of 4
+#>   ..$ message       : chr "File could be read successfully. \n "
 #>   ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
-#>   ..$ call          : chr "check_file_exists"
+#>   ..$ call          : chr "check_file_read"
 #>   ..$ use_cli_format: logi TRUE
 #>   ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-#>  $ file_name     :List of 4
-#>   ..$ message       : chr "File name \033[34m\"2022-10-08-team1-goodmodel.csv\"\033[39m is valid. \n "
+#>  $ valid_round_id_col:List of 4
+#>   ..$ message       : chr "`round_id_col` name is valid. \n "
 #>   ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
-#>   ..$ call          : chr "check_file_name"
+#>   ..$ call          : chr "check_valid_round_id_col"
 #>   ..$ use_cli_format: logi TRUE
 #>   ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-#>  $ file_location :List of 4
-#>   ..$ message       : chr "File directory name matches `model_id`\n                                           metadata in file name. \n "
+#>  $ unique_round_id   :List of 4
+#>   ..$ message       : chr "`round_id` column \033[34m\"origin_date\"\033[39m contains a single, unique round ID value. \n "
 #>   ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
-#>   ..$ call          : chr "check_file_location"
+#>   ..$ call          : chr "check_tbl_unique_round_id"
 #>   ..$ use_cli_format: logi TRUE
 #>   ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-#>  $ round_id_valid:List of 4
-#>   ..$ message       : chr "`round_id` is valid. \n "
+#>  $ match_round_id    :List of 4
+#>   ..$ message       : chr "All `round_id_col` \033[34m\"origin_date\"\033[39m values match submission `round_id` from file name. \n "
 #>   ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
-#>   ..$ call          : chr "check_valid_round_id"
+#>   ..$ call          : chr "check_tbl_match_round_id"
 #>   ..$ use_cli_format: logi TRUE
 #>   ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-#>  $ file_format   :List of 4
-#>   ..$ message       : chr "File is accepted hub format. \n "
+#>  $ colnames          :List of 4
+#>   ..$ message       : chr "Column names are consistent with expected round task IDs and std column names. \n "
 #>   ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
-#>   ..$ call          : chr "check_file_format"
+#>   ..$ call          : chr "check_tbl_colnames"
 #>   ..$ use_cli_format: logi TRUE
 #>   ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+#>  $ col_types         :List of 4
+#>   ..$ message       : chr "Column data types match hub schema. \n "
+#>   ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+#>   ..$ call          : chr "check_tbl_col_types"
+#>   ..$ use_cli_format: logi TRUE
+#>   ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+#>  - attr(*, "where")= chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+#>  - attr(*, "class")= chr [1:2] "hub_validations" "list"
 ```
 
-Each `<hub_check>` objects contains the following elements:
+Each `<hub_check>` object contains the following elements:
 
 - `message`: the result message containing details about the check.
-- `where`: where the check was performed, usually the model output file
-  name.
+- `where`: what was validated (corresponds to the `where` attribute of
+  the parent `hub_validations` object).
 - `call`: the function used to perform the check.
 - `use_cli_format`: whether the message is formatted using cli format,
   almost always TRUE.
@@ -282,10 +256,69 @@ the `value` column) contain valid combinations of task ID / output type
 `error_tbl`, with details of the invalid value combinations in the rows
 affected.
 
-To access `error_tbl` from the output of
-[`validate_submission()`](https://hubverse-org.github.io/hubValidations/reference/validate_submission.md)
-stored in an object `v`, you would use:
+To access `error_tbl` from a `hub_validations` object `v`, you would
+use:
 
 ``` r
 v$valid_vals$error_tbl
 ```
+
+## Collection classes
+
+When validating multiple items (e.g., with
+[`validate_submission()`](https://hubverse-org.github.io/hubValidations/reference/validate_submission.md)
+or
+[`validate_pr()`](https://hubverse-org.github.io/hubValidations/reference/validate_pr.md)),
+results are organized hierarchically using collection classes.
+
+### `<hub_validations_collection>` class
+
+A `hub_validations_collection` is a named list where:
+
+- **Names** identify what was validated (e.g., `"hub-config"`,
+  `"team1-goodmodel/2022-10-08-team1-goodmodel.csv"`)
+- **Elements** are `hub_validations` objects containing the checks for
+  that item
+
+Let’s look at an example using
+[`validate_submission()`](https://hubverse-org.github.io/hubValidations/reference/validate_submission.md):
+
+``` r
+v_collection <- validate_submission(hub_path,
+  file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+)
+
+# Class of the returned object
+class(v_collection)
+#> [1] "hub_validations_collection" "list"
+
+# Names show what was validated
+names(v_collection)
+#> [1] "hub-config"                                    
+#> [2] "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+
+# Subset to access a specific hub_validations object
+v_collection[["hub-config"]]
+#> 
+#> ── hub-config ────
+#> 
+#> ✔ [valid_config]: All hub config files are valid.
+
+# Access a specific check within a file's validations
+v_collection[["team1-goodmodel/2022-10-08-team1-goodmodel.csv"]]$file_exists
+#> <message/check_success>
+#> Message:
+#> File exists at path
+#> model-output/team1-goodmodel/2022-10-08-team1-goodmodel.csv.
+```
+
+See `vignette("validate-pr")` for more examples of working with
+`hub_validations_collection` objects.
+
+### `<target_validations_collection>` class
+
+Similarly, `target_validations_collection` is used for target data
+validation results, where each element contains a `target_validations`
+object. See `vignette("validate-target-pr")` for examples of working
+with `target_validations_collection` objects returned by
+[`validate_target_pr()`](https://hubverse-org.github.io/hubValidations/reference/validate_target_pr.md).

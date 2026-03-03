@@ -61,7 +61,8 @@ The pertinent section of the workflow is:
 where
 [`validate_target_pr()`](https://hubverse-org.github.io/hubValidations/reference/validate_target_pr.md)
 is called on the contents of the current Pull Request, the results (an
-S3 `<target_validations>` class object) are stored in `v` and then
+S3 `<target_validations_collection>` class object) are stored in `v` and
+then
 [`check_for_errors()`](https://hubverse-org.github.io/hubValidations/reference/check_for_errors.md)
 is used to signal whether overall validations have passed or failed and
 summarise any validation failures.
@@ -80,7 +81,7 @@ gert::git_clone(
 )
 gert::git_branch_checkout("add-file-oracle-output", repo = ci_target_hub_path)
 #> Creating local branch add-file-oracle-output from origin/add-file-oracle-output
-#> <git repository>: /tmp/RtmptLHLLa/file23d419c13086/target[@add-file-oracle-output]
+#> <git repository>: /tmp/Rtmpz8Txnw/file226f31b6e05f/target[@add-file-oracle-output]
 
 v <- validate_target_pr(
   hub_path = ci_target_hub_path,
@@ -89,12 +90,12 @@ v <- validate_target_pr(
 )
 v
 #> 
-#> ── target ────
+#> ── hub-config ────
 #> 
 #> ✔ [valid_config]: All hub config files are valid.
 #> 
 #> 
-#> ── oracle-output.csv ────
+#> ── oracle-output ────
 #> 
 #> 
 #> 
@@ -104,6 +105,12 @@ v
 #> ✔ [target_dataset_file_ext_unique]: oracle-output dataset files share single
 #>   unique file format.
 #> ✔ [target_dataset_rows_unique]: oracle-output target dataset rows are unique.
+#> 
+#> 
+#> ── oracle-output.csv ────
+#> 
+#> 
+#> 
 #> ✔ [target_file_exists]: File exists at path target-data/oracle-output.csv.
 #> ℹ [target_partition_file_name]: Target file path not hive-partitioned. Check
 #>   skipped.
@@ -199,7 +206,7 @@ failure:
 ``` r
 gert::git_branch_checkout("delete-target-dir-files", repo = ci_target_hub_path)
 #> Creating local branch delete-target-dir-files from origin/delete-target-dir-files
-#> <git repository>: /tmp/RtmptLHLLa/file23d419c13086/target[@delete-target-dir-files]
+#> <git repository>: /tmp/Rtmpz8Txnw/file226f31b6e05f/target[@delete-target-dir-files]
 
 v_mod <- validate_target_pr(
   hub_path = ci_target_hub_path,
@@ -209,18 +216,9 @@ v_mod <- validate_target_pr(
 )
 v_mod
 #> 
-#> ── target ────
+#> ── hub-config ────
 #> 
 #> ✔ [valid_config]: All hub config files are valid.
-#> 
-#> 
-#> ── oracle-output/output_type=sample/part-0.parquet ────
-#> 
-#> 
-#> 
-#> ✖ [oracle_output_mod]: Previously submitted oracle output files must not be
-#>   removed.  target-data/oracle-output/output_type=sample/part-0.parquet
-#>   removed.
 #> 
 #> 
 #> ── oracle-output ────
@@ -233,17 +231,38 @@ v_mod
 #> ✔ [target_dataset_file_ext_unique]: oracle-output dataset files share single
 #>   unique file format.
 #> ✔ [target_dataset_rows_unique]: oracle-output target dataset rows are unique.
+#> 
+#> 
+#> ── oracle-output/output_type=sample/part-0.parquet ────
+#> 
+#> 
+#> 
+#> ✖ [valid_file_status]: Previously submitted oracle output files must not be
+#>   removed.  target-data/oracle-output/output_type=sample/part-0.parquet
+#>   removed.
 
 check_for_errors(v_mod)
 #> 
-#> ── part-0.parquet ────
+#> ── oracle-output/output_type=sample/part-0.parquet ────
 #> 
-#> ✖ [oracle_output_mod]: Previously submitted oracle output files must not be
+#> ✖ [valid_file_status]: Previously submitted oracle output files must not be
 #>   removed.  target-data/oracle-output/output_type=sample/part-0.parquet
 #>   removed.
 #> Error in `check_for_errors()`:
 #> ! 
 #> The validation checks produced some failures/errors reported above.
+```
+
+#### Accessing modification check results
+
+When modification/deletion checks are enabled, each affected file
+creates an entry in the returned collection named by the file’s path.
+The check within each entry is named `valid_file_status` (reflecting
+that we validate the file’s git status).
+
+``` r
+# Access the file status check for a deleted file
+v_mod[["oracle-output/output_type=sample/part-0.parquet"]][["valid_file_status"]]
 ```
 
 ### Allowing deletion of entire target type datasets
@@ -258,7 +277,7 @@ oracle-output data. With the default settings, this produces an error:
 ``` r
 gert::git_branch_checkout("remove-ts-add-oo", repo = ci_target_hub_path)
 #> Creating local branch remove-ts-add-oo from origin/remove-ts-add-oo
-#> <git repository>: /tmp/RtmptLHLLa/file23d419c13086/target[@remove-ts-add-oo]
+#> <git repository>: /tmp/Rtmpz8Txnw/file226f31b6e05f/target[@remove-ts-add-oo]
 
 v_del <- validate_target_pr(
   hub_path = ci_target_hub_path,
@@ -267,7 +286,7 @@ v_del <- validate_target_pr(
 )
 v_del
 #> 
-#> ── target ────
+#> ── hub-config ────
 #> 
 #> ✔ [valid_config]: All hub config files are valid.
 #> 
@@ -279,16 +298,22 @@ v_del
 #> ⓧ [target_dataset_exists]: time-series dataset not detected.
 #> 
 #> 
-#> ── oracle-output.csv ────
+#> ── oracle-output ────
 #> 
 #> 
 #> 
-#> ✔ [target_dataset_exists_1]: oracle-output dataset detected.
+#> ✔ [target_dataset_exists]: oracle-output dataset detected.
 #> ✔ [target_dataset_unique]: target-data directory contains single unique
 #>   oracle-output dataset.
 #> ✔ [target_dataset_file_ext_unique]: oracle-output dataset files share single
 #>   unique file format.
 #> ✔ [target_dataset_rows_unique]: oracle-output target dataset rows are unique.
+#> 
+#> 
+#> ── oracle-output.csv ────
+#> 
+#> 
+#> 
 #> ✔ [target_file_exists]: File exists at path target-data/oracle-output.csv.
 #> ℹ [target_partition_file_name]: Target file path not hive-partitioned. Check
 #>   skipped.
@@ -333,13 +358,13 @@ check_for_errors(v_del_allowed)
 ## Checking for validation failures with `check_for_errors()`
 
 [`check_for_errors()`](https://hubverse-org.github.io/hubValidations/reference/check_for_errors.md)
-is used to inspect a `target_validations` class object, determine
-whether overall validations have passed or failed and summarise any
-detected errors/failures.
+is used to inspect a `target_validations_collection` class object,
+determine whether overall validations have passed or failed and
+summarise any detected errors/failures.
 
 ### Validation failure
 
-If any elements of the `target_validations` object contain
+If any elements of the `target_validations_collection` object contain
 `<error/check_error>`, `<warning/check_warning>` or
 `<error/check_exec_error>` condition class objects, the function throws
 an error and prints the messages from the failing checks.
@@ -357,6 +382,54 @@ returns `TRUE` silently and prints:
 If printing the results of all checks is preferred instead of just
 summarising the results of checks that failed, argument `verbose` can be
 set to `TRUE`.
+
+## Accessing validation results by file
+
+The
+[`validate_target_pr()`](https://hubverse-org.github.io/hubValidations/reference/validate_target_pr.md)
+function returns a `target_validations_collection` object, which is a
+named list where each element contains the validation results for a
+specific file or dataset. You can access results for individual files
+using standard list subsetting:
+
+``` r
+# See all file paths in the collection
+names(v)
+#> [1] "hub-config"        "oracle-output"     "oracle-output.csv"
+
+# Access all checks for a specific file
+v[["oracle-output.csv"]]
+#> 
+#> ── oracle-output.csv ────
+#> 
+#> ✔ [target_file_exists]: File exists at path target-data/oracle-output.csv.
+#> ℹ [target_partition_file_name]: Target file path not hive-partitioned. Check
+#>   skipped.
+#> ✔ [target_file_ext]: Target data file extension is valid.
+#> ✔ [target_file_read]: target file could be read successfully.
+#> ✔ [target_tbl_colnames]: Column names are consistent with expected column names
+#>   for oracle-output target type data.
+#> ✔ [target_tbl_coltypes]: Column data types match oracle-output target schema.
+#> ℹ [target_tbl_ts_targets]: Check not applicable to oracle-output target data.
+#>   Skipped.
+#> ✔ [target_tbl_rows_unique]: oracle-output target data rows are unique.
+#> ✔ [target_tbl_values]: `target_tbl_chr` contains valid values/value
+#>   combinations.
+#> ✔ [target_tbl_output_type_ids]: oracle-output `target_tbl` contains valid
+#>   complete output_type_id values.
+#> ✔ [target_tbl_oracle_value]: oracle-output `target_tbl` contains valid oracle
+#>   values.
+
+# Access a specific check result
+v[["oracle-output.csv"]]$target_file_exists
+#> <message/check_success>
+#> Message:
+#> File exists at path target-data/oracle-output.csv.
+```
+
+This structure is particularly useful when you need to programmatically
+inspect specific checks or extract error details from failed
+validations.
 
 ## `validate_target_pr` check details
 

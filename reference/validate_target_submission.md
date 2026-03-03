@@ -44,8 +44,8 @@ validate_target_submission(
 
 - target_type:
 
-  Type of target data to retrieve matching files. One of "time-series"
-  or "oracle-output". Defaults to "time-series".
+  Character string. The type of target data, either `"time-series"` or
+  `"oracle-output"`.
 
 - date_col:
 
@@ -73,11 +73,8 @@ validate_target_submission(
 
 - na:
 
-  A character vector of strings to interpret as missing values. Only
-  applies to CSV files. The default is `c("NA", "")`. Useful when actual
-  character string `"NA"` values are used in the data. In such a case,
-  use empty cells to indicate missing values in your files and set
-  `na = ""`.
+  Character vector of strings to interpret as missing values when
+  reading data files. Passed to the underlying file reader.
 
 - output_type_id_datatype:
 
@@ -111,14 +108,10 @@ validate_target_submission(
 
 ## Value
 
-An object of class `hub_validations`. Each named element contains a
-`hub_check` class object reflecting the result of a given check.
-Function will return early if a check returns an error.
-
-For more details on the structure of `<hub_validations>` objects,
-including how to access more information on individual checks, see
-[article on `<hub_validations>` S3 class
-objects](https://hubverse-org.github.io/hubValidations/articles/hub-validations-class.html).
+A `target_validations_collection` object containing validation results
+organized by file. The collection includes separate entries for hub
+config validation (keyed by `"hub-config"`) and file-specific
+validations (keyed by file path).
 
 ## Details
 
@@ -149,7 +142,7 @@ validate_target_submission(
   target_type = "time-series"
 )
 #> 
-#> ── target_file ────
+#> ── hub-config ────
 #> 
 #> ✔ [valid_config]: All hub config files are valid.
 #> 
@@ -182,7 +175,7 @@ validate_target_submission(
   target_type = "time-series"
 )
 #> 
-#> ── target_dir ────
+#> ── hub-config ────
 #> 
 #> ✔ [valid_config]: All hub config files are valid.
 #> 

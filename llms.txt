@@ -90,41 +90,28 @@ class objects.
 
 - [`validate_model_data()`](https://hubverse-org.github.io/hubValidations/reference/validate_model_data.md)
   : Validate the contents of a submitted model data file
-
 - [`validate_model_file()`](https://hubverse-org.github.io/hubValidations/reference/validate_model_file.md)
   : Valid file level properties of a submitted model output file.
-
 - [`validate_model_metadata()`](https://hubverse-org.github.io/hubValidations/reference/validate_model_metadata.md)
   : Valid properties of a metadata file.
-
 - [`validate_pr()`](https://hubverse-org.github.io/hubValidations/reference/validate_pr.md)
   : Validate Pull Request
-
 - [`validate_submission()`](https://hubverse-org.github.io/hubValidations/reference/validate_submission.md)
   : Validate a submitted model data file.
-
 - [`validate_submission_time()`](https://hubverse-org.github.io/hubValidations/reference/validate_submission_time.md)
   : Validate a submitted model data file submission time.
-
 - [`validate_target_data()`](https://hubverse-org.github.io/hubValidations/reference/validate_target_data.md)
   : Validate the contents of a submitted target data file.
-
 - [`validate_target_dataset()`](https://hubverse-org.github.io/hubValidations/reference/validate_target_dataset.md)
   : Validate dataset level properties of a given target type
-
 - [`validate_target_file()`](https://hubverse-org.github.io/hubValidations/reference/validate_target_file.md)
   : Validate file level properties of a target data file.
-
 - [`validate_target_pr()`](https://hubverse-org.github.io/hubValidations/reference/validate_target_pr.md)
   : Validate Target Data Pull Request
-
 - [`validate_target_submission()`](https://hubverse-org.github.io/hubValidations/reference/validate_target_submission.md)
   : Validate a submitted target data file.
-
 - [`check_for_errors()`](https://hubverse-org.github.io/hubValidations/reference/check_for_errors.md)
-  :
-
-  Raise conditions stored in a `hub_validations` S3 object
+  : Raise conditions stored in validation objects
 
 ## Unit validation checks
 
@@ -153,9 +140,7 @@ Unit validation checks. All return `hub_check` S3 class objects.
   : Check file can be read successfully
 
 - [`check_for_errors()`](https://hubverse-org.github.io/hubValidations/reference/check_for_errors.md)
-  :
-
-  Raise conditions stored in a `hub_validations` S3 object
+  : Raise conditions stored in validation objects
 
 - [`check_metadata_file_exists()`](https://hubverse-org.github.io/hubValidations/reference/check_metadata_file_exists.md)
   : Check whether a metadata schema file exists
@@ -398,15 +383,11 @@ Methods for `<hub_validations>` S3 objects and subclasses.
 
   Print results of `validate_...()` function as a bullet list
 
+- [`print(`*`<hub_validations_collection>`*`)`](https://hubverse-org.github.io/hubValidations/reference/print.hub_validations_collection.md)
+  : Print results of multi-file validation as a hierarchical bullet list
+
 - [`combine()`](https://hubverse-org.github.io/hubValidations/reference/combine.md)
-  :
-
-  Concatenate `hub_validations` S3 class objects
-
-- [`combine(`*`<target_validations>`*`)`](https://hubverse-org.github.io/hubValidations/reference/combine.target_validations.md)
-  :
-
-  Concatenate `target_validations` S3 class objects
+  : Concatenate validation objects
 
 - [`new_hub_validations()`](https://hubverse-org.github.io/hubValidations/reference/new_hub_validations.md)
   [`as_hub_validations()`](https://hubverse-org.github.io/hubValidations/reference/new_hub_validations.md)
@@ -414,11 +395,25 @@ Methods for `<hub_validations>` S3 objects and subclasses.
 
   Create new or convert list to `hub_validations` S3 class object
 
+- [`new_hub_validations_collection()`](https://hubverse-org.github.io/hubValidations/reference/new_hub_validations_collection.md)
+  [`as_hub_validations_collection()`](https://hubverse-org.github.io/hubValidations/reference/new_hub_validations_collection.md)
+  :
+
+  Create new or convert list to `hub_validations_collection` S3 class
+  object
+
 - [`new_target_validations()`](https://hubverse-org.github.io/hubValidations/reference/new_target_validations.md)
   [`as_target_validations()`](https://hubverse-org.github.io/hubValidations/reference/new_target_validations.md)
   :
 
   Create new or convert list to `target_validations` S3 class object
+
+- [`new_target_validations_collection()`](https://hubverse-org.github.io/hubValidations/reference/new_target_validations_collection.md)
+  [`as_target_validations_collection()`](https://hubverse-org.github.io/hubValidations/reference/new_target_validations_collection.md)
+  :
+
+  Create new or convert list to `target_validations_collection` S3 class
+  object
 
 # Articles
 

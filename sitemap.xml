@@ -67,7 +67,6 @@
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/check_valid_round_id.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/check_valid_round_id_col.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/combine.html</loc></url>
-<url><loc>https://hubverse-org.github.io/hubValidations/reference/combine.target_validations.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/create_custom_check.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/expand_model_out_grid.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/get_config_derived_task_ids.html</loc></url>
@@ -77,7 +76,9 @@
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/is_success.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/match_tbl_to_model_task.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/new_hub_validations.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubValidations/reference/new_hub_validations_collection.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/new_target_validations.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubValidations/reference/new_target_validations_collection.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/opt_check_metadata_team_max_model_n.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/opt_check_tbl_col_timediff.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/opt_check_tbl_counts_lt_popn.html</loc></url>
@@ -85,7 +86,7 @@
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/parse_file_name.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/pipe.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/print.hub_validations.html</loc></url>
-<url><loc>https://hubverse-org.github.io/hubValidations/reference/print.pr_hub_validations.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubValidations/reference/print.hub_validations_collection.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/read_model_out_file.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/read_target_file.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubValidations/reference/reexports.html</loc></url>

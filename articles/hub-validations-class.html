@@ -25,7 +25,7 @@
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/hubverse-org/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubValidations</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.13.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,7 +67,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Structure of hub_validations class objects</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/hubverse-org/hubValidations/blob/v0.13.0/vignettes/articles/hub-validations-class.Rmd" class="external-link"><code>vignettes/articles/hub-validations-class.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/hubverse-org/hubValidations/blob/main/vignettes/articles/hub-validations-class.Rmd" class="external-link"><code>vignettes/articles/hub-validations-class.Rmd</code></a></small>
       <div class="d-none name"><code>hub-validations-class.Rmd</code></div>
     </div>
 
@@ -75,44 +75,40 @@
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/hubverse-org/hubValidations" class="external-link">hubValidations</a></span><span class="op">)</span></span></code></pre></div>
-<p>The high level <code>validate_*()</code> family of functions all
-return a <code>&lt;hub_validations&gt;</code> S3 class object.</p>
+<p>The <code>validate_*()</code> family of functions return validation
+results as S3 class objects. Functions that validate multiple items
+(e.g., <code><a href="../reference/validate_submission.html">validate_submission()</a></code>, <code><a href="../reference/validate_pr.html">validate_pr()</a></code>)
+return a <code>&lt;hub_validations_collection&gt;</code>, while
+lower-level functions return a <code>&lt;hub_validations&gt;</code>
+object.</p>
 <div class="section level2">
 <h2 id="structure-of-hub_validations-object">Structure of <code>&lt;hub_validations&gt;</code> object<a class="anchor" aria-label="anchor" href="#structure-of-hub_validations-object"></a>
 </h2>
-<p>A <code>hub_validations</code> object is effectively a list and
-represents the collected output of the series of checks performed by a
-higher level <code>validate_*()</code> function.</p>
-<p>Each named element of the list contains the result of an individual
-check and inherits from subclass <code>&lt;hub_check&gt;</code>. The
-name of each element is the name of the check.</p>
-<p>Let’s examine an example output of a model output file validation
-using <code><a href="../reference/validate_submission.html">validate_submission()</a></code>.</p>
+<p>A <code>hub_validations</code> object represents validation results
+for a single validation subject. Depending on context, this could be a
+file, a configuration directory (<code>hub-config</code>), or a target
+dataset type (<code>time-series</code>, <code>oracle-output</code>).</p>
+<p>It is a named list where each element contains the result of an
+individual check and inherits from subclass
+<code>&lt;hub_check&gt;</code>. The name of each element is the name of
+the check. The object also has a <code>where</code> attribute
+identifying what was validated.</p>
+<p>Let’s examine an example using <code><a href="../reference/validate_model_data.html">validate_model_data()</a></code>,
+which validates a single model output file’s data:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">hub_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"testhubs/simple"</span>, package <span class="op">=</span> <span class="st">"hubValidations"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">v</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/validate_submission.html">validate_submission</a></span><span class="op">(</span><span class="va">hub_path</span>,</span>
+<span><span class="va">v</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/validate_model_data.html">validate_model_data</a></span><span class="op">(</span><span class="va">hub_path</span>,</span>
 <span>  file_path <span class="op">=</span> <span class="st">"team1-goodmodel/2022-10-08-team1-goodmodel.csv"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
+<span><span class="co"># The where attribute</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">v</span>, <span class="st">"where"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "team1-goodmodel/2022-10-08-team1-goodmodel.csv"</span></span>
+<span></span>
+<span><span class="co"># Structure of the hub_validations object</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">v</span>, max.level <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Classes 'hub_validations', 'list'  hidden list of 22</span></span>
-<span><span class="co">#&gt;  $ valid_config        :List of 4</span></span>
-<span><span class="co">#&gt;   ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...</span></span>
-<span><span class="co">#&gt;  $ file_exists         :List of 4</span></span>
-<span><span class="co">#&gt;   ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...</span></span>
-<span><span class="co">#&gt;  $ file_name           :List of 4</span></span>
-<span><span class="co">#&gt;   ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...</span></span>
-<span><span class="co">#&gt;  $ file_location       :List of 4</span></span>
-<span><span class="co">#&gt;   ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...</span></span>
-<span><span class="co">#&gt;  $ round_id_valid      :List of 4</span></span>
-<span><span class="co">#&gt;   ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...</span></span>
-<span><span class="co">#&gt;  $ file_format         :List of 4</span></span>
-<span><span class="co">#&gt;   ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...</span></span>
-<span><span class="co">#&gt;  $ file_n              :List of 4</span></span>
-<span><span class="co">#&gt;   ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...</span></span>
-<span><span class="co">#&gt;  $ metadata_exists     :List of 4</span></span>
-<span><span class="co">#&gt;   ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...</span></span>
+<span><span class="co">#&gt; List of 13</span></span>
 <span><span class="co">#&gt;  $ file_read           :List of 4</span></span>
 <span><span class="co">#&gt;   ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...</span></span>
 <span><span class="co">#&gt;  $ valid_round_id_col  :List of 4</span></span>
@@ -139,8 +135,8 @@ using <code><a href="../reference/validate_submission.html">validate_submission(
 <span><span class="co">#&gt;   ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...</span></span>
 <span><span class="co">#&gt;  $ value_col_sum1      :List of 4</span></span>
 <span><span class="co">#&gt;   ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...</span></span>
-<span><span class="co">#&gt;  $ submission_time     :List of 6</span></span>
-<span><span class="co">#&gt;   ..- attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_error" "error" ...</span></span></code></pre></div>
+<span><span class="co">#&gt;  - attr(*, "class")= chr [1:2] "hub_validations" "list"</span></span>
+<span><span class="co">#&gt;  - attr(*, "where")= chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"</span></span></code></pre></div>
 <p>The super class returned in each element depends on the status of the
 check:</p>
 <ul>
@@ -209,25 +205,8 @@ returned)</li>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">v</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">simple</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">team1-goodmodel/2022-10-08-team1-goodmodel.csv</span><span style="color: #BB00BB;"> ────</span></span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_config]</span>: All hub config files are valid.</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">2022-10-08-team1-goodmodel.csv</span><span style="color: #BB00BB;"> ────</span></span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_exists]</span>: File exists at path</span></span>
-<span><span class="co">#&gt;   <span style="color: #0000BB;">model-output/team1-goodmodel/2022-10-08-team1-goodmodel.csv</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_name]</span>: File name <span style="color: #0000BB;">"2022-10-08-team1-goodmodel.csv"</span> is valid.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_location]</span>: File directory name matches `model_id` metadata in file</span></span>
-<span><span class="co">#&gt;   name.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[round_id_valid]</span>: `round_id` is valid.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_format]</span>: File is accepted hub format.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_n]</span>: Number of accepted model output files per round met.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[metadata_exists]</span>: Metadata file exists at path</span></span>
-<span><span class="co">#&gt;   <span style="color: #0000BB;">model-metadata/team1-goodmodel.yaml</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_read]</span>: File could be read successfully.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_round_id_col]</span>: `round_id_col` name is valid.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[unique_round_id]</span>: `round_id` column <span style="color: #0000BB;">"origin_date"</span> contains a single, unique</span></span>
@@ -248,10 +227,7 @@ returned)</li>
 <span><span class="co">#&gt;   modeling task config.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[value_col_non_desc]</span>: Quantile or cdf `value` values increase when ordered by</span></span>
 <span><span class="co">#&gt;   `output_type_id`.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[value_col_sum1]</span>: No pmf output types to check for sum of 1. Check skipped.</span></span>
-<span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[submission_time]</span>: Submission time must be within accepted submission window</span></span>
-<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2026-01-13 15:37:09 UTC"</span> is outside window</span></span>
-<span><span class="co">#&gt;   <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[value_col_sum1]</span>: No pmf output types to check for sum of 1. Check skipped.</span></span></code></pre></div>
 <p>Note that the submission window check is always performed and
 reported last.</p>
 <div class="section level3">
@@ -281,7 +257,7 @@ below their associated check result.</p></li>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">│</span>   validation. Please review carefully.                             <span style="color: #BBBB00;">│</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">└────────────────────────────────────────────────────────────────────┘</span></span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">2022-10-08-hub-baseline.csv</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">hub-baseline/2022-10-08-hub-baseline.csv</span><span style="color: #BB00BB;"> ────</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_exists]</span>: File exists.</span></span>
 <span><span class="co">#&gt;     <span style="color: #BBBB00;">!</span><span style="color: #555555;"> Check-level warning: additional context about this check.</span></span></span></code></pre>
@@ -291,60 +267,59 @@ below their associated check result.</p></li>
 <h2 id="structure-of-a-hub_check-object">Structure of a <code>&lt;hub_check&gt;</code> object<a class="anchor" aria-label="anchor" href="#structure-of-a-hub_check-object"></a>
 </h2>
 <p>Let’s look more closely at the structure of the first few elements of
-the <code>hub_validations</code> object retuned by
-<code><a href="../reference/validate_submission.html">validate_submission()</a></code></p>
+the <code>hub_validations</code> object returned by
+<code><a href="../reference/validate_model_data.html">validate_model_data()</a></code>:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">v</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/validate_submission.html">validate_submission</a></span><span class="op">(</span><span class="va">hub_path</span>,</span>
-<span>  file_path <span class="op">=</span> <span class="st">"team1-goodmodel/2022-10-08-team1-goodmodel.csv"</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">v</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">v</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; List of 6</span></span>
-<span><span class="co">#&gt;  $ valid_config  :List of 4</span></span>
-<span><span class="co">#&gt;   ..$ message       : chr "All hub config files are valid. \n "</span></span>
-<span><span class="co">#&gt;   ..$ where         : chr "simple"</span></span>
-<span><span class="co">#&gt;   ..$ call          : chr "check_config_hub_valid"</span></span>
+<span><span class="co">#&gt;  $ file_read         :List of 4</span></span>
+<span><span class="co">#&gt;   ..$ message       : chr "File could be read successfully. \n "</span></span>
+<span><span class="co">#&gt;   ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"</span></span>
+<span><span class="co">#&gt;   ..$ call          : chr "check_file_read"</span></span>
 <span><span class="co">#&gt;   ..$ use_cli_format: logi TRUE</span></span>
 <span><span class="co">#&gt;   ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...</span></span>
-<span><span class="co">#&gt;  $ file_exists   :List of 4</span></span>
-<span><span class="co">#&gt;   ..$ message       : chr "File exists at path \033[34mmodel-output/team1-goodmodel/2022-10-08-team1-goodmodel.csv\033[39m. \n "</span></span>
+<span><span class="co">#&gt;  $ valid_round_id_col:List of 4</span></span>
+<span><span class="co">#&gt;   ..$ message       : chr "`round_id_col` name is valid. \n "</span></span>
 <span><span class="co">#&gt;   ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"</span></span>
-<span><span class="co">#&gt;   ..$ call          : chr "check_file_exists"</span></span>
+<span><span class="co">#&gt;   ..$ call          : chr "check_valid_round_id_col"</span></span>
 <span><span class="co">#&gt;   ..$ use_cli_format: logi TRUE</span></span>
 <span><span class="co">#&gt;   ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...</span></span>
-<span><span class="co">#&gt;  $ file_name     :List of 4</span></span>
-<span><span class="co">#&gt;   ..$ message       : chr "File name \033[34m\"2022-10-08-team1-goodmodel.csv\"\033[39m is valid. \n "</span></span>
+<span><span class="co">#&gt;  $ unique_round_id   :List of 4</span></span>
+<span><span class="co">#&gt;   ..$ message       : chr "`round_id` column \033[34m\"origin_date\"\033[39m contains a single, unique round ID value. \n "</span></span>
 <span><span class="co">#&gt;   ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"</span></span>
-<span><span class="co">#&gt;   ..$ call          : chr "check_file_name"</span></span>
+<span><span class="co">#&gt;   ..$ call          : chr "check_tbl_unique_round_id"</span></span>
 <span><span class="co">#&gt;   ..$ use_cli_format: logi TRUE</span></span>
 <span><span class="co">#&gt;   ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...</span></span>
-<span><span class="co">#&gt;  $ file_location :List of 4</span></span>
-<span><span class="co">#&gt;   ..$ message       : chr "File directory name matches `model_id`\n                                           metadata in file name. \n "</span></span>
+<span><span class="co">#&gt;  $ match_round_id    :List of 4</span></span>
+<span><span class="co">#&gt;   ..$ message       : chr "All `round_id_col` \033[34m\"origin_date\"\033[39m values match submission `round_id` from file name. \n "</span></span>
 <span><span class="co">#&gt;   ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"</span></span>
-<span><span class="co">#&gt;   ..$ call          : chr "check_file_location"</span></span>
+<span><span class="co">#&gt;   ..$ call          : chr "check_tbl_match_round_id"</span></span>
 <span><span class="co">#&gt;   ..$ use_cli_format: logi TRUE</span></span>
 <span><span class="co">#&gt;   ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...</span></span>
-<span><span class="co">#&gt;  $ round_id_valid:List of 4</span></span>
-<span><span class="co">#&gt;   ..$ message       : chr "`round_id` is valid. \n "</span></span>
+<span><span class="co">#&gt;  $ colnames          :List of 4</span></span>
+<span><span class="co">#&gt;   ..$ message       : chr "Column names are consistent with expected round task IDs and std column names. \n "</span></span>
 <span><span class="co">#&gt;   ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"</span></span>
-<span><span class="co">#&gt;   ..$ call          : chr "check_valid_round_id"</span></span>
+<span><span class="co">#&gt;   ..$ call          : chr "check_tbl_colnames"</span></span>
 <span><span class="co">#&gt;   ..$ use_cli_format: logi TRUE</span></span>
 <span><span class="co">#&gt;   ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...</span></span>
-<span><span class="co">#&gt;  $ file_format   :List of 4</span></span>
-<span><span class="co">#&gt;   ..$ message       : chr "File is accepted hub format. \n "</span></span>
+<span><span class="co">#&gt;  $ col_types         :List of 4</span></span>
+<span><span class="co">#&gt;   ..$ message       : chr "Column data types match hub schema. \n "</span></span>
 <span><span class="co">#&gt;   ..$ where         : chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"</span></span>
-<span><span class="co">#&gt;   ..$ call          : chr "check_file_format"</span></span>
+<span><span class="co">#&gt;   ..$ call          : chr "check_tbl_col_types"</span></span>
 <span><span class="co">#&gt;   ..$ use_cli_format: logi TRUE</span></span>
-<span><span class="co">#&gt;   ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...</span></span></code></pre></div>
-<p>Each <code>&lt;hub_check&gt;</code> objects contains the following
+<span><span class="co">#&gt;   ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...</span></span>
+<span><span class="co">#&gt;  - attr(*, "where")= chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"</span></span>
+<span><span class="co">#&gt;  - attr(*, "class")= chr [1:2] "hub_validations" "list"</span></span></code></pre></div>
+<p>Each <code>&lt;hub_check&gt;</code> object contains the following
 elements:</p>
 <ul>
 <li>
 <code>message</code>: the result message containing details about
 the check.</li>
 <li>
-<code>where</code>: where the check was performed, usually the model
-output file name.</li>
+<code>where</code>: what was validated (corresponds to the
+<code>where</code> attribute of the parent <code>hub_validations</code>
+object).</li>
 <li>
 <code>call</code>: the function used to perform the check.</li>
 <li>
@@ -367,11 +342,74 @@ model output file (excluding the <code>value</code> column) contain
 valid combinations of task ID / output type / output type ID values
 contains an additional element called <code>error_tbl</code>, with
 details of the invalid value combinations in the rows affected.</p>
-<p>To access <code>error_tbl</code> from the output of
-<code><a href="../reference/validate_submission.html">validate_submission()</a></code> stored in an object <code>v</code>,
-you would use:</p>
+<p>To access <code>error_tbl</code> from a <code>hub_validations</code>
+object <code>v</code>, you would use:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">v</span><span class="op">$</span><span class="va">valid_vals</span><span class="op">$</span><span class="va">error_tbl</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="collection-classes">Collection classes<a class="anchor" aria-label="anchor" href="#collection-classes"></a>
+</h2>
+<p>When validating multiple items (e.g., with
+<code><a href="../reference/validate_submission.html">validate_submission()</a></code> or <code><a href="../reference/validate_pr.html">validate_pr()</a></code>),
+results are organized hierarchically using collection classes.</p>
+<div class="section level3">
+<h3 id="hub_validations_collection-class">
+<code>&lt;hub_validations_collection&gt;</code> class<a class="anchor" aria-label="anchor" href="#hub_validations_collection-class"></a>
+</h3>
+<p>A <code>hub_validations_collection</code> is a named list where:</p>
+<ul>
+<li>
+<strong>Names</strong> identify what was validated (e.g.,
+<code>"hub-config"</code>,
+<code>"team1-goodmodel/2022-10-08-team1-goodmodel.csv"</code>)</li>
+<li>
+<strong>Elements</strong> are <code>hub_validations</code> objects
+containing the checks for that item</li>
+</ul>
+<p>Let’s look at an example using
+<code><a href="../reference/validate_submission.html">validate_submission()</a></code>:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">v_collection</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/validate_submission.html">validate_submission</a></span><span class="op">(</span><span class="va">hub_path</span>,</span>
+<span>  file_path <span class="op">=</span> <span class="st">"team1-goodmodel/2022-10-08-team1-goodmodel.csv"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Class of the returned object</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">v_collection</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "hub_validations_collection" "list"</span></span>
+<span></span>
+<span><span class="co"># Names show what was validated</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">v_collection</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "hub-config"                                    </span></span>
+<span><span class="co">#&gt; [2] "team1-goodmodel/2022-10-08-team1-goodmodel.csv"</span></span>
+<span></span>
+<span><span class="co"># Subset to access a specific hub_validations object</span></span>
+<span><span class="va">v_collection</span><span class="op">[[</span><span class="st">"hub-config"</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">hub-config</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_config]</span>: All hub config files are valid.</span></span>
+<span></span>
+<span><span class="co"># Access a specific check within a file's validations</span></span>
+<span><span class="va">v_collection</span><span class="op">[[</span><span class="st">"team1-goodmodel/2022-10-08-team1-goodmodel.csv"</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">file_exists</span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB; font-weight: bold;">&lt;message/check_success&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Message</span><span style="font-weight: bold;">:</span></span></span>
+<span><span class="co">#&gt; File exists at path</span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">model-output/team1-goodmodel/2022-10-08-team1-goodmodel.csv</span>.</span></span></code></pre></div>
+<p>See <code>vignette("validate-pr")</code> for more examples of working
+with <code>hub_validations_collection</code> objects.</p>
+</div>
+<div class="section level3">
+<h3 id="target_validations_collection-class">
+<code>&lt;target_validations_collection&gt;</code> class<a class="anchor" aria-label="anchor" href="#target_validations_collection-class"></a>
+</h3>
+<p>Similarly, <code>target_validations_collection</code> is used for
+target data validation results, where each element contains a
+<code>target_validations</code> object. See
+<code>vignette("validate-target-pr")</code> for examples of working with
+<code>target_validations_collection</code> objects returned by
+<code><a href="../reference/validate_target_pr.html">validate_target_pr()</a></code>.</p>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

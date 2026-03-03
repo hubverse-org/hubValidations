@@ -47,7 +47,8 @@ validate_submission_time(
 
 An object of class `hub_validations`. Each named element contains a
 `hub_check` class object reflecting the result of a given check.
-Function will return early if a check returns an error.
+Function will return early if a check returns an error. The `where`
+attribute is set to `file_path`.
 
 For more details on the structure of `<hub_validations>` objects,
 including how to access more information on individual checks, see
@@ -61,9 +62,9 @@ hub_path <- system.file("testhubs/simple", package = "hubValidations")
 file_path <- "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
 validate_submission_time(hub_path, file_path)
 #> 
-#> ── 2022-10-08-team1-goodmodel.csv ────
+#> ── team1-goodmodel/2022-10-08-team1-goodmodel.csv ────
 #> 
 #> ✖ [submission_time]: Submission time must be within accepted submission window
-#>   for round.  Current time "2026-01-13 15:36:50 UTC" is outside window
+#>   for round.  Current time "2026-03-03 12:25:53 UTC" is outside window
 #>   2022-10-02 EDT--2022-10-09 23:59:59 EDT.
 ```

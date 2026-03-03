@@ -25,7 +25,7 @@
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/hubverse-org/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubValidations</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.13.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,7 +67,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Validating Target Data Pull Requests on GitHub</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/hubverse-org/hubValidations/blob/v0.13.0/vignettes/articles/validate-target-pr.Rmd" class="external-link"><code>vignettes/articles/validate-target-pr.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/hubverse-org/hubValidations/blob/main/vignettes/articles/validate-target-pr.Rmd" class="external-link"><code>vignettes/articles/validate-target-pr.Rmd</code></a></small>
       <div class="d-none name"><code>validate-target-pr.Rmd</code></div>
     </div>
 
@@ -118,10 +118,10 @@ Action workflows using the <code>hubCI</code> package:</p>
 <span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="at">        </span><span class="fu">shell</span><span class="kw">:</span><span class="at"> Rscript {0}</span></span></code></pre></div>
 <p>where <code><a href="../reference/validate_target_pr.html">validate_target_pr()</a></code> is called on the contents of
 the current Pull Request, the results (an S3
-<code>&lt;target_validations&gt;</code> class object) are stored in
-<code>v</code> and then <code><a href="../reference/check_for_errors.html">check_for_errors()</a></code> is used to
-signal whether overall validations have passed or failed and summarise
-any validation failures.</p>
+<code>&lt;target_validations_collection&gt;</code> class object) are
+stored in <code>v</code> and then <code><a href="../reference/check_for_errors.html">check_for_errors()</a></code> is
+used to signal whether overall validations have passed or failed and
+summarise any validation failures.</p>
 </div>
 <div class="section level3">
 <h3 id="example-validating-a-pull-request">Example: Validating a Pull Request<a class="anchor" aria-label="anchor" href="#example-validating-a-pull-request"></a>
@@ -137,7 +137,7 @@ file:</p>
 <span><span class="op">)</span></span>
 <span><span class="fu">gert</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/gert/reference/git_branch.html" class="external-link">git_branch_checkout</a></span><span class="op">(</span><span class="st">"add-file-oracle-output"</span>, repo <span class="op">=</span> <span class="va">ci_target_hub_path</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Creating local branch add-file-oracle-output from origin/add-file-oracle-output</span></span>
-<span><span class="co">#&gt; &lt;git repository&gt;: /tmp/RtmptLHLLa/file23d419c13086/target[@add-file-oracle-output]</span></span>
+<span><span class="co">#&gt; &lt;git repository&gt;: /tmp/Rtmpz8Txnw/file226f31b6e05f/target[@add-file-oracle-output]</span></span>
 <span></span>
 <span><span class="va">v</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/validate_target_pr.html">validate_target_pr</a></span><span class="op">(</span></span>
 <span>  hub_path <span class="op">=</span> <span class="va">ci_target_hub_path</span>,</span>
@@ -146,12 +146,12 @@ file:</p>
 <span><span class="op">)</span></span>
 <span><span class="va">v</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">target</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">hub-config</span><span style="color: #BB00BB;"> ────</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_config]</span>: All hub config files are valid.</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">oracle-output.csv</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">oracle-output</span><span style="color: #BB00BB;"> ────</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
@@ -161,6 +161,12 @@ file:</p>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_dataset_file_ext_unique]</span>: <span style="color: #00BB00;">oracle-output</span> dataset files share single</span></span>
 <span><span class="co">#&gt;   unique file format.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_dataset_rows_unique]</span>: <span style="color: #00BB00;">oracle-output</span> target dataset rows are unique.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">oracle-output.csv</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_file_exists]</span>: File exists at path <span style="color: #0000BB;">target-data/oracle-output.csv</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[target_partition_file_name]</span>: Target file path not hive-partitioned. Check</span></span>
 <span><span class="co">#&gt;   skipped.</span></span>
@@ -261,7 +267,7 @@ validation failure:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">gert</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/gert/reference/git_branch.html" class="external-link">git_branch_checkout</a></span><span class="op">(</span><span class="st">"delete-target-dir-files"</span>, repo <span class="op">=</span> <span class="va">ci_target_hub_path</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Creating local branch delete-target-dir-files from origin/delete-target-dir-files</span></span>
-<span><span class="co">#&gt; &lt;git repository&gt;: /tmp/RtmptLHLLa/file23d419c13086/target[@delete-target-dir-files]</span></span>
+<span><span class="co">#&gt; &lt;git repository&gt;: /tmp/Rtmpz8Txnw/file226f31b6e05f/target[@delete-target-dir-files]</span></span>
 <span></span>
 <span><span class="va">v_mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/validate_target_pr.html">validate_target_pr</a></span><span class="op">(</span></span>
 <span>  hub_path <span class="op">=</span> <span class="va">ci_target_hub_path</span>,</span>
@@ -271,18 +277,9 @@ validation failure:</p>
 <span><span class="op">)</span></span>
 <span><span class="va">v_mod</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">target</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">hub-config</span><span style="color: #BB00BB;"> ────</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_config]</span>: All hub config files are valid.</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">oracle-output/output_type=sample/part-0.parquet</span><span style="color: #BB00BB;"> ────</span></span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[oracle_output_mod]</span>: Previously submitted oracle output files must not be</span></span>
-<span><span class="co">#&gt;   removed.  <span style="color: #0000BB;">target-data/oracle-output/output_type=sample/part-0.parquet</span></span></span>
-<span><span class="co">#&gt;   removed.</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">oracle-output</span><span style="color: #BB00BB;"> ────</span></span></span>
@@ -295,17 +292,37 @@ validation failure:</p>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_dataset_file_ext_unique]</span>: <span style="color: #00BB00;">oracle-output</span> dataset files share single</span></span>
 <span><span class="co">#&gt;   unique file format.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_dataset_rows_unique]</span>: <span style="color: #00BB00;">oracle-output</span> target dataset rows are unique.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">oracle-output/output_type=sample/part-0.parquet</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[valid_file_status]</span>: Previously submitted oracle output files must not be</span></span>
+<span><span class="co">#&gt;   removed.  <span style="color: #0000BB;">target-data/oracle-output/output_type=sample/part-0.parquet</span></span></span>
+<span><span class="co">#&gt;   removed.</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/check_for_errors.html">check_for_errors</a></span><span class="op">(</span><span class="va">v_mod</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">part-0.parquet</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">oracle-output/output_type=sample/part-0.parquet</span><span style="color: #BB00BB;"> ────</span></span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[oracle_output_mod]</span>: Previously submitted oracle output files must not be</span></span>
+<span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[valid_file_status]</span>: Previously submitted oracle output files must not be</span></span>
 <span><span class="co">#&gt;   removed.  <span style="color: #0000BB;">target-data/oracle-output/output_type=sample/part-0.parquet</span></span></span>
 <span><span class="co">#&gt;   removed.</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `check_for_errors()`:</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> </span></span>
 <span><span class="co">#&gt; The validation checks produced some failures/errors reported above.</span></span></code></pre></div>
+<div class="section level4">
+<h4 id="accessing-modification-check-results">Accessing modification check results<a class="anchor" aria-label="anchor" href="#accessing-modification-check-results"></a>
+</h4>
+<p>When modification/deletion checks are enabled, each affected file
+creates an entry in the returned collection named by the file’s path.
+The check within each entry is named <code>valid_file_status</code>
+(reflecting that we validate the file’s git status).</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Access the file status check for a deleted file</span></span>
+<span><span class="va">v_mod</span><span class="op">[[</span><span class="st">"oracle-output/output_type=sample/part-0.parquet"</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="st">"valid_file_status"</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
+</div>
 </div>
 <div class="section level3">
 <h3 id="allowing-deletion-of-entire-target-type-datasets">Allowing deletion of entire target type datasets<a class="anchor" aria-label="anchor" href="#allowing-deletion-of-entire-target-type-datasets"></a>
@@ -317,10 +334,10 @@ setting <code>allow_target_type_deletion</code> to
 <p>Here’s an example of a PR that removes the time-series dataset and
 adds oracle-output data. With the default settings, this produces an
 error:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">gert</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/gert/reference/git_branch.html" class="external-link">git_branch_checkout</a></span><span class="op">(</span><span class="st">"remove-ts-add-oo"</span>, repo <span class="op">=</span> <span class="va">ci_target_hub_path</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Creating local branch remove-ts-add-oo from origin/remove-ts-add-oo</span></span>
-<span><span class="co">#&gt; &lt;git repository&gt;: /tmp/RtmptLHLLa/file23d419c13086/target[@remove-ts-add-oo]</span></span>
+<span><span class="co">#&gt; &lt;git repository&gt;: /tmp/Rtmpz8Txnw/file226f31b6e05f/target[@remove-ts-add-oo]</span></span>
 <span></span>
 <span><span class="va">v_del</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/validate_target_pr.html">validate_target_pr</a></span><span class="op">(</span></span>
 <span>  hub_path <span class="op">=</span> <span class="va">ci_target_hub_path</span>,</span>
@@ -329,7 +346,7 @@ error:</p>
 <span><span class="op">)</span></span>
 <span><span class="va">v_del</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">target</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">hub-config</span><span style="color: #BB00BB;"> ────</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_config]</span>: All hub config files are valid.</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -341,16 +358,22 @@ error:</p>
 <span><span class="co">#&gt; <span style="color: #BB0000;">ⓧ</span> <span style="color: #B2B2B2;">[target_dataset_exists]</span>: <span style="color: #00BB00;">time-series</span> dataset not detected.</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">oracle-output.csv</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">oracle-output</span><span style="color: #BB00BB;"> ────</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_dataset_exists_1]</span>: <span style="color: #00BB00;">oracle-output</span> dataset detected.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_dataset_exists]</span>: <span style="color: #00BB00;">oracle-output</span> dataset detected.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_dataset_unique]</span>: <span style="color: #0000BB;">target-data</span> directory contains single unique</span></span>
 <span><span class="co">#&gt;   <span style="color: #00BB00;">oracle-output</span> dataset.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_dataset_file_ext_unique]</span>: <span style="color: #00BB00;">oracle-output</span> dataset files share single</span></span>
 <span><span class="co">#&gt;   unique file format.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_dataset_rows_unique]</span>: <span style="color: #00BB00;">oracle-output</span> target dataset rows are unique.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">oracle-output.csv</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_file_exists]</span>: File exists at path <span style="color: #0000BB;">target-data/oracle-output.csv</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[target_partition_file_name]</span>: Target file path not hive-partitioned. Check</span></span>
 <span><span class="co">#&gt;   skipped.</span></span>
@@ -379,7 +402,7 @@ error:</p>
 <span><span class="co">#&gt; The validation checks produced some failures/errors reported above.</span></span></code></pre></div>
 <p>Setting <code>allow_target_type_deletion = TRUE</code> allows the
 deletion to pass:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">v_del_allowed</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/validate_target_pr.html">validate_target_pr</a></span><span class="op">(</span></span>
 <span>  hub_path <span class="op">=</span> <span class="va">ci_target_hub_path</span>,</span>
 <span>  gh_repo <span class="op">=</span> <span class="st">"hubverse-org/ci-testhub-target"</span>,</span>
@@ -395,14 +418,14 @@ deletion to pass:</p>
 <code>check_for_errors()</code><a class="anchor" aria-label="anchor" href="#checking-for-validation-failures-with-check_for_errors"></a>
 </h2>
 <p><code><a href="../reference/check_for_errors.html">check_for_errors()</a></code> is used to inspect a
-<code>target_validations</code> class object, determine whether overall
-validations have passed or failed and summarise any detected
-errors/failures.</p>
+<code>target_validations_collection</code> class object, determine
+whether overall validations have passed or failed and summarise any
+detected errors/failures.</p>
 <div class="section level3">
 <h3 id="validation-failure">Validation failure<a class="anchor" aria-label="anchor" href="#validation-failure"></a>
 </h3>
-<p>If any elements of the <code>target_validations</code> object contain
-<code>&lt;error/check_error&gt;</code>,
+<p>If any elements of the <code>target_validations_collection</code>
+object contain <code>&lt;error/check_error&gt;</code>,
 <code>&lt;warning/check_warning&gt;</code> or
 <code>&lt;error/check_exec_error&gt;</code> condition class objects, the
 function throws an error and prints the messages from the failing
@@ -422,6 +445,51 @@ returns <code>TRUE</code> silently and prints:</p>
 summarising the results of checks that failed, argument
 <code>verbose</code> can be set to <code>TRUE</code>.</p>
 </div>
+</div>
+<div class="section level2">
+<h2 id="accessing-validation-results-by-file">Accessing validation results by file<a class="anchor" aria-label="anchor" href="#accessing-validation-results-by-file"></a>
+</h2>
+<p>The <code><a href="../reference/validate_target_pr.html">validate_target_pr()</a></code> function returns a
+<code>target_validations_collection</code> object, which is a named list
+where each element contains the validation results for a specific file
+or dataset. You can access results for individual files using standard
+list subsetting:</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># See all file paths in the collection</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">v</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "hub-config"        "oracle-output"     "oracle-output.csv"</span></span>
+<span></span>
+<span><span class="co"># Access all checks for a specific file</span></span>
+<span><span class="va">v</span><span class="op">[[</span><span class="st">"oracle-output.csv"</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">oracle-output.csv</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_file_exists]</span>: File exists at path <span style="color: #0000BB;">target-data/oracle-output.csv</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[target_partition_file_name]</span>: Target file path not hive-partitioned. Check</span></span>
+<span><span class="co">#&gt;   skipped.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_file_ext]</span>: Target data file extension is valid.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_file_read]</span>: target file could be read successfully.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_colnames]</span>: Column names are consistent with expected column names</span></span>
+<span><span class="co">#&gt;   for <span style="color: #00BB00;">oracle-output</span> target type data.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_coltypes]</span>: Column data types match oracle-output target schema.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[target_tbl_ts_targets]</span>: Check not applicable to <span style="color: #00BB00;">oracle-output</span> target data.</span></span>
+<span><span class="co">#&gt;   Skipped.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_rows_unique]</span>: <span style="color: #00BB00;">oracle-output</span> target data rows are unique.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_values]</span>: `target_tbl_chr` contains valid values/value</span></span>
+<span><span class="co">#&gt;   combinations.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_output_type_ids]</span>: <span style="color: #00BB00;">oracle-output</span> `target_tbl` contains valid</span></span>
+<span><span class="co">#&gt;   complete output_type_id values.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[target_tbl_oracle_value]</span>: <span style="color: #00BB00;">oracle-output</span> `target_tbl` contains valid oracle</span></span>
+<span><span class="co">#&gt;   values.</span></span>
+<span></span>
+<span><span class="co"># Access a specific check result</span></span>
+<span><span class="va">v</span><span class="op">[[</span><span class="st">"oracle-output.csv"</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">target_file_exists</span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB; font-weight: bold;">&lt;message/check_success&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Message</span><span style="font-weight: bold;">:</span></span></span>
+<span><span class="co">#&gt; File exists at path <span style="color: #0000BB;">target-data/oracle-output.csv</span>.</span></span></code></pre></div>
+<p>This structure is particularly useful when you need to
+programmatically inspect specific checks or extract error details from
+failed validations.</p>
 </div>
 <div class="section level2">
 <h2 id="validate_target_pr-check-details">

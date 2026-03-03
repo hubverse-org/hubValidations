@@ -7,7 +7,7 @@
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/hubverse-org/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubValidations</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.13.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,7 +37,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Validate the contents of a submitted model data file</h1>
-      <small class="dont-index">Source: <a href="https://github.com/hubverse-org/hubValidations/blob/v0.13.0/R/validate_model_data.R" class="external-link"><code>R/validate_model_data.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/hubverse-org/hubValidations/blob/main/R/validate_model_data.R" class="external-link"><code>R/validate_model_data.R</code></a></small>
       <div class="d-none name"><code>validate_model_data.Rd</code></div>
     </div>
 
@@ -121,7 +121,8 @@ If <code>NULL</code>, defaults to extracting derived task IDs from hub <code>tas
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>An object of class <code>hub_validations</code>. Each named element contains
 a <code>hub_check</code> class object reflecting the result of a given check. Function
-will return early if a check returns an error.</p>
+will return early if a check returns an error. The <code>where</code> attribute is set
+to <code>file_path</code>.</p>
 <p>For more details on the structure of <code>&lt;hub_validations&gt;</code> objects, including
 how to access more information on individual checks,
 see <a href="https://hubverse-org.github.io/hubValidations/articles/hub-validations-class.html">article on <code>&lt;hub_validations&gt;</code> S3 class objects</a>.</p>
@@ -234,7 +235,7 @@ the compound idx in question. </td>
 <span class="r-in"><span><span class="va">file_path</span> <span class="op">&lt;-</span> <span class="st">"team1-goodmodel/2022-10-08-team1-goodmodel.csv"</span></span></span>
 <span class="r-in"><span><span class="fu">validate_model_data</span><span class="op">(</span><span class="va">hub_path</span>, <span class="va">file_path</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">2022-10-08-team1-goodmodel.csv</span><span style="color: #BB00BB;"> ────</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">team1-goodmodel/2022-10-08-team1-goodmodel.csv</span><span style="color: #BB00BB;"> ────</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_read]</span>: File could be read successfully.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_round_id_col]</span>: `round_id_col` name is valid.</span>

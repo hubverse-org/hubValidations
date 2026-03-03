@@ -52,7 +52,8 @@ validate_target_file(
 
 An object of class `hub_validations`. Each named element contains a
 `hub_check` class object reflecting the result of a given check.
-Function will return early if a check returns an error.
+Function will return early if a check returns an error. The `where`
+attribute is set to `file_path`.
 
 For more details on the structure of `<hub_validations>` objects,
 including how to access more information on individual checks, see

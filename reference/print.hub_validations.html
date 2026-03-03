@@ -13,7 +13,7 @@ are only shown when show_check_warnings = TRUE."><meta property="og:image" conte
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/hubverse-org/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubValidations</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.13.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,7 +43,7 @@ are only shown when show_check_warnings = TRUE."><meta property="og:image" conte
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Print results of <code>validate_...()</code> function as a bullet list</h1>
-      <small class="dont-index">Source: <a href="https://github.com/hubverse-org/hubValidations/blob/v0.13.0/R/print.R" class="external-link"><code>R/print.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/hubverse-org/hubValidations/blob/main/R/print.R" class="external-link"><code>R/print.R</code></a></small>
       <div class="d-none name"><code>print.hub_validations.Rd</code></div>
     </div>
 
@@ -94,11 +94,11 @@ Default <code>FALSE</code>.</p></dd>
 <span class="r-in"><span><span class="co"># Default print</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">v</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">simple</span><span style="color: #BB00BB;"> ────</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">hub-config</span><span style="color: #BB00BB;"> ────</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_config]</span>: All hub config files are valid.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">2022-10-08-team1-goodmodel.csv</span><span style="color: #BB00BB;"> ────</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">team1-goodmodel/2022-10-08-team1-goodmodel.csv</span><span style="color: #BB00BB;"> ────</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_exists]</span>: File exists at path</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">model-output/team1-goodmodel/2022-10-08-team1-goodmodel.csv</span>.</span>
@@ -110,6 +110,9 @@ Default <code>FALSE</code>.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_n]</span>: Number of accepted model output files per round met.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[metadata_exists]</span>: Metadata file exists at path</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">model-metadata/team1-goodmodel.yaml</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[submission_time]</span>: Submission time must be within accepted submission window</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   for round.  Current time <span style="color: #0000BB;">"2026-03-03 12:25:43 UTC"</span> is outside window</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_read]</span>: File could be read successfully.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_round_id_col]</span>: `round_id_col` name is valid.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[unique_round_id]</span>: `round_id` column <span style="color: #0000BB;">"origin_date"</span> contains a single, unique</span>
@@ -131,18 +134,15 @@ Default <code>FALSE</code>.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[value_col_non_desc]</span>: Quantile or cdf `value` values increase when ordered by</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   `output_type_id`.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[value_col_sum1]</span>: No pmf output types to check for sum of 1. Check skipped.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[submission_time]</span>: Submission time must be within accepted submission window</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   for round.  Current time <span style="color: #0000BB;">"2026-01-13 15:36:40 UTC"</span> is outside window</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Show check-level warnings (if any)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">v</span>, show_check_warnings <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">simple</span><span style="color: #BB00BB;"> ────</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">hub-config</span><span style="color: #BB00BB;"> ────</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_config]</span>: All hub config files are valid.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">2022-10-08-team1-goodmodel.csv</span><span style="color: #BB00BB;"> ────</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">team1-goodmodel/2022-10-08-team1-goodmodel.csv</span><span style="color: #BB00BB;"> ────</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_exists]</span>: File exists at path</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">model-output/team1-goodmodel/2022-10-08-team1-goodmodel.csv</span>.</span>
@@ -154,6 +154,9 @@ Default <code>FALSE</code>.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_n]</span>: Number of accepted model output files per round met.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[metadata_exists]</span>: Metadata file exists at path</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">model-metadata/team1-goodmodel.yaml</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[submission_time]</span>: Submission time must be within accepted submission window</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   for round.  Current time <span style="color: #0000BB;">"2026-03-03 12:25:43 UTC"</span> is outside window</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_read]</span>: File could be read successfully.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_round_id_col]</span>: `round_id_col` name is valid.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[unique_round_id]</span>: `round_id` column <span style="color: #0000BB;">"origin_date"</span> contains a single, unique</span>
@@ -175,9 +178,6 @@ Default <code>FALSE</code>.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[value_col_non_desc]</span>: Quantile or cdf `value` values increase when ordered by</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   `output_type_id`.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[value_col_sum1]</span>: No pmf output types to check for sum of 1. Check skipped.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[submission_time]</span>: Submission time must be within accepted submission window</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   for round.  Current time <span style="color: #0000BB;">"2026-01-13 15:36:40 UTC"</span> is outside window</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Example with validation-level warning</span></span></span>
 <span class="r-in"><span><span class="va">v_with_warning</span> <span class="op">&lt;-</span> <span class="va">v</span></span></span>
@@ -194,11 +194,11 @@ Default <code>FALSE</code>.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">└─────────────────────────────────────────────┘</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">simple</span><span style="color: #BB00BB;"> ────</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">hub-config</span><span style="color: #BB00BB;"> ────</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_config]</span>: All hub config files are valid.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">2022-10-08-team1-goodmodel.csv</span><span style="color: #BB00BB;"> ────</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">team1-goodmodel/2022-10-08-team1-goodmodel.csv</span><span style="color: #BB00BB;"> ────</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_exists]</span>: File exists at path</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">model-output/team1-goodmodel/2022-10-08-team1-goodmodel.csv</span>.</span>
@@ -210,6 +210,9 @@ Default <code>FALSE</code>.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_n]</span>: Number of accepted model output files per round met.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[metadata_exists]</span>: Metadata file exists at path</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">model-metadata/team1-goodmodel.yaml</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[submission_time]</span>: Submission time must be within accepted submission window</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   for round.  Current time <span style="color: #0000BB;">"2026-03-03 12:25:43 UTC"</span> is outside window</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_read]</span>: File could be read successfully.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_round_id_col]</span>: `round_id_col` name is valid.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[unique_round_id]</span>: `round_id` column <span style="color: #0000BB;">"origin_date"</span> contains a single, unique</span>
@@ -231,9 +234,6 @@ Default <code>FALSE</code>.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[value_col_non_desc]</span>: Quantile or cdf `value` values increase when ordered by</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   `output_type_id`.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[value_col_sum1]</span>: No pmf output types to check for sum of 1. Check skipped.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[submission_time]</span>: Submission time must be within accepted submission window</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   for round.  Current time <span style="color: #0000BB;">"2026-01-13 15:36:40 UTC"</span> is outside window</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

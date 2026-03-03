@@ -38,7 +38,8 @@ validate_model_file(hub_path, file_path, validations_cfg_path = NULL)
 
 An object of class `hub_validations`. Each named element contains a
 `hub_check` class object reflecting the result of a given check.
-Function will return early if a check returns an error.
+Function will return early if a check returns an error. The `where`
+attribute is set to `file_path`.
 
 For more details on the structure of `<hub_validations>` objects,
 including how to access more information on individual checks, see
@@ -67,7 +68,7 @@ validate_model_file(hub_path,
   file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
 )
 #> 
-#> ── 2022-10-08-team1-goodmodel.csv ────
+#> ── team1-goodmodel/2022-10-08-team1-goodmodel.csv ────
 #> 
 #> ✔ [file_exists]: File exists at path
 #>   model-output/team1-goodmodel/2022-10-08-team1-goodmodel.csv.
@@ -83,7 +84,7 @@ validate_model_file(hub_path,
   file_path = "team1-goodmodel/2022-10-15-team1-goodmodel.csv"
 )
 #> 
-#> ── 2022-10-15-team1-goodmodel.csv ────
+#> ── team1-goodmodel/2022-10-15-team1-goodmodel.csv ────
 #> 
 #> ⓧ [file_exists]: File does not exist at path
 #>   model-output/team1-goodmodel/2022-10-15-team1-goodmodel.csv.

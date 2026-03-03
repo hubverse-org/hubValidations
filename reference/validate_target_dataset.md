@@ -52,7 +52,9 @@ validate_target_dataset(
 
 An object of class `hub_validations`. Each named element contains a
 `hub_check` class object reflecting the result of a given check.
-Function will return early if a check returns an error.
+Function will return early if a check returns an error. The `where`
+attribute is set to `target_type` (e.g. `"oracle-output"`,
+`"time-series"`).
 
 For more details on the structure of `<hub_validations>` objects,
 including how to access more information on individual checks, see
@@ -79,7 +81,7 @@ validate_target_dataset(hub_path,
   target_type = "time-series"
 )
 #> 
-#> ── time-series.csv ────
+#> ── time-series ────
 #> 
 #> ✔ [target_dataset_exists]: time-series dataset detected.
 #> ✔ [target_dataset_unique]: target-data directory contains single unique
@@ -91,7 +93,7 @@ validate_target_dataset(hub_path,
   target_type = "oracle-output"
 )
 #> 
-#> ── oracle-output.csv ────
+#> ── oracle-output ────
 #> 
 #> ✔ [target_dataset_exists]: oracle-output dataset detected.
 #> ✔ [target_dataset_unique]: target-data directory contains single unique

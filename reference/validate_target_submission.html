@@ -11,7 +11,7 @@ contents of the file."><meta property="og:image" content="https://hubverse-org.g
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/hubverse-org/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubValidations</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.13.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,7 +41,7 @@ contents of the file."><meta property="og:image" content="https://hubverse-org.g
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Validate a submitted target data file.</h1>
-      <small class="dont-index">Source: <a href="https://github.com/hubverse-org/hubValidations/blob/v0.13.0/R/validate_target_submission.R" class="external-link"><code>R/validate_target_submission.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/hubverse-org/hubValidations/blob/main/R/validate_target_submission.R" class="external-link"><code>R/validate_target_submission.R</code></a></small>
       <div class="d-none name"><code>validate_target_submission.Rd</code></div>
     </div>
 
@@ -90,8 +90,8 @@ file relative to the <code>target-data</code> directory.</p></dd>
 
 
 <dt id="arg-target-type">target_type<a class="anchor" aria-label="anchor" href="#arg-target-type"></a></dt>
-<dd><p>Type of target data to retrieve matching files. One of "time-series" or
-"oracle-output". Defaults to "time-series".</p></dd>
+<dd><p>Character string. The type of target data, either
+<code>"time-series"</code> or <code>"oracle-output"</code>.</p></dd>
 
 
 <dt id="arg-date-col">date_col<a class="anchor" aria-label="anchor" href="#arg-date-col"></a></dt>
@@ -118,10 +118,8 @@ validation checks.</p></dd>
 
 
 <dt id="arg-na">na<a class="anchor" aria-label="anchor" href="#arg-na"></a></dt>
-<dd><p>A character vector of strings to interpret as missing values. Only
-applies to CSV files. The default is <code>c("NA", "")</code>. Useful when actual character
-string <code>"NA"</code> values are used in the data. In such a case, use empty cells to
-indicate missing values in your files and set <code>na = ""</code>.</p></dd>
+<dd><p>Character vector of strings to interpret as missing values when
+reading data files. Passed to the underlying file reader.</p></dd>
 
 
 <dt id="arg-output-type-id-datatype">output_type_id_datatype<a class="anchor" aria-label="anchor" href="#arg-output-type-id-datatype"></a></dt>
@@ -155,12 +153,10 @@ see <a href="https://hubverse-org.github.io/hubValidations/articles/deploying-cu
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>An object of class <code>hub_validations</code>. Each named element contains
-a <code>hub_check</code> class object reflecting the result of a given check. Function
-will return early if a check returns an error.</p>
-<p>For more details on the structure of <code>&lt;hub_validations&gt;</code> objects, including
-how to access more information on individual checks,
-see <a href="https://hubverse-org.github.io/hubValidations/articles/hub-validations-class.html">article on <code>&lt;hub_validations&gt;</code> S3 class objects</a>.</p>
+    <p>A <code>target_validations_collection</code> object containing validation results
+organized by file. The collection includes separate entries for hub config
+validation (keyed by <code>"hub-config"</code>) and file-specific validations (keyed by
+file path).</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -241,7 +237,7 @@ see <a href="https://hubverse-org.github.io/hubValidations/articles/hub-validati
 <span class="r-in"><span>  target_type <span class="op">=</span> <span class="st">"time-series"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">target_file</span><span style="color: #BB00BB;"> ────</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">hub-config</span><span style="color: #BB00BB;"> ────</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_config]</span>: All hub config files are valid.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
@@ -274,7 +270,7 @@ see <a href="https://hubverse-org.github.io/hubValidations/articles/hub-validati
 <span class="r-in"><span>  target_type <span class="op">=</span> <span class="st">"time-series"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">target_dir</span><span style="color: #BB00BB;"> ────</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">hub-config</span><span style="color: #BB00BB;"> ────</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_config]</span>: All hub config files are valid.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>

@@ -25,7 +25,7 @@
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/hubverse-org/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubValidations</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.13.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,7 +67,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Validating Pull Requests on GitHub</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/hubverse-org/hubValidations/blob/v0.13.0/vignettes/articles/validate-pr.Rmd" class="external-link"><code>vignettes/articles/validate-pr.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/hubverse-org/hubValidations/blob/main/vignettes/articles/validate-pr.Rmd" class="external-link"><code>vignettes/articles/validate-pr.Rmd</code></a></small>
       <div class="d-none name"><code>validate-pr.Rmd</code></div>
     </div>
 
@@ -119,10 +119,10 @@ Action workflows using the <code>hubCI</code> package:</p>
 <span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="at">        </span><span class="fu">shell</span><span class="kw">:</span><span class="at"> Rscript {0}</span></span></code></pre></div>
 <p>where <code><a href="../reference/validate_pr.html">validate_pr()</a></code> is called on the contents of the
 current Pull Request, the results (an S3
-<code>&lt;hub_validations&gt;</code> class object) is stored in
-<code>v</code> and then <code><a href="../reference/check_for_errors.html">check_for_errors()</a></code> used to signal
-whether overall validations have passed or failed and summarise any
-validation failures.</p>
+<code>&lt;hub_validations_collection&gt;</code> class object) is stored
+in <code>v</code> and then <code><a href="../reference/check_for_errors.html">check_for_errors()</a></code> used to
+signal whether overall validations have passed or failed and summarise
+any validation failures.</p>
 <p>Here’s an example of what the workflow looks like on GitHub:</p>
 <p><img src="assets/ga-action-screenshot.png"><!-- --></p>
 </div>
@@ -265,17 +265,15 @@ within their allowed submission window.</p>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">└──────────────────────────────────────────────────────────────────────────┘</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">mod_del_hub</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">hub-config</span><span style="color: #BB00BB;"> ────</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_config]</span>: All hub config files are valid.</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">2022-10-08-hub-baseline.csv</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">hub-baseline/2022-10-08-hub-baseline.csv</span><span style="color: #BB00BB;"> ────</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #BB0000;">ⓧ</span> <span style="color: #B2B2B2;">[model_output_mod]</span>: Previously submitted model output files must not be</span></span>
-<span><span class="co">#&gt;   modified.  <span style="color: #0000BB;">model-output/hub-baseline/2022-10-08-hub-baseline.csv</span> modified.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_exists]</span>: File exists at path</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">model-output/hub-baseline/2022-10-08-hub-baseline.csv</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_name]</span>: File name <span style="color: #0000BB;">"2022-10-08-hub-baseline.csv"</span> is valid.</span></span>
@@ -315,13 +313,60 @@ within their allowed submission window.</p>
 <span><span class="co">#&gt;   Skipping `check_tbl_spl_non_compound_tid` check.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[spl_n]</span>: No v3 samples found in model output data to check. Skipping</span></span>
 <span><span class="co">#&gt;   `check_tbl_spl_n` check.</span></span>
+<span><span class="co">#&gt; <span style="color: #BB0000;">ⓧ</span> <span style="color: #B2B2B2;">[valid_file_status]</span>: Previously submitted model output files must not be</span></span>
+<span><span class="co">#&gt;   modified.  <span style="color: #0000BB;">model-output/hub-baseline/2022-10-08-hub-baseline.csv</span> modified.</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">2022-10-15-team1-goodmodel.csv</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">team1-goodmodel/2022-10-22-team1-goodmodel.csv</span><span style="color: #BB00BB;"> ────</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #BB0000;">ⓧ</span> <span style="color: #B2B2B2;">[model_output_mod_1]</span>: Previously submitted model output files must not be</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_exists]</span>: File exists at path</span></span>
+<span><span class="co">#&gt;   <span style="color: #0000BB;">model-output/team1-goodmodel/2022-10-22-team1-goodmodel.csv</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_name]</span>: File name <span style="color: #0000BB;">"2022-10-22-team1-goodmodel.csv"</span> is valid.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_location]</span>: File directory name matches `model_id` metadata in file</span></span>
+<span><span class="co">#&gt;   name.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[round_id_valid]</span>: `round_id` is valid.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_format]</span>: File is accepted hub format.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_n]</span>: Number of accepted model output files per round met.</span></span>
+<span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[metadata_exists]</span>: Metadata file does not exist at path</span></span>
+<span><span class="co">#&gt;   <span style="color: #0000BB;">model-metadata/team1-goodmodel.yml</span> or <span style="color: #0000BB;">model-metadata/team1-goodmodel.yaml</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_read]</span>: File could be read successfully.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_round_id_col]</span>: `round_id_col` name is valid.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[unique_round_id]</span>: `round_id` column <span style="color: #0000BB;">"origin_date"</span> contains a single, unique</span></span>
+<span><span class="co">#&gt;   round ID value.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[match_round_id]</span>: All `round_id_col` <span style="color: #0000BB;">"origin_date"</span> values match submission</span></span>
+<span><span class="co">#&gt;   `round_id` from file name.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[colnames]</span>: Column names are consistent with expected round task IDs and std</span></span>
+<span><span class="co">#&gt;   column names.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[col_types]</span>: Column data types match hub schema.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_vals]</span>: `tbl` contains valid values/value combinations.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[derived_task_id_vals]</span>: No derived task IDs to check. Skipping derived task</span></span>
+<span><span class="co">#&gt;   ID value check.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[rows_unique]</span>: All combinations of task ID</span></span>
+<span><span class="co">#&gt;   column/`output_type`/`output_type_id` values are unique.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[req_vals]</span>: Required task ID/output type/output type ID combinations all</span></span>
+<span><span class="co">#&gt;   present.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[value_col_valid]</span>: Values in column `value` all valid with respect to</span></span>
+<span><span class="co">#&gt;   modeling task config.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[value_col_non_desc]</span>: Quantile or cdf `value` values increase when ordered by</span></span>
+<span><span class="co">#&gt;   `output_type_id`.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[value_col_sum1]</span>: No pmf output types to check for sum of 1. Check skipped.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[spl_compound_taskid_set]</span>: No v3 samples found in model output data to check.</span></span>
+<span><span class="co">#&gt;   Skipping `check_tbl_spl_compound_taskid_set` check.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[spl_compound_tid]</span>: No v3 samples found in model output data to check.</span></span>
+<span><span class="co">#&gt;   Skipping `check_tbl_spl_compound_tid` check.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[spl_non_compound_tid]</span>: No v3 samples found in model output data to check.</span></span>
+<span><span class="co">#&gt;   Skipping `check_tbl_spl_non_compound_tid` check.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[spl_n]</span>: No v3 samples found in model output data to check. Skipping</span></span>
+<span><span class="co">#&gt;   `check_tbl_spl_n` check.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">team1-goodmodel/2022-10-15-team1-goodmodel.csv</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #BB0000;">ⓧ</span> <span style="color: #B2B2B2;">[valid_file_status]</span>: Previously submitted model output files must not be</span></span>
 <span><span class="co">#&gt;   removed.  <span style="color: #0000BB;">model-output/team1-goodmodel/2022-10-15-team1-goodmodel.csv</span></span></span>
 <span><span class="co">#&gt;   removed.</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -330,53 +375,8 @@ within their allowed submission window.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #BB0000;">ⓧ</span> <span style="color: #B2B2B2;">[model_metadata_mod]</span>: Previously submitted model metadata files must not be</span></span>
-<span><span class="co">#&gt;   removed.  <span style="color: #0000BB;">model-metadata/team1-goodmodel.yaml</span> removed.</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">2022-10-22-team1-goodmodel.csv</span><span style="color: #BB00BB;"> ────</span></span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_exists_1]</span>: File exists at path</span></span>
-<span><span class="co">#&gt;   <span style="color: #0000BB;">model-output/team1-goodmodel/2022-10-22-team1-goodmodel.csv</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_name_1]</span>: File name <span style="color: #0000BB;">"2022-10-22-team1-goodmodel.csv"</span> is valid.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_location_1]</span>: File directory name matches `model_id` metadata in file</span></span>
-<span><span class="co">#&gt;   name.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[round_id_valid_1]</span>: `round_id` is valid.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_format_1]</span>: File is accepted hub format.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_n_1]</span>: Number of accepted model output files per round met.</span></span>
-<span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[metadata_exists_1]</span>: Metadata file does not exist at path</span></span>
-<span><span class="co">#&gt;   <span style="color: #0000BB;">model-metadata/team1-goodmodel.yml</span> or <span style="color: #0000BB;">model-metadata/team1-goodmodel.yaml</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_read_1]</span>: File could be read successfully.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_round_id_col_1]</span>: `round_id_col` name is valid.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[unique_round_id_1]</span>: `round_id` column <span style="color: #0000BB;">"origin_date"</span> contains a single,</span></span>
-<span><span class="co">#&gt;   unique round ID value.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[match_round_id_1]</span>: All `round_id_col` <span style="color: #0000BB;">"origin_date"</span> values match submission</span></span>
-<span><span class="co">#&gt;   `round_id` from file name.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[colnames_1]</span>: Column names are consistent with expected round task IDs and</span></span>
-<span><span class="co">#&gt;   std column names.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[col_types_1]</span>: Column data types match hub schema.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_vals_1]</span>: `tbl` contains valid values/value combinations.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[derived_task_id_vals_1]</span>: No derived task IDs to check. Skipping derived task</span></span>
-<span><span class="co">#&gt;   ID value check.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[rows_unique_1]</span>: All combinations of task ID</span></span>
-<span><span class="co">#&gt;   column/`output_type`/`output_type_id` values are unique.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[req_vals_1]</span>: Required task ID/output type/output type ID combinations all</span></span>
-<span><span class="co">#&gt;   present.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[value_col_valid_1]</span>: Values in column `value` all valid with respect to</span></span>
-<span><span class="co">#&gt;   modeling task config.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[value_col_non_desc_1]</span>: Quantile or cdf `value` values increase when ordered</span></span>
-<span><span class="co">#&gt;   by `output_type_id`.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[value_col_sum1_1]</span>: No pmf output types to check for sum of 1. Check skipped.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[spl_compound_taskid_set_1]</span>: No v3 samples found in model output data to</span></span>
-<span><span class="co">#&gt;   check. Skipping `check_tbl_spl_compound_taskid_set` check.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[spl_compound_tid_1]</span>: No v3 samples found in model output data to check.</span></span>
-<span><span class="co">#&gt;   Skipping `check_tbl_spl_compound_tid` check.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[spl_non_compound_tid_1]</span>: No v3 samples found in model output data to check.</span></span>
-<span><span class="co">#&gt;   Skipping `check_tbl_spl_non_compound_tid` check.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[spl_n_1]</span>: No v3 samples found in model output data to check. Skipping</span></span>
-<span><span class="co">#&gt;   `check_tbl_spl_n` check.</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BB0000;">ⓧ</span> <span style="color: #B2B2B2;">[valid_file_status]</span>: Previously submitted model metadata files must not be</span></span>
+<span><span class="co">#&gt;   removed.  <span style="color: #0000BB;">model-metadata/team1-goodmodel.yaml</span> removed.</span></span></code></pre></div>
 <p>These settings can be modified if required though the use of
 arguments <code>file_modification_check</code> and
 <code>allow_submit_window_mods</code>.</p>
@@ -415,6 +415,20 @@ regardless of timing. Is ignored when checking model metadata files as
 well as when <code>file_modification_check</code> is set to
 <code>"none"</code>.</p></li>
 </ul>
+<div class="section level4">
+<h4 id="accessing-modification-check-results">Accessing modification check results<a class="anchor" aria-label="anchor" href="#accessing-modification-check-results"></a>
+</h4>
+<p>When modification/deletion checks are enabled, each affected file
+creates an entry in the returned collection named by the file’s path.
+The check within each entry is named <code>valid_file_status</code>
+(reflecting that we validate the file’s git status).</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Access the file status check for a deleted file</span></span>
+<span><span class="va">v</span><span class="op">[[</span><span class="st">"team1-goodmodel/2022-10-15-team1-goodmodel.csv"</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="st">"valid_file_status"</span><span class="op">]</span><span class="op">]</span></span>
+<span></span>
+<span><span class="co"># Access the file status check for a modified file</span></span>
+<span><span class="va">v</span><span class="op">[[</span><span class="st">"hub-baseline/2022-10-08-hub-baseline.csv"</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="st">"valid_file_status"</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
+</div>
 <div class="section level4 alert alert-warning" role="note">
 <h4 id="warning-1">Warning<a class="anchor" aria-label="anchor" href="#warning-1"></a>
 </h4>
@@ -482,19 +496,19 @@ integrity scanning.</p>
 <code>check_for_errors()</code><a class="anchor" aria-label="anchor" href="#checking-for-validation-failures-with-check_for_errors"></a>
 </h2>
 <p><code><a href="../reference/check_for_errors.html">check_for_errors()</a></code> is used to inspect a
-<code>hub_validations</code> class object, determine whether overall
-validations have passed or failed and summarise any detected
+<code>hub_validations_collection</code> class object, determine whether
+overall validations have passed or failed and summarise any detected
 errors/failures.</p>
 <div class="section level3">
 <h3 id="validation-failure">Validation failure<a class="anchor" aria-label="anchor" href="#validation-failure"></a>
 </h3>
-<p>If any elements of the <code>hub_validations</code> object contain
-<code>&lt;error/check_error&gt;</code>,
+<p>If any elements of the <code>hub_validations_collection</code> object
+contain <code>&lt;error/check_error&gt;</code>,
 <code>&lt;warning/check_warning&gt;</code> or
 <code>&lt;error/check_exec_error&gt;</code> condition class objects, the
 function throws an error and prints the messages from the failing
 checks.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">temp_hub</span> <span class="op">&lt;-</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/path.html" class="external-link">path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"invalid_sb_hub"</span><span class="op">)</span></span>
 <span><span class="fu">gert</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/gert/reference/git_fetch.html" class="external-link">git_clone</a></span><span class="op">(</span></span>
 <span>  url <span class="op">=</span> <span class="st">"https://github.com/hubverse-org/ci-testhub-simple"</span>,</span>
@@ -524,7 +538,7 @@ checks.</p>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">└──────────────────────────────────────────────────────────────────────────┘</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">2022-10-22-hub-baseline.parquet</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">hub-baseline/2022-10-22-hub-baseline.parquet</span><span style="color: #BB00BB;"> ────</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">ⓧ</span> <span style="color: #B2B2B2;">[colnames]</span>: Column names must be consistent with expected round task IDs and</span></span>
 <span><span class="co">#&gt;   std column names.  Expected column <span style="color: #0000BB;">"age_group"</span> not present in file.</span></span>
@@ -538,7 +552,7 @@ checks.</p>
 <p>If all validations checks pass, <code><a href="../reference/check_for_errors.html">check_for_errors()</a></code>
 returns <code>TRUE</code> silently and prints:</p>
 <pre><code>✔ All validation checks have been successful.</code></pre>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">temp_hub</span> <span class="op">&lt;-</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/path.html" class="external-link">path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"valid_sb_hub"</span><span class="op">)</span></span>
 <span><span class="fu">gert</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/gert/reference/git_fetch.html" class="external-link">git_clone</a></span><span class="op">(</span></span>
 <span>  url <span class="op">=</span> <span class="st">"https://github.com/hubverse-org/ci-testhub-simple"</span>,</span>
@@ -575,17 +589,17 @@ returns <code>TRUE</code> silently and prints:</p>
 <p>If printing the results of all checks is preferred instead of just
 summarising the results of checks that failed, argument
 <code>verbose</code> can be set to <code>TRUE</code>.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/check_for_errors.html">check_for_errors</a></span><span class="op">(</span><span class="va">v_fail</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── <span style="font-weight: bold;">Individual check results</span> ──</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">invalid_sb_hub</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">hub-config</span><span style="color: #BB00BB;"> ────</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_config]</span>: All hub config files are valid.</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">2022-10-22-hub-baseline.parquet</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">hub-baseline/2022-10-22-hub-baseline.parquet</span><span style="color: #BB00BB;"> ────</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
@@ -619,7 +633,7 @@ summarising the results of checks that failed, argument
 <span><span class="co">#&gt; <span style="color: #BBBB00;">└──────────────────────────────────────────────────────────────────────────┘</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">2022-10-22-hub-baseline.parquet</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">hub-baseline/2022-10-22-hub-baseline.parquet</span><span style="color: #BB00BB;"> ────</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">ⓧ</span> <span style="color: #B2B2B2;">[colnames]</span>: Column names must be consistent with expected round task IDs and</span></span>
 <span><span class="co">#&gt;   std column names.  Expected column <span style="color: #0000BB;">"age_group"</span> not present in file.</span></span>
@@ -632,10 +646,10 @@ summarising the results of checks that failed, argument
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── <span style="font-weight: bold;">Individual check results</span> ──</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">valid_sb_hub</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">hub-config</span><span style="color: #BB00BB;"> ────</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_config]</span>: All hub config files are valid.</span></span>
-<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">2022-10-22-team1-goodmodel.csv</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">team1-goodmodel/2022-10-22-team1-goodmodel.csv</span><span style="color: #BB00BB;"> ────</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_exists]</span>: File exists at path</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">model-output/team1-goodmodel/2022-10-22-team1-goodmodel.csv</span>.<span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_name]</span>: File name <span style="color: #0000BB;">"2022-10-22-team1-goodmodel.csv"</span> is valid.<span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_location]</span>: File directory name matches `model_id` metadata in file</span></span>
@@ -664,6 +678,75 @@ summarising the results of checks that failed, argument
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> All validation checks have been successful.</span></span></code></pre></div>
 </div>
+</div>
+<div class="section level2">
+<h2 id="accessing-validation-results-by-file">Accessing validation results by file<a class="anchor" aria-label="anchor" href="#accessing-validation-results-by-file"></a>
+</h2>
+<p>The <code><a href="../reference/validate_pr.html">validate_pr()</a></code> function returns a
+<code>hub_validations_collection</code> object, which is a named list
+where each element contains the validation results for a specific file.
+You can access results for individual files using standard list
+subsetting:</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># See all file paths in the collection</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">v_pass</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "hub-config"                                    </span></span>
+<span><span class="co">#&gt; [2] "team1-goodmodel/2022-10-22-team1-goodmodel.csv"</span></span>
+<span></span>
+<span><span class="co"># Access all checks for a specific file</span></span>
+<span><span class="va">v_pass</span><span class="op">[[</span><span class="st">"team1-goodmodel/2022-10-22-team1-goodmodel.csv"</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">team1-goodmodel/2022-10-22-team1-goodmodel.csv</span><span style="color: #BB00BB;"> ────</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_exists]</span>: File exists at path</span></span>
+<span><span class="co">#&gt;   <span style="color: #0000BB;">model-output/team1-goodmodel/2022-10-22-team1-goodmodel.csv</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_name]</span>: File name <span style="color: #0000BB;">"2022-10-22-team1-goodmodel.csv"</span> is valid.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_location]</span>: File directory name matches `model_id` metadata in file</span></span>
+<span><span class="co">#&gt;   name.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[round_id_valid]</span>: `round_id` is valid.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_format]</span>: File is accepted hub format.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_n]</span>: Number of accepted model output files per round met.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[metadata_exists]</span>: Metadata file exists at path</span></span>
+<span><span class="co">#&gt;   <span style="color: #0000BB;">model-metadata/team1-goodmodel.yaml</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_read]</span>: File could be read successfully.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_round_id_col]</span>: `round_id_col` name is valid.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[unique_round_id]</span>: `round_id` column <span style="color: #0000BB;">"origin_date"</span> contains a single, unique</span></span>
+<span><span class="co">#&gt;   round ID value.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[match_round_id]</span>: All `round_id_col` <span style="color: #0000BB;">"origin_date"</span> values match submission</span></span>
+<span><span class="co">#&gt;   `round_id` from file name.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[colnames]</span>: Column names are consistent with expected round task IDs and std</span></span>
+<span><span class="co">#&gt;   column names.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[col_types]</span>: Column data types match hub schema.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_vals]</span>: `tbl` contains valid values/value combinations.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[derived_task_id_vals]</span>: No derived task IDs to check. Skipping derived task</span></span>
+<span><span class="co">#&gt;   ID value check.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[rows_unique]</span>: All combinations of task ID</span></span>
+<span><span class="co">#&gt;   column/`output_type`/`output_type_id` values are unique.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[req_vals]</span>: Required task ID/output type/output type ID combinations all</span></span>
+<span><span class="co">#&gt;   present.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[value_col_valid]</span>: Values in column `value` all valid with respect to</span></span>
+<span><span class="co">#&gt;   modeling task config.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[value_col_non_desc]</span>: Quantile or cdf `value` values increase when ordered by</span></span>
+<span><span class="co">#&gt;   `output_type_id`.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[value_col_sum1]</span>: No pmf output types to check for sum of 1. Check skipped.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[spl_compound_taskid_set]</span>: No v3 samples found in model output data to check.</span></span>
+<span><span class="co">#&gt;   Skipping `check_tbl_spl_compound_taskid_set` check.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[spl_compound_tid]</span>: No v3 samples found in model output data to check.</span></span>
+<span><span class="co">#&gt;   Skipping `check_tbl_spl_compound_tid` check.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[spl_non_compound_tid]</span>: No v3 samples found in model output data to check.</span></span>
+<span><span class="co">#&gt;   Skipping `check_tbl_spl_non_compound_tid` check.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[spl_n]</span>: No v3 samples found in model output data to check. Skipping</span></span>
+<span><span class="co">#&gt;   `check_tbl_spl_n` check.</span></span>
+<span></span>
+<span><span class="co"># Access a specific check result</span></span>
+<span><span class="va">v_pass</span><span class="op">[[</span><span class="st">"team1-goodmodel/2022-10-22-team1-goodmodel.csv"</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">file_exists</span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB; font-weight: bold;">&lt;message/check_success&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Message</span><span style="font-weight: bold;">:</span></span></span>
+<span><span class="co">#&gt; File exists at path</span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">model-output/team1-goodmodel/2022-10-22-team1-goodmodel.csv</span>.</span></span></code></pre></div>
+<p>This structure is particularly useful when you need to
+programmatically inspect specific checks or extract error details from
+failed validations.</p>
 </div>
 <div class="section level2">
 <h2 id="validate_pr-check-details">

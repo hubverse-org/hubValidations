@@ -43,11 +43,11 @@ v <- validate_submission(
 # Default print
 print(v)
 #> 
-#> ── simple ────
+#> ── hub-config ────
 #> 
 #> ✔ [valid_config]: All hub config files are valid.
 #> 
-#> ── 2022-10-08-team1-goodmodel.csv ────
+#> ── team1-goodmodel/2022-10-08-team1-goodmodel.csv ────
 #> 
 #> ✔ [file_exists]: File exists at path
 #>   model-output/team1-goodmodel/2022-10-08-team1-goodmodel.csv.
@@ -59,6 +59,9 @@ print(v)
 #> ✔ [file_n]: Number of accepted model output files per round met.
 #> ✔ [metadata_exists]: Metadata file exists at path
 #>   model-metadata/team1-goodmodel.yaml.
+#> ✖ [submission_time]: Submission time must be within accepted submission window
+#>   for round.  Current time "2026-03-03 12:25:43 UTC" is outside window
+#>   2022-10-02 EDT--2022-10-09 23:59:59 EDT.
 #> ✔ [file_read]: File could be read successfully.
 #> ✔ [valid_round_id_col]: `round_id_col` name is valid.
 #> ✔ [unique_round_id]: `round_id` column "origin_date" contains a single, unique
@@ -80,18 +83,15 @@ print(v)
 #> ✔ [value_col_non_desc]: Quantile or cdf `value` values increase when ordered by
 #>   `output_type_id`.
 #> ℹ [value_col_sum1]: No pmf output types to check for sum of 1. Check skipped.
-#> ✖ [submission_time]: Submission time must be within accepted submission window
-#>   for round.  Current time "2026-01-13 15:36:40 UTC" is outside window
-#>   2022-10-02 EDT--2022-10-09 23:59:59 EDT.
 
 # Show check-level warnings (if any)
 print(v, show_check_warnings = TRUE)
 #> 
-#> ── simple ────
+#> ── hub-config ────
 #> 
 #> ✔ [valid_config]: All hub config files are valid.
 #> 
-#> ── 2022-10-08-team1-goodmodel.csv ────
+#> ── team1-goodmodel/2022-10-08-team1-goodmodel.csv ────
 #> 
 #> ✔ [file_exists]: File exists at path
 #>   model-output/team1-goodmodel/2022-10-08-team1-goodmodel.csv.
@@ -103,6 +103,9 @@ print(v, show_check_warnings = TRUE)
 #> ✔ [file_n]: Number of accepted model output files per round met.
 #> ✔ [metadata_exists]: Metadata file exists at path
 #>   model-metadata/team1-goodmodel.yaml.
+#> ✖ [submission_time]: Submission time must be within accepted submission window
+#>   for round.  Current time "2026-03-03 12:25:43 UTC" is outside window
+#>   2022-10-02 EDT--2022-10-09 23:59:59 EDT.
 #> ✔ [file_read]: File could be read successfully.
 #> ✔ [valid_round_id_col]: `round_id_col` name is valid.
 #> ✔ [unique_round_id]: `round_id` column "origin_date" contains a single, unique
@@ -124,9 +127,6 @@ print(v, show_check_warnings = TRUE)
 #> ✔ [value_col_non_desc]: Quantile or cdf `value` values increase when ordered by
 #>   `output_type_id`.
 #> ℹ [value_col_sum1]: No pmf output types to check for sum of 1. Check skipped.
-#> ✖ [submission_time]: Submission time must be within accepted submission window
-#>   for round.  Current time "2026-01-13 15:36:40 UTC" is outside window
-#>   2022-10-02 EDT--2022-10-09 23:59:59 EDT.
 
 # Example with validation-level warning
 v_with_warning <- v
@@ -143,11 +143,11 @@ print(v_with_warning)
 #> └─────────────────────────────────────────────┘
 #> 
 #> 
-#> ── simple ────
+#> ── hub-config ────
 #> 
 #> ✔ [valid_config]: All hub config files are valid.
 #> 
-#> ── 2022-10-08-team1-goodmodel.csv ────
+#> ── team1-goodmodel/2022-10-08-team1-goodmodel.csv ────
 #> 
 #> ✔ [file_exists]: File exists at path
 #>   model-output/team1-goodmodel/2022-10-08-team1-goodmodel.csv.
@@ -159,6 +159,9 @@ print(v_with_warning)
 #> ✔ [file_n]: Number of accepted model output files per round met.
 #> ✔ [metadata_exists]: Metadata file exists at path
 #>   model-metadata/team1-goodmodel.yaml.
+#> ✖ [submission_time]: Submission time must be within accepted submission window
+#>   for round.  Current time "2026-03-03 12:25:43 UTC" is outside window
+#>   2022-10-02 EDT--2022-10-09 23:59:59 EDT.
 #> ✔ [file_read]: File could be read successfully.
 #> ✔ [valid_round_id_col]: `round_id_col` name is valid.
 #> ✔ [unique_round_id]: `round_id` column "origin_date" contains a single, unique
@@ -180,7 +183,4 @@ print(v_with_warning)
 #> ✔ [value_col_non_desc]: Quantile or cdf `value` values increase when ordered by
 #>   `output_type_id`.
 #> ℹ [value_col_sum1]: No pmf output types to check for sum of 1. Check skipped.
-#> ✖ [submission_time]: Submission time must be within accepted submission window
-#>   for round.  Current time "2026-01-13 15:36:40 UTC" is outside window
-#>   2022-10-02 EDT--2022-10-09 23:59:59 EDT.
 ```

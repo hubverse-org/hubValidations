@@ -34,7 +34,7 @@ to validate their model output files prior to submitting.**
 The function takes a relative path, relative to the model output
 directory, as argument `file_path`, performs a series of standard
 validation checks and returns their results in the form of a
-`hub_validations` S3 class object.
+`hub_validations_collection` S3 class object.
 
 ``` r
 hub_path <- system.file("testhubs/simple", package = "hubValidations")
@@ -43,12 +43,12 @@ validate_submission(hub_path,
   file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
 )
 #> 
-#> ── simple ────
+#> ── hub-config ────
 #> 
 #> ✔ [valid_config]: All hub config files are valid.
 #> 
 #> 
-#> ── 2022-10-08-team1-goodmodel.csv ────
+#> ── team1-goodmodel/2022-10-08-team1-goodmodel.csv ────
 #> 
 #> 
 #> 
@@ -62,6 +62,9 @@ validate_submission(hub_path,
 #> ✔ [file_n]: Number of accepted model output files per round met.
 #> ✔ [metadata_exists]: Metadata file exists at path
 #>   model-metadata/team1-goodmodel.yaml.
+#> ✖ [submission_time]: Submission time must be within accepted submission window
+#>   for round.  Current time "2026-03-03 12:26:28 UTC" is outside window
+#>   2022-10-02 EDT--2022-10-09 23:59:59 EDT.
 #> ✔ [file_read]: File could be read successfully.
 #> ✔ [valid_round_id_col]: `round_id_col` name is valid.
 #> ✔ [unique_round_id]: `round_id` column "origin_date" contains a single, unique
@@ -83,9 +86,6 @@ validate_submission(hub_path,
 #> ✔ [value_col_non_desc]: Quantile or cdf `value` values increase when ordered by
 #>   `output_type_id`.
 #> ℹ [value_col_sum1]: No pmf output types to check for sum of 1. Check skipped.
-#> ✖ [submission_time]: Submission time must be within accepted submission window
-#>   for round.  Current time "2026-01-13 15:37:27 UTC" is outside window
-#>   2022-10-02 EDT--2022-10-09 23:59:59 EDT.
 ```
 
 For more details on the structure of `<hub_validations>` objects,
@@ -109,12 +109,12 @@ validate_submission(hub_path,
   file_path = "team1-goodmodel/2022-10-15-hub-baseline.csv"
 )
 #> 
-#> ── simple ────
+#> ── hub-config ────
 #> 
 #> ✔ [valid_config]: All hub config files are valid.
 #> 
 #> 
-#> ── 2022-10-15-hub-baseline.csv ────
+#> ── team1-goodmodel/2022-10-15-hub-baseline.csv ────
 #> 
 #> 
 #> 
@@ -129,6 +129,9 @@ validate_submission(hub_path,
 #> ✔ [file_n]: Number of accepted model output files per round met.
 #> ✔ [metadata_exists]: Metadata file exists at path
 #>   model-metadata/hub-baseline.yml.
+#> ✖ [submission_time]: Submission time must be within accepted submission window
+#>   for round.  Current time "2026-03-03 12:26:30 UTC" is outside window
+#>   2022-10-02 EDT--2022-10-09 23:59:59 EDT.
 #> ✔ [file_read]: File could be read successfully.
 #> ✔ [valid_round_id_col]: `round_id_col` name is valid.
 #> ✔ [unique_round_id]: `round_id` column "origin_date" contains a single, unique
@@ -136,9 +139,6 @@ validate_submission(hub_path,
 #> ⓧ [match_round_id]: All `round_id_col` "origin_date" values must match
 #>   submission `round_id` from file name.  `round_id` value 2022-10-08 does not
 #>   match submission `round_id` "2022-10-15"
-#> ✖ [submission_time]: Submission time must be within accepted submission window
-#>   for round.  Current time "2026-01-13 15:37:28 UTC" is outside window
-#>   2022-10-02 EDT--2022-10-09 23:59:59 EDT.
 ```
 
 ### Execution Errors
@@ -151,7 +151,7 @@ object.
 ### Checking for errors with `check_for_errors()`
 
 You can check whether your file will overall pass validation checks by
-passing the `hub_validations` object to
+passing the validation results to
 [`check_for_errors()`](https://hubverse-org.github.io/hubValidations/reference/check_for_errors.md).
 
 If validation fails, an error will be thrown and the failing checks will
@@ -163,10 +163,10 @@ validate_submission(hub_path,
 )  |>
   check_for_errors()
 #> 
-#> ── 2022-10-08-team1-goodmodel.csv ────
+#> ── team1-goodmodel/2022-10-08-team1-goodmodel.csv ────
 #> 
 #> ✖ [submission_time]: Submission time must be within accepted submission window
-#>   for round.  Current time "2026-01-13 15:37:30 UTC" is outside window
+#>   for round.  Current time "2026-03-03 12:26:31 UTC" is outside window
 #>   2022-10-02 EDT--2022-10-09 23:59:59 EDT.
 #> Error in `check_for_errors()`:
 #> ! 
@@ -298,16 +298,10 @@ validate_model_metadata(hub_path,
   file_path = "hub-baseline.yml"
 )
 #> 
-#> ── model-metadata-schema.json ────
-#> 
-#> ✔ [metadata_schema_exists]: File exists at path
-#>   hub-config/model-metadata-schema.json.
-#> 
-#> 
 #> ── hub-baseline.yml ────
 #> 
-#> 
-#> 
+#> ✔ [metadata_schema_exists]: Model metadata schema file exists at path
+#>   hub-config/model-metadata-schema.json.
 #> ✔ [metadata_file_exists]: File exists at path model-metadata/hub-baseline.yml.
 #> ✔ [metadata_file_ext]: Metadata file extension is "yml" or "yaml".
 #> ✔ [metadata_file_location]: Metadata file directory name matches
@@ -321,13 +315,10 @@ validate_model_metadata(hub_path,
   file_path = "team1-goodmodel.yaml"
 )
 #> 
-#> ── model-metadata-schema.json ────
-#> 
-#> ✔ [metadata_schema_exists]: File exists at path
-#>   hub-config/model-metadata-schema.json.
 #> ── team1-goodmodel.yaml ────
 #> 
-#> ✔ [metadata_file_exists]: File exists at path
+#> ✔ [metadata_schema_exists]: Model metadata schema file exists at path
+#>   hub-config/model-metadata-schema.json.✔ [metadata_file_exists]: File exists at path
 #>   model-metadata/team1-goodmodel.yaml.✔ [metadata_file_ext]: Metadata file extension is "yml" or "yaml".✔ [metadata_file_location]: Metadata file directory name matches
 #>   "model-metadata".ⓧ [metadata_matches_schema]: Metadata file contents must be consistent with
 #>   schema specifications.  - must have required property 'model_details' . -
@@ -393,7 +384,7 @@ validate_target_submission(
   target_type = "time-series"
 )
 #> 
-#> ── target_file ────
+#> ── hub-config ────
 #> 
 #> ✔ [valid_config]: All hub config files are valid.
 #> 
@@ -428,7 +419,7 @@ validate_target_submission(
   target_type = "oracle-output"
 )
 #> 
-#> ── target_file ────
+#> ── hub-config ────
 #> 
 #> ✔ [valid_config]: All hub config files are valid.
 #> 
@@ -470,7 +461,7 @@ validate_target_submission(
   target_type = "time-series"
 )
 #> 
-#> ── target_dir ────
+#> ── hub-config ────
 #> 
 #> ✔ [valid_config]: All hub config files are valid.
 #> 
@@ -543,7 +534,7 @@ v <- validate_target_submission(
 )
 v
 #> 
-#> ── target_file ────
+#> ── hub-config ────
 #> 
 #> ✔ [valid_config]: All hub config files are valid.
 #> 
@@ -583,7 +574,7 @@ v <- validate_target_submission(
 )
 v
 #> 
-#> ── target_file ────
+#> ── hub-config ────
 #> 
 #> ✔ [valid_config]: All hub config files are valid.
 #> 
@@ -631,7 +622,7 @@ validate_target_submission(
   date_col = "target_end_date"
 )
 #> 
-#> ── target_file ────
+#> ── hub-config ────
 #> 
 #> ✔ [valid_config]: All hub config files are valid.
 #> 
@@ -672,7 +663,7 @@ hub_path <- system.file("testhubs/v6/target_file", package = "hubUtils")
 
 validate_target_dataset(hub_path, target_type = "time-series")
 #> 
-#> ── time-series.csv ────
+#> ── time-series ────
 #> 
 #> ✔ [target_dataset_exists]: time-series dataset detected.
 #> ✔ [target_dataset_unique]: target-data directory contains single unique
@@ -683,7 +674,7 @@ validate_target_dataset(hub_path, target_type = "time-series")
 
 validate_target_dataset(hub_path, target_type = "oracle-output")
 #> 
-#> ── oracle-output.csv ────
+#> ── oracle-output ────
 #> 
 #> ✔ [target_dataset_exists]: oracle-output dataset detected.✔ [target_dataset_unique]: target-data directory contains single unique
 #>   oracle-output dataset.✔ [target_dataset_file_ext_unique]: oracle-output dataset files share single

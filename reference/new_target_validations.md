@@ -1,6 +1,11 @@
 # Create new or convert list to `target_validations` S3 class object
 
-Create new or convert list to `target_validations` S3 class object
+A `target_validations` object contains validation results for a single
+validation subject. Depending on context, this could be a target data
+file, the hub configuration directory (`hub-config`), or a target
+dataset type (`time-series`, `oracle-output`). All checks must have the
+same `$where` value, which is extracted and stored as the `where`
+attribute.
 
 ## Usage
 
@@ -15,16 +20,18 @@ as_target_validations(x)
 - ...:
 
   named elements to be included. Each element must be an object which
-  inherits from class `<hub_check>`.
+  inherits from class `<hub_check>`. All checks must have the same
+  `$where` value.
 
 - x:
 
   a list of named elements. Each element must be an object which
-  inherits from class `<hub_check>`.
+  inherits from class `<hub_check>`. All checks must have the same
+  `$where` value.
 
 ## Value
 
-an S3 object of class `<target_validations>`.
+an S3 object of class `<target_validations>` with a `where` attribute.
 
 ## Functions
 
