@@ -66,6 +66,21 @@ check_tbl_spl_compound_taskid_set <- function(
   ) |>
     all()
 
+  # If the check passed, detect whether any compound_taskid_set is coarser
+  # than configured. This can indicate a misconfiguration or submission
+  # error rather than an intentional modelling choice.
+  coarser_warnings <- NULL
+  if (check) {
+    config_comp_tids <- get_round_compound_task_ids(config_tasks, round_id)
+    coarser_warnings <- detect_coarser_compound_taskid_set(
+      compound_taskid_set,
+      config_comp_tids
+    )
+    if (length(coarser_warnings) == 0L) {
+      coarser_warnings <- NULL
+    }
+  }
+
   capture_check_cnd(
     check = check,
     file_path = file_path,
@@ -76,6 +91,7 @@ check_tbl_spl_compound_taskid_set <- function(
     details = compile_msg(compound_taskid_set),
     errors = compile_errors(compound_taskid_set),
     error = TRUE,
+    warnings = coarser_warnings,
     compound_taskid_set = if (check) {
       compound_taskid_set
     } else {

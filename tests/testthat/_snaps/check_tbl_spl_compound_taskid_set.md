@@ -184,10 +184,17 @@
       str(check_tbl_spl_compound_taskid_set(tbl_coarse_location, "2022-10-29",
         create_file_path("2022-10-29"), hub_path))
     Output
-      List of 6
+      List of 7
        $ message            : chr "All samples in a model task conform to single, unique compound task ID set that matches or is\n    coarser than"| __truncated__
        $ where              : 'fs_path' chr "flu-base/2022-10-29-flu-base.parquet"
        $ errors             : NULL
+       $ warnings           :List of 1
+        ..$ 2:List of 4
+        .. ..$ message       : chr "Modeling task 2: detected `compound_taskid_set` (\"reference_date\" and \"location\") is coarser than configure"| __truncated__
+        .. ..$ where         : NULL
+        .. ..$ call          : chr ".f"
+        .. ..$ use_cli_format: logi TRUE
+        .. ..- attr(*, "class")= chr [1:4] "validation_warning" "rlang_warning" "warning" "condition"
        $ compound_taskid_set:List of 2
         ..$ 1: NULL
         ..$ 2: chr [1:2] "reference_date" "location"
@@ -201,10 +208,17 @@
       str(check_tbl_spl_compound_taskid_set(tbl_coarse_horizon, "2022-11-05",
         create_file_path("2022-11-05"), hub_path))
     Output
-      List of 6
+      List of 7
        $ message            : chr "All samples in a model task conform to single, unique compound task ID set that matches or is\n    coarser than"| __truncated__
        $ where              : 'fs_path' chr "flu-base/2022-11-05-flu-base.parquet"
        $ errors             : NULL
+       $ warnings           :List of 1
+        ..$ 2:List of 4
+        .. ..$ message       : chr "Modeling task 2: detected `compound_taskid_set` (\"reference_date\", \"horizon\", and \"target_end_date\") is c"| __truncated__
+        .. ..$ where         : NULL
+        .. ..$ call          : chr ".f"
+        .. ..$ use_cli_format: logi TRUE
+        .. ..- attr(*, "class")= chr [1:4] "validation_warning" "rlang_warning" "warning" "condition"
        $ compound_taskid_set:List of 2
         ..$ 1: NULL
         ..$ 2: chr [1:3] "reference_date" "horizon" "target_end_date"
@@ -218,7 +232,7 @@
       str(check_tbl_spl_compound_taskid_set(tbl_coarse_horizon, "2022-11-05",
         create_file_path("2022-11-05"), hub_path))
     Output
-      List of 8
+      List of 9
        $ message            : chr "All samples in a model task do not conform to single, unique compound task ID set that matches or is\n    coars"| __truncated__
        $ trace              : NULL
        $ parent             : NULL
@@ -230,6 +244,7 @@
         .. .. ..$ invalid_tbl_comp_tids: chr "target_end_date"
         .. .. ..$ tbl_comp_tids        : chr [1:3] "reference_date" "horizon" "target_end_date"
         .. .. ..$ output_type_ids      : chr [1:40] "1" "10" "11" "12" ...
+       $ warnings           : NULL
        $ compound_taskid_set: logi NA
        $ call               : chr "check_tbl_spl_compound_taskid_set"
        $ use_cli_format     : logi TRUE
@@ -241,10 +256,17 @@
       str(check_tbl_spl_compound_taskid_set(tbl_coarse_horizon, "2022-11-05",
         create_file_path("2022-11-05"), hub_path, derived_task_ids = "target_end_date"))
     Output
-      List of 6
+      List of 7
        $ message            : chr "All samples in a model task conform to single, unique compound task ID set that matches or is\n    coarser than"| __truncated__
        $ where              : 'fs_path' chr "flu-base/2022-11-05-flu-base.parquet"
        $ errors             : NULL
+       $ warnings           :List of 1
+        ..$ 2:List of 4
+        .. ..$ message       : chr "Modeling task 2: detected `compound_taskid_set` (\"reference_date\" and \"horizon\") is coarser than configured"| __truncated__
+        .. ..$ where         : NULL
+        .. ..$ call          : chr ".f"
+        .. ..$ use_cli_format: logi TRUE
+        .. ..- attr(*, "class")= chr [1:4] "validation_warning" "rlang_warning" "warning" "condition"
        $ compound_taskid_set:List of 2
         ..$ 1: NULL
         ..$ 2: chr [1:2] "reference_date" "horizon"
@@ -268,7 +290,7 @@
       str(check_tbl_spl_compound_taskid_set(tbl_fine, "2022-10-22", create_file_path(
         "2022-10-22"), test_path("testdata/hub-spl")))
     Output
-      List of 8
+      List of 9
        $ message            : chr "All samples in a model task do not conform to single, unique compound task ID set that matches or is\n    coars"| __truncated__
        $ trace              : NULL
        $ parent             : NULL
@@ -280,6 +302,7 @@
         .. .. ..$ invalid_tbl_comp_tids: chr "variant"
         .. .. ..$ tbl_comp_tids        : chr [1:5] "reference_date" "horizon" "location" "variant" ...
         .. .. ..$ output_type_ids      : chr [1:800] "1" "10" "100" "101" ...
+       $ warnings           : NULL
        $ compound_taskid_set: logi NA
        $ call               : chr "check_tbl_spl_compound_taskid_set"
        $ use_cli_format     : logi TRUE

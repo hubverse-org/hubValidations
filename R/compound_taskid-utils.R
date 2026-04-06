@@ -261,3 +261,38 @@ get_comp_tid_sample_ids <- function(is_compound_taskid, output_type_ids) {
     ~ c(list(tbl_comp_tids = .y), .x)
   )
 }
+
+#' Detect model tasks where detected compound_taskid_set is coarser than
+#' configured and return check-level warnings.
+#' @param detected List of detected compound_taskid_set vectors (one per model
+#'   task).
+#' @param configured List of configured compound_taskid_set vectors (one per
+#'   model task).
+#' @returns List of `validation_warning` objects, one per coarser model task.
+#'   Empty list if no model tasks are coarser.
+#' @noRd
+detect_coarser_compound_taskid_set <- function(detected, configured) {
+  purrr::pmap(
+    list(det = detected, conf = configured, mt_idx = seq_along(detected)),
+    function(det, conf, mt_idx) {
+      if (is.null(det) || is.null(conf)) {
+        return(NULL)
+      }
+      # Coarser means fewer compound task IDs than configured
+      if (length(det) < length(conf) || !all(conf %in% det)) {
+        missing_comp_tids <- setdiff(conf, det) # nolint: object_usage_linter
+        det_label <- if (length(det) == 0L) "none" else det # nolint: object_usage_linter
+        msg <- cli::format_inline(
+          "Modeling task {mt_idx}: detected {.var compound_taskid_set} ",
+          "({.val {det_label}}) is coarser than configured ",
+          "({.val {conf}}). ",
+          "Configured compound task ID{?s} {.val {missing_comp_tids}} ",
+          "{?is/are} not fixed within samples. ",
+          "This may indicate a misconfiguration or submission error."
+        )
+        capture_validation_warning(msg = msg)
+      }
+    }
+  ) |>
+    purrr::compact()
+}

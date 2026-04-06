@@ -153,6 +153,51 @@ test_that("Different compound_taskid_sets work", {
   )
 })
 
+test_that("Coarser compound_taskid_set triggers check-level warning", {
+  hub_path <- test_path("testdata/hub-spl")
+  round_id <- "2022-10-29"
+  file_path <- create_file_path(round_id = round_id)
+
+  # This file has compound_taskid_set = ["reference_date", "location"],
+  # coarser than configured ["reference_date", "horizon", "location",
+  # "variant", "target_end_date"].
+  tbl_coarse_location <- read_model_out_file(
+    file_path = file_path,
+    hub_path = hub_path,
+    coerce_types = "chr"
+  )
+
+  result <- check_tbl_spl_compound_taskid_set(
+    tbl_coarse_location,
+    round_id = round_id,
+    file_path = file_path,
+    hub_path = hub_path
+  )
+
+  # Check passes but with a warning
+  expect_s3_class(result, "check_success")
+  expect_true(length(result$warnings) > 0)
+  expect_true(
+    grepl("coarser than configured", result$warnings[[1]]$message)
+  )
+
+  # Matching compound_taskid_set should have no warnings
+  hub_path_match <- system.file("testhubs/samples", package = "hubValidations")
+  file_path_match <- "flu-base/2022-10-22-flu-base.csv"
+  result_match <- check_tbl_spl_compound_taskid_set(
+    read_model_out_file(
+      file_path = file_path_match,
+      hub_path = hub_path_match,
+      coerce_types = "chr"
+    ),
+    "2022-10-22",
+    file_path_match,
+    hub_path_match
+  )
+  expect_s3_class(result_match, "check_success")
+  expect_null(result_match$warnings)
+})
+
 test_that("Finer compound_taskid_sets work", {
   hub_path <- test_path("testdata/hub-spl")
   # Mock the config file to remove variant from compound_taskid_set
