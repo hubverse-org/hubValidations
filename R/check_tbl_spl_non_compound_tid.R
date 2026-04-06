@@ -64,11 +64,10 @@ check_tbl_spl_non_compound_tid <- function(
     )
   }
 
-  n_tbl <- dplyr::summarise(
-    hash_tbl,
-    n = dplyr::n_distinct(.data$hash_non_comp_tid),
-    mt_id = unique(.data$mt_id)
-  ) |>
+  n_tbl <- dplyr::group_by(hash_tbl, .data$mt_id) |>
+    dplyr::summarise(
+      n = dplyr::n_distinct(.data$hash_non_comp_tid)
+    ) |>
     dplyr::filter(.data$n > 1L)
 
   check <- nrow(n_tbl) == 0L
@@ -78,7 +77,7 @@ check_tbl_spl_non_compound_tid <- function(
     errors <- NULL
   } else {
     errors <- non_comptid_mismatch_errors(
-      mt_ids = n_tbl$mt_id,
+      mt_ids = unique(n_tbl$mt_id),
       hash_tbl,
       tbl,
       config_tasks,

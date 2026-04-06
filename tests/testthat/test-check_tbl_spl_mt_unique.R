@@ -34,6 +34,21 @@ test_that("check_tbl_spl_mt_unique detects samples spanning model tasks", {
     "check_success"
   )
 
+  # submission_tmpl() output should also pass
+  tmpl <- submission_tmpl(
+    path = hub_path,
+    round_id = round_id,
+    required_vals_only = FALSE,
+    output_types = "sample",
+    complete_cases_only = FALSE
+  ) |>
+    hubData::coerce_to_character()
+
+  expect_s3_class(
+    check_tbl_spl_mt_unique(tmpl, round_id, file_path, hub_path),
+    "check_success"
+  )
+
   # Invalid case: share sample IDs across model tasks
   tbl_error <- tbl
   tbl_error$output_type_id[tbl_error$target == "ed_visits"] <-
