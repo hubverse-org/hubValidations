@@ -250,6 +250,19 @@ validate_model_data <- function(
 
   # -- v3 sample checks ----
   if (hubUtils::is_v3_hub(hub_path)) {
+    checks$spl_mt_unique <- try_check(
+      check_tbl_spl_mt_unique(
+        tbl_chr,
+        round_id = round_id,
+        file_path = file_path,
+        hub_path = hub_path,
+        derived_task_ids = derived_task_ids
+      ),
+      file_path
+    )
+    if (is_any_error(checks$spl_mt_unique)) {
+      return(checks)
+    }
     checks$spl_compound_taskid_set <- try_check(
       check_tbl_spl_compound_taskid_set(
         tbl_chr,

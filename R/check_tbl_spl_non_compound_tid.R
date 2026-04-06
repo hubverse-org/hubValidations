@@ -49,6 +49,21 @@ check_tbl_spl_non_compound_tid <- function(
     derived_task_ids = derived_task_ids
   )
 
+  # Check that no output_type_id spans multiple model tasks. This should be
+  # caught upstream by check_tbl_spl_mt_unique, but we handle it defensively
+  # here to produce an informative error instead of a cryptic dplyr crash.
+  otid_mt <- unique(hash_tbl[, c("output_type_id", "mt_id")])
+  dup_otids <- otid_mt$output_type_id[duplicated(otid_mt$output_type_id)]
+  if (length(dup_otids) > 0L) {
+    cli::cli_abort(
+      c(
+        "x" = "Sample {.var output_type_id}s span multiple modeling tasks.",
+        "i" = "Use {.fn submission_tmpl} to generate a template with
+        correct sample ID structure."
+      )
+    )
+  }
+
   n_tbl <- dplyr::summarise(
     hash_tbl,
     n = dplyr::n_distinct(.data$hash_non_comp_tid),

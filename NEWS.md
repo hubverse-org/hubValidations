@@ -1,5 +1,8 @@
 # hubValidations (development version)
 
+* Added new `check_tbl_spl_mt_unique` check that validates individual sample `output_type_id`s do not span multiple model tasks. Different model tasks can have different sample configurations, so samples should be entirely independent across model tasks. The check runs upstream of other sample checks and returns an early error if violated (#333).
+* Added defensive error handling in `check_tbl_spl_non_compound_tid` to produce an informative error message when sample `output_type_id`s span multiple model tasks, instead of a cryptic `dplyr::summarise()` crash (#332).
+
 # hubValidations 2.0.0
 
 ## Breaking Changes

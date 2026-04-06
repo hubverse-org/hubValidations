@@ -1,0 +1,112 @@
+{
+    "schema_version": "https://raw.githubusercontent.com/hubverse-org/schemas/main/v3.0.0/tasks-schema.json",
+    "rounds": [
+        {
+            "round_id_from_variable": true,
+            "round_id": "reference_date",
+            "model_tasks": [
+                {
+                    "task_ids": {
+                        "reference_date": {
+                            "required": null,
+                            "optional": ["2022-10-22"]
+                        },
+                        "target": {
+                            "required": null,
+                            "optional": ["hosp"]
+                        },
+                        "horizon": {
+                            "required": null,
+                            "optional": [0, 1]
+                        },
+                        "location": {
+                            "required": ["US", "01"],
+                            "optional": null
+                        }
+                    },
+                    "output_type": {
+                        "sample": {
+                            "output_type_id_params": {
+                                "is_required": true,
+                                "type": "integer",
+                                "min_samples_per_task": 2,
+                                "max_samples_per_task": 2,
+                                "compound_taskid_set": ["location", "target"]
+                            },
+                            "value": {
+                                "type": "integer",
+                                "minimum": 0
+                            }
+                        }
+                    },
+                    "target_metadata": [
+                        {
+                            "target_id": "hosp",
+                            "target_name": "hospitalizations",
+                            "target_units": "count",
+                            "target_keys": {
+                                "target": ["hosp"]
+                            },
+                            "target_type": "continuous",
+                            "is_step_ahead": true,
+                            "time_unit": "week"
+                        }
+                    ]
+                },
+                {
+                    "task_ids": {
+                        "reference_date": {
+                            "required": null,
+                            "optional": ["2022-10-22"]
+                        },
+                        "target": {
+                            "required": null,
+                            "optional": ["ed_visits"]
+                        },
+                        "horizon": {
+                            "required": null,
+                            "optional": [0, 1]
+                        },
+                        "location": {
+                            "required": ["US", "01"],
+                            "optional": null
+                        }
+                    },
+                    "output_type": {
+                        "sample": {
+                            "output_type_id_params": {
+                                "is_required": true,
+                                "type": "integer",
+                                "min_samples_per_task": 2,
+                                "max_samples_per_task": 2,
+                                "compound_taskid_set": ["location", "target"]
+                            },
+                            "value": {
+                                "type": "integer",
+                                "minimum": 0
+                            }
+                        }
+                    },
+                    "target_metadata": [
+                        {
+                            "target_id": "ed_visits",
+                            "target_name": "ED visits",
+                            "target_units": "count",
+                            "target_keys": {
+                                "target": ["ed_visits"]
+                            },
+                            "target_type": "continuous",
+                            "is_step_ahead": true,
+                            "time_unit": "week"
+                        }
+                    ]
+                }
+            ],
+            "submissions_due": {
+                "relative_to": "reference_date",
+                "start": -6,
+                "end": -3
+            }
+        }
+    ]
+}
