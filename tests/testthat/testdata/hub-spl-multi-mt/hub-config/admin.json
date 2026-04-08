@@ -1,0 +1,17 @@
+{
+    "schema_version": "https://raw.githubusercontent.com/hubverse-org/schemas/main/v3.0.0/admin-schema.json",
+    "name": "Test Hub",
+    "maintainer": "Test Org",
+    "contact": {
+        "name": "Test User",
+        "email": "test@example.com"
+    },
+    "repository": {
+        "host": "github",
+        "owner": "test-org",
+        "name": "test-hub"
+    },
+    "file_format": ["csv"],
+    "timezone": "US/Eastern",
+    "model_output_dir": "model-output"
+}

@@ -1075,7 +1075,7 @@
         .. ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
         ..- attr(*, "class")= chr [1:2] "hub_validations" "list"
         ..- attr(*, "where")= chr "hub-config"
-       $ flu-base/2022-10-22-flu-base.csv:List of 25
+       $ flu-base/2022-10-22-flu-base.csv:List of 26
         ..$ file_exists            :List of 4
         .. ..$ message       : chr "File exists at path 'model-output/flu-base/2022-10-22-flu-base.csv'. \n "
         .. ..$ where         : chr "flu-base/2022-10-22-flu-base.csv"
@@ -1205,6 +1205,13 @@
         .. ..$ where         : chr "flu-base/2022-10-22-flu-base.csv"
         .. ..$ error_tbl     : NULL
         .. ..$ call          : chr "check_tbl_value_col_sum1"
+        .. ..$ use_cli_format: logi TRUE
+        .. ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+        ..$ spl_mt_unique          :List of 5
+        .. ..$ message       : chr "Sample `output_type_id`s are each associated with a single, unique modeling task. \n "
+        .. ..$ where         : chr "flu-base/2022-10-22-flu-base.csv"
+        .. ..$ errors        : NULL
+        .. ..$ call          : chr "check_tbl_spl_mt_unique"
         .. ..$ use_cli_format: logi TRUE
         .. ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
         ..$ spl_compound_taskid_set:List of 7

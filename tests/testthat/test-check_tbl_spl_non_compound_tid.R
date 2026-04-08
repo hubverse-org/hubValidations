@@ -41,6 +41,76 @@ test_that("check_tbl_spl_non_compound_tid works", {
   )
 })
 
+test_that("check_tbl_spl_non_compound_tid works with valid multi-MT samples", {
+  hub_path <- test_path("testdata/hub-spl-multi-mt")
+  file_path <- "team-model/2022-10-22-team-model.csv"
+  round_id <- "2022-10-22"
+
+  tbl <- read_model_out_file(
+    file_path = file_path,
+    hub_path = hub_path,
+    coerce_types = "chr"
+  )
+
+  # Valid multi-MT submission with unique sample IDs per model task
+  # should pass without error
+  expect_s3_class(
+    check_tbl_spl_non_compound_tid(tbl, round_id, file_path, hub_path),
+    "check_success"
+  )
+
+  # submission_tmpl() output should also pass
+  tmpl <- submission_tmpl(
+    path = hub_path,
+    round_id = round_id,
+    required_vals_only = FALSE,
+    output_types = "sample",
+    complete_cases_only = FALSE
+  ) |>
+    hubData::coerce_to_character()
+
+  expect_s3_class(
+    check_tbl_spl_non_compound_tid(tmpl, round_id, file_path, hub_path),
+    "check_success"
+  )
+})
+
+test_that("check_tbl_spl_non_compound_tid errors when samples span model tasks", {
+  hub_path <- test_path("testdata/hub-spl-multi-mt")
+  file_path <- "team-model/2022-10-22-team-model.csv"
+  round_id <- "2022-10-22"
+
+  tbl <- read_model_out_file(
+    file_path = file_path,
+    hub_path = hub_path,
+    coerce_types = "chr"
+  )
+
+  # Share sample IDs across model tasks
+  tbl$output_type_id[tbl$target == "ed_visits"] <-
+    tbl$output_type_id[tbl$target == "hosp"]
+
+  config_tasks <- read_config(hub_path, "tasks")
+  compound_taskid_set <- get_tbl_compound_taskid_set(
+    tbl,
+    config_tasks,
+    round_id,
+    compact = FALSE,
+    error = FALSE
+  )
+
+  expect_error(
+    check_tbl_spl_non_compound_tid(
+      tbl,
+      round_id,
+      file_path,
+      hub_path,
+      compound_taskid_set = compound_taskid_set
+    ),
+    "span multiple modeling tasks"
+  )
+})
+
 test_that("Overriding compound_taskid_set in check_tbl_spl_compound_tid works", {
   hub_path <- test_path("testdata/hub-spl")
   file_path <- "flu-base/2022-10-22-flu-base.csv"
