@@ -6,8 +6,8 @@
 #' @inherit check_tbl_colnames return
 #' @inheritParams expand_model_out_grid
 #' @param derived_task_ids Character vector of derived task ID names (task IDs whose
-#' values depend on other task IDs) to ignore. Columns for such task ids will
-#' contain `NA`s. Defaults to extracting derived task IDs from hub `task.json`. See
+#' values depend on other task IDs) to ignore during validation. Defaults to
+#' extracting derived task IDs from hub `task.json`. See
 #' [get_hub_derived_task_ids()] for more details.
 #' @details
 #' Different model tasks can have different sample configurations
