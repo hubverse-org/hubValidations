@@ -182,6 +182,13 @@ Details of checks performed by \code{validate_model_data()}\if{html}{\out{
    <td style="text-align:left;"> error_tbl: table of rows affected </td>
   </tr>
   <tr>
+   <td style="text-align:left;font-weight: bold;"> spl_mt_unique </td>
+   <td style="text-align:left;"> Individual sample output_type_ids do not span multiple model tasks. </td>
+   <td style="text-align:left;"> TRUE </td>
+   <td style="text-align:left;"> check_error </td>
+   <td style="text-align:left;"> errors: list with mt_ids (model task indices the overlapping samples span) and output_type_ids (sample IDs appearing in multiple model tasks). </td>
+  </tr>
+  <tr>
    <td style="text-align:left;font-weight: bold;"> spl_compound_taskid_set </td>
    <td style="text-align:left;"> Sample compound task id sets for each modeling task match or are coarser than the expected set defined in tasks.json config. </td>
    <td style="text-align:left;"> TRUE </td>
@@ -201,7 +208,7 @@ Details of checks performed by \code{validate_model_data()}\if{html}{\out{
    <td style="text-align:left;"> TRUE </td>
    <td style="text-align:left;"> check_error </td>
    <td style="text-align:left;"> errors: list containing item for each modeling task with vectors of output type ids of samples failing validation and example table of most frequent non-compound task ID value combination
-across all samples in the modeling task. </td>
+across all samples in the modeling task </td>
   </tr>
   <tr>
    <td style="text-align:left;font-weight: bold;"> spl_n </td>

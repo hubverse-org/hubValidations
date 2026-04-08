@@ -359,7 +359,7 @@
       file_path = "flu-base/2022-10-22-flu-base.csv", validations_cfg_path = system.file(
         "testhubs/samples/hub-config/validations.yml", package = "hubValidations")))
     Output
-      List of 18
+      List of 19
        $ file_read              :List of 4
         ..$ message       : chr "File could be read successfully. \n "
         ..$ where         : chr "flu-base/2022-10-22-flu-base.csv"
@@ -446,6 +446,13 @@
         ..$ where         : chr "flu-base/2022-10-22-flu-base.csv"
         ..$ error_tbl     : NULL
         ..$ call          : chr "check_tbl_value_col_sum1"
+        ..$ use_cli_format: logi TRUE
+        ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+       $ spl_mt_unique          :List of 5
+        ..$ message       : chr "Sample `output_type_id`s are each associated with a single, unique modeling task. \n "
+        ..$ where         : chr "flu-base/2022-10-22-flu-base.csv"
+        ..$ errors        : NULL
+        ..$ call          : chr "check_tbl_spl_mt_unique"
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ spl_compound_taskid_set:List of 6
