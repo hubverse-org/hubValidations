@@ -1215,7 +1215,7 @@
         .. ..$ use_cli_format: logi TRUE
         .. ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
         ..$ spl_compound_taskid_set:List of 7
-        .. ..$ message            : chr "All samples in a model task conform to single, unique compound task ID set that matches or is\n    coarser than"| __truncated__
+        .. ..$ message            : chr "All samples in a model task conform to single, unique compound task ID set that matches the configured\n    `co"| __truncated__
         .. ..$ where              : chr "flu-base/2022-10-22-flu-base.csv"
         .. ..$ errors             : NULL
         .. ..$ warnings           : NULL
@@ -1271,7 +1271,7 @@
       v [req_vals]: Required task ID/output type/output type ID combinations all present.
       v [value_col_valid]: Values in column `value` all valid with respect to modeling task config.
       v [spl_n]: Required samples per compound idx task present.
-      v [spl_compound_taskid_set]: All samples in a model task conform to single, unique compound task ID set that matches or is coarser than the configured `compound_taksid_set`.
+      v [spl_compound_taskid_set]: All samples in a model task conform to single, unique compound task ID set that matches the configured `compound_taskid_set`.
       v [spl_compound_tid]: Each sample compound task ID contains single, unique value.
       v [spl_non_compound_tid]: Task ID combinations of non compound task id values consistent across modeling task samples.
 

@@ -177,8 +177,18 @@ test_that("Coarser compound_taskid_set triggers check-level warning", {
   # Check passes but with a warning
   expect_s3_class(result, "check_success")
   expect_true(length(result$warnings) > 0)
-  expect_true(
-    grepl("coarser than configured", result$warnings[[1]]$message)
+
+  # Full check message explicitly states the coarser outcome and carries
+  # per-modeling-task detected vs configured details.
+  expect_equal(
+    result$message,
+    paste0(
+      "All samples in a model task conform to single, unique compound ",
+      "task ID set that matches or is\n    coarser than the configured ",
+      "`compound_taskid_set`. \n mt 2: detected (\"reference_date\" and ",
+      "\"location\") is coarser than configured (\"reference_date\", ",
+      "\"horizon\", \"location\", \"variant\", and \"target_end_date\")."
+    )
   )
 
   # Matching compound_taskid_set should have no warnings

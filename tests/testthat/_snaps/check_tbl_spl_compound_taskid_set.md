@@ -5,7 +5,7 @@
     Output
       <message/check_success>
       Message:
-      All samples in a model task conform to single, unique compound task ID set that matches or is coarser than the configured `compound_taksid_set`.
+      All samples in a model task conform to single, unique compound task ID set that matches the configured `compound_taskid_set`.
 
 ---
 
@@ -14,7 +14,7 @@
     Output
       <message/check_success>
       Message:
-      All samples in a model task conform to single, unique compound task ID set that matches or is coarser than the configured `compound_taksid_set`.
+      All samples in a model task conform to single, unique compound task ID set that matches the configured `compound_taskid_set`.
 
 ---
 
@@ -23,7 +23,7 @@
     Output
       <error/check_error>
       Error:
-      ! All samples in a model task do not conform to single, unique compound task ID set that matches or is coarser than the configured `compound_taksid_set`.  mt 2: Finer `compound_taskid_set` than allowed detected. "horizon" identified as compound task ID in file but not allowed in config. Compound task IDs should be one of "reference_date" and "location".
+      ! All samples in a model task do not conform to single, unique compound task ID set that matches or is coarser than the configured `compound_taskid_set`.  mt 2: Finer `compound_taskid_set` than allowed detected. "horizon" identified as compound task ID in file but not allowed in config. Compound task IDs should be one of "reference_date" and "location".
 
 ---
 
@@ -103,7 +103,7 @@
     Output
       <error/check_error>
       Error:
-      ! All samples in a model task do not conform to single, unique compound task ID set that matches or is coarser than the configured `compound_taksid_set`.  mt 2: More than 1 unique `compound_taskid_set` detected. See `errors` attribute for details.
+      ! All samples in a model task do not conform to single, unique compound task ID set that matches or is coarser than the configured `compound_taskid_set`.  mt 2: More than 1 unique `compound_taskid_set` detected. See `errors` attribute for details.
 
 ---
 
@@ -189,10 +189,10 @@
        $ where              : 'fs_path' chr "flu-base/2022-10-29-flu-base.parquet"
        $ errors             : NULL
        $ warnings           :List of 1
-        ..$ 2:List of 4
-        .. ..$ message       : chr "Modeling task 2: detected `compound_taskid_set` (\"reference_date\" and \"location\") is coarser than configure"| __truncated__
+        ..$ :List of 4
+        .. ..$ message       : chr "Coarser-than-configured `compound_taskid_set` detected for modeling task 2. See check message and compound_task"| __truncated__
         .. ..$ where         : NULL
-        .. ..$ call          : chr ".f"
+        .. ..$ call          : chr "coarser_compound_taskid_set_warnings"
         .. ..$ use_cli_format: logi TRUE
         .. ..- attr(*, "class")= chr [1:4] "validation_warning" "rlang_warning" "warning" "condition"
        $ compound_taskid_set:List of 2
@@ -213,10 +213,10 @@
        $ where              : 'fs_path' chr "flu-base/2022-11-05-flu-base.parquet"
        $ errors             : NULL
        $ warnings           :List of 1
-        ..$ 2:List of 4
-        .. ..$ message       : chr "Modeling task 2: detected `compound_taskid_set` (\"reference_date\", \"horizon\", and \"target_end_date\") is c"| __truncated__
+        ..$ :List of 4
+        .. ..$ message       : chr "Coarser-than-configured `compound_taskid_set` detected for modeling task 2. See check message and compound_task"| __truncated__
         .. ..$ where         : NULL
-        .. ..$ call          : chr ".f"
+        .. ..$ call          : chr "coarser_compound_taskid_set_warnings"
         .. ..$ use_cli_format: logi TRUE
         .. ..- attr(*, "class")= chr [1:4] "validation_warning" "rlang_warning" "warning" "condition"
        $ compound_taskid_set:List of 2
@@ -261,10 +261,10 @@
        $ where              : 'fs_path' chr "flu-base/2022-11-05-flu-base.parquet"
        $ errors             : NULL
        $ warnings           :List of 1
-        ..$ 2:List of 4
-        .. ..$ message       : chr "Modeling task 2: detected `compound_taskid_set` (\"reference_date\" and \"horizon\") is coarser than configured"| __truncated__
+        ..$ :List of 4
+        .. ..$ message       : chr "Coarser-than-configured `compound_taskid_set` detected for modeling task 2. See check message and compound_task"| __truncated__
         .. ..$ where         : NULL
-        .. ..$ call          : chr ".f"
+        .. ..$ call          : chr "coarser_compound_taskid_set_warnings"
         .. ..$ use_cli_format: logi TRUE
         .. ..- attr(*, "class")= chr [1:4] "validation_warning" "rlang_warning" "warning" "condition"
        $ compound_taskid_set:List of 2
@@ -282,7 +282,7 @@
     Output
       <error/check_error>
       Error:
-      ! All samples in a model task do not conform to single, unique compound task ID set that matches or is coarser than the configured `compound_taksid_set`.  mt 2: Finer `compound_taskid_set` than allowed detected. "variant" identified as compound task ID in file but not allowed in config. Compound task IDs should be one of "reference_date", "horizon", "location", and "target_end_date".
+      ! All samples in a model task do not conform to single, unique compound task ID set that matches or is coarser than the configured `compound_taskid_set`.  mt 2: Finer `compound_taskid_set` than allowed detected. "variant" identified as compound task ID in file but not allowed in config. Compound task IDs should be one of "reference_date", "horizon", "location", and "target_end_date".
 
 ---
 
@@ -316,5 +316,5 @@
     Output
       <message/check_success>
       Message:
-      All samples in a model task conform to single, unique compound task ID set that matches or is coarser than the configured `compound_taksid_set`.
+      All samples in a model task conform to single, unique compound task ID set that matches the configured `compound_taskid_set`.
 

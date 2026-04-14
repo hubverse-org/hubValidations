@@ -138,6 +138,9 @@ capture_check_info <- function(file_path, msg, call = rlang::caller_call()) {
 #' Capture a warning about the validation process. Unlike check results
 #' (success/failure/error), validation warnings are informational messages
 #' about the validation process itself rather than validation outcomes.
+#' They do **not** cause validation to fail — [check_for_errors()] only
+#' aborts on `check_failure`, `check_error`, `check_exec_error` or
+#' `check_exec_warn` objects.
 #'
 #' Validation warnings can be attached at two levels:
 #' - **Validation-level**: Stored as an attribute on `hub_validations` objects,
