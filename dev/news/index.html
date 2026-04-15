@@ -7,7 +7,7 @@
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/hubverse-org/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubValidations</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.0.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.1.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,11 +42,14 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="hubvalidations-development-version">hubValidations (development version)<a class="anchor" aria-label="anchor" href="#hubvalidations-development-version"></a></h2>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="2.1.0" id="hubvalidations-210">hubValidations 2.1.0<a class="anchor" aria-label="anchor" href="#hubvalidations-210"></a></h2>
 <ul><li>Added new <code>check_tbl_spl_mt_unique</code> check that validates individual sample <code>output_type_id</code>s do not span multiple model tasks. Different model tasks can have different sample configurations, so samples should be entirely independent across model tasks. The check runs upstream of other sample checks and returns an early error if violated (<a href="https://github.com/hubverse-org/hubValidations/issues/333" class="external-link">#333</a>).</li>
 <li>Added defensive error handling in <code>check_tbl_spl_non_compound_tid</code> to produce an informative error message when sample <code>output_type_id</code>s span multiple model tasks, instead of a cryptic <code><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">dplyr::summarise()</a></code> crash (<a href="https://github.com/hubverse-org/hubValidations/issues/332" class="external-link">#332</a>).</li>
 <li>Fixed <code>check_tbl_spl_non_compound_tid</code> to group by <code>mt_id</code> before summarising, so it works correctly when multiple model tasks have sample output types (<a href="https://github.com/hubverse-org/hubValidations/issues/332" class="external-link">#332</a>).</li>
 <li>
-<code>check_tbl_spl_compound_taskid_set</code> now attaches a check-level warning when the detected <code>compound_taskid_set</code> is coarser than configured. The check still passes, but the warning alerts hub administrators to investigate whether the coarser structure is intentional or indicates a misconfiguration (<a href="https://github.com/hubverse-org/hubValidations/issues/334" class="external-link">#334</a>).</li>
+<code>check_tbl_spl_compound_taskid_set</code> now detects when the <code>compound_taskid_set</code> of submitted samples is coarser than configured. The check still passes (coarser is statistically valid), but the success message distinguishes match vs coarser, per-modeling-task details identify the exact detected and configured sets, and a concise check-level warning surfaces to alert hub administrators that the coarser structure may be intentional or may indicate a misconfiguration (<a href="https://github.com/hubverse-org/hubValidations/issues/334" class="external-link">#334</a>).</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.0.0" id="hubvalidations-200">hubValidations 2.0.0<a class="anchor" aria-label="anchor" href="#hubvalidations-200"></a></h2>

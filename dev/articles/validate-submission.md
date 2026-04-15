@@ -63,7 +63,7 @@ validate_submission(hub_path,
 #> ✔ [metadata_exists]: Metadata file exists at path
 #>   model-metadata/team1-goodmodel.yaml.
 #> ✖ [submission_time]: Submission time must be within accepted submission window
-#>   for round.  Current time "2026-04-15 12:28:42 UTC" is outside window
+#>   for round.  Current time "2026-04-15 14:42:17 UTC" is outside window
 #>   2022-10-02 EDT--2022-10-09 23:59:59 EDT.
 #> ✔ [file_read]: File could be read successfully.
 #> ✔ [valid_round_id_col]: `round_id_col` name is valid.
@@ -130,7 +130,7 @@ validate_submission(hub_path,
 #> ✔ [metadata_exists]: Metadata file exists at path
 #>   model-metadata/hub-baseline.yml.
 #> ✖ [submission_time]: Submission time must be within accepted submission window
-#>   for round.  Current time "2026-04-15 12:28:44 UTC" is outside window
+#>   for round.  Current time "2026-04-15 14:42:19 UTC" is outside window
 #>   2022-10-02 EDT--2022-10-09 23:59:59 EDT.
 #> ✔ [file_read]: File could be read successfully.
 #> ✔ [valid_round_id_col]: `round_id_col` name is valid.
@@ -166,7 +166,7 @@ validate_submission(hub_path,
 #> ── team1-goodmodel/2022-10-08-team1-goodmodel.csv ────
 #> 
 #> ✖ [submission_time]: Submission time must be within accepted submission window
-#>   for round.  Current time "2026-04-15 12:28:45 UTC" is outside window
+#>   for round.  Current time "2026-04-15 14:42:20 UTC" is outside window
 #>   2022-10-02 EDT--2022-10-09 23:59:59 EDT.
 #> Error in `check_for_errors()`:
 #> ! 

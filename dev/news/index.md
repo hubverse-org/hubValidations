@@ -2,6 +2,8 @@
 
 ## hubValidations (development version)
 
+## hubValidations 2.1.0
+
 - Added new `check_tbl_spl_mt_unique` check that validates individual
   sample `output_type_id`s do not span multiple model tasks. Different
   model tasks can have different sample configurations, so samples
@@ -18,11 +20,14 @@
   summarising, so it works correctly when multiple model tasks have
   sample output types
   ([\#332](https://github.com/hubverse-org/hubValidations/issues/332)).
-- `check_tbl_spl_compound_taskid_set` now attaches a check-level warning
-  when the detected `compound_taskid_set` is coarser than configured.
-  The check still passes, but the warning alerts hub administrators to
-  investigate whether the coarser structure is intentional or indicates
-  a misconfiguration
+- `check_tbl_spl_compound_taskid_set` now detects when the
+  `compound_taskid_set` of submitted samples is coarser than configured.
+  The check still passes (coarser is statistically valid), but the
+  success message distinguishes match vs coarser, per-modeling-task
+  details identify the exact detected and configured sets, and a concise
+  check-level warning surfaces to alert hub administrators that the
+  coarser structure may be intentional or may indicate a
+  misconfiguration
   ([\#334](https://github.com/hubverse-org/hubValidations/issues/334)).
 
 ## hubValidations 2.0.0
