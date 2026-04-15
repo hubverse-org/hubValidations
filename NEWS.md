@@ -1,9 +1,9 @@
-# hubValidations (development version)
+# hubValidations 2.1.0
 
 * Added new `check_tbl_spl_mt_unique` check that validates individual sample `output_type_id`s do not span multiple model tasks. Different model tasks can have different sample configurations, so samples should be entirely independent across model tasks. The check runs upstream of other sample checks and returns an early error if violated (#333).
 * Added defensive error handling in `check_tbl_spl_non_compound_tid` to produce an informative error message when sample `output_type_id`s span multiple model tasks, instead of a cryptic `dplyr::summarise()` crash (#332).
 * Fixed `check_tbl_spl_non_compound_tid` to group by `mt_id` before summarising, so it works correctly when multiple model tasks have sample output types (#332).
-* `check_tbl_spl_compound_taskid_set` now attaches a check-level warning when the detected `compound_taskid_set` is coarser than configured. The check still passes, but the warning alerts hub administrators to investigate whether the coarser structure is intentional or indicates a misconfiguration (#334).
+* `check_tbl_spl_compound_taskid_set` now detects when the `compound_taskid_set` of submitted samples is coarser than configured. The check still passes (coarser is statistically valid), but the success message distinguishes match vs coarser, per-modeling-task details identify the exact detected and configured sets, and a concise check-level warning surfaces to alert hub administrators that the coarser structure may be intentional or may indicate a misconfiguration (#334).
 
 # hubValidations 2.0.0
 
