@@ -261,3 +261,76 @@ get_comp_tid_sample_ids <- function(is_compound_taskid, output_type_ids) {
     ~ c(list(tbl_comp_tids = .y), .x)
   )
 }
+
+#' Detect model tasks where detected compound_taskid_set is coarser than
+#' configured.
+#' @param detected List of detected compound_taskid_set vectors (one per model
+#'   task).
+#' @param configured List of configured compound_taskid_set vectors (one per
+#'   model task).
+#' @returns List of info entries (one per coarser model task) with fields
+#'   `mt_idx`, `detected`, `configured`. Empty list if no model tasks are
+#'   coarser.
+#' @noRd
+detect_coarser_compound_taskid_set <- function(detected, configured) {
+  purrr::pmap(
+    list(det = detected, conf = configured, mt_idx = seq_along(detected)),
+    function(det, conf, mt_idx) {
+      if (is.null(det) || is.null(conf)) {
+        return(NULL)
+      }
+      if (length(det) < length(conf) || !all(conf %in% det)) {
+        list(
+          mt_idx = mt_idx,
+          detected = det,
+          configured = conf
+        )
+      }
+    }
+  ) |>
+    purrr::compact()
+}
+
+#' Build a brief `validation_warning` flagging which modeling tasks have
+#' coarser-than-configured compound_taskid_sets. Warning points to check
+#' `details` and `compound_taskid_set` fields rather than duplicating them, so
+#' it remains concise when surfaced in aggregated warning summaries.
+#' @param coarser_info Output of `detect_coarser_compound_taskid_set()`.
+#' @returns A list of length 1 containing a `validation_warning`, or `NULL`
+#'   if no coarser modeling tasks.
+#' @noRd
+coarser_compound_taskid_set_warnings <- function(coarser_info) {
+  if (length(coarser_info) == 0L) {
+    return(NULL)
+  }
+  mt_idx <- purrr::map_int(coarser_info, "mt_idx") # nolint: object_usage_linter
+  n_mts <- length(mt_idx) # nolint: object_usage_linter
+  msg <- cli::format_inline(
+    "Coarser-than-configured {.var compound_taskid_set} detected for ",
+    "{cli::qty(n_mts)}modeling task{?s} {.val {mt_idx}}. ",
+    "See check {.field message} and {.field compound_taskid_set} fields ",
+    "for specifics."
+  )
+  list(capture_validation_warning(msg = msg))
+}
+
+#' Compile a brief per-modeling-task details string for the check message
+#' when coarser compound_taskid_sets are detected.
+#' @param coarser_info Output of `detect_coarser_compound_taskid_set()`.
+#' @returns A single character string, or `NULL` if no coarser info.
+#' @noRd
+compile_coarser_details <- function(coarser_info) {
+  if (length(coarser_info) == 0L) {
+    return(NULL)
+  }
+  purrr::map_chr(coarser_info, function(info) {
+    mt_idx <- info$mt_idx # nolint: object_usage_linter
+    det_label <- if (length(info$detected) == 0L) "none" else info$detected # nolint: object_usage_linter
+    conf <- info$configured # nolint: object_usage_linter
+    cli::format_inline(
+      "mt {mt_idx}: detected ({.val {det_label}}) is coarser than ",
+      "configured ({.val {conf}})."
+    )
+  }) |>
+    paste(collapse = " ")
+}

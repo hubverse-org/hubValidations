@@ -27,6 +27,9 @@ A \verb{<warning/validation_warning>} condition class object.
 Capture a warning about the validation process. Unlike check results
 (success/failure/error), validation warnings are informational messages
 about the validation process itself rather than validation outcomes.
+They do \strong{not} cause validation to fail — \code{\link[=check_for_errors]{check_for_errors()}} only
+aborts on \code{check_failure}, \code{check_error}, \code{check_exec_error} or
+\code{check_exec_warn} objects.
 }
 \details{
 Validation warnings can be attached at two levels:

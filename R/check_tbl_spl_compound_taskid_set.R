@@ -62,20 +62,44 @@ check_tbl_spl_compound_taskid_set <- function(
 
   check <- purrr::map_lgl(
     compound_taskid_set,
-    ~ is.null(attr(.x, "errors"))
+    \(.x) is.null(attr(.x, "errors"))
   ) |>
     all()
+
+  coarser_info <- list()
+  if (check) {
+    config_comp_tids <- get_round_compound_task_ids(config_tasks, round_id)
+    coarser_info <- detect_coarser_compound_taskid_set(
+      compound_taskid_set,
+      config_comp_tids
+    )
+  }
+  any_coarser <- length(coarser_info) > 0L
+
+  msg_attribute <- if (!check || any_coarser) {
+    "to single, unique compound task ID set that matches or is
+    coarser than the configured {.var compound_taskid_set}."
+  } else {
+    "to single, unique compound task ID set that matches the configured
+    {.var compound_taskid_set}."
+  }
+
+  details <- if (any_coarser) {
+    compile_coarser_details(coarser_info)
+  } else {
+    compile_msg(compound_taskid_set)
+  }
 
   capture_check_cnd(
     check = check,
     file_path = file_path,
     msg_subject = "All samples in a model task",
-    msg_attribute = "to single, unique compound task ID set that matches or is
-    coarser than the configured {.var compound_taksid_set}.",
+    msg_attribute = msg_attribute,
     msg_verbs = c("conform", "do not conform"),
-    details = compile_msg(compound_taskid_set),
+    details = details,
     errors = compile_errors(compound_taskid_set),
     error = TRUE,
+    warnings = coarser_compound_taskid_set_warnings(coarser_info),
     compound_taskid_set = if (check) {
       compound_taskid_set
     } else {
@@ -85,7 +109,7 @@ check_tbl_spl_compound_taskid_set <- function(
 }
 
 compile_errors <- function(x) {
-  out <- purrr::map(x, ~ attr(.x, "errors")) |>
+  out <- purrr::map(x, \(.x) attr(.x, "errors")) |>
     purrr::compact()
   if (length(out) == 0L) {
     return(NULL)
@@ -94,8 +118,8 @@ compile_errors <- function(x) {
 }
 
 compile_msg <- function(x) {
-  purrr::map(x, ~ attr(.x, "msg")) |>
+  purrr::map(x, \(.x) attr(.x, "msg")) |>
     purrr::compact() |>
-    purrr::imap_chr(~ paste0("mt ", .y, ": ", .x)) |>
+    purrr::imap_chr(\(.x, .y) paste0("mt ", .y, ": ", .x)) |>
     paste(collapse = ". ")
 }
