@@ -3,6 +3,10 @@
 Capture a warning about the validation process. Unlike check results
 (success/failure/error), validation warnings are informational messages
 about the validation process itself rather than validation outcomes.
+They do **not** cause validation to fail —
+[`check_for_errors()`](https://hubverse-org.github.io/hubValidations/reference/check_for_errors.md)
+only aborts on `check_failure`, `check_error`, `check_exec_error` or
+`check_exec_warn` objects.
 
 ## Usage
 

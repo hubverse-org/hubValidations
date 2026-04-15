@@ -25,7 +25,7 @@
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/hubverse-org/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubValidations</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,7 +67,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Validating Pull Requests on GitHub</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/hubverse-org/hubValidations/blob/v2.0.0/vignettes/articles/validate-pr.Rmd" class="external-link"><code>vignettes/articles/validate-pr.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/hubverse-org/hubValidations/blob/main/vignettes/articles/validate-pr.Rmd" class="external-link"><code>vignettes/articles/validate-pr.Rmd</code></a></small>
       <div class="d-none name"><code>validate-pr.Rmd</code></div>
     </div>
 
@@ -305,6 +305,8 @@ within their allowed submission window.</p>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[value_col_non_desc]</span>: Quantile or cdf `value` values increase when ordered by</span></span>
 <span><span class="co">#&gt;   `output_type_id`.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[value_col_sum1]</span>: No pmf output types to check for sum of 1. Check skipped.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[spl_mt_unique]</span>: No v3 samples found in model output data to check. Skipping</span></span>
+<span><span class="co">#&gt;   `check_tbl_spl_mt_unique` check.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[spl_compound_taskid_set]</span>: No v3 samples found in model output data to check.</span></span>
 <span><span class="co">#&gt;   Skipping `check_tbl_spl_compound_taskid_set` check.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[spl_compound_tid]</span>: No v3 samples found in model output data to check.</span></span>
@@ -352,6 +354,8 @@ within their allowed submission window.</p>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[value_col_non_desc]</span>: Quantile or cdf `value` values increase when ordered by</span></span>
 <span><span class="co">#&gt;   `output_type_id`.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[value_col_sum1]</span>: No pmf output types to check for sum of 1. Check skipped.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[spl_mt_unique]</span>: No v3 samples found in model output data to check. Skipping</span></span>
+<span><span class="co">#&gt;   `check_tbl_spl_mt_unique` check.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[spl_compound_taskid_set]</span>: No v3 samples found in model output data to check.</span></span>
 <span><span class="co">#&gt;   Skipping `check_tbl_spl_compound_taskid_set` check.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[spl_compound_tid]</span>: No v3 samples found in model output data to check.</span></span>
@@ -662,7 +666,8 @@ summarising the results of checks that failed, argument
 <span><span class="co">#&gt;   column/`output_type`/`output_type_id` values are unique.<span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[req_vals]</span>: Required task ID/output type/output type ID combinations all</span></span>
 <span><span class="co">#&gt;   present.<span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[value_col_valid]</span>: Values in column `value` all valid with respect to</span></span>
 <span><span class="co">#&gt;   modeling task config.<span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[value_col_non_desc]</span>: Quantile or cdf `value` values increase when ordered by</span></span>
-<span><span class="co">#&gt;   `output_type_id`.<span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[value_col_sum1]</span>: No pmf output types to check for sum of 1. Check skipped.<span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[spl_compound_taskid_set]</span>: No v3 samples found in model output data to check.</span></span>
+<span><span class="co">#&gt;   `output_type_id`.<span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[value_col_sum1]</span>: No pmf output types to check for sum of 1. Check skipped.<span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[spl_mt_unique]</span>: No v3 samples found in model output data to check. Skipping</span></span>
+<span><span class="co">#&gt;   `check_tbl_spl_mt_unique` check.<span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[spl_compound_taskid_set]</span>: No v3 samples found in model output data to check.</span></span>
 <span><span class="co">#&gt;   Skipping `check_tbl_spl_compound_taskid_set` check.<span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[spl_compound_tid]</span>: No v3 samples found in model output data to check.</span></span>
 <span><span class="co">#&gt;   Skipping `check_tbl_spl_compound_tid` check.<span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[spl_non_compound_tid]</span>: No v3 samples found in model output data to check.</span></span>
 <span><span class="co">#&gt;   Skipping `check_tbl_spl_non_compound_tid` check.<span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[spl_n]</span>: No v3 samples found in model output data to check. Skipping</span></span>
@@ -729,6 +734,8 @@ subsetting:</p>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[value_col_non_desc]</span>: Quantile or cdf `value` values increase when ordered by</span></span>
 <span><span class="co">#&gt;   `output_type_id`.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[value_col_sum1]</span>: No pmf output types to check for sum of 1. Check skipped.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[spl_mt_unique]</span>: No v3 samples found in model output data to check. Skipping</span></span>
+<span><span class="co">#&gt;   `check_tbl_spl_mt_unique` check.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[spl_compound_taskid_set]</span>: No v3 samples found in model output data to check.</span></span>
 <span><span class="co">#&gt;   Skipping `check_tbl_spl_compound_taskid_set` check.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[spl_compound_tid]</span>: No v3 samples found in model output data to check.</span></span>
@@ -1160,6 +1167,25 @@ error_tbl: table of rows affected
 </tr>
 <tr>
 <td style="text-align:left;font-weight: bold;">
+spl_mt_unique
+</td>
+<td style="text-align:left;">
+Individual sample output_type_ids do not span multiple model tasks.
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:left;">
+check_error
+</td>
+<td style="text-align:left;">
+errors: list with mt_ids (model task indices the overlapping samples
+span) and output_type_ids (sample IDs appearing in multiple model
+tasks).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
 spl_compound_taskid_set
 </td>
 <td style="text-align:left;">
@@ -1215,7 +1241,7 @@ check_error
 errors: list containing item for each modeling task with vectors of
 output type ids of samples failing validation and example table of most
 frequent non-compound task ID value combination across all samples in
-the modeling task.
+the modeling task
 </td>
 </tr>
 <tr>

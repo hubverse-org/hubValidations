@@ -180,6 +180,10 @@ Unit validation checks. All return `hub_check` S3 class objects.
   : Check model output data tbl samples contain single unique values for
   each compound task ID within individual samples
 
+- [`check_tbl_spl_mt_unique()`](https://hubverse-org.github.io/hubValidations/reference/check_tbl_spl_mt_unique.md)
+  : Check that individual sample output_type_ids do not span multiple
+  model tasks
+
 - [`check_tbl_spl_n()`](https://hubverse-org.github.io/hubValidations/reference/check_tbl_spl_n.md)
   : Check model output data tbl samples contain the appropriate number
   of samples for a given compound idx.
