@@ -18,6 +18,12 @@
   summarising, so it works correctly when multiple model tasks have
   sample output types
   ([\#332](https://github.com/hubverse-org/hubValidations/issues/332)).
+- `check_tbl_spl_compound_taskid_set` now attaches a check-level warning
+  when the detected `compound_taskid_set` is coarser than configured.
+  The check still passes, but the warning alerts hub administrators to
+  investigate whether the coarser structure is intentional or indicates
+  a misconfiguration
+  ([\#334](https://github.com/hubverse-org/hubValidations/issues/334)).
 
 ## hubValidations 2.0.0
 
