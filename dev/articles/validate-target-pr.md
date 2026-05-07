@@ -1,6 +1,7 @@
 # Validating Target Data Pull Requests on GitHub
 
 ``` r
+
 library(hubValidations)
 ```
 
@@ -39,6 +40,7 @@ The latest release of the workflow can be added to a hub’s GitHub Action
 workflows using the `hubCI` package:
 
 ``` r
+
 hubCI::use_hub_github_action("validate-target-data")
 ```
 
@@ -73,6 +75,7 @@ Here’s an example of validating a PR that adds a valid oracle-output
 file:
 
 ``` r
+
 tmp_dir <- withr::local_tempdir()
 ci_target_hub_path <- fs::path(tmp_dir, "target")
 gert::git_clone(
@@ -81,7 +84,7 @@ gert::git_clone(
 )
 gert::git_branch_checkout("add-file-oracle-output", repo = ci_target_hub_path)
 #> Creating local branch add-file-oracle-output from origin/add-file-oracle-output
-#> <git repository>: /tmp/Rtmpu2KGuR/file23d13be8efd1/target[@add-file-oracle-output]
+#> <git repository>: /tmp/RtmpPi94sQ/file26f43fe16e67/target[@add-file-oracle-output]
 
 v <- validate_target_pr(
   hub_path = ci_target_hub_path,
@@ -131,6 +134,7 @@ v
 ```
 
 ``` r
+
 check_for_errors(v)
 #> ✔ All validation checks have been successful.
 ```
@@ -204,9 +208,10 @@ Here’s an example of a PR that deletes some target data files. With
 failure:
 
 ``` r
+
 gert::git_branch_checkout("delete-target-dir-files", repo = ci_target_hub_path)
 #> Creating local branch delete-target-dir-files from origin/delete-target-dir-files
-#> <git repository>: /tmp/Rtmpu2KGuR/file23d13be8efd1/target[@delete-target-dir-files]
+#> <git repository>: /tmp/RtmpPi94sQ/file26f43fe16e67/target[@delete-target-dir-files]
 
 v_mod <- validate_target_pr(
   hub_path = ci_target_hub_path,
@@ -261,6 +266,7 @@ The check within each entry is named `valid_file_status` (reflecting
 that we validate the file’s git status).
 
 ``` r
+
 # Access the file status check for a deleted file
 v_mod[["oracle-output/output_type=sample/part-0.parquet"]][["valid_file_status"]]
 ```
@@ -275,9 +281,10 @@ Here’s an example of a PR that removes the time-series dataset and adds
 oracle-output data. With the default settings, this produces an error:
 
 ``` r
+
 gert::git_branch_checkout("remove-ts-add-oo", repo = ci_target_hub_path)
 #> Creating local branch remove-ts-add-oo from origin/remove-ts-add-oo
-#> <git repository>: /tmp/Rtmpu2KGuR/file23d13be8efd1/target[@remove-ts-add-oo]
+#> <git repository>: /tmp/RtmpPi94sQ/file26f43fe16e67/target[@remove-ts-add-oo]
 
 v_del <- validate_target_pr(
   hub_path = ci_target_hub_path,
@@ -345,6 +352,7 @@ check_for_errors(v_del)
 Setting `allow_target_type_deletion = TRUE` allows the deletion to pass:
 
 ``` r
+
 v_del_allowed <- validate_target_pr(
   hub_path = ci_target_hub_path,
   gh_repo = "hubverse-org/ci-testhub-target",
@@ -393,6 +401,7 @@ specific file or dataset. You can access results for individual files
 using standard list subsetting:
 
 ``` r
+
 # See all file paths in the collection
 names(v)
 #> [1] "hub-config"        "oracle-output"     "oracle-output.csv"
@@ -439,35 +448,39 @@ on how to access more information about specific checks, see
 
 ### Checks on target datasets
 
-| Name                           | Check                                                                | Early return | Fail output   | Extra info |
-|:-------------------------------|:---------------------------------------------------------------------|:-------------|:--------------|:-----------|
-| valid_config                   | Hub config valid                                                     | TRUE         | check_error   |            |
-| target_dataset_exists          | Target dataset can be successfully detected for a given target type. | TRUE         | check_error   |            |
-| target_dataset_unique          | A single unique target dataset exists for a given target type.       | TRUE         | check_error   |            |
-| target_dataset_file_ext_unique | All files of a given target type share a single unique file format.  | TRUE         | check_error   |            |
-| target_dataset_rows_unique     | Target dataset rows are all unique.                                  | FALSE        | check_failure |            |
+| Name | Check | Early return | Fail output | Extra info |
+|:---|:---|:---|:---|:---|
+| valid_config | Hub config valid | TRUE | check_error |  |
+| target_dataset_exists | Target dataset can be successfully detected for a given target type. | TRUE | check_error |  |
+| target_dataset_unique | A single unique target dataset exists for a given target type. | TRUE | check_error |  |
+| target_dataset_file_ext_unique | All files of a given target type share a single unique file format. | TRUE | check_error |  |
+| target_dataset_rows_unique | Target dataset rows are all unique. | FALSE | check_failure |  |
 
 Details of dataset-level checks performed by
 [`validate_target_pr()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_target_pr.md).
+{.table .table .table-striped .table-hover .table-condensed
+.table-responsive style="margin-left: auto; margin-right: auto;"}
 
 ### Checks on individual target files
 
-| Name                       | Check                                                                                                                                             | Early return | Fail output   | Extra info |
-|:---------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------|:-------------|:--------------|:-----------|
-| target_file_exists         | File exists at `file_path` provided.                                                                                                              | TRUE         | check_error   |            |
-| target_partition_file_name | Hive-style partition file path segments are valid and can be parsed successfully. Skipped if target dataset not hive-partitioned.                 | TRUE         | check_error   |            |
-| target_file_ext            | Target data file extension is valid.                                                                                                              | TRUE         | check_error   |            |
-| target_file_read           | Target data file can be read successfully.                                                                                                        | TRUE         | check_error   |            |
-| target_tbl_colnames        | Target data file has the correct column names according to target type.                                                                           | TRUE         | check_error   |            |
-| target_tbl_coltypes        | Target data file has the correct column types according to target type.                                                                           | TRUE         | check_error   |            |
-| target_tbl_ts_targets      | Targets in a time-series target data file are valid. Only performed on `time-series` data files.                                                  | TRUE         | check_error   |            |
-| target_tbl_rows_unique     | Target data file rows are all unique.                                                                                                             | FALSE        | check_failure |            |
-| target_tbl_values          | Task ID columns in a target data file have valid task ID values.                                                                                  | TRUE         | check_error   |            |
-| target_tbl_output_type_ids | Output type ID values in a target data file are valid and complete. Only performed when the target data file contains an `output_type_id` column. | TRUE         | check_error   |            |
-| target_tbl_oracle_value    | Oracle values in a target data file are valid. Only performed on `oracle output` data files.                                                      | FALSE        | check_failure |            |
+| Name | Check | Early return | Fail output | Extra info |
+|:---|:---|:---|:---|:---|
+| target_file_exists | File exists at `file_path` provided. | TRUE | check_error |  |
+| target_partition_file_name | Hive-style partition file path segments are valid and can be parsed successfully. Skipped if target dataset not hive-partitioned. | TRUE | check_error |  |
+| target_file_ext | Target data file extension is valid. | TRUE | check_error |  |
+| target_file_read | Target data file can be read successfully. | TRUE | check_error |  |
+| target_tbl_colnames | Target data file has the correct column names according to target type. | TRUE | check_error |  |
+| target_tbl_coltypes | Target data file has the correct column types according to target type. | TRUE | check_error |  |
+| target_tbl_ts_targets | Targets in a time-series target data file are valid. Only performed on `time-series` data files. | TRUE | check_error |  |
+| target_tbl_rows_unique | Target data file rows are all unique. | FALSE | check_failure |  |
+| target_tbl_values | Task ID columns in a target data file have valid task ID values. | TRUE | check_error |  |
+| target_tbl_output_type_ids | Output type ID values in a target data file are valid and complete. Only performed when the target data file contains an `output_type_id` column. | TRUE | check_error |  |
+| target_tbl_oracle_value | Oracle values in a target data file are valid. Only performed on `oracle output` data files. | FALSE | check_failure |  |
 
 Details of file-level checks performed by
 [`validate_target_submission()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_target_submission.md).
+{.table .table .table-striped .table-hover .table-condensed
+.table-responsive style="margin-left: auto; margin-right: auto;"}
 
 #### Custom checks
 

@@ -50,15 +50,15 @@ objects](https://hubverse-org.github.io/hubValidations/articles/hub-validations-
 
 Details of checks performed by `validate_model_file()`
 
-| Name            | Check                                                                        | Early return | Fail output   | Extra info |
-|:----------------|:-----------------------------------------------------------------------------|:-------------|:--------------|:-----------|
-| file_exists     | File exists at \`file_path\` provided                                        | TRUE         | check_error   |            |
-| file_name       | File name valid                                                              | TRUE         | check_error   |            |
-| file_location   | File located in correct team directory                                       | FALSE        | check_failure |            |
-| round_id_valid  | File round ID is valid hub round IDs                                         | TRUE         | check_error   |            |
-| file_format     | File format is accepted hub/round format                                     | TRUE         | check_error   |            |
-| file_n          | Number of submission files per round per team does not exceed allowed number | FALSE        | check_failure |            |
-| metadata_exists | Model metadata file exists in expected location                              | FALSE        | check_failure |            |
+| Name | Check | Early return | Fail output | Extra info |
+|:---|:---|:---|:---|:---|
+| file_exists | File exists at \`file_path\` provided | TRUE | check_error |  |
+| file_name | File name valid | TRUE | check_error |  |
+| file_location | File located in correct team directory | FALSE | check_failure |  |
+| round_id_valid | File round ID is valid hub round IDs | TRUE | check_error |  |
+| file_format | File format is accepted hub/round format | TRUE | check_error |  |
+| file_n | Number of submission files per round per team does not exceed allowed number | FALSE | check_failure |  |
+| metadata_exists | Model metadata file exists in expected location | FALSE | check_failure |  |
 
 ## Examples
 

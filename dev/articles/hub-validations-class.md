@@ -1,6 +1,7 @@
 # Structure of hub_validations class objects
 
 ``` r
+
 library(hubValidations)
 ```
 
@@ -28,6 +29,7 @@ Let’s examine an example using
 which validates a single model output file’s data:
 
 ``` r
+
 hub_path <- system.file("testhubs/simple", package = "hubValidations")
 
 v <- validate_model_data(hub_path,
@@ -119,6 +121,7 @@ result, the check name and message of each check:
   class object was returned)
 
 ``` r
+
 v
 #> 
 #> ── team1-goodmodel/2022-10-08-team1-goodmodel.csv ────
@@ -190,6 +193,7 @@ the `hub_validations` object returned by
 [`validate_model_data()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_model_data.md):
 
 ``` r
+
 str(utils::head(v))
 #> List of 6
 #>  $ file_read         :List of 4
@@ -260,6 +264,7 @@ To access `error_tbl` from a `hub_validations` object `v`, you would
 use:
 
 ``` r
+
 v$valid_vals$error_tbl
 ```
 
@@ -284,6 +289,7 @@ Let’s look at an example using
 [`validate_submission()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_submission.md):
 
 ``` r
+
 v_collection <- validate_submission(hub_path,
   file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
 )

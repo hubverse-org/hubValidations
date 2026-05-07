@@ -1,6 +1,7 @@
 # Writing custom validation functions
 
 ``` r
+
 library(hubValidations)
 ```
 
@@ -71,12 +72,13 @@ We’ll start by creating a temporary “hub” for us to work in, but if you
 have an existing hub, you can work in there.
 
 ``` r
+
 hub_path <- withr::local_tempdir()
 
 create_custom_check("cstm_check_tbl_basic",
   hub_path = hub_path
 )
-#> ✔ Directory /tmp/RtmpFK9xpU/file24252b70f57f/src/validations/R created.
+#> ✔ Directory /tmp/RtmpBjuIDj/file274b695b0c32/src/validations/R created.
 #> ✔ Custom validation check template function file "cstm_check_tbl_basic.R" created.
 #> → Edit the function template to add your custom check logic.
 #> ℹ See the Writing custom check functions article for more information.
@@ -87,6 +89,7 @@ The contents of the created file at
 `src/validations/R/cstm_check_tbl_basic.R` are as follows:
 
 ``` r
+
 cstm_check_tbl_basic <- function(tbl, file_path) {
   # Here you can write your custom check logic
   # Assign the result as `TRUE` or `FALSE` to object called `check`.
@@ -339,7 +342,7 @@ function (tbl, file_path, hub_path, t0_colname, t1_colname, timediff = lubridate
         msg_verbs = c("all match", "do not all match"), msg_attribute = cli::format_inline("expected period of {.val {timediff}}."), 
         details = details)
 }
-<bytecode: 0x556474cf99f8>
+<bytecode: 0x55f79615f8e0>
 <environment: namespace:hubValidations>
 ```
 
@@ -348,6 +351,7 @@ creating the custom check function with
 [`create_custom_check()`](https://hubverse-org.github.io/hubValidations/dev/reference/create_custom_check.md).
 
 ``` r
+
 create_custom_check("cstm_check_tbl_args",
   hub_path = hub_path,
   extra_args = TRUE
@@ -363,6 +367,7 @@ function formals as well as an example input check to the top of the
 function body.
 
 ``` r
+
 cstm_check_tbl_args <- function(tbl, file_path, extra_arg = NULL) {
   # If you're providing additional custom arguments, make sure to include input checks
   # at the top of your function. `checkmate` package provides a simple interface
@@ -423,6 +428,7 @@ If the value is `FALSE`, the output depends on the `error` argument.
   fails.
 
 ``` r
+
 create_custom_check("cstm_check_tbl_error",
   hub_path = hub_path, error = TRUE
 )
@@ -433,6 +439,7 @@ create_custom_check("cstm_check_tbl_error",
 ```
 
 ``` r
+
 cstm_check_tbl_error <- function(tbl, file_path) {
   # Here you can write your custom check logic
   # Assign the result as `TRUE` or `FALSE` to object called `check`.
@@ -472,6 +479,7 @@ function. Use the `msg` argument to explain that a check was skipped and
 why.
 
 ``` r
+
 capture_check_info(
   "modelA-teamA/2024-09-12-modelA-teamA",
   "Condition for running this check was not met. Skipped."
@@ -518,7 +526,7 @@ function (tbl, file_path, hub_path, round_id, derived_task_ids = get_hub_derived
         msg_verbs = c("increase", "do not all increase"), msg_attribute = "when ordered by {.var output_type_id}.", 
         details = details, error_tbl = error_tbl)
 }
-<bytecode: 0x556477826ae0>
+<bytecode: 0x55f799356c60>
 <environment: namespace:hubValidations>
 ```
 
@@ -527,6 +535,7 @@ You can add a pre-condition check block of code with argument
 [`create_custom_check()`](https://hubverse-org.github.io/hubValidations/dev/reference/create_custom_check.md).
 
 ``` r
+
 create_custom_check("cstm_check_tbl_skip",
   hub_path = hub_path,
   conditional = TRUE
@@ -538,6 +547,7 @@ create_custom_check("cstm_check_tbl_skip",
 ```
 
 ``` r
+
 cstm_check_tbl_skip <- function(tbl, file_path) {
   if (!condition) {
     return(
@@ -593,6 +603,7 @@ custom check function skeleton that reads in the `tasks.json` hub
 configuration file.
 
 ``` r
+
 create_custom_check("cstm_check_tbl_config",
   hub_path = hub_path,
   config = TRUE
@@ -604,6 +615,7 @@ create_custom_check("cstm_check_tbl_config",
 ```
 
 ``` r
+
 cstm_check_tbl_config <- function(tbl, file_path, hub_path) {
   config_tasks <- hubValidations::read_config(hub_path)
 
@@ -701,6 +713,7 @@ You can easily [turn the contents of `src/validations` into a local
 package](https://r-pkgs.org/whole-game.html#create_package) with:
 
 ``` r
+
 usethis::create_package("src/validations", open = FALSE)
 ```
 

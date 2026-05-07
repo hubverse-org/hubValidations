@@ -11,6 +11,7 @@ You can install the [latest version of hubValidations from the
 R-universe](https://hubverse-org.r-universe.dev/hubValidations):
 
 ``` r
+
 install.packages("hubValidations", repos = c("https://hubverse-org.r-universe.dev", "https://cloud.r-project.org"))
 ```
 
@@ -21,6 +22,7 @@ you can install the development version of hubValidations from
 [GitHub](https://github.com/) with:
 
 ``` r
+
 remotes::install_github("hubverse-org/hubValidations")
 ```
 
@@ -35,6 +37,7 @@ remotes::install_github("hubverse-org/hubValidations")
 > repository](https://apache.r-universe.dev) with:
 >
 > ``` r
+>
 > install.packages("arrow", repos = c("https://apache.r-universe.dev", "https://cran.r-project.org"))
 > ```
 

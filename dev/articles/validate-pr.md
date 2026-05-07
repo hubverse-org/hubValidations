@@ -1,6 +1,7 @@
 # Validating Pull Requests on GitHub
 
 ``` r
+
 library(hubValidations)
 ```
 
@@ -38,6 +39,7 @@ The latest release of the workflow can be added to hub’s GitHub Action
 workflows using the `hubCI` package:
 
 ``` r
+
 hubCI::use_hub_github_action("validate-submission")
 ```
 
@@ -168,6 +170,7 @@ however allow modifications to model output files within their allowed
 submission window.
 
 ``` r
+
 temp_hub <- fs::path(tempdir(), "mod_del_hub")
 gert::git_clone(
   url = "https://github.com/hubverse-org/ci-testhub-simple",
@@ -177,6 +180,7 @@ gert::git_clone(
 ```
 
 ``` r
+
 v <- validate_pr(
   hub_path = temp_hub,
   gh_repo = "hubverse-org/ci-testhub-simple",
@@ -354,6 +358,7 @@ The check within each entry is named `valid_file_status` (reflecting
 that we validate the file’s git status).
 
 ``` r
+
 # Access the file status check for a deleted file
 v[["team1-goodmodel/2022-10-15-team1-goodmodel.csv"]][["valid_file_status"]]
 
@@ -434,6 +439,7 @@ If any elements of the `hub_validations_collection` object contain
 an error and prints the messages from the failing checks.
 
 ``` r
+
 temp_hub <- fs::path(tempdir(), "invalid_sb_hub")
 gert::git_clone(
   url = "https://github.com/hubverse-org/ci-testhub-simple",
@@ -481,6 +487,7 @@ returns `TRUE` silently and prints:
     ✔ All validation checks have been successful.
 
 ``` r
+
 temp_hub <- fs::path(tempdir(), "valid_sb_hub")
 gert::git_clone(
   url = "https://github.com/hubverse-org/ci-testhub-simple",
@@ -519,6 +526,7 @@ summarising the results of checks that failed, argument `verbose` can be
 set to `TRUE`.
 
 ``` r
+
 check_for_errors(v_fail, verbose = TRUE)
 #> 
 #> ── Individual check results ──
@@ -619,6 +627,7 @@ file. You can access results for individual files using standard list
 subsetting:
 
 ``` r
+
 # See all file paths in the collection
 names(v_pass)
 #> [1] "hub-config"                                    
@@ -691,69 +700,73 @@ on how to access more information about specific checks, see
 
 ### Checks on model output files
 
-| Name                           | Check                                                                                                                                                                            | Early return | Fail output   | Extra info                                                                                                                                                                                                                          |
-|:-------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-------------|:--------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| valid_config                   | Hub config valid                                                                                                                                                                 | TRUE         | check_error   |                                                                                                                                                                                                                                     |
-| submission_time                | Current time within file submission window                                                                                                                                       | FALSE        | check_failure |                                                                                                                                                                                                                                     |
-| file_exists                    | File exists at `file_path` provided                                                                                                                                              | TRUE         | check_error   |                                                                                                                                                                                                                                     |
-| file_name                      | File name valid                                                                                                                                                                  | TRUE         | check_error   |                                                                                                                                                                                                                                     |
-| file_location                  | File located in correct team directory                                                                                                                                           | FALSE        | check_failure |                                                                                                                                                                                                                                     |
-| round_id_valid                 | File round ID is valid hub round IDs                                                                                                                                             | TRUE         | check_error   |                                                                                                                                                                                                                                     |
-| file_format                    | File format is accepted hub/round format                                                                                                                                         | TRUE         | check_error   |                                                                                                                                                                                                                                     |
-| file_n                         | Number of submission files per round per team does not exceed allowed number                                                                                                     | FALSE        | check_failure |                                                                                                                                                                                                                                     |
-| metadata_exists                | Model metadata file exists in expected location                                                                                                                                  | FALSE        | check_failure |                                                                                                                                                                                                                                     |
-| file_read                      | File can be read without errors                                                                                                                                                  | TRUE         | check_error   |                                                                                                                                                                                                                                     |
-| valid_round_id_col             | Round ID var from config exists in data column names. Skipped if `round_id_from_var` is FALSE in config.                                                                         | FALSE        | check_failure |                                                                                                                                                                                                                                     |
-| unique_round_id                | Round ID column contains a single unique round ID. Skipped if `round_id_from_var` is FALSE in config.                                                                            | TRUE         | check_error   |                                                                                                                                                                                                                                     |
-| match_round_id                 | Round ID from file contents matches round ID from file name. Skipped if `round_id_from_var` is FALSE in config.                                                                  | TRUE         | check_error   |                                                                                                                                                                                                                                     |
-| colnames                       | File column names match expected column names for round (i.e. task ID names + hub standard column names)                                                                         | TRUE         | check_error   |                                                                                                                                                                                                                                     |
-| col_types                      | File column types match expected column types from config. Mainly applicable to parquet & arrow files.                                                                           | FALSE        | check_failure |                                                                                                                                                                                                                                     |
-| valid_vals                     | Columns (excluding the `value` and any derived task ID columns) contain valid combinations of task ID / output type / output type ID values                                      | TRUE         | check_error   | error_tbl: table of invalid task ID/output type/output type ID value combinations                                                                                                                                                   |
-| derived_task_id_vals           | Derived task ID columns contain valid values.                                                                                                                                    | FALSE        | check_failure | errors: named list of derived task ID values. Each element contains the invalid values for each derived task ID that failed the check.                                                                                              |
-| rows_unique                    | Columns (excluding the `value` and any derived task ID columns) contain unique combinations of task ID / output type / output type ID values                                     | FALSE        | check_failure |                                                                                                                                                                                                                                     |
-| req_vals                       | Columns (excluding the `value` and any derived task ID columns) contain all required combinations of task ID / output type / output type ID values                               | FALSE        | check_failure | missing_df: table of missing task ID/output type/output type ID value combinations                                                                                                                                                  |
-| value_col_valid                | Values in `value` column are coercible to data type configured for each output type                                                                                              | FALSE        | check_failure |                                                                                                                                                                                                                                     |
-| value_col_non_desc             | Values in `value` column are non-decreasing as output_type_ids increase for all unique task ID /output type value combinations. Applies to `quantile` or `cdf` output types only | FALSE        | check_failure | error_tbl: table of rows affected                                                                                                                                                                                                   |
-| value_col_sum1                 | Values in the `value` column of `pmf` output type data for each unique task ID combination sum to 1.                                                                             | FALSE        | check_failure | error_tbl: table of rows affected                                                                                                                                                                                                   |
-| spl_mt_unique                  | Individual sample output_type_ids do not span multiple model tasks.                                                                                                              | TRUE         | check_error   | errors: list with mt_ids (model task indices the overlapping samples span) and output_type_ids (sample IDs appearing in multiple model tasks).                                                                                      |
-| spl_compound_taskid_set        | Sample compound task id sets for each modeling task match or are coarser than the expected set defined in tasks.json config.                                                     | TRUE         | check_error   | errors: list containing item for each failing modeling task. Exact structure dependent on type of validation failure. See check function documentation for more details.                                                            |
-| spl_compound_tid               | Samples contain single unique values for each compound task ID within individual samples (v3 and above schema only).                                                             | TRUE         | check_error   | errors: list containing item for each sample failing validation with breakdown of unique values for each compound task ID.                                                                                                          |
-| spl_non_compound_tid           | Samples contain single unique combination of non-compound task ID values across all samples (v3 and above schema only).                                                          | TRUE         | check_error   | errors: list containing item for each modeling task with vectors of output type ids of samples failing validation and example table of most frequent non-compound task ID value combination across all samples in the modeling task |
-| spl_n                          | Number of samples for a given compound idx falls within accepted compound task range (v3 and above schema only).                                                                 | FALSE        | check_failure | errors: list containing item for each compound_idx failing validation with sample count, metadata on expected samples and example table of expected structure for samples belonging to the compound idx in question.                |
-| target_file_exists             | File exists at `file_path` provided.                                                                                                                                             | TRUE         | check_error   |                                                                                                                                                                                                                                     |
-| target_partition_file_name     | Hive-style partition file path segments are valid and can be parsed successfully. Skipped if target dataset not hive-partitioned.                                                | TRUE         | check_error   |                                                                                                                                                                                                                                     |
-| target_file_ext                | Target data file extension is valid.                                                                                                                                             | TRUE         | check_error   |                                                                                                                                                                                                                                     |
-| target_dataset_exists          | Target dataset can be successfully detected for a given target type.                                                                                                             | TRUE         | check_error   |                                                                                                                                                                                                                                     |
-| target_dataset_unique          | A single unique target dataset exists for a given target type.                                                                                                                   | TRUE         | check_error   |                                                                                                                                                                                                                                     |
-| target_dataset_file_ext_unique | All files of a given target type share a single unique file format.                                                                                                              | TRUE         | check_error   |                                                                                                                                                                                                                                     |
-| target_dataset_rows_unique     | Target dataset rows are all unique.                                                                                                                                              | FALSE        | check_failure |                                                                                                                                                                                                                                     |
-| target_file_read               | Target data file can be read successfully.                                                                                                                                       | TRUE         | check_error   |                                                                                                                                                                                                                                     |
-| target_tbl_colnames            | Target data file has the correct column names according to target type.                                                                                                          | TRUE         | check_error   |                                                                                                                                                                                                                                     |
-| target_tbl_coltypes            | Target data file has the correct column types according to target type.                                                                                                          | TRUE         | check_error   |                                                                                                                                                                                                                                     |
-| target_tbl_ts_targets          | Targets in a time-series target data file are valid. Only performed on `time-series` data files.                                                                                 | TRUE         | check_error   |                                                                                                                                                                                                                                     |
-| target_tbl_rows_unique         | Target data file rows are all unique.                                                                                                                                            | FALSE        | check_failure |                                                                                                                                                                                                                                     |
-| target_tbl_values              | Task ID columns in a target data file have valid task ID values.                                                                                                                 | TRUE         | check_error   |                                                                                                                                                                                                                                     |
-| target_tbl_output_type_ids     | Output type ID values in a target data file are valid and complete. Only performed when the target data file contains an `output_type_id` column.                                | TRUE         | check_error   |                                                                                                                                                                                                                                     |
-| target_tbl_oracle_value        | Oracle values in a target data file are valid. Only performed on `oracle output` data files.                                                                                     | FALSE        | check_failure |                                                                                                                                                                                                                                     |
+| Name | Check | Early return | Fail output | Extra info |
+|:---|:---|:---|:---|:---|
+| valid_config | Hub config valid | TRUE | check_error |  |
+| submission_time | Current time within file submission window | FALSE | check_failure |  |
+| file_exists | File exists at `file_path` provided | TRUE | check_error |  |
+| file_name | File name valid | TRUE | check_error |  |
+| file_location | File located in correct team directory | FALSE | check_failure |  |
+| round_id_valid | File round ID is valid hub round IDs | TRUE | check_error |  |
+| file_format | File format is accepted hub/round format | TRUE | check_error |  |
+| file_n | Number of submission files per round per team does not exceed allowed number | FALSE | check_failure |  |
+| metadata_exists | Model metadata file exists in expected location | FALSE | check_failure |  |
+| file_read | File can be read without errors | TRUE | check_error |  |
+| valid_round_id_col | Round ID var from config exists in data column names. Skipped if `round_id_from_var` is FALSE in config. | FALSE | check_failure |  |
+| unique_round_id | Round ID column contains a single unique round ID. Skipped if `round_id_from_var` is FALSE in config. | TRUE | check_error |  |
+| match_round_id | Round ID from file contents matches round ID from file name. Skipped if `round_id_from_var` is FALSE in config. | TRUE | check_error |  |
+| colnames | File column names match expected column names for round (i.e. task ID names + hub standard column names) | TRUE | check_error |  |
+| col_types | File column types match expected column types from config. Mainly applicable to parquet & arrow files. | FALSE | check_failure |  |
+| valid_vals | Columns (excluding the `value` and any derived task ID columns) contain valid combinations of task ID / output type / output type ID values | TRUE | check_error | error_tbl: table of invalid task ID/output type/output type ID value combinations |
+| derived_task_id_vals | Derived task ID columns contain valid values. | FALSE | check_failure | errors: named list of derived task ID values. Each element contains the invalid values for each derived task ID that failed the check. |
+| rows_unique | Columns (excluding the `value` and any derived task ID columns) contain unique combinations of task ID / output type / output type ID values | FALSE | check_failure |  |
+| req_vals | Columns (excluding the `value` and any derived task ID columns) contain all required combinations of task ID / output type / output type ID values | FALSE | check_failure | missing_df: table of missing task ID/output type/output type ID value combinations |
+| value_col_valid | Values in `value` column are coercible to data type configured for each output type | FALSE | check_failure |  |
+| value_col_non_desc | Values in `value` column are non-decreasing as output_type_ids increase for all unique task ID /output type value combinations. Applies to `quantile` or `cdf` output types only | FALSE | check_failure | error_tbl: table of rows affected |
+| value_col_sum1 | Values in the `value` column of `pmf` output type data for each unique task ID combination sum to 1. | FALSE | check_failure | error_tbl: table of rows affected |
+| spl_mt_unique | Individual sample output_type_ids do not span multiple model tasks. | TRUE | check_error | errors: list with mt_ids (model task indices the overlapping samples span) and output_type_ids (sample IDs appearing in multiple model tasks). |
+| spl_compound_taskid_set | Sample compound task id sets for each modeling task match or are coarser than the expected set defined in tasks.json config. | TRUE | check_error | errors: list containing item for each failing modeling task. Exact structure dependent on type of validation failure. See check function documentation for more details. |
+| spl_compound_tid | Samples contain single unique values for each compound task ID within individual samples (v3 and above schema only). | TRUE | check_error | errors: list containing item for each sample failing validation with breakdown of unique values for each compound task ID. |
+| spl_non_compound_tid | Samples contain single unique combination of non-compound task ID values across all samples (v3 and above schema only). | TRUE | check_error | errors: list containing item for each modeling task with vectors of output type ids of samples failing validation and example table of most frequent non-compound task ID value combination across all samples in the modeling task |
+| spl_n | Number of samples for a given compound idx falls within accepted compound task range (v3 and above schema only). | FALSE | check_failure | errors: list containing item for each compound_idx failing validation with sample count, metadata on expected samples and example table of expected structure for samples belonging to the compound idx in question. |
+| target_file_exists | File exists at `file_path` provided. | TRUE | check_error |  |
+| target_partition_file_name | Hive-style partition file path segments are valid and can be parsed successfully. Skipped if target dataset not hive-partitioned. | TRUE | check_error |  |
+| target_file_ext | Target data file extension is valid. | TRUE | check_error |  |
+| target_dataset_exists | Target dataset can be successfully detected for a given target type. | TRUE | check_error |  |
+| target_dataset_unique | A single unique target dataset exists for a given target type. | TRUE | check_error |  |
+| target_dataset_file_ext_unique | All files of a given target type share a single unique file format. | TRUE | check_error |  |
+| target_dataset_rows_unique | Target dataset rows are all unique. | FALSE | check_failure |  |
+| target_file_read | Target data file can be read successfully. | TRUE | check_error |  |
+| target_tbl_colnames | Target data file has the correct column names according to target type. | TRUE | check_error |  |
+| target_tbl_coltypes | Target data file has the correct column types according to target type. | TRUE | check_error |  |
+| target_tbl_ts_targets | Targets in a time-series target data file are valid. Only performed on `time-series` data files. | TRUE | check_error |  |
+| target_tbl_rows_unique | Target data file rows are all unique. | FALSE | check_failure |  |
+| target_tbl_values | Task ID columns in a target data file have valid task ID values. | TRUE | check_error |  |
+| target_tbl_output_type_ids | Output type ID values in a target data file are valid and complete. Only performed when the target data file contains an `output_type_id` column. | TRUE | check_error |  |
+| target_tbl_oracle_value | Oracle values in a target data file are valid. Only performed on `oracle output` data files. | FALSE | check_failure |  |
 
 Details of checks performed by
 [`validate_submission()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_submission.md)
-on model output files.
+on model output files. {.table .table .table-striped .table-hover
+.table-condensed .table-responsive
+style="margin-left: auto; margin-right: auto;"}
 
 ### Checks on model metadata files
 
-| Name                    | Check                                                                                                               | Early return | Fail output   | Extra info |
-|:------------------------|:--------------------------------------------------------------------------------------------------------------------|:-------------|:--------------|:-----------|
-| metadata_schema_exists  | A model metadata schema file exists in `hub-config` directory.                                                      | TRUE         | check_error   |            |
-| metadata_file_exists    | A file with name provided to argument `file_path` exists at the expected location (the `model-metadata` directory). | TRUE         | check_error   |            |
-| metadata_file_ext       | The metadata file has correct extension (yaml or yml).                                                              | TRUE         | check_error   |            |
-| metadata_file_location  | The metadata file has been saved to correct location.                                                               | TRUE         | check_failure |            |
-| metadata_matches_schema | The contents of the metadata file match the hub’s model metadata schema                                             | TRUE         | check_error   |            |
-| metadata_file_name      | The metadata filename matches the model ID specified in the contents of the file.                                   | TRUE         | check_error   |            |
+| Name | Check | Early return | Fail output | Extra info |
+|:---|:---|:---|:---|:---|
+| metadata_schema_exists | A model metadata schema file exists in `hub-config` directory. | TRUE | check_error |  |
+| metadata_file_exists | A file with name provided to argument `file_path` exists at the expected location (the `model-metadata` directory). | TRUE | check_error |  |
+| metadata_file_ext | The metadata file has correct extension (yaml or yml). | TRUE | check_error |  |
+| metadata_file_location | The metadata file has been saved to correct location. | TRUE | check_failure |  |
+| metadata_matches_schema | The contents of the metadata file match the hub’s model metadata schema | TRUE | check_error |  |
+| metadata_file_name | The metadata filename matches the model ID specified in the contents of the file. | TRUE | check_error |  |
 
 Details of checks performed by
 [`validate_model_metadata()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_model_metadata.md)
-on model metadata files.
+on model metadata files. {.table .table .table-striped .table-hover
+.table-condensed .table-responsive
+style="margin-left: auto; margin-right: auto;"}
 
 #### Custom checks
 
