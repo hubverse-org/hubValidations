@@ -2,6 +2,15 @@
 
 ## hubValidations (development version)
 
+- Fixed
+  [`validate_pr()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_pr.md)
+  and
+  [`validate_target_pr()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_target_pr.md)
+  leaking a `gh` pagination progress message into their output by
+  passing `.progress = FALSE` to the
+  [`gh::gh()`](https://gh.r-lib.org/reference/gh.html) call
+  ([\#347](https://github.com/hubverse-org/hubValidations/issues/347)).
+
 ## hubValidations 2.1.0
 
 - Added new `check_tbl_spl_mt_unique` check that validates individual
