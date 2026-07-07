@@ -2,6 +2,8 @@ url: https://hubverse-org.github.io/hubValidations/
 template:
   bootstrap: 5
   package: hubStyle
+  includes:
+    in_header: pkgdown/plausible.html
 
 reference:
 - title: "Utilities for submitting teams"
