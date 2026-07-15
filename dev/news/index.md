@@ -2,6 +2,8 @@
 
 ## hubValidations (development version)
 
+## hubValidations 2.1.1
+
 - Fixed
   [`validate_pr()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_pr.md)
   and

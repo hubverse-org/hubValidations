@@ -65,7 +65,7 @@ validate_submission(hub_path,
 #> ✔ [metadata_exists]: Metadata file exists at path
 #>   model-metadata/team1-goodmodel.yaml.
 #> ✖ [submission_time]: Submission time must be within accepted submission window
-#>   for round.  Current time "2026-07-07 16:51:34 UTC" is outside window
+#>   for round.  Current time "2026-07-15 15:14:57 UTC" is outside window
 #>   2022-10-02 EDT--2022-10-09 23:59:59 EDT.
 #> ✔ [file_read]: File could be read successfully.
 #> ✔ [valid_round_id_col]: `round_id_col` name is valid.
@@ -133,7 +133,7 @@ validate_submission(hub_path,
 #> ✔ [metadata_exists]: Metadata file exists at path
 #>   model-metadata/hub-baseline.yml.
 #> ✖ [submission_time]: Submission time must be within accepted submission window
-#>   for round.  Current time "2026-07-07 16:51:35 UTC" is outside window
+#>   for round.  Current time "2026-07-15 15:14:59 UTC" is outside window
 #>   2022-10-02 EDT--2022-10-09 23:59:59 EDT.
 #> ✔ [file_read]: File could be read successfully.
 #> ✔ [valid_round_id_col]: `round_id_col` name is valid.
@@ -170,7 +170,7 @@ validate_submission(hub_path,
 #> ── team1-goodmodel/2022-10-08-team1-goodmodel.csv ────
 #> 
 #> ✖ [submission_time]: Submission time must be within accepted submission window
-#>   for round.  Current time "2026-07-07 16:51:36 UTC" is outside window
+#>   for round.  Current time "2026-07-15 15:15:00 UTC" is outside window
 #>   2022-10-02 EDT--2022-10-09 23:59:59 EDT.
 #> Error in `check_for_errors()`:
 #> ! 
@@ -269,7 +269,7 @@ administrators.
 | spl_mt_unique | Individual sample output_type_ids do not span multiple model tasks. | TRUE | check_error | errors: list with mt_ids (model task indices the overlapping samples span) and output_type_ids (sample IDs appearing in multiple model tasks). |
 | spl_compound_taskid_set | Sample compound task id sets for each modeling task match or are coarser than the expected set defined in tasks.json config. | TRUE | check_error | errors: list containing item for each failing modeling task. Exact structure dependent on type of validation failure. See check function documentation for more details. |
 | spl_compound_tid | Samples contain single unique values for each compound task ID within individual samples (v3 and above schema only). | TRUE | check_error | errors: list containing item for each sample failing validation with breakdown of unique values for each compound task ID. |
-| spl_non_compound_tid | Samples contain single unique combination of non-compound task ID values across all samples (v3 and above schema only). | TRUE | check_error | errors: list containing item for each modeling task with vectors of output type ids of samples failing validation and example table of most frequent non-compound task ID value combination across all samples in the modeling task |
+| spl_non_compound_tid | Samples contain single unique combination of non-compound task ID values across all samples (v3 and above schema only). | TRUE | check_error | errors: list containing item for each modeling task with vectors of output type ids of samples failing validation and example table of most frequent non-compound task ID value combination across all samples in the modeling task. |
 | spl_n | Number of samples for a given compound idx falls within accepted compound task range (v3 and above schema only). | FALSE | check_failure | errors: list containing item for each compound_idx failing validation with sample count, metadata on expected samples and example table of expected structure for samples belonging to the compound idx in question. |
 | target_file_exists | File exists at `file_path` provided. | TRUE | check_error |  |
 | target_partition_file_name | Hive-style partition file path segments are valid and can be parsed successfully. Skipped if target dataset not hive-partitioned. | TRUE | check_error |  |
