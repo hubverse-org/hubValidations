@@ -117,20 +117,20 @@ validations (keyed by file path).
 
 Details of checks performed by `validate_target_submission()`
 
-| Name                       | Check                                                                                                                                               | Early return | Fail output   | Extra info |
-|:---------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------|:-------------|:--------------|:-----------|
-| valid_config               | Hub config valid                                                                                                                                    | TRUE         | check_error   |            |
-| target_file_exists         | File exists at \`file_path\` provided.                                                                                                              | TRUE         | check_error   |            |
-| target_partition_file_name | Hive-style partition file path segments are valid and can be parsed successfully. Skipped if target dataset not hive-partitioned.                   | TRUE         | check_error   |            |
-| target_file_ext            | Target data file extension is valid.                                                                                                                | TRUE         | check_error   |            |
-| target_file_read           | Target data file can be read successfully.                                                                                                          | TRUE         | check_error   |            |
-| target_tbl_colnames        | Target data file has the correct column names according to target type.                                                                             | TRUE         | check_error   |            |
-| target_tbl_coltypes        | Target data file has the correct column types according to target type.                                                                             | TRUE         | check_error   |            |
-| target_tbl_ts_targets      | Targets in a time-series target data file are valid. Only performed on \`time-series\` data files.                                                  | TRUE         | check_error   |            |
-| target_tbl_rows_unique     | Target data file rows are all unique.                                                                                                               | FALSE        | check_failure |            |
-| target_tbl_values          | Task ID columns in a target data file have valid task ID values.                                                                                    | TRUE         | check_error   |            |
-| target_tbl_output_type_ids | Output type ID values in a target data file are valid and complete. Only performed when the target data file contains an \`output_type_id\` column. | TRUE         | check_error   |            |
-| target_tbl_oracle_value    | Oracle values in a target data file are valid. Only performed on \`oracle output\` data files.                                                      | FALSE        | check_failure |            |
+| Name | Check | Early return | Fail output | Extra info |
+|:---|:---|:---|:---|:---|
+| valid_config | Hub config valid | TRUE | check_error |  |
+| target_file_exists | File exists at \`file_path\` provided. | TRUE | check_error |  |
+| target_partition_file_name | Hive-style partition file path segments are valid and can be parsed successfully. Skipped if target dataset not hive-partitioned. | TRUE | check_error |  |
+| target_file_ext | Target data file extension is valid. | TRUE | check_error |  |
+| target_file_read | Target data file can be read successfully. | TRUE | check_error |  |
+| target_tbl_colnames | Target data file has the correct column names according to target type. | TRUE | check_error |  |
+| target_tbl_coltypes | Target data file has the correct column types according to target type. | TRUE | check_error |  |
+| target_tbl_ts_targets | Targets in a time-series target data file are valid. Only performed on \`time-series\` data files. | TRUE | check_error |  |
+| target_tbl_rows_unique | Target data file rows are all unique. | FALSE | check_failure |  |
+| target_tbl_values | Task ID columns in a target data file have valid task ID values. | TRUE | check_error |  |
+| target_tbl_output_type_ids | Output type ID values in a target data file are valid and complete. Only performed when the target data file contains an \`output_type_id\` column. | TRUE | check_error |  |
+| target_tbl_oracle_value | Oracle values in a target data file are valid. Only performed on \`oracle output\` data files. | FALSE | check_failure |  |
 
 ## Examples
 

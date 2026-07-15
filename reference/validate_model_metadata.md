@@ -61,14 +61,14 @@ objects](https://hubverse-org.github.io/hubValidations/articles/hub-validations-
 
 Details of checks performed by `validate_model_metadata()`
 
-| Name                    | Check                                                                                                                   | Early return | Fail output   | Extra info |
-|:------------------------|:------------------------------------------------------------------------------------------------------------------------|:-------------|:--------------|:-----------|
-| metadata_schema_exists  | A model metadata schema file exists in \`hub-config\` directory.                                                        | TRUE         | check_error   |            |
-| metadata_file_exists    | A file with name provided to argument \`file_path\` exists at the expected location (the \`model-metadata\` directory). | TRUE         | check_error   |            |
-| metadata_file_ext       | The metadata file has correct extension (yaml or yml).                                                                  | TRUE         | check_error   |            |
-| metadata_file_location  | The metadata file has been saved to correct location.                                                                   | TRUE         | check_failure |            |
-| metadata_matches_schema | The contents of the metadata file match the hub's model metadata schema                                                 | TRUE         | check_error   |            |
-| metadata_file_name      | The metadata filename matches the model ID specified in the contents of the file.                                       | TRUE         | check_error   |            |
+| Name | Check | Early return | Fail output | Extra info |
+|:---|:---|:---|:---|:---|
+| metadata_schema_exists | A model metadata schema file exists in \`hub-config\` directory. | TRUE | check_error |  |
+| metadata_file_exists | A file with name provided to argument \`file_path\` exists at the expected location (the \`model-metadata\` directory). | TRUE | check_error |  |
+| metadata_file_ext | The metadata file has correct extension (yaml or yml). | TRUE | check_error |  |
+| metadata_file_location | The metadata file has been saved to correct location. | TRUE | check_failure |  |
+| metadata_matches_schema | The contents of the metadata file match the hub's model metadata schema | TRUE | check_error |  |
+| metadata_file_name | The metadata filename matches the model ID specified in the contents of the file. | TRUE | check_error |  |
 
 ## Examples
 

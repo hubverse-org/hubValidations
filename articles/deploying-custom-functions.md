@@ -1,6 +1,7 @@
 # Deploying custom validation functions
 
 ``` r
+
 library(hubValidations)
 ```
 
@@ -157,6 +158,7 @@ validation function which checks the content of the model data
 submission files.
 
 ``` r
+
 default:
     validate_model_data:
       horizon_timediff:
@@ -244,25 +246,29 @@ consult the function documentation.
 
 #### For deploying through `validate_model_data`
 
-| check fun                      | Check                                                                                                                  | Early return | Fail output   | Extra info |
-|:-------------------------------|:-----------------------------------------------------------------------------------------------------------------------|:-------------|:--------------|:-----------|
-| opt_check_tbl_col_timediff     | Time difference between values in two date columns equal a defined period.                                             | FALSE        | check_failure |            |
-| opt_check_tbl_counts_lt_popn   | Predicted values per location are less than total location population.                                                 | FALSE        | check_failure |            |
-| opt_check_tbl_horizon_timediff | Time difference between values in two date columns equals a defined time period defined by values in a horizon column. | FALSE        | check_failure |            |
+| check fun | Check | Early return | Fail output | Extra info |
+|:---|:---|:---|:---|:---|
+| opt_check_tbl_col_timediff | Time difference between values in two date columns equal a defined period. | FALSE | check_failure |  |
+| opt_check_tbl_counts_lt_popn | Predicted values per location are less than total location population. | FALSE | check_failure |  |
+| opt_check_tbl_horizon_timediff | Time difference between values in two date columns equals a defined time period defined by values in a horizon column. | FALSE | check_failure |  |
 
 Details of available optional checks or checks requiring configuration
 for
 [`validate_model_data()`](https://hubverse-org.github.io/hubValidations/reference/validate_model_data.md).
+{.table .table .table-striped .table-hover .table-condensed
+.table-responsive style="margin-left: auto; margin-right: auto;"}
 
 #### For deploying through `validate_model_metadata`
 
-| check fun                           | Check                                                                                               | Early return | Fail output   | Extra info |
-|:------------------------------------|:----------------------------------------------------------------------------------------------------|:-------------|:--------------|:-----------|
-| opt_check_metadata_team_max_model_n | The number of metadata files submitted by a single team does not exceed the maximum number allowed. | FALSE        | check_failure |            |
+| check fun | Check | Early return | Fail output | Extra info |
+|:---|:---|:---|:---|:---|
+| opt_check_metadata_team_max_model_n | The number of metadata files submitted by a single team does not exceed the maximum number allowed. | FALSE | check_failure |  |
 
 Details of available optional checks or checks requiring configuration
 for
 [`validate_model_metadata()`](https://hubverse-org.github.io/hubValidations/reference/validate_model_metadata.md).
+{.table .table .table-striped .table-hover .table-condensed
+.table-responsive style="margin-left: auto; margin-right: auto;"}
 
 ## Managing dependencies of custom functions
 

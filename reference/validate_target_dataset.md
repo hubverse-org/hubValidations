@@ -65,12 +65,12 @@ objects](https://hubverse-org.github.io/hubValidations/articles/hub-validations-
 
 Details of checks performed by `validate_target_dataset()`
 
-| Name                           | Check                                                                | Early return | Fail output   | Extra info |
-|:-------------------------------|:---------------------------------------------------------------------|:-------------|:--------------|:-----------|
-| target_dataset_exists          | Target dataset can be successfully detected for a given target type. | TRUE         | check_error   |            |
-| target_dataset_unique          | A single unique target dataset exists for a given target type.       | TRUE         | check_error   |            |
-| target_dataset_file_ext_unique | All files of a given target type share a single unique file format.  | TRUE         | check_error   |            |
-| target_dataset_rows_unique     | Target dataset rows are all unique.                                  | FALSE        | check_failure |            |
+| Name | Check | Early return | Fail output | Extra info |
+|:---|:---|:---|:---|:---|
+| target_dataset_exists | Target dataset can be successfully detected for a given target type. | TRUE | check_error |  |
+| target_dataset_unique | A single unique target dataset exists for a given target type. | TRUE | check_error |  |
+| target_dataset_file_ext_unique | All files of a given target type share a single unique file format. | TRUE | check_error |  |
+| target_dataset_rows_unique | Target dataset rows are all unique. | FALSE | check_failure |  |
 
 ## Examples
 

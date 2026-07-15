@@ -64,11 +64,11 @@ objects](https://hubverse-org.github.io/hubValidations/articles/hub-validations-
 
 Details of checks performed by `validate_target_file()`
 
-| Name                       | Check                                                                                                                             | Early return | Fail output | Extra info |
-|:---------------------------|:----------------------------------------------------------------------------------------------------------------------------------|:-------------|:------------|:-----------|
-| target_file_exists         | File exists at \`file_path\` provided.                                                                                            | TRUE         | check_error |            |
-| target_partition_file_name | Hive-style partition file path segments are valid and can be parsed successfully. Skipped if target dataset not hive-partitioned. | TRUE         | check_error |            |
-| target_file_ext            | Target data file extension is valid.                                                                                              | TRUE         | check_error |            |
+| Name | Check | Early return | Fail output | Extra info |
+|:---|:---|:---|:---|:---|
+| target_file_exists | File exists at \`file_path\` provided. | TRUE | check_error |  |
+| target_partition_file_name | Hive-style partition file path segments are valid and can be parsed successfully. Skipped if target dataset not hive-partitioned. | TRUE | check_error |  |
+| target_file_ext | Target data file extension is valid. | TRUE | check_error |  |
 
 ## Examples
 
