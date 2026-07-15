@@ -1,3 +1,5 @@
+# hubValidations (development version)
+
 # hubValidations 2.1.1
 
 * Fixed `validate_pr()` and `validate_target_pr()` leaking a `gh` pagination progress message into their output by passing `.progress = FALSE` to the `gh::gh()` call (#347).
