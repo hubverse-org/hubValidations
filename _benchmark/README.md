@@ -86,13 +86,18 @@ across G1, G2 and G3, which all submit ~65,000 rows while the config allows 11.7
 38.9M and 77.7M valid value grid rows. Then read one check's `peak_rss_mb` across the
 three:
 
-- rising with the grid rows means memory still depends on the config.
-  `check_tbl_values_required` currently reads 3,885 MB then 10,397 MB.
+- rising with the grid rows means the cost still depends on the config.
+  `check_tbl_values_required` currently reads 3,885 MB / 436 s, then 10,397 MB /
+  1,482 s, then 13,280 MB / 3,497 s.
 - staying level means it now depends only on the submitted data, which is what the
-  rewrite is for. `check_tbl_rows_unique` already does this, reading ~283 MB at both.
+  rewrite is for. `check_tbl_rows_unique` already does this: ~290 MB and under a second
+  at all three.
 
-Peak memory moves by around 20% between runs, so only believe a change larger than
-that.
+Read `elapsed_s` alongside `peak_rss_mb`, and prefer it. Across those three the grid
+grows 6.7x and the times grow with it, but the memory figures flatten as they approach
+what the machine will give. Everything affected lands between 11 and 14 GB at G3, so
+memory understates the effect at the top end. Peak memory also moves by around 20%
+between runs, so only believe a memory change larger than that.
 
 ## Settings
 

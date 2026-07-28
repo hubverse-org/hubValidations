@@ -15,10 +15,13 @@ Machine: Darwin arm64, R 4.5.2.
 2. **`check_tbl_values_required` accounts for 91% of that time**, and matching rows
    against the valid value grid accounts for 89% of it. Everything else put
    together is under 10%.
-3. **Memory grows with the size of the valid value grid, not with how much data was
-   submitted.** Hold the submission at 65k rows and triple the grid, and per-check
-   memory grows 1.5-3.2x with it: validating 65k rows costs about 10 GB when the grid
-   has 39M rows.
+3. **Cost grows with the size of the valid value grid, not with how much data was
+   submitted.** With the submission fixed at 65k rows, a 6.7x larger grid takes 6.7-8x
+   longer. Memory rises too but flattens off, 2.9-3.8x for that same 6.7x, because it
+   runs into what the machine will give it: every check converges on 11-14 GB. So time
+   is the cleaner measure of the effect, and the memory ceiling is itself a finding:
+   65k rows against a 78M-row grid needs ~14 GB, which will not fit a 16 GB runner
+   alongside anything else.
 4. **Working out which model task each row belongs to already costs more when there
    are more of them**: ~3.3x slower going from 1 to 7. So the new approach checking
    rows against each model task in turn is not automatically worse than what we have.
@@ -69,35 +72,39 @@ Matching rows against the valid value grid accounts for 88.9% of the time on
 its own. At size M that same check is 64% rather than 91%, and the sample checks are
 ~22% rather than ~6%. So the bigger the hub, the stronger the case for #357.
 
-## Memory as the config grows
+## Cost as the config grows
 
-The submission is held at 65,000 rows and only the config grows, so anything that
-moves here is down to the valid value grid. Figures are the most memory each
-check needed at once.
+The submission is held at 65,000 rows and only the config grows, so anything that moves
+here is down to the valid value grid. Peak memory and elapsed time per check.
 
-| check | G1 (11.7M grid rows) | G2 (38.9M grid rows) | ratio |
+| check | G1 (11.7M) | G2 (38.9M) | G3 (77.7M) |
 |---|---:|---:|---:|
-| `check_tbl_spl_compound_tid` | 7,097 MB | 11,085 MB | 1.56x |
-| `check_tbl_spl_non_compound_tid` | 7,336 MB | 10,921 MB | 1.49x |
-| `check_tbl_spl_n` | 7,338 MB | 10,657 MB | 1.45x |
-| `check_tbl_values_required` | 3,885 MB | 10,397 MB | 2.68x |
-| `check_tbl_value_col` | 3,579 MB | 9,925 MB | 2.77x |
-| `match_tbl_to_model_task` | 3,568 MB | 9,783 MB | 2.74x |
-| `check_tbl_values` | 4,021 MB | 9,607 MB | 2.39x |
-| `check_tbl_spl_mt_unique` | 2,545 MB | 8,065 MB | 3.17x |
-| `check_tbl_rows_unique` | 284 MB | 282 MB | **0.99x** |
-| `check_tbl_value_col_ascending` | 195 MB | 195 MB | **1.00x** |
+| `check_tbl_values_required` | 3,885 MB / 436 s | 10,397 MB / 1,482 s | 13,280 MB / 3,497 s |
+| `check_tbl_spl_non_compound_tid` | 7,336 MB / 20 s | 10,921 MB / 36 s | 14,237 MB / 78 s |
+| `check_tbl_spl_compound_taskid_set` | 3,409 MB / 8 s | 9,514 MB / 28 s | 13,883 MB / 58 s |
+| `check_tbl_spl_n` | 7,338 MB / 20 s | 10,657 MB / 37 s | 13,787 MB / 76 s |
+| `check_tbl_spl_compound_tid` | 7,097 MB / 20 s | 11,085 MB / 36 s | 13,717 MB / 77 s |
+| `check_tbl_value_col` | 3,579 MB / 9 s | 9,925 MB / 29 s | 13,424 MB / 60 s |
+| `check_tbl_spl_mt_unique` | 2,545 MB / 4 s | 8,065 MB / 14 s | 13,396 MB / 28 s |
+| `check_tbl_values` | 4,021 MB / 10 s | 9,607 MB / 34 s | 11,474 MB / 76 s |
+| `match_tbl_to_model_task` | 3,568 MB / 9 s | 9,783 MB / 28 s | 11,452 MB / 60 s |
+| `check_tbl_rows_unique` | 284 MB / 0.2 s | 282 MB / 0.2 s | 293 MB / 0.2 s |
+| `check_tbl_value_col_ascending` | 195 MB / 0.1 s | 195 MB / 0.1 s | 193 MB / 0.1 s |
 
-The valid value grid grows 3.33x between these two sizes, and memory grows 1.5-3.2x
-with it. So memory currently tracks the config, not the submission. The
-ratios are not precise — peak memory moves ~20% between runs — so read them as
-"clearly rising" rather than as exact multiples.
+The grid grows 6.67x from G1 to G3. **Time grows 6.7-8x with it**, i.e. roughly in
+proportion. **Memory grows only 2.9-3.8x**, and every affected check lands between 11
+and 14 GB at G3 — they are converging on what this machine will hand out rather than on
+what the work needs, so read the memory column as a floor on the real appetite, not a
+measurement of it.
 
-The last two rows are the control. Neither check has to work out which model task a
-row belongs to, so neither is affected by the size of the grid, and both read ~1.00x
-on the same data that puts every other row above 1.4x. The
-ratio column is what to watch as #355-#357 land: every row should end up near
-1.00x.
+The last two rows are the control. Neither check has to work out which model task a row
+belongs to, so neither is affected by the size of the grid: both sit at ~200-290 MB and
+under a second across a grid that grew nearly sevenfold. That is what every other row
+should look like once #355-#357 land, and the ratio between the G columns is what to
+watch.
+
+A whole `peak` run takes ~9 min at G1, ~29 min at G2 and ~68 min at G3, almost all of it
+`check_tbl_values_required`.
 
 ## Memory and time as model tasks are added
 
