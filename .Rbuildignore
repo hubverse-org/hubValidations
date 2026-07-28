@@ -9,6 +9,7 @@
 ^pkgdown$
 ^codecov\.yml$
 ^attic$
+^_benchmark$
 ^data-raw$
 ^vignettes/articles$
 ^\.DS_Store$
