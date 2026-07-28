@@ -69,3 +69,8 @@
 "ak/benchmark-baseline/323@9d04eef","G2","acefa","check_tbl_spl_compound_tid","follow-up",65000,38872500,1,11085,36.39,"check_success","ok","ak/benchmark-baseline/323@9d04eef","1.2.1.9000","2.2.2.9000","Darwin","arm64","4.5.2"
 "ak/benchmark-baseline/323@9d04eef","G2","acefa","check_tbl_spl_non_compound_tid","follow-up",65000,38872500,1,10921,36,"check_success","ok","ak/benchmark-baseline/323@9d04eef","1.2.1.9000","2.2.2.9000","Darwin","arm64","4.5.2"
 "ak/benchmark-baseline/323@9d04eef","G2","acefa","check_tbl_spl_n","follow-up",65000,38872500,1,10657,36.95,"check_success","ok","ak/benchmark-baseline/323@9d04eef","1.2.1.9000","2.2.2.9000","Darwin","arm64","4.5.2"
+"ak/benchmark-baseline/323@a3671f1","G3","acefa","baseline_load_only_chr","baseline",65000,77745000,1,196,0,"none","ok","ak/benchmark-baseline/323@a3671f1","1.2.1.9000","2.2.2.9000","Darwin","arm64","4.5.2"
+"ak/benchmark-baseline/323@a3671f1","G3","acefa","baseline_load_only_typed","baseline",65000,77745000,1,186,0,"none","ok","ak/benchmark-baseline/323@a3671f1","1.2.1.9000","2.2.2.9000","Darwin","arm64","4.5.2"
+"ak/benchmark-baseline/323@a3671f1","G3","acefa","prepare_compound_taskid_set","prep",65000,77745000,1,11156,62.18,"list","ok","ak/benchmark-baseline/323@a3671f1","1.2.1.9000","2.2.2.9000","Darwin","arm64","4.5.2"
+"ak/benchmark-baseline/323@a3671f1","G3","acefa","match_tbl_to_model_task","in",65000,77745000,1,11452,60.14,"list","ok","ak/benchmark-baseline/323@a3671f1","1.2.1.9000","2.2.2.9000","Darwin","arm64","4.5.2"
+"ak/benchmark-baseline/323@a3671f1","G3","acefa","check_tbl_values","in",65000,77745000,1,11474,75.52,"check_success","ok","ak/benchmark-baseline/323@a3671f1","1.2.1.9000","2.2.2.9000","Darwin","arm64","4.5.2"

@@ -8,20 +8,22 @@ Machine: Darwin arm64, R 4.5.2.
 
 ## Headlines
 
-1. **One file at the size that was reported takes ~29 minutes and ~11 GiB** (size L:
-   13M submitted rows, 3.9M valid value combinations grid rows, one model task).
+1. **One file at the size that was reported takes ~29 minutes, and needs up to ~15 GiB
+   of memory** (size L: 13M submitted rows, 3.9M valid value combinations grid rows,
+   one model task). Budget on 15 GiB: that is the highest the whole process has been
+   observed to reach.
 2. **`check_tbl_values_required` accounts for 91% of that time**, and matching rows
    against the valid value grid accounts for 89% of it. Everything else put
    together is under 10%.
 3. **Memory grows with the size of the valid value grid, not with how much data was
-   submitted.** Hold the submission at 65k rows and triple the grid, and memory
-   roughly triples with it: validating 65k rows costs about 10 GB when the grid has
-   39M rows.
+   submitted.** Hold the submission at 65k rows and triple the grid, and per-check
+   memory grows 1.5-3.2x with it: validating 65k rows costs about 10 GB when the grid
+   has 39M rows.
 4. **Working out which model task each row belongs to already costs more when there
    are more of them**: ~3.3x slower going from 1 to 7. So the new approach checking
    rows against each model task in turn is not automatically worse than what we have.
    Keeping a separate marker per row for every model task would be.
-5. **`check_tbl_values_required` gets ~2.7x *faster* with 7 model tasks** than with
+5. **`check_tbl_values_required` gets ~2.6x *faster* with 7 model tasks** than with
    1, on identical data. Its cost comes from working through the combinations of
    optional values within each model task, so splitting the values between several
    makes each one's job much smaller. Their single model task holding every optional
@@ -36,16 +38,23 @@ Machine: Darwin arm64, R 4.5.2.
 `validate_submission()` on one submission file, from `results.csv`. "Valid value grid
 rows" is how many rows that grid has for the round.
 
-| size | submitted rows | valid value grid rows | time | most memory R held | errors |
+| size | submitted rows | valid value grid rows | time | R heap peak | errors |
 |---|---:|---:|---:|---:|---:|
 | S | 18,000 | 25,200 | 2.5 s | 188 MB | 0 |
 | M | 460,000 | 237,510 | 25.6 s | 735 MB | 0 |
 | L | 13,000,000 | 3,887,250 | 1,769 s | 17,751 MB | 0 |
 
-At size L the whole process peaked at 15.4 GiB, and it only ever uses one core. Across
-three runs L took between 1,694 and 1,813 s, so treat differences under about 5% as
-noise. The memory peak varied more (10.7 to 15.4 GiB), because it depends on when R
-happens to tidy up after itself.
+**Two different memory numbers, don't compare them.** The table's "R heap peak" is R's
+own high-water counter (`gc()` max-used), which read 17.3 GiB at size L. The number that
+decides whether a run fits on a machine is the whole process's resident set, from
+`/usr/bin/time -l`, which read 10.5 GiB for this run. R's counter can exceed the
+resident set because it tracks everything R ever had allocated at once, while pages get
+freed and reused, so 17.3 > 10.5 is not a contradiction. Budget on the process figure.
+
+**Expect noise.** Across four runs, size L took 1,694-1,813 s, so treat time differences
+under about 5% as nothing. The process peak varied more, 10.5 to 15.4 GiB, since it
+depends on when R happens to tidy up; only believe a memory change larger than about
+20%. It only ever uses one core.
 
 Where the time goes at size L, as a percentage of the total:
 
