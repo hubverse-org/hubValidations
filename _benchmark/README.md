@@ -206,24 +206,26 @@ Size L is their config exactly, which `assert_faithful_to_acefa()` confirms on e
 run: if a scaling rule or the config file changes, generation stops rather than
 quietly measuring a different hub.
 
-## An oddity in the sample ids
+## What the sample indices say
 
-All four submitted targets use the same set of sample ids, so one sample is one
-simulation across every target and horizon. That is what sharing ids is for, and it
-is why the hub has one model task: an id cannot appear in more than one.
+Sample index `1` appears on 3,250 rows of the submission, covering 6 origin dates,
+4 targets, 64 horizons, 9 locations and 3 diseases. Only `round_id` is constant, and
+the same holds for each of the 4,000 indices.
 
-But the config does not say which task IDs a sample is shared across
-(`compound_taskid_set`), and when that is missing the package assumes every task ID.
-Because the ids start again at 1 in every unit, what the data implies is the
-opposite extreme: that sample 1 is one continuous simulation spanning every
-location, disease, target and horizon in the round. Almost certainly not intended.
-It passes only because a submission may share samples more widely than the config
-says.
+Since indices are meant to be unique across a whole model output file, that states
+that all of those rows are one jointly sampled set: one compound modeling task
+spanning everything except the round. The config says the opposite: it declares no
+`compound_taskid_set`, and when that is absent every task ID is treated as compound,
+i.e. no joint sampling at all. The submission passes because samples are allowed to be
+coarser than the config declares.
 
-Copied rather than corrected, since the hub's job is to be the case that was
-reported. It does mean the sample checks run against the broadest possible sharing,
-so a hub that spells the sharing out would take a different path through
-`spl_hash_tbl()`.
+Which of the two is intended is a question for the hub's authors, asked on #295. It
+is reproduced here rather than resolved, because the test hub's job is to be the case
+that was reported. Two consequences for the benchmark: the sample checks run against
+the broadest possible joint sampling, so a hub declaring a narrower
+`compound_taskid_set` would take a different path through `spl_hash_tbl()`; and the
+single model task is required either way, since an index cannot appear in more than
+one.
 
 ## Constraints on splitting into model tasks
 
