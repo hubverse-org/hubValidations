@@ -217,15 +217,17 @@ config_grid_rows <- function(config, round_id) {
 
 # Peak memory per check --------------------------------------------------------
 
-# The measurement that still means something after the rewrite. The promise being
-# made is that memory depends on how much data was submitted, not on how many rows
-# the valid value grid has.
+# What this measures today: how much the size of the valid value grid costs. The G
+# sizes all submit about 65k rows and differ only in how many grid rows the config
+# permits, so comparing one check across G1, G2 and G3 isolates that. Today the cost
+# climbs steeply with the grid, because validation builds it and matches the submission
+# against it.
 #
-# The G sizes are how to test it: they all submit about 65k rows, and only the
-# number of valid value grid rows changes between them. Compare one check's figure across G1,
-# G2 and G3. Today it rises as the grid rows rise. If the promise holds it should
-# stay about the same. That works whether or not the new code ever builds such a
-# table.
+# The rewrite removes the need to build the grid, so these are the numbers to watch as
+# it lands. They should drop, substantially, and the gaps between the three sizes should
+# narrow, though not close: a config permitting more values still means more values to
+# test each column against, so G3 should still cost more than G1, just far less than it
+# does today.
 #
 # Each check gets a fresh process and the figure comes from the operating system,
 # because that is the only one that counts everything the process is holding (see
@@ -278,7 +280,7 @@ peak_subprocess <- function(check_name, hub, cache_path) {
   ))
 }
 
-benchmark_peak <- function(check_name, scope, size, hub, cache_path) {
+benchmark_peak <- function(check_name, size, hub, cache_path) {
   output <- peak_subprocess(check_name, hub, cache_path)
   status <- attr(output, "status")
   peak_mb <- parse_peak_mb(output, PEAK_RSS)
@@ -303,7 +305,6 @@ benchmark_peak <- function(check_name, scope, size, hub, cache_path) {
   row <- append_row(
     data.frame(
       check = check_name,
-      scope = scope,
       data_rows = hub$n_rows,
       grid_rows = hub$grid_rows,
       n_model_tasks = hub$n_model_tasks,
@@ -321,9 +322,8 @@ benchmark_peak <- function(check_name, scope, size, hub, cache_path) {
     hub$variant
   )
   cat(sprintf(
-    "  %-34s %-9s %8.0f MB peak RSS  %8.2f s  %-14s %s\n",
+    "  %-34s %8.0f MB peak RSS  %8.2f s  %-14s %s\n",
     check_name,
-    scope,
     peak_mb,
     elapsed_s,
     result_class,
@@ -504,7 +504,6 @@ for (variant in variants) {
       for (flavour in unique(vapply(CHECKS, \(x) x$tbl, character(1)))) {
         benchmark_peak(
           paste0("baseline_load_only_", flavour),
-          "baseline",
           size,
           hub,
           cache_path
@@ -514,16 +513,10 @@ for (variant in variants) {
       # being measured has to pay for it. Its own cost gets its own row rather than
       # being hidden inside another check's.
       if (any(vapply(CHECKS, \(x) isTRUE(x$compound_taskid_set), NA))) {
-        benchmark_peak(
-          "prepare_compound_taskid_set",
-          "prep",
-          size,
-          hub,
-          cache_path
-        )
+        benchmark_peak("prepare_compound_taskid_set", size, hub, cache_path)
       }
       for (spec in CHECKS) {
-        benchmark_peak(spec$name, spec$scope, size, hub, cache_path)
+        benchmark_peak(spec$name, size, hub, cache_path)
       }
     }
     if (mode %in% c("all", "submission")) {

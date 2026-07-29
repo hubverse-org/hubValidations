@@ -43,7 +43,16 @@ All generated from one real hub config, shared by a user (ruarai) on
 because validating their submissions was slow. Same config and same random seed
 every time, so the hubs come out identical.
 
-Two things vary independently.
+**Three things drive what validation costs**, and the test hubs vary them
+independently:
+
+1. the size of the submitted data
+2. the size of the config's valid value combinations grid
+3. the number of model tasks
+
+The first two are set by **size**, the third by **shape**. Nothing else about a config
+changes any of them, which is why one config is enough. The tables below count rows,
+since the column count is the same across all of these hubs.
 
 ### Size
 
@@ -81,17 +90,26 @@ of valid value grid rows stays the same and only the number of model tasks chang
 **Is validation faster?** Run `submission` mode at size L and compare
 `elapsed_s` against the baseline in `prof-summary.md`.
 
-**Does memory still depend on the config rather than the data?** Run `peak` mode
-across G1, G2 and G3, which all submit ~65,000 rows while the config allows 11.7M,
-38.9M and 77.7M valid value grid rows. Then read one check's `peak_rss_mb` across the
-three:
+**How much does the size of the valid value grid still cost?** This is what the G sizes
+are for. All three submit ~65,000 rows, and the only difference between them is that the
+config permits 11.7M, 38.9M and 77.7M valid value grid rows. Run `peak` mode across them
+and read one check's `elapsed_s` and `peak_rss_mb` at each.
 
-- rising with the grid rows means the cost still depends on the config.
-  `check_tbl_values_required` currently reads 3,885 MB / 436 s, then 10,397 MB /
-  1,482 s, then 13,280 MB / 3,497 s.
-- staying level means it now depends only on the submitted data, which is what the
-  rewrite is for. `check_tbl_rows_unique` already does this: ~290 MB and under a second
-  at all three.
+Today the cost climbs steeply with the grid, because validation builds it and matches
+the submission against it. `check_tbl_values_required` reads 3,885 MB / 436 s, then
+10,397 MB / 1,482 s, then 13,280 MB / 3,497 s.
+
+The rewrite removes the need to build the grid at all, so these are the numbers to watch
+as it lands. Two things should happen to them:
+
+- **they should drop**, and substantially — that is the point of the work, not a side
+  effect of it;
+- **the gaps between G1, G2 and G3 should narrow.** They should not close completely: a
+  config permitting more values still means more values to test each column against, so
+  G3 should still cost more than G1 — just far less than it does today.
+
+For a check that never touches the grid, `check_tbl_rows_unique` shows what the floor
+looks like: ~290 MB and under a second at all three sizes.
 
 Read `elapsed_s` alongside `peak_rss_mb`, and prefer it. Across those three the grid
 grows 6.7x and the times grow with it, but the memory figures flatten as they approach
@@ -125,7 +143,6 @@ HUBVALIDATIONS_BENCHMARK_SIZES=L /usr/bin/time -l Rscript _benchmark/run-benchma
 | `r_peak_mb` | the most memory R itself held (whole-file rows) |
 | `grid_rows` | how many valid value grid rows the config allows for the round |
 | `data_rows` | how many rows were submitted |
-| `scope` | whether the rewrite should change this check: see below |
 | `result_class` | what the check returned, so a failure is not read as a fast pass |
 | `status` | `ok`, `error`, `oom` or `timeout` |
 
@@ -134,16 +151,6 @@ Some rows in `peak-results.csv` are setup rather than checks.
 check, so subtract it from a check that read the submission the same way.
 `prepare_compound_taskid_set` works out a value the sample checks need, once, so
 none of them is charged for it.
-
-`scope` says whether a check is expected to move:
-
-- **`in`** — rewritten by #355–#357.
-- **`follow-up`** — the sample checks. #355 leaves them out, but they decide which
-  model task a row belongs to the same way it is replacing, so the same fix applies
-  later. Tracked separately because these hubs submit samples, so a fair share of
-  every run is spent here and it would otherwise look like the rewrite
-  underdelivered.
-- **`other`** — neither.
 
 Every row also records `label`, `hubvalidations`, `hubutils`, `hubdata`, `sysname`,
 `machine` and `r_version`. Numbers are only comparable on the same machine.

@@ -1,68 +1,49 @@
-# The list of checks the benchmark measures, how validate_model_data() calls each
-# one, and what each needs to be given. Used by run-benchmark.R and by
-# run-one-check.R, which runs a single check on its own so its memory use can be
-# measured cleanly.
-
-# `scope` says whether the grid-free work is expected to change a check, and it is
-# the main reason this list exists. These test hubs submit samples, so a fair chunk
-# of every run is spent in the sample checks. Without the label, that time would
-# make a successful change look disappointing, because it was never going to move.
+# Which checks to time, how to call each one, and what to hand it.
 #
-# - `in`        — rewritten by #355-#357.
-# - `follow-up` — the sample checks. #355 leaves them out, but they work out which
-#   model task a row belongs to in exactly the same way it is replacing: build the
-#   valid value grid for each model task, then match the data against it.
-#   check_tbl_spl_mt_unique does that directly, and spl_hash_tbl()
-#   (utils-samples.R) and get_tbl_compound_taskid_set() (compound_taskid-utils.R)
-#   do it too. So their cost can be dealt with by reusing #355's new helper rather
-#   than by anything new, which is why they are tracked separately instead of
-#   written off.
-# - `other`     — neither, e.g. check_tbl_rows_unique.
+# Both run-benchmark.R and run-one-check.R need all three, which is why this is its own
+# file. Each entry in CHECKS has:
 #
-# The labels describe the plan as it stands for #355-#357. Once that work lands they
-# describe what it did touch, so they should not be edited in place: rows already
-# saved in the CSVs would stop meaning the same thing as new ones with the same
-# label.
+#   name                 the check function
+#   tbl                  which version of the submission the check is given: "chr" for
+#                        the all-character one, "typed" for real column types, "none" if
+#                        it needs no data.
+#   compound_taskid_set  TRUE if the check takes a compound task ID set.
 #
-# `tbl` says which version of the submission a check is given, and
-# `compound_taskid_set` whether it needs that set. check_context() uses both, so a
-# process measuring one check reads only what that check actually uses. Reading the
-# other version as well would add all of its memory to the figure being blamed on
-# the check.
+# check_context() reads only what a check's `tbl` and `compound_taskid_set` say it uses,
+# so the memory measured against a check is its own and not the cost of loading data it
+# never touched.
 CHECKS <- list(
-  # Not a check itself. It is the shared code underneath check_tbl_value_col and
+  # Not a check. This is the shared code beneath check_tbl_value_col and
   # check_tbl_value_col_ascending that works out which model task each row belongs
-  # to, measured on its own because #355 replaces it. Its two real callers each
-  # name one output type; leaving that unset here covers all of them at once. On
-  # these test hubs that is the same thing, since they only use samples, and on a
-  # hub with more it is deliberately the worst case.
-  list(name = "match_tbl_to_model_task", scope = "in", tbl = "chr"),
-  list(name = "check_tbl_values", scope = "in", tbl = "chr"),
-  list(name = "check_tbl_values_required", scope = "in", tbl = "chr"),
-  list(name = "check_tbl_value_col", scope = "in", tbl = "typed"),
-  list(name = "check_tbl_value_col_ascending", scope = "in", tbl = "chr"),
-  list(name = "check_tbl_rows_unique", scope = "other", tbl = "chr"),
-  list(name = "check_tbl_spl_mt_unique", scope = "follow-up", tbl = "chr"),
+  # to. It is measured on its own because #355 replaces it.
+  #
+  # Those two callers each ask it about one output type at a time. Here it is asked
+  # about all of them at once, which on these test hubs is the same thing, because
+  # they only submit samples. On a hub with several output types it would do more
+  # work than either caller does, so read the number as an upper bound.
+  list(name = "match_tbl_to_model_task", tbl = "chr"),
+  list(name = "check_tbl_values", tbl = "chr"),
+  list(name = "check_tbl_values_required", tbl = "chr"),
+  list(name = "check_tbl_value_col", tbl = "typed"),
+  list(name = "check_tbl_value_col_ascending", tbl = "chr"),
+  list(name = "check_tbl_rows_unique", tbl = "chr"),
+  list(name = "check_tbl_spl_mt_unique", tbl = "chr"),
   list(
     name = "check_tbl_spl_compound_taskid_set",
-    scope = "follow-up",
     tbl = "chr"
   ),
   list(
     name = "check_tbl_spl_compound_tid",
-    scope = "follow-up",
     tbl = "chr",
     compound_taskid_set = TRUE
   ),
   list(
     name = "check_tbl_spl_non_compound_tid",
-    scope = "follow-up",
     tbl = "chr",
     compound_taskid_set = TRUE
   ),
   list(
     name = "check_tbl_spl_n",
-    scope = "follow-up",
     tbl = "chr",
     compound_taskid_set = TRUE
   )
@@ -76,22 +57,23 @@ check_spec <- function(name) {
   spec[[1]]
 }
 
-# Checks that validate_model_data() runs but the benchmark does not time, and why.
-# Listed so the note below stays quiet until a genuinely new check turns up.
+# validate_model_data() runs more checks than the list above measures. These are the
+# ones deliberately left out, and why. Listing them keeps warn_unmeasured_checks()
+# below quiet until a genuinely new check turns up.
 DELIBERATELY_UNMEASURED <- c(
-  # Reading the submission is the benchmark's own setup cost, and it is already
-  # measured by the baseline rows.
+  # Reading the submission is the benchmark's own setup cost rather than a check's,
+  # and the baseline rows already measure it.
   "check_file_read",
-  # These look at column names, types and the round, so their work depends on the
-  # number of columns rather than the number of rows. Grid-free validation cannot
-  # change them, and they are too quick to register at any size.
+  # These look at column names, column types and the round ID, so their work depends
+  # on how many columns there are rather than how many rows. Grid-free validation
+  # cannot change that, and they are too quick to register at any size.
   "check_valid_round_id_col",
   "check_tbl_unique_round_id",
   "check_tbl_match_round_id",
   "check_tbl_colnames",
   "check_tbl_col_types",
-  # These do nothing on these test hubs, which have no derived task IDs and no
-  # probability-mass output type.
+  # These two have nothing to do on these test hubs: there are no derived task IDs
+  # for the first to check, and no pmf output type for the second.
   "check_tbl_derived_task_id_vals",
   "check_tbl_value_col_sum1"
 )
@@ -115,7 +97,7 @@ warn_unmeasured_checks <- function(pkg_dir) {
   missing <- setdiff(expected, c(measured, DELIBERATELY_UNMEASURED))
   if (length(missing) > 0L) {
     cat(
-      "note: validate_model_data() runs checks this harness does not measure:\n  ",
+      "note: validate_model_data() runs checks the benchmark does not measure:\n  ",
       paste(missing, collapse = ", "),
       "\n"
     )
@@ -231,12 +213,14 @@ check_call <- function(name, ctx) {
   )
 }
 
-# validate_model_data() reads the submission twice: once with everything as text,
-# and once with proper column types. For that second read it uses the types from
-# the hub config for csv files, and the types stored in the file itself otherwise.
-# Copying that split matters, because reading a parquet test hub with the config's
-# types would measure the value-column check against types it never actually
-# receives in practice.
+# Reads the submission the way validate_model_data() reads it. It reads the file
+# twice: once with every column as character, and once with real column types. For
+# that second read it takes the types from the hub config when the file is csv, and
+# from the file itself for any other format.
+#
+# The benchmark copies that so check_tbl_value_col, which is the check given the
+# typed version, sees the same column types here as it does in a real run. The check
+# runs either way; it is only the types it is handed that would otherwise differ.
 read_tbl_flavour <- function(flavour, file_path, hub_path) {
   switch(
     flavour,
@@ -290,8 +274,8 @@ check_context <- function(
   ctx
 }
 
-# check_tbl_spl_compound_taskid_set() wants the all-text version of the submission,
-# so read that here whatever version the calling check itself asked for.
+# check_tbl_spl_compound_taskid_set() wants the all-character version of the
+# submission, so read that here whatever version the calling check asked for.
 derive_compound_taskid_set <- function(ctx) {
   tbl_chr <- ctx$tbl_chr
   if (is.null(tbl_chr)) {

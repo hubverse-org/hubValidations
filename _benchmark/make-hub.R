@@ -26,29 +26,41 @@
 
 # Size definitions ------------------------------------------------------------
 
-# Each size is a size. The `cfg_*` entries set how many values the config allows,
-# which decides how big the valid value grid becomes. The rest set how much
-# data is actually submitted.
+# A "size" is one set of numbers saying how big a test hub should be.
 #
-# The L size is ruarai's config exactly, which assert_faithful_to_acefa() checks.
-# Every other size is the same shape, scaled up or down.
+# The `cfg_*` entries say how many values the config allows for a task ID, which is
+# what decides how big the valid value grid becomes. The others say how much data is
+# actually submitted:
 #
-# Submitted rows = units * samples * (2 * horizons used + 2), from
-# make_unit_rows().
+#   units    how many date/location/disease combinations the submission covers
+#   samples  how many samples in each of those units
 #
-# There are three groups, because the current code and its planned replacement can
-# get slow for different reasons, and a size that changed two things at once could
-# not tell us which was to blame.
+# Submitted rows = units x samples x rows per sample, and rows per sample is
+# (2 x horizons used) + 2. The two targets that forecast ahead appear at every
+# horizon, which is the first part; the two peak targets appear once each, which is
+# the + 2. make_unit_rows() builds those rows.
 #
-# - S, M and L grow the config and the submission together, like a real hub.
-# - G1 to G3 grow only the config, so any extra memory has to be the valid value
-#   grid. This is where today's cost sits: memory grows in step with that grid.
-# - the `mt<N>` variants add model tasks while the config and the submission stay
-#   the same size. This is where the replacement could get slow instead. The plan
-#   is to test rows against one model task at a time; if it kept a separate
-#   true/false marker per row for every model task, memory would grow with rows
-#   times model tasks. #356 says not to do that, and this is how we would notice.
-#   It needs a size with a lot of data to show up.
+# The L size is ruarai's config exactly, which assert_faithful_to_acefa() checks on
+# every run. Every other size is that same shape scaled up or down.
+#
+# There are three groups of sizes, because the current code and its planned
+# replacement can get slow for different reasons. A size that changed two things at
+# once could not tell us which was to blame.
+#
+# - S, M and L grow the config and the submission together, like a real hub does.
+# - G1 to G3 grow only the config. The submission stays at about 65k rows, so any
+#   extra memory has to come from the valid value grid. This is where today's cost
+#   is.
+# - the `mt<N>` shapes are those same sizes again, but with the config split into N
+#   model tasks instead of one. All N model tasks are in the same round, and one
+#   submission file covers all of them. The config and the submission stay the same
+#   size, so the only thing that changes is how many model tasks there are.
+#
+# That last group exists because the replacement could get slow where the current
+# code does not. The plan is to test rows against one model task at a time. If an
+# implementation instead kept a separate true/false marker per row for every model
+# task, memory would grow with rows x model tasks. #356 says not to do that, and
+# these shapes are how we would find out. It takes one of the larger sizes to show.
 BENCHMARK_SIZES <- list(
   S = list(
     cfg_round_id = 4,

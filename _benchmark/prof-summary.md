@@ -1,8 +1,8 @@
 # Baseline
 
-What validation costs today: the numbers #355–#357 have to beat. `results.csv` and
-`peak-results.csv` hold every run; this file is the short version. Only add to it
-when a run moves a cost, removes one, or turns up something new.
+What validation costs today. These are the numbers #355–#357 need to improve on.
+`results.csv` and `peak-results.csv` hold every run; this file is the short version.
+Only add to it when a run moves a cost, removes one, or turns up something new.
 
 Machine: Darwin arm64, R 4.5.2.
 
@@ -99,9 +99,12 @@ measurement of it.
 
 The last two rows are the control. Neither check has to work out which model task a row
 belongs to, so neither is affected by the size of the grid: both sit at ~200-290 MB and
-under a second across a grid that grew nearly sevenfold. That is what every other row
-should look like once #355-#357 land, and the ratio between the G columns is what to
-watch.
+under a second across a grid that grew nearly sevenfold.
+
+What to expect of the other rows once #355-#357 land: they should **drop**, and the gaps
+between the G columns should **narrow**. Not to the controls' floor, though. A config
+permitting more values still means more values to test each column against, so G3 should
+still cost more than G1, just far less than it does today.
 
 A whole `peak` run takes ~9 min at G1, ~29 min at G2 and ~68 min at G3, almost all of it
 `check_tbl_values_required`.
@@ -123,8 +126,8 @@ tasks changes. Size M.
 | `check_tbl_values` | 479 MB / 0.8 s | 470 / 0.8 | 539 / 0.9 |
 | `check_tbl_rows_unique` | 753 MB / 1.4 s | 747 / 1.5 | 753 / 1.5 |
 
-Setup costs to subtract: ~270 MB when the submission is read as text, ~246 MB when it
-is read with proper column types.
+Setup costs to subtract: ~270 MB when the submission is read as character, ~246 MB
+when it is read with real column types.
 
 Time is the clearer signal here, not memory. The sample checks take 3.3x longer with 7
 model tasks than with 1, on identical data, while their memory moves by little more
