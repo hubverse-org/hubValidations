@@ -82,8 +82,15 @@ How many model tasks the config is split into, set with
 | `acefa` | 1, as in ruarai's config |
 | `mt3`, `mt7`, … | 3, 7, … |
 
-Splitting shares the same set of values out between the model tasks, so the number
-of valid value grid rows stays the same and only the number of model tasks changes.
+All N model tasks sit in the same round, and one submission file covers all of them.
+Splitting shares the same set of values out between them, so the number of valid value
+grid rows stays the same and only the number of model tasks changes.
+
+This matters because validation builds the grid as one sub-grid per model task and maps
+over them, so more model tasks means more passes through the same build-and-join work.
+It maps over output type too, which is why it helps that these hubs submit a single
+output type: every pass is then the same shape, so changing the model task count changes
+how many passes there are and nothing else.
 
 ## The two questions it answers
 
@@ -265,11 +272,14 @@ check failed early would measure validation stopping rather than doing its work.
 
 ## What is not covered
 
-No shape includes quantile output, because ruarai's hub submits only samples. So the
-ascending-quantiles check is skipped, and model tasks that can only be told apart by
-`output_type_id` — which #355 and #356 both flag as the hard case — are not
-exercised here. That is a question of correctness rather than speed, so it belongs
-in the old-versus-new comparison tests those issues describe.
+Every shape submits a single output type, samples. That is deliberate: it keeps each pass
+through validation the same shape, so the model task count can be varied on its own.
+
+The consequence is that `check_tbl_value_col_ascending`, which only applies to quantile
+and cdf output, doesn't run. Its expensive half is covered regardless, since it works out
+which model task a row belongs to by calling `match_tbl_to_model_task()`, which is
+measured separately. Model tasks that can only be told apart by `output_type_id` aren't
+exercised either — that's a correctness question, and the test suite's job.
 
 The valid value grid is not measured on its own. It is not being made faster,
 it is being made unnecessary, and each check's memory figure already includes

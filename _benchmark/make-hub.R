@@ -56,11 +56,19 @@
 #   submission file covers all of them. The config and the submission stay the same
 #   size, so the only thing that changes is how many model tasks there are.
 #
-# That last group exists because the replacement could get slow where the current
-# code does not. The plan is to test rows against one model task at a time. If an
-# implementation instead kept a separate true/false marker per row for every model
-# task, memory would grow with rows x model tasks. #356 says not to do that, and
-# these shapes are how we would find out. It takes one of the larger sizes to show.
+# That last group matters for both the current code and its replacement.
+#
+# Today the grid is built as one sub-grid per model task and validation maps over
+# them, so more model tasks means more passes through the same build-and-join work.
+# It maps over output type as well, which is why it helps that these hubs submit a
+# single output type: every pass is then the same shape, so changing the model task
+# count changes how many passes there are and nothing else.
+#
+# For the replacement, the risk runs the other way. The plan is to test rows against
+# one model task at a time; an implementation that instead kept a separate true/false
+# marker per row for every model task would grow with rows x model tasks. #356 says
+# not to do that, and these shapes are how we would find out. It takes one of the
+# larger sizes to show.
 BENCHMARK_SIZES <- list(
   S = list(
     cfg_round_id = 4,
