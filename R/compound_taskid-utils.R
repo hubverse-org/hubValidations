@@ -96,7 +96,10 @@ get_tbl_compound_taskid_set <- function(
   )
 
   if (compact) {
-    tbl_compound_taskids <- purrr::compact(tbl_compound_taskids)
+    # Only modeling tasks without samples are dropped. An empty detected set is an
+    # answer rather than an absence, so it stays, which `purrr::compact()` would not
+    # do because it drops anything of length zero.
+    tbl_compound_taskids <- purrr::discard(tbl_compound_taskids, is.null)
   }
 
   tbl_compound_taskids
@@ -197,10 +200,17 @@ get_mt_compound_taskid_set <- function(
   if (!all(tbl_comp_tids %in% config_comp_tids)) {
     invalid_tbl_comp_tids <- setdiff(tbl_comp_tids, config_comp_tids)
 
+    expected_msg <- if (length(config_comp_tids) == 0L) {
+      "The hub expects no compound task IDs and response dependence across all
+      task IDs."
+    } else {
+      "Compound task IDs should be one of {.val {config_comp_tids}}."
+    }
+
     error_vec <- c(
-      "x" = "Finer {.var compound_taskid_set} than allowed detected.",
-      "!" = "{.val {invalid_tbl_comp_tids}} identified as compound task ID{?s} in file but not allowed in config.",
-      "i" = "Compound task IDs should be one of {.val {config_comp_tids}}."
+      "x" = "Detected a finer {.var compound_taskid_set} than the hub accepts.",
+      "!" = "{.val {invalid_tbl_comp_tids}} identified as compound task ID{?s} in file but not accepted by the hub.",
+      "i" = expected_msg
     )
 
     if (error) {

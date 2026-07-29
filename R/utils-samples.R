@@ -213,7 +213,9 @@ get_model_task_compound_taskid_set <- function(x, config_tasks, round_id) {
   if (is.null(output_type_id_params$compound_taskid_set)) {
     return(hubUtils::get_round_task_id_names(config_tasks, round_id))
   }
-  output_type_id_params$compound_taskid_set
+  # A `compound_taskid_set` of `[]` reads back as an empty list rather than an empty
+  # character vector, which no longer works as a column index.
+  as.character(output_type_id_params$compound_taskid_set)
 }
 
 ## --- v3 sample check utils ---------------------------------------------------
@@ -403,7 +405,13 @@ add_mt_sample_idx <- function(
     output_type = "sample",
     output_type_id = seq_len(nrow(spl_unique)) + start_idx
   )
-  spl <- dplyr::left_join(spl_unique, spl, by = comp_tids)
+  spl <- if (length(comp_tids) == 0L) {
+    # No compound task IDs means the whole modeling task is one sample, so every row
+    # belongs to the single sample ID.
+    dplyr::cross_join(spl_unique, spl)
+  } else {
+    dplyr::left_join(spl_unique, spl, by = comp_tids)
+  }
 
   if (!is.null(type) && type == "character") {
     spl[[config_tid]] <- sprintf("s%s", spl[[config_tid]])

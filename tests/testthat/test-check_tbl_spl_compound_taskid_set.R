@@ -299,3 +299,63 @@ test_that("Ignoring derived_task_ids in check_tbl_spl_compound_taskid_set works"
     )
   )
 })
+
+test_that("check_tbl_spl_compound_taskid_set works with an empty compound_taskid_set", {
+  hub_path <- empty_cts_hub()
+  file_path <- "flu-base/2022-10-22-flu-base.csv"
+  round_id <- "2022-10-22"
+  tbl <- read_model_out_file(file_path, hub_path, coerce_types = "chr")
+  tbl <- tbl[tbl$output_type == "sample", ]
+  task_ids <- setdiff(names(tbl), c(hubUtils::std_colnames, "value"))
+
+  # Give every sample one row per task ID value combination, so no task ID holds a
+  # single value within a sample and the detected set is empty, as configured.
+  joint <- tbl |>
+    dplyr::group_by(dplyr::pick(dplyr::all_of(task_ids))) |>
+    dplyr::mutate(output_type_id = as.character(dplyr::row_number())) |>
+    dplyr::ungroup()
+
+  expect_snapshot(
+    check_tbl_spl_compound_taskid_set(joint, round_id, file_path, hub_path)
+  )
+  config_tasks <- read_config(hub_path, "tasks")
+  expect_equal(
+    get_tbl_compound_taskid_set(joint, config_tasks, round_id, compact = FALSE),
+    list(`1` = NULL, `2` = character(0))
+  )
+  # Compacting drops the modeling task without samples but keeps the empty detected
+  # set, which is an answer rather than an absence.
+  expect_equal(
+    get_tbl_compound_taskid_set(joint, config_tasks, round_id),
+    list(`2` = character(0))
+  )
+
+  # The file as submitted keeps each sample to one location, which is a finer set
+  # than a hub expecting none.
+  expect_snapshot(
+    check_tbl_spl_compound_taskid_set(tbl, round_id, file_path, hub_path)
+  )
+})
+
+test_that("validation passes end to end with an empty compound_taskid_set", {
+  hub_path <- empty_cts_hub()
+  file_path <- "flu-base/2022-10-22-flu-base.csv"
+  tbl <- read_model_out_file(file_path, hub_path, coerce_types = "chr")
+  spl <- tbl[tbl$output_type == "sample", ]
+  task_ids <- setdiff(names(spl), c(hubUtils::std_colnames, "value"))
+
+  joint <- spl |>
+    dplyr::group_by(dplyr::pick(dplyr::all_of(task_ids))) |>
+    dplyr::mutate(output_type_id = as.character(dplyr::row_number())) |>
+    dplyr::ungroup()
+  utils::write.csv(
+    rbind(tbl[tbl$output_type != "sample", ], joint),
+    fs::path(hub_path, "model-output", file_path),
+    row.names = FALSE
+  )
+
+  # The empty set has to reach the other sample checks unchanged for them to read it
+  # as "every task ID is sampled jointly" rather than as no configuration at all.
+  checks <- validate_model_data(hub_path, file_path)
+  expect_true(all(purrr::map_lgl(checks, \(.x) !is_any_error(.x))))
+})

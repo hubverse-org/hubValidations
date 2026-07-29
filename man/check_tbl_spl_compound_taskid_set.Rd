@@ -65,13 +65,12 @@ for a given model task, the \code{errors} object will be a list with one element
 single, unique value for each compound task ID.
 }
 
-If the check failed because task IDs which is not allowed in the config, were identified
-as compound task ID (i.e. samples describe "finer" compound modeling tasks)
+If the check failed because task IDs the hub does not accept as compound task IDs
+were identified as such (i.e. samples describe "finer" compound modeling tasks)
 for a given model task, the \code{errors} object will be a list with the structure
 described above as well as the additional following elements:
 \itemize{
-\item \code{config_comp_tids}: the allowed \code{compound_taskid_set} defined in the modeling
-task config.
+\item \code{config_comp_tids}: the \code{compound_taskid_set} the modeling task config expects.
 \item \code{invalid_tbl_comp_tids}: the names of invalid compound task IDs.
 }
 

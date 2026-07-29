@@ -1,5 +1,8 @@
 # hubValidations (development version)
 
+* A `compound_taskid_set` of `[]`, which declares that every task ID is sampled jointly, no longer errors. `check_tbl_spl_compound_taskid_set()` failed with `` `config_comp_tids` must be logical, numeric, or character, not an empty list `` and `submission_tmpl()` with `invalid subscript type 'list'`. The check now passes when a submission's samples are drawn jointly across every task ID and, when they are finer, reports that the hub expects no compound task IDs and response dependence across all task IDs (#361).
+* `get_tbl_compound_taskid_set()` no longer drops modeling tasks whose detected compound task ID set is empty, which previously made a jointly sampled modeling task indistinguishable from one with no samples at all (#361).
+
 # hubValidations 2.1.1
 
 * Fixed `validate_pr()` and `validate_target_pr()` leaking a `gh` pagination progress message into their output by passing `.progress = FALSE` to the `gh::gh()` call (#347).
