@@ -47,12 +47,14 @@ rows" is how many rows that grid has for the round.
 | M | 460,000 | 237,510 | 25.6 s | 735 MB | 0 |
 | L | 13,000,000 | 3,887,250 | 1,769 s | 17,751 MB | 0 |
 
-**Two different memory numbers, don't compare them.** The table's "R heap peak" is R's
-own high-water counter (`gc()` max-used), which read 17.3 GiB at size L. The number that
-decides whether a run fits on a machine is the whole process's resident set, from
-`/usr/bin/time -l`, which read 10.5 GiB for this run. R's counter can exceed the
-resident set because it tracks everything R ever had allocated at once, while pages get
-freed and reused, so 17.3 > 10.5 is not a contradiction. Budget on the process figure.
+**Two different memory numbers, don't compare them.** The `R heap peak` column in the
+table above is R's own high-water counter (`gc()` max-used), which read 17.3 GiB at
+size L. It is not the number that decides whether a run fits on a machine. That one is
+the whole process's resident set, measured with `/usr/bin/time -l`, which read 10.5 GiB
+for the same run. R's counter can exceed the resident set because it adds up everything
+R ever had allocated at once, while the operating system frees and reuses pages as it
+goes, so 17.3 > 10.5 is not a contradiction. **When working out how much memory a
+machine needs, use the resident set figure, not this column.**
 
 **Expect noise.** Across four runs, size L took 1,694-1,813 s, so treat time differences
 under about 5% as nothing. The process peak varied more, 10.5 to 15.4 GiB, since it
@@ -75,7 +77,8 @@ its own. At size M that same check is 64% rather than 91%, and the sample checks
 ## Cost as the config grows
 
 The submission is held at 65,000 rows and only the config grows, so anything that moves
-here is down to the valid value grid. Peak memory and elapsed time per check.
+here is down to the valid value grid. Each cell gives the peak memory and the elapsed
+time for one check at one size.
 
 | check | G1 (11.7M) | G2 (38.9M) | G3 (77.7M) |
 |---|---:|---:|---:|

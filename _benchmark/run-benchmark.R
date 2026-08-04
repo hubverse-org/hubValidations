@@ -292,10 +292,10 @@ benchmark_peak <- function(check_name, size, hub, cache_path) {
     sub(paste0(".*", field, "=([^ ]+).*"), "\\1", result_line)
   }
   elapsed_s <- as.numeric(parse_field("elapsed_s", NA_character_))
-  # A check that fails is still a successful run of the script, so the exit code
-  # alone cannot tell us. Recording what the check returned means a check that
-  # stopped passing on a new size shows up, instead of looking like a suspiciously
-  # quick success.
+  # A check that fails is still a successful run of the script, so a zero exit code
+  # only tells us the script ran, not that the check passed. Recording what the check
+  # returned means a check that stopped passing on a new size shows up, instead of
+  # looking like a suspiciously quick success.
   result_class <- parse_field("class", NA_character_)
   ok <- is.null(status) || identical(status, 0L)
   if (!ok) {

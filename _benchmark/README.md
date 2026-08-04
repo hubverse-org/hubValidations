@@ -118,11 +118,13 @@ as it lands. Two things should happen to them:
 For a check that never touches the grid, `check_tbl_rows_unique` shows what the floor
 looks like: ~290 MB and under a second at all three sizes.
 
-Read `elapsed_s` alongside `peak_rss_mb`, and prefer it. Across those three the grid
-grows 6.7x and the times grow with it, but the memory figures flatten as they approach
-what the machine will give. Everything affected lands between 11 and 14 GB at G3, so
-memory understates the effect at the top end. Peak memory also moves by around 20%
-between runs, so only believe a memory change larger than that.
+Read both `elapsed_s` and `peak_rss_mb`, but trust `elapsed_s` more. Across G1 to G3
+the grid grows 6.7x and the times grow roughly in step, while the memory figures level
+off: everything affected lands between 11 and 14 GB at G3, because that is about as
+much as this machine will hand out. So at the top end the memory figures are capped by
+the machine rather than by what the work needs, and they make the effect look smaller
+than it is. Peak memory also varies by around 20% between runs of the same thing, so
+treat a memory change smaller than that as noise.
 
 ## Settings
 
