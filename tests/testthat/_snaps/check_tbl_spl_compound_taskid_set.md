@@ -23,7 +23,7 @@
     Output
       <error/check_error>
       Error:
-      ! All samples in a model task do not conform to single, unique compound task ID set that matches or is coarser than the configured `compound_taskid_set`.  mt 2: Finer `compound_taskid_set` than allowed detected. "horizon" identified as compound task ID in file but not allowed in config. Compound task IDs should be one of "reference_date" and "location".
+      ! All samples in a model task do not conform to single, unique compound task ID set that matches or is coarser than the configured `compound_taskid_set`.  mt 2: Detected a finer `compound_taskid_set` than the hub accepts. "horizon" identified as compound task ID in file but not accepted by the hub. Compound task IDs should be one of "reference_date" and "location".
 
 ---
 
@@ -282,7 +282,7 @@
     Output
       <error/check_error>
       Error:
-      ! All samples in a model task do not conform to single, unique compound task ID set that matches or is coarser than the configured `compound_taskid_set`.  mt 2: Finer `compound_taskid_set` than allowed detected. "variant" identified as compound task ID in file but not allowed in config. Compound task IDs should be one of "reference_date", "horizon", "location", and "target_end_date".
+      ! All samples in a model task do not conform to single, unique compound task ID set that matches or is coarser than the configured `compound_taskid_set`.  mt 2: Detected a finer `compound_taskid_set` than the hub accepts. "variant" identified as compound task ID in file but not accepted by the hub. Compound task IDs should be one of "reference_date", "horizon", "location", and "target_end_date".
 
 ---
 
@@ -317,4 +317,22 @@
       <message/check_success>
       Message:
       All samples in a model task conform to single, unique compound task ID set that matches the configured `compound_taskid_set`.
+
+# check_tbl_spl_compound_taskid_set works with an empty compound_taskid_set
+
+    Code
+      check_tbl_spl_compound_taskid_set(joint, round_id, file_path, hub_path)
+    Output
+      <message/check_success>
+      Message:
+      All samples in a model task conform to single, unique compound task ID set that matches the configured `compound_taskid_set`.
+
+---
+
+    Code
+      check_tbl_spl_compound_taskid_set(tbl, round_id, file_path, hub_path)
+    Output
+      <error/check_error>
+      Error:
+      ! All samples in a model task do not conform to single, unique compound task ID set that matches or is coarser than the configured `compound_taskid_set`.  mt 2: Detected a finer `compound_taskid_set` than the hub accepts. "location" identified as compound task ID in file but not accepted by the hub. The hub expects no compound task IDs and response dependence across all task IDs.
 

@@ -462,3 +462,18 @@ test_that("submission_tmpl works with SubTreeFileSystems", {
     regexp = "is not a JSON file"
   )
 })
+
+test_that("submission_tmpl handles an empty compound_taskid_set", {
+  hub_path <- empty_cts_hub()
+
+  # No compound task IDs means the modeling task is a single compound modeling task,
+  # so the template carries one sample covering every task ID value combination.
+  expect_no_warning(
+    tmpl <- submission_tmpl(hub_path, round_id = "2022-10-22")
+  )
+  spl <- tmpl[tmpl$output_type == "sample", ]
+  task_ids <- setdiff(names(spl), c(hubUtils::std_colnames, "value"))
+
+  expect_equal(dplyr::n_distinct(spl$output_type_id), 1L)
+  expect_equal(nrow(spl), nrow(unique(spl[, task_ids])))
+})
