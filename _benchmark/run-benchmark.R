@@ -52,7 +52,7 @@ hubs_dir <- env_default(
   "HUBVALIDATIONS_BENCHMARK_HUBS",
   file.path(benchmark_dir, "hubs")
 )
-# A best effort rather than a guarantee. R only notices the limit between steps of
+# R only notices the limit between steps of
 # its own work, so a check stuck inside one long operation in compiled code (a big
 # join, which is what the large sizes risk) will run past it. Wrap the whole thing
 # in `timeout` if you need a hard stop.
