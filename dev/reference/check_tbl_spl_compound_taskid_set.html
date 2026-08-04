@@ -118,11 +118,10 @@ for a given model task, the <code>errors</code> object will be a list with one e
 <code>compound_taskid_set</code> detected and will have the following structure:</p><ul><li><p><code>tbl_comp_tids</code>: a compound task id set detected in the the tbl.</p></li>
 <li><p><code>output_type_ids</code>: The output type ID of the sample that does not contain a
 single, unique value for each compound task ID.</p></li>
-</ul><p>If the check failed because task IDs which is not allowed in the config, were identified
-as compound task ID (i.e. samples describe "finer" compound modeling tasks)
+</ul><p>If the check failed because task IDs the hub does not accept as compound task IDs
+were identified as such (i.e. samples describe "finer" compound modeling tasks)
 for a given model task, the <code>errors</code> object will be a list with the structure
-described above as well as the additional following elements:</p><ul><li><p><code>config_comp_tids</code>: the allowed <code>compound_taskid_set</code> defined in the modeling
-task config.</p></li>
+described above as well as the additional following elements:</p><ul><li><p><code>config_comp_tids</code>: the <code>compound_taskid_set</code> the modeling task config expects.</p></li>
 <li><p><code>invalid_tbl_comp_tids</code>: the names of invalid compound task IDs.</p></li>
 </ul><p>The name of each element is the index identifying the config modeling task the sample is associated with <code>mt_id</code>.
 See <a href="https://docs.hubverse.io/en/latest/user-guide/sample-output-type.html" class="external-link">hubverse documentation on samples</a>

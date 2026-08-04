@@ -45,7 +45,10 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="hubvalidations-development-version">hubValidations (development version)<a class="anchor" aria-label="anchor" href="#hubvalidations-development-version"></a></h2>
-</div>
+<ul><li>A <code>compound_taskid_set</code> of <code>[]</code>, which declares that every task ID is sampled jointly, no longer errors. <code><a href="../reference/check_tbl_spl_compound_taskid_set.html">check_tbl_spl_compound_taskid_set()</a></code> failed with <code>`config_comp_tids` must be logical, numeric, or character, not an empty list</code> and <code><a href="../reference/submission_tmpl.html">submission_tmpl()</a></code> with <code>invalid subscript type 'list'</code>. The check now passes when a submission’s samples are drawn jointly across every task ID and, when they are finer, reports that the hub expects no compound task IDs and response dependence across all task IDs (<a href="https://github.com/hubverse-org/hubValidations/issues/361" class="external-link">#361</a>).</li>
+<li>
+<code><a href="../reference/get_tbl_compound_taskid_set.html">get_tbl_compound_taskid_set()</a></code> no longer drops modeling tasks whose detected compound task ID set is empty, which previously made a jointly sampled modeling task indistinguishable from one with no samples at all (<a href="https://github.com/hubverse-org/hubValidations/issues/361" class="external-link">#361</a>).</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.1.1" id="hubvalidations-211">hubValidations 2.1.1<a class="anchor" aria-label="anchor" href="#hubvalidations-211"></a></h2>
 <ul><li>Fixed <code><a href="../reference/validate_pr.html">validate_pr()</a></code> and <code><a href="../reference/validate_target_pr.html">validate_target_pr()</a></code> leaking a <code>gh</code> pagination progress message into their output by passing <code>.progress = FALSE</code> to the <code><a href="https://gh.r-lib.org/reference/gh.html" class="external-link">gh::gh()</a></code> call (<a href="https://github.com/hubverse-org/hubValidations/issues/347" class="external-link">#347</a>).</li>
