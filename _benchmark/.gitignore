@@ -1,0 +1,5 @@
+# Generated hubs and profiles: regenerated on every run, deterministic from
+# acefa-tasks.json plus make-hub.R, so not worth committing.
+hubs/
+Rprof-*.out
+*.log
