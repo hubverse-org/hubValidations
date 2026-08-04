@@ -338,6 +338,11 @@ test_that("check_tbl_spl_compound_taskid_set works with an empty compound_taskid
 })
 
 test_that("validation passes end to end with an empty compound_taskid_set", {
+  # The other sample checks all read the compound task ID set, and an empty one is easy
+  # to lose on the way to them: dropped when compacting, or arriving as `NULL`. Either
+  # way they would see nothing configured and read it as an absent set, which asks for
+  # the opposite of what an empty one does. So this calls `validate_model_data()` rather
+  # than the check on its own, to pin that the empty set reaches them intact.
   hub_path <- empty_cts_hub()
   file_path <- "flu-base/2022-10-22-flu-base.csv"
   tbl <- read_model_out_file(file_path, hub_path, coerce_types = "chr")
@@ -354,8 +359,6 @@ test_that("validation passes end to end with an empty compound_taskid_set", {
     row.names = FALSE
   )
 
-  # The empty set has to reach the other sample checks unchanged for them to read it
-  # as "every task ID is sampled jointly" rather than as no configuration at all.
   checks <- validate_model_data(hub_path, file_path)
   expect_true(all(purrr::map_lgl(checks, \(.x) !is_any_error(.x))))
 })
