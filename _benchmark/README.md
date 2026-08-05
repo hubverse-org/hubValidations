@@ -133,6 +133,7 @@ treat a memory change smaller than that as noise.
 | `HUBVALIDATIONS_BENCHMARK_SIZES` | `S` | comma-separated sizes to run |
 | `HUBVALIDATIONS_BENCHMARK_VARIANTS` | `acefa` | comma-separated shapes |
 | `HUBVALIDATIONS_BENCHMARK_MODE` | `all` | `peak`, `submission` or `all` |
+| `HUBVALIDATIONS_BENCHMARK_CHECKS` | all of them | comma-separated checks to run |
 | `HUBVALIDATIONS_BENCHMARK_TIMEOUT` | `1800` | seconds allowed per measurement |
 | `HUBVALIDATIONS_BENCHMARK_LABEL` | the code version | a name for the run |
 | `HUBVALIDATIONS_BENCHMARK_HUBS` | `_benchmark/hubs` | where test hubs are built |

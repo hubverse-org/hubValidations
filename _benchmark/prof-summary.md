@@ -1,10 +1,36 @@
-# Baseline
+# Validation cost
 
-What validation costs today. These are the numbers #355–#357 need to improve on.
+What validation costs, and what each of #355–#357 has taken off it.
 `results.csv` and `peak-results.csv` hold every run; this file is the short version.
 Only add to it when a run moves a cost, removes one, or turns up something new.
 
 Machine: Darwin arm64, R 4.5.2.
+
+## Where things stand
+
+Every check at G3, the hardest case measured: 65,000 submitted rows against a config
+allowing 77.7 million valid value combinations. Peak memory and elapsed time.
+
+| check | baseline | now | changed by |
+|---|---:|---:|---|
+| `check_tbl_values_required` | 13,280 MB / 3,497 s | 13,570 MB / 3,384 s | #357, not landed |
+| `check_tbl_spl_compound_taskid_set` | 13,883 MB / 58 s | 13,330 MB / 57 s | samples, not scoped |
+| `check_tbl_spl_compound_tid` | 13,717 MB / 77 s | 13,773 MB / 78 s | samples, not scoped |
+| `check_tbl_spl_non_compound_tid` | 14,237 MB / 78 s | 13,374 MB / 77 s | samples, not scoped |
+| `check_tbl_spl_n` | 13,787 MB / 76 s | 13,542 MB / 77 s | samples, not scoped |
+| `check_tbl_spl_mt_unique` | 13,396 MB / 28 s | 12,913 MB / 29 s | samples, not scoped |
+| `check_tbl_values` | 11,474 MB / 76 s | 11,178 MB / 76 s | #356, not landed |
+| `check_tbl_value_col` | 13,424 MB / 60 s | **222 MB / 0.08 s** | #355 |
+| `match_tbl_to_model_task` | 11,452 MB / 60 s | **211 MB / 0.05 s** | #355 |
+| `check_tbl_rows_unique` | 293 MB / 0.2 s | 282 MB / 0.2 s | never built the grid |
+| `check_tbl_value_col_ascending` | 193 MB / 0.1 s | 200 MB / 0.03 s | never built the grid |
+
+Only the two marked #355 have moved. The rest differ by up to 1.3 GB either way, which
+is the run-to-run variation the memory figures carry at this size and not a change in
+what the code does.
+
+From #355 on, `check_tbl_value_col` is measured on the character submission, following
+`validate_model_data()`. Its baseline figure is a typed measurement.
 
 ## Headlines
 
@@ -24,8 +50,9 @@ Machine: Darwin arm64, R 4.5.2.
    alongside anything else.
 4. **Working out which model task each row belongs to already costs more when there
    are more of them**: ~3.3x slower going from 1 to 7. So the new approach checking
-   rows against each model task in turn is not automatically worse than what we have.
-   Keeping a separate marker per row for every model task would be.
+   rows against each model task in turn was never automatically worse than what we
+   had, and #355 confirms it: the same run costs a little less at every model task
+   count. Keeping a separate marker per row for every model task would have been worse.
 5. **`check_tbl_values_required` gets ~2.6x *faster* with 7 model tasks** than with
    1, on identical data. Its cost comes from working through the combinations of
    optional values within each model task, so splitting the values between several
@@ -135,3 +162,44 @@ when it is read with real column types.
 Time is the clearer signal here, not memory. The sample checks take 3.3x longer with 7
 model tasks than with 1, on identical data, while their memory moves by little more
 than the run-to-run noise.
+
+## What #355 changed
+
+Working out which model task each row belongs to no longer builds the valid value grid.
+Each of the row's values is tested against the set of values the model task allows for
+that column, which costs one pass over the submission per column and does not depend on
+how many combinations the config allows.
+
+| check | G1 (11.7M) | G2 (38.9M) | G3 (77.7M) |
+|---|---:|---:|---:|
+| `match_tbl_to_model_task` | 3,568 MB / 8.6 s → 221 MB / 0.05 s | 9,783 MB / 27.7 s → 210 MB / 0.04 s | 11,452 MB / 60.1 s → 211 MB / 0.05 s |
+| `check_tbl_value_col` | 3,579 MB / 8.7 s → 228 MB / 0.08 s | 9,925 MB / 28.7 s → 229 MB / 0.08 s | 13,424 MB / 59.6 s → 222 MB / 0.08 s |
+
+Three things worth reading off it.
+
+**The gaps between G1, G2 and G3 closed, rather than narrowing.** The expectation was
+that they would narrow but not close, because a config permitting more values still
+means more values to test each column against. That is true and it turns out not to
+matter. The config is read once into a lookup per column, and the per-row cost does not
+touch it again, so what grows is the lookup rather than the work. G1 to G3 multiplies
+the combinations by 6.7 while the longest single value list only goes from 365 to 730.
+
+**Both now sit at the floor.** Loading the package and reading the submission is
+~190 MB before any check runs, so what these two cost on top of it is a few tens of MB.
+`check_tbl_rows_unique`, which never touched the grid, reads 282 MB at G3.
+
+**More model tasks are no longer more expensive.** At size M, assigning 460,000 rows
+took 0.54 s with one model task and 1.07 s with seven; it now takes 0.33 s and 0.71 s.
+`check_tbl_value_col` goes the same way, 0.73 s to 0.48 s with one and 1.20 s to 0.80 s
+with seven. Testing each row against every model task in turn was the part of this
+approach that could have cost more than it saved, and it does not.
+
+Nothing else moved, which is the point: `check_tbl_values` and
+`check_tbl_values_required` still build the grid, and the sample checks still work out
+model tasks their own way. A whole file at size L takes 1,771 s against a baseline of
+1,769 s, because `check_tbl_values_required` is 91% of that run and #357 is what
+addresses it.
+
+Handed the typed submission instead, `check_tbl_value_col` still works but pays
+`match()` a `Date` conversion per model task: 3.81 s against 0.68 s at size M with
+seven.

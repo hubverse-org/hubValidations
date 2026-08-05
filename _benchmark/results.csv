@@ -2,3 +2,6 @@
 "ak/benchmark-baseline/323@9d04eef","S","acefa",18000,25200,1,2.5,188,"ok",0,"ak/benchmark-baseline/323@9d04eef","1.2.1.9000","2.2.2.9000","Darwin","arm64","4.5.2"
 "ak/benchmark-baseline/323@9d04eef","M","acefa",460000,237510,1,25.6,735,"ok",0,"ak/benchmark-baseline/323@9d04eef","1.2.1.9000","2.2.2.9000","Darwin","arm64","4.5.2"
 "ak/benchmark-baseline/323@9d04eef","L","acefa",13000000,3887250,1,1768.7,17751,"ok",0,"ak/benchmark-baseline/323@9d04eef","1.2.1.9000","2.2.2.9000","Darwin","arm64","4.5.2"
+"grid-free-assignment-355","S","acefa",18000,25200,1,2.5,188,"ok",0,"ak/grid-free-assignment/355@18eb721-dirty","1.2.1.9000","2.2.2.9000","Darwin","arm64","4.5.2"
+"grid-free-assignment-355","M","acefa",460000,237510,1,26.2,672,"ok",0,"ak/grid-free-assignment/355@18eb721-dirty","1.2.1.9000","2.2.2.9000","Darwin","arm64","4.5.2"
+"grid-free-assignment-355","L","acefa",13000000,3887250,1,1771.2,16149,"ok",0,"ak/grid-free-assignment/355@18eb721-dirty","1.2.1.9000","2.2.2.9000","Darwin","arm64","4.5.2"

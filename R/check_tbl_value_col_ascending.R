@@ -90,16 +90,16 @@ check_values_ascending_by_output_type <- function(
   derived_task_ids
 ) {
   # FIX for <https://github.com/hubverse-org/hubValidations/issues/78>
-  # This function splits the table by model task (via
-  # `expand_model_out_grid(bind_model_tasks = FALSE)`) and then performs an
-  # inner join to auto-sort for this particular output type regardless if the
-  # output type is inherently sortable.
+  # `check_values_ascending()` needs rows ordered by `output_type_id` to
+  # perform its check. Sort by the config's order, since `pmf` categories are
+  # not necessarily alphabetical.
   model_task_tbls <- match_tbl_to_model_task(
     tbl,
     config_tasks = config_tasks,
     round_id = round_id,
     output_types = output_type,
-    derived_task_ids = derived_task_ids
+    derived_task_ids = derived_task_ids,
+    order_by_config = TRUE
   ) |>
     purrr::compact()
 

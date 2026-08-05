@@ -1,10 +1,30 @@
-#' Match model output `tbl` data to their model tasks in `config_tasks`.
+#' Match model output data to their model tasks in `config_tasks`.
 #'
-#' Split and match model output `tbl` data to their corresponding model tasks in
+#' Split and match model output data to their corresponding model tasks in
 #' `config_tasks`. Useful for performing model task specific checks on model output.
 #' For v3 samples, the `output_type_id` column is set to `NA` for `sample` outputs.
 #' @inheritParams expand_model_out_grid
 #' @inheritParams check_tbl_colnames
+#' @param tbl a tibble/data.frame of the contents of the file being validated.
+#' Column types must **all be character**: values are matched against the
+#' config's with `%in%`, which converts the config side to character to compare,
+#' so the data is never converted and never has to be. That conversion uses R's
+#' own rendering of a number, so a config value R prints in scientific notation
+#' does not match its plain form in the data. Every task ID column the round
+#' defines must be present.
+#' @param derived_task_ids Character vector of derived task ID names, or `NULL`
+#' for none. A derived task ID's value is worked out from other task IDs, and
+#' those are matched on, so it adds nothing to deciding where a row belongs.
+#' These columns are not matched on and come back holding whatever they held.
+#' @param order_by_config Logical. Whether to sort each modeling task's rows by
+#' where each of their values sits in the config, rather than leaving them in the
+#' order they were submitted in. Rows are sorted on `output_type` first, so rows of
+#' one output type sit together, then on `output_type_id` so they ascend within
+#' each, then on the task IDs to break ties. What is compared is each value's
+#' position in the config's list for its column, not the value itself, so a column
+#' whose values do not sort meaningfully still comes back in the order the config
+#' gives them. That is what a check reading values in sequence needs, such as the
+#' non-descending check on `quantile` and `cdf` values.
 #'
 #' @return A list containing a `tbl_df` of model output data matched to a model
 #' task with one element per round model task.
@@ -31,23 +51,21 @@ match_tbl_to_model_task <- function(
     config_tasks,
     round_id
   ),
-  all_character = TRUE
+  order_by_config = FALSE
 ) {
   if (hubUtils::is_v3_config(config_tasks)) {
     tbl[tbl$output_type == "sample", "output_type_id"] <- NA
   }
 
-  expand_model_out_grid(
-    config_tasks,
+  assign_tbl_to_model_task(
+    tbl,
+    config_tasks = config_tasks,
     round_id = round_id,
-    required_vals_only = FALSE,
-    all_character = all_character,
-    as_arrow_table = FALSE,
-    bind_model_tasks = FALSE,
     output_types = output_types,
-    derived_task_ids = derived_task_ids
-  ) |>
-    join_tbl_to_model_task(tbl, subset_to_tbl_cols = FALSE)
+    derived_task_ids = derived_task_ids,
+    subset_to_tbl_cols = FALSE,
+    order_by_config = order_by_config
+  )
 }
 
 join_tbl_to_model_task <- function(full, tbl, subset_to_tbl_cols = TRUE) {

@@ -235,7 +235,72 @@ expand_model_out_grid <- function(
   # See function documentation for details.
   all_output_types <- is.null(output_types) # nolint: object_usage_linter
 
-  task_id_l <- purrr::map(
+  property_values <- extract_round_property_values(
+    config_tasks,
+    round_id = round_id,
+    output_types = output_types,
+    derived_task_ids = derived_task_ids,
+    required_vals_only = required_vals_only,
+    force_output_types = force_output_types
+  )
+
+  # Expand output grid individually for each modeling task.
+  grid <- purrr::map2(
+    property_values[["task_ids"]],
+    property_values[["output_type"]],
+    ~ expand_model_task_grid(
+      task_id_values = .x,
+      output_type_values = .y,
+      all_output_types = all_output_types
+    )
+  )
+
+  if (include_sample_ids) {
+    if (is.null(compound_taskid_set)) {
+      compound_taskid_set <- get_round_compound_task_ids(config_tasks, round_id)
+    }
+    grid <- add_sample_idx(
+      grid,
+      round_config,
+      hubUtils::get_config_tid(config_tasks = config_tasks),
+      compound_taskid_set
+    )
+  }
+
+  process_model_task_grids(
+    grid,
+    config_tasks,
+    all_character = all_character,
+    as_arrow_table = as_arrow_table,
+    bind_model_tasks = bind_model_tasks,
+    output_type_id_datatype = output_type_id_datatype
+  )
+}
+
+#' Read the values each modeling task lists for each of its columns
+#'
+#' The preparation shared by [expand_model_out_grid()], which expands these values into
+#' a grid, and `get_config_mt_value_sets()`, which keeps them as sets: read the
+#' round config,
+#' set derived and unused task IDs to `NA`, fix the round ID column to the round being
+#' built, and collapse each property to the values it allows.
+#'
+#' @inheritParams expand_model_out_grid
+#'
+#' @returns A list of two, `task_ids` and `output_type`, each with one element per
+#' modeling task in the round.
+#' @noRd
+extract_round_property_values <- function(
+  config_tasks,
+  round_id,
+  output_types,
+  derived_task_ids,
+  required_vals_only = FALSE,
+  force_output_types = FALSE
+) {
+  round_config <- get_round_config(config_tasks, round_id)
+
+  task_ids <- purrr::map(
     round_config[["model_tasks"]],
     ~ .x[["task_ids"]] |>
       derived_taskids_to_na(derived_task_ids) |>
@@ -254,37 +319,12 @@ expand_model_out_grid <- function(
   # retired
   config_tid <- hubUtils::get_config_tid(config_tasks = config_tasks)
 
-  output_type_l <- subset_round_output_types(round_config, output_types) |>
+  output_type <- subset_round_output_types(round_config, output_types) |>
     extract_round_output_type_ids(config_tid, force_output_types) |>
     extract_property_values(required_vals_only = required_vals_only) |>
     purrr::map(~ purrr::compact(.x))
 
-  # Expand output grid individually for each modeling task.
-  grid <- purrr::map2(
-    task_id_l,
-    output_type_l,
-    ~ expand_model_task_grid(
-      task_id_values = .x,
-      output_type_values = .y,
-      all_output_types = all_output_types
-    )
-  )
-
-  if (include_sample_ids) {
-    if (is.null(compound_taskid_set)) {
-      compound_taskid_set <- get_round_compound_task_ids(config_tasks, round_id)
-    }
-    grid <- add_sample_idx(grid, round_config, config_tid, compound_taskid_set)
-  }
-
-  process_model_task_grids(
-    grid,
-    config_tasks,
-    all_character = all_character,
-    as_arrow_table = as_arrow_table,
-    bind_model_tasks = bind_model_tasks,
-    output_type_id_datatype = output_type_id_datatype
-  )
+  list(task_ids = task_ids, output_type = output_type)
 }
 
 # Subset output types according to `output_types` from all model_task objects in

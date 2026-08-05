@@ -42,6 +42,26 @@ mode <- match.arg(
   env_default("HUBVALIDATIONS_BENCHMARK_MODE", "all"),
   c("all", "peak", "submission")
 )
+# Narrows the run to named checks, for re-measuring one after a change without
+# waiting for the rest. The baselines and the compound task ID set follow the
+# narrowed list, so a check still gets the right fixed cost subtracted.
+check_names <- vapply(CHECKS, \(x) x$name, character(1))
+wanted <- trimws(
+  strsplit(env_default("HUBVALIDATIONS_BENCHMARK_CHECKS", ""), ",")[[1]]
+)
+if (length(wanted) > 0) {
+  unknown <- setdiff(wanted, check_names)
+  if (length(unknown) > 0) {
+    stop(
+      "Unknown check(s): ",
+      paste(unknown, collapse = ", "),
+      ". Available: ",
+      paste(check_names, collapse = ", "),
+      call. = FALSE
+    )
+  }
+  CHECKS <- CHECKS[check_names %in% wanted]
+}
 # "acefa" is ruarai's config as they sent it, with one model task. "mt<N>" splits
 # it into N, so that deciding which model task a row belongs to (#355) actually has
 # a decision to make.

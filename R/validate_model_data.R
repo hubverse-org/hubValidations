@@ -220,7 +220,7 @@ validate_model_data <- function(
   # -- Value column checks ----
   checks$value_col_valid <- try_check(
     check_tbl_value_col(
-      tbl,
+      tbl_chr,
       round_id = round_id,
       file_path = file_path,
       hub_path = hub_path,
