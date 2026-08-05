@@ -74,43 +74,43 @@ match_fixtures <- function() {
       file_path = "Flusight-base/2022-10-22-Flusight-base.csv"
     ),
     list(
-      hub_path = test_path("testdata/hub-177"),
+      hub_path = testthat::test_path("testdata/hub-177"),
       file_path = "FluSight-baseline/2024-12-14-FluSight-baseline.parquet"
     ),
     list(
-      hub_path = test_path("testdata/hub-chr"),
+      hub_path = testthat::test_path("testdata/hub-chr"),
       file_path = "UMass-gbq/2023-10-28-UMass-gbq.csv"
     ),
     list(
-      hub_path = test_path("testdata/hub-num"),
+      hub_path = testthat::test_path("testdata/hub-num"),
       file_path = "UMass-gbq/2023-10-28-UMass-gbq.csv"
     ),
     list(
-      hub_path = test_path("testdata/hub-diff-otid-per-task"),
+      hub_path = testthat::test_path("testdata/hub-diff-otid-per-task"),
       file_path = "ISI-NotOrdered/2024-01-10-ILI-model.csv"
     ),
     list(
-      hub_path = test_path("testdata/hub-it"),
+      hub_path = testthat::test_path("testdata/hub-it"),
       file_path = "Tm-Md/2023-11-04-Tm-Md.csv"
     ),
     list(
-      hub_path = test_path("testdata/hub-now"),
+      hub_path = testthat::test_path("testdata/hub-now"),
       file_path = "UMass-HMLR/2024-10-02-UMass-HMLR.parquet"
     ),
     list(
-      hub_path = test_path("testdata/hub-nul"),
+      hub_path = testthat::test_path("testdata/hub-nul"),
       file_path = "team-model/2023-11-19-team-model.parquet"
     ),
     list(
-      hub_path = test_path("testdata/hub-spl"),
+      hub_path = testthat::test_path("testdata/hub-spl"),
       file_path = "flu-base/2022-10-22-flu-base.parquet"
     ),
     list(
-      hub_path = test_path("testdata/hub-spl-multi-mt"),
+      hub_path = testthat::test_path("testdata/hub-spl-multi-mt"),
       file_path = "team-model/2022-10-22-team-model.csv"
     ),
     list(
-      hub_path = test_path("testdata/hub-unordered"),
+      hub_path = testthat::test_path("testdata/hub-unordered"),
       file_path = "ISI-NotOrdered/2024-01-10-ISI-NotOrdered.csv"
     )
   )
