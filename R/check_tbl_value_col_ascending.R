@@ -36,10 +36,6 @@ check_tbl_value_col_ascending <- function(
 
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
 
-  if (!is.null(derived_task_ids)) {
-    tbl[derived_task_ids] <- NA_character_
-  }
-
   # Check that values are non-decreasing for each output type separately to reduce
   # memory pressure
   error_tbl <- purrr::map(
@@ -103,7 +99,10 @@ check_values_ascending_by_output_type <- function(
   ) |>
     purrr::compact()
 
-  purrr::map(model_task_tbls, check_values_ascending) |>
+  purrr::map(
+    model_task_tbls,
+    \(mt_tbl) check_values_ascending(mt_tbl, derived_task_ids)
+  ) |>
     purrr::list_rbind()
 }
 
@@ -115,8 +114,15 @@ check_values_ascending_by_output_type <- function(
 #'  - If the check fails, a summary table showing the model tasks that
 #'    had decreasing values for this output type
 #' @noRd
-check_values_ascending <- function(tbl) {
-  group_cols <- names(tbl)[!names(tbl) %in% hubUtils::std_colnames]
+check_values_ascending <- function(tbl, derived_task_ids = NULL) {
+  # Derived task IDs are left out, as they are when matching rows to modeling
+  # tasks. A derived value follows from the other task IDs, so it cannot separate
+  # rows they leave together, and a file whose derived values are wrong must not
+  # be grouped by them (#189).
+  group_cols <- setdiff(
+    names(tbl)[!names(tbl) %in% hubUtils::std_colnames],
+    derived_task_ids
+  )
   tbl[["value"]] <- as.numeric(tbl[["value"]])
 
   # group by all of the target columns
