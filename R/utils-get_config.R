@@ -36,25 +36,30 @@ get_config_derived_task_ids <- function(config_tasks, round_id = NULL) {
 #' [[1]]
 #'   $task_ids
 #'     $target   "wk flu hosp rate category"
-#'     $horizon  0 1 2 3
+#'     $horizon  "0" "1" "2" "3"
 #'     $location "US" "01" "02" ...
 #'   $output_type_ids
 #'     $pmf      "low" "moderate" "high" ...
 #' ```
 #'
-#' So a row belongs to that modeling task when its `target` is that one string,
-#' its `horizon` is one of those four numbers, and so on. That is what matching
-#' needs: within a modeling task the valid combinations are the Cartesian
-#' product of these lists, so testing a row against them answers the same
-#' question as matching it against the expanded product, without building the
-#' product.
+#' A row is valid for a modeling task when every column holds one of the values
+#' listed for it. [expand_model_out_grid()] builds one row for every valid
+#' combination of those values. These lists hold the same information per
+#' column, unexpanded.
 #'
-#' Three things about configs make this more than a lookup. A task ID a modeling
-#' task does not use is listed as `null`, or left out; which `output_type_id`
-#' values are valid depends on the output type, so they are keyed by it rather
-#' than pooled; and `round_id` has to be pinned to the round being read when it
-#' comes from a variable. `extract_round_property_values()` handles those,
-#' shared with [expand_model_out_grid()] so the two cannot drift apart.
+#' Three things about configs make reading them more than a lookup, and
+#' `extract_round_property_values()` handles all three. It is shared with
+#' [expand_model_out_grid()], so a grid and these value sets cannot disagree
+#' about what a config allows.
+#'
+#' - A task ID a modeling task does not use is either listed as `null` or left
+#'   out of that modeling task altogether. Both come back as `NA`, which is what
+#'   the column holds for those rows.
+#' - Which `output_type_id` values are valid depends on the output type, so
+#'   `output_type_ids` holds a separate vector for each output type rather than
+#'   one vector covering them all.
+#' - `round_id` is pinned to the round being read, for a hub that takes its
+#'   round IDs from a task ID variable.
 #'
 #' @inheritParams expand_model_out_grid
 #'
@@ -98,13 +103,13 @@ get_config_mt_value_sets <- function(
     purrr::map(property_values[["task_ids"]], purrr::compact),
     property_values[["output_type"]],
     \(task_ids, output_type) {
-      # A modeling task that does not use a task ID lists it as null, or
-      # leaves it out altogether. A peak target has no `horizon`, for
+      # A modeling task that does not use a task ID lists it as null, or leaves
+      # it out altogether. A peak timing target might not use `horizon`, for
       # instance, and its rows carry `NA` in that column, so `NA` is the only
-      # value the modeling task accepts there. `null_taskids_to_na()` has
-      # already handled the ones listed as null; this handles the ones left
-      # out, which would otherwise go untested and let the modeling task
-      # accept any value at all.
+      # value the modeling task accepts there. `extract_round_property_values()`
+      # above has already turned the ones listed as null into `NA`; this handles
+      # the ones left out, which would otherwise go untested and let the
+      # modeling task accept any value at all.
       omitted <- setdiff(round_task_ids, names(task_ids))
       task_ids[omitted] <- list(NA)
 

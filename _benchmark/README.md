@@ -115,8 +115,8 @@ as it lands. Two things should happen to them:
   config permitting more values still means more values to test each column against, so
   G3 should still cost more than G1 — just far less than it does today.
 
-For a check that never touches the grid, `check_tbl_rows_unique` shows what the floor
-looks like: ~290 MB and under a second at all three sizes.
+For a check that never touches the grid, `check_tbl_rows_unique` shows how little this
+can cost: ~290 MB and under a second at all three sizes.
 
 Read both `elapsed_s` and `peak_rss_mb`, but trust `elapsed_s` more. Across G1 to G3
 the grid grows 6.7x and the times grow roughly in step, while the memory figures level

@@ -33,19 +33,26 @@ contains only a single round.}
 Use to subset for grids for specific output types.}
 
 \item{derived_task_ids}{Character vector of derived task ID names, or \code{NULL}
-for none. A derived task ID's value is worked out from other task IDs, and
-those are matched on, so it adds nothing to deciding where a row belongs.
-These columns are not matched on and come back holding whatever they held.}
+for none. A derived task ID's value follows from the values of other task
+IDs. A derived task ID cannot therefore further distinguish a row beyond the
+values of the task IDs it is derived from. Derived task ID columns are
+skipped, and returned unchanged.}
 
-\item{order_by_config}{Logical. Whether to sort each modeling task's rows by
-where each of their values sits in the config, rather than leaving them in the
-order they were submitted in. Rows are sorted on \code{output_type} first, so rows of
-one output type sit together, then on \code{output_type_id} so they ascend within
-each, then on the task IDs to break ties. What is compared is each value's
-position in the config's list for its column, not the value itself, so a column
-whose values do not sort meaningfully still comes back in the order the config
-gives them. That is what a check reading values in sequence needs, such as the
-non-descending check on \code{quantile} and \code{cdf} values.}
+\item{order_by_config}{Logical. How to order each modeling task's rows.
+\code{FALSE}, the default, leaves them in the order they were submitted in. \code{TRUE}
+sorts them into the order the config lists their values in: on \code{output_type}
+first, so rows of one output type sit together, then on \code{output_type_id}, so
+they ascend within each, then on the task IDs to break ties.
+
+What is sorted on is each value's position in the config, not the value
+itself. \code{pmf} categories show why that matters: \code{"low"}, \code{"moderate"} and
+\code{"high"} have no useful alphabetical order, but the config lists them in the
+order they belong in. \code{check_tbl_value_col_ascending()} asks for this order,
+because it reads values in the order the rows arrive in.
+
+In the config a task ID's values are split into \code{required} and \code{optional}.
+Extracting them collapses the two into a single order, \code{required} values
+first, then \code{optional} ones, and that is the order sorted on.}
 }
 \value{
 A list containing a \code{tbl_df} of model output data matched to a model

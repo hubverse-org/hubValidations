@@ -279,11 +279,15 @@ expand_model_out_grid <- function(
 
 #' Read the values each modeling task lists for each of its columns
 #'
-#' The preparation shared by [expand_model_out_grid()], which expands these values into
-#' a grid, and `get_config_mt_value_sets()`, which keeps them as sets: read the
-#' round config,
-#' set derived and unused task IDs to `NA`, fix the round ID column to the round being
-#' built, and collapse each property to the values it allows.
+#' Reads a round's config and returns, for each modeling task, the values it
+#' lists in each of its columns. Along the way it sets derived and unused task
+#' IDs to `NA`, pins the round ID column to the round being read, and collapses
+#' each property's `required` and `optional` values into one vector, `required`
+#' first.
+#'
+#' Two functions share this. [expand_model_out_grid()] expands the values into
+#' a grid; `get_config_mt_value_sets()` keeps them as sets. Sharing it means the
+#' two cannot disagree about what a config allows.
 #'
 #' @inheritParams expand_model_out_grid
 #'

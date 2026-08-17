@@ -10,18 +10,25 @@
 #' character when they are extracted, and are compared against this table as it
 #' stands. Every task ID column the round defines must be present.
 #' @param derived_task_ids Character vector of derived task ID names, or `NULL`
-#' for none. A derived task ID's value is worked out from other task IDs, and
-#' those are matched on, so it adds nothing to deciding where a row belongs.
-#' These columns are not matched on and come back holding whatever they held.
-#' @param order_by_config Logical. Whether to sort each modeling task's rows by
-#' where each of their values sits in the config, rather than leaving them in the
-#' order they were submitted in. Rows are sorted on `output_type` first, so rows of
-#' one output type sit together, then on `output_type_id` so they ascend within
-#' each, then on the task IDs to break ties. What is compared is each value's
-#' position in the config's list for its column, not the value itself, so a column
-#' whose values do not sort meaningfully still comes back in the order the config
-#' gives them. That is what a check reading values in sequence needs, such as the
-#' non-descending check on `quantile` and `cdf` values.
+#' for none. A derived task ID's value follows from the values of other task
+#' IDs. A derived task ID cannot therefore further distinguish a row beyond the
+#' values of the task IDs it is derived from. Derived task ID columns are
+#' skipped, and returned unchanged.
+#' @param order_by_config Logical. How to order each modeling task's rows.
+#' `FALSE`, the default, leaves them in the order they were submitted in. `TRUE`
+#' sorts them into the order the config lists their values in: on `output_type`
+#' first, so rows of one output type sit together, then on `output_type_id`, so
+#' they ascend within each, then on the task IDs to break ties.
+#'
+#' What is sorted on is each value's position in the config, not the value
+#' itself. `pmf` categories show why that matters: `"low"`, `"moderate"` and
+#' `"high"` have no useful alphabetical order, but the config lists them in the
+#' order they belong in. `check_tbl_value_col_ascending()` asks for this order,
+#' because it reads values in the order the rows arrive in.
+#'
+#' In the config a task ID's values are split into `required` and `optional`.
+#' Extracting them collapses the two into a single order, `required` values
+#' first, then `optional` ones, and that is the order sorted on.
 #'
 #' @return A list containing a `tbl_df` of model output data matched to a model
 #' task with one element per round model task.

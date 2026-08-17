@@ -124,15 +124,16 @@ time for one check at one size.
 The grid grows 6.67x from G1 to G3. **Time grows 6.7-8x with it**, i.e. roughly in
 proportion. **Memory grows only 2.9-3.8x**, and every affected check lands between 11
 and 14 GB at G3 — they are converging on what this machine will hand out rather than on
-what the work needs, so read the memory column as a floor on the real appetite, not a
-measurement of it.
+what the work needs, so read the memory column as a lower bound on what the work would
+really use, not a measurement of it.
 
 The last two rows are the control. Neither check has to work out which model task a row
 belongs to, so neither is affected by the size of the grid: both sit at ~200-290 MB and
 under a second across a grid that grew nearly sevenfold.
 
 What to expect of the other rows once #355-#357 land: they should **drop**, and the gaps
-between the G columns should **narrow**. Not to the controls' floor, though. A config
+between the G columns should **narrow**, though not all the way down to the controls. A
+config
 permitting more values still means more values to test each column against, so G3 should
 still cost more than G1, just far less than it does today.
 
@@ -184,9 +185,10 @@ matter. The config is read once into a lookup per column, and the per-row cost d
 touch it again, so what grows is the lookup rather than the work. G1 to G3 multiplies
 the combinations by 6.7 while the longest single value list only goes from 365 to 730.
 
-**Both now sit at the floor.** Loading the package and reading the submission is
-~190 MB before any check runs, so what these two cost on top of it is a few tens of MB.
-`check_tbl_rows_unique`, which never touched the grid, reads 282 MB at G3.
+**Both now cost almost nothing beyond the setup.** Loading the package and reading
+the submission takes ~190 MB before any check runs, so these two add only a few tens
+of MB on top of that. For comparison, `check_tbl_rows_unique`, which never touched the
+grid, reads 282 MB at G3.
 
 **More model tasks are no longer more expensive.** At size M, assigning 460,000 rows
 took 0.54 s with one model task and 1.07 s with seven; it now takes 0.33 s and 0.71 s.
@@ -200,6 +202,7 @@ model tasks their own way. A whole file at size L takes 1,771 s against a baseli
 1,769 s, because `check_tbl_values_required` is 91% of that run and #357 is what
 addresses it.
 
-Handed the typed submission instead, `check_tbl_value_col` still works but pays
-`match()` a `Date` conversion per model task: 3.81 s against 0.68 s at size M with
-seven.
+`check_tbl_value_col` now expects and is given the all-character submission. Given
+the typed one instead it still works, but `match()` then has to convert its `Date`
+column once for every model task: 3.77 s against 0.80 s, at size M with seven
+model tasks.
