@@ -15,12 +15,9 @@ match_tbl_to_model_task(
 }
 \arguments{
 \item{tbl}{a tibble/data.frame of the contents of the file being validated.
-Column types must \strong{all be character}: values are matched against the
-config's with \code{\%in\%}, which converts the config side to character to compare,
-so the data is never converted and never has to be. That conversion uses R's
-own rendering of a number, so a config value R prints in scientific notation
-does not match its plain form in the data. Every task ID column the round
-defines must be present.}
+Column types must \strong{all be character}: the config's values are converted to
+character when they are extracted, and are compared against this table as it
+stands. Every task ID column the round defines must be present.}
 
 \item{config_tasks}{a list version of the content's of a hub's \code{tasks.json}
 config file, accessed through the \code{"config_tasks"} attribute of a \verb{<hub_connection>}

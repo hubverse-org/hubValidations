@@ -59,10 +59,9 @@ get_config_derived_task_ids <- function(config_tasks, round_id = NULL) {
 #' @inheritParams expand_model_out_grid
 #'
 #' @returns A list with one element per modeling task in the round, each a list
-#' of `task_ids` and `output_type_ids` as above. Values come back as the config
-#' holds them, numbers as numbers. Nothing needs coercing here because they are
-#' only ever compared against a column of submitted data with `%in%`, which
-#' converts the config side to match the data, never the other way round.
+#' of `task_ids` and `output_type_ids` as above. Values come back as character,
+#' whatever the config holds them as, because the only thing they are ever
+#' compared against is the all-character copy of a submission.
 #' @noRd
 get_config_mt_value_sets <- function(
   config_tasks,
@@ -109,7 +108,28 @@ get_config_mt_value_sets <- function(
       omitted <- setdiff(round_task_ids, names(task_ids))
       task_ids[omitted] <- list(NA)
 
-      list(task_ids = task_ids, output_type_ids = output_type)
+      list(
+        task_ids = config_values_to_character(task_ids),
+        output_type_ids = config_values_to_character(output_type)
+      )
     }
+  )
+}
+
+# Convert a modeling task's value sets to character.
+#
+# These values are only ever compared against an all-character copy of a
+# submission, so they need to be character. Converting them here does it once,
+# rather than leaving `%in%` to redo it for every column of every modeling task.
+#
+# Cast through arrow, as `hubData::coerce_to_character()` casts a submission, so
+# that the two renderings cannot disagree. `as.character()` would differ on more
+# than one count: it renders a large number in scientific notation, where
+# `"1e+05"` would not match a `"100000"` in the data, and it writes a logical as
+# `"TRUE"` where arrow writes `"true"`.
+config_values_to_character <- function(x) {
+  purrr::map(
+    x,
+    \(values) as.vector(arrow::Array$create(values)$cast(arrow::string()))
   )
 }

@@ -6,12 +6,9 @@
 #' @inheritParams expand_model_out_grid
 #' @inheritParams check_tbl_colnames
 #' @param tbl a tibble/data.frame of the contents of the file being validated.
-#' Column types must **all be character**: values are matched against the
-#' config's with `%in%`, which converts the config side to character to compare,
-#' so the data is never converted and never has to be. That conversion uses R's
-#' own rendering of a number, so a config value R prints in scientific notation
-#' does not match its plain form in the data. Every task ID column the round
-#' defines must be present.
+#' Column types must **all be character**: the config's values are converted to
+#' character when they are extracted, and are compared against this table as it
+#' stands. Every task ID column the round defines must be present.
 #' @param derived_task_ids Character vector of derived task ID names, or `NULL`
 #' for none. A derived task ID's value is worked out from other task IDs, and
 #' those are matched on, so it adds nothing to deciding where a row belongs.

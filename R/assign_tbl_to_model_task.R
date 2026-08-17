@@ -12,12 +12,10 @@
 #'
 #' @inheritParams expand_model_out_grid
 #' @param tbl_chr a tibble/data.frame of the contents of the file being
-#' validated. Column types must **all be character**: values are matched against
-#' the config's with `%in%`, which converts the config side to character to
-#' compare, so the data is never converted and never has to be. That conversion
-#' uses R's own rendering of a number, so a config value R prints in scientific
-#' notation does not match its plain form in the data. Every task ID column the
-#' round defines must be present.
+#' validated. Column types must **all be character**: the config's values are
+#' converted to character when they are extracted, and are compared against
+#' this table as it stands. Every task ID column the round defines must be
+#' present.
 #' @param derived_task_ids Character vector of derived task ID names, or `NULL`
 #' for none. A derived task ID's value is worked out from other task IDs, and
 #' those are matched on, so it adds nothing to deciding where a row belongs.
@@ -135,9 +133,7 @@ assign_mt_rows <- function(
   }
 
   # Narrow to the rows the modeling task accepts, one task ID column at a time.
-  # `tbl_chr` is character and the config holds values as JSON gave them,
-  # numbers as numbers, so `%in%` coerces the config side to character to
-  # compare. It never touches the data, which is the expensive side. It also
+  # Both sides are already character, so `%in%` is a plain comparison. It also
   # matches `NA` to `NA`, as the join it replaces did, which is how a task ID
   # the modeling task does not use is matched.
   keep <- !is.na(output_type_id_pos)
