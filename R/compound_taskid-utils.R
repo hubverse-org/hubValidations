@@ -43,47 +43,33 @@ get_tbl_compound_taskid_set <- function(
   if (!inherits(tbl, "tbl_df")) {
     tbl <- dplyr::as_tibble(tbl)
   }
+  # Detection counts how many distinct values each task ID takes. A derived task
+  # ID's values follow from the others, so blank them to keep them out of the
+  # count.
   if (!is.null(derived_task_ids)) {
     tbl[, derived_task_ids] <- NA_character_
   }
   tbl <- tbl[tbl$output_type == "sample", names(tbl) != "value"]
-  out_tid <- hubUtils::std_colnames["output_type_id"]
 
   mt_compound_taskids <- get_round_compound_task_ids(
     config_tasks,
     round_id
   )
 
-  mt_tbls <- purrr::map(
-    .x = expand_model_out_grid(
+  call <- rlang::current_env()
+  # Subset inside the loop, so only one modeling task's rows exist at a time.
+  tbl_compound_taskids <- purrr::map2(
+    assign_spl_tbl_rows(
+      tbl,
       config_tasks = config_tasks,
       round_id = round_id,
-      all_character = TRUE,
-      include_sample_ids = FALSE,
-      bind_model_tasks = FALSE,
-      output_types = "sample",
       derived_task_ids = derived_task_ids
     ),
-    function(.x) {
-      if (nrow(.x) == 0L) {
-        return(NULL)
-      }
-      dplyr::inner_join(
-        tbl,
-        .x[, names(.x) != out_tid],
-        by = setdiff(names(tbl), out_tid)
-      )
-    }
-  )
-
-  call <- rlang::current_env()
-  tbl_compound_taskids <- purrr::map2(
-    mt_tbls,
     mt_compound_taskids,
-    function(.x, .y) {
+    function(row_idx, compound_taskids) {
       get_mt_compound_taskid_set(
-        .x,
-        .y,
+        tbl[row_idx, ],
+        compound_taskids,
         config_tasks,
         error = error,
         call = call

@@ -14,20 +14,23 @@ allowing 77.7 million valid value combinations. Peak memory and elapsed time.
 | check | baseline | now | changed by |
 |---|---:|---:|---|
 | `check_tbl_values_required` | 13,280 MB / 3,497 s | 13,570 MB / 3,384 s | #357, not landed |
-| `check_tbl_spl_compound_taskid_set` | 13,883 MB / 58 s | 13,330 MB / 57 s | samples, not scoped |
-| `check_tbl_spl_compound_tid` | 13,717 MB / 77 s | 13,773 MB / 78 s | samples, not scoped |
-| `check_tbl_spl_non_compound_tid` | 14,237 MB / 78 s | 13,374 MB / 77 s | samples, not scoped |
-| `check_tbl_spl_n` | 13,787 MB / 76 s | 13,542 MB / 77 s | samples, not scoped |
-| `check_tbl_spl_mt_unique` | 13,396 MB / 28 s | 12,913 MB / 29 s | samples, not scoped |
+| `check_tbl_spl_compound_taskid_set` | 13,883 MB / 58 s | **276 MB / 0.14 s** | #368 |
+| `check_tbl_spl_compound_tid` | 13,717 MB / 77 s | **294 MB / 0.39 s** | #368 |
+| `check_tbl_spl_non_compound_tid` | 14,237 MB / 78 s | **294 MB / 0.38 s** | #368 |
+| `check_tbl_spl_n` | 13,787 MB / 76 s | **295 MB / 0.39 s** | #368 |
+| `check_tbl_spl_mt_unique` | 13,396 MB / 28 s | **223 MB / 0.06 s** | #368 |
 | `check_tbl_values` | 11,474 MB / 76 s | 11,178 MB / 76 s | #356, not landed |
 | `check_tbl_value_col` | 13,424 MB / 60 s | **222 MB / 0.08 s** | #355 |
 | `match_tbl_to_model_task` | 11,452 MB / 60 s | **211 MB / 0.05 s** | #355 |
 | `check_tbl_rows_unique` | 293 MB / 0.2 s | 282 MB / 0.2 s | never built the grid |
 | `check_tbl_value_col_ascending` | 193 MB / 0.1 s | 200 MB / 0.03 s | never built the grid |
 
-Only the two marked #355 have moved. The rest differ by up to 1.3 GB either way, which
-is the run-to-run variation the memory figures carry at this size and not a change in
-what the code does.
+Only the rows marked #355 and #368 have moved. The rest differ by up to 1.3 GB either
+way, which is the run-to-run variation the memory figures carry at this size and not a
+change in what the code does.
+
+`check_tbl_values_required` is now the only check at this size that needs more than a
+gigabyte.
 
 From #355 on, `check_tbl_value_col` is measured on the character submission, following
 `validate_model_data()`. Its baseline figure is a typed measurement.
@@ -60,8 +63,9 @@ From #355 on, `check_tbl_value_col` is measured on the character submission, fol
    value is therefore close to the worst case, and the size L numbers are an upper
    bound rather than a typical one.
 6. **~20% of a mid-size run is spent in the sample checks**, falling to ~6% at size L.
-   #355 leaves those for later, but they work out which model task a row belongs to
-   the same way, so the same new helper would fix them too.
+   #368 took the grid out of them, which removed almost all of their cost at the G
+   sizes but very little at size M. What is left there is the per-sample work described
+   under "What #368 changed".
 
 ## A whole file, by size
 
@@ -206,3 +210,36 @@ addresses it.
 the typed one instead it still works, but `match()` then has to convert its `Date`
 column once for every model task: 3.77 s against 0.80 s, at size M with seven
 model tasks.
+
+## What #368 changed
+
+The sample checks no longer build the valid value grid either. They used it for two
+things. One was deciding which model task a sample row belongs to, which is the same
+question #355 answered without the grid. The other was the compound index: the grid was
+expanded with sample IDs, and the ID it gave a row was read back as the group of task ID
+values the `compound_taskid_set` puts that row in. That index is now worked out from the
+config's value lists directly, as the position of the row's combination among the
+combinations the model task allows.
+
+| check | G1 (11.7M) | G2 (38.9M) | G3 (77.7M) |
+|---|---:|---:|---:|
+| `check_tbl_spl_mt_unique` | 2,545 MB / 4.6 s → 222 MB / 0.06 s | 8,067 MB / 14.4 s → 225 MB / 0.06 s | 12,913 MB / 28.8 s → 223 MB / 0.06 s |
+| `check_tbl_spl_compound_taskid_set` | 3,407 MB / 8.7 s → 283 MB / 0.14 s | 9,211 MB / 28.1 s → 279 MB / 0.15 s | 13,330 MB / 57.2 s → 276 MB / 0.14 s |
+| `check_tbl_spl_compound_tid` | 7,121 MB / 21.0 s → 306 MB / 0.37 s | 10,355 MB / 38.0 s → 289 MB / 0.41 s | 13,773 MB / 78.2 s → 294 MB / 0.39 s |
+| `check_tbl_spl_non_compound_tid` | 7,343 MB / 20.5 s → 297 MB / 0.39 s | 10,246 MB / 37.8 s → 294 MB / 0.38 s | 13,374 MB / 77.2 s → 294 MB / 0.38 s |
+| `check_tbl_spl_n` | 7,361 MB / 20.2 s → 298 MB / 0.39 s | 10,741 MB / 37.1 s → 291 MB / 0.38 s | 13,542 MB / 77.1 s → 295 MB / 0.39 s |
+
+As with #355, the gaps between G1, G2 and G3 closed rather than narrowed, and all five
+now cost almost nothing beyond the setup: loading the package and reading the
+submission takes ~190 MB before any check runs.
+
+**Almost nothing changes at size M**, where the grid is only 237,510 rows. With one
+model task `check_tbl_spl_n` goes from 2.03 s to 1.82 s and `check_tbl_spl_compound_tid`
+from 2.00 s to 1.81 s. With seven, 6.82 s to 6.23 s and 6.75 s to 6.12 s. So the sample
+checks stay ~20% of a mid-size run, and what they spend it on is `spl_hash_tbl()`
+splitting the rows one sample at a time and hashing each group, not the grid. That is
+the next thing to look at for hubs of this shape, and it is a separate piece of work
+from the grid.
+
+`check_tbl_spl_mt_unique` is the exception, because it does nothing per sample: at size
+M with seven model tasks it goes from 1.00 s to 0.52 s.

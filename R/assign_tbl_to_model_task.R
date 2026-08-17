@@ -2,8 +2,7 @@
 #'
 #' Tests each row's values against the values each modeling task allows, one
 #' column at a time. A row belongs to a modeling task when every column agrees.
-#' Rows that no modeling task accepts are left out, as are rows carrying a value
-#' the config does not list.
+#' Rows that no modeling task accepts are left out.
 #'
 #' This is what [match_tbl_to_model_task()] used to do by expanding the grid of
 #' every valid value combination and joining the data to it. Testing each column
@@ -14,12 +13,13 @@
 #' @param tbl_chr a tibble/data.frame of the contents of the file being
 #' validated. Column types must **all be character**: the config's values are
 #' converted to character when they are extracted, and are compared against
-#' this table as it stands. Every task ID column the round defines must be
-#' present.
+#' this table without further conversion. Every task ID column the round defines
+#' must be present.
 #' @param derived_task_ids Character vector of derived task ID names, or `NULL`
-#' for none. A derived task ID's value follows from the other task IDs. Those
-#' are matched on, so a derived one cannot send a row to a different modeling
-#' task. These columns are skipped, and returned unchanged.
+#' for none. A derived task ID's value follows from the values of other task
+#' IDs. A derived task ID cannot therefore further distinguish a row beyond the
+#' values of the task IDs it is derived from. Derived task ID columns are
+#' skipped, and returned unchanged.
 #' @param output_types Character vector of output type names, or `NULL`, the
 #' default, for every output type the round defines. This subsets the data as
 #' well as matching it: rows of any other output type are ignored, and a
@@ -37,14 +37,13 @@
 #' first, so rows of one output type sit together, then on `output_type_id`, so
 #' they ascend within each, then on the task IDs to break ties.
 #'
-#' What is sorted on is each value's position in the config, not the value
-#' itself, so a column whose values do not sort into a useful order on their own
-#' still comes back in the order the config gives them.
+#' What is sorted on is each task IDs value's position in the config, not the
+#' value itself.
 #'
 #' In the config a task ID's values are split into `required` and `optional`.
 #' `extract_round_property_values()` collapses the two into a single order when
 #' it extracts them, `required` values first, then `optional` ones, and that is
-#' the order sorted on. See `order_by_config()`.
+#' the order sorted on.
 #'
 #' @returns A list with one element per modeling task in the round, each
 #' containing the rows of `tbl_chr` assigned to that modeling task, in submitted
@@ -63,17 +62,32 @@ assign_tbl_to_model_task <- function(
   subset_to_tbl_cols = TRUE,
   order_by_config = FALSE
 ) {
+  call <- rlang::caller_env()
   value_sets <- get_config_mt_value_sets(
     config_tasks = config_tasks,
     round_id = round_id,
     output_types = output_types,
     derived_task_ids = derived_task_ids,
-    call = rlang::caller_env()
+    call = call
   )
+  check_match_cols(tbl_chr, config_tasks, round_id, call = call)
 
-  # Every task ID the round defines is matched on, whether or not a given
-  # modeling task uses it, so all of them have to be present, along with the two
-  # output type columns.
+  purrr::map(
+    value_sets,
+    \(mt) {
+      row_idx <- which_mt_rows(tbl_chr, mt, derived_task_ids, order_by_config)
+      if (is.null(row_idx)) {
+        return(NULL)
+      }
+      subset_mt_tbl(tbl_chr, mt, row_idx, subset_to_tbl_cols)
+    }
+  )
+}
+
+# Check that `tbl_chr` has every column the matching step reads. Every task ID
+# the round defines is matched on, whether or not a given modeling task uses it,
+# so all of them have to be present, along with the two output type columns.
+check_match_cols <- function(tbl_chr, config_tasks, round_id, call) {
   match_cols <- c(
     hubUtils::get_round_task_id_names(config_tasks, round_id),
     unname(hubUtils::std_colnames[c("output_type", "output_type_id")])
@@ -81,85 +95,117 @@ assign_tbl_to_model_task <- function(
   missing_cols <- setdiff(match_cols, names(tbl_chr))
   if (length(missing_cols) > 0L) {
     cli::cli_abort(
-      # Named for the caller's argument, since the error is attributed to the
-      # caller and this function is not the one anybody invoked.
+      # `tbl`, not `tbl_chr`, because the error is attributed to the exported
+      # function the user called, where the argument is named `tbl`.
       "Column{?s} {.val {missing_cols}} must be present in {.arg tbl}.",
-      call = rlang::caller_env()
+      call = call
     )
   }
-
-  purrr::map(
-    value_sets,
-    \(mt) {
-      assign_mt_rows(
-        tbl_chr,
-        mt,
-        derived_task_ids,
-        subset_to_tbl_cols,
-        order_by_config
-      )
-    }
-  )
+  invisible(NULL)
 }
 
-# Assign rows to a single modeling task, in submitted order unless
-# `order_by_config`.
-assign_mt_rows <- function(
+# Row numbers of the rows in `tbl_chr` that a single modeling task accepts, in
+# submitted order unless `order_by_config`. `NULL` when the modeling task offers
+# none of the requested output types, which is different from accepting no rows.
+which_mt_rows <- function(
   tbl_chr,
   mt,
   derived_task_ids,
-  subset_to_tbl_cols,
-  order_by_config
+  order_by_config = FALSE
 ) {
-  # A derived task ID's value follows from the other task IDs. Those are matched
-  # on, so a derived one cannot send a row anywhere different. Skipping it saves
-  # a pass over the data.
+  # A derived task ID's value follows from the values of other task IDs. A
+  # derived task ID cannot therefore further distinguish a row beyond the values
+  # of the task IDs it is derived from. Skipping it saves a pass over the data.
   match_task_ids <- setdiff(names(mt[["task_ids"]]), derived_task_ids)
 
-  output_types <- names(mt[["output_type_ids"]])
-  # A modeling task offering none of the requested output types has nothing to
-  # match against and so gets no rows at all.
-  if (length(output_types) == 0L) {
+  # Nothing to compare against, so this modeling task is not in play at all.
+  # `NULL` rather than no rows, which the caller reads differently.
+  if (length(mt[["output_type_ids"]]) == 0L) {
     return(NULL)
   }
-  output_type_col <- tbl_chr[[hubUtils::std_colnames[["output_type"]]]]
-  output_type_id_col <- tbl_chr[[hubUtils::std_colnames[["output_type_id"]]]]
-
-  # Find where each row's `output_type_id` sits among the ones the config allows
-  # for its `output_type`. Each output type has its own set, which is why this
-  # loops over them rather than doing one lookup. A row whose `output_type_id`
-  # is not in the set gets `NA`, and those are the rows this modeling task does
-  # not accept. `order_by_config` sorts on these positions later.
-  output_type_id_pos <- rep(NA_integer_, nrow(tbl_chr))
-  for (output_type in output_types) {
-    output_type_rows <- which(output_type_col == output_type)
-    output_type_id_pos[output_type_rows] <- match(
-      output_type_id_col[output_type_rows],
-      mt[["output_type_ids"]][[output_type]]
-    )
-  }
-
-  # Narrow to the rows the modeling task accepts, one task ID column at a time.
-  # Both sides are already character, so `%in%` is a plain comparison. `NA`
-  # matches `NA`, as it did in the join this replaces. That is what handles a
-  # task ID the modeling task does not use: it allows `NA` and nothing else,
-  # the rows hold `NA` there, so the comparison is `TRUE` and `keep` is left
-  # alone.
+  output_type_id_pos <- match_output_type_ids(tbl_chr, mt)
   keep <- !is.na(output_type_id_pos)
-  for (task_id in match_task_ids) {
-    keep <- keep & tbl_chr[[task_id]] %in% mt[["task_ids"]][[task_id]]
-  }
-  rows <- which(keep)
+
+  keep <- narrow_by_task_id_values(
+    tbl_chr,
+    mt,
+    match_task_ids,
+    keep = keep
+  )
+  row_idx <- which(keep)
   if (order_by_config) {
-    rows <- order_by_config(
-      rows,
+    row_idx <- order_by_config(
+      row_idx,
       tbl_chr,
       mt,
       match_task_ids,
       output_type_id_pos
     )
   }
+  row_idx
+}
 
+# Row numbers of the rows in `spl_tbl` that a single modeling task accepts.
+# `NULL` when the modeling task does not offer the sample output type.
+#
+# Samples skip the `output_type_id` comparison that `which_mt_rows()` performs.
+# A sample's `output_type_id` is an identifier the submitter chose, so the
+# config lists no valid ids to compare it with, and the caller has already
+# reduced `spl_tbl` to sample rows. That comparison could therefore never
+# reject a row, so every row starts eligible and only the task ID columns are
+# compared.
+which_mt_spl_rows <- function(spl_tbl, mt, derived_task_ids) {
+  if (is.null(mt[["output_type_ids"]][["sample"]])) {
+    return(NULL)
+  }
+  match_task_ids <- setdiff(names(mt[["task_ids"]]), derived_task_ids)
+  keep <- narrow_by_task_id_values(
+    spl_tbl,
+    mt,
+    match_task_ids,
+    keep = rep(TRUE, nrow(spl_tbl))
+  )
+  which(keep)
+}
+
+# Where each row's `output_type_id` sits among the ones the modeling task allows
+# for that row's `output_type`. Each output type has its own set, which is why
+# this loops over them rather than doing one lookup. A row whose
+# `output_type_id` is not in the set gets `NA`, and those are the rows the
+# modeling task does not accept. The positions are also what `order_by_config()`
+# sorts on, which is why this returns them rather than a logical vector.
+match_output_type_ids <- function(tbl_chr, mt) {
+  output_type_col <- tbl_chr[[hubUtils::std_colnames[["output_type"]]]]
+  output_type_id_col <- tbl_chr[[hubUtils::std_colnames[["output_type_id"]]]]
+
+  pos <- rep(NA_integer_, nrow(tbl_chr))
+  for (output_type in names(mt[["output_type_ids"]])) {
+    output_type_row_idx <- which(output_type_col == output_type)
+    pos[output_type_row_idx] <- match(
+      output_type_id_col[output_type_row_idx],
+      mt[["output_type_ids"]][[output_type]]
+    )
+  }
+  pos
+}
+
+# Narrow `keep` to the rows whose value in every task ID column is one the
+# modeling task allows. Both sides are already character, so `%in%` is a plain
+# comparison.
+#
+# `%in%` matches `NA` to `NA`, as the grid join this replaced did. That is how a
+# task ID a modeling task does not use passes: the config allows it only `NA`,
+# and the submitted rows hold `NA` there too.
+narrow_by_task_id_values <- function(tbl_chr, mt, match_task_ids, keep) {
+  for (task_id in match_task_ids) {
+    keep <- keep & tbl_chr[[task_id]] %in% mt[["task_ids"]][[task_id]]
+  }
+  keep
+}
+
+# Subset `tbl_chr` to a modeling task's rows, with the columns the caller
+# asked for.
+subset_mt_tbl <- function(tbl_chr, mt, row_idx, subset_to_tbl_cols) {
   if (subset_to_tbl_cols) {
     cols <- setdiff(names(tbl_chr), "value")
   } else {
@@ -172,29 +218,25 @@ assign_mt_rows <- function(
   # A no-op when `tbl_chr` is a tibble, which is what reading a submission
   # gives. For a plain data.frame it keeps the documented `tbl_df` return, and
   # drops the row names that subsetting by position would otherwise carry over.
-  tibble::as_tibble(tbl_chr[rows, cols, drop = FALSE])
+  tibble::as_tibble(tbl_chr[row_idx, cols, drop = FALSE])
 }
 
 # Order rows by where each of their values sits among the ones the config
 # allows: output type first, so rows of one output type are together, then
-# output type ID, so they ascend within each, then the task IDs to break ties.
+# output type ID, so they ascend within each output type, then the task IDs
+# to break ties.
 #
 # What is sorted on is each value's position, not the value itself, because
 # output type IDs do not always have a useful order of their own. `pmf`
 # categories are the example: sorting `"low"`, `"moderate"`, `"high"`
 # alphabetically would put them in the wrong order, while their positions in
 # the config are already right.
-# For a task ID, the positions run through its `required` values first and then
-# its `optional` ones, the order `extract_round_property_values()` collapses the
-# two into. Sorting is stable, so rows sharing a position keep the order they
-# were submitted in.
 #
-# This lives here rather than in the caller because assigning a row already
-# works out where its values sit in the config. A caller doing its own sorting
-# would have to read the config a second time to recover positions this function
-# is handed for free.
+# A task ID's positions run through its `required` values first, then its
+# `optional` ones. Sorting is stable, so rows sharing a position keep the order
+# they were submitted in.
 order_by_config <- function(
-  rows,
+  row_idx,
   tbl_chr,
   mt,
   match_task_ids,
@@ -202,23 +244,23 @@ order_by_config <- function(
 ) {
   output_type_col <- tbl_chr[[hubUtils::std_colnames[["output_type"]]]]
   task_ids <- mt[["task_ids"]]
-  # Only `output_type_id_pos` is worked out already, because matching needed it.
-  # The rest are wanted for ordering alone, so they are worked out here and only
-  # for the rows being ordered. Derived task IDs are left out, as they are for
-  # matching. A derived value follows from the task IDs already being sorted on,
-  # so it cannot separate two rows those leave tied.
+  # `output_type_id_pos` already exists, because matching needed it. The task ID
+  # positions are only needed for sorting, so they are worked out here, and only
+  # for the rows being sorted. Derived task IDs are left out as they are for
+  # matching: a derived value cannot separate two rows that are tied on the task
+  # IDs it is derived from.
   keys <- c(
     list(
-      match(output_type_col[rows], names(mt[["output_type_ids"]])),
-      output_type_id_pos[rows]
+      match(output_type_col[row_idx], names(mt[["output_type_ids"]])),
+      output_type_id_pos[row_idx]
     ),
     purrr::map(
       match_task_ids,
-      \(task_id) match(tbl_chr[[task_id]][rows], task_ids[[task_id]])
+      \(task_id) match(tbl_chr[[task_id]][row_idx], task_ids[[task_id]])
     )
   )
   # `do.call()` hands the keys to `order()` as separate arguments, which is how
   # `order()` takes tie-breakers: the first decides, and each one after it only
-  # separates rows the ones before left equal.
-  rows[do.call(order, c(keys, list(method = "radix")))]
+  # separates rows that earlier keys left equal.
+  row_idx[do.call(order, c(keys, list(method = "radix")))]
 }

@@ -13,7 +13,7 @@
 * `get_tbl_compound_taskid_set()` no longer drops modeling tasks whose detected compound task ID set is empty, which previously made a jointly sampled modeling task indistinguishable from one with no samples at all (#361).
 * `match_tbl_to_model_task()` now returns derived task ID columns holding their values. They previously came back as `NA` (#355).
 * The `error_tbl` attribute of `check_tbl_value_col_ascending()` no longer includes a column for each derived task ID. Those columns only ever held `NA` (#355).
-* `match_tbl_to_model_task()`, `check_tbl_value_col()` and `check_tbl_value_col_ascending()` no longer build the grid of every value combination a round's config allows. They report the same results, but are much faster and need far less memory, increasingly so the more combinations the config permits (#355).
+* `match_tbl_to_model_task()`, `check_tbl_value_col()`, `check_tbl_value_col_ascending()`, `get_tbl_compound_taskid_set()` and the sample checks `check_tbl_spl_mt_unique()`, `check_tbl_spl_compound_tid()`, `check_tbl_spl_non_compound_tid()` and `check_tbl_spl_n()` no longer build the grid of every value combination a round's config allows. They report the same results, but are much faster and need far less memory, increasingly so the more combinations the config permits (#355, #368).
 
 # hubValidations 2.1.1
 

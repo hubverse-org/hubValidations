@@ -16,8 +16,9 @@ match_tbl_to_model_task(
 \arguments{
 \item{tbl}{a tibble/data.frame of the contents of the file being validated.
 Column types must \strong{all be character}: the config's values are converted to
-character when they are extracted, and are compared against this table as it
-stands. Every task ID column the round defines must be present.}
+character when they are extracted, and are compared against this table
+without further conversion. Every task ID column the round defines must be
+present.}
 
 \item{config_tasks}{a list version of the content's of a hub's \code{tasks.json}
 config file, accessed through the \code{"config_tasks"} attribute of a \verb{<hub_connection>}
@@ -55,13 +56,15 @@ Extracting them collapses the two into a single order, \code{required} values
 first, then \code{optional} ones, and that is the order sorted on.}
 }
 \value{
-A list containing a \code{tbl_df} of model output data matched to a model
-task with one element per round model task.
+A list with one element per model task in the round, each a \code{tbl_df}
+of the model output rows matched to that model task. A model task that offers
+none of the requested \code{output_types} gets \code{NULL}. Rows that no model task
+accepts are not returned.
 }
 \description{
-Split and match model output data to their corresponding model tasks in
-\code{config_tasks}. Useful for performing model task specific checks on model output.
-For v3 samples, the \code{output_type_id} column is set to \code{NA} for \code{sample} outputs.
+Useful for performing model task specific checks on model output. For hubs on
+config schema v3 or later, sample \code{output_type_id} values are identifiers
+chosen by the submitter, so they are set to \code{NA} in the returned tables.
 }
 \examples{
 hub_path <- system.file("testhubs/samples", package = "hubValidations")
