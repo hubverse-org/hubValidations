@@ -86,9 +86,9 @@ check_values_ascending_by_output_type <- function(
   derived_task_ids
 ) {
   # FIX for <https://github.com/hubverse-org/hubValidations/issues/78>
-  # `check_values_ascending()` needs rows ordered by `output_type_id` to
-  # perform its check. Sort by the config's order, since `pmf` categories are
-  # not necessarily alphabetical.
+  # `check_values_ascending()` reads rows in the order they arrive, so sort by
+  # the config's order. Alphabetical is wrong for character `cdf` thresholds:
+  # "10" sorts before "5".
   model_task_tbls <- match_tbl_to_model_task(
     tbl,
     config_tasks = config_tasks,
@@ -115,17 +115,13 @@ check_values_ascending_by_output_type <- function(
 #'    had decreasing values for this output type
 #' @noRd
 check_values_ascending <- function(tbl, derived_task_ids = NULL) {
-  # Derived task IDs are left out, as they are when matching rows to modeling
-  # tasks. A derived value follows from the other task IDs, so it cannot separate
-  # rows they leave together, and a file whose derived values are wrong must not
-  # be grouped by them (#189).
+  # Group by the task ID columns, leaving out the derived ones (#189).
   group_cols <- setdiff(
     names(tbl)[!names(tbl) %in% hubUtils::std_colnames],
     derived_task_ids
   )
   tbl[["value"]] <- as.numeric(tbl[["value"]])
 
-  # group by all of the target columns
   check_tbl <- dplyr::group_by(
     tbl,
     dplyr::across(dplyr::all_of(group_cols))
