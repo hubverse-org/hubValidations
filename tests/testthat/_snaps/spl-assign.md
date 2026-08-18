@@ -1,4 +1,4 @@
-# a compound_taskid_set naming an unknown task ID is reported
+# the sample checks still validate compound_taskid_set names without building the grid
 
     Code
       check_tbl_spl_compound_tid(tbl, "2022-10-22",
@@ -9,7 +9,7 @@
       x "locatoin" is not valid task ID.
       i The `compound_taskid_set` must be a subset of "reference_date", "target", "horizon", and "location".
 
-# a compound_taskid_set of the wrong length is reported
+# the sample checks still validate compound_taskid_set length without building the grid
 
     Code
       check_tbl_spl_n(tbl, "2022-10-22", "team-model/2022-10-22-team-model.csv",

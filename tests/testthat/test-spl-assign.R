@@ -1,4 +1,4 @@
-test_that("sample rows reach the same modeling tasks as through the grid", {
+test_that("sample rows assign to the same modeling tasks as they did through the grid", {
   for (fixture in spl_fixtures()) {
     config_tasks <- read_config(fixture[["hub_path"]], "tasks")
     round_id <- fixture[["round_id"]]
@@ -24,7 +24,7 @@ test_that("sample rows reach the same modeling tasks as through the grid", {
   }
 })
 
-test_that("sample properties are compiled as they were through the grid", {
+test_that("the sample hash table is built as it was through the grid", {
   for (fixture in spl_fixtures()) {
     config_tasks <- read_config(fixture[["hub_path"]], "tasks")
     round_id <- fixture[["round_id"]]
@@ -54,12 +54,12 @@ test_that("sample properties are compiled as they were through the grid", {
   }
 })
 
-test_that("a modeling task with no submitted samples still uses up indices", {
-  # `get_tbl_compound_taskid_set()` returns `NULL` for such a modeling task,
-  # meaning every one of its task IDs is compound. The modeling tasks after it
-  # have to be numbered from the whole of its share, as they were through the
-  # grid, because those indices are what `submission_tmpl()` writes and what the
-  # checks report.
+test_that("a modeling task with no samples is numbered as it was through the grid", {
+  # Detection returns `NULL` for a modeling task with no samples, and the
+  # numbering reads `NULL` as every task ID being compound. That modeling task
+  # therefore takes the largest block of indices it could, and every modeling
+  # task after it starts past the whole of it. This tests against what the grid
+  # also did. Whether this is the right numbering is an open issue, see #377.
   hub_path <- test_path("testdata/hub-spl-multi-mt")
   round_id <- "2022-10-22"
   tbl <- read_model_out_file(
@@ -87,11 +87,13 @@ test_that("a modeling task with no submitted samples still uses up indices", {
   )
 })
 
-test_that("a compound_taskid_set is read as a set, not as an order", {
-  # Indices are counted with the task ID the config lists first varying
-  # fastest, so a set written in a different order has to give the same
-  # numbering. Every hub the fixtures cover happens to declare its set in
-  # config order, which would let the wrong order go unnoticed.
+test_that("the order a compound_taskid_set is written in does not change compound_idx numbering", {
+  # A compound_idx is calculated from the values of compound task IDs in the
+  # order the config lists them, so config order decides the numbering, not the
+  # order the set happens to be written in. `get_mt_compound_idx_numbering()`
+  # reorders the set to match the config. Every fixture hub already declares its
+  # set in config order, so without this test a failure to reorder would go
+  # unnoticed.
   hub_path <- test_path("testdata/hub-spl")
   round_id <- "2022-10-22"
   tbl <- read_model_out_file(
@@ -114,7 +116,7 @@ test_that("a compound_taskid_set is read as a set, not as an order", {
   )
 })
 
-test_that("a compound_taskid_set naming an unknown task ID is reported", {
+test_that("the sample checks still validate compound_taskid_set names without building the grid", {
   hub_path <- test_path("testdata/hub-spl-multi-mt")
   tbl <- read_model_out_file(
     "team-model/2022-10-22-team-model.csv",
@@ -137,7 +139,7 @@ test_that("a compound_taskid_set naming an unknown task ID is reported", {
   )
 })
 
-test_that("a compound_taskid_set of the wrong length is reported", {
+test_that("the sample checks still validate compound_taskid_set length without building the grid", {
   hub_path <- test_path("testdata/hub-spl-multi-mt")
   tbl <- read_model_out_file(
     "team-model/2022-10-22-team-model.csv",

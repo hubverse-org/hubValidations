@@ -1,6 +1,6 @@
 # Sample assignment as it was done before value sets replaced it: expand the
 # sample grid for each modeling task and join the data to it. Kept here as the
-# reference the new code is measured against.
+# reference the new code is checked against.
 
 # What `spl_hash_tbl()` used to do to split a table across modeling tasks and
 # give each row its compound index.
@@ -114,9 +114,9 @@ spl_mt_rows_via_grid <- function(
   )
 }
 
-# Every hub the test suite has a submission of samples for, so the comparison
-# covers a single modeling task and several, a declared compound task ID set and
-# none, character and numeric sample IDs, and derived task IDs.
+# Every hub in the test suite with a sample submission, so the comparison covers
+# a single modeling task and several, a declared compound task ID set and none,
+# character and numeric sample IDs, and derived task IDs.
 spl_fixtures <- function() {
   fixtures <- list(
     list(
@@ -150,8 +150,8 @@ spl_fixtures <- function() {
       round_id = "2024-10-02"
     )
   )
-  # A hub that comes from another package is skipped rather than failed if the
-  # installed version does not ship it.
+  # `system.file()` returns "" when the installed build does not ship the hub,
+  # so drop that fixture rather than fail on a path that does not exist.
   purrr::keep(fixtures, \(x) nzchar(x[["hub_path"]]))
 }
 
