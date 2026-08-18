@@ -57,7 +57,12 @@ get_tbl_compound_taskid_set <- function(
   )
 
   call <- rlang::current_env()
-  # Subset inside the loop, so only one modeling task's rows exist at a time.
+  # Each modeling task declares its own compound task ID set, so the submitted
+  # sample rows have to be separated into modeling tasks first.
+  # `assign_spl_tbl_rows()` returns the row indexes of each modeling task's
+  # rows, which are the first input to the map below. That detects the
+  # compound task ID set each modeling task's submitted rows use, and checks
+  # it against the set the config declares.
   tbl_compound_taskids <- purrr::map2(
     assign_spl_tbl_rows(
       tbl,
@@ -82,9 +87,9 @@ get_tbl_compound_taskid_set <- function(
   )
 
   if (compact) {
-    # Only modeling tasks without samples are dropped. An empty detected set is an
-    # answer rather than an absence, so it stays, which `purrr::compact()` would not
-    # do because it drops anything of length zero.
+    # Only modeling tasks without samples are dropped. An empty detected set
+    # is an answer rather than an absence, so it stays, which
+    # `purrr::compact()` would not do because it drops anything of length zero.
     tbl_compound_taskids <- purrr::discard(tbl_compound_taskids, is.null)
   }
 

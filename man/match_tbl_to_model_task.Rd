@@ -58,8 +58,8 @@ first, then \code{optional} ones, and that is the order sorted on.}
 \value{
 A list with one element per model task in the round, each a \code{tbl_df}
 of the model output rows matched to that model task. A model task that offers
-none of the requested \code{output_types} gets \code{NULL}. Rows that no model task
-accepts are not returned.
+none of the requested \code{output_types} gets \code{NULL}. Rows that match no model
+task are not returned.
 }
 \description{
 Useful for performing model task specific checks on model output. For hubs on

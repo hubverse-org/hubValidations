@@ -106,10 +106,10 @@ get_config_mt_value_sets <- function(
       # A modeling task that does not use a task ID lists it as null, or leaves
       # it out altogether. A peak timing target might not use `horizon`, for
       # instance, and its rows carry `NA` in that column, so `NA` is the only
-      # value the modeling task accepts there. `extract_round_property_values()`
+      # value the modeling task allows there. `extract_round_property_values()`
       # above has already turned the ones listed as null into `NA`; this handles
       # the ones left out, which would otherwise go untested and let the
-      # modeling task accept any value at all.
+      # modeling task allow any value at all.
       omitted <- setdiff(round_task_ids, names(task_ids))
       task_ids[omitted] <- list(NA)
 

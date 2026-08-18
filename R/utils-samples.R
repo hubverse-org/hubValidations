@@ -5,8 +5,8 @@
 #' without the `value` column.
 #' @inheritParams expand_model_out_grid
 #' @returns A list with one element per modeling task in the round, each an
-#' integer vector of row numbers of `spl_tbl`. `NULL` for a modeling task that
-#' does not offer samples.
+#' integer vector of row indexes into `spl_tbl`. `NULL` for a modeling task
+#' that does not offer samples.
 #' @noRd
 assign_spl_tbl_rows <- function(
   spl_tbl,
@@ -494,9 +494,9 @@ get_compound_idx <- function(mt_tbl, numbering) {
   stride <- 1
   for (task_id in names(numbering[["comp_tid_values"]])) {
     task_id_values <- numbering[["comp_tid_values"]][[task_id]]
-    # Where this row's value sits among the values the config allows here. Both
-    # sides are already character, as they are when rows are matched to modeling
-    # tasks, so this is a plain comparison.
+    # The position of this row's value in the config's list of values for this
+    # task ID. Both sides are already character, as they are when rows are
+    # matched to modeling tasks, so this is a plain comparison.
     pos <- match(mt_tbl[[task_id]], task_id_values)
     idx <- idx + (pos - 1L) * stride
     stride <- stride * length(task_id_values)

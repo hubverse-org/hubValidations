@@ -33,8 +33,8 @@
 #'
 #' @return A list with one element per model task in the round, each a `tbl_df`
 #' of the model output rows matched to that model task. A model task that offers
-#' none of the requested `output_types` gets `NULL`. Rows that no model task
-#' accepts are not returned.
+#' none of the requested `output_types` gets `NULL`. Rows that match no model
+#' task are not returned.
 #' @export
 #'
 #' @examples

@@ -1,8 +1,8 @@
 #' Assign each row of model output data to the modeling task it belongs to
 #'
 #' Tests each row's values against the values each modeling task allows, one
-#' column at a time. A row belongs to a modeling task when every column agrees.
-#' Rows that no modeling task accepts are left out.
+#' column at a time. A row belongs to a modeling task when every column
+#' matches. Rows that match no modeling task are left out.
 #'
 #' This is what [match_tbl_to_model_task()] used to do by expanding the grid of
 #' every valid value combination and joining the data to it. Testing each column
@@ -104,9 +104,35 @@ check_match_cols <- function(tbl_chr, config_tasks, round_id, call) {
   invisible(NULL)
 }
 
-# Row numbers of the rows in `tbl_chr` that a single modeling task accepts, in
-# submitted order unless `order_by_config`. `NULL` when the modeling task offers
-# none of the requested output types, which is different from accepting no rows.
+#' Find the rows of `tbl_chr` that match a single modeling task
+#'
+#' Compares each row's value in every task ID and output type column against
+#' the values the modeling task allows. Returns the indexes of the rows where
+#' every column matches.
+#'
+#' @param tbl_chr An all character tibble/data.frame of the file being
+#' validated. Every task ID the round defines must be present, along with
+#' `output_type` and `output_type_id`.
+#' @param mt One modeling task's value sets, a single element of
+#' `get_config_mt_value_sets()`. A list of `task_ids`, holding the values each
+#' task ID allows, and `output_type_ids`, holding the values `output_type_id`
+#' allows for each output type. All character.
+#' @param derived_task_ids Character vector of derived task ID names, or `NULL`
+#' for none. These columns are not matched on.
+#' @param order_by_config Logical. `FALSE`, the default, returns the row
+#' indexes in submitted order. `TRUE` returns them in the order the config
+#' lists their values in.
+#'
+#' @returns An integer vector of row indexes into `tbl_chr`, or `NULL`.
+#'
+#' Note that the two empty returns below mean different things:
+#' - `integer(0)`: the modeling task offers one or more of the requested output
+#'   types but no row matched it/them. `subset_mt_tbl()` turns this into a
+#'   tibble of zero rows.
+#' - `NULL`: the modeling task offers none of the requested output types, so
+#'   there was nothing to match against. The caller returns `NULL` for that
+#'   modeling task.
+#' @noRd
 which_mt_rows <- function(
   tbl_chr,
   mt,
@@ -118,8 +144,7 @@ which_mt_rows <- function(
   # of the task IDs it is derived from. Skipping it saves a pass over the data.
   match_task_ids <- setdiff(names(mt[["task_ids"]]), derived_task_ids)
 
-  # Nothing to compare against, so this modeling task is not in play at all.
-  # `NULL` rather than no rows, which the caller reads differently.
+  # None of the requested output types, so there is nothing to match against.
   if (length(mt[["output_type_ids"]]) == 0L) {
     return(NULL)
   }
@@ -145,15 +170,37 @@ which_mt_rows <- function(
   row_idx
 }
 
-# Row numbers of the rows in `spl_tbl` that a single modeling task accepts.
-# `NULL` when the modeling task does not offer the sample output type.
-#
-# Samples skip the `output_type_id` comparison that `which_mt_rows()` performs.
-# A sample's `output_type_id` is an identifier the submitter chose, so the
-# config lists no valid ids to compare it with, and the caller has already
-# reduced `spl_tbl` to sample rows. That comparison could therefore never
-# reject a row, so every row starts eligible and only the task ID columns are
-# compared.
+#' Find the sample rows of `spl_tbl` that match a single modeling task
+#'
+#' Compares each row's value in every task ID column against the values the
+#' modeling task allows. Returns the indexes of the rows where every column
+#' matches.
+#'
+#' Samples skip the `output_type_id` comparison that `which_mt_rows()`
+#' performs. A sample's `output_type_id` is an identifier the submitter chose,
+#' so the config lists no valid ids to compare it with, and the caller has
+#' already reduced `spl_tbl` to sample rows. That comparison could therefore
+#' never reject a row, so every row starts eligible and only the task ID
+#' columns are compared.
+#'
+#' @param spl_tbl An all character tibble/data.frame holding the sample rows of
+#' a submission, without the `value` column. Every task ID the round defines
+#' must be present.
+#' @param mt One modeling task's value sets, a single element of
+#' `get_config_mt_value_sets()`. A list of `task_ids`, holding the values each
+#' task ID allows, and `output_type_ids`, holding the values `output_type_id`
+#' allows for each output type. All character.
+#' @param derived_task_ids Character vector of derived task ID names, or `NULL`
+#' for none. These columns are not matched on.
+#'
+#' @returns An integer vector of row indexes into `spl_tbl`, or `NULL`.
+#'
+#' Note that the two empty returns below mean different things:
+#' - `integer(0)`: the modeling task offers the sample output type but no row
+#'   matched it.
+#' - `NULL`: the modeling task does not offer the sample output type, so there
+#'   was nothing to match against.
+#' @noRd
 which_mt_spl_rows <- function(spl_tbl, mt, derived_task_ids) {
   if (is.null(mt[["output_type_ids"]][["sample"]])) {
     return(NULL)
@@ -168,12 +215,27 @@ which_mt_spl_rows <- function(spl_tbl, mt, derived_task_ids) {
   which(keep)
 }
 
-# Where each row's `output_type_id` sits among the ones the modeling task allows
-# for that row's `output_type`. Each output type has its own set, which is why
-# this loops over them rather than doing one lookup. A row whose
-# `output_type_id` is not in the set gets `NA`, and those are the rows the
-# modeling task does not accept. The positions are also what `order_by_config()`
-# sorts on, which is why this returns them rather than a logical vector.
+#' Find the position of each row's `output_type_id` in the config's list
+#'
+#' Matches each row's `output_type_id` against the values the config allows for
+#' that row's `output_type`. Returns its position in that list, which is the
+#' order the config lists the values in.
+#'
+#' Each output type has its own set, which is why this loops over them rather
+#' than doing one lookup.
+#'
+#' @param tbl_chr An all character tibble/data.frame of the file being
+#' validated. `output_type` and `output_type_id` must be present.
+#' @param mt One modeling task's value sets, a single element of
+#' `get_config_mt_value_sets()`.
+#'
+#' @returns An integer vector with one element per row of `tbl_chr`. A row
+#' whose `output_type_id` is not one the modeling task allows gets `NA`, and
+#' those are the rows that do not match it.
+#'
+#' Positions rather than a logical vector, because `order_by_config()` sorts on
+#' them.
+#' @noRd
 match_output_type_ids <- function(tbl_chr, mt) {
   output_type_col <- tbl_chr[[hubUtils::std_colnames[["output_type"]]]]
   output_type_id_col <- tbl_chr[[hubUtils::std_colnames[["output_type_id"]]]]
@@ -189,13 +251,32 @@ match_output_type_ids <- function(tbl_chr, mt) {
   pos
 }
 
-# Narrow `keep` to the rows whose value in every task ID column is one the
-# modeling task allows. Both sides are already character, so `%in%` is a plain
-# comparison.
-#
-# `%in%` matches `NA` to `NA`, as the grid join this replaced did. That is how a
-# task ID a modeling task does not use passes: the config allows it only `NA`,
-# and the submitted rows hold `NA` there too.
+#' Narrow a set of candidate rows to those a modeling task's task IDs allow
+#'
+#' Tests one task ID column at a time and drops any row whose value in that
+#' column is not one the modeling task allows. Both sides are already
+#' character, so `%in%` is a plain comparison.
+#'
+#' Note that a modeling task that does not use a task ID either lists it as
+#' null in the config or leaves it out, and config processing turns the
+#' expected value of both situations into `NA`. Correctly submitted model
+#' output carries `NA` in that column too. `%in%` matches `NA` to `NA`, unlike
+#' `==`, so those rows match.
+#'
+#' @param tbl_chr An all character tibble/data.frame of the file being
+#' validated.
+#' @param mt One modeling task's value sets, a single element of
+#' `get_config_mt_value_sets()`.
+#' @param match_task_ids Character vector naming the task ID columns to test.
+#' The caller has already removed any derived task IDs.
+#' @param keep Logical vector with one element per row of `tbl_chr`, marking
+#' the rows still in the running when this stage starts. It carries the result
+#' of the stage before it: `which_mt_rows()` passes the rows that survived the
+#' `output_type_id` comparison, and `which_mt_spl_rows()` passes all `TRUE`,
+#' because samples skip that comparison.
+#'
+#' @returns `keep`, with `FALSE` for every row a task ID column ruled out.
+#' @noRd
 narrow_by_task_id_values <- function(tbl_chr, mt, match_task_ids, keep) {
   for (task_id in match_task_ids) {
     keep <- keep & tbl_chr[[task_id]] %in% mt[["task_ids"]][[task_id]]
@@ -221,10 +302,9 @@ subset_mt_tbl <- function(tbl_chr, mt, row_idx, subset_to_tbl_cols) {
   tibble::as_tibble(tbl_chr[row_idx, cols, drop = FALSE])
 }
 
-# Order rows by where each of their values sits among the ones the config
-# allows: output type first, so rows of one output type are together, then
-# output type ID, so they ascend within each output type, then the task IDs
-# to break ties.
+# Order rows by the position each of their values holds in the config's list:
+# output type first, so rows of one output type are together, then output type
+# ID, so they ascend within each output type, then the task IDs to break ties.
 #
 # What is sorted on is each value's position, not the value itself, because
 # output type IDs do not always have a useful order of their own. `pmf`
