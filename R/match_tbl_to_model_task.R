@@ -1,8 +1,9 @@
 #' Match model output data to their model tasks in `config_tasks`.
 #'
-#' Useful for performing model task specific checks on model output. For hubs on
-#' config schema v3 or later, sample `output_type_id` values are identifiers
-#' chosen by the submitter, so they are set to `NA` in the returned tables.
+#' Useful for performing model task specific checks on model output.
+#'
+#' Sample `output_type_id` values are returned as submitted. The submitter
+#' chooses them, so this function does not check them against the config.
 #' @inheritParams expand_model_out_grid
 #' @inheritParams check_tbl_colnames
 #' @param tbl a tibble/data.frame of the contents of the file being validated.
@@ -30,6 +31,8 @@
 #' In the config a task ID's values are split into `required` and `optional`.
 #' Extracting them collapses the two into a single order, `required` values
 #' first, then `optional` ones, and that is the order sorted on.
+#'
+#' Sample rows are ordered by their task ID values only.
 #'
 #' @return A list with one element per model task in the round, each a `tbl_df`
 #' of the model output rows matched to that model task. A model task that offers
@@ -60,10 +63,6 @@ match_tbl_to_model_task <- function(
   ),
   order_by_config = FALSE
 ) {
-  if (hubUtils::is_v3_config(config_tasks)) {
-    tbl[tbl$output_type == "sample", "output_type_id"] <- NA
-  }
-
   assign_tbl_to_model_task(
     tbl,
     config_tasks = config_tasks,

@@ -26,7 +26,7 @@ assign_spl_tbl_rows <- function(
 
   purrr::map(
     value_sets,
-    \(mt) which_mt_spl_rows(spl_tbl, mt, derived_task_ids)
+    \(mt) which_mt_rows(spl_tbl, mt, derived_task_ids)
   )
 }
 

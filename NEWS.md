@@ -11,7 +11,7 @@
 
 * A `compound_taskid_set` of `[]`, which declares that every task ID is sampled jointly, no longer errors. `check_tbl_spl_compound_taskid_set()` failed with `` `config_comp_tids` must be logical, numeric, or character, not an empty list `` and `submission_tmpl()` with `invalid subscript type 'list'`. The check now passes when a submission's samples are drawn jointly across every task ID and, when they are finer, reports that the hub expects no compound task IDs and response dependence across all task IDs (#361).
 * `get_tbl_compound_taskid_set()` no longer drops modeling tasks whose detected compound task ID set is empty, which previously made a jointly sampled modeling task indistinguishable from one with no samples at all (#361).
-* `match_tbl_to_model_task()` now returns derived task ID columns holding their values. They previously came back as `NA` (#355).
+* `match_tbl_to_model_task()` now returns derived task ID columns and sample `output_type_id` values as submitted. Both previously came back as `NA` (#355, #368).
 * The `error_tbl` attribute of `check_tbl_value_col_ascending()` no longer includes a column for each derived task ID. Those columns only ever held `NA` (#355).
 * `match_tbl_to_model_task()`, `check_tbl_value_col()`, `check_tbl_value_col_ascending()`, `get_tbl_compound_taskid_set()` and the sample checks `check_tbl_spl_mt_unique()`, `check_tbl_spl_compound_tid()`, `check_tbl_spl_non_compound_tid()` and `check_tbl_spl_n()` no longer build the grid of every value combination a round's config allows. They report the same results, but are much faster and need far less memory, increasingly so the more combinations the config permits (#355, #368).
 

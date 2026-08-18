@@ -53,7 +53,9 @@ because it reads values in the order the rows arrive in.
 
 In the config a task ID's values are split into \code{required} and \code{optional}.
 Extracting them collapses the two into a single order, \code{required} values
-first, then \code{optional} ones, and that is the order sorted on.}
+first, then \code{optional} ones, and that is the order sorted on.
+
+Sample rows are ordered by their task ID values only.}
 }
 \value{
 A list with one element per model task in the round, each a \code{tbl_df}
@@ -62,9 +64,11 @@ none of the requested \code{output_types} gets \code{NULL}. Rows that match no m
 task are not returned.
 }
 \description{
-Useful for performing model task specific checks on model output. For hubs on
-config schema v3 or later, sample \code{output_type_id} values are identifiers
-chosen by the submitter, so they are set to \code{NA} in the returned tables.
+Useful for performing model task specific checks on model output.
+}
+\details{
+Sample \code{output_type_id} values are returned as submitted. The submitter
+chooses them, so this function does not check them against the config.
 }
 \examples{
 hub_path <- system.file("testhubs/samples", package = "hubValidations")
