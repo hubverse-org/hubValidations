@@ -1,9 +1,6 @@
 # Match model output data to their model tasks in `config_tasks`.
 
-Split and match model output data to their corresponding model tasks in
-`config_tasks`. Useful for performing model task specific checks on
-model output. For v3 samples, the `output_type_id` column is set to `NA`
-for `sample` outputs.
+Useful for performing model task specific checks on model output.
 
 ## Usage
 
@@ -25,8 +22,8 @@ match_tbl_to_model_task(
   a tibble/data.frame of the contents of the file being validated.
   Column types must **all be character**: the config's values are
   converted to character when they are extracted, and are compared
-  against this table as it stands. Every task ID column the round
-  defines must be present.
+  against this table without further conversion. Every task ID column
+  the round defines must be present.
 
 - config_tasks:
 
@@ -78,10 +75,19 @@ match_tbl_to_model_task(
   `required` values first, then `optional` ones, and that is the order
   sorted on.
 
+  Sample rows are ordered by their task ID values only.
+
 ## Value
 
-A list containing a `tbl_df` of model output data matched to a model
-task with one element per round model task.
+A list with one element per model task in the round, each a `tbl_df` of
+the model output rows matched to that model task. A model task that
+offers none of the requested `output_types` gets `NULL`. Rows that match
+no model task are not returned.
+
+## Details
+
+Sample `output_type_id` values are returned as submitted. The submitter
+chooses them, so this function does not check them against the config.
 
 ## Examples
 

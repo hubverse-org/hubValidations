@@ -45,22 +45,30 @@
   indistinguishable from one with no samples at all
   ([\#361](https://github.com/hubverse-org/hubValidations/issues/361)).
 - [`match_tbl_to_model_task()`](https://hubverse-org.github.io/hubValidations/dev/reference/match_tbl_to_model_task.md)
-  now returns derived task ID columns holding their values. They
-  previously came back as `NA`
-  ([\#355](https://github.com/hubverse-org/hubValidations/issues/355)).
+  now returns derived task ID columns and sample `output_type_id` values
+  as submitted. Both previously came back as `NA`
+  ([\#355](https://github.com/hubverse-org/hubValidations/issues/355),
+  [\#368](https://github.com/hubverse-org/hubValidations/issues/368)).
 - The `error_tbl` attribute of
   [`check_tbl_value_col_ascending()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_value_col_ascending.md)
   no longer includes a column for each derived task ID. Those columns
   only ever held `NA`
   ([\#355](https://github.com/hubverse-org/hubValidations/issues/355)).
 - [`match_tbl_to_model_task()`](https://hubverse-org.github.io/hubValidations/dev/reference/match_tbl_to_model_task.md),
-  [`check_tbl_value_col()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_value_col.md)
+  [`check_tbl_value_col()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_value_col.md),
+  [`check_tbl_value_col_ascending()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_value_col_ascending.md),
+  [`get_tbl_compound_taskid_set()`](https://hubverse-org.github.io/hubValidations/dev/reference/get_tbl_compound_taskid_set.md)
+  and the sample checks
+  [`check_tbl_spl_mt_unique()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_spl_mt_unique.md),
+  [`check_tbl_spl_compound_tid()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_spl_compound_tid.md),
+  [`check_tbl_spl_non_compound_tid()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_spl_non_compound_tid.md)
   and
-  [`check_tbl_value_col_ascending()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_value_col_ascending.md)
+  [`check_tbl_spl_n()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_spl_n.md)
   no longer build the grid of every value combination a round’s config
   allows. They report the same results, but are much faster and need far
   less memory, increasingly so the more combinations the config permits
-  ([\#355](https://github.com/hubverse-org/hubValidations/issues/355)).
+  ([\#355](https://github.com/hubverse-org/hubValidations/issues/355),
+  [\#368](https://github.com/hubverse-org/hubValidations/issues/368)).
 
 ## hubValidations 2.1.1
 
