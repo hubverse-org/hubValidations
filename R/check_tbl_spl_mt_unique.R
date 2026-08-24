@@ -38,41 +38,24 @@ check_tbl_spl_mt_unique <- function(
 
   out_tid <- hubUtils::std_colnames["output_type_id"]
   spl_tbl <- tbl[tbl$output_type == "sample", names(tbl) != "value"]
-  if (!is.null(derived_task_ids)) {
-    spl_tbl[, derived_task_ids] <- NA_character_
-  }
 
-  mt_grids <- expand_model_out_grid(
+  mt_row_idx <- assign_spl_tbl_rows(
+    spl_tbl,
     config_tasks = config_tasks,
     round_id = round_id,
-    all_character = TRUE,
-    include_sample_ids = FALSE,
-    bind_model_tasks = FALSE,
-    output_types = "sample",
     derived_task_ids = derived_task_ids
   )
 
   # If fewer than 2 model tasks have samples, no overlap is possible
-  n_spl_mts <- sum(purrr::map_int(mt_grids, nrow) > 0L)
+  n_spl_mts <- sum(!purrr::map_lgl(mt_row_idx, is.null))
   if (n_spl_mts < 2L) {
     check <- TRUE
     details <- NULL
     errors <- NULL
   } else {
-    join_by <- setdiff(names(spl_tbl), out_tid)
-    mt_otids <- mt_grids |>
-      purrr::set_names(seq_along(mt_grids)) |>
-      purrr::map(\(.x) {
-        if (nrow(.x) == 0L) {
-          return(NULL)
-        }
-        # semi_join returns rows from spl_tbl where a match exists in each
-        # model task grid, without duplicating rows or returning model task
-        # grid columns. More performant than inner_join as we only need
-        # the output_type_ids.
-        matched <- dplyr::semi_join(spl_tbl, .x, by = join_by)
-        unique(matched[[out_tid]])
-      })
+    mt_otids <- mt_row_idx |>
+      purrr::set_names(seq_along(mt_row_idx)) |>
+      purrr::map(\(row_idx) unique(spl_tbl[[out_tid]][row_idx]))
 
     otid_counts <- table(unlist(mt_otids, use.names = FALSE))
     dup_otids <- names(otid_counts[otid_counts > 1L])

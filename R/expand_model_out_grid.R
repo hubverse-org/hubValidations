@@ -291,8 +291,8 @@ expand_model_out_grid <- function(
 #'
 #' @inheritParams expand_model_out_grid
 #'
-#' @returns A list of two, `task_ids` and `output_type`, each with one element per
-#' modeling task in the round.
+#' @returns A list of two, `task_ids` and `output_type`, each with one element
+#' per modeling task in the round.
 #' @noRd
 extract_round_property_values <- function(
   config_tasks,

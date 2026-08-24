@@ -875,7 +875,8 @@
           "target")))
     Condition
       Error in `expand_model_out_grid()`:
-      x The length of `compound_taskid_set` (1) must match the number of modeling tasks (2) in the round.
+      x `compound_taskid_set` must have one element for each modeling task in the round.
+      i The round has 2 modeling tasks but `compound_taskid_set` has 1.
 
 ---
 
@@ -884,7 +885,8 @@
         include_sample_ids = TRUE, compound_taskid_set = list())
     Condition
       Error in `expand_model_out_grid()`:
-      x The length of `compound_taskid_set` (0) must match the number of modeling tasks (2) in the round.
+      x `compound_taskid_set` must have one element for each modeling task in the round.
+      i The round has 2 modeling tasks but `compound_taskid_set` has 0.
 
 # v4 required output type ID values extracted correctly
 

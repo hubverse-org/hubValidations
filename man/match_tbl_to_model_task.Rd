@@ -16,8 +16,9 @@ match_tbl_to_model_task(
 \arguments{
 \item{tbl}{a tibble/data.frame of the contents of the file being validated.
 Column types must \strong{all be character}: the config's values are converted to
-character when they are extracted, and are compared against this table as it
-stands. Every task ID column the round defines must be present.}
+character when they are extracted, and are compared against this table
+without further conversion. Every task ID column the round defines must be
+present.}
 
 \item{config_tasks}{a list version of the content's of a hub's \code{tasks.json}
 config file, accessed through the \code{"config_tasks"} attribute of a \verb{<hub_connection>}
@@ -52,16 +53,22 @@ because it reads values in the order the rows arrive in.
 
 In the config a task ID's values are split into \code{required} and \code{optional}.
 Extracting them collapses the two into a single order, \code{required} values
-first, then \code{optional} ones, and that is the order sorted on.}
+first, then \code{optional} ones, and that is the order sorted on.
+
+Sample rows are ordered by their task ID values only.}
 }
 \value{
-A list containing a \code{tbl_df} of model output data matched to a model
-task with one element per round model task.
+A list with one element per model task in the round, each a \code{tbl_df}
+of the model output rows matched to that model task. A model task that offers
+none of the requested \code{output_types} gets \code{NULL}. Rows that match no model
+task are not returned.
 }
 \description{
-Split and match model output data to their corresponding model tasks in
-\code{config_tasks}. Useful for performing model task specific checks on model output.
-For v3 samples, the \code{output_type_id} column is set to \code{NA} for \code{sample} outputs.
+Useful for performing model task specific checks on model output.
+}
+\details{
+Sample \code{output_type_id} values are returned as submitted. The submitter
+chooses them, so this function does not check them against the config.
 }
 \examples{
 hub_path <- system.file("testhubs/samples", package = "hubValidations")

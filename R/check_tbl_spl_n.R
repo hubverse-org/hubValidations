@@ -117,12 +117,7 @@ get_round_spl_n_ranges <- function(config_tasks, round_id) {
   purrr::imap(
     round_mt,
     ~ {
-      output_type_id_params <- purrr::pluck(
-        .x,
-        "output_type",
-        "sample",
-        "output_type_id_params"
-      )
+      output_type_id_params <- get_mt_sample_params(.x)
 
       if (is.null(output_type_id_params)) {
         return(NULL)

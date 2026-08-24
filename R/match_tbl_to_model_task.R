@@ -1,14 +1,16 @@
 #' Match model output data to their model tasks in `config_tasks`.
 #'
-#' Split and match model output data to their corresponding model tasks in
-#' `config_tasks`. Useful for performing model task specific checks on model output.
-#' For v3 samples, the `output_type_id` column is set to `NA` for `sample` outputs.
+#' Useful for performing model task specific checks on model output.
+#'
+#' Sample `output_type_id` values are returned as submitted. The submitter
+#' chooses them, so this function does not check them against the config.
 #' @inheritParams expand_model_out_grid
 #' @inheritParams check_tbl_colnames
 #' @param tbl a tibble/data.frame of the contents of the file being validated.
 #' Column types must **all be character**: the config's values are converted to
-#' character when they are extracted, and are compared against this table as it
-#' stands. Every task ID column the round defines must be present.
+#' character when they are extracted, and are compared against this table
+#' without further conversion. Every task ID column the round defines must be
+#' present.
 #' @param derived_task_ids Character vector of derived task ID names, or `NULL`
 #' for none. A derived task ID's value follows from the values of other task
 #' IDs. A derived task ID cannot therefore further distinguish a row beyond the
@@ -30,8 +32,12 @@
 #' Extracting them collapses the two into a single order, `required` values
 #' first, then `optional` ones, and that is the order sorted on.
 #'
-#' @return A list containing a `tbl_df` of model output data matched to a model
-#' task with one element per round model task.
+#' Sample rows are ordered by their task ID values only.
+#'
+#' @return A list with one element per model task in the round, each a `tbl_df`
+#' of the model output rows matched to that model task. A model task that offers
+#' none of the requested `output_types` gets `NULL`. Rows that match no model
+#' task are not returned.
 #' @export
 #'
 #' @examples
@@ -57,10 +63,6 @@ match_tbl_to_model_task <- function(
   ),
   order_by_config = FALSE
 ) {
-  if (hubUtils::is_v3_config(config_tasks)) {
-    tbl[tbl$output_type == "sample", "output_type_id"] <- NA
-  }
-
   assign_tbl_to_model_task(
     tbl,
     config_tasks = config_tasks,
