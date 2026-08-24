@@ -293,10 +293,10 @@ check_compound_taskid_set_length <- function(
   }
   cli::cli_abort(
     c(
-      "x" = "The length of {.var compound_taskid_set}
-      ({.val {length(compound_taskid_set)}})
-      must match the number of modeling tasks ({.val {n_model_tasks}})
-      in the round."
+      "x" = "{.var compound_taskid_set} must have one element for each modeling
+      task in the round.",
+      "i" = "The round has {.val {n_model_tasks}} modeling tasks but
+      {.var compound_taskid_set} has {.val {length(compound_taskid_set)}}."
     ),
     call = call
   )

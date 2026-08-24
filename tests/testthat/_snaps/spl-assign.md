@@ -16,5 +16,6 @@
         hub_path, compound_taskid_set = list(c("target", "location")))
     Condition
       Error in `check_tbl_spl_n()`:
-      x The length of `compound_taskid_set` (1) must match the number of modeling tasks (2) in the round.
+      x `compound_taskid_set` must have one element for each modeling task in the round.
+      i The round has 2 modeling tasks but `compound_taskid_set` has 1.
 
