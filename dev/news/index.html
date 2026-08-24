@@ -45,10 +45,29 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="hubvalidations-development-version">hubValidations (development version)<a class="anchor" aria-label="anchor" href="#hubvalidations-development-version"></a></h2>
+<div class="section level3">
+<h3 id="breaking-changes-development-version">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-development-version"></a></h3>
+<ul><li>
+<code><a href="../reference/match_tbl_to_model_task.html">match_tbl_to_model_task()</a></code> has lost its <code>all_character</code> argument. <code>tbl</code> must now always be character (<a href="https://github.com/hubverse-org/hubValidations/issues/355" class="external-link">#355</a>).</li>
+<li>
+<code><a href="../reference/match_tbl_to_model_task.html">match_tbl_to_model_task()</a></code> now returns each modeling task’s rows in the order they were submitted in, rather than the order the config lists their values. Pass the new <code>order_by_config = TRUE</code> argument for the config’s order (<a href="https://github.com/hubverse-org/hubValidations/issues/355" class="external-link">#355</a>).</li>
+<li>
+<code><a href="../reference/check_tbl_value_col.html">check_tbl_value_col()</a></code> now expects <code>tbl</code> to be all character, like the other checks that validate data against the config. Passing a table with hub schema column types is no longer supported (<a href="https://github.com/hubverse-org/hubValidations/issues/355" class="external-link">#355</a>).</li>
+<li>
+<code><a href="../reference/match_tbl_to_model_task.html">match_tbl_to_model_task()</a></code> and <code><a href="../reference/check_tbl_value_col.html">check_tbl_value_col()</a></code> now error when a task ID column is missing from <code>tbl</code>. They previously returned a number of rows unrelated to the submission (<a href="https://github.com/hubverse-org/hubValidations/issues/355" class="external-link">#355</a>).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="other-changes-development-version">Other changes<a class="anchor" aria-label="anchor" href="#other-changes-development-version"></a></h3>
 <ul><li>A <code>compound_taskid_set</code> of <code>[]</code>, which declares that every task ID is sampled jointly, no longer errors. <code><a href="../reference/check_tbl_spl_compound_taskid_set.html">check_tbl_spl_compound_taskid_set()</a></code> failed with <code>`config_comp_tids` must be logical, numeric, or character, not an empty list</code> and <code><a href="../reference/submission_tmpl.html">submission_tmpl()</a></code> with <code>invalid subscript type 'list'</code>. The check now passes when a submission’s samples are drawn jointly across every task ID and, when they are finer, reports that the hub expects no compound task IDs and response dependence across all task IDs (<a href="https://github.com/hubverse-org/hubValidations/issues/361" class="external-link">#361</a>).</li>
 <li>
 <code><a href="../reference/get_tbl_compound_taskid_set.html">get_tbl_compound_taskid_set()</a></code> no longer drops modeling tasks whose detected compound task ID set is empty, which previously made a jointly sampled modeling task indistinguishable from one with no samples at all (<a href="https://github.com/hubverse-org/hubValidations/issues/361" class="external-link">#361</a>).</li>
+<li>
+<code><a href="../reference/match_tbl_to_model_task.html">match_tbl_to_model_task()</a></code> now returns derived task ID columns holding their values. They previously came back as <code>NA</code> (<a href="https://github.com/hubverse-org/hubValidations/issues/355" class="external-link">#355</a>).</li>
+<li>The <code>error_tbl</code> attribute of <code><a href="../reference/check_tbl_value_col_ascending.html">check_tbl_value_col_ascending()</a></code> no longer includes a column for each derived task ID. Those columns only ever held <code>NA</code> (<a href="https://github.com/hubverse-org/hubValidations/issues/355" class="external-link">#355</a>).</li>
+<li>
+<code><a href="../reference/match_tbl_to_model_task.html">match_tbl_to_model_task()</a></code>, <code><a href="../reference/check_tbl_value_col.html">check_tbl_value_col()</a></code> and <code><a href="../reference/check_tbl_value_col_ascending.html">check_tbl_value_col_ascending()</a></code> no longer build the grid of every value combination a round’s config allows. They report the same results, but are much faster and need far less memory, increasingly so the more combinations the config permits (<a href="https://github.com/hubverse-org/hubValidations/issues/355" class="external-link">#355</a>).</li>
 </ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.1.1" id="hubvalidations-211">hubValidations 2.1.1<a class="anchor" aria-label="anchor" href="#hubvalidations-211"></a></h2>
 <ul><li>Fixed <code><a href="../reference/validate_pr.html">validate_pr()</a></code> and <code><a href="../reference/validate_target_pr.html">validate_target_pr()</a></code> leaking a <code>gh</code> pagination progress message into their output by passing <code>.progress = FALSE</code> to the <code><a href="https://gh.r-lib.org/reference/gh.html" class="external-link">gh::gh()</a></code> call (<a href="https://github.com/hubverse-org/hubValidations/issues/347" class="external-link">#347</a>).</li>

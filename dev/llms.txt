@@ -376,7 +376,7 @@ checks.
 - [`match_tbl_to_model_task()`](https://hubverse-org.github.io/hubValidations/dev/reference/match_tbl_to_model_task.md)
   :
 
-  Match model output `tbl` data to their model tasks in `config_tasks`.
+  Match model output data to their model tasks in `config_tasks`.
 
 - [`get_target_task_id()`](https://hubverse-org.github.io/hubValidations/dev/reference/get_target_task_id.md)
   : Get Unique Target Task ID

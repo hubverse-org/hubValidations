@@ -2,6 +2,31 @@
 
 ## hubValidations (development version)
 
+### Breaking Changes
+
+- [`match_tbl_to_model_task()`](https://hubverse-org.github.io/hubValidations/dev/reference/match_tbl_to_model_task.md)
+  has lost its `all_character` argument. `tbl` must now always be
+  character
+  ([\#355](https://github.com/hubverse-org/hubValidations/issues/355)).
+- [`match_tbl_to_model_task()`](https://hubverse-org.github.io/hubValidations/dev/reference/match_tbl_to_model_task.md)
+  now returns each modeling task’s rows in the order they were submitted
+  in, rather than the order the config lists their values. Pass the new
+  `order_by_config = TRUE` argument for the config’s order
+  ([\#355](https://github.com/hubverse-org/hubValidations/issues/355)).
+- [`check_tbl_value_col()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_value_col.md)
+  now expects `tbl` to be all character, like the other checks that
+  validate data against the config. Passing a table with hub schema
+  column types is no longer supported
+  ([\#355](https://github.com/hubverse-org/hubValidations/issues/355)).
+- [`match_tbl_to_model_task()`](https://hubverse-org.github.io/hubValidations/dev/reference/match_tbl_to_model_task.md)
+  and
+  [`check_tbl_value_col()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_value_col.md)
+  now error when a task ID column is missing from `tbl`. They previously
+  returned a number of rows unrelated to the submission
+  ([\#355](https://github.com/hubverse-org/hubValidations/issues/355)).
+
+### Other changes
+
 - A `compound_taskid_set` of `[]`, which declares that every task ID is
   sampled jointly, no longer errors.
   [`check_tbl_spl_compound_taskid_set()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_spl_compound_taskid_set.md)
@@ -19,6 +44,23 @@
   empty, which previously made a jointly sampled modeling task
   indistinguishable from one with no samples at all
   ([\#361](https://github.com/hubverse-org/hubValidations/issues/361)).
+- [`match_tbl_to_model_task()`](https://hubverse-org.github.io/hubValidations/dev/reference/match_tbl_to_model_task.md)
+  now returns derived task ID columns holding their values. They
+  previously came back as `NA`
+  ([\#355](https://github.com/hubverse-org/hubValidations/issues/355)).
+- The `error_tbl` attribute of
+  [`check_tbl_value_col_ascending()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_value_col_ascending.md)
+  no longer includes a column for each derived task ID. Those columns
+  only ever held `NA`
+  ([\#355](https://github.com/hubverse-org/hubValidations/issues/355)).
+- [`match_tbl_to_model_task()`](https://hubverse-org.github.io/hubValidations/dev/reference/match_tbl_to_model_task.md),
+  [`check_tbl_value_col()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_value_col.md)
+  and
+  [`check_tbl_value_col_ascending()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_value_col_ascending.md)
+  no longer build the grid of every value combination a round’s config
+  allows. They report the same results, but are much faster and need far
+  less memory, increasingly so the more combinations the config permits
+  ([\#355](https://github.com/hubverse-org/hubValidations/issues/355)).
 
 ## hubValidations 2.1.1
 

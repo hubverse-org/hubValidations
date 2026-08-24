@@ -21,6 +21,7 @@ check_tbl_value_col(
 - tbl:
 
   a tibble/data.frame of the contents of the file being validated.
+  Column types must **all be character**.
 
 - round_id:
 

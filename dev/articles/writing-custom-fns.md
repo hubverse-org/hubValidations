@@ -78,7 +78,7 @@ hub_path <- withr::local_tempdir()
 create_custom_check("cstm_check_tbl_basic",
   hub_path = hub_path
 )
-#> ✔ Directory /tmp/Rtmp1ILaz0/file233c2f508abf/src/validations/R created.
+#> ✔ Directory /tmp/Rtmp6pAx4V/file2340733f1b5a/src/validations/R created.
 #> ✔ Custom validation check template function file "cstm_check_tbl_basic.R" created.
 #> → Edit the function template to add your custom check logic.
 #> ℹ See the Writing custom check functions article for more information.
@@ -342,7 +342,7 @@ function (tbl, file_path, hub_path, t0_colname, t1_colname, timediff = lubridate
         msg_verbs = c("all match", "do not all match"), msg_attribute = cli::format_inline("expected period of {.val {timediff}}."), 
         details = details)
 }
-<bytecode: 0x55a8ebfce0b8>
+<bytecode: 0x557ffc833740>
 <environment: namespace:hubValidations>
 ```
 
@@ -506,9 +506,6 @@ function (tbl, file_path, hub_path, round_id, derived_task_ids = get_hub_derived
         return(capture_check_info(file_path, "No quantile or cdf output types to check for non-descending values.\n        Check skipped."))
     }
     config_tasks <- hubUtils::read_config(hub_path, "tasks")
-    if (!is.null(derived_task_ids)) {
-        tbl[derived_task_ids] <- NA_character_
-    }
     error_tbl <- purrr::list_rbind(purrr::map(check_output_types, 
         function(.x) {
             check_values_ascending_by_output_type(.x, tbl, config_tasks, 
@@ -526,7 +523,7 @@ function (tbl, file_path, hub_path, round_id, derived_task_ids = get_hub_derived
         msg_verbs = c("increase", "do not all increase"), msg_attribute = "when ordered by {.var output_type_id}.", 
         details = details, error_tbl = error_tbl)
 }
-<bytecode: 0x55a8ef1e01c8>
+<bytecode: 0x557ffecad6e0>
 <environment: namespace:hubValidations>
 ```
 
