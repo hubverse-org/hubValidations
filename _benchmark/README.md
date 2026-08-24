@@ -115,8 +115,8 @@ as it lands. Two things should happen to them:
   config permitting more values still means more values to test each column against, so
   G3 should still cost more than G1 — just far less than it does today.
 
-For a check that never touches the grid, `check_tbl_rows_unique` shows what the floor
-looks like: ~290 MB and under a second at all three sizes.
+For a check that never touches the grid, `check_tbl_rows_unique` shows how little this
+can cost: ~290 MB and under a second at all three sizes.
 
 Read both `elapsed_s` and `peak_rss_mb`, but trust `elapsed_s` more. Across G1 to G3
 the grid grows 6.7x and the times grow roughly in step, while the memory figures level
@@ -133,6 +133,7 @@ treat a memory change smaller than that as noise.
 | `HUBVALIDATIONS_BENCHMARK_SIZES` | `S` | comma-separated sizes to run |
 | `HUBVALIDATIONS_BENCHMARK_VARIANTS` | `acefa` | comma-separated shapes |
 | `HUBVALIDATIONS_BENCHMARK_MODE` | `all` | `peak`, `submission` or `all` |
+| `HUBVALIDATIONS_BENCHMARK_CHECKS` | all of them | comma-separated checks to run |
 | `HUBVALIDATIONS_BENCHMARK_TIMEOUT` | `1800` | seconds allowed per measurement |
 | `HUBVALIDATIONS_BENCHMARK_LABEL` | the code version | a name for the run |
 | `HUBVALIDATIONS_BENCHMARK_HUBS` | `_benchmark/hubs` | where test hubs are built |

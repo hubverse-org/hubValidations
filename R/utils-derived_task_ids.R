@@ -37,7 +37,8 @@ derived_taskids_to_na <- function(model_task, derived_task_ids) {
 validate_derived_task_ids <- function(
   derived_task_ids,
   config_tasks,
-  round_id
+  round_id,
+  call = rlang::caller_call()
 ) {
   checkmate::assert_character(derived_task_ids, null.ok = TRUE)
   if (is.null(derived_task_ids)) {
@@ -52,7 +53,7 @@ validate_derived_task_ids <- function(
         {?is/are} not valid task ID{?s}. Ignored.",
         "i" = "{.arg derived_task_ids} must be a member of: {.val {round_task_ids}}"
       ),
-      call = rlang::caller_call()
+      call = call
     )
   }
   model_tasks <- hubUtils::get_round_model_tasks(config_tasks, round_id)
@@ -69,9 +70,9 @@ validate_derived_task_ids <- function(
       c(
         "x" = "Derived task IDs cannot have required task ID values.",
         "!" = "{.val {names(has_required)[has_required]}} ha{?s/ve}
-          required task ID values. Ignored."
+          required task ID values."
       ),
-      call = rlang::caller_call()
+      call = call
     )
   }
   valid_task_ids <- intersect(

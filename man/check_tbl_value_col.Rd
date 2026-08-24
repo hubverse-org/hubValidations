@@ -13,7 +13,8 @@ check_tbl_value_col(
 )
 }
 \arguments{
-\item{tbl}{a tibble/data.frame of the contents of the file being validated.}
+\item{tbl}{a tibble/data.frame of the contents of the file being validated.
+Column types must \strong{all be character}.}
 
 \item{round_id}{character string. The round identifier.}
 

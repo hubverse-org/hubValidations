@@ -36,10 +36,6 @@ check_tbl_value_col_ascending <- function(
 
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
 
-  if (!is.null(derived_task_ids)) {
-    tbl[derived_task_ids] <- NA_character_
-  }
-
   # Check that values are non-decreasing for each output type separately to reduce
   # memory pressure
   error_tbl <- purrr::map(
@@ -90,20 +86,23 @@ check_values_ascending_by_output_type <- function(
   derived_task_ids
 ) {
   # FIX for <https://github.com/hubverse-org/hubValidations/issues/78>
-  # This function splits the table by model task (via
-  # `expand_model_out_grid(bind_model_tasks = FALSE)`) and then performs an
-  # inner join to auto-sort for this particular output type regardless if the
-  # output type is inherently sortable.
+  # `check_values_ascending()` reads rows in the order they arrive, so sort by
+  # the config's order. Alphabetical is wrong for character `cdf` thresholds:
+  # "10" sorts before "5".
   model_task_tbls <- match_tbl_to_model_task(
     tbl,
     config_tasks = config_tasks,
     round_id = round_id,
     output_types = output_type,
-    derived_task_ids = derived_task_ids
+    derived_task_ids = derived_task_ids,
+    order_by_config = TRUE
   ) |>
     purrr::compact()
 
-  purrr::map(model_task_tbls, check_values_ascending) |>
+  purrr::map(
+    model_task_tbls,
+    \(mt_tbl) check_values_ascending(mt_tbl, derived_task_ids)
+  ) |>
     purrr::list_rbind()
 }
 
@@ -115,11 +114,14 @@ check_values_ascending_by_output_type <- function(
 #'  - If the check fails, a summary table showing the model tasks that
 #'    had decreasing values for this output type
 #' @noRd
-check_values_ascending <- function(tbl) {
-  group_cols <- names(tbl)[!names(tbl) %in% hubUtils::std_colnames]
+check_values_ascending <- function(tbl, derived_task_ids = NULL) {
+  # Group by the task ID columns, leaving out the derived ones (#189).
+  group_cols <- setdiff(
+    names(tbl)[!names(tbl) %in% hubUtils::std_colnames],
+    derived_task_ids
+  )
   tbl[["value"]] <- as.numeric(tbl[["value"]])
 
-  # group by all of the target columns
   check_tbl <- dplyr::group_by(
     tbl,
     dplyr::across(dplyr::all_of(group_cols))

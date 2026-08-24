@@ -24,7 +24,7 @@ CHECKS <- list(
   list(name = "match_tbl_to_model_task", tbl = "chr"),
   list(name = "check_tbl_values", tbl = "chr"),
   list(name = "check_tbl_values_required", tbl = "chr"),
-  list(name = "check_tbl_value_col", tbl = "typed"),
+  list(name = "check_tbl_value_col", tbl = "chr"),
   list(name = "check_tbl_value_col_ascending", tbl = "chr"),
   list(name = "check_tbl_rows_unique", tbl = "chr"),
   list(name = "check_tbl_spl_mt_unique", tbl = "chr"),
@@ -142,7 +142,7 @@ check_call <- function(name, ctx) {
     },
     check_tbl_value_col = function() {
       check_tbl_value_col(
-        ctx$tbl,
+        ctx$tbl_chr,
         ctx$round_id,
         ctx$file_path,
         ctx$hub_path,
@@ -218,9 +218,10 @@ check_call <- function(name, ctx) {
 # that second read it takes the types from the hub config when the file is csv, and
 # from the file itself for any other format.
 #
-# The benchmark copies that so check_tbl_value_col, which is the check given the
-# typed version, sees the same column types here as it does in a real run. The check
-# runs either way; it is only the types it is handed that would otherwise differ.
+# Every check measured here is handed the character version, because that is what
+# validate_model_data() hands them. The typed read is kept because a hub with a
+# csv submission still pays for it in a real run, and a check added later may
+# want it.
 read_tbl_flavour <- function(flavour, file_path, hub_path) {
   switch(
     flavour,

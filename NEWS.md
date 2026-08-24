@@ -1,7 +1,19 @@
 # hubValidations (development version)
 
+## Breaking Changes
+
+* `match_tbl_to_model_task()` has lost its `all_character` argument. `tbl` must now always be character (#355).
+* `match_tbl_to_model_task()` now returns each modeling task's rows in the order they were submitted in, rather than the order the config lists their values. Pass the new `order_by_config = TRUE` argument for the config's order (#355).
+* `check_tbl_value_col()` now expects `tbl` to be all character, like the other checks that validate data against the config. Passing a table with hub schema column types is no longer supported (#355).
+* `match_tbl_to_model_task()` and `check_tbl_value_col()` now error when a task ID column is missing from `tbl`. They previously returned a number of rows unrelated to the submission (#355).
+
+## Other changes
+
 * A `compound_taskid_set` of `[]`, which declares that every task ID is sampled jointly, no longer errors. `check_tbl_spl_compound_taskid_set()` failed with `` `config_comp_tids` must be logical, numeric, or character, not an empty list `` and `submission_tmpl()` with `invalid subscript type 'list'`. The check now passes when a submission's samples are drawn jointly across every task ID and, when they are finer, reports that the hub expects no compound task IDs and response dependence across all task IDs (#361).
 * `get_tbl_compound_taskid_set()` no longer drops modeling tasks whose detected compound task ID set is empty, which previously made a jointly sampled modeling task indistinguishable from one with no samples at all (#361).
+* `match_tbl_to_model_task()` now returns derived task ID columns holding their values. They previously came back as `NA` (#355).
+* The `error_tbl` attribute of `check_tbl_value_col_ascending()` no longer includes a column for each derived task ID. Those columns only ever held `NA` (#355).
+* `match_tbl_to_model_task()`, `check_tbl_value_col()` and `check_tbl_value_col_ascending()` no longer build the grid of every value combination a round's config allows. They report the same results, but are much faster and need far less memory, increasingly so the more combinations the config permits (#355).
 
 # hubValidations 2.1.1
 

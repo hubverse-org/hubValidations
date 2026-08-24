@@ -4,6 +4,8 @@
 #' in from the file being validated conform to the configuration for each output
 #' type of the appropriate model task.
 #' @inherit check_tbl_colnames params
+#' @param tbl a tibble/data.frame of the contents of the file being validated.
+#' Column types must **all be character**.
 #' @inherit check_tbl_col_types return
 #' @inheritParams check_tbl_spl_compound_taskid_set
 #' @inheritParams expand_model_out_grid
@@ -16,13 +18,6 @@ check_tbl_value_col <- function(
   derived_task_ids = get_hub_derived_task_ids(hub_path, round_id)
 ) {
   config_tasks <- read_config(hub_path, "tasks")
-
-  tbl[, names(tbl) != "value"] <- hubData::coerce_to_character(
-    tbl[, names(tbl) != "value"]
-  )
-  if (!is.null(derived_task_ids)) {
-    tbl[, derived_task_ids] <- NA_character_
-  }
 
   details <- split(tbl, f = tbl$output_type) |>
     purrr::imap(

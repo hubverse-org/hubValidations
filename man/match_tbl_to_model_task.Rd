@@ -2,7 +2,7 @@
 % Please edit documentation in R/match_tbl_to_model_task.R
 \name{match_tbl_to_model_task}
 \alias{match_tbl_to_model_task}
-\title{Match model output \code{tbl} data to their model tasks in \code{config_tasks}.}
+\title{Match model output data to their model tasks in \code{config_tasks}.}
 \usage{
 match_tbl_to_model_task(
   tbl,
@@ -10,11 +10,14 @@ match_tbl_to_model_task(
   round_id,
   output_types = NULL,
   derived_task_ids = get_config_derived_task_ids(config_tasks, round_id),
-  all_character = TRUE
+  order_by_config = FALSE
 )
 }
 \arguments{
-\item{tbl}{a tibble/data.frame of the contents of the file being validated.}
+\item{tbl}{a tibble/data.frame of the contents of the file being validated.
+Column types must \strong{all be character}: the config's values are converted to
+character when they are extracted, and are compared against this table as it
+stands. Every task ID column the round defines must be present.}
 
 \item{config_tasks}{a list version of the content's of a hub's \code{tasks.json}
 config file, accessed through the \code{"config_tasks"} attribute of a \verb{<hub_connection>}
@@ -29,19 +32,34 @@ contains only a single round.}
 \item{output_types}{Character vector of output type names to include.
 Use to subset for grids for specific output types.}
 
-\item{derived_task_ids}{Character vector of derived task ID names (task IDs whose
-values depend on other task IDs) to ignore. Columns for such task ids will
-contain \code{NA}s. Defaults to extracting derived task IDs from \code{config_tasks}. See
-\code{\link[=get_config_derived_task_ids]{get_config_derived_task_ids()}} for more details.}
+\item{derived_task_ids}{Character vector of derived task ID names, or \code{NULL}
+for none. A derived task ID's value follows from the values of other task
+IDs. A derived task ID cannot therefore further distinguish a row beyond the
+values of the task IDs it is derived from. Derived task ID columns are
+skipped, and returned unchanged.}
 
-\item{all_character}{Logical. Whether to return all character column.}
+\item{order_by_config}{Logical. How to order each modeling task's rows.
+\code{FALSE}, the default, leaves them in the order they were submitted in. \code{TRUE}
+sorts them into the order the config lists their values in: on \code{output_type}
+first, so rows of one output type sit together, then on \code{output_type_id}, so
+they ascend within each, then on the task IDs to break ties.
+
+What is sorted on is each value's position in the config, not the value
+itself. \code{pmf} categories show why that matters: \code{"low"}, \code{"moderate"} and
+\code{"high"} have no useful alphabetical order, but the config lists them in the
+order they belong in. \code{check_tbl_value_col_ascending()} asks for this order,
+because it reads values in the order the rows arrive in.
+
+In the config a task ID's values are split into \code{required} and \code{optional}.
+Extracting them collapses the two into a single order, \code{required} values
+first, then \code{optional} ones, and that is the order sorted on.}
 }
 \value{
 A list containing a \code{tbl_df} of model output data matched to a model
 task with one element per round model task.
 }
 \description{
-Split and match model output \code{tbl} data to their corresponding model tasks in
+Split and match model output data to their corresponding model tasks in
 \code{config_tasks}. Useful for performing model task specific checks on model output.
 For v3 samples, the \code{output_type_id} column is set to \code{NA} for \code{sample} outputs.
 }
