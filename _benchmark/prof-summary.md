@@ -133,9 +133,8 @@ under a second across a grid that grew nearly sevenfold.
 
 What to expect of the other rows once #355-#357 land: they should **drop**, and the gaps
 between the G columns should **narrow**, though not all the way down to the controls. A
-config
-permitting more values still means more values to test each column against, so G3 should
-still cost more than G1, just far less than it does today.
+config permitting more values still means more values to test each column against, so G3
+should still cost more than G1, just far less than it does today.
 
 A whole `peak` run takes ~9 min at G1, ~29 min at G2 and ~68 min at G3, almost all of it
 `check_tbl_values_required`.
@@ -185,10 +184,11 @@ matter. The config is read once into a lookup per column, and the per-row cost d
 touch it again, so what grows is the lookup rather than the work. G1 to G3 multiplies
 the combinations by 6.7 while the longest single value list only goes from 365 to 730.
 
-**Both now cost almost nothing beyond the setup.** Loading the package and reading
-the submission takes ~190 MB before any check runs, so these two add only a few tens
-of MB on top of that. For comparison, `check_tbl_rows_unique`, which never touched the
-grid, reads 282 MB at G3.
+**Both checks in the table now cost almost nothing beyond the setup.** Loading the
+package and reading the submission takes ~190 MB before any check runs, so
+`match_tbl_to_model_task` and `check_tbl_value_col` add only a few tens of MB on top of
+that. For comparison, `check_tbl_rows_unique`, which never touched the grid, reads
+282 MB at G3.
 
 **More model tasks are no longer more expensive.** At size M, assigning 460,000 rows
 took 0.54 s with one model task and 1.07 s with seven; it now takes 0.33 s and 0.71 s.
