@@ -521,3 +521,26 @@ test_that("Missing required modeling task detected (#203)", {
     )
   )
 })
+
+test_that("a missing required value is reported when no column holds optional values", {
+  # `opt_cols` is all FALSE only when every column carries required values and
+  # none is missing from `req`. A derived task ID is blanked to NA and never
+  # enters `req`, so it counts as optional for every row, and a hub declaring
+  # one cannot reach this path at all. Every other fixture in this file has
+  # either a derived task ID or an optional column, so nothing else covers it.
+  req <- tibble::tibble(
+    location = c("US", "US", "01", "01"),
+    output_type = "quantile",
+    output_type_id = c("0.5", "0.9", "0.5", "0.9")
+  )
+
+  expect_equal(
+    check_modeling_task_values_required(
+      tbl = req[-1L, ],
+      req = req,
+      full = req,
+      derived_task_ids = NULL
+    ),
+    req[1L, ]
+  )
+})

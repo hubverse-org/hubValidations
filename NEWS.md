@@ -9,6 +9,7 @@
 
 ## Bug fixes
 
+* Fixed a bug in `check_tbl_values_required()` which allowed a submission that was missing a specific required value combination to pass validation. It affected modeling tasks where every column carries only required values, in hubs that declare no derived task IDs.
 * Fixed a bug in `check_tbl_values()` which reported `NA` as an invalid value in a task ID column that a modeling task does not use. Rows holding `NA` there are valid, but the value was reported whenever anything else in the file failed (#356).
 
 ## Other changes

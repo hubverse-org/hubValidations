@@ -226,8 +226,12 @@ get_opt_col_list <- function(x, mask, full, req) {
 # Identify missing required values for optional value combinations.
 # Output full missing rows compiled from optional values and missing required values.
 missing_req_rows <- function(opt_cols, x, mask, req, full) {
+  # When the rows hold no optional values there is nothing to narrow the
+  # expectation with, so every row of `req` is expected and what is missing is
+  # whatever `x` does not hold. The path below cannot express that: it narrows
+  # by joining on the optional columns, and here there are none.
   if (all(opt_cols == FALSE)) {
-    return(req[!get_group_indices(req) %in% get_group_indices(x), ])
+    return(dplyr::anti_join(req, x[, names(req)], by = names(req)))
   }
   opt_colnms <- names(x)[opt_cols]
 
