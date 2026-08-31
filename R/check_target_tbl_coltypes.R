@@ -73,14 +73,7 @@ check_target_tbl_coltypes <- function(
     )
   )[colnames(target_tbl)]
 
-  tbl_types <- purrr::map_chr(
-    target_tbl,
-    ~ if (inherits(.x, "numeric")) {
-      typeof(.x)
-    } else {
-      paste(class(.x), collapse = "/")
-    }
-  )
+  tbl_types <- tbl_col_types(target_tbl)
   compare_types <- schema == tbl_types
 
   check <- all(compare_types)
