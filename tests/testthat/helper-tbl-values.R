@@ -163,8 +163,9 @@ summarise_invalid_values_via_grid <- function(
 # and numeric output type IDs, task IDs a modeling task does not use, samples,
 # and modeling tasks that only `output_type_id` tells apart.
 #
-# `derived_task_ids` is what to pass the check, for a hub whose config does not
-# declare any but which has a task ID derived from the others all the same.
+# A fixture sets `derived_task_ids` to pass them to the check explicitly,
+# covering hubs whose config declares none. The rest leave the check to read
+# them from the config.
 values_fixtures <- function() {
   fixtures <- list(
     list(
@@ -253,10 +254,12 @@ call_with_fixture <- function(check, tbl, fixture) {
 # combinations no single modeling task allows.
 #
 # A derived task ID gets no `invalid_` variant, because the check is told to
-# ignore what those columns hold. Neither does `output_type_id` on a sample
-# row: a sample's `output_type_id` is an identifier the submitter chose, so
-# every value is valid there. That variant alters the first row of another
-# output type instead, and a submission of nothing but samples does not get one.
+# ignore what those columns hold.
+#
+# `invalid_output_type_id` alters the first row that is not a sample. A sample's
+# `output_type_id` is an identifier the submitter chose, so no value is invalid
+# there. A submission of nothing but samples has no row to alter and so gets no
+# `invalid_output_type_id` variant at all.
 values_variants <- function(fixture) {
   tbl <- read_model_out_file(
     file_path = fixture[["file_path"]],
