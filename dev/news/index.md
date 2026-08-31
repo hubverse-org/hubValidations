@@ -25,6 +25,15 @@
   returned a number of rows unrelated to the submission
   ([\#355](https://github.com/hubverse-org/hubValidations/issues/355)).
 
+### Bug fixes
+
+- Fixed a bug in
+  [`check_tbl_values()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_values.md)
+  which reported `NA` as an invalid value in a task ID column that a
+  modeling task does not use. Rows holding `NA` there are valid, but the
+  value was reported whenever anything else in the file failed
+  ([\#356](https://github.com/hubverse-org/hubValidations/issues/356)).
+
 ### Other changes
 
 - A `compound_taskid_set` of `[]`, which declares that every task ID is
@@ -54,7 +63,18 @@
   no longer includes a column for each derived task ID. Those columns
   only ever held `NA`
   ([\#355](https://github.com/hubverse-org/hubValidations/issues/355)).
+- [`check_tbl_values()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_values.md)
+  now reports an `output_type` value the round does not define as an
+  invalid value in the `output_type` column. The check previously
+  errored
+  ([\#356](https://github.com/hubverse-org/hubValidations/issues/356)).
+- [`check_tbl_values()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_values.md)
+  now reports rows holding invalid combinations of valid values in the
+  order they were submitted in, and `error_tbl` returns them in that
+  order. They were previously grouped by output type
+  ([\#356](https://github.com/hubverse-org/hubValidations/issues/356)).
 - [`match_tbl_to_model_task()`](https://hubverse-org.github.io/hubValidations/dev/reference/match_tbl_to_model_task.md),
+  [`check_tbl_values()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_values.md),
   [`check_tbl_value_col()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_value_col.md),
   [`check_tbl_value_col_ascending()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_value_col_ascending.md),
   [`get_tbl_compound_taskid_set()`](https://hubverse-org.github.io/hubValidations/dev/reference/get_tbl_compound_taskid_set.md)
@@ -68,6 +88,7 @@
   allows. They report the same results, but are much faster and need far
   less memory, increasingly so the more combinations the config permits
   ([\#355](https://github.com/hubverse-org/hubValidations/issues/355),
+  [\#356](https://github.com/hubverse-org/hubValidations/issues/356),
   [\#368](https://github.com/hubverse-org/hubValidations/issues/368)).
 
 ## hubValidations 2.1.1
