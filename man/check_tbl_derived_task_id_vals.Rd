@@ -5,7 +5,7 @@
 \title{Check derived task ID columns contain valid values}
 \usage{
 check_tbl_derived_task_id_vals(
-  tbl,
+  tbl_chr,
   round_id,
   file_path,
   hub_path,
@@ -13,7 +13,8 @@ check_tbl_derived_task_id_vals(
 )
 }
 \arguments{
-\item{tbl}{a tibble/data.frame of the contents of the file being validated. Column types must \strong{all be character}.}
+\item{tbl_chr}{a tibble/data.frame of the contents of the file being
+validated. Column types must \strong{all be character}.}
 
 \item{round_id}{character string. The round identifier.}
 
@@ -32,8 +33,8 @@ files within the \code{hub-config} directory.}
 
 \item{derived_task_ids}{Character vector of derived task ID names (task IDs whose
 values depend on other task IDs) to ignore. Columns for such task ids will
-contain \code{NA}s. Defaults to extracting derived task IDs from \code{config_tasks}. See
-\code{\link[=get_config_derived_task_ids]{get_config_derived_task_ids()}} for more details.}
+contain \code{NA}s. Defaults to extracting derived task IDs from hub \code{task.json}. See
+\code{\link[=get_hub_derived_task_ids]{get_hub_derived_task_ids()}} for more details.}
 }
 \value{
 Depending on whether validation has succeeded, one of:

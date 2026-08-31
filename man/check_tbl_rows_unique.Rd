@@ -4,10 +4,11 @@
 \alias{check_tbl_rows_unique}
 \title{Check model data rows are all unique}
 \usage{
-check_tbl_rows_unique(tbl, file_path, hub_path)
+check_tbl_rows_unique(tbl_chr, file_path, hub_path)
 }
 \arguments{
-\item{tbl}{a tibble/data.frame of the contents of the file being validated. Column types must \strong{all be character}.}
+\item{tbl_chr}{a tibble/data.frame of the contents of the file being
+validated. Column types must \strong{all be character}.}
 
 \item{file_path}{character string. Path to the file being validated relative to
 the hub's model-output directory.}
@@ -34,5 +35,5 @@ Returned object also inherits from subclass \verb{<hub_check>}.
 \description{
 Checks that combinations of task ID, output type and output type ID value
 combinations are unique, by checking that there are no duplicate rows across
-all \code{tbl} columns excluding the \code{value} column.
+all \code{tbl_chr} columns excluding the \code{value} column.
 }

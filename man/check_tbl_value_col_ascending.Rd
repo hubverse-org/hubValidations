@@ -6,7 +6,7 @@
 are non-descending}
 \usage{
 check_tbl_value_col_ascending(
-  tbl,
+  tbl_chr,
   file_path,
   hub_path,
   round_id,
@@ -14,7 +14,8 @@ check_tbl_value_col_ascending(
 )
 }
 \arguments{
-\item{tbl}{a tibble/data.frame of the contents of the file being validated. Column types must \strong{all be character}.}
+\item{tbl_chr}{a tibble/data.frame of the contents of the file being
+validated. Column types must \strong{all be character}.}
 
 \item{file_path}{character string. Path to the file being validated relative to
 the hub's model-output directory.}
@@ -49,7 +50,7 @@ Returned object also inherits from subclass \verb{<hub_check>}.
 Checks that values in the \code{value} column for \code{quantile} and \code{cdf} output type
 data for each unique task ID/output type combination
 are non-descending when arranged by increasing \code{output_type_id} order.
-Check only performed if \code{tbl} contains \code{quantile} or \code{cdf} output type data.
-If not, the check is skipped and a \verb{<message/check_info>} condition class
-object is returned.
+Check only performed if \code{tbl_chr} contains \code{quantile} or \code{cdf} output type
+data. If not, the check is skipped and a \verb{<message/check_info>} condition
+class object is returned.
 }

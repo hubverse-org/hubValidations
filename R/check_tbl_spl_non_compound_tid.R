@@ -1,6 +1,5 @@
 #' Check model output data tbl samples contain single unique combination of
 #' non-compound task ID values across all samples
-#' @param tbl a tibble/data.frame of the contents of the file being validated. Column types must **all be character**.
 #' @inherit check_tbl_colnames params
 #' @inheritParams check_tbl_spl_compound_tid
 #' @inherit check_tbl_colnames return
@@ -17,13 +16,14 @@
 #' for more details.
 #' @export
 check_tbl_spl_non_compound_tid <- function(
-  tbl,
+  tbl_chr,
   round_id,
   file_path,
   hub_path,
   compound_taskid_set = NULL,
   derived_task_ids = get_hub_derived_task_ids(hub_path, round_id)
 ) {
+  assert_tbl_chr(tbl_chr)
   if (!is.null(compound_taskid_set) && isTRUE(is.na(compound_taskid_set))) {
     cli::cli_abort("Valid {.var compound_taskid_set} must be provided.")
   }
@@ -36,13 +36,14 @@ check_tbl_spl_non_compound_tid <- function(
   }
 
   if (
-    isFALSE(has_spls_tbl(tbl)) || isFALSE(hubUtils::is_v3_config(config_tasks))
+    isFALSE(has_spls_tbl(tbl_chr)) ||
+      isFALSE(hubUtils::is_v3_config(config_tasks))
   ) {
     return(skip_v3_spl_check(file_path))
   }
 
   hash_tbl <- spl_hash_tbl(
-    tbl,
+    tbl_chr,
     round_id,
     config_tasks,
     compound_taskid_set,
@@ -79,7 +80,7 @@ check_tbl_spl_non_compound_tid <- function(
     errors <- non_comptid_mismatch_errors(
       mt_ids = unique(n_tbl$mt_id),
       hash_tbl,
-      tbl,
+      tbl_chr,
       config_tasks,
       round_id,
       compound_taskid_set
@@ -109,12 +110,12 @@ check_tbl_spl_non_compound_tid <- function(
 non_comptid_mismatch_errors <- function(
   mt_ids,
   hash_tbl,
-  tbl,
+  tbl_chr,
   config_tasks,
   round_id,
   compound_taskid_set
 ) {
-  tbl <- tbl[tbl$output_type == "sample", names(tbl) != "value"]
+  tbl_chr <- tbl_chr[tbl_chr$output_type == "sample", names(tbl_chr) != "value"]
 
   round_taskids <- hubUtils::get_round_task_id_names(
     config_tasks,
@@ -123,7 +124,7 @@ non_comptid_mismatch_errors <- function(
 
   purrr::map(
     mt_ids,
-    function(.x, hash_tbl, tbl, compound_taskid_set) {
+    function(.x, hash_tbl, tbl_chr, compound_taskid_set) {
       mt_hashes <- hash_tbl$hash_non_comp_tid[hash_tbl$mt_id == .x] |>
         table() |>
         sort(decreasing = TRUE) |>
@@ -139,14 +140,14 @@ non_comptid_mismatch_errors <- function(
       list(
         mt_id = .x,
         output_type_ids = get_hash_out_type_ids(hash_tbl, mt_hashes[-1L]),
-        frequent = tbl[
-          tbl$output_type_id == spl_id,
+        frequent = tbl_chr[
+          tbl_chr$output_type_id == spl_id,
           setdiff(round_taskids, mt_compound_taskid_set)
         ]
       )
     },
     hash_tbl = hash_tbl,
-    tbl = tbl,
+    tbl_chr = tbl_chr,
     compound_taskid_set = compound_taskid_set
   )
 }

@@ -1,7 +1,7 @@
 # check_tbl_values reports an output type the round does not define
 
     Code
-      check_tbl_values(tbl = tbl, round_id = round_id, file_path = file_path,
+      check_tbl_values(tbl_chr = tbl_chr, round_id = round_id, file_path = file_path,
         hub_path = hub_path)
     Output
       <error/check_error>
@@ -11,7 +11,7 @@
 # check_tbl_values works
 
     Code
-      check_tbl_values(tbl = tbl, round_id = round_id, file_path = file_path,
+      check_tbl_values(tbl_chr = tbl_chr, round_id = round_id, file_path = file_path,
         hub_path = hub_path)
     Output
       <message/check_success>
@@ -21,7 +21,7 @@
 ---
 
     Code
-      check_tbl_values(tbl = tbl, round_id = round_id, file_path = file_path,
+      check_tbl_values(tbl_chr = tbl_chr, round_id = round_id, file_path = file_path,
         hub_path = hub_path)
     Output
       <error/check_error>
@@ -31,7 +31,7 @@
 # check_tbl_values works with v3 spec samples
 
     Code
-      check_tbl_values(tbl = tbl, round_id = round_id, file_path = file_path,
+      check_tbl_values(tbl_chr = tbl_chr, round_id = round_id, file_path = file_path,
         hub_path = hub_path)
     Output
       <message/check_success>
@@ -41,7 +41,7 @@
 ---
 
     Code
-      check_tbl_values(tbl = tbl, round_id = round_id, file_path = file_path,
+      check_tbl_values(tbl_chr = tbl_chr, round_id = round_id, file_path = file_path,
         hub_path = hub_path)
     Output
       <error/check_error>
@@ -51,7 +51,7 @@
 # Ignoring derived_task_ids in check_tbl_values works
 
     Code
-      check_tbl_values(tbl, round_id, file_path, hub_path, derived_task_ids = "target_end_date")
+      check_tbl_values(tbl_chr, round_id, file_path, hub_path, derived_task_ids = "target_end_date")
     Output
       <message/check_success>
       Message:
@@ -60,7 +60,7 @@
 ---
 
     Code
-      check_tbl_values(tbl, round_id, file_path, hub_path, derived_task_ids = "target_end_date")
+      check_tbl_values(tbl_chr, round_id, file_path, hub_path, derived_task_ids = "target_end_date")
     Output
       <error/check_error>
       Error:
@@ -69,7 +69,7 @@
 ---
 
     Code
-      check_tbl_values(tbl, round_id, file_path, hub_path, derived_task_ids = "target_end_date")$
+      check_tbl_values(tbl_chr, round_id, file_path, hub_path, derived_task_ids = "target_end_date")$
         error_tbl
     Output
       # A tibble: 1 x 7

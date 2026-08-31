@@ -4,26 +4,24 @@
 #' in from the file being validated conform to the configuration for each output
 #' type of the appropriate model task.
 #' @inherit check_tbl_colnames params
-#' @param tbl a tibble/data.frame of the contents of the file being validated.
-#' Column types must **all be character**.
 #' @inherit check_tbl_col_types return
-#' @inheritParams check_tbl_spl_compound_taskid_set
-#' @inheritParams expand_model_out_grid
+#' @inheritParams check_tbl_values
 #' @export
 check_tbl_value_col <- function(
-  tbl,
+  tbl_chr,
   round_id,
   file_path,
   hub_path,
   derived_task_ids = get_hub_derived_task_ids(hub_path, round_id)
 ) {
+  assert_tbl_chr(tbl_chr)
   config_tasks <- read_config(hub_path, "tasks")
 
-  details <- split(tbl, f = tbl$output_type) |>
+  details <- split(tbl_chr, f = tbl_chr$output_type) |>
     purrr::imap(
       \(.x, .y) {
         check_value_col_by_output_type(
-          tbl = .x,
+          tbl_chr = .x,
           output_type = .y,
           config_tasks = config_tasks,
           round_id = round_id,
@@ -46,7 +44,7 @@ check_tbl_value_col <- function(
 }
 
 check_value_col_by_output_type <- function(
-  tbl,
+  tbl_chr,
   output_type,
   config_tasks,
   round_id,
@@ -54,7 +52,7 @@ check_value_col_by_output_type <- function(
 ) {
   purrr::map2(
     .x = match_tbl_to_model_task(
-      tbl,
+      tbl_chr,
       config_tasks,
       round_id,
       output_type,
@@ -63,7 +61,7 @@ check_value_col_by_output_type <- function(
     .y = get_round_output_types(config_tasks, round_id),
     \(.x, .y) {
       compare_values_to_config(
-        tbl = .x,
+        tbl_chr = .x,
         output_type_config = .y,
         output_type = output_type
       )
@@ -72,19 +70,19 @@ check_value_col_by_output_type <- function(
     unlist(use.names = TRUE)
 }
 
-compare_values_to_config <- function(tbl, output_type, output_type_config) {
-  if (any(is.null(tbl), is.null(output_type_config))) {
+compare_values_to_config <- function(tbl_chr, output_type, output_type_config) {
+  if (any(is.null(tbl_chr), is.null(output_type_config))) {
     return(NULL)
   }
   details <- NULL
-  values <- tbl$value
+  values <- tbl_chr$value
   config <- output_type_config[[output_type]][["value"]]
 
   # Check and coerce value data type
   values_type <- config$type
   values <- coerce_values(values, values_type)
   if (any(is.na(values))) {
-    invalid_vals <- tbl$value[is.na(values)] # nolint: object_usage_linter
+    invalid_vals <- tbl_chr$value[is.na(values)] # nolint: object_usage_linter
     details <- c(
       details,
       cli::format_inline(
@@ -100,7 +98,7 @@ compare_values_to_config <- function(tbl, output_type, output_type_config) {
   }
 
   invalid_int <- detect_invalid_int(
-    original_values = tbl$value,
+    original_values = tbl_chr$value,
     coerced_values = values
   )
   if (invalid_int$check) {
