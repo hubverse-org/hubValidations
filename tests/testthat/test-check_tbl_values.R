@@ -31,16 +31,16 @@ test_that("check_tbl_values reports an output type the round does not define", {
   hub_path <- system.file("testhubs/simple", package = "hubValidations")
   file_path <- "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
   round_id <- "2022-10-08"
-  tbl <- read_model_out_file(
+  tbl_chr <- read_model_out_file(
     file_path = file_path,
     hub_path = hub_path,
     coerce_types = "chr"
   )
-  tbl[1, "output_type"] <- "sample"
+  tbl_chr[1, "output_type"] <- "sample"
 
   expect_snapshot(
     check_tbl_values(
-      tbl = tbl,
+      tbl_chr = tbl_chr,
       round_id = round_id,
       file_path = file_path,
       hub_path = hub_path
@@ -52,24 +52,24 @@ test_that("check_tbl_values works", {
   hub_path <- system.file("testhubs/simple", package = "hubValidations")
   file_path <- "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
   round_id <- "2022-10-08"
-  tbl <- read_model_out_file(
+  tbl_chr <- read_model_out_file(
     file_path = file_path,
     hub_path = hub_path,
     coerce_types = "chr"
   )
   expect_snapshot(
     check_tbl_values(
-      tbl = tbl,
+      tbl_chr = tbl_chr,
       round_id = round_id,
       file_path = file_path,
       hub_path = hub_path
     )
   )
 
-  tbl[1, "horizon"] <- "11"
+  tbl_chr[1, "horizon"] <- "11"
   expect_snapshot(
     check_tbl_values(
-      tbl = tbl,
+      tbl_chr = tbl_chr,
       round_id = round_id,
       file_path = file_path,
       hub_path = hub_path
@@ -90,7 +90,7 @@ test_that("check_tbl_values consistent across numeric & character output type id
   # Also contains trailing zeros.
   file_path <- "UMass-gbq/2023-10-28-UMass-gbq.csv"
   round_id <- "2023-10-28"
-  tbl <- read_model_out_file(
+  tbl_chr <- read_model_out_file(
     file_path = file_path,
     hub_path = hub_path,
     coerce_types = "chr"
@@ -98,7 +98,7 @@ test_that("check_tbl_values consistent across numeric & character output type id
 
   expect_s3_class(
     check_tbl_values(
-      tbl = tbl,
+      tbl_chr = tbl_chr,
       round_id = round_id,
       file_path = file_path,
       hub_path = hub_path
@@ -112,14 +112,14 @@ test_that("check_tbl_values consistent across numeric & character output type id
   # to 0.1 by `as.character` as well as by `arrow::cast`.
   file_path <- "UMass-gbq/2023-11-04-UMass-gbq.csv"
   round_id <- "2023-11-04"
-  tbl <- read_model_out_file(
+  tbl_chr <- read_model_out_file(
     file_path = file_path,
     hub_path = hub_path,
     coerce_types = "chr"
   )
   expect_s3_class(
     check_tbl_values(
-      tbl = tbl,
+      tbl_chr = tbl_chr,
       round_id = round_id,
       file_path = file_path,
       hub_path = hub_path
@@ -133,14 +133,14 @@ test_that("check_tbl_values consistent across numeric & character output type id
   # Contains Number that is coerced
   # to 0.1 by `as.character` but not by `arrow::cast`
   round_id <- "2023-11-11"
-  tbl <- read_model_out_file(
+  tbl_chr <- read_model_out_file(
     file_path = file_path,
     hub_path = hub_path,
     coerce_types = "chr"
   )
   expect_s3_class(
     check_tbl_values(
-      tbl = tbl,
+      tbl_chr = tbl_chr,
       round_id = round_id,
       file_path = file_path,
       hub_path = hub_path
@@ -156,14 +156,14 @@ test_that("check_tbl_values consistent across numeric & character output type id
   # to 0.1 by `as.character` as well as by `arrow::cast`.
   file_path <- "UMass-gbq/2023-11-04-UMass-gbq.csv"
   round_id <- "2023-11-04"
-  tbl <- read_model_out_file(
+  tbl_chr <- read_model_out_file(
     file_path = file_path,
     hub_path = hub_path,
     coerce_types = "chr"
   )
   expect_s3_class(
     check_tbl_values(
-      tbl = tbl,
+      tbl_chr = tbl_chr,
       round_id = round_id,
       file_path = file_path,
       hub_path = hub_path
@@ -178,7 +178,7 @@ test_that("check_tbl_values consistent across numeric & character output type id
   # Also contains trailing zeros
   file_path <- "UMass-gbq/2023-10-28-UMass-gbq.csv"
   round_id <- "2023-10-28"
-  tbl <- read_model_out_file(
+  tbl_chr <- read_model_out_file(
     file_path = file_path,
     hub_path = hub_path,
     coerce_types = "chr"
@@ -186,7 +186,7 @@ test_that("check_tbl_values consistent across numeric & character output type id
 
   expect_s3_class(
     check_tbl_values(
-      tbl = tbl,
+      tbl_chr = tbl_chr,
       round_id = round_id,
       file_path = file_path,
       hub_path = hub_path
@@ -200,14 +200,14 @@ test_that("check_tbl_values consistent across numeric & character output type id
   # to 0.1 by `as.character` but not by `arrow::cast`
   file_path <- "UMass-gbq/2023-11-11-UMass-gbq.csv"
   round_id <- "2023-11-11"
-  tbl <- read_model_out_file(
+  tbl_chr <- read_model_out_file(
     file_path = file_path,
     hub_path = hub_path,
     coerce_types = "chr"
   )
   expect_s3_class(
     check_tbl_values(
-      tbl = tbl,
+      tbl_chr = tbl_chr,
       round_id = round_id,
       file_path = file_path,
       hub_path = hub_path
@@ -221,27 +221,30 @@ test_that("check_tbl_values works with v3 spec samples", {
   hub_path <- system.file("testhubs/samples", package = "hubValidations")
   file_path <- "flu-base/2022-10-22-flu-base.csv"
   round_id <- "2022-10-22"
-  tbl <- read_model_out_file(
+  tbl_chr <- read_model_out_file(
     file_path = file_path,
     hub_path = hub_path,
     coerce_types = "chr"
   )
   expect_snapshot(
     check_tbl_values(
-      tbl = tbl,
+      tbl_chr = tbl_chr,
       round_id = round_id,
       file_path = file_path,
       hub_path = hub_path
     )
   )
 
-  tbl[utils::head(which(tbl$output_type == "sample"), 2), "horizon"] <- c(
+  tbl_chr[
+    utils::head(which(tbl_chr$output_type == "sample"), 2),
+    "horizon"
+  ] <- c(
     "11",
     "12"
   )
   expect_snapshot(
     check_tbl_values(
-      tbl = tbl,
+      tbl_chr = tbl_chr,
       round_id = round_id,
       file_path = file_path,
       hub_path = hub_path
@@ -254,17 +257,17 @@ test_that("Ignoring derived_task_ids in check_tbl_values works", {
   hub_path <- system.file("testhubs/samples", package = "hubValidations")
   file_path <- "flu-base/2022-10-22-flu-base.csv"
   round_id <- "2022-10-22"
-  tbl <- tbl_orig <- read_model_out_file(
+  tbl_chr <- tbl_orig <- read_model_out_file(
     file_path = file_path,
     hub_path = hub_path,
     coerce_types = "chr"
   )
   # Introduce invalid value to derived task id that should be ignored when using
   # `derived_task_ids`.
-  tbl[1, "target_end_date"] <- "random_date"
+  tbl_chr[1, "target_end_date"] <- "random_date"
   expect_snapshot(
     check_tbl_values(
-      tbl,
+      tbl_chr,
       round_id,
       file_path,
       hub_path,
@@ -274,7 +277,7 @@ test_that("Ignoring derived_task_ids in check_tbl_values works", {
   # Check that ignoring derived task ids returns same result as not ignoring.
   expect_equal(
     check_tbl_values(
-      tbl,
+      tbl_chr,
       round_id,
       file_path,
       hub_path,
@@ -290,12 +293,12 @@ test_that("Ignoring derived_task_ids in check_tbl_values works", {
   )
 
   # Trigger invalid value error
-  tbl[1, "horizon"] <- tbl_orig[1, "horizon"] <- "9"
+  tbl_chr[1, "horizon"] <- tbl_orig[1, "horizon"] <- "9"
   # Trigger invalid value combination error
-  tbl[2, "output_type"] <- tbl_orig[2, "output_type"] <- "pmf"
+  tbl_chr[2, "output_type"] <- tbl_orig[2, "output_type"] <- "pmf"
   expect_snapshot(
     check_tbl_values(
-      tbl,
+      tbl_chr,
       round_id,
       file_path,
       hub_path,
@@ -304,7 +307,7 @@ test_that("Ignoring derived_task_ids in check_tbl_values works", {
   )
   expect_snapshot(
     check_tbl_values(
-      tbl,
+      tbl_chr,
       round_id,
       file_path,
       hub_path,
@@ -314,7 +317,7 @@ test_that("Ignoring derived_task_ids in check_tbl_values works", {
 
   expect_equal(
     check_tbl_values(
-      tbl,
+      tbl_chr,
       round_id,
       file_path,
       hub_path,

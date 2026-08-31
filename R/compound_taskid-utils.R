@@ -1,7 +1,5 @@
 #' Detect the compound_taskid_set for a tbl for each modeling task in a given round.
 #'
-#' @param tbl a tibble/data.frame of the contents of the file being validated.
-#' Column types must **all be character**.
 #' @param config_tasks a list representantion of the `tasks.json` config file.
 #' @param round_id Character string. The round ID.
 #' @param compact Logical. If TRUE, the output will be compacted to remove NULL elements.
@@ -9,6 +7,7 @@
 #' If FALSE and an error is detected, the detected compound task ID set will be
 #' returned with error attributes attached.
 #' @inheritParams expand_model_out_grid
+#' @inheritParams check_tbl_values
 #'
 #' @return A list of vectors of compound task IDs detected in the tbl, one for each
 #' modeling task in the round. If `compact` is TRUE, modeling tasks returning NULL
@@ -18,19 +17,19 @@
 #' hub_path <- system.file("testhubs/samples", package = "hubValidations")
 #' file_path <- "flu-base/2022-10-22-flu-base.csv"
 #' round_id <- "2022-10-22"
-#' tbl <- read_model_out_file(
+#' tbl_chr <- read_model_out_file(
 #'   file_path = file_path,
 #'   hub_path = hub_path,
 #'   coerce_types = "chr"
 #' )
 #' config_tasks <- read_config(hub_path, "tasks")
-#' get_tbl_compound_taskid_set(tbl, config_tasks, round_id)
-#' get_tbl_compound_taskid_set(tbl, config_tasks, round_id,
+#' get_tbl_compound_taskid_set(tbl_chr, config_tasks, round_id)
+#' get_tbl_compound_taskid_set(tbl_chr, config_tasks, round_id,
 #'   compact = FALSE
 #' )
 #'
 get_tbl_compound_taskid_set <- function(
-  tbl,
+  tbl_chr,
   config_tasks,
   round_id,
   compact = TRUE,
@@ -40,16 +39,17 @@ get_tbl_compound_taskid_set <- function(
     round_id
   )
 ) {
-  if (!inherits(tbl, "tbl_df")) {
-    tbl <- dplyr::as_tibble(tbl)
+  assert_tbl_chr(tbl_chr)
+  if (!inherits(tbl_chr, "tbl_df")) {
+    tbl_chr <- dplyr::as_tibble(tbl_chr)
   }
   # Detection counts how many distinct values each task ID takes. A derived task
   # ID's values follow from the others, so blank them to keep them out of the
   # count.
   if (!is.null(derived_task_ids)) {
-    tbl[, derived_task_ids] <- NA_character_
+    tbl_chr[, derived_task_ids] <- NA_character_
   }
-  tbl <- tbl[tbl$output_type == "sample", names(tbl) != "value"]
+  tbl_chr <- tbl_chr[tbl_chr$output_type == "sample", names(tbl_chr) != "value"]
 
   mt_compound_taskids <- get_round_compound_task_ids(
     config_tasks,
@@ -65,7 +65,7 @@ get_tbl_compound_taskid_set <- function(
   # it against the set the config declares.
   tbl_compound_taskids <- purrr::map2(
     assign_spl_tbl_rows(
-      tbl,
+      tbl_chr,
       config_tasks = config_tasks,
       round_id = round_id,
       derived_task_ids = derived_task_ids
@@ -73,7 +73,7 @@ get_tbl_compound_taskid_set <- function(
     mt_compound_taskids,
     function(row_idx, compound_taskids) {
       get_mt_compound_taskid_set(
-        tbl[row_idx, ],
+        tbl_chr[row_idx, ],
         compound_taskids,
         config_tasks,
         error = error,
@@ -98,17 +98,17 @@ get_tbl_compound_taskid_set <- function(
 
 # Detect the compound_taskid_set for a tbl for a single modeling task.
 get_mt_compound_taskid_set <- function(
-  tbl,
+  tbl_chr,
   config_comp_tids,
   config_tasks,
   error = TRUE,
   call = NULL
 ) {
-  if (any(is.null(tbl), is.null(config_comp_tids))) {
+  if (any(is.null(tbl_chr), is.null(config_comp_tids))) {
     return(NULL)
   }
 
-  if (nrow(tbl) == 0L) {
+  if (nrow(tbl_chr) == 0L) {
     return(NULL)
   }
   if (is.null(call)) {
@@ -119,7 +119,7 @@ get_mt_compound_taskid_set <- function(
 
   # Count number of unique values per sample (output_type_id) for each task ID column and
   # return TRUE if 1 which would indicate a task ID can be considered a compound_taskid
-  spl_uniq <- tbl[, c(task_ids, out_tid)] |>
+  spl_uniq <- tbl_chr[, c(task_ids, out_tid)] |>
     dplyr::group_by(.data[[out_tid]]) |>
     dplyr::summarise(
       dplyr::across(
@@ -130,7 +130,7 @@ get_mt_compound_taskid_set <- function(
       )
     )
 
-  # Count number of unique values for each task ID column across tbl and
+  # Count number of unique values for each task ID column across tbl_chr and
   # return TRUE if greater than 1.
   # The aim of this check is to distinguish between false positives, resulting
   # from task ids that can only take a single value or where only 1 value
@@ -140,7 +140,7 @@ get_mt_compound_taskid_set <- function(
   # compound_taskid and therefore FALSE will be returned. Note that this check
   # only applies to task ids that are not members of the compound_taskids set.
   # compound_taskids set vars will always be set to TRUE in this check.
-  tbl_non_uniq <- tbl[, task_ids] |>
+  tbl_non_uniq <- tbl_chr[, task_ids] |>
     purrr::map(~ dplyr::n_distinct(.x) > 1L) |>
     tibble::as_tibble()
   tbl_non_uniq[, config_comp_tids] <- TRUE

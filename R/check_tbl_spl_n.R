@@ -1,6 +1,5 @@
 #' Check model output data tbl samples contain the appropriate number of samples
 #' for a given compound idx.
-#' @param tbl a tibble/data.frame of the contents of the file being validated. Column types must **all be character**.
 #' @inherit check_tbl_colnames params
 #' @inherit check_tbl_col_types return
 #' @inheritParams check_tbl_spl_compound_tid
@@ -16,13 +15,14 @@
 #' for more details.
 #' @export
 check_tbl_spl_n <- function(
-  tbl,
+  tbl_chr,
   round_id,
   file_path,
   hub_path,
   compound_taskid_set = NULL,
   derived_task_ids = get_hub_derived_task_ids(hub_path, round_id)
 ) {
+  assert_tbl_chr(tbl_chr)
   if (!is.null(compound_taskid_set) && isTRUE(is.na(compound_taskid_set))) {
     cli::cli_abort("Valid {.var compound_taskid_set} must be provided.")
   }
@@ -35,13 +35,14 @@ check_tbl_spl_n <- function(
   }
 
   if (
-    isFALSE(has_spls_tbl(tbl)) || isFALSE(hubUtils::is_v3_config(config_tasks))
+    isFALSE(has_spls_tbl(tbl_chr)) ||
+      isFALSE(hubUtils::is_v3_config(config_tasks))
   ) {
     return(skip_v3_spl_check(file_path))
   }
 
   hash_tbl <- spl_hash_tbl(
-    tbl,
+    tbl_chr,
     round_id,
     config_tasks,
     compound_taskid_set,
@@ -96,7 +97,7 @@ check_tbl_spl_n <- function(
     errors <- n_mismatch_errors(
       n_tbl,
       hash_tbl,
-      tbl
+      tbl_chr
     )
     details <- n_mismatch_details(n_tbl)
   }
@@ -133,15 +134,15 @@ get_round_spl_n_ranges <- function(config_tasks, round_id) {
     purrr::list_rbind()
 }
 
-n_mismatch_errors <- function(n_tbl, hash_tbl, tbl) {
-  tbl <- tbl[tbl$output_type == "sample", names(tbl) != "value"]
+n_mismatch_errors <- function(n_tbl, hash_tbl, tbl_chr) {
+  tbl_chr <- tbl_chr[tbl_chr$output_type == "sample", names(tbl_chr) != "value"]
   purrr::map(
     purrr::set_names(n_tbl$compound_idx),
     ~ {
       spl_d <- hash_tbl$output_type_id[hash_tbl$compound_idx == .x][1L]
-      compound_idx_tbl <- tbl[
-        tbl$output_type_id == spl_d,
-        setdiff(names(tbl), c("output_type_id", "value", "output_type"))
+      compound_idx_tbl <- tbl_chr[
+        tbl_chr$output_type_id == spl_d,
+        setdiff(names(tbl_chr), c("output_type_id", "value", "output_type"))
       ]
       row <- n_tbl[n_tbl$compound_idx == .x, ] |> as.vector()
       list(

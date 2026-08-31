@@ -6,11 +6,11 @@
 #' chooses them, so this function does not check them against the config.
 #' @inheritParams expand_model_out_grid
 #' @inheritParams check_tbl_colnames
-#' @param tbl a tibble/data.frame of the contents of the file being validated.
-#' Column types must **all be character**: the config's values are converted to
-#' character when they are extracted, and are compared against this table
-#' without further conversion. Every task ID column the round defines must be
-#' present.
+#' @param tbl_chr a tibble/data.frame of the contents of the file being
+#' validated. Column types must **all be character**: the config's values are
+#' converted to character when they are extracted, and are compared against
+#' this table without further conversion. Every task ID column the round
+#' defines must be present.
 #' @param derived_task_ids Character vector of derived task ID names, or `NULL`
 #' for none. A derived task ID's value follows from the values of other task
 #' IDs. A derived task ID cannot therefore further distinguish a row beyond the
@@ -42,18 +42,18 @@
 #'
 #' @examples
 #' hub_path <- system.file("testhubs/samples", package = "hubValidations")
-#' tbl <- read_model_out_file(
+#' tbl_chr <- read_model_out_file(
 #'   file_path = "flu-base/2022-10-22-flu-base.csv",
 #'   hub_path, coerce_types = "chr"
 #' )
 #' config_tasks <- read_config(hub_path, "tasks")
-#' match_tbl_to_model_task(tbl, config_tasks, round_id = "2022-10-22")
-#' match_tbl_to_model_task(tbl, config_tasks,
+#' match_tbl_to_model_task(tbl_chr, config_tasks, round_id = "2022-10-22")
+#' match_tbl_to_model_task(tbl_chr, config_tasks,
 #'   round_id = "2022-10-22",
 #'   output_types = "sample"
 #' )
 match_tbl_to_model_task <- function(
-  tbl,
+  tbl_chr,
   config_tasks,
   round_id,
   output_types = NULL,
@@ -63,8 +63,9 @@ match_tbl_to_model_task <- function(
   ),
   order_by_config = FALSE
 ) {
+  assert_tbl_chr(tbl_chr)
   assign_tbl_to_model_task(
-    tbl,
+    tbl_chr,
     config_tasks = config_tasks,
     round_id = round_id,
     output_types = output_types,
@@ -74,8 +75,8 @@ match_tbl_to_model_task <- function(
   )
 }
 
-join_tbl_to_model_task <- function(full, tbl, subset_to_tbl_cols = TRUE) {
-  cols <- names(tbl)
+join_tbl_to_model_task <- function(full, tbl_chr, subset_to_tbl_cols = TRUE) {
+  cols <- names(tbl_chr)
   join_cols <- cols[cols != "value"]
   purrr::map(
     full,
@@ -84,9 +85,10 @@ join_tbl_to_model_task <- function(full, tbl, subset_to_tbl_cols = TRUE) {
       if (is_zero_tbl(.x)) {
         return(NULL)
       }
-      # Otherwise join tbl to model task full expanded grids, splitting the
-      # submitted tbl across modeling task. Keep only column present in the tbl
-      match_tbl <- dplyr::inner_join(.x, tbl, by = join_cols)
+      # Otherwise join tbl_chr to model task full expanded grids, splitting the
+      # submitted tbl_chr across modeling task. Keep only column present in the
+      # tbl_chr
+      match_tbl <- dplyr::inner_join(.x, tbl_chr, by = join_cols)
       if (subset_to_tbl_cols) {
         match_tbl <- match_tbl[, join_cols]
       }

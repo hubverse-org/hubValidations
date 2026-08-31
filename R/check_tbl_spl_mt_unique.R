@@ -1,10 +1,8 @@
 #' Check that individual sample output_type_ids do not span multiple model tasks
 #'
-#' @param tbl a tibble/data.frame of the contents of the file being validated.
-#' Column types must **all be character**.
 #' @inherit check_tbl_colnames params
 #' @inherit check_tbl_colnames return
-#' @inheritParams expand_model_out_grid
+#' @inheritParams check_tbl_values
 #' @param derived_task_ids Character vector of derived task ID names (task IDs whose
 #' values depend on other task IDs) to ignore during validation. Defaults to
 #' extracting derived task IDs from hub `task.json`. See
@@ -22,22 +20,24 @@
 #'   in multiple model tasks.
 #' @export
 check_tbl_spl_mt_unique <- function(
-  tbl,
+  tbl_chr,
   round_id,
   file_path,
   hub_path,
   derived_task_ids = get_hub_derived_task_ids(hub_path, round_id)
 ) {
+  assert_tbl_chr(tbl_chr)
   config_tasks <- read_config(hub_path, "tasks")
 
   if (
-    isFALSE(has_spls_tbl(tbl)) || isFALSE(hubUtils::is_v3_config(config_tasks))
+    isFALSE(has_spls_tbl(tbl_chr)) ||
+      isFALSE(hubUtils::is_v3_config(config_tasks))
   ) {
     return(skip_v3_spl_check(file_path))
   }
 
   out_tid <- hubUtils::std_colnames["output_type_id"]
-  spl_tbl <- tbl[tbl$output_type == "sample", names(tbl) != "value"]
+  spl_tbl <- tbl_chr[tbl_chr$output_type == "sample", names(tbl_chr) != "value"]
 
   mt_row_idx <- assign_spl_tbl_rows(
     spl_tbl,

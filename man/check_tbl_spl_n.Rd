@@ -6,7 +6,7 @@
 for a given compound idx.}
 \usage{
 check_tbl_spl_n(
-  tbl,
+  tbl_chr,
   round_id,
   file_path,
   hub_path,
@@ -15,7 +15,8 @@ check_tbl_spl_n(
 )
 }
 \arguments{
-\item{tbl}{a tibble/data.frame of the contents of the file being validated. Column types must \strong{all be character}.}
+\item{tbl_chr}{a tibble/data.frame of the contents of the file being
+validated. Column types must \strong{all be character}.}
 
 \item{round_id}{character string. The round identifier.}
 

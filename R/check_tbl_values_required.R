@@ -12,29 +12,30 @@
 #' task ID values will result in **false validation errors when validating
 #' required values**.
 check_tbl_values_required <- function(
-  tbl,
+  tbl_chr,
   round_id,
   file_path,
   hub_path,
   derived_task_ids = get_hub_derived_task_ids(hub_path)
 ) {
-  tbl[["value"]] <- NULL
+  assert_tbl_chr(tbl_chr)
+  tbl_chr[["value"]] <- NULL
   config_tasks <- read_config(hub_path, "tasks")
 
   if (hubUtils::is_v3_config(config_tasks)) {
-    tbl[tbl$output_type == "sample", "output_type_id"] <- NA
+    tbl_chr[tbl_chr$output_type == "sample", "output_type_id"] <- NA
   }
   if (!is.null(derived_task_ids)) {
-    tbl[, derived_task_ids] <- NA_character_
+    tbl_chr[, derived_task_ids] <- NA_character_
   }
   # The v4 path never builds the grid of every valid value combination. The
   # pre-v4 path still does, and is much slower and heavier for it.
   if (hubUtils::version_gte("v4.0.0", config = config_tasks)) {
     missing_df <- purrr::map(
-      get_submission_required_output_types(tbl, config_tasks, round_id),
+      get_submission_required_output_types(tbl_chr, config_tasks, round_id),
       \(.x) {
         missing_required_by_output_type(
-          tbl = tbl,
+          tbl_chr = tbl_chr,
           config_tasks = config_tasks,
           round_id = round_id,
           output_type = .x,
@@ -45,7 +46,7 @@ check_tbl_values_required <- function(
       purrr::list_rbind()
   } else {
     missing_df <- missing_required_via_grid(
-      tbl = tbl,
+      tbl_chr = tbl_chr,
       config_tasks = config_tasks,
       round_id = round_id,
       derived_task_ids = derived_task_ids
@@ -84,9 +85,9 @@ check_tbl_values_required <- function(
 #' `missing_required_via_grid()` serves earlier ones.
 #'
 #' @inheritParams expand_model_out_grid
-#' @param tbl a tibble/data.frame of the contents of the file being validated,
-#' with the `value` column dropped and any derived task ID columns blanked to
-#' `NA`. Column types must **all be character**.
+#' @param tbl_chr a tibble/data.frame of the contents of the file being
+#' validated, with the `value` column dropped and any derived task ID columns
+#' blanked to `NA`. Column types must **all be character**.
 #' @param output_type Single output type name. Callers map over the output types
 #' the submission has to account for.
 #' @param derived_task_ids Character vector of derived task ID names, or `NULL`
@@ -95,10 +96,11 @@ check_tbl_values_required <- function(
 #' `check_tbl_derived_task_id_vals()`.
 #'
 #' @returns A tibble with one row per required value combination the submission
-#' does not contain, in the columns of `tbl`. Zero rows when none are missing.
+#' does not contain, in the columns of `tbl_chr`. Zero rows when none are
+#' missing.
 #' @noRd
 missing_required_by_output_type <- function(
-  tbl,
+  tbl_chr,
   config_tasks,
   round_id,
   output_type,
@@ -118,7 +120,7 @@ missing_required_by_output_type <- function(
   )
 
   mt_tbl_list <- assign_tbl_to_model_task(
-    tbl,
+    tbl_chr,
     config_tasks = config_tasks,
     round_id = round_id,
     output_types = output_type,
@@ -140,12 +142,13 @@ missing_required_by_output_type <- function(
 #' it, or what was submitted does not cover everything it requires.
 #'
 #' @details
-#' An empty `tbl` is only a failure when the modeling task requires something of
-#' every column. If `req` covers every column of `tbl`, each column has at least
-#' one required value, so the whole of `req` is missing. If `req` does not, some
-#' column(s) hold only optional values, the modeling task requires no submission
-#' at all, and nothing is reported as missing. Note that derived task IDs are
-#' left out of that comparison, because they never enter `req`.
+#' An empty `tbl_chr` is only a failure when the modeling task requires
+#' something of every column. If `req` covers every column of `tbl_chr`, each
+#' column has at least one required value, so the whole of `req` is missing. If
+#' `req` does not, some column(s) hold only optional values, the modeling task
+#' requires no submission at all, and nothing is reported as missing. Note that
+#' derived task IDs are left out of that comparison, because they never enter
+#' `req`.
 #'
 #' Otherwise the rows are grouped by the combination of optional values they
 #' hold, the required ones having been blanked so only the optional ones form
@@ -168,8 +171,8 @@ missing_required_by_output_type <- function(
 #' submission holds is dropped from the result at the end, leaving only `01`/`1`
 #' reported as missing.
 #'
-#' @param tbl The rows of the submission assigned to one modeling task, in the
-#' columns of the submission without `value`. Column types must **all be
+#' @param tbl_chr The rows of the submission assigned to one modeling task, in
+#' the columns of the submission without `value`. Column types must **all be
 #' character**.
 #' @param req The values the modeling task requires, expanded. A column with no
 #' required values is absent from it.
@@ -178,31 +181,31 @@ missing_required_by_output_type <- function(
 #' @param full The grid of every combination the modeling task allows, supplied
 #' on the pre-v4 path only. See the pre-v4 section at the foot of this file.
 #'
-#' @returns A tibble of the required rows `tbl` does not hold, in the columns of
-#' `tbl`. Zero rows when none are missing.
+#' @returns A tibble of the required rows `tbl_chr` does not hold, in the
+#' columns of `tbl_chr`. Zero rows when none are missing.
 #' @noRd
 check_modeling_task_values_required <- function(
-  tbl,
+  tbl_chr,
   req,
   derived_task_ids,
   full = NULL
 ) {
-  if (nrow(tbl) == 0L) {
-    tbl_names <- setdiff(names(tbl), derived_task_ids)
+  if (nrow(tbl_chr) == 0L) {
+    tbl_names <- setdiff(names(tbl_chr), derived_task_ids)
     if (setequal(tbl_names, names(req))) {
       return(req[, tbl_names])
     } else {
-      return(tbl)
+      return(tbl_chr)
     }
   }
-  req_mask <- are_required_vals(tbl, req)
+  req_mask <- are_required_vals(tbl_chr, req)
 
   # Check each combination of optional values against the values it has to
   # appear with.
-  new_missing_df <- get_group_rows(tbl, mask = req_mask) |>
+  new_missing_df <- get_group_rows(tbl_chr, mask = req_mask) |>
     purrr::map(
       ~ missing_required(
-        x = tbl[.x, ],
+        x = tbl_chr[.x, ],
         mask = req_mask[.x, , drop = FALSE],
         req,
         full
@@ -223,7 +226,7 @@ check_modeling_task_values_required <- function(
     return(missing_df)
   }
   # Drop whatever the submission does hold.
-  dplyr::anti_join(missing_df, tbl, by = names(tbl))
+  dplyr::anti_join(missing_df, tbl_chr, by = names(tbl_chr))
 }
 
 #' Check a combination of optional values appears with every required one
@@ -382,12 +385,12 @@ map_missing_req_rows <- function(opt_cols_list, x, req, full) {
     purrr::list_rbind()
 }
 
-are_required_vals <- function(tbl, req) {
-  req[, setdiff(names(tbl), names(req))] <- ""
-  req <- req[, names(tbl)]
+are_required_vals <- function(tbl_chr, req) {
+  req[, setdiff(names(tbl_chr), names(req))] <- ""
+  req <- req[, names(tbl_chr)]
 
   req_vals <- purrr::map2(
-    tbl,
+    tbl_chr,
     purrr::map(req, unique),
     ~ .x %in% .y
   )
@@ -456,10 +459,10 @@ get_opt_cols <- function(mask, check_opt_comb = NULL, all_opt_cols = NULL) {
 # only, so the list is two elements long on the v4 path and three on the pre-v4
 # one. `purrr::pmap()` matches them to `check_modeling_task_values_required()`
 # by name.
-combine_mt_inputs <- function(tbl, req, full = NULL) {
+combine_mt_inputs <- function(mt_tbl_list, req, full = NULL) {
   keep_mt <- purrr::map_lgl(req, ~ nrow(.x) > 0L)
   c(
-    list(tbl = tbl[keep_mt], req = req[keep_mt]),
+    list(tbl_chr = mt_tbl_list[keep_mt], req = req[keep_mt]),
     if (!is.null(full)) list(full = full[keep_mt])
   )
 }
@@ -483,7 +486,7 @@ combine_mt_inputs <- function(tbl, req, full = NULL) {
 # ---------------------------------------------------------------------------
 
 missing_required_via_grid <- function(
-  tbl,
+  tbl_chr,
   config_tasks,
   round_id,
   derived_task_ids
@@ -510,10 +513,14 @@ missing_required_via_grid <- function(
     derived_task_ids = derived_task_ids
   )
 
-  tbl <- join_tbl_to_model_task(full, tbl, subset_to_tbl_cols = TRUE)
+  mt_tbl_list <- join_tbl_to_model_task(
+    full,
+    tbl_chr,
+    subset_to_tbl_cols = TRUE
+  )
 
   purrr::pmap(
-    combine_mt_inputs(tbl, req, full),
+    combine_mt_inputs(mt_tbl_list, req, full),
     check_modeling_task_values_required,
     derived_task_ids = derived_task_ids
   ) |>

@@ -5,7 +5,7 @@
 \title{Check output type values of model output data against config}
 \usage{
 check_tbl_value_col(
-  tbl,
+  tbl_chr,
   round_id,
   file_path,
   hub_path,
@@ -13,8 +13,8 @@ check_tbl_value_col(
 )
 }
 \arguments{
-\item{tbl}{a tibble/data.frame of the contents of the file being validated.
-Column types must \strong{all be character}.}
+\item{tbl_chr}{a tibble/data.frame of the contents of the file being
+validated. Column types must \strong{all be character}.}
 
 \item{round_id}{character string. The round identifier.}
 

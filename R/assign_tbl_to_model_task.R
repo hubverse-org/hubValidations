@@ -100,9 +100,7 @@ check_match_cols <- function(tbl_chr, config_tasks, round_id, call) {
   missing_cols <- setdiff(match_cols, names(tbl_chr))
   if (length(missing_cols) > 0L) {
     cli::cli_abort(
-      # `tbl`, not `tbl_chr`, because the error is attributed to the exported
-      # function the user called, where the argument is named `tbl`.
-      "Column{?s} {.val {missing_cols}} must be present in {.arg tbl}.",
+      "Column{?s} {.val {missing_cols}} must be present in {.arg tbl_chr}.",
       call = call
     )
   }
