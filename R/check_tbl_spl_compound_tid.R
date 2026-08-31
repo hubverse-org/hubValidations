@@ -1,11 +1,9 @@
 #' Check model output data tbl samples contain single unique values for each
 #' compound task ID within individual samples
 #'
-#' @param tbl a tibble/data.frame of the contents of the file being validated. Column types must **all be character**.
 #' @inherit check_tbl_colnames params
 #' @inherit check_tbl_colnames return
-#' @inheritParams check_tbl_spl_compound_taskid_set
-#' @inheritParams expand_model_out_grid
+#' @inheritParams check_tbl_values
 #' @param compound_taskid_set a list of `compound_taskid_set`s (characters vector of compound task IDs),
 #' one for each modeling task. Used to override the compound task ID set in the config file,
 #' for example, when validating coarser samples.
@@ -19,13 +17,14 @@
 #' for more details.
 #' @export
 check_tbl_spl_compound_tid <- function(
-  tbl,
+  tbl_chr,
   round_id,
   file_path,
   hub_path,
   compound_taskid_set = NULL,
   derived_task_ids = get_hub_derived_task_ids(hub_path, round_id)
 ) {
+  assert_tbl_chr(tbl_chr)
   if (!is.null(compound_taskid_set) && isTRUE(is.na(compound_taskid_set))) {
     cli::cli_abort("Valid {.var compound_taskid_set} must be provided.")
   }
@@ -38,13 +37,14 @@ check_tbl_spl_compound_tid <- function(
   }
 
   if (
-    isFALSE(has_spls_tbl(tbl)) || isFALSE(hubUtils::is_v3_config(config_tasks))
+    isFALSE(has_spls_tbl(tbl_chr)) ||
+      isFALSE(hubUtils::is_v3_config(config_tasks))
   ) {
     return(skip_v3_spl_check(file_path))
   }
 
   hash_tbl <- spl_hash_tbl(
-    tbl,
+    tbl_chr,
     round_id,
     config_tasks,
     compound_taskid_set,
@@ -60,7 +60,7 @@ check_tbl_spl_compound_tid <- function(
   } else {
     errors <- comptid_mismatch(
       n_tbl,
-      tbl,
+      tbl_chr,
       config_tasks,
       round_id,
       compound_taskid_set
@@ -91,18 +91,21 @@ check_tbl_spl_compound_tid <- function(
 
 comptid_mismatch <- function(
   n_tbl,
-  tbl,
+  tbl_chr,
   config_tasks,
   round_id,
   compound_taskid_set
 ) {
-  tbl <- tbl[tbl$output_type == "sample", ]
+  tbl_chr <- tbl_chr[tbl_chr$output_type == "sample", ]
   purrr::map(
     seq_along(n_tbl$output_type_id),
     ~ {
       x <- n_tbl[.x, ]
       compound_taskids <- compound_taskid_set[[x$mt_id]]
-      spl <- tbl[tbl$output_type_id == x$output_type_id, compound_taskids] |>
+      spl <- tbl_chr[
+        tbl_chr$output_type_id == x$output_type_id,
+        compound_taskids
+      ] |>
         unique()
 
       values <- spl[, purrr::map_lgl(spl, ~ length(unique(.x)) > 1L)] |>

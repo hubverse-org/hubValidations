@@ -5,7 +5,7 @@
 \title{Match model output data to their model tasks in \code{config_tasks}.}
 \usage{
 match_tbl_to_model_task(
-  tbl,
+  tbl_chr,
   config_tasks,
   round_id,
   output_types = NULL,
@@ -14,11 +14,11 @@ match_tbl_to_model_task(
 )
 }
 \arguments{
-\item{tbl}{a tibble/data.frame of the contents of the file being validated.
-Column types must \strong{all be character}: the config's values are converted to
-character when they are extracted, and are compared against this table
-without further conversion. Every task ID column the round defines must be
-present.}
+\item{tbl_chr}{a tibble/data.frame of the contents of the file being
+validated. Column types must \strong{all be character}: the config's values are
+converted to character when they are extracted, and are compared against
+this table without further conversion. Every task ID column the round
+defines must be present.}
 
 \item{config_tasks}{a list version of the content's of a hub's \code{tasks.json}
 config file, accessed through the \code{"config_tasks"} attribute of a \verb{<hub_connection>}
@@ -72,13 +72,13 @@ chooses them, so this function does not check them against the config.
 }
 \examples{
 hub_path <- system.file("testhubs/samples", package = "hubValidations")
-tbl <- read_model_out_file(
+tbl_chr <- read_model_out_file(
   file_path = "flu-base/2022-10-22-flu-base.csv",
   hub_path, coerce_types = "chr"
 )
 config_tasks <- read_config(hub_path, "tasks")
-match_tbl_to_model_task(tbl, config_tasks, round_id = "2022-10-22")
-match_tbl_to_model_task(tbl, config_tasks,
+match_tbl_to_model_task(tbl_chr, config_tasks, round_id = "2022-10-22")
+match_tbl_to_model_task(tbl_chr, config_tasks,
   round_id = "2022-10-22",
   output_types = "sample"
 )

@@ -5,9 +5,8 @@
 #' Given the dependence of derived task IDs on the values of other values,
 #' it ignores the combinations of derived task ID values with those of other task IDs
 #' and focuses only on identifying values that do not match the accepted values.
-#' @param tbl a tibble/data.frame of the contents of the file being validated. Column types must **all be character**.
 #' @inherit check_tbl_colnames params
-#' @inheritParams expand_model_out_grid
+#' @inheritParams check_tbl_values
 #' @return
 #' Depending on whether validation has succeeded, one of:
 #' - `<message/check_success>` condition class object.
@@ -19,7 +18,7 @@
 #' Returned object also inherits from subclass `<hub_check>`.
 #' @export
 check_tbl_derived_task_id_vals <- function(
-  tbl,
+  tbl_chr,
   round_id,
   file_path,
   hub_path,
@@ -28,6 +27,7 @@ check_tbl_derived_task_id_vals <- function(
     round_id
   )
 ) {
+  assert_tbl_chr(tbl_chr)
   if (is.null(derived_task_ids)) {
     return(
       capture_check_info(
@@ -45,7 +45,7 @@ check_tbl_derived_task_id_vals <- function(
   )[derived_task_ids]
 
   setdiff_vals <- purrr::map2(
-    tbl[derived_task_ids],
+    tbl_chr[derived_task_ids],
     derived_task_id_vals,
     setdiff
   )

@@ -2,6 +2,8 @@
 
 ## Breaking Changes
 
+* The `tbl` argument of every function that requires an all character table has been renamed to `tbl_chr`: `check_tbl_values()`, `check_tbl_values_required()`, `check_tbl_value_col()`, `check_tbl_value_col_ascending()`, `check_tbl_rows_unique()`, `check_tbl_derived_task_id_vals()`, `check_tbl_spl_mt_unique()`, `check_tbl_spl_compound_taskid_set()`, `check_tbl_spl_compound_tid()`, `check_tbl_spl_non_compound_tid()`, `check_tbl_spl_n()`, `match_tbl_to_model_task()` and `get_tbl_compound_taskid_set()`. Calls that pass the table by name need updating, positional calls do not (#366).
+* Those functions now error when a column of `tbl_chr` is not character, naming the offending columns and their types. A table with hub schema column types is no longer accepted (#366).
 * `match_tbl_to_model_task()` has lost its `all_character` argument. `tbl` must now always be character (#355).
 * `match_tbl_to_model_task()` now returns each modeling task's rows in the order they were submitted in, rather than the order the config lists their values. Pass the new `order_by_config = TRUE` argument for the config's order (#355).
 * `check_tbl_value_col()` now expects `tbl` to be all character, like the other checks that validate data against the config. Passing a table with hub schema column types is no longer supported (#355).

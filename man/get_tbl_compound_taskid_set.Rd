@@ -5,7 +5,7 @@
 \title{Detect the compound_taskid_set for a tbl for each modeling task in a given round.}
 \usage{
 get_tbl_compound_taskid_set(
-  tbl,
+  tbl_chr,
   config_tasks,
   round_id,
   compact = TRUE,
@@ -14,8 +14,8 @@ get_tbl_compound_taskid_set(
 )
 }
 \arguments{
-\item{tbl}{a tibble/data.frame of the contents of the file being validated.
-Column types must \strong{all be character}.}
+\item{tbl_chr}{a tibble/data.frame of the contents of the file being
+validated. Column types must \strong{all be character}.}
 
 \item{config_tasks}{a list representantion of the \code{tasks.json} config file.}
 
@@ -44,14 +44,14 @@ Detect the compound_taskid_set for a tbl for each modeling task in a given round
 hub_path <- system.file("testhubs/samples", package = "hubValidations")
 file_path <- "flu-base/2022-10-22-flu-base.csv"
 round_id <- "2022-10-22"
-tbl <- read_model_out_file(
+tbl_chr <- read_model_out_file(
   file_path = file_path,
   hub_path = hub_path,
   coerce_types = "chr"
 )
 config_tasks <- read_config(hub_path, "tasks")
-get_tbl_compound_taskid_set(tbl, config_tasks, round_id)
-get_tbl_compound_taskid_set(tbl, config_tasks, round_id,
+get_tbl_compound_taskid_set(tbl_chr, config_tasks, round_id)
+get_tbl_compound_taskid_set(tbl_chr, config_tasks, round_id,
   compact = FALSE
 )
 

@@ -7,7 +7,7 @@
 # invalid row back to the row it came from. The rows are put back in submitted
 # order here, because that is the order the new code reports them in.
 check_tbl_values_via_grid <- function(
-  tbl,
+  tbl_chr,
   round_id,
   file_path,
   hub_path,
@@ -15,9 +15,9 @@ check_tbl_values_via_grid <- function(
 ) {
   config_tasks <- read_config(hub_path, "tasks")
 
-  valid_tbl <- tbl |>
+  valid_tbl <- tbl_chr |>
     tibble::rowid_to_column() |>
-    split(f = tbl$output_type) |>
+    split(f = tbl_chr$output_type) |>
     purrr::imap(
       ~ check_values_by_output_type_via_grid(
         tbl = .x,
@@ -46,9 +46,9 @@ check_tbl_values_via_grid <- function(
     if (length(error_summary$invalid_combs_idx) == 0L) {
       error_tbl <- NULL
     } else {
-      error_tbl <- tbl[
+      error_tbl <- tbl_chr[
         error_summary$invalid_combs_idx,
-        names(tbl) != "value"
+        names(tbl_chr) != "value"
       ]
     }
   }
@@ -236,9 +236,9 @@ values_fixtures <- function() {
 }
 
 # Call a check on a fixture.
-call_with_fixture <- function(check, tbl, fixture) {
+call_with_fixture <- function(check, tbl_chr, fixture) {
   check(
-    tbl = tbl,
+    tbl_chr = tbl_chr,
     round_id = fixture[["round_id"]],
     file_path = fixture[["file_path"]],
     hub_path = fixture[["hub_path"]],
