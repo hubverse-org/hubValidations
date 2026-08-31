@@ -14,40 +14,31 @@ check_tbl_values <- function(
 ) {
   config_tasks <- read_config(hub_path, "tasks")
 
-  valid_tbl <- tbl |>
-    tibble::rowid_to_column() |>
-    split(f = tbl$output_type) |>
-    purrr::imap(
-      ~ check_values_by_output_type(
-        tbl = .x,
-        output_type = .y,
-        config_tasks = config_tasks,
-        round_id = round_id,
-        derived_task_ids = derived_task_ids
-      )
-    ) |>
-    purrr::list_rbind()
-
-  check <- !any(is.na(valid_tbl$valid))
+  invalid_row_idx <- which_invalid_rows(
+    tbl,
+    config_tasks = config_tasks,
+    round_id = round_id,
+    derived_task_ids = derived_task_ids
+  )
+  check <- length(invalid_row_idx) == 0L
 
   if (check) {
     details <- NULL
     error_tbl <- NULL
   } else {
+    invalid_tbl <- tbl[invalid_row_idx, names(tbl) != "value"]
     error_summary <- summarise_invalid_values(
-      valid_tbl,
+      invalid_tbl,
+      invalid_row_idx,
       config_tasks,
       round_id,
       derived_task_ids
     )
     details <- error_summary$msg
-    if (length(error_summary$invalid_combs_idx) == 0L) {
+    if (length(error_summary$comb_rows) == 0L) {
       error_tbl <- NULL
     } else {
-      error_tbl <- tbl[
-        error_summary$invalid_combs_idx,
-        names(tbl) != "value"
-      ]
+      error_tbl <- invalid_tbl[error_summary$comb_rows, ]
     }
   }
 
@@ -66,68 +57,96 @@ check_tbl_values <- function(
   )
 }
 
-check_values_by_output_type <- function(
-  tbl,
-  output_type,
-  config_tasks,
-  round_id,
-  derived_task_ids = NULL
-) {
-  if (!is.null(derived_task_ids)) {
-    tbl[, derived_task_ids] <- NA_character_
-  }
-
-  # Coerce accepted vals to character for easier comparison of
-  # values. Tried to use arrow tbls for comparisons as more efficient when
-  # working with larger files but currently arrow does not match NAs as dplyr
-  # does, returning false positives for mean & median rows which contain NA in
-  # output type ID column.
-  accepted_vals <- expand_model_out_grid(
+#' Find the rows of `tbl` that no modeling task allows
+#'
+#' A row holds a valid combination when a single modeling task allows every one
+#' of its values. `which_mt_rows()` answers that for one modeling task at a
+#' time, so the combinations themselves are never built.
+#'
+#' @param tbl a tibble/data.frame of the contents of the file being validated.
+#' Column types must **all be character**.
+#' @inheritParams expand_model_out_grid
+#'
+#' @returns An integer vector of row indexes into `tbl`, ascending.
+#' @noRd
+which_invalid_rows <- function(tbl, config_tasks, round_id, derived_task_ids) {
+  call <- rlang::caller_env()
+  value_sets <- get_config_mt_value_sets(
     config_tasks = config_tasks,
     round_id = round_id,
-    all_character = TRUE,
-    output_types = output_type,
-    derived_task_ids = derived_task_ids
+    derived_task_ids = derived_task_ids,
+    call = call
   )
+  check_match_cols(tbl, config_tasks, round_id, call = call)
 
-  # This approach uses dplyr to identify tbl rows that don't have a complete match
-  # in accepted_vals.
-  accepted_vals$valid <- TRUE
-  if (hubUtils::is_v3_config(config_tasks) && output_type == "sample") {
-    tbl[tbl$output_type == "sample", "output_type_id"] <- NA
+  valid <- logical(nrow(tbl))
+  for (mt in value_sets) {
+    valid[which_mt_rows(tbl, mt, derived_task_ids)] <- TRUE
+    # A row that has matched stays matched, so once every row has, the
+    # remaining modeling tasks cannot change the result.
+    if (all(valid)) {
+      break
+    }
   }
-
-  dplyr::left_join(
-    tbl,
-    accepted_vals,
-    by = setdiff(names(tbl), c("value", "rowid"))
-  )
+  which(!valid)
 }
 
-# Summarise results of check for invalid values by creating appropriate
-# messages and extracting the rowids of invalid value combinations with respect
-# to the row order in the original tbl.
-# Problems are summarised in two parts:
-# First we report any invalid values in the tbl that do not match any values in the
-# config. Second we report any rows that contain valid values but in invalid
-# combinations.
+#' Build the message details and `error_tbl` rows for a failed check
+#'
+#' A rejected row is reported in one of two ways. A value the config does not
+#' list for the column it appears in is reported as an invalid value, naming
+#' the column and the value. A row whose values are each valid, but which no
+#' single modeling task allows together, is reported as an invalid combination,
+#' naming the row and returning it in `error_tbl`.
+#'
+#' Note that a row can qualify for both. It is then reported only as an invalid
+#' value, which is the more specific of the two explanations.
+#'
+#' @param invalid_tbl The rows of the submission that no modeling task allows,
+#' without the `value` column. Column types must **all be character**.
+#' @param invalid_row_idx Integer vector of the rows of the submission that
+#' `invalid_tbl` holds, so that a row can be reported by its number in the file.
+#' @inheritParams expand_model_out_grid
+#'
+#' @returns A list of:
+#' - `msg`: the details appended to the check's message.
+#' - `comb_rows`: integer vector of the rows of `invalid_tbl` to return in
+#'   `error_tbl`, which are the invalid combinations. An invalid value needs no
+#'   table, because the message already names the column and the value.
+#' @noRd
 summarise_invalid_values <- function(
-  valid_tbl,
+  invalid_tbl,
+  invalid_row_idx,
   config_tasks,
   round_id,
   derived_task_ids
 ) {
-  # Chack for invalid values
-  cols <- setdiff(names(valid_tbl), c("value", "valid", "rowid"))
-  uniq_tbl <- purrr::map(valid_tbl[cols], unique)
+  # Two kinds of value are left out, for different reasons. A sample's
+  # `output_type_id` is an identifier the submitter chose, so the config
+  # enumerates no values to compare it against. The config does list values for
+  # a derived task ID, but this check ignores derived task IDs, and
+  # `get_round_config_values()` is asked to return `NA` for them, so comparing
+  # them would report every derived value as invalid.
+  #
+  # Note that the sample entries are blanked rather than their column dropped,
+  # because `output_type_id` also carries the enumerated IDs of every other
+  # output type.
+  vals <- as.list(invalid_tbl[setdiff(names(invalid_tbl), derived_task_ids)])
+  output_type <- hubUtils::std_colnames[["output_type"]]
+  output_type_id <- hubUtils::std_colnames[["output_type_id"]]
+  is_sample <- invalid_tbl[[output_type]] == "sample"
+  if (any(is_sample)) {
+    vals[[output_type_id]][is_sample] <- NA_character_
+  }
+
   uniq_config <- get_round_config_values(
     config_tasks,
     round_id,
     derived_task_ids
-  )[cols]
+  )[names(vals)]
 
   invalid_vals <- purrr::map2(
-    uniq_tbl,
+    purrr::map(vals, unique),
     uniq_config,
     ~ .x[!.x %in% .y]
   ) |>
@@ -146,33 +165,25 @@ summarise_invalid_values <- function(
     invalid_vals_msg <- NULL
   }
 
-  # Get rowids of invalid value combinations
-  invalid_val_idx <- purrr::imap(
-    invalid_vals,
-    ~ which(valid_tbl[[.y]] %in% .x)
-  ) |>
+  # A row already reported for an invalid value is not reported a second time
+  # as an invalid combination. What is left is every other rejected row.
+  reported <- purrr::imap(invalid_vals, ~ which(vals[[.y]] %in% .x)) |>
     unlist(use.names = FALSE) |>
     unique()
-  invalid_row_idx <- which(is.na(valid_tbl$valid))
-  # Ignore rows which have already been reported for invalid values
-  invalid_combs_idx <- setdiff(invalid_row_idx, invalid_val_idx)
-  if (length(invalid_combs_idx) == 0L) {
+  comb_rows <- setdiff(seq_len(nrow(invalid_tbl)), reported)
+  if (length(comb_rows) == 0L) {
     invalid_combs_msg <- NULL
   } else {
-    # invalid_combs_idx indicates invalid value combinations in the table joined
-    # to expanded valid value grid. This changes the row order of the table, so
-    # to return rowids with respect to the original tbl row order we use
-    # invalid_combs_idx to extract values from the rowid column of the valid_tbl.
-    invalid_combs_idx <- valid_tbl$rowid[invalid_combs_idx]
+    comb_row_idx <- invalid_row_idx[comb_rows] # nolint: object_usage_linter
     invalid_combs_msg <- cli::format_inline(
-      "Additionally {cli::qty(length(invalid_combs_idx))} row{?s}
-      {.val {invalid_combs_idx}} {cli::qty(length(invalid_combs_idx))}
+      "Additionally {cli::qty(length(comb_row_idx))} row{?s}
+      {.val {comb_row_idx}} {cli::qty(length(comb_row_idx))}
       {?contains/contain} invalid combinations of valid values.
       See {.var error_tbl} for details."
     )
   }
   list(
     msg = paste(invalid_vals_msg, invalid_combs_msg, sep = "\n"),
-    invalid_combs_idx = invalid_combs_idx
+    comb_rows = comb_rows
   )
 }

@@ -19,15 +19,15 @@ allowing 77.7 million valid value combinations. Peak memory and elapsed time.
 | `check_tbl_spl_non_compound_tid` | 14,237 MB / 78 s | **294 MB / 0.38 s** | #368 |
 | `check_tbl_spl_n` | 13,787 MB / 76 s | **295 MB / 0.39 s** | #368 |
 | `check_tbl_spl_mt_unique` | 13,396 MB / 28 s | **223 MB / 0.06 s** | #368 |
-| `check_tbl_values` | 11,474 MB / 76 s | 11,178 MB / 76 s | #356, not landed |
+| `check_tbl_values` | 11,474 MB / 76 s | **222 MB / 0.05 s** | #356 |
 | `check_tbl_value_col` | 13,424 MB / 60 s | **222 MB / 0.08 s** | #355 |
 | `match_tbl_to_model_task` | 11,452 MB / 60 s | **211 MB / 0.05 s** | #355 |
 | `check_tbl_rows_unique` | 293 MB / 0.2 s | 282 MB / 0.2 s | never built the grid |
 | `check_tbl_value_col_ascending` | 193 MB / 0.1 s | 200 MB / 0.03 s | never built the grid |
 
-Only the rows marked #355 and #368 have moved. The rest differ by up to 1.3 GB either
-way, which is the run-to-run variation the memory figures carry at this size and not a
-change in what the code does.
+Only the rows marked #355, #356 and #368 have moved. The rest differ by up to 1.3 GB
+either way, which is the run-to-run variation the memory figures carry at this size and
+not a change in what the code does.
 
 `check_tbl_values_required` is now the only check at this size that needs more than a
 gigabyte.
@@ -210,6 +210,32 @@ addresses it.
 the typed one instead it still works, but `match()` then has to convert its `Date`
 column once for every model task: 3.77 s against 0.80 s, at size M with seven
 model tasks.
+
+## What #356 changed
+
+`check_tbl_values()` no longer builds the grid. A row holds a valid combination when a
+single modeling task allows every one of its values, which is the question #355 already
+answers without the grid, so the check reuses that routing rather than matching against
+the combinations.
+
+| check | G1 (11.7M) | G2 (38.9M) | G3 (77.7M) |
+|---|---:|---:|---:|
+| `check_tbl_values` | 4,021 MB / 10.0 s → 222 MB / 0.05 s | 9,607 MB / 33.7 s → 226 MB / 0.05 s | 11,474 MB / 75.5 s → 222 MB / 0.05 s |
+
+As with #355 and #368, the gaps between G1, G2 and G3 closed rather than narrowed, and
+what is left is almost all setup: loading the package and reading the submission takes
+~190 MB before any check runs.
+
+**More modeling tasks now cost more, where before they cost the same.** At size M the
+check takes 0.16 s with one modeling task, 0.37 s with three and 0.58 s with seven,
+against 0.82 s, 0.85 s and 0.91 s before. It is faster than building the grid at all
+three, and at seven modeling tasks it is still ~36% faster.
+
+Each modeling task is a further pass over the table, and the loop stops as soon as every
+row has matched one. What the cost grows with is therefore how many modeling tasks a
+submission spans, not how many the round defines. The figures above are the worst case,
+because every benchmark submission covers every modeling task. A file confined to one of
+the seven takes 0.014 s, against 0.045 s if the loop ran to the end.
 
 ## What #368 changed
 

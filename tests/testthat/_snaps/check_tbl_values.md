@@ -1,3 +1,13 @@
+# check_tbl_values reports an output type the round does not define
+
+    Code
+      check_tbl_values(tbl = tbl, round_id = round_id, file_path = file_path,
+        hub_path = hub_path)
+    Output
+      <error/check_error>
+      Error:
+      ! `tbl` contains invalid values/value combinations.  Column `output_type` contains invalid value "sample".
+
 # check_tbl_values works
 
     Code
