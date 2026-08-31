@@ -9,6 +9,7 @@
 
 ## Bug fixes
 
+* Fixed a bug in `check_tbl_values_required()` which allowed a submission that was missing a specific required value combination to pass validation. It affected modeling tasks where every column carries only required values, in hubs that declare no derived task IDs.
 * Fixed a bug in `check_tbl_values()` which reported `NA` as an invalid value in a task ID column that a modeling task does not use. Rows holding `NA` there are valid, but the value was reported whenever anything else in the file failed (#356).
 
 ## Other changes
@@ -20,6 +21,7 @@
 * `check_tbl_values()` now reports an `output_type` value the round does not define as an invalid value in the `output_type` column. The check previously errored (#356).
 * `check_tbl_values()` now reports rows holding invalid combinations of valid values in the order they were submitted in, and `error_tbl` returns them in that order. They were previously grouped by output type (#356).
 * `match_tbl_to_model_task()`, `check_tbl_values()`, `check_tbl_value_col()`, `check_tbl_value_col_ascending()`, `get_tbl_compound_taskid_set()` and the sample checks `check_tbl_spl_mt_unique()`, `check_tbl_spl_compound_tid()`, `check_tbl_spl_non_compound_tid()` and `check_tbl_spl_n()` no longer build the grid of every value combination a round's config allows. They report the same results, but are much faster and need far less memory, increasingly so the more combinations the config permits (#355, #356, #368).
+* `check_tbl_values_required()` no longer builds the grid of every value combination a round's config allows, for hubs whose config schema version is `v4.0.0` or later. It reports the same results. On a hub whose config permits 77.7 million combinations, it now needs 302 MB and half a second, where it previously needed 13.3 GB and 58 minutes. Hubs on earlier schema versions are validated as before (#357).
 
 # hubValidations 2.1.1
 
