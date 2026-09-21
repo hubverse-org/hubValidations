@@ -28,6 +28,12 @@
 ### Bug fixes
 
 - Fixed a bug in
+  [`check_tbl_values_required()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_values_required.md)
+  which allowed a submission that was missing a specific required value
+  combination to pass validation. It affected modeling tasks where every
+  column carries only required values, in hubs that declare no derived
+  task IDs.
+- Fixed a bug in
   [`check_tbl_values()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_values.md)
   which reported `NA` as an invalid value in a task ID column that a
   modeling task does not use. Rows holding `NA` there are valid, but the
@@ -90,6 +96,14 @@
   ([\#355](https://github.com/hubverse-org/hubValidations/issues/355),
   [\#356](https://github.com/hubverse-org/hubValidations/issues/356),
   [\#368](https://github.com/hubverse-org/hubValidations/issues/368)).
+- [`check_tbl_values_required()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_values_required.md)
+  no longer builds the grid of every value combination a round’s config
+  allows, for hubs whose config schema version is `v4.0.0` or later. It
+  reports the same results. On a hub whose config permits 77.7 million
+  combinations, it now needs 302 MB and half a second, where it
+  previously needed 13.3 GB and 58 minutes. Hubs on earlier schema
+  versions are validated as before
+  ([\#357](https://github.com/hubverse-org/hubValidations/issues/357)).
 
 ## hubValidations 2.1.1
 
