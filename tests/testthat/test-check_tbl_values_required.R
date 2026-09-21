@@ -521,3 +521,64 @@ test_that("Missing required modeling task detected (#203)", {
     )
   )
 })
+
+test_that("a missing required value is reported when no column holds optional values", {
+  # `opt_cols` is all FALSE only when every column carries required values and
+  # none is missing from `req`. A derived task ID is blanked to NA and never
+  # enters `req`, so it counts as optional for every row, and a hub declaring
+  # one cannot reach this path at all. Every other fixture in this file has
+  # either a derived task ID or an optional column, so nothing else covers it.
+  req <- tibble::tibble(
+    location = c("US", "US", "01", "01"),
+    output_type = "quantile",
+    output_type_id = c("0.5", "0.9", "0.5", "0.9")
+  )
+
+  expect_equal(
+    check_modeling_task_values_required(
+      tbl = req[-1L, ],
+      req = req,
+      full = req,
+      derived_task_ids = NULL
+    ),
+    req[1L, ]
+  )
+})
+
+test_that("an optional value is required to accompany the full required set", {
+  # Both directions of the rule `missing_required()` documents, on the v4 path
+  # where `full` is absent. No fixture in this file exercises both on a single
+  # modeling task.
+  req <- tibble::tibble(
+    location = rep(c("US", "01"), each = 2),
+    output_type = "quantile",
+    output_type_id = rep(c("0.5", "0.9"), 2)
+  )
+  # "02" is a value the config lists as optional, so it is absent from `req`.
+  optional_location <- tibble::tibble(
+    location = "02",
+    output_type = "quantile",
+    output_type_id = c("0.5", "0.9")
+  )
+
+  # The optional location carries both required output type IDs, so nothing
+  # is missing.
+  expect_equal(
+    check_modeling_task_values_required(
+      tbl = rbind(req, optional_location),
+      req = req,
+      derived_task_ids = NULL
+    ),
+    req[0L, ]
+  )
+
+  # The optional location carries only one of them, so the other is missing.
+  expect_equal(
+    check_modeling_task_values_required(
+      tbl = rbind(req, optional_location[1L, ]),
+      req = req,
+      derived_task_ids = NULL
+    ),
+    optional_location[2L, ]
+  )
+})
