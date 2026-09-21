@@ -2,17 +2,17 @@ test_that("check_tbl_values_required works with 1 model task & completely opt co
   hub_path <- system.file("testhubs/simple", package = "hubValidations")
   file_path <- "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
   config_tasks <- read_config(hub_path, "tasks")
-  tbl <- read_model_out_file(file_path, hub_path, coerce_types = "chr")
+  tbl_chr <- read_model_out_file(file_path, hub_path, coerce_types = "chr")
   tbl_hub <- read_model_out_file(file_path, hub_path, coerce_types = "hub")
   round_id <- "2022-10-08"
 
   # Test all required but only optional location for optional output type
   expect_snapshot(
-    check_tbl_values_required(tbl, round_id, file_path, hub_path)
+    check_tbl_values_required(tbl_chr, round_id, file_path, hub_path)
   )
   # Test completely missing required block
   missing_req_block <- check_tbl_values_required(
-    tbl[24:47, ],
+    tbl_chr[24:47, ],
     round_id,
     file_path,
     hub_path
@@ -29,7 +29,7 @@ test_that("check_tbl_values_required works with 1 model task & completely opt co
 
   # Test missing required output_type_id for optional task ID
   res_missing_otid <- check_tbl_values_required(
-    tbl[-(24:26), ],
+    tbl_chr[-(24:26), ],
     round_id,
     file_path,
     hub_path
@@ -51,14 +51,14 @@ test_that("check_tbl_values_required works with 2 separate model tasks & complet
   file_path <- "hub-ensemble/2023-05-08-hub-ensemble.parquet"
   round_id <- "2023-05-08"
   config_tasks <- read_config(hub_path, "tasks")
-  tbl <- read_model_out_file(file_path, hub_path, coerce_types = "chr")
+  tbl_chr <- read_model_out_file(file_path, hub_path, coerce_types = "chr")
   tbl_hub <- read_model_out_file(file_path, hub_path, coerce_types = "hub")
   expect_snapshot(
-    check_tbl_values_required(tbl, round_id, file_path, hub_path)
+    check_tbl_values_required(tbl_chr, round_id, file_path, hub_path)
   )
 
   missing_required <- check_tbl_values_required(
-    tbl[-(24:25), ],
+    tbl_chr[-(24:25), ],
     round_id,
     file_path,
     hub_path
@@ -72,7 +72,7 @@ test_that("check_tbl_values_required works with 2 separate model tasks & complet
   )
 
   missing_opt_otid <- check_tbl_values_required(
-    tbl[-(1:2), ],
+    tbl_chr[-(1:2), ],
     round_id,
     file_path,
     hub_path
@@ -85,7 +85,7 @@ test_that("check_tbl_values_required works with 2 separate model tasks & complet
     tbl_hub[1:2, names(tbl_hub) != "value"]
   )
 
-  pmf_row <- tbl[24, ]
+  pmf_row <- tbl_chr[24, ]
   pmf_row$output_type <- "pmf"
   pmf_row$output_type_id <- "large_decrease"
   pmf_row$target <- "wk flu hosp rate change"
@@ -113,7 +113,7 @@ test_that("check_tbl_values_required works with 2 separate model tasks & complet
       hub_path
     ),
     check_tbl_values_required(
-      rbind(tbl, pmf_row),
+      rbind(tbl_chr, pmf_row),
       round_id,
       file_path,
       hub_path
@@ -137,14 +137,14 @@ test_that("check_tbl_values_required correctly matches numeric output type IDs w
   hub_path <- test_path("testdata/hub-chr")
   file_path <- "UMass-gbq/2023-10-28-UMass-gbq.csv"
   round_id <- "2023-10-28"
-  tbl <- read_model_out_file(
+  tbl_chr <- read_model_out_file(
     file_path = file_path,
     hub_path = hub_path,
     coerce_types = "chr"
   )
 
   check <- check_tbl_values_required(
-    tbl = tbl,
+    tbl_chr = tbl_chr,
     round_id = round_id,
     file_path = file_path,
     hub_path = hub_path
@@ -173,14 +173,14 @@ test_that("check_tbl_values_required works when config contains non required mod
   hub_path <- test_path("testdata/hub-it")
   file_path <- "Tm-Md/2023-11-04-Tm-Md.csv"
   round_id <- "2023-11-04"
-  tbl <- read_model_out_file(
+  tbl_chr <- read_model_out_file(
     file_path = file_path,
     hub_path = hub_path,
     coerce_types = "chr"
   )
   expect_s3_class(
     check_tbl_values_required(
-      tbl = tbl,
+      tbl_chr = tbl_chr,
       round_id = round_id,
       file_path = file_path,
       hub_path = hub_path
@@ -193,14 +193,14 @@ test_that("check_tbl_values_required works with v3 spec samples", {
   hub_path <- system.file("testhubs/samples", package = "hubValidations")
   file_path <- "flu-base/2022-10-22-flu-base.csv"
   round_id <- "2022-10-22"
-  tbl <- read_model_out_file(
+  tbl_chr <- read_model_out_file(
     file_path = file_path,
     hub_path = hub_path,
     coerce_types = "chr"
   )
   expect_snapshot(
     check_tbl_values_required(
-      tbl = tbl,
+      tbl_chr = tbl_chr,
       round_id = round_id,
       file_path = file_path,
       hub_path = hub_path
@@ -208,17 +208,17 @@ test_that("check_tbl_values_required works with v3 spec samples", {
   )
   # Remove US location to test missing required values identified and reported
   # correctly.
-  tbl <- tbl[tbl$location != "US", ]
+  tbl_chr <- tbl_chr[tbl_chr$location != "US", ]
   expect_snapshot(
     check_tbl_values_required(
-      tbl = tbl,
+      tbl_chr = tbl_chr,
       round_id = round_id,
       file_path = file_path,
       hub_path = hub_path
     )
   )
   missing <- check_tbl_values_required(
-    tbl = tbl,
+    tbl_chr = tbl_chr,
     round_id = round_id,
     file_path = file_path,
     hub_path = hub_path
@@ -237,11 +237,11 @@ test_that("check_tbl_values_required works with v3 spec samples", {
 
   # Remove some optional submission values to check that they are not
   # flagged as required when required US value is missing.
-  tbl <- tbl[tbl$horizon == 1L, ]
-  tbl <- tbl[tbl$output_type != "median", ]
+  tbl_chr <- tbl_chr[tbl_chr$horizon == 1L, ]
+  tbl_chr <- tbl_chr[tbl_chr$output_type != "median", ]
 
   missing <- check_tbl_values_required(
-    tbl = tbl,
+    tbl_chr = tbl_chr,
     round_id = round_id,
     file_path = file_path,
     hub_path = hub_path
@@ -258,17 +258,17 @@ test_that("Ignoring derived_task_ids in check_tbl_values_required works", {
   hub_path <- system.file("testhubs/samples", package = "hubValidations")
   file_path <- "flu-base/2022-10-22-flu-base.csv"
   round_id <- "2022-10-22"
-  tbl <- tbl_orig <- read_model_out_file(
+  tbl_chr <- tbl_orig <- read_model_out_file(
     file_path = file_path,
     hub_path = hub_path,
     coerce_types = "chr"
   )
   # Introduce invalid value to derived task id that should be ignored when using
   # `derived_task_ids`.
-  tbl[1, "target_end_date"] <- "random_date"
+  tbl_chr[1, "target_end_date"] <- "random_date"
   expect_snapshot(
     check_tbl_values_required(
-      tbl,
+      tbl_chr,
       round_id,
       file_path,
       hub_path,
@@ -278,7 +278,7 @@ test_that("Ignoring derived_task_ids in check_tbl_values_required works", {
   # Check that ignoring derived task ids returns same result as not ignoring.
   expect_equal(
     check_tbl_values_required(
-      tbl,
+      tbl_chr,
       round_id,
       file_path,
       hub_path,
@@ -300,14 +300,14 @@ test_that("(#123) check_tbl_values_required works with all optional output types
   hub_path <- test_path("testdata", "hub-now")
   file_path <- "UMass-HMLR/2024-10-02-UMass-HMLR.parquet"
   round_id <- "2024-10-02"
-  tbl <- read_model_out_file(
+  tbl_chr <- read_model_out_file(
     hub_path = hub_path,
     file_path = file_path,
     coerce_types = "chr"
   )
 
   opt_output_type_ids_result <- check_tbl_values_required(
-    tbl,
+    tbl_chr,
     round_id,
     file_path,
     hub_path
@@ -337,11 +337,11 @@ test_that("check_tbl_values_required works with v4 hubs", {
   file_path <- "hub-ensemble/2023-05-08-hub-ensemble.parquet"
   round_id <- "2023-05-08"
   config_tasks <- read_config(hub_path, "tasks")
-  tbl <- read_model_out_file(file_path, hub_path, coerce_types = "chr")
+  tbl_chr <- read_model_out_file(file_path, hub_path, coerce_types = "chr")
   tbl_hub <- read_model_out_file(file_path, hub_path, coerce_types = "hub")
   expect_s3_class(
     check_tbl_values_required(
-      tbl,
+      tbl_chr,
       round_id,
       file_path,
       hub_path,
@@ -352,7 +352,7 @@ test_that("check_tbl_values_required works with v4 hubs", {
   )
 
   missing_required <- check_tbl_values_required(
-    tbl[-(24:25), ],
+    tbl_chr[-(24:25), ],
     round_id,
     file_path,
     hub_path,
@@ -366,7 +366,7 @@ test_that("check_tbl_values_required works with v4 hubs", {
   )
 
   missing_opt_otid <- check_tbl_values_required(
-    tbl[-(1:2), ],
+    tbl_chr[-(1:2), ],
     round_id,
     file_path,
     hub_path,
@@ -378,7 +378,7 @@ test_that("check_tbl_values_required works with v4 hubs", {
     tbl_hub[1:2, !names(tbl_hub) %in% c("target_date", "value")]
   )
 
-  pmf_row <- tbl[24, ]
+  pmf_row <- tbl_chr[24, ]
   pmf_row$output_type <- "pmf"
   pmf_row$output_type_id <- "large_decrease"
   pmf_row$target <- "wk flu hosp rate change"
@@ -416,19 +416,19 @@ test_that("Reading derived_task_ids from config works", {
   file_path <- "hub-ensemble/2023-05-08-hub-ensemble.parquet"
   round_id <- "2023-05-08"
   config_tasks <- read_config(hub_path, "tasks")
-  tbl <- read_model_out_file(file_path, hub_path, coerce_types = "chr")
+  tbl_chr <- read_model_out_file(file_path, hub_path, coerce_types = "chr")
 
   # Ensure reading derived_task_ids from config gives same result as when
   # explicitly provided as argument
   expect_equal(
     check_tbl_values_required(
-      tbl,
+      tbl_chr,
       round_id,
       file_path,
       hub_path,
       derived_task_ids = "target_date"
     ),
-    check_tbl_values_required(tbl, round_id, file_path, hub_path)
+    check_tbl_values_required(tbl_chr, round_id, file_path, hub_path)
   )
 })
 
@@ -436,13 +436,13 @@ test_that("v4 config output type leak fixed (#177)", {
   hub_path <- test_path("testdata", "hub-177")
   file_path <- "FluSight-baseline/2024-12-14-FluSight-baseline.parquet"
   round_id <- "2024-12-14"
-  tbl <- read_model_out_file(
+  tbl_chr <- read_model_out_file(
     file_path = file_path,
     hub_path = hub_path,
     coerce_types = "chr"
   )
   res <- check_tbl_values_required(
-    tbl,
+    tbl_chr,
     round_id = round_id,
     file_path = file_path,
     hub_path = hub_path
@@ -536,7 +536,7 @@ test_that("a missing required value is reported when no column holds optional va
 
   expect_equal(
     check_modeling_task_values_required(
-      tbl = req[-1L, ],
+      tbl_chr = req[-1L, ],
       req = req,
       full = req,
       derived_task_ids = NULL
@@ -565,7 +565,7 @@ test_that("an optional value is required to accompany the full required set", {
   # is missing.
   expect_equal(
     check_modeling_task_values_required(
-      tbl = rbind(req, optional_location),
+      tbl_chr = rbind(req, optional_location),
       req = req,
       derived_task_ids = NULL
     ),
@@ -575,7 +575,7 @@ test_that("an optional value is required to accompany the full required set", {
   # The optional location carries only one of them, so the other is missing.
   expect_equal(
     check_modeling_task_values_required(
-      tbl = rbind(req, optional_location[1L, ]),
+      tbl_chr = rbind(req, optional_location[1L, ]),
       req = req,
       derived_task_ids = NULL
     ),

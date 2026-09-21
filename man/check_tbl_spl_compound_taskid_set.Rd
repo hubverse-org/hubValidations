@@ -6,7 +6,7 @@
 match or are coarser than the expected set defined in the config.}
 \usage{
 check_tbl_spl_compound_taskid_set(
-  tbl,
+  tbl_chr,
   round_id,
   file_path,
   hub_path,
@@ -14,8 +14,8 @@ check_tbl_spl_compound_taskid_set(
 )
 }
 \arguments{
-\item{tbl}{a tibble/data.frame of the contents of the file being validated.
-Column types must \strong{all be character}.}
+\item{tbl_chr}{a tibble/data.frame of the contents of the file being
+validated. Column types must \strong{all be character}.}
 
 \item{round_id}{character string. The round identifier.}
 

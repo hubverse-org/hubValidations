@@ -1,3 +1,17 @@
+# Name each column's type the way `hubData::create_hub_schema()` names it, so
+# that a column's type can be compared against the schema and reported to a
+# submitter in the same words.
+tbl_col_types <- function(tbl) {
+  purrr::map_chr(
+    tbl,
+    ~ if (inherits(.x, "numeric")) {
+      typeof(.x)
+    } else {
+      paste(class(.x), collapse = "/")
+    }
+  )
+}
+
 get_file_target_metadata <- function(hub_path, file_path) {
   round_config <- get_file_round_config(file_path, hub_path)
 

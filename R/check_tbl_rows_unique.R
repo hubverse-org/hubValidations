@@ -2,20 +2,21 @@
 #'
 #' Checks that combinations of task ID, output type and output type ID value
 #' combinations are unique, by checking that there are no duplicate rows across
-#' all `tbl` columns excluding the `value` column.
+#' all `tbl_chr` columns excluding the `value` column.
 #' @inheritParams check_tbl_values
 #' @inherit check_tbl_colnames params
 #' @inherit check_tbl_col_types return
 #' @export
-check_tbl_rows_unique <- function(tbl, file_path, hub_path) {
-  tbl[["values"]] <- NULL
-  check <- !any(duplicated(tbl))
+check_tbl_rows_unique <- function(tbl_chr, file_path, hub_path) {
+  assert_tbl_chr(tbl_chr)
+  tbl_chr[["values"]] <- NULL
+  check <- !any(duplicated(tbl_chr))
 
   if (check) {
     details <- NULL
   } else {
     details <- cli::format_inline(
-      "Rows containing duplicate combinations: {.val {which(duplicated(tbl))}}"
+      "Rows containing duplicate combinations: {.val {which(duplicated(tbl_chr))}}"
     )
   }
 

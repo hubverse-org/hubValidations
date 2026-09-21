@@ -1,21 +1,25 @@
 #' Check model output data tbl contains valid value combinations
-#' @param tbl a tibble/data.frame of the contents of the file being validated. Column types must **all be character**.
+#' @param tbl_chr a tibble/data.frame of the contents of the file being
+#' validated. Column types must **all be character**.
+#' @param derived_task_ids Character vector of derived task ID names (task IDs whose
+#' values depend on other task IDs) to ignore. Columns for such task ids will
+#' contain `NA`s. Defaults to extracting derived task IDs from hub `task.json`. See
+#' [get_hub_derived_task_ids()] for more details.
 #' @inherit check_tbl_colnames params
-#' @inheritParams check_tbl_spl_compound_taskid_set
-#' @inheritParams expand_model_out_grid
 #' @inherit check_tbl_colnames return
 #' @export
 check_tbl_values <- function(
-  tbl,
+  tbl_chr,
   round_id,
   file_path,
   hub_path,
   derived_task_ids = get_hub_derived_task_ids(hub_path, round_id)
 ) {
+  assert_tbl_chr(tbl_chr)
   config_tasks <- read_config(hub_path, "tasks")
 
   invalid_row_idx <- which_invalid_rows(
-    tbl,
+    tbl_chr,
     config_tasks = config_tasks,
     round_id = round_id,
     derived_task_ids = derived_task_ids
@@ -26,7 +30,7 @@ check_tbl_values <- function(
     details <- NULL
     error_tbl <- NULL
   } else {
-    invalid_tbl <- tbl[invalid_row_idx, names(tbl) != "value"]
+    invalid_tbl <- tbl_chr[invalid_row_idx, names(tbl_chr) != "value"]
     error_summary <- summarise_invalid_values(
       invalid_tbl,
       invalid_row_idx,
@@ -57,19 +61,23 @@ check_tbl_values <- function(
   )
 }
 
-#' Find the rows of `tbl` that no modeling task allows
+#' Find the rows of `tbl_chr` that no modeling task allows
 #'
 #' A row holds a valid combination when a single modeling task allows every one
 #' of its values. `which_mt_rows()` answers that for one modeling task at a
 #' time, so the combinations themselves are never built.
 #'
-#' @param tbl a tibble/data.frame of the contents of the file being validated.
-#' Column types must **all be character**.
+#' @inheritParams check_tbl_values
 #' @inheritParams expand_model_out_grid
 #'
-#' @returns An integer vector of row indexes into `tbl`, ascending.
+#' @returns An integer vector of row indexes into `tbl_chr`, ascending.
 #' @noRd
-which_invalid_rows <- function(tbl, config_tasks, round_id, derived_task_ids) {
+which_invalid_rows <- function(
+  tbl_chr,
+  config_tasks,
+  round_id,
+  derived_task_ids
+) {
   call <- rlang::caller_env()
   value_sets <- get_config_mt_value_sets(
     config_tasks = config_tasks,
@@ -77,11 +85,11 @@ which_invalid_rows <- function(tbl, config_tasks, round_id, derived_task_ids) {
     derived_task_ids = derived_task_ids,
     call = call
   )
-  check_match_cols(tbl, config_tasks, round_id, call = call)
+  check_match_cols(tbl_chr, config_tasks, round_id, call = call)
 
-  valid <- logical(nrow(tbl))
+  valid <- logical(nrow(tbl_chr))
   for (mt in value_sets) {
-    valid[which_mt_rows(tbl, mt, derived_task_ids)] <- TRUE
+    valid[which_mt_rows(tbl_chr, mt, derived_task_ids)] <- TRUE
     # A row that has matched stays matched, so once every row has, the
     # remaining modeling tasks cannot change the result.
     if (all(valid)) {

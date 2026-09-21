@@ -1,7 +1,7 @@
 # check_tbl_values_required works with 1 model task & completely opt cols
 
     Code
-      check_tbl_values_required(tbl, round_id, file_path, hub_path)
+      check_tbl_values_required(tbl_chr, round_id, file_path, hub_path)
     Output
       <message/check_success>
       Message:
@@ -52,7 +52,7 @@
 # check_tbl_values_required works with 2 separate model tasks & completely missing cols
 
     Code
-      check_tbl_values_required(tbl, round_id, file_path, hub_path)
+      check_tbl_values_required(tbl_chr, round_id, file_path, hub_path)
     Output
       <message/check_success>
       Message:
@@ -145,7 +145,7 @@
 # check_tbl_values_required works with v3 spec samples
 
     Code
-      check_tbl_values_required(tbl = tbl, round_id = round_id, file_path = file_path,
+      check_tbl_values_required(tbl_chr = tbl_chr, round_id = round_id, file_path = file_path,
         hub_path = hub_path)
     Output
       <message/check_success>
@@ -155,7 +155,7 @@
 ---
 
     Code
-      check_tbl_values_required(tbl = tbl, round_id = round_id, file_path = file_path,
+      check_tbl_values_required(tbl_chr = tbl_chr, round_id = round_id, file_path = file_path,
         hub_path = hub_path)
     Output
       <error/check_failure>
@@ -186,7 +186,8 @@
 # Ignoring derived_task_ids in check_tbl_values_required works
 
     Code
-      check_tbl_values_required(tbl, round_id, file_path, hub_path, derived_task_ids = "target_end_date")
+      check_tbl_values_required(tbl_chr, round_id, file_path, hub_path,
+        derived_task_ids = "target_end_date")
     Output
       <message/check_success>
       Message:
