@@ -56,6 +56,13 @@ test_that("check_metadata_matches_schema properly distinguishes length-1 arrays 
   run_check(
     "no-entry.yml",
     "check_error",
+    "must have required property"
+  )
+  
+  # null mandatory array field errors
+  run_check(
+    "null-entry.yml",
+    "check_error",
     "mandatory_array_valued_metadata must be array"
   )
 

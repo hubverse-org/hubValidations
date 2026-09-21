@@ -19,3 +19,4 @@ model_details: {
   data_inputs: "description of the data inputs"
 }
 ensemble_of_hub_models: false
+mandatory_array_valued_metadata:
