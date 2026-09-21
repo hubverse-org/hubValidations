@@ -20,7 +20,7 @@ check_metadata_matches_schema <- function(file_path, hub_path = ".") {
         handlers = list(seq = function(x) x),
         as.named.list = TRUE
       )
-      # conversely, use auto_unbox avoid converting strings
+      # conversely, use auto_unbox to avoid converting strings
       # to length-1 JSON arrays
       metadata_json <- jsonlite::toJSON(metadata, auto_unbox = TRUE)
 
