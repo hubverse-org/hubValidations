@@ -77,7 +77,7 @@ check_tbl_values_required <- function(
 #'
 #' Compares the values a modeling task requires against those the submission
 #' holds. Only the required values are expanded, and rows are matched with
-#' [assign_tbl_to_model_task()], so the grid of every valid value combination is
+#' `assign_tbl_to_model_task()`, so the grid of every valid value combination is
 #' never built.
 #'
 #' Serves configs of schema version `v4.0.0` and later.
