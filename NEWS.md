@@ -10,7 +10,7 @@
 ## Bug fixes
 
 * Fixed a bug in `check_tbl_values()` which reported `NA` as an invalid value in a task ID column that a modeling task does not use. Rows holding `NA` there are valid, but the value was reported whenever anything else in the file failed (#356).
-* Fixed a bug in `check_metadata_matches_schema()` to ensure it correctly validates length-1 arrays. Before, length-1 arrays were incorrectly treated as strings, so they passed validation for `string` fields and failed validations for `array` field (#385).
+* Fixed a bug in `check_metadata_matches_schema()` to ensure it correctly validates length-1 arrays. Before, length-1 arrays were incorrectly treated as strings, so they passed validation for `string` fields and failed validations for `array` fields (#385).
 
 ## Other changes
 
