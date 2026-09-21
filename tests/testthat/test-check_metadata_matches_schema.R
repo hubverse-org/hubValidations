@@ -31,7 +31,7 @@ test_that("check_metadata_matches_schema works", {
 })
 
 test_that("check_metadata_matches_schema properly distinguishes length-1 arrays from scalars", {
-  hub_path <- system.file("testhubs/array_hub", package = "hubValidations")
+  hub_path <- test_path("testdata", "array_hub")
 
   run_check <- function(file_path, expected_result, expected_message_regex) {
     result <- check_metadata_matches_schema(
