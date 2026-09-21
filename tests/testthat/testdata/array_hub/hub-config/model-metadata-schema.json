@@ -104,20 +104,20 @@
             "description": "Indicator for whether this model is an ensemble specifically of other models submitted to this Hub",
             "type": "boolean"
         },
-	"mandatory_array_valued_metadata": {
-            "description": "An array of strings model metadata field for testing whether hubValidations::check_model_metadata_matches_schema() handles these gracefully",
-	    "type": "array",
-	    "items": {
-		"type": "string"
-	    }
-	},
-	"optional_array_valued_metadata": {
-            "description": "Another array of strings model metadata field for testing whether hubValidations::check_model_metadata_matches_schema() handles these gracefully",
-	    "type": "array",
-	    "items": {
-		"type": "string"
-	    }
-	}
+        "mandatory_array_valued_metadata": {
+            "description": "An array of strings model metadata field for testing whether hubValidations::check_metadata_matches_schema() handles these gracefully",
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "optional_array_valued_metadata": {
+            "description": "Another array of strings model metadata field for testing whether hubValidations::check_metadata_matches_schema() handles these gracefully",
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        }
     },
     "additionalProperties": true,
     "required": [
