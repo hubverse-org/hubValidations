@@ -2,17 +2,17 @@
 
 Checks that combinations of task ID, output type and output type ID
 value combinations are unique, by checking that there are no duplicate
-rows across all `tbl` columns excluding the `value` column.
+rows across all `tbl_chr` columns excluding the `value` column.
 
 ## Usage
 
 ``` r
-check_tbl_rows_unique(tbl, file_path, hub_path)
+check_tbl_rows_unique(tbl_chr, file_path, hub_path)
 ```
 
 ## Arguments
 
-- tbl:
+- tbl_chr:
 
   a tibble/data.frame of the contents of the file being validated.
   Column types must **all be character**.

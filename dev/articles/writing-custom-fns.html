@@ -151,7 +151,7 @@ you have an existing hub, you can work in there.</p>
 <span><span class="fu"><a href="../reference/create_custom_check.html">create_custom_check</a></span><span class="op">(</span><span class="st">"cstm_check_tbl_basic"</span>,</span>
 <span>  hub_path <span class="op">=</span> <span class="va">hub_path</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Directory <span style="color: #0000BB;">/tmp/RtmpnwfIY1/file22033ca0b226/src/validations/R</span> created.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Directory <span style="color: #0000BB;">/tmp/RtmpcY8QRN/file227a54871f53/src/validations/R</span> created.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Custom validation check template function file <span style="color: #0000BB;">"cstm_check_tbl_basic.R"</span> created.</span></span>
 <span><span class="co">#&gt; → Edit the function template to add your custom check logic.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> See the <span style="color: #00BB00;">Writing custom check functions</span> article for more information.</span></span>
@@ -461,7 +461,7 @@ the same fashion as custom functions, i.e. through the
 <span id="cb4-37"><a href="#cb4-37" tabindex="-1"></a>        <span class="at">msg_verbs =</span> <span class="fu">c</span>(<span class="st">"all match"</span>, <span class="st">"do not all match"</span>), <span class="at">msg_attribute =</span> cli<span class="sc">::</span><span class="fu">format_inline</span>(<span class="st">"expected period of {.val {timediff}}."</span>), </span>
 <span id="cb4-38"><a href="#cb4-38" tabindex="-1"></a>        <span class="at">details =</span> details)</span>
 <span id="cb4-39"><a href="#cb4-39" tabindex="-1"></a>}</span>
-<span id="cb4-40"><a href="#cb4-40" tabindex="-1"></a><span class="sc">&lt;</span>bytecode<span class="sc">:</span> <span class="dv">0x562450d4cae8</span><span class="sc">&gt;</span></span>
+<span id="cb4-40"><a href="#cb4-40" tabindex="-1"></a><span class="sc">&lt;</span>bytecode<span class="sc">:</span> <span class="dv">0x55d4b9032048</span><span class="sc">&gt;</span></span>
 <span id="cb4-41"><a href="#cb4-41" tabindex="-1"></a><span class="er">&lt;</span>environment<span class="sc">:</span> namespace<span class="sc">:</span>hubValidations<span class="sc">&gt;</span></span></code></pre></div>
 <p>You can add an example extra argument with
 <code>extra_args = TRUE</code> when creating the custom check function
@@ -599,35 +599,36 @@ function which validates that values are ascending when arranged by
 increasing <code>output_type_id</code> order is only applicable to
 <code>cdf</code> and <code>quantile</code> output types. Before
 proceeding with the main check, the function first checks whether the
-model output <code>tbl</code> contains data for <code>cdf</code> and
+model output <code>tbl_chr</code> contains data for <code>cdf</code> and
 <code>quantile</code> output types. If not, the check is skipped.</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>check_tbl_value_col_ascending</span>
-<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="cf">function</span> (tbl, file_path, hub_path, round_id, <span class="at">derived_task_ids =</span> <span class="fu">get_hub_derived_task_ids</span>(hub_path)) </span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="cf">function</span> (tbl_chr, file_path, hub_path, round_id, <span class="at">derived_task_ids =</span> <span class="fu">get_hub_derived_task_ids</span>(hub_path)) </span>
 <span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>{</span>
-<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>    check_output_types <span class="ot">&lt;-</span> <span class="fu">intersect</span>(<span class="fu">c</span>(<span class="st">"cdf"</span>, <span class="st">"quantile"</span>), <span class="fu">unique</span>(tbl[[<span class="st">"output_type"</span>]]))</span>
-<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">length</span>(check_output_types) <span class="sc">==</span> <span class="dv">0</span><span class="dt">L</span>) {</span>
-<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>        <span class="fu">return</span>(<span class="fu">capture_check_info</span>(file_path, <span class="st">"No quantile or cdf output types to check for non-descending values.</span><span class="sc">\n</span><span class="st">        Check skipped."</span>))</span>
-<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>    }</span>
-<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>    config_tasks <span class="ot">&lt;-</span> hubUtils<span class="sc">::</span><span class="fu">read_config</span>(hub_path, <span class="st">"tasks"</span>)</span>
-<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>    error_tbl <span class="ot">&lt;-</span> purrr<span class="sc">::</span><span class="fu">list_rbind</span>(purrr<span class="sc">::</span><span class="fu">map</span>(check_output_types, </span>
-<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a>        <span class="cf">function</span>(.x) {</span>
-<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a>            <span class="fu">check_values_ascending_by_output_type</span>(.x, tbl, config_tasks, </span>
-<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a>                round_id, derived_task_ids)</span>
-<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a>        }))</span>
-<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a>    check <span class="ot">&lt;-</span> <span class="fu">nrow</span>(error_tbl) <span class="sc">==</span> <span class="dv">0</span><span class="dt">L</span></span>
-<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a>    <span class="cf">if</span> (check) {</span>
-<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a>        details <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb10-17"><a href="#cb10-17" tabindex="-1"></a>        error_tbl <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb10-18"><a href="#cb10-18" tabindex="-1"></a>    }</span>
-<span id="cb10-19"><a href="#cb10-19" tabindex="-1"></a>    <span class="cf">else</span> {</span>
-<span id="cb10-20"><a href="#cb10-20" tabindex="-1"></a>        details <span class="ot">&lt;-</span> cli<span class="sc">::</span><span class="fu">format_inline</span>(<span class="st">"See {.var error_tbl} attribute for details."</span>)</span>
-<span id="cb10-21"><a href="#cb10-21" tabindex="-1"></a>    }</span>
-<span id="cb10-22"><a href="#cb10-22" tabindex="-1"></a>    <span class="fu">capture_check_cnd</span>(<span class="at">check =</span> check, <span class="at">file_path =</span> file_path, <span class="at">msg_subject =</span> <span class="st">"Quantile or cdf {.var value} values"</span>, </span>
-<span id="cb10-23"><a href="#cb10-23" tabindex="-1"></a>        <span class="at">msg_verbs =</span> <span class="fu">c</span>(<span class="st">"increase"</span>, <span class="st">"do not all increase"</span>), <span class="at">msg_attribute =</span> <span class="st">"when ordered by {.var output_type_id}."</span>, </span>
-<span id="cb10-24"><a href="#cb10-24" tabindex="-1"></a>        <span class="at">details =</span> details, <span class="at">error_tbl =</span> error_tbl)</span>
-<span id="cb10-25"><a href="#cb10-25" tabindex="-1"></a>}</span>
-<span id="cb10-26"><a href="#cb10-26" tabindex="-1"></a><span class="sc">&lt;</span>bytecode<span class="sc">:</span> <span class="dv">0x56244ff7b458</span><span class="sc">&gt;</span></span>
-<span id="cb10-27"><a href="#cb10-27" tabindex="-1"></a><span class="er">&lt;</span>environment<span class="sc">:</span> namespace<span class="sc">:</span>hubValidations<span class="sc">&gt;</span></span></code></pre></div>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>    <span class="fu">assert_tbl_chr</span>(tbl_chr)</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>    check_output_types <span class="ot">&lt;-</span> <span class="fu">intersect</span>(<span class="fu">c</span>(<span class="st">"cdf"</span>, <span class="st">"quantile"</span>), <span class="fu">unique</span>(tbl_chr[[<span class="st">"output_type"</span>]]))</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">length</span>(check_output_types) <span class="sc">==</span> <span class="dv">0</span><span class="dt">L</span>) {</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>        <span class="fu">return</span>(<span class="fu">capture_check_info</span>(file_path, <span class="st">"No quantile or cdf output types to check for non-descending values.</span><span class="sc">\n</span><span class="st">        Check skipped."</span>))</span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>    }</span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>    config_tasks <span class="ot">&lt;-</span> hubUtils<span class="sc">::</span><span class="fu">read_config</span>(hub_path, <span class="st">"tasks"</span>)</span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a>    error_tbl <span class="ot">&lt;-</span> purrr<span class="sc">::</span><span class="fu">list_rbind</span>(purrr<span class="sc">::</span><span class="fu">map</span>(check_output_types, </span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a>        <span class="cf">function</span>(.x) {</span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a>            <span class="fu">check_values_ascending_by_output_type</span>(.x, tbl_chr, </span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a>                config_tasks, round_id, derived_task_ids)</span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a>        }))</span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a>    check <span class="ot">&lt;-</span> <span class="fu">nrow</span>(error_tbl) <span class="sc">==</span> <span class="dv">0</span><span class="dt">L</span></span>
+<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a>    <span class="cf">if</span> (check) {</span>
+<span id="cb10-17"><a href="#cb10-17" tabindex="-1"></a>        details <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb10-18"><a href="#cb10-18" tabindex="-1"></a>        error_tbl <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb10-19"><a href="#cb10-19" tabindex="-1"></a>    }</span>
+<span id="cb10-20"><a href="#cb10-20" tabindex="-1"></a>    <span class="cf">else</span> {</span>
+<span id="cb10-21"><a href="#cb10-21" tabindex="-1"></a>        details <span class="ot">&lt;-</span> cli<span class="sc">::</span><span class="fu">format_inline</span>(<span class="st">"See {.var error_tbl} attribute for details."</span>)</span>
+<span id="cb10-22"><a href="#cb10-22" tabindex="-1"></a>    }</span>
+<span id="cb10-23"><a href="#cb10-23" tabindex="-1"></a>    <span class="fu">capture_check_cnd</span>(<span class="at">check =</span> check, <span class="at">file_path =</span> file_path, <span class="at">msg_subject =</span> <span class="st">"Quantile or cdf {.var value} values"</span>, </span>
+<span id="cb10-24"><a href="#cb10-24" tabindex="-1"></a>        <span class="at">msg_verbs =</span> <span class="fu">c</span>(<span class="st">"increase"</span>, <span class="st">"do not all increase"</span>), <span class="at">msg_attribute =</span> <span class="st">"when ordered by {.var output_type_id}."</span>, </span>
+<span id="cb10-25"><a href="#cb10-25" tabindex="-1"></a>        <span class="at">details =</span> details, <span class="at">error_tbl =</span> error_tbl)</span>
+<span id="cb10-26"><a href="#cb10-26" tabindex="-1"></a>}</span>
+<span id="cb10-27"><a href="#cb10-27" tabindex="-1"></a><span class="sc">&lt;</span>bytecode<span class="sc">:</span> <span class="dv">0x55d4b8329d70</span><span class="sc">&gt;</span></span>
+<span id="cb10-28"><a href="#cb10-28" tabindex="-1"></a><span class="er">&lt;</span>environment<span class="sc">:</span> namespace<span class="sc">:</span>hubValidations<span class="sc">&gt;</span></span></code></pre></div>
 <p>You can add a pre-condition check block of code with argument
 <code>conditional = TRUE</code> when creating the custom check function
 with <code><a href="../reference/create_custom_check.html">create_custom_check()</a></code>.</p>

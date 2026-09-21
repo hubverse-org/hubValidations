@@ -7,7 +7,7 @@ given round.
 
 ``` r
 get_tbl_compound_taskid_set(
-  tbl,
+  tbl_chr,
   config_tasks,
   round_id,
   compact = TRUE,
@@ -18,7 +18,7 @@ get_tbl_compound_taskid_set(
 
 ## Arguments
 
-- tbl:
+- tbl_chr:
 
   a tibble/data.frame of the contents of the file being validated.
   Column types must **all be character**.
@@ -63,17 +63,17 @@ returning NULL elements will be removed.
 hub_path <- system.file("testhubs/samples", package = "hubValidations")
 file_path <- "flu-base/2022-10-22-flu-base.csv"
 round_id <- "2022-10-22"
-tbl <- read_model_out_file(
+tbl_chr <- read_model_out_file(
   file_path = file_path,
   hub_path = hub_path,
   coerce_types = "chr"
 )
 config_tasks <- read_config(hub_path, "tasks")
-get_tbl_compound_taskid_set(tbl, config_tasks, round_id)
+get_tbl_compound_taskid_set(tbl_chr, config_tasks, round_id)
 #> $`2`
 #> [1] "reference_date" "location"      
 #> 
-get_tbl_compound_taskid_set(tbl, config_tasks, round_id,
+get_tbl_compound_taskid_set(tbl_chr, config_tasks, round_id,
   compact = FALSE
 )
 #> $`1`

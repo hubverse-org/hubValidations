@@ -11,7 +11,7 @@ the accepted values.
 
 ``` r
 check_tbl_derived_task_id_vals(
-  tbl,
+  tbl_chr,
   round_id,
   file_path,
   hub_path,
@@ -21,7 +21,7 @@ check_tbl_derived_task_id_vals(
 
 ## Arguments
 
-- tbl:
+- tbl_chr:
 
   a tibble/data.frame of the contents of the file being validated.
   Column types must **all be character**.
@@ -53,9 +53,9 @@ check_tbl_derived_task_id_vals(
 
   Character vector of derived task ID names (task IDs whose values
   depend on other task IDs) to ignore. Columns for such task ids will
-  contain `NA`s. Defaults to extracting derived task IDs from
-  `config_tasks`. See
-  [`get_config_derived_task_ids()`](https://hubverse-org.github.io/hubValidations/dev/reference/get_config_derived_task_ids.md)
+  contain `NA`s. Defaults to extracting derived task IDs from hub
+  `task.json`. See
+  [`get_hub_derived_task_ids()`](https://hubverse-org.github.io/hubUtils/reference/get_hub_timezone.html)
   for more details.
 
 ## Value

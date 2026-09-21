@@ -7,7 +7,7 @@ non-compound task ID values across all samples
 
 ``` r
 check_tbl_spl_non_compound_tid(
-  tbl,
+  tbl_chr,
   round_id,
   file_path,
   hub_path,
@@ -18,7 +18,7 @@ check_tbl_spl_non_compound_tid(
 
 ## Arguments
 
-- tbl:
+- tbl_chr:
 
   a tibble/data.frame of the contents of the file being validated.
   Column types must **all be character**.

@@ -6,7 +6,7 @@ Check model output data tbl contains valid value combinations
 
 ``` r
 check_tbl_values(
-  tbl,
+  tbl_chr,
   round_id,
   file_path,
   hub_path,
@@ -16,7 +16,7 @@ check_tbl_values(
 
 ## Arguments
 
-- tbl:
+- tbl_chr:
 
   a tibble/data.frame of the contents of the file being validated.
   Column types must **all be character**.

@@ -51,7 +51,7 @@
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_tbl_compound_taskid_set</span><span class="op">(</span></span>
-<span>  <span class="va">tbl</span>,</span>
+<span>  <span class="va">tbl_chr</span>,</span>
 <span>  <span class="va">config_tasks</span>,</span>
 <span>  <span class="va">round_id</span>,</span>
 <span>  compact <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -64,9 +64,9 @@
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
 
 
-<dl><dt id="arg-tbl">tbl<a class="anchor" aria-label="anchor" href="#arg-tbl"></a></dt>
-<dd><p>a tibble/data.frame of the contents of the file being validated.
-Column types must <strong>all be character</strong>.</p></dd>
+<dl><dt id="arg-tbl-chr">tbl_chr<a class="anchor" aria-label="anchor" href="#arg-tbl-chr"></a></dt>
+<dd><p>a tibble/data.frame of the contents of the file being
+validated. Column types must <strong>all be character</strong>.</p></dd>
 
 
 <dt id="arg-config-tasks">config_tasks<a class="anchor" aria-label="anchor" href="#arg-config-tasks"></a></dt>
@@ -106,17 +106,17 @@ elements will be removed.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">hub_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"testhubs/samples"</span>, package <span class="op">=</span> <span class="st">"hubValidations"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">file_path</span> <span class="op">&lt;-</span> <span class="st">"flu-base/2022-10-22-flu-base.csv"</span></span></span>
 <span class="r-in"><span><span class="va">round_id</span> <span class="op">&lt;-</span> <span class="st">"2022-10-22"</span></span></span>
-<span class="r-in"><span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="read_model_out_file.html">read_model_out_file</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="va">tbl_chr</span> <span class="op">&lt;-</span> <span class="fu"><a href="read_model_out_file.html">read_model_out_file</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  file_path <span class="op">=</span> <span class="va">file_path</span>,</span></span>
 <span class="r-in"><span>  hub_path <span class="op">=</span> <span class="va">hub_path</span>,</span></span>
 <span class="r-in"><span>  coerce_types <span class="op">=</span> <span class="st">"chr"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">config_tasks</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://hubverse-org.github.io/hubUtils/reference/read_config.html" class="external-link">read_config</a></span><span class="op">(</span><span class="va">hub_path</span>, <span class="st">"tasks"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">get_tbl_compound_taskid_set</span><span class="op">(</span><span class="va">tbl</span>, <span class="va">config_tasks</span>, <span class="va">round_id</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">get_tbl_compound_taskid_set</span><span class="op">(</span><span class="va">tbl_chr</span>, <span class="va">config_tasks</span>, <span class="va">round_id</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $`2`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "reference_date" "location"      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span><span class="fu">get_tbl_compound_taskid_set</span><span class="op">(</span><span class="va">tbl</span>, <span class="va">config_tasks</span>, <span class="va">round_id</span>,</span></span>
+<span class="r-in"><span><span class="fu">get_tbl_compound_taskid_set</span><span class="op">(</span><span class="va">tbl_chr</span>, <span class="va">config_tasks</span>, <span class="va">round_id</span>,</span></span>
 <span class="r-in"><span>  compact <span class="op">=</span> <span class="cn">FALSE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $`1`</span>

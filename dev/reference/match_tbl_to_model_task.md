@@ -6,7 +6,7 @@ Useful for performing model task specific checks on model output.
 
 ``` r
 match_tbl_to_model_task(
-  tbl,
+  tbl_chr,
   config_tasks,
   round_id,
   output_types = NULL,
@@ -17,7 +17,7 @@ match_tbl_to_model_task(
 
 ## Arguments
 
-- tbl:
+- tbl_chr:
 
   a tibble/data.frame of the contents of the file being validated.
   Column types must **all be character**: the config's values are
@@ -93,12 +93,12 @@ chooses them, so this function does not check them against the config.
 
 ``` r
 hub_path <- system.file("testhubs/samples", package = "hubValidations")
-tbl <- read_model_out_file(
+tbl_chr <- read_model_out_file(
   file_path = "flu-base/2022-10-22-flu-base.csv",
   hub_path, coerce_types = "chr"
 )
 config_tasks <- read_config(hub_path, "tasks")
-match_tbl_to_model_task(tbl, config_tasks, round_id = "2022-10-22")
+match_tbl_to_model_task(tbl_chr, config_tasks, round_id = "2022-10-22")
 #> [[1]]
 #> # A tibble: 60 × 8
 #>    reference_date target            horizon location target_end_date output_type
@@ -133,7 +133,7 @@ match_tbl_to_model_task(tbl, config_tasks, round_id = "2022-10-22")
 #> # ℹ 1,520 more rows
 #> # ℹ 2 more variables: output_type_id <chr>, value <chr>
 #> 
-match_tbl_to_model_task(tbl, config_tasks,
+match_tbl_to_model_task(tbl_chr, config_tasks,
   round_id = "2022-10-22",
   output_types = "sample"
 )

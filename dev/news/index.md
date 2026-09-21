@@ -4,6 +4,29 @@
 
 ### Breaking Changes
 
+- The `tbl` argument of every function that requires an all character
+  table has been renamed to `tbl_chr`:
+  [`check_tbl_values()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_values.md),
+  [`check_tbl_values_required()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_values_required.md),
+  [`check_tbl_value_col()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_value_col.md),
+  [`check_tbl_value_col_ascending()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_value_col_ascending.md),
+  [`check_tbl_rows_unique()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_rows_unique.md),
+  [`check_tbl_derived_task_id_vals()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_derived_task_id_vals.md),
+  [`check_tbl_spl_mt_unique()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_spl_mt_unique.md),
+  [`check_tbl_spl_compound_taskid_set()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_spl_compound_taskid_set.md),
+  [`check_tbl_spl_compound_tid()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_spl_compound_tid.md),
+  [`check_tbl_spl_non_compound_tid()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_spl_non_compound_tid.md),
+  [`check_tbl_spl_n()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_spl_n.md),
+  [`match_tbl_to_model_task()`](https://hubverse-org.github.io/hubValidations/dev/reference/match_tbl_to_model_task.md)
+  and
+  [`get_tbl_compound_taskid_set()`](https://hubverse-org.github.io/hubValidations/dev/reference/get_tbl_compound_taskid_set.md).
+  Calls that pass the table by name need updating, positional calls do
+  not
+  ([\#366](https://github.com/hubverse-org/hubValidations/issues/366)).
+- Those functions now error when a column of `tbl_chr` is not character,
+  naming the offending columns and their types. A table with hub schema
+  column types is no longer accepted
+  ([\#366](https://github.com/hubverse-org/hubValidations/issues/366)).
 - [`match_tbl_to_model_task()`](https://hubverse-org.github.io/hubValidations/dev/reference/match_tbl_to_model_task.md)
   has lost its `all_character` argument. `tbl` must now always be
   character

@@ -63,7 +63,7 @@ and focuses only on identifying values that do not match the accepted values.</p
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">check_tbl_derived_task_id_vals</span><span class="op">(</span></span>
-<span>  <span class="va">tbl</span>,</span>
+<span>  <span class="va">tbl_chr</span>,</span>
 <span>  <span class="va">round_id</span>,</span>
 <span>  <span class="va">file_path</span>,</span>
 <span>  <span class="va">hub_path</span>,</span>
@@ -75,8 +75,9 @@ and focuses only on identifying values that do not match the accepted values.</p
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
 
 
-<dl><dt id="arg-tbl">tbl<a class="anchor" aria-label="anchor" href="#arg-tbl"></a></dt>
-<dd><p>a tibble/data.frame of the contents of the file being validated. Column types must <strong>all be character</strong>.</p></dd>
+<dl><dt id="arg-tbl-chr">tbl_chr<a class="anchor" aria-label="anchor" href="#arg-tbl-chr"></a></dt>
+<dd><p>a tibble/data.frame of the contents of the file being
+validated. Column types must <strong>all be character</strong>.</p></dd>
 
 
 <dt id="arg-round-id">round_id<a class="anchor" aria-label="anchor" href="#arg-round-id"></a></dt>
@@ -103,8 +104,8 @@ files within the <code>hub-config</code> directory.</p></dd>
 <dt id="arg-derived-task-ids">derived_task_ids<a class="anchor" aria-label="anchor" href="#arg-derived-task-ids"></a></dt>
 <dd><p>Character vector of derived task ID names (task IDs whose
 values depend on other task IDs) to ignore. Columns for such task ids will
-contain <code>NA</code>s. Defaults to extracting derived task IDs from <code>config_tasks</code>. See
-<code><a href="get_config_derived_task_ids.html">get_config_derived_task_ids()</a></code> for more details.</p></dd>
+contain <code>NA</code>s. Defaults to extracting derived task IDs from hub <code>task.json</code>. See
+<code><a href="https://hubverse-org.github.io/hubUtils/reference/get_hub_timezone.html" class="external-link">get_hub_derived_task_ids()</a></code> for more details.</p></dd>
 
 </dl></div>
     <div class="section level2">
