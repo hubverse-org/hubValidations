@@ -1,6 +1,7 @@
 #' Check all required task ID/output type/output type ID value combinations present
 #' in model data.
 #'
+#' @inheritParams check_tbl_spl_mt_unique
 #' @inheritParams check_tbl_values
 #' @inherit check_tbl_colnames params
 #' @inherit check_tbl_col_types return
@@ -92,8 +93,8 @@ check_tbl_values_required <- function(
 #' the submission has to account for.
 #' @param derived_task_ids Character vector of derived task ID names, or `NULL`
 #' for none. A derived task ID's value follows from the task IDs it is derived
-#' from, so derived task IDs are excluded from the required values and left to
-#' `check_tbl_derived_task_id_vals()`.
+#' from, so derived task IDs are excluded from the required values.
+#' `check_tbl_values()` validates the values they hold.
 #'
 #' @returns A tibble with one row per required value combination the submission
 #' does not contain, in the columns of `tbl_chr`. Zero rows when none are

@@ -33,8 +33,8 @@ files within the \code{hub-config} directory.}
 \item{round_id}{character string. The round identifier.}
 
 \item{derived_task_ids}{Character vector of derived task ID names (task IDs whose
-values depend on other task IDs) to ignore. Columns for such task ids will
-contain \code{NA}s. Defaults to extracting derived task IDs from hub \code{task.json}. See
+values depend on other task IDs) to ignore during validation. Defaults to
+extracting derived task IDs from hub \code{task.json}. See
 \code{\link[=get_hub_derived_task_ids]{get_hub_derived_task_ids()}} for more details.}
 }
 \value{
