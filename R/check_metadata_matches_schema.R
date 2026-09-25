@@ -12,9 +12,16 @@ check_metadata_matches_schema <- function(file_path, hub_path = ".") {
         subdir = "model-metadata",
         file_path = file_path
       )
-      metadata <- yaml::read_yaml(abs_metadata_path)
-
-      # For some reason, jsonvalidate doesn't like it when we don't unbox
+      # Use a custom handler to ensure that length-1 arrays become lists rather
+      # than scalars, avoiding spurious schema validation failures. See
+      # https://github.com/r-lib/yaml/issues/69
+      metadata <- yaml::read_yaml(
+        abs_metadata_path,
+        handlers = list(seq = function(x) x),
+        as.named.list = TRUE
+      )
+      # conversely, use auto_unbox to avoid converting strings
+      # to length-1 JSON arrays
       metadata_json <- jsonlite::toJSON(metadata, auto_unbox = TRUE)
 
       abs_metadata_schema_path <- abs_file_path(
