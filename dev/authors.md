@@ -12,6 +12,9 @@
 - **Zhian N. Kamvar**. Contributor.
   [](https://orcid.org/0000-0003-1458-7108)
 
+- **Dylan H. Morris**. Contributor.
+  [](https://orcid.org/0000-0002-3655-406X)
+
 - **Consortium of Infectious Disease Modeling Hubs**. Copyright holder.
 
 ## Citation

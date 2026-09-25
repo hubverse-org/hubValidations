@@ -62,6 +62,12 @@
   modeling task does not use. Rows holding `NA` there are valid, but the
   value was reported whenever anything else in the file failed
   ([\#356](https://github.com/hubverse-org/hubValidations/issues/356)).
+- Fixed a bug in
+  [`check_metadata_matches_schema()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_metadata_matches_schema.md)
+  to ensure it correctly validates length-1 arrays. Before, length-1
+  arrays were incorrectly treated as strings, so they passed validation
+  for `string` fields and failed validations for `array` fields
+  ([\#385](https://github.com/hubverse-org/hubValidations/issues/385)).
 
 ### Other changes
 

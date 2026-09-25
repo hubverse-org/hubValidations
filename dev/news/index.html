@@ -62,6 +62,7 @@
 <h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
 <ul><li>Fixed a bug in <code><a href="../reference/check_tbl_values_required.html">check_tbl_values_required()</a></code> which allowed a submission that was missing a specific required value combination to pass validation. It affected modeling tasks where every column carries only required values, in hubs that declare no derived task IDs.</li>
 <li>Fixed a bug in <code><a href="../reference/check_tbl_values.html">check_tbl_values()</a></code> which reported <code>NA</code> as an invalid value in a task ID column that a modeling task does not use. Rows holding <code>NA</code> there are valid, but the value was reported whenever anything else in the file failed (<a href="https://github.com/hubverse-org/hubValidations/issues/356" class="external-link">#356</a>).</li>
+<li>Fixed a bug in <code><a href="../reference/check_metadata_matches_schema.html">check_metadata_matches_schema()</a></code> to ensure it correctly validates length-1 arrays. Before, length-1 arrays were incorrectly treated as strings, so they passed validation for <code>string</code> fields and failed validations for <code>array</code> fields (<a href="https://github.com/hubverse-org/hubValidations/issues/385" class="external-link">#385</a>).</li>
 </ul></div>
 <div class="section level3">
 <h3 id="other-changes-development-version">Other changes<a class="anchor" aria-label="anchor" href="#other-changes-development-version"></a></h3>
