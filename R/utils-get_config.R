@@ -72,10 +72,7 @@ get_config_mt_value_sets <- function(
   config_tasks,
   round_id,
   output_types = NULL,
-  derived_task_ids = get_config_derived_task_ids(
-    config_tasks,
-    round_id
-  ),
+  derived_task_ids = NULL,
   call = rlang::caller_env()
 ) {
   output_types <- validate_output_types(

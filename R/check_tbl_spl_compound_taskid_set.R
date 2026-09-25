@@ -4,6 +4,7 @@
 #' This check detects the compound task ID sets of samples, implied by the `output_type_id`
 #' and task ID values, and checks them for internal consistency and compliance with
 #' the `compound_taskid_set` defined for each round modeling task in the `tasks.json` config.
+#' @inheritParams check_tbl_spl_mt_unique
 #' @inheritParams check_tbl_values
 #' @inherit check_tbl_colnames params
 #' @inherit check_tbl_colnames return

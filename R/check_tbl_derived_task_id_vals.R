@@ -1,5 +1,11 @@
 #' Check derived task ID columns contain valid values
 #'
+#' `r lifecycle::badge("superseded")`
+#'
+#' `check_tbl_values()` validates derived task ID columns like any other task
+#' ID column, so `validate_model_data()` no longer runs this check. It remains
+#' available as a custom check.
+#'
 #' This check is used to validate that values in any derived task ID columns
 #' matches accepted values for each derived task ID in the config.
 #' Given the dependence of derived task IDs on the values of other values,
@@ -7,6 +13,10 @@
 #' and focuses only on identifying values that do not match the accepted values.
 #' @inherit check_tbl_colnames params
 #' @inheritParams check_tbl_values
+#' @param derived_task_ids Character vector of derived task ID names (task IDs
+#' whose values depend on other task IDs) to validate. Defaults to extracting
+#' derived task IDs from hub `task.json`. See [get_hub_derived_task_ids()] for
+#' more details.
 #' @return
 #' Depending on whether validation has succeeded, one of:
 #' - `<message/check_success>` condition class object.
@@ -40,8 +50,7 @@ check_tbl_derived_task_id_vals <- function(
 
   derived_task_id_vals <- get_round_config_values(
     config_tasks = config_tasks,
-    round_id = round_id,
-    derived_task_ids = NULL
+    round_id = round_id
   )[derived_task_ids]
 
   setdiff_vals <- purrr::map2(

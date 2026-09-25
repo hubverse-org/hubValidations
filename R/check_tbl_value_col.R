@@ -5,6 +5,7 @@
 #' type of the appropriate model task.
 #' @inherit check_tbl_colnames params
 #' @inherit check_tbl_col_types return
+#' @inheritParams check_tbl_spl_mt_unique
 #' @inheritParams check_tbl_values
 #' @export
 check_tbl_value_col <- function(

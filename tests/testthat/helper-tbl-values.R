@@ -162,10 +162,6 @@ summarise_invalid_values_via_grid <- function(
 # comparison covers one modeling task and several, v2 to v4 configs, character
 # and numeric output type IDs, task IDs a modeling task does not use, samples,
 # and modeling tasks that only `output_type_id` tells apart.
-#
-# A fixture sets `derived_task_ids` to pass them to the check explicitly,
-# covering hubs whose config declares none. The rest leave the check to read
-# them from the config.
 values_fixtures <- function() {
   fixtures <- list(
     list(
@@ -177,12 +173,6 @@ values_fixtures <- function() {
       hub_path = system.file("testhubs/samples", package = "hubValidations"),
       file_path = "flu-base/2022-10-22-flu-base.csv",
       round_id = "2022-10-22"
-    ),
-    list(
-      hub_path = system.file("testhubs/samples", package = "hubValidations"),
-      file_path = "flu-base/2022-10-22-flu-base.csv",
-      round_id = "2022-10-22",
-      derived_task_ids = "target_end_date"
     ),
     list(
       hub_path = testthat::test_path("testdata/hub-chr"),
@@ -241,8 +231,7 @@ call_with_fixture <- function(check, tbl_chr, fixture) {
     tbl_chr = tbl_chr,
     round_id = fixture[["round_id"]],
     file_path = fixture[["file_path"]],
-    hub_path = fixture[["hub_path"]],
-    derived_task_ids = fixture_derived_task_ids(fixture)
+    hub_path = fixture[["hub_path"]]
   )
 }
 
@@ -253,8 +242,8 @@ call_with_fixture <- function(check, tbl_chr, fixture) {
 # a hub of several modeling tasks rejects most of those pairings as
 # combinations no single modeling task allows.
 #
-# A derived task ID gets no `invalid_` variant, because the check is told to
-# ignore what those columns hold.
+# A derived task ID gets no variants, because the grid reference ignores what
+# those columns hold. The targeted tests cover them.
 #
 # `invalid_output_type_id` alters the first row that is not a sample. A sample's
 # `output_type_id` is an identifier the submitter chose, so no value is invalid
@@ -273,12 +262,15 @@ values_variants <- function(fixture) {
   )
   out_tid <- hubUtils::std_colnames[["output_type_id"]]
   out_type <- tbl[[hubUtils::std_colnames[["output_type"]]]]
-  derived_task_ids <- fixture_derived_task_ids(fixture)
+  derived_task_ids <- get_hub_derived_task_ids(
+    fixture[["hub_path"]],
+    fixture[["round_id"]]
+  )
 
   variants <- list(submitted = tbl)
-  for (col in c(task_ids, out_tid)) {
+  for (col in setdiff(c(task_ids, out_tid), derived_task_ids)) {
     row <- if (col == out_tid) which(out_type != "sample")[1L] else 1L
-    if (!col %in% derived_task_ids && !is.na(row)) {
+    if (!is.na(row)) {
       invalid <- tbl
       invalid[row, col] <- "not-a-value"
       variants[[paste0("invalid_", col)]] <- invalid
@@ -288,14 +280,6 @@ values_variants <- function(fixture) {
     variants[[paste0("reversed_", col)]] <- reversed
   }
   variants
-}
-
-# The derived task IDs the check ignores for a fixture.
-fixture_derived_task_ids <- function(fixture) {
-  if (!is.null(fixture[["derived_task_ids"]])) {
-    return(fixture[["derived_task_ids"]])
-  }
-  get_hub_derived_task_ids(fixture[["hub_path"]], fixture[["round_id"]])
 }
 
 # The condition each implementation returns records the name of the function

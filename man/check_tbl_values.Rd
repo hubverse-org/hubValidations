@@ -9,7 +9,7 @@ check_tbl_values(
   round_id,
   file_path,
   hub_path,
-  derived_task_ids = get_hub_derived_task_ids(hub_path, round_id)
+  derived_task_ids = deprecated()
 )
 }
 \arguments{
@@ -31,10 +31,9 @@ in the \code{arrow} package.
 The hub must be fully configured with valid \code{admin.json} and \code{tasks.json}
 files within the \code{hub-config} directory.}
 
-\item{derived_task_ids}{Character vector of derived task ID names (task IDs whose
-values depend on other task IDs) to ignore. Columns for such task ids will
-contain \code{NA}s. Defaults to extracting derived task IDs from hub \code{task.json}. See
-\code{\link[=get_hub_derived_task_ids]{get_hub_derived_task_ids()}} for more details.}
+\item{derived_task_ids}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Derived task ID
+columns are validated like any other task ID column, so the argument has no
+effect.}
 }
 \value{
 Depending on whether validation has succeeded, one of:
