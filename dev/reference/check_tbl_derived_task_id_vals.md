@@ -1,11 +1,6 @@
 # Check derived task ID columns contain valid values
 
-This check is used to validate that values in any derived task ID
-columns matches accepted values for each derived task ID in the config.
-Given the dependence of derived task IDs on the values of other values,
-it ignores the combinations of derived task ID values with those of
-other task IDs and focuses only on identifying values that do not match
-the accepted values.
+**\[superseded\]**
 
 ## Usage
 
@@ -52,9 +47,8 @@ check_tbl_derived_task_id_vals(
 - derived_task_ids:
 
   Character vector of derived task ID names (task IDs whose values
-  depend on other task IDs) to ignore. Columns for such task ids will
-  contain `NA`s. Defaults to extracting derived task IDs from hub
-  `task.json`. See
+  depend on other task IDs) to validate. Defaults to extracting derived
+  task IDs from hub `task.json`. See
   [`get_hub_derived_task_ids()`](https://hubverse-org.github.io/hubUtils/reference/get_hub_timezone.html)
   for more details.
 
@@ -70,3 +64,17 @@ If no `derived_task_ids` are specified, the check is skipped and a
 `<message/check_info>` condition class object is retuned.
 
 Returned object also inherits from subclass `<hub_check>`.
+
+## Details
+
+[`check_tbl_values()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_values.md)
+validates derived task ID columns like any other task ID column, so
+[`validate_model_data()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_model_data.md)
+no longer runs this check. It remains available as a custom check.
+
+This check is used to validate that values in any derived task ID
+columns matches accepted values for each derived task ID in the config.
+Given the dependence of derived task IDs on the values of other values,
+it ignores the combinations of derived task ID values with those of
+other task IDs and focuses only on identifying values that do not match
+the accepted values.

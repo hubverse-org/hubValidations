@@ -156,8 +156,8 @@ provided in the hub's config.</p></dd>
 
 <dt id="arg-derived-task-ids">derived_task_ids<a class="anchor" aria-label="anchor" href="#arg-derived-task-ids"></a></dt>
 <dd><p>Character vector of derived task ID names (task IDs whose
-values depend on other task IDs) to ignore. Columns for such task ids will
-contain <code>NA</code>s.
+values depend on other task IDs). The required values and sample checks
+leave these columns out.
 If <code>NULL</code>, defaults to extracting derived task IDs from hub <code>task.json</code>. See
 <code><a href="https://hubverse-org.github.io/hubUtils/reference/get_hub_timezone.html" class="external-link">get_hub_derived_task_ids()</a></code> for more details.</p></dd>
 
@@ -289,15 +289,10 @@ validating required values</strong>.</p><div class="section">
    <td style="text-align:left;"> check_failure </td>
    <td style="text-align:left;">  </td>
   </tr><tr><td style="text-align:left;font-weight: bold;"> valid_vals </td>
-   <td style="text-align:left;"> Columns (excluding the `value` and any derived task ID columns) contain valid combinations of task ID / output type / output type ID values </td>
+   <td style="text-align:left;"> Columns (excluding the `value` column) contain valid combinations of task ID / output type / output type ID values. Derived task ID values are not checked against the task IDs they are derived from. </td>
    <td style="text-align:left;"> TRUE </td>
    <td style="text-align:left;"> check_error </td>
    <td style="text-align:left;"> error_tbl: table of invalid task ID/output type/output type ID value combinations </td>
-  </tr><tr><td style="text-align:left;font-weight: bold;"> derived_task_id_vals </td>
-   <td style="text-align:left;"> Derived task ID columns contain valid values. </td>
-   <td style="text-align:left;"> FALSE </td>
-   <td style="text-align:left;"> check_failure </td>
-   <td style="text-align:left;"> errors: named list of derived task ID values. Each element contains the invalid values for each derived task ID that failed the check. </td>
   </tr><tr><td style="text-align:left;font-weight: bold;"> rows_unique </td>
    <td style="text-align:left;"> Columns (excluding the `value` and any derived task ID columns) contain unique combinations of task ID / output type / output type ID values </td>
    <td style="text-align:left;"> FALSE </td>

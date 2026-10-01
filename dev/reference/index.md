@@ -163,7 +163,8 @@ Unit validation checks. All return `hub_check` S3 class objects.
   : Check column names of model output data
 
 - [`check_tbl_derived_task_id_vals()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_derived_task_id_vals.md)
-  : Check derived task ID columns contain valid values
+  **\[superseded\]** : Check derived task ID columns contain valid
+  values
 
 - [`check_tbl_match_round_id()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_match_round_id.md)
   : Check model output data tbl round ID matches submission round ID.

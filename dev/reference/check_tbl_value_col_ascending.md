@@ -52,9 +52,8 @@ check_tbl_value_col_ascending(
 - derived_task_ids:
 
   Character vector of derived task ID names (task IDs whose values
-  depend on other task IDs) to ignore. Columns for such task ids will
-  contain `NA`s. Defaults to extracting derived task IDs from hub
-  `task.json`. See
+  depend on other task IDs) to ignore during validation. Defaults to
+  extracting derived task IDs from hub `task.json`. See
   [`get_hub_derived_task_ids()`](https://hubverse-org.github.io/hubUtils/reference/get_hub_timezone.html)
   for more details.
 

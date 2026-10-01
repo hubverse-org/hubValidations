@@ -65,7 +65,7 @@ validate_submission(hub_path,
 #> ✔ [metadata_exists]: Metadata file exists at path
 #>   model-metadata/team1-goodmodel.yaml.
 #> ✖ [submission_time]: Submission time must be within accepted submission window
-#>   for round.  Current time "2026-09-28 12:30:53 UTC" is outside window
+#>   for round.  Current time "2026-10-01 08:22:49 UTC" is outside window
 #>   2022-10-02 EDT--2022-10-09 23:59:59 EDT.
 #> ✔ [file_read]: File could be read successfully.
 #> ✔ [valid_round_id_col]: `round_id_col` name is valid.
@@ -77,8 +77,6 @@ validate_submission(hub_path,
 #>   column names.
 #> ✔ [col_types]: Column data types match hub schema.
 #> ✔ [valid_vals]: `tbl` contains valid values/value combinations.
-#> ℹ [derived_task_id_vals]: No derived task IDs to check. Skipping derived task
-#>   ID value check.
 #> ✔ [rows_unique]: All combinations of task ID
 #>   column/`output_type`/`output_type_id` values are unique.
 #> ✔ [req_vals]: Required task ID/output type/output type ID combinations all
@@ -133,7 +131,7 @@ validate_submission(hub_path,
 #> ✔ [metadata_exists]: Metadata file exists at path
 #>   model-metadata/hub-baseline.yml.
 #> ✖ [submission_time]: Submission time must be within accepted submission window
-#>   for round.  Current time "2026-09-28 12:30:54 UTC" is outside window
+#>   for round.  Current time "2026-10-01 08:22:51 UTC" is outside window
 #>   2022-10-02 EDT--2022-10-09 23:59:59 EDT.
 #> ✔ [file_read]: File could be read successfully.
 #> ✔ [valid_round_id_col]: `round_id_col` name is valid.
@@ -170,7 +168,7 @@ validate_submission(hub_path,
 #> ── team1-goodmodel/2022-10-08-team1-goodmodel.csv ────
 #> 
 #> ✖ [submission_time]: Submission time must be within accepted submission window
-#>   for round.  Current time "2026-09-28 12:30:55 UTC" is outside window
+#>   for round.  Current time "2026-10-01 08:22:52 UTC" is outside window
 #>   2022-10-02 EDT--2022-10-09 23:59:59 EDT.
 #> Error in `check_for_errors()`:
 #> ! 
@@ -196,7 +194,7 @@ validate_submission(hub_path,
 #> ✔ All validation checks have been successful.
 ```
 
-### Ignoring derived task IDs to improve validation performance
+### Derived task IDs
 
 #### What are derived task IDs?
 
@@ -208,10 +206,27 @@ IDs is much more restricted. A common example of a derived task ID is
 `target_end_date` which is most often derived from the `reference_date`
 or `origin_date` and `horizon` task ids.
 
-#### How to ignore derived task IDs
+#### How derived task IDs are validated
+
+The standard checks do not validate the relationship between a derived
+task ID and the task IDs it is derived from. The valid values check
+tests each derived task ID value against the values the config lists,
+like any other task ID. The required values and sample checks leave
+derived task ID columns out, which they must do to give correct results.
+Declaring derived task IDs, in the config or through the
+`derived_task_ids` argument, is what lets those checks do so, and
+records that the relationship exists. It is therefore **important to
+validate the relationship itself with a custom check**. For example, the
+values of `target_end_date` can be checked by deploying optional check
+[`opt_check_tbl_horizon_timediff()`](https://hubverse-org.github.io/hubValidations/dev/reference/opt_check_tbl_horizon_timediff.md).
+See the article on [including custom
+functions](https://hubverse-org.github.io/hubValidations/dev/articles/deploying-custom-functions.md)
+for more information.
+
+#### How to specify derived task IDs
 
 **For configs using schema version v4.0.0 and above, derived task IDs
-are configured via the hub config and do not need to be ignored
+are configured via the hub config and do not need to be specified
 manually**
 
 To check if the hub uses schema version v4.0.0 or above, you can use:
@@ -221,14 +236,9 @@ To check if the hub uses schema version v4.0.0 or above, you can use:
 hubUtils::version_gte("v4.0.0", hub_path = "path/to/hub")
 ```
 
-Argument **`derived_task_ids`** allows for the specification of **task
-IDs that are derived from other task IDs**. Supplying the names of
-derived task IDs to argument `derived_task_ids` will ignore them during
-validation checks.
-
-Depending on config complexity, this **can often lead to a significant
-improvement in validation performance and in some circumstances is
-necessary for correct validation**.
+For hubs whose config does not declare them, argument
+**`derived_task_ids`** allows for the specification of **task IDs that
+are derived from other task IDs**.
 
 Note that, **if any task IDs with `required` values have dependent
 derived task IDs, it is essential for `derived_task_ids` to be
@@ -259,8 +269,7 @@ administrators.
 | match_round_id | Round ID from file contents matches round ID from file name. Skipped if `round_id_from_var` is FALSE in config. | TRUE | check_error |  |
 | colnames | File column names match expected column names for round (i.e. task ID names + hub standard column names) | TRUE | check_error |  |
 | col_types | File column types match expected column types from config. Mainly applicable to parquet & arrow files. | FALSE | check_failure |  |
-| valid_vals | Columns (excluding the `value` and any derived task ID columns) contain valid combinations of task ID / output type / output type ID values | TRUE | check_error | error_tbl: table of invalid task ID/output type/output type ID value combinations |
-| derived_task_id_vals | Derived task ID columns contain valid values. | FALSE | check_failure | errors: named list of derived task ID values. Each element contains the invalid values for each derived task ID that failed the check. |
+| valid_vals | Columns (excluding the `value` column) contain valid combinations of task ID / output type / output type ID values. Derived task ID values are not checked against the task IDs they are derived from. | TRUE | check_error | error_tbl: table of invalid task ID/output type/output type ID value combinations |
 | rows_unique | Columns (excluding the `value` and any derived task ID columns) contain unique combinations of task ID / output type / output type ID values | FALSE | check_failure |  |
 | req_vals | Columns (excluding the `value` and any derived task ID columns) contain all required combinations of task ID / output type / output type ID values | FALSE | check_failure | missing_df: table of missing task ID/output type/output type ID value combinations |
 | value_col_valid | Values in `value` column are coercible to data type configured for each output type | FALSE | check_failure |  |

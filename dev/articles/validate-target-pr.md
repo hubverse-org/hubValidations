@@ -84,7 +84,7 @@ gert::git_clone(
 )
 gert::git_branch_checkout("add-file-oracle-output", repo = ci_target_hub_path)
 #> Creating local branch add-file-oracle-output from origin/add-file-oracle-output
-#> <git repository>: /tmp/RtmpJiH894/file230010d5545b/target[@add-file-oracle-output]
+#> <git repository>: /tmp/RtmpxxCziL/file233d4821d574/target[@add-file-oracle-output]
 
 v <- validate_target_pr(
   hub_path = ci_target_hub_path,
@@ -211,7 +211,7 @@ failure:
 
 gert::git_branch_checkout("delete-target-dir-files", repo = ci_target_hub_path)
 #> Creating local branch delete-target-dir-files from origin/delete-target-dir-files
-#> <git repository>: /tmp/RtmpJiH894/file230010d5545b/target[@delete-target-dir-files]
+#> <git repository>: /tmp/RtmpxxCziL/file233d4821d574/target[@delete-target-dir-files]
 
 v_mod <- validate_target_pr(
   hub_path = ci_target_hub_path,
@@ -284,7 +284,7 @@ oracle-output data. With the default settings, this produces an error:
 
 gert::git_branch_checkout("remove-ts-add-oo", repo = ci_target_hub_path)
 #> Creating local branch remove-ts-add-oo from origin/remove-ts-add-oo
-#> <git repository>: /tmp/RtmpJiH894/file230010d5545b/target[@remove-ts-add-oo]
+#> <git repository>: /tmp/RtmpxxCziL/file233d4821d574/target[@remove-ts-add-oo]
 
 v_del <- validate_target_pr(
   hub_path = ci_target_hub_path,

@@ -55,7 +55,7 @@
 <span>  <span class="va">round_id</span>,</span>
 <span>  <span class="va">file_path</span>,</span>
 <span>  <span class="va">hub_path</span>,</span>
-<span>  derived_task_ids <span class="op">=</span> <span class="fu"><a href="https://hubverse-org.github.io/hubUtils/reference/get_hub_timezone.html" class="external-link">get_hub_derived_task_ids</a></span><span class="op">(</span><span class="va">hub_path</span>, <span class="va">round_id</span><span class="op">)</span></span>
+<span>  derived_task_ids <span class="op">=</span> <span class="fu">deprecated</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -90,10 +90,9 @@ files within the <code>hub-config</code> directory.</p></dd>
 
 
 <dt id="arg-derived-task-ids">derived_task_ids<a class="anchor" aria-label="anchor" href="#arg-derived-task-ids"></a></dt>
-<dd><p>Character vector of derived task ID names (task IDs whose
-values depend on other task IDs) to ignore. Columns for such task ids will
-contain <code>NA</code>s. Defaults to extracting derived task IDs from hub <code>task.json</code>. See
-<code><a href="https://hubverse-org.github.io/hubUtils/reference/get_hub_timezone.html" class="external-link">get_hub_derived_task_ids()</a></code> for more details.</p></dd>
+<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> Derived task ID
+columns are validated like any other task ID column, so the argument has no
+effect.</p></dd>
 
 </dl></div>
     <div class="section level2">
