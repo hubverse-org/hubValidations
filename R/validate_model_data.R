@@ -1,8 +1,8 @@
 #' Validate the contents of a submitted model data file
 #'
 #' @param derived_task_ids Character vector of derived task ID names (task IDs whose
-#' values depend on other task IDs) to ignore. Columns for such task ids will
-#' contain `NA`s.
+#' values depend on other task IDs). The required values and sample checks
+#' leave these columns out.
 #' If `NULL`, defaults to extracting derived task IDs from hub `task.json`. See
 #' [get_hub_derived_task_ids()] for more details.
 #' @inheritParams check_tbl_unique_round_id
@@ -177,25 +177,13 @@ validate_model_data <- function(
       tbl_chr,
       round_id = round_id,
       file_path = file_path,
-      hub_path = hub_path,
-      derived_task_ids = derived_task_ids
+      hub_path = hub_path
     ),
     file_path
   )
   if (is_any_error(checks$valid_vals)) {
     return(checks)
   }
-
-  checks$derived_task_id_vals <- try_check(
-    check_tbl_derived_task_id_vals(
-      tbl_chr,
-      round_id = round_id,
-      file_path = file_path,
-      hub_path = hub_path,
-      derived_task_ids = derived_task_ids
-    ),
-    file_path
-  )
 
   checks$rows_unique <- try_check(
     check_tbl_rows_unique(

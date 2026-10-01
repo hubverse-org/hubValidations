@@ -69,8 +69,8 @@ Not applicable when explicit submission window start and end dates are
 provided in the hub's config.}
 
 \item{derived_task_ids}{Character vector of derived task ID names (task IDs whose
-values depend on other task IDs) to ignore. Columns for such task ids will
-contain \code{NA}s.
+values depend on other task IDs). The required values and sample checks
+leave these columns out.
 If \code{NULL}, defaults to extracting derived task IDs from hub \code{task.json}. See
 \code{\link[=get_hub_derived_task_ids]{get_hub_derived_task_ids()}} for more details.}
 }
@@ -211,17 +211,10 @@ Details of checks performed by \code{validate_submission()}\if{html}{\out{
   </tr>
   <tr>
    <td style="text-align:left;font-weight: bold;"> valid_vals </td>
-   <td style="text-align:left;"> Columns (excluding the `value` and any derived task ID columns) contain valid combinations of task ID / output type / output type ID values </td>
+   <td style="text-align:left;"> Columns (excluding the `value` column) contain valid combinations of task ID / output type / output type ID values. Derived task ID values are not checked against the task IDs they are derived from. </td>
    <td style="text-align:left;"> TRUE </td>
    <td style="text-align:left;"> check_error </td>
    <td style="text-align:left;"> error_tbl: table of invalid task ID/output type/output type ID value combinations </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;font-weight: bold;"> derived_task_id_vals </td>
-   <td style="text-align:left;"> Derived task ID columns contain valid values. </td>
-   <td style="text-align:left;"> FALSE </td>
-   <td style="text-align:left;"> check_failure </td>
-   <td style="text-align:left;"> errors: named list of derived task ID values. Each element contains the invalid values for each derived task ID that failed the check. </td>
   </tr>
   <tr>
    <td style="text-align:left;font-weight: bold;"> rows_unique </td>

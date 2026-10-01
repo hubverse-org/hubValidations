@@ -3,6 +3,7 @@
 #'
 #' @inherit check_tbl_colnames params
 #' @inherit check_tbl_colnames return
+#' @inheritParams check_tbl_spl_mt_unique
 #' @inheritParams check_tbl_values
 #' @param compound_taskid_set a list of `compound_taskid_set`s (characters vector of compound task IDs),
 #' one for each modeling task. Used to override the compound task ID set in the config file,

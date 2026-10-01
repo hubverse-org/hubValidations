@@ -332,7 +332,7 @@ test_that("validate_submission handles overriding output type id data type corre
   )
 })
 
-test_that("Ignoring derived_task_ids in validate_submission works", {
+test_that("validate_submission validates derived task ID values", {
   skip_if_offline()
   # Validation passes
   expect_snapshot(
@@ -346,36 +346,27 @@ test_that("Ignoring derived_task_ids in validate_submission works", {
     )
   )
 
-  # Ensure derived_task_ids values are ignored in validate submission by introducing
-  # deliberate error in derived_task_ids through mocking.
-  # This should not impact successful validation of affected checks
+  # An invalid derived task ID value, introduced through mocking, fails the
+  # valid values check and stops validation of the file there.
   tbl_mod <- read_model_out_file(
     file_path = "flu-base/2022-10-22-flu-base.csv",
     hub_path = system.file("testhubs/samples", package = "hubValidations"),
     coerce_types = "chr"
   )
   tbl_mod[1, "target_end_date"] <- "2092-10-22"
-  # Use `local_mocked_bindings()` to override `read_model_out_file`
   local_mocked_bindings(
     read_model_out_file = function(...) tbl_mod
   )
   file_path <- "flu-base/2022-10-22-flu-base.csv"
-  expect_snapshot(
-    validate_submission(
-      hub_path = system.file("testhubs/samples", package = "hubValidations"),
-      file_path = file_path,
-      skip_submit_window_check = TRUE,
-      derived_task_ids = "target_end_date"
-    )[[file_path]][c(
-      "valid_vals",
-      "req_vals",
-      "value_col_valid",
-      "spl_n",
-      "spl_compound_taskid_set",
-      "spl_compound_tid",
-      "spl_non_compound_tid"
-    )]
-  )
+  res <- validate_submission(
+    hub_path = system.file("testhubs/samples", package = "hubValidations"),
+    file_path = file_path,
+    skip_submit_window_check = TRUE,
+    derived_task_ids = "target_end_date"
+  )[[file_path]]
+  expect_snapshot(res[["valid_vals"]])
+  expect_false("derived_task_id_vals" %in% names(res))
+  expect_null(res[["req_vals"]])
 })
 
 test_that("validate_submission returns check_failure when duplicate files per round exist", {

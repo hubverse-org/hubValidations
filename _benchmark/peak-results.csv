@@ -341,3 +341,7 @@
 "ak/grid-free-required/357@b1c9d11-dirty","G2","acefa","check_tbl_values_required",65000,38872500,1,307,0.52,"check_success","ok","ak/grid-free-required/357@b1c9d11-dirty","1.2.1.9000","2.2.2.9000","Darwin","arm64","4.5.2"
 "ak/grid-free-required/357@b1c9d11-dirty","G3","acefa","baseline_load_only_chr",65000,77745000,1,196,0,"none","ok","ak/grid-free-required/357@b1c9d11-dirty","1.2.1.9000","2.2.2.9000","Darwin","arm64","4.5.2"
 "ak/grid-free-required/357@b1c9d11-dirty","G3","acefa","check_tbl_values_required",65000,77745000,1,302,0.52,"check_success","ok","ak/grid-free-required/357@b1c9d11-dirty","1.2.1.9000","2.2.2.9000","Darwin","arm64","4.5.2"
+"ak/values-derived-task-ids/378","S","acefa","baseline_load_only_chr",18000,25200,1,187,0,"none","ok","ak/values-derived-task-ids/378@88de231-dirty","1.2.1.9000","2.2.2.9000","Darwin","arm64","4.5.2"
+"ak/values-derived-task-ids/378","S","acefa","check_tbl_values",18000,25200,1,209,0.04,"check_success","ok","ak/values-derived-task-ids/378@88de231-dirty","1.2.1.9000","2.2.2.9000","Darwin","arm64","4.5.2"
+"ak/values-derived-task-ids/378","G3","acefa","baseline_load_only_chr",65000,77745000,1,194,0,"none","ok","ak/values-derived-task-ids/378@88de231-dirty","1.2.1.9000","2.2.2.9000","Darwin","arm64","4.5.2"
+"ak/values-derived-task-ids/378","G3","acefa","check_tbl_values",65000,77745000,1,219,0.05,"check_success","ok","ak/values-derived-task-ids/378@88de231-dirty","1.2.1.9000","2.2.2.9000","Darwin","arm64","4.5.2"

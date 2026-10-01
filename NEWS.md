@@ -8,6 +8,8 @@
 * `match_tbl_to_model_task()` now returns each modeling task's rows in the order they were submitted in, rather than the order the config lists their values. Pass the new `order_by_config = TRUE` argument for the config's order (#355).
 * `check_tbl_value_col()` now expects `tbl` to be all character, like the other checks that validate data against the config. Passing a table with hub schema column types is no longer supported (#355).
 * `match_tbl_to_model_task()` and `check_tbl_value_col()` now error when a task ID column is missing from `tbl`. They previously returned a number of rows unrelated to the submission (#355).
+* `check_tbl_values()` now validates derived task ID columns like any other task ID column, so an invalid derived task ID value or combination is reported alongside the rest. Its `derived_task_ids` argument is deprecated and has no effect. Note that the relationship between a derived task ID and the task IDs it is derived from is still not checked, so optional or custom checks for it are still recommended (#378).
+* `validate_model_data()`, and so `validate_submission()` and `validate_pr()`, no longer run `check_tbl_derived_task_id_vals()`, and their output no longer contains a `derived_task_id_vals` element. An invalid derived task ID value now fails the `valid_vals` check as a `check_error`, which stops validation of the file, where it previously failed the `derived_task_id_vals` check as a `check_failure` and validation continued. `check_tbl_derived_task_id_vals()` remains available as a custom check (#378).
 
 ## Bug fixes
 

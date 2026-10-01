@@ -1,28 +1,34 @@
 #' Check model output data tbl contains valid value combinations
 #' @param tbl_chr a tibble/data.frame of the contents of the file being
 #' validated. Column types must **all be character**.
-#' @param derived_task_ids Character vector of derived task ID names (task IDs whose
-#' values depend on other task IDs) to ignore. Columns for such task ids will
-#' contain `NA`s. Defaults to extracting derived task IDs from hub `task.json`. See
-#' [get_hub_derived_task_ids()] for more details.
+#' @param derived_task_ids `r lifecycle::badge("deprecated")` Derived task ID
+#' columns are validated like any other task ID column, so the argument has no
+#' effect.
 #' @inherit check_tbl_colnames params
 #' @inherit check_tbl_colnames return
+#' @importFrom lifecycle deprecated
 #' @export
 check_tbl_values <- function(
   tbl_chr,
   round_id,
   file_path,
   hub_path,
-  derived_task_ids = get_hub_derived_task_ids(hub_path, round_id)
+  derived_task_ids = deprecated()
 ) {
+  if (lifecycle::is_present(derived_task_ids)) {
+    lifecycle::deprecate_warn(
+      "3.0.0",
+      "check_tbl_values(derived_task_ids = )",
+      details = "The argument is ignored. Derived task ID columns are now validated like any other task ID column."
+    )
+  }
   assert_tbl_chr(tbl_chr)
   config_tasks <- read_config(hub_path, "tasks")
 
   invalid_row_idx <- which_invalid_rows(
     tbl_chr,
     config_tasks = config_tasks,
-    round_id = round_id,
-    derived_task_ids = derived_task_ids
+    round_id = round_id
   )
   check <- length(invalid_row_idx) == 0L
 
@@ -35,8 +41,7 @@ check_tbl_values <- function(
       invalid_tbl,
       invalid_row_idx,
       config_tasks,
-      round_id,
-      derived_task_ids
+      round_id
     )
     details <- error_summary$msg
     if (length(error_summary$comb_rows) == 0L) {
@@ -75,21 +80,22 @@ check_tbl_values <- function(
 which_invalid_rows <- function(
   tbl_chr,
   config_tasks,
-  round_id,
-  derived_task_ids
+  round_id
 ) {
   call <- rlang::caller_env()
+  # Pass `derived_task_ids = NULL` here and to `which_mt_rows()` below, so
+  # derived task ID columns are validated like any other.
   value_sets <- get_config_mt_value_sets(
     config_tasks = config_tasks,
     round_id = round_id,
-    derived_task_ids = derived_task_ids,
+    derived_task_ids = NULL,
     call = call
   )
   check_match_cols(tbl_chr, config_tasks, round_id, call = call)
 
   valid <- logical(nrow(tbl_chr))
   for (mt in value_sets) {
-    valid[which_mt_rows(tbl_chr, mt, derived_task_ids)] <- TRUE
+    valid[which_mt_rows(tbl_chr, mt, derived_task_ids = NULL)] <- TRUE
     # A row that has matched stays matched, so once every row has, the
     # remaining modeling tasks cannot change the result.
     if (all(valid)) {
@@ -126,20 +132,13 @@ summarise_invalid_values <- function(
   invalid_tbl,
   invalid_row_idx,
   config_tasks,
-  round_id,
-  derived_task_ids
+  round_id
 ) {
-  # Two kinds of value are left out, for different reasons. A sample's
-  # `output_type_id` is an identifier the submitter chose, so the config
-  # enumerates no values to compare it against. The config does list values for
-  # a derived task ID, but this check ignores derived task IDs, and
-  # `get_round_config_values()` is asked to return `NA` for them, so comparing
-  # them would report every derived value as invalid.
-  #
-  # Note that the sample entries are blanked rather than their column dropped,
-  # because `output_type_id` also carries the enumerated IDs of every other
-  # output type.
-  vals <- as.list(invalid_tbl[setdiff(names(invalid_tbl), derived_task_ids)])
+  # A sample's `output_type_id` is an identifier the submitter chose, so the
+  # config enumerates no values to compare it against. Those entries are
+  # blanked rather than their column dropped, because `output_type_id` also
+  # carries the enumerated IDs of every other output type.
+  vals <- as.list(invalid_tbl)
   output_type <- hubUtils::std_colnames[["output_type"]]
   output_type_id <- hubUtils::std_colnames[["output_type_id"]]
   is_sample <- invalid_tbl[[output_type]] == "sample"
@@ -147,11 +146,7 @@ summarise_invalid_values <- function(
     vals[[output_type_id]][is_sample] <- NA_character_
   }
 
-  uniq_config <- get_round_config_values(
-    config_tasks,
-    round_id,
-    derived_task_ids
-  )[names(vals)]
+  uniq_config <- get_round_config_values(config_tasks, round_id)[names(vals)]
 
   invalid_vals <- purrr::map2(
     purrr::map(vals, unique),

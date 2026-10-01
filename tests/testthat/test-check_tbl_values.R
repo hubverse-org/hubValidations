@@ -253,51 +253,53 @@ test_that("check_tbl_values works with v3 spec samples", {
 })
 
 
-test_that("Ignoring derived_task_ids in check_tbl_values works", {
-  hub_path <- system.file("testhubs/samples", package = "hubValidations")
-  file_path <- "flu-base/2022-10-22-flu-base.csv"
-  round_id <- "2022-10-22"
-  tbl_chr <- tbl_orig <- read_model_out_file(
+test_that("check_tbl_values validates derived task ID values", {
+  # `target_end_date` is derived from `reference_date` and `horizon`, and the
+  # config declares it as derived.
+  hub_path <- test_path("testdata/hub-177")
+  file_path <- "FluSight-baseline/2024-12-14-FluSight-baseline.parquet"
+  round_id <- "2024-12-14"
+  tbl_chr <- read_model_out_file(
     file_path = file_path,
     hub_path = hub_path,
     coerce_types = "chr"
   )
-  # Introduce invalid value to derived task id that should be ignored when using
-  # `derived_task_ids`.
+  expect_s3_class(
+    check_tbl_values(tbl_chr, round_id, file_path, hub_path),
+    "check_success"
+  )
+
+  # A date the config does not list. Two of the modeling tasks allow only `NA`
+  # in `target_end_date`, so pick a row from one that lists dates.
+  row <- which(!is.na(tbl_chr$target_end_date))[1L]
+  tbl_chr[row, "target_end_date"] <- "2092-10-22"
+  expect_snapshot(
+    check_tbl_values(tbl_chr, round_id, file_path, hub_path)
+  )
+
+  # A value only another modeling task allows. The modeling tasks without a
+  # horizon allow `NA` alone in `target_end_date`, and the row's own modeling
+  # task does not allow `NA`, so no modeling task matches the row. Skipping
+  # the column when matching would let the row pass.
+  tbl_chr[row, "target_end_date"] <- NA_character_
+  expect_snapshot(
+    check_tbl_values(tbl_chr, round_id, file_path, hub_path)
+  )
+})
+
+test_that("check_tbl_values(derived_task_ids) is deprecated and has no effect", {
+  hub_path <- system.file("testhubs/samples", package = "hubValidations")
+  file_path <- "flu-base/2022-10-22-flu-base.csv"
+  round_id <- "2022-10-22"
+  tbl_chr <- read_model_out_file(
+    file_path = file_path,
+    hub_path = hub_path,
+    coerce_types = "chr"
+  )
   tbl_chr[1, "target_end_date"] <- "random_date"
-  expect_snapshot(
-    check_tbl_values(
-      tbl_chr,
-      round_id,
-      file_path,
-      hub_path,
-      derived_task_ids = "target_end_date"
-    )
-  )
-  # Check that ignoring derived task ids returns same result as not ignoring.
-  expect_equal(
-    check_tbl_values(
-      tbl_chr,
-      round_id,
-      file_path,
-      hub_path,
-      derived_task_ids = "target_end_date"
-    ),
-    check_tbl_values(
-      tbl_orig,
-      round_id,
-      file_path,
-      hub_path,
-      derived_task_ids = "target_end_date"
-    )
-  )
 
-  # Trigger invalid value error
-  tbl_chr[1, "horizon"] <- tbl_orig[1, "horizon"] <- "9"
-  # Trigger invalid value combination error
-  tbl_chr[2, "output_type"] <- tbl_orig[2, "output_type"] <- "pmf"
-  expect_snapshot(
-    check_tbl_values(
+  lifecycle::expect_deprecated(
+    res <- check_tbl_values(
       tbl_chr,
       round_id,
       file_path,
@@ -305,30 +307,8 @@ test_that("Ignoring derived_task_ids in check_tbl_values works", {
       derived_task_ids = "target_end_date"
     )
   )
-  expect_snapshot(
-    check_tbl_values(
-      tbl_chr,
-      round_id,
-      file_path,
-      hub_path,
-      derived_task_ids = "target_end_date"
-    )$error_tbl
-  )
-
   expect_equal(
-    check_tbl_values(
-      tbl_chr,
-      round_id,
-      file_path,
-      hub_path,
-      derived_task_ids = "target_end_date"
-    ),
-    check_tbl_values(
-      tbl_orig,
-      round_id,
-      file_path,
-      hub_path,
-      derived_task_ids = "target_end_date"
-    )
+    res,
+    check_tbl_values(tbl_chr, round_id, file_path, hub_path)
   )
 })

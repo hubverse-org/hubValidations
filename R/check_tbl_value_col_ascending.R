@@ -8,6 +8,7 @@
 #' data. If not, the check is skipped and a `<message/check_info>` condition
 #' class object is returned.
 #'
+#' @inheritParams check_tbl_spl_mt_unique
 #' @inherit check_tbl_values params
 #' @inherit check_tbl_col_types return
 #' @export

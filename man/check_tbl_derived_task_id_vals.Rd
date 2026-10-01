@@ -31,10 +31,10 @@ in the \code{arrow} package.
 The hub must be fully configured with valid \code{admin.json} and \code{tasks.json}
 files within the \code{hub-config} directory.}
 
-\item{derived_task_ids}{Character vector of derived task ID names (task IDs whose
-values depend on other task IDs) to ignore. Columns for such task ids will
-contain \code{NA}s. Defaults to extracting derived task IDs from hub \code{task.json}. See
-\code{\link[=get_hub_derived_task_ids]{get_hub_derived_task_ids()}} for more details.}
+\item{derived_task_ids}{Character vector of derived task ID names (task IDs
+whose values depend on other task IDs) to validate. Defaults to extracting
+derived task IDs from hub \code{task.json}. See \code{\link[=get_hub_derived_task_ids]{get_hub_derived_task_ids()}} for
+more details.}
 }
 \value{
 Depending on whether validation has succeeded, one of:
@@ -49,6 +49,13 @@ If no \code{derived_task_ids} are specified, the check is skipped and a
 Returned object also inherits from subclass \verb{<hub_check>}.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
+}
+\details{
+\code{check_tbl_values()} validates derived task ID columns like any other task
+ID column, so \code{validate_model_data()} no longer runs this check. It remains
+available as a custom check.
+
 This check is used to validate that values in any derived task ID columns
 matches accepted values for each derived task ID in the config.
 Given the dependence of derived task IDs on the values of other values,

@@ -72,8 +72,8 @@ DELIBERATELY_UNMEASURED <- c(
   "check_tbl_match_round_id",
   "check_tbl_colnames",
   "check_tbl_col_types",
-  # These two have nothing to do on these test hubs: there are no derived task IDs
-  # for the first to check, and no pmf output type for the second.
+  # `validate_model_data()` no longer runs the first, and the second has nothing
+  # to do on these test hubs: there is no pmf output type.
   "check_tbl_derived_task_id_vals",
   "check_tbl_value_col_sum1"
 )
@@ -127,8 +127,7 @@ check_call <- function(name, ctx) {
         ctx$tbl_chr,
         ctx$round_id,
         ctx$file_path,
-        ctx$hub_path,
-        derived_task_ids = ctx$derived_task_ids
+        ctx$hub_path
       )
     },
     check_tbl_values_required = function() {
