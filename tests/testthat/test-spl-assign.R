@@ -188,7 +188,7 @@ test_that("compound task ID sets are detected as they were through the grid", {
             hubValidations:::get_mt_compound_taskid_set(
               mt_tbl,
               comp_tids,
-              config_tasks
+              hubUtils::get_round_task_id_names(config_tasks, round_id)
             )
           }
         ),
