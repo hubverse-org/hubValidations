@@ -56,8 +56,6 @@ get_tbl_compound_taskid_set <- function(
     round_id
   )
 
-  # Only the round's own task IDs: other rounds may have task IDs this round,
-  # and so the submission, does not.
   task_ids <- hubUtils::get_round_task_id_names(config_tasks, round_id)
 
   call <- rlang::current_env()

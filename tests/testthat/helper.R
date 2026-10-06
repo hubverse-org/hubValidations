@@ -72,9 +72,9 @@ create_file_path <- function(round_id, model_id = "flu-base", ext = "parquet") {
   fs::path(model_id, paste0(round_id, "-", model_id), ext = ext)
 }
 
-# A hub whose config declares a `compound_taskid_set` of `[]`, i.e. that nothing is a
-# compound task ID and every task ID is sampled jointly.
-empty_cts_hub <- function(env = parent.frame()) {
+# A temporary copy of the `samples` test hub with its `tasks.json` replaced by
+# the named config from `testdata/configs/`.
+samples_hub <- function(tasks_file, env = parent.frame()) {
   hub_path <- withr::local_tempdir(.local_envir = env)
   fs::dir_copy(
     system.file("testhubs/samples", package = "hubValidations"),
@@ -82,9 +82,15 @@ empty_cts_hub <- function(env = parent.frame()) {
     overwrite = TRUE
   )
   fs::file_copy(
-    test_path("testdata/configs/tasks-samples-empty-cts.json"),
+    test_path("testdata/configs", tasks_file),
     fs::path(hub_path, "hub-config", "tasks.json"),
     overwrite = TRUE
   )
   hub_path
+}
+
+# A hub whose config declares a `compound_taskid_set` of `[]`, i.e. that nothing is a
+# compound task ID and every task ID is sampled jointly.
+empty_cts_hub <- function(env = parent.frame()) {
+  samples_hub("tasks-samples-empty-cts.json", env = env)
 }

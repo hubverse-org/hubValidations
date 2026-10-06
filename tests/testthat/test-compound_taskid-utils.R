@@ -73,22 +73,15 @@ test_that("get_tbl_compound_taskid_set ignores task IDs of other rounds (#393)",
     hub_path = hub_path,
     coerce_types = "chr"
   )
-  config_tasks <- read_config(hub_path, "tasks")
-  expected <- get_tbl_compound_taskid_set(tbl, config_tasks, round_id)
-
-  # Add a later round whose model tasks have a task ID that the round being
-  # validated, and so the submission, does not.
-  new_round <- config_tasks$rounds[[1]]
-  new_round$model_tasks <- purrr::map(new_round$model_tasks, function(mt) {
-    mt$task_ids$reference_date <- list(required = NULL, optional = "2023-10-21")
-    mt$task_ids$scenario_id <- list(required = NULL, optional = c("A", "B"))
-    mt
-  })
-  config_tasks$rounds <- c(config_tasks$rounds, list(new_round))
+  # The config has a later round with a task ID, `scenario_id`, that the round
+  # being validated, and so the submission, does not have.
+  config_tasks <- read_config_file(
+    test_path("testdata/configs/tasks-samples-extra-round.json")
+  )
 
   expect_equal(
     get_tbl_compound_taskid_set(tbl, config_tasks, round_id),
-    expected
+    list("2" = c("reference_date", "location"))
   )
 })
 

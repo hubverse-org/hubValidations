@@ -364,32 +364,9 @@ test_that("validation passes end to end with an empty compound_taskid_set", {
 })
 
 test_that("check_tbl_spl_compound_taskid_set ignores task IDs of other rounds (#393)", {
-  # A hub's rounds can have different task IDs. Add a later round with a task
-  # ID, `scenario_id`, that the round being validated, and so the submission,
-  # does not have.
-  hub_path <- withr::local_tempdir()
-  fs::dir_copy(
-    system.file("testhubs/samples", package = "hubValidations"),
-    hub_path,
-    overwrite = TRUE
-  )
-  tasks_path <- fs::path(hub_path, "hub-config", "tasks.json")
-  config_tasks <- jsonlite::read_json(tasks_path)
-  new_round <- config_tasks$rounds[[1]]
-  new_round$model_tasks <- purrr::map(new_round$model_tasks, function(mt) {
-    mt$task_ids$reference_date <- list(required = NULL, optional = "2023-10-21")
-    mt$task_ids$scenario_id <- list(required = NULL, optional = c("A", "B"))
-    mt
-  })
-  config_tasks$rounds <- c(config_tasks$rounds, list(new_round))
-  jsonlite::write_json(
-    config_tasks,
-    tasks_path,
-    auto_unbox = TRUE,
-    null = "null",
-    digits = NA
-  )
-
+  # The config has a later round with a task ID, `scenario_id`, that the round
+  # being validated, and so the submission, does not have.
+  hub_path <- samples_hub("tasks-samples-extra-round.json")
   file_path <- "flu-base/2022-10-22-flu-base.csv"
   round_id <- "2022-10-22"
   tbl <- read_model_out_file(file_path, hub_path, coerce_types = "chr")
