@@ -379,3 +379,36 @@ test_that("check_tbl_spl_compound_taskid_set ignores task IDs of other rounds (#
   expect_s3_class(checks$spl_compound_taskid_set, "check_success")
   expect_true(all(purrr::map_lgl(checks, \(.x) !is_any_error(.x))))
 })
+
+test_that("check_tbl_spl_compound_taskid_set defaults to round-level derived task IDs (#395)", {
+  # The config sets `derived_task_ids` at round level only. `horizon` is in its
+  # `compound_taskid_set`, so each sample below covers a single horizon.
+  # `target_end_date` follows from `horizon`, so each sample also holds a
+  # single `target_end_date`. Unless the check knows `target_end_date` is
+  # derived, it detects it as a compound task ID the config does not allow.
+  hub_path <- samples_hub("tasks-samples-round-derived.json")
+  file_path <- "flu-base/2022-10-22-flu-base.csv"
+  round_id <- "2022-10-22"
+  tbl <- read_model_out_file(file_path, hub_path, coerce_types = "chr")
+  is_spl <- tbl$output_type == "sample"
+  tbl$output_type_id[is_spl] <- paste(
+    tbl$output_type_id[is_spl],
+    tbl$horizon[is_spl],
+    sep = "_"
+  )
+
+  expect_s3_class(
+    check_tbl_spl_compound_taskid_set(
+      tbl,
+      round_id,
+      file_path,
+      hub_path,
+      derived_task_ids = get_hub_derived_task_ids(hub_path)
+    ),
+    "check_error"
+  )
+  expect_s3_class(
+    check_tbl_spl_compound_taskid_set(tbl, round_id, file_path, hub_path),
+    "check_success"
+  )
+})
