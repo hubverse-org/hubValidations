@@ -116,9 +116,9 @@ validate_pr(
 - derived_task_ids:
 
   Character vector of derived task ID names (task IDs whose values
-  depend on other task IDs) to ignore. Columns for such task ids will
-  contain `NA`s. If `NULL`, defaults to extracting derived task IDs from
-  hub `task.json`. See
+  depend on other task IDs). The required values and sample checks leave
+  these columns out. If `NULL`, defaults to extracting derived task IDs
+  from hub `task.json`. See
   [`get_hub_derived_task_ids()`](https://hubverse-org.github.io/hubUtils/reference/get_hub_timezone.html)
   for more details.
 
@@ -198,8 +198,7 @@ Details of checks performed by
 | match_round_id | Round ID from file contents matches round ID from file name. Skipped if \`round_id_from_var\` is FALSE in config. | TRUE | check_error |  |
 | colnames | File column names match expected column names for round (i.e. task ID names + hub standard column names) | TRUE | check_error |  |
 | col_types | File column types match expected column types from config. Mainly applicable to parquet & arrow files. | FALSE | check_failure |  |
-| valid_vals | Columns (excluding the \`value\` and any derived task ID columns) contain valid combinations of task ID / output type / output type ID values | TRUE | check_error | error_tbl: table of invalid task ID/output type/output type ID value combinations |
-| derived_task_id_vals | Derived task ID columns contain valid values. | FALSE | check_failure | errors: named list of derived task ID values. Each element contains the invalid values for each derived task ID that failed the check. |
+| valid_vals | Columns (excluding the \`value\` column) contain valid combinations of task ID / output type / output type ID values. Derived task ID values are not checked against the task IDs they are derived from. | TRUE | check_error | error_tbl: table of invalid task ID/output type/output type ID value combinations |
 | rows_unique | Columns (excluding the \`value\` and any derived task ID columns) contain unique combinations of task ID / output type / output type ID values | FALSE | check_failure |  |
 | req_vals | Columns (excluding the \`value\` and any derived task ID columns) contain all required combinations of task ID / output type / output type ID values | FALSE | check_failure | missing_df: table of missing task ID/output type/output type ID value combinations |
 | value_col_valid | Values in \`value\` column are coercible to data type configured for each output type | FALSE | check_failure |  |

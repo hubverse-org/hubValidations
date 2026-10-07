@@ -9,17 +9,17 @@ each round modeling task in the `tasks.json` config.
 
 ``` r
 check_tbl_spl_compound_taskid_set(
-  tbl,
+  tbl_chr,
   round_id,
   file_path,
   hub_path,
-  derived_task_ids = get_hub_derived_task_ids(hub_path)
+  derived_task_ids = get_hub_derived_task_ids(hub_path, round_id)
 )
 ```
 
 ## Arguments
 
-- tbl:
+- tbl_chr:
 
   a tibble/data.frame of the contents of the file being validated.
   Column types must **all be character**.
@@ -50,9 +50,8 @@ check_tbl_spl_compound_taskid_set(
 - derived_task_ids:
 
   Character vector of derived task ID names (task IDs whose values
-  depend on other task IDs) to ignore. Columns for such task ids will
-  contain `NA`s. Defaults to extracting derived task IDs from hub
-  `task.json`. See
+  depend on other task IDs) to ignore during validation. Defaults to
+  extracting derived task IDs from hub `task.json`. See
   [`get_hub_derived_task_ids()`](https://hubverse-org.github.io/hubUtils/reference/get_hub_timezone.html)
   for more details.
 
@@ -82,14 +81,14 @@ detected and will have the following structure:
 - `output_type_ids`: The output type ID of the sample that does not
   contain a single, unique value for each compound task ID.
 
-If the check failed because task IDs which is not allowed in the config,
-were identified as compound task ID (i.e. samples describe "finer"
-compound modeling tasks) for a given model task, the `errors` object
-will be a list with the structure described above as well as the
-additional following elements:
+If the check failed because task IDs the hub does not accept as compound
+task IDs were identified as such (i.e. samples describe "finer" compound
+modeling tasks) for a given model task, the `errors` object will be a
+list with the structure described above as well as the additional
+following elements:
 
-- `config_comp_tids`: the allowed `compound_taskid_set` defined in the
-  modeling task config.
+- `config_comp_tids`: the `compound_taskid_set` the modeling task config
+  expects.
 
 - `invalid_tbl_comp_tids`: the names of invalid compound task IDs.
 

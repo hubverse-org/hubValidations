@@ -1,5 +1,185 @@
 # Changelog
 
+## hubValidations 3.0.0
+
+### Breaking Changes
+
+- The `tbl` argument of every function that requires an all character
+  table has been renamed to `tbl_chr`:
+  [`check_tbl_values()`](https://hubverse-org.github.io/hubValidations/reference/check_tbl_values.md),
+  [`check_tbl_values_required()`](https://hubverse-org.github.io/hubValidations/reference/check_tbl_values_required.md),
+  [`check_tbl_value_col()`](https://hubverse-org.github.io/hubValidations/reference/check_tbl_value_col.md),
+  [`check_tbl_value_col_ascending()`](https://hubverse-org.github.io/hubValidations/reference/check_tbl_value_col_ascending.md),
+  [`check_tbl_rows_unique()`](https://hubverse-org.github.io/hubValidations/reference/check_tbl_rows_unique.md),
+  [`check_tbl_derived_task_id_vals()`](https://hubverse-org.github.io/hubValidations/reference/check_tbl_derived_task_id_vals.md),
+  [`check_tbl_spl_mt_unique()`](https://hubverse-org.github.io/hubValidations/reference/check_tbl_spl_mt_unique.md),
+  [`check_tbl_spl_compound_taskid_set()`](https://hubverse-org.github.io/hubValidations/reference/check_tbl_spl_compound_taskid_set.md),
+  [`check_tbl_spl_compound_tid()`](https://hubverse-org.github.io/hubValidations/reference/check_tbl_spl_compound_tid.md),
+  [`check_tbl_spl_non_compound_tid()`](https://hubverse-org.github.io/hubValidations/reference/check_tbl_spl_non_compound_tid.md),
+  [`check_tbl_spl_n()`](https://hubverse-org.github.io/hubValidations/reference/check_tbl_spl_n.md),
+  [`match_tbl_to_model_task()`](https://hubverse-org.github.io/hubValidations/reference/match_tbl_to_model_task.md)
+  and
+  [`get_tbl_compound_taskid_set()`](https://hubverse-org.github.io/hubValidations/reference/get_tbl_compound_taskid_set.md).
+  Calls that pass the table by name need updating, positional calls do
+  not
+  ([\#366](https://github.com/hubverse-org/hubValidations/issues/366)).
+- Those functions now error when a column of `tbl_chr` is not character,
+  naming the offending columns and their types. A table with hub schema
+  column types is no longer accepted
+  ([\#366](https://github.com/hubverse-org/hubValidations/issues/366)).
+- [`match_tbl_to_model_task()`](https://hubverse-org.github.io/hubValidations/reference/match_tbl_to_model_task.md)
+  has lost its `all_character` argument. `tbl` must now always be
+  character
+  ([\#355](https://github.com/hubverse-org/hubValidations/issues/355)).
+- [`match_tbl_to_model_task()`](https://hubverse-org.github.io/hubValidations/reference/match_tbl_to_model_task.md)
+  now returns each modeling task’s rows in the order they were submitted
+  in, rather than the order the config lists their values. Pass the new
+  `order_by_config = TRUE` argument for the config’s order
+  ([\#355](https://github.com/hubverse-org/hubValidations/issues/355)).
+- [`check_tbl_value_col()`](https://hubverse-org.github.io/hubValidations/reference/check_tbl_value_col.md)
+  now expects `tbl` to be all character, like the other checks that
+  validate data against the config. Passing a table with hub schema
+  column types is no longer supported
+  ([\#355](https://github.com/hubverse-org/hubValidations/issues/355)).
+- [`match_tbl_to_model_task()`](https://hubverse-org.github.io/hubValidations/reference/match_tbl_to_model_task.md)
+  and
+  [`check_tbl_value_col()`](https://hubverse-org.github.io/hubValidations/reference/check_tbl_value_col.md)
+  now error when a task ID column is missing from `tbl`. They previously
+  returned a number of rows unrelated to the submission
+  ([\#355](https://github.com/hubverse-org/hubValidations/issues/355)).
+- [`check_tbl_values()`](https://hubverse-org.github.io/hubValidations/reference/check_tbl_values.md)
+  now validates derived task ID columns like any other task ID column,
+  so an invalid derived task ID value or combination is reported
+  alongside the rest. Its `derived_task_ids` argument is deprecated and
+  has no effect. Note that the relationship between a derived task ID
+  and the task IDs it is derived from is still not checked, so optional
+  or custom checks for it are still recommended
+  ([\#378](https://github.com/hubverse-org/hubValidations/issues/378)).
+- [`validate_model_data()`](https://hubverse-org.github.io/hubValidations/reference/validate_model_data.md),
+  and so
+  [`validate_submission()`](https://hubverse-org.github.io/hubValidations/reference/validate_submission.md)
+  and
+  [`validate_pr()`](https://hubverse-org.github.io/hubValidations/reference/validate_pr.md),
+  no longer run
+  [`check_tbl_derived_task_id_vals()`](https://hubverse-org.github.io/hubValidations/reference/check_tbl_derived_task_id_vals.md),
+  and their output no longer contains a `derived_task_id_vals` element.
+  An invalid derived task ID value now fails the `valid_vals` check as a
+  `check_error`, which stops validation of the file, where it previously
+  failed the `derived_task_id_vals` check as a `check_failure` and
+  validation continued.
+  [`check_tbl_derived_task_id_vals()`](https://hubverse-org.github.io/hubValidations/reference/check_tbl_derived_task_id_vals.md)
+  remains available as a custom check
+  ([\#378](https://github.com/hubverse-org/hubValidations/issues/378)).
+
+### Bug fixes
+
+- [`check_tbl_spl_compound_taskid_set()`](https://hubverse-org.github.io/hubValidations/reference/check_tbl_spl_compound_taskid_set.md)
+  no longer errors on a valid sample submission when another round in
+  `tasks.json` has a task ID that the submission’s round does not. The
+  error is also now fixed in
+  [`validate_submission()`](https://hubverse-org.github.io/hubValidations/reference/validate_submission.md)
+  and
+  [`validate_pr()`](https://hubverse-org.github.io/hubValidations/reference/validate_pr.md).
+  Compound task ID detection now uses only the task IDs of the round
+  being validated
+  ([\#393](https://github.com/hubverse-org/hubValidations/issues/393)).
+- [`check_tbl_spl_compound_taskid_set()`](https://hubverse-org.github.io/hubValidations/reference/check_tbl_spl_compound_taskid_set.md),
+  [`check_tbl_values_required()`](https://hubverse-org.github.io/hubValidations/reference/check_tbl_values_required.md)
+  and
+  [`check_tbl_value_col_ascending()`](https://hubverse-org.github.io/hubValidations/reference/check_tbl_value_col_ascending.md)
+  now default to the `derived_task_ids` of the round being validated
+  when called directly. They previously read only the hub-level setting,
+  ignoring round-level `derived_task_ids`.
+  [`validate_model_data()`](https://hubverse-org.github.io/hubValidations/reference/validate_model_data.md),
+  [`validate_submission()`](https://hubverse-org.github.io/hubValidations/reference/validate_submission.md)
+  and
+  [`validate_pr()`](https://hubverse-org.github.io/hubValidations/reference/validate_pr.md)
+  were not affected
+  ([\#395](https://github.com/hubverse-org/hubValidations/issues/395)).
+- Fixed a bug in
+  [`check_tbl_values_required()`](https://hubverse-org.github.io/hubValidations/reference/check_tbl_values_required.md)
+  which allowed a submission that was missing a specific required value
+  combination to pass validation. It affected modeling tasks where every
+  column carries only required values, in hubs that declare no derived
+  task IDs.
+- Fixed a bug in
+  [`check_tbl_values()`](https://hubverse-org.github.io/hubValidations/reference/check_tbl_values.md)
+  which reported `NA` as an invalid value in a task ID column that a
+  modeling task does not use. Rows holding `NA` there are valid, but the
+  value was reported whenever anything else in the file failed
+  ([\#356](https://github.com/hubverse-org/hubValidations/issues/356)).
+- Fixed a bug in
+  [`check_metadata_matches_schema()`](https://hubverse-org.github.io/hubValidations/reference/check_metadata_matches_schema.md)
+  to ensure it correctly validates length-1 arrays. Before, length-1
+  arrays were incorrectly treated as strings, so they passed validation
+  for `string` fields and failed validations for `array` fields
+  ([\#385](https://github.com/hubverse-org/hubValidations/issues/385)).
+
+### Other changes
+
+- A `compound_taskid_set` of `[]`, which declares that every task ID is
+  sampled jointly, no longer errors.
+  [`check_tbl_spl_compound_taskid_set()`](https://hubverse-org.github.io/hubValidations/reference/check_tbl_spl_compound_taskid_set.md)
+  failed with
+  `` `config_comp_tids` must be logical, numeric, or character, not an empty list ``
+  and
+  [`submission_tmpl()`](https://hubverse-org.github.io/hubValidations/reference/submission_tmpl.md)
+  with `invalid subscript type 'list'`. The check now passes when a
+  submission’s samples are drawn jointly across every task ID and, when
+  they are finer, reports that the hub expects no compound task IDs and
+  response dependence across all task IDs
+  ([\#361](https://github.com/hubverse-org/hubValidations/issues/361)).
+- [`get_tbl_compound_taskid_set()`](https://hubverse-org.github.io/hubValidations/reference/get_tbl_compound_taskid_set.md)
+  no longer drops modeling tasks whose detected compound task ID set is
+  empty, which previously made a jointly sampled modeling task
+  indistinguishable from one with no samples at all
+  ([\#361](https://github.com/hubverse-org/hubValidations/issues/361)).
+- [`match_tbl_to_model_task()`](https://hubverse-org.github.io/hubValidations/reference/match_tbl_to_model_task.md)
+  now returns derived task ID columns and sample `output_type_id` values
+  as submitted. Both previously came back as `NA`
+  ([\#355](https://github.com/hubverse-org/hubValidations/issues/355),
+  [\#368](https://github.com/hubverse-org/hubValidations/issues/368)).
+- The `error_tbl` attribute of
+  [`check_tbl_value_col_ascending()`](https://hubverse-org.github.io/hubValidations/reference/check_tbl_value_col_ascending.md)
+  no longer includes a column for each derived task ID. Those columns
+  only ever held `NA`
+  ([\#355](https://github.com/hubverse-org/hubValidations/issues/355)).
+- [`check_tbl_values()`](https://hubverse-org.github.io/hubValidations/reference/check_tbl_values.md)
+  now reports an `output_type` value the round does not define as an
+  invalid value in the `output_type` column. The check previously
+  errored
+  ([\#356](https://github.com/hubverse-org/hubValidations/issues/356)).
+- [`check_tbl_values()`](https://hubverse-org.github.io/hubValidations/reference/check_tbl_values.md)
+  now reports rows holding invalid combinations of valid values in the
+  order they were submitted in, and `error_tbl` returns them in that
+  order. They were previously grouped by output type
+  ([\#356](https://github.com/hubverse-org/hubValidations/issues/356)).
+- [`match_tbl_to_model_task()`](https://hubverse-org.github.io/hubValidations/reference/match_tbl_to_model_task.md),
+  [`check_tbl_values()`](https://hubverse-org.github.io/hubValidations/reference/check_tbl_values.md),
+  [`check_tbl_value_col()`](https://hubverse-org.github.io/hubValidations/reference/check_tbl_value_col.md),
+  [`check_tbl_value_col_ascending()`](https://hubverse-org.github.io/hubValidations/reference/check_tbl_value_col_ascending.md),
+  [`get_tbl_compound_taskid_set()`](https://hubverse-org.github.io/hubValidations/reference/get_tbl_compound_taskid_set.md)
+  and the sample checks
+  [`check_tbl_spl_mt_unique()`](https://hubverse-org.github.io/hubValidations/reference/check_tbl_spl_mt_unique.md),
+  [`check_tbl_spl_compound_tid()`](https://hubverse-org.github.io/hubValidations/reference/check_tbl_spl_compound_tid.md),
+  [`check_tbl_spl_non_compound_tid()`](https://hubverse-org.github.io/hubValidations/reference/check_tbl_spl_non_compound_tid.md)
+  and
+  [`check_tbl_spl_n()`](https://hubverse-org.github.io/hubValidations/reference/check_tbl_spl_n.md)
+  no longer build the grid of every value combination a round’s config
+  allows. They report the same results, but are much faster and need far
+  less memory, increasingly so the more combinations the config permits
+  ([\#355](https://github.com/hubverse-org/hubValidations/issues/355),
+  [\#356](https://github.com/hubverse-org/hubValidations/issues/356),
+  [\#368](https://github.com/hubverse-org/hubValidations/issues/368)).
+- [`check_tbl_values_required()`](https://hubverse-org.github.io/hubValidations/reference/check_tbl_values_required.md)
+  no longer builds the grid of every value combination a round’s config
+  allows, for hubs whose config schema version is `v4.0.0` or later. It
+  reports the same results. On a hub whose config permits 77.7 million
+  combinations, it now needs 302 MB and half a second, where it
+  previously needed 13.3 GB and 58 minutes. Hubs on earlier schema
+  versions are validated as before
+  ([\#357](https://github.com/hubverse-org/hubValidations/issues/357)).
+
 ## hubValidations 2.1.1
 
 - Fixed

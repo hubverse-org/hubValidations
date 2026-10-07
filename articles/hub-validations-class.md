@@ -42,32 +42,30 @@ attr(v, "where")
 
 # Structure of the hub_validations object
 str(v, max.level = 1)
-#> List of 13
-#>  $ file_read           :List of 4
+#> List of 12
+#>  $ file_read         :List of 4
 #>   ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-#>  $ valid_round_id_col  :List of 4
+#>  $ valid_round_id_col:List of 4
 #>   ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-#>  $ unique_round_id     :List of 4
+#>  $ unique_round_id   :List of 4
 #>   ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-#>  $ match_round_id      :List of 4
+#>  $ match_round_id    :List of 4
 #>   ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-#>  $ colnames            :List of 4
+#>  $ colnames          :List of 4
 #>   ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-#>  $ col_types           :List of 4
+#>  $ col_types         :List of 4
 #>   ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-#>  $ valid_vals          :List of 5
+#>  $ valid_vals        :List of 5
 #>   ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-#>  $ derived_task_id_vals:List of 4
-#>   ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
-#>  $ rows_unique         :List of 4
+#>  $ rows_unique       :List of 4
 #>   ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-#>  $ req_vals            :List of 5
+#>  $ req_vals          :List of 5
 #>   ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-#>  $ value_col_valid     :List of 4
+#>  $ value_col_valid   :List of 4
 #>   ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-#>  $ value_col_non_desc  :List of 5
+#>  $ value_col_non_desc:List of 5
 #>   ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-#>  $ value_col_sum1      :List of 4
+#>  $ value_col_sum1    :List of 4
 #>   ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
 #>  - attr(*, "class")= chr [1:2] "hub_validations" "list"
 #>  - attr(*, "where")= chr "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
@@ -136,8 +134,6 @@ v
 #>   column names.
 #> ✔ [col_types]: Column data types match hub schema.
 #> ✔ [valid_vals]: `tbl` contains valid values/value combinations.
-#> ℹ [derived_task_id_vals]: No derived task IDs to check. Skipping derived task
-#>   ID value check.
 #> ✔ [rows_unique]: All combinations of task ID
 #>   column/`output_type`/`output_type_id` values are unique.
 #> ✔ [req_vals]: Required task ID/output type/output type ID combinations all

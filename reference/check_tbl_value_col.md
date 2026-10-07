@@ -8,7 +8,7 @@ each output type of the appropriate model task.
 
 ``` r
 check_tbl_value_col(
-  tbl,
+  tbl_chr,
   round_id,
   file_path,
   hub_path,
@@ -18,9 +18,10 @@ check_tbl_value_col(
 
 ## Arguments
 
-- tbl:
+- tbl_chr:
 
   a tibble/data.frame of the contents of the file being validated.
+  Column types must **all be character**.
 
 - round_id:
 
@@ -48,9 +49,8 @@ check_tbl_value_col(
 - derived_task_ids:
 
   Character vector of derived task ID names (task IDs whose values
-  depend on other task IDs) to ignore. Columns for such task ids will
-  contain `NA`s. Defaults to extracting derived task IDs from hub
-  `task.json`. See
+  depend on other task IDs) to ignore during validation. Defaults to
+  extracting derived task IDs from hub `task.json`. See
   [`get_hub_derived_task_ids()`](https://hubverse-org.github.io/hubUtils/reference/get_hub_timezone.html)
   for more details.
 

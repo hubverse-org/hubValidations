@@ -16,7 +16,7 @@
 <script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Validating hub data locally">
-<!-- Privacy-friendly analytics by Plausible --><script async src="https://plausible.io/js/pa-WnwHUXKkRXbX_5qcMPxvY.js"></script><script>
+<!-- Privacy-friendly analytics by Plausible --><script async src="https://plausible.io/js/pa-_SeES0qkE5KfksH84IX9u.js"></script><script>
   window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
   plausible.init()
 </script>
@@ -29,7 +29,7 @@
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/hubverse-org/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubValidations</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">3.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,7 +71,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Validating hub data locally</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/hubverse-org/hubValidations/blob/v2.1.1/vignettes/articles/validate-submission.Rmd" class="external-link"><code>vignettes/articles/validate-submission.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/hubverse-org/hubValidations/blob/main/vignettes/articles/validate-submission.Rmd" class="external-link"><code>vignettes/articles/validate-submission.Rmd</code></a></small>
       <div class="d-none name"><code>validate-submission.Rmd</code></div>
     </div>
 
@@ -137,7 +137,7 @@ standard validation checks and returns their results in the form of a
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[metadata_exists]</span>: Metadata file exists at path</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">model-metadata/team1-goodmodel.yaml</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[submission_time]</span>: Submission time must be within accepted submission window</span></span>
-<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2026-07-15 15:04:34 UTC"</span> is outside window</span></span>
+<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2026-10-07 07:38:12 UTC"</span> is outside window</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_read]</span>: File could be read successfully.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_round_id_col]</span>: `round_id_col` name is valid.</span></span>
@@ -149,8 +149,6 @@ standard validation checks and returns their results in the form of a
 <span><span class="co">#&gt;   column names.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[col_types]</span>: Column data types match hub schema.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_vals]</span>: `tbl` contains valid values/value combinations.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[derived_task_id_vals]</span>: No derived task IDs to check. Skipping derived task</span></span>
-<span><span class="co">#&gt;   ID value check.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[rows_unique]</span>: All combinations of task ID</span></span>
 <span><span class="co">#&gt;   column/`output_type`/`output_type_id` values are unique.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[req_vals]</span>: Required task ID/output type/output type ID combinations all</span></span>
@@ -201,7 +199,7 @@ and the function re-run for validation to proceed further.</p>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[metadata_exists]</span>: Metadata file exists at path</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">model-metadata/hub-baseline.yml</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[submission_time]</span>: Submission time must be within accepted submission window</span></span>
-<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2026-07-15 15:04:35 UTC"</span> is outside window</span></span>
+<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2026-10-07 07:38:14 UTC"</span> is outside window</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_read]</span>: File could be read successfully.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_round_id_col]</span>: `round_id_col` name is valid.</span></span>
@@ -236,7 +234,7 @@ will be summarised.</p>
 <span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">team1-goodmodel/2022-10-08-team1-goodmodel.csv</span><span style="color: #BB00BB;"> ────</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[submission_time]</span>: Submission time must be within accepted submission window</span></span>
-<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2026-07-15 15:04:37 UTC"</span> is outside window</span></span>
+<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2026-10-07 07:38:15 UTC"</span> is outside window</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `check_for_errors()`:</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> </span></span>
@@ -260,7 +258,7 @@ validation window check) now passing overall validation.</p>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> All validation checks have been successful.</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="ignoring-derived-task-ids-to-improve-validation-performance">Ignoring derived task IDs to improve validation performance<a class="anchor" aria-label="anchor" href="#ignoring-derived-task-ids-to-improve-validation-performance"></a>
+<h3 id="derived-task-ids">Derived task IDs<a class="anchor" aria-label="anchor" href="#derived-task-ids"></a>
 </h3>
 <div class="section level4">
 <h4 id="what-are-derived-task-ids">What are derived task IDs?<a class="anchor" aria-label="anchor" href="#what-are-derived-task-ids"></a>
@@ -275,25 +273,38 @@ the <code>reference_date</code> or <code>origin_date</code> and
 <code>horizon</code> task ids.</p>
 </div>
 <div class="section level4">
-<h4 id="how-to-ignore-derived-task-ids">How to ignore derived task IDs<a class="anchor" aria-label="anchor" href="#how-to-ignore-derived-task-ids"></a>
+<h4 id="how-derived-task-ids-are-validated">How derived task IDs are validated<a class="anchor" aria-label="anchor" href="#how-derived-task-ids-are-validated"></a>
+</h4>
+<p>The standard checks do not validate the relationship between a
+derived task ID and the task IDs it is derived from. The valid values
+check tests each derived task ID value against the values the config
+lists, like any other task ID. The required values and sample checks
+leave derived task ID columns out, which they must do to give correct
+results. Declaring derived task IDs, in the config or through the
+<code>derived_task_ids</code> argument, is what lets those checks do so,
+and records that the relationship exists. It is therefore
+<strong>important to validate the relationship itself with a custom
+check</strong>. For example, the values of <code>target_end_date</code>
+can be checked by deploying optional check
+<code><a href="../reference/opt_check_tbl_horizon_timediff.html">opt_check_tbl_horizon_timediff()</a></code>. See the article on <a href="deploying-custom-functions.html">including custom functions</a>
+for more information.</p>
+</div>
+<div class="section level4">
+<h4 id="how-to-specify-derived-task-ids">How to specify derived task IDs<a class="anchor" aria-label="anchor" href="#how-to-specify-derived-task-ids"></a>
 </h4>
 <div class="alert alert-info" role="note">
 <p><strong>For configs using schema version v4.0.0 and above, derived
-task IDs are configured via the hub config and do not need to be ignored
-manually</strong></p>
+task IDs are configured via the hub config and do not need to be
+specified manually</strong></p>
 <p>To check if the hub uses schema version v4.0.0 or above, you can
 use:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">hubUtils</span><span class="fu">::</span><span class="fu"><a href="https://hubverse-org.github.io/hubUtils/reference/version_equal.html" class="external-link">version_gte</a></span><span class="op">(</span><span class="st">"v4.0.0"</span>, hub_path <span class="op">=</span> <span class="st">"path/to/hub"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<p>Argument <strong><code>derived_task_ids</code></strong> allows for
-the specification of <strong>task IDs that are derived from other task
-IDs</strong>. Supplying the names of derived task IDs to argument
-<code>derived_task_ids</code> will ignore them during validation
-checks.</p>
-<p>Depending on config complexity, this <strong>can often lead to a
-significant improvement in validation performance and in some
-circumstances is necessary for correct validation</strong>.</p>
+<p>For hubs whose config does not declare them, argument
+<strong><code>derived_task_ids</code></strong> allows for the
+specification of <strong>task IDs that are derived from other task
+IDs</strong>.</p>
 <div class="alert alert-warning" role="note">
 <p>Note that, <strong>if any task IDs with <code>required</code> values
 have dependent derived task IDs, it is essential for
@@ -584,9 +595,10 @@ check_failure
 valid_vals
 </td>
 <td style="text-align:left;">
-Columns (excluding the <code>value</code> and any derived task ID
-columns) contain valid combinations of task ID / output type / output
-type ID values
+Columns (excluding the <code>value</code> column) contain valid
+combinations of task ID / output type / output type ID values. Derived
+task ID values are not checked against the task IDs they are derived
+from.
 </td>
 <td style="text-align:left;">
 TRUE
@@ -597,24 +609,6 @@ check_error
 <td style="text-align:left;">
 error_tbl: table of invalid task ID/output type/output type ID value
 combinations
-</td>
-</tr>
-<tr>
-<td style="text-align:left;font-weight: bold;">
-derived_task_id_vals
-</td>
-<td style="text-align:left;">
-Derived task ID columns contain valid values.
-</td>
-<td style="text-align:left;">
-FALSE
-</td>
-<td style="text-align:left;">
-check_failure
-</td>
-<td style="text-align:left;">
-errors: named list of derived task ID values. Each element contains the
-invalid values for each derived task ID that failed the check.
 </td>
 </tr>
 <tr>

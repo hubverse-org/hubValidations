@@ -6,17 +6,17 @@ Check model output data tbl contains valid value combinations
 
 ``` r
 check_tbl_values(
-  tbl,
+  tbl_chr,
   round_id,
   file_path,
   hub_path,
-  derived_task_ids = get_hub_derived_task_ids(hub_path, round_id)
+  derived_task_ids = deprecated()
 )
 ```
 
 ## Arguments
 
-- tbl:
+- tbl_chr:
 
   a tibble/data.frame of the contents of the file being validated.
   Column types must **all be character**.
@@ -46,12 +46,8 @@ check_tbl_values(
 
 - derived_task_ids:
 
-  Character vector of derived task ID names (task IDs whose values
-  depend on other task IDs) to ignore. Columns for such task ids will
-  contain `NA`s. Defaults to extracting derived task IDs from hub
-  `task.json`. See
-  [`get_hub_derived_task_ids()`](https://hubverse-org.github.io/hubUtils/reference/get_hub_timezone.html)
-  for more details.
+  **\[deprecated\]** Derived task ID columns are validated like any
+  other task ID column, so the argument has no effect.
 
 ## Value
 
