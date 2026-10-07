@@ -10,7 +10,7 @@
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/hubverse-org/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubValidations</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.1.1.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">3.0.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,8 +45,11 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="hubvalidations-development-version">hubValidations (development version)<a class="anchor" aria-label="anchor" href="#hubvalidations-development-version"></a></h2>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="3.0.0" id="hubvalidations-300">hubValidations 3.0.0<a class="anchor" aria-label="anchor" href="#hubvalidations-300"></a></h2>
 <div class="section level3">
-<h3 id="breaking-changes-development-version">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-development-version"></a></h3>
+<h3 id="breaking-changes-3-0-0">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-3-0-0"></a></h3>
 <ul><li>The <code>tbl</code> argument of every function that requires an all character table has been renamed to <code>tbl_chr</code>: <code><a href="../reference/check_tbl_values.html">check_tbl_values()</a></code>, <code><a href="../reference/check_tbl_values_required.html">check_tbl_values_required()</a></code>, <code><a href="../reference/check_tbl_value_col.html">check_tbl_value_col()</a></code>, <code><a href="../reference/check_tbl_value_col_ascending.html">check_tbl_value_col_ascending()</a></code>, <code><a href="../reference/check_tbl_rows_unique.html">check_tbl_rows_unique()</a></code>, <code><a href="../reference/check_tbl_derived_task_id_vals.html">check_tbl_derived_task_id_vals()</a></code>, <code><a href="../reference/check_tbl_spl_mt_unique.html">check_tbl_spl_mt_unique()</a></code>, <code><a href="../reference/check_tbl_spl_compound_taskid_set.html">check_tbl_spl_compound_taskid_set()</a></code>, <code><a href="../reference/check_tbl_spl_compound_tid.html">check_tbl_spl_compound_tid()</a></code>, <code><a href="../reference/check_tbl_spl_non_compound_tid.html">check_tbl_spl_non_compound_tid()</a></code>, <code><a href="../reference/check_tbl_spl_n.html">check_tbl_spl_n()</a></code>, <code><a href="../reference/match_tbl_to_model_task.html">match_tbl_to_model_task()</a></code> and <code><a href="../reference/get_tbl_compound_taskid_set.html">get_tbl_compound_taskid_set()</a></code>. Calls that pass the table by name need updating, positional calls do not (<a href="https://github.com/hubverse-org/hubValidations/issues/366" class="external-link">#366</a>).</li>
 <li>Those functions now error when a column of <code>tbl_chr</code> is not character, naming the offending columns and their types. A table with hub schema column types is no longer accepted (<a href="https://github.com/hubverse-org/hubValidations/issues/366" class="external-link">#366</a>).</li>
 <li>
@@ -63,7 +66,7 @@
 <code><a href="../reference/validate_model_data.html">validate_model_data()</a></code>, and so <code><a href="../reference/validate_submission.html">validate_submission()</a></code> and <code><a href="../reference/validate_pr.html">validate_pr()</a></code>, no longer run <code><a href="../reference/check_tbl_derived_task_id_vals.html">check_tbl_derived_task_id_vals()</a></code>, and their output no longer contains a <code>derived_task_id_vals</code> element. An invalid derived task ID value now fails the <code>valid_vals</code> check as a <code>check_error</code>, which stops validation of the file, where it previously failed the <code>derived_task_id_vals</code> check as a <code>check_failure</code> and validation continued. <code><a href="../reference/check_tbl_derived_task_id_vals.html">check_tbl_derived_task_id_vals()</a></code> remains available as a custom check (<a href="https://github.com/hubverse-org/hubValidations/issues/378" class="external-link">#378</a>).</li>
 </ul></div>
 <div class="section level3">
-<h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
+<h3 id="bug-fixes-3-0-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-3-0-0"></a></h3>
 <ul><li>
 <code><a href="../reference/check_tbl_spl_compound_taskid_set.html">check_tbl_spl_compound_taskid_set()</a></code> no longer errors on a valid sample submission when another round in <code>tasks.json</code> has a task ID that the submission’s round does not. The error is also now fixed in <code><a href="../reference/validate_submission.html">validate_submission()</a></code> and <code><a href="../reference/validate_pr.html">validate_pr()</a></code>. Compound task ID detection now uses only the task IDs of the round being validated (<a href="https://github.com/hubverse-org/hubValidations/issues/393" class="external-link">#393</a>).</li>
 <li>
@@ -73,7 +76,7 @@
 <li>Fixed a bug in <code><a href="../reference/check_metadata_matches_schema.html">check_metadata_matches_schema()</a></code> to ensure it correctly validates length-1 arrays. Before, length-1 arrays were incorrectly treated as strings, so they passed validation for <code>string</code> fields and failed validations for <code>array</code> fields (<a href="https://github.com/hubverse-org/hubValidations/issues/385" class="external-link">#385</a>).</li>
 </ul></div>
 <div class="section level3">
-<h3 id="other-changes-development-version">Other changes<a class="anchor" aria-label="anchor" href="#other-changes-development-version"></a></h3>
+<h3 id="other-changes-3-0-0">Other changes<a class="anchor" aria-label="anchor" href="#other-changes-3-0-0"></a></h3>
 <ul><li>A <code>compound_taskid_set</code> of <code>[]</code>, which declares that every task ID is sampled jointly, no longer errors. <code><a href="../reference/check_tbl_spl_compound_taskid_set.html">check_tbl_spl_compound_taskid_set()</a></code> failed with <code>`config_comp_tids` must be logical, numeric, or character, not an empty list</code> and <code><a href="../reference/submission_tmpl.html">submission_tmpl()</a></code> with <code>invalid subscript type 'list'</code>. The check now passes when a submission’s samples are drawn jointly across every task ID and, when they are finer, reports that the hub expects no compound task IDs and response dependence across all task IDs (<a href="https://github.com/hubverse-org/hubValidations/issues/361" class="external-link">#361</a>).</li>
 <li>
 <code><a href="../reference/get_tbl_compound_taskid_set.html">get_tbl_compound_taskid_set()</a></code> no longer drops modeling tasks whose detected compound task ID set is empty, which previously made a jointly sampled modeling task indistinguishable from one with no samples at all (<a href="https://github.com/hubverse-org/hubValidations/issues/361" class="external-link">#361</a>).</li>

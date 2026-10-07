@@ -2,6 +2,8 @@
 
 ## hubValidations (development version)
 
+## hubValidations 3.0.0
+
 ### Breaking Changes
 
 - The `tbl` argument of every function that requires an all character
