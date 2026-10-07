@@ -15,7 +15,7 @@ check_tbl_value_col_ascending(
   file_path,
   hub_path,
   round_id,
-  derived_task_ids = get_hub_derived_task_ids(hub_path)
+  derived_task_ids = get_hub_derived_task_ids(hub_path, round_id)
 )
 ```
 

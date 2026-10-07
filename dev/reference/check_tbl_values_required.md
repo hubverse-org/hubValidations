@@ -11,7 +11,7 @@ check_tbl_values_required(
   round_id,
   file_path,
   hub_path,
-  derived_task_ids = get_hub_derived_task_ids(hub_path)
+  derived_task_ids = get_hub_derived_task_ids(hub_path, round_id)
 )
 ```
 

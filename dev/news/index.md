@@ -73,6 +73,29 @@
 
 ### Bug fixes
 
+- [`check_tbl_spl_compound_taskid_set()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_spl_compound_taskid_set.md)
+  no longer errors on a valid sample submission when another round in
+  `tasks.json` has a task ID that the submission’s round does not. The
+  error is also now fixed in
+  [`validate_submission()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_submission.md)
+  and
+  [`validate_pr()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_pr.md).
+  Compound task ID detection now uses only the task IDs of the round
+  being validated
+  ([\#393](https://github.com/hubverse-org/hubValidations/issues/393)).
+- [`check_tbl_spl_compound_taskid_set()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_spl_compound_taskid_set.md),
+  [`check_tbl_values_required()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_values_required.md)
+  and
+  [`check_tbl_value_col_ascending()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_value_col_ascending.md)
+  now default to the `derived_task_ids` of the round being validated
+  when called directly. They previously read only the hub-level setting,
+  ignoring round-level `derived_task_ids`.
+  [`validate_model_data()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_model_data.md),
+  [`validate_submission()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_submission.md)
+  and
+  [`validate_pr()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_pr.md)
+  were not affected
+  ([\#395](https://github.com/hubverse-org/hubValidations/issues/395)).
 - Fixed a bug in
   [`check_tbl_values_required()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_values_required.md)
   which allowed a submission that was missing a specific required value
