@@ -13,6 +13,8 @@
 
 ## Bug fixes
 
+* `check_tbl_spl_compound_taskid_set()` no longer errors on a valid sample submission when another round in `tasks.json` has a task ID that the submission's round does not. The error is also now fixed in `validate_submission()` and `validate_pr()`. Compound task ID detection now uses only the task IDs of the round being validated (#393).
+* `check_tbl_spl_compound_taskid_set()`, `check_tbl_values_required()` and `check_tbl_value_col_ascending()` now default to the `derived_task_ids` of the round being validated when called directly. They previously read only the hub-level setting, ignoring round-level `derived_task_ids`. `validate_model_data()`, `validate_submission()` and `validate_pr()` were not affected (#395).
 * Fixed a bug in `check_tbl_values_required()` which allowed a submission that was missing a specific required value combination to pass validation. It affected modeling tasks where every column carries only required values, in hubs that declare no derived task IDs.
 * Fixed a bug in `check_tbl_values()` which reported `NA` as an invalid value in a task ID column that a modeling task does not use. Rows holding `NA` there are valid, but the value was reported whenever anything else in the file failed (#356).
 * Fixed a bug in `check_metadata_matches_schema()` to ensure it correctly validates length-1 arrays. Before, length-1 arrays were incorrectly treated as strings, so they passed validation for `string` fields and failed validations for `array` fields (#385).

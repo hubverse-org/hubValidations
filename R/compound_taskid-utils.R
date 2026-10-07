@@ -56,6 +56,8 @@ get_tbl_compound_taskid_set <- function(
     round_id
   )
 
+  task_ids <- hubUtils::get_round_task_id_names(config_tasks, round_id)
+
   call <- rlang::current_env()
   # Each modeling task declares its own compound task ID set, so the submitted
   # sample rows have to be separated into modeling tasks first.
@@ -75,7 +77,7 @@ get_tbl_compound_taskid_set <- function(
       get_mt_compound_taskid_set(
         tbl_chr[row_idx, ],
         compound_taskids,
-        config_tasks,
+        task_ids,
         error = error,
         call = call
       )
@@ -100,7 +102,7 @@ get_tbl_compound_taskid_set <- function(
 get_mt_compound_taskid_set <- function(
   tbl_chr,
   config_comp_tids,
-  config_tasks,
+  task_ids,
   error = TRUE,
   call = NULL
 ) {
@@ -115,7 +117,6 @@ get_mt_compound_taskid_set <- function(
     call <- rlang::current_env()
   }
   out_tid <- hubUtils::std_colnames["output_type_id"]
-  task_ids <- hubUtils::get_task_id_names(config_tasks)
 
   # Count number of unique values per sample (output_type_id) for each task ID column and
   # return TRUE if 1 which would indicate a task ID can be considered a compound_taskid

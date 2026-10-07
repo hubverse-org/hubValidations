@@ -64,6 +64,27 @@ test_that("get_tbl_compound_taskid_set errors correctly", {
   )
 })
 
+test_that("get_tbl_compound_taskid_set ignores task IDs of other rounds (#393)", {
+  hub_path <- system.file("testhubs/samples", package = "hubValidations")
+  file_path <- "flu-base/2022-10-22-flu-base.csv"
+  round_id <- "2022-10-22"
+  tbl <- read_model_out_file(
+    file_path = file_path,
+    hub_path = hub_path,
+    coerce_types = "chr"
+  )
+  # The config has a later round with a task ID, `scenario_id`, that the round
+  # being validated, and so the submission, does not have.
+  config_tasks <- read_config_file(
+    test_path("testdata/configs/tasks-samples-extra-round.json")
+  )
+
+  expect_equal(
+    get_tbl_compound_taskid_set(tbl, config_tasks, round_id),
+    list("2" = c("reference_date", "location"))
+  )
+})
+
 test_that("test get_tbl_compound_taskid_set utilities", {
   x <- structure(
     list(
