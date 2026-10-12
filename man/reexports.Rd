@@ -10,6 +10,8 @@
 \alias{read_config}
 \alias{read_config_file}
 \alias{get_hub_derived_task_ids}
+\alias{get_derived_task_ids_config}
+\alias{get_config_derived_task_ids}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -19,6 +21,6 @@ below to see their documentation.
 \describe{
   \item{hubData}{\code{\link[hubData]{coerce_to_hub_schema}}, \code{\link[hubData]{create_hub_schema}}, \code{\link[hubData]{extract_hive_partitions}}, \code{\link[hubData]{is_hive_partitioned_path}}}
 
-  \item{hubUtils}{\code{\link[hubUtils:get_hub_timezone]{get_hub_derived_task_ids}}, \code{\link[hubUtils]{read_config}}, \code{\link[hubUtils]{read_config_file}}}
+  \item{hubUtils}{\code{\link[hubUtils:get_derived_task_ids_config]{get_config_derived_task_ids}}, \code{\link[hubUtils]{get_derived_task_ids_config}}, \code{\link[hubUtils:get_hub_timezone]{get_hub_derived_task_ids}}, \code{\link[hubUtils]{read_config}}, \code{\link[hubUtils]{read_config_file}}}
 }}
 
