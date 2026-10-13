@@ -16,6 +16,8 @@ Functions to help teams create valid submission model output files.
   [`read_config`](https://hubverse-org.github.io/hubValidations/dev/reference/reexports.md)
   [`read_config_file`](https://hubverse-org.github.io/hubValidations/dev/reference/reexports.md)
   [`get_hub_derived_task_ids`](https://hubverse-org.github.io/hubValidations/dev/reference/reexports.md)
+  [`get_derived_task_ids_config`](https://hubverse-org.github.io/hubValidations/dev/reference/reexports.md)
+  [`get_config_derived_task_ids`](https://hubverse-org.github.io/hubValidations/dev/reference/reexports.md)
   : Objects exported from other packages
 
 ## Higher level validation functions
@@ -301,11 +303,6 @@ checks.
 - [`get_tbl_compound_taskid_set()`](https://hubverse-org.github.io/hubValidations/dev/reference/get_tbl_compound_taskid_set.md)
   : Detect the compound_taskid_set for a tbl for each modeling task in a
   given round.
-
-- [`get_config_derived_task_ids()`](https://hubverse-org.github.io/hubValidations/dev/reference/get_config_derived_task_ids.md)
-  :
-
-  Get hub configuration fields from a `<config>` class object
 
 - [`match_tbl_to_model_task()`](https://hubverse-org.github.io/hubValidations/dev/reference/match_tbl_to_model_task.md)
   :

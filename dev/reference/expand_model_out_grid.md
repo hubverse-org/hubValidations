@@ -106,7 +106,7 @@ expand_model_out_grid(
   depend on other task IDs) to ignore. Columns for such task ids will
   contain `NA`s. Defaults to extracting derived task IDs from
   `config_tasks`. See
-  [`get_config_derived_task_ids()`](https://hubverse-org.github.io/hubValidations/dev/reference/get_config_derived_task_ids.md)
+  [`get_config_derived_task_ids()`](https://hubverse-org.github.io/hubUtils/reference/get_derived_task_ids_config.html)
   for more details.
 
 ## Value

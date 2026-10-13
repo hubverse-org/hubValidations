@@ -12,6 +12,8 @@ to see their documentation.
 
 - hubUtils:
 
+  [`get_config_derived_task_ids`](https://hubverse-org.github.io/hubUtils/reference/get_derived_task_ids_config.html),
+  [`get_derived_task_ids_config`](https://hubverse-org.github.io/hubUtils/reference/get_derived_task_ids_config.html),
   [`get_hub_derived_task_ids`](https://hubverse-org.github.io/hubUtils/reference/get_hub_timezone.html),
   [`read_config`](https://hubverse-org.github.io/hubUtils/reference/read_config.html),
   [`read_config_file`](https://hubverse-org.github.io/hubUtils/reference/read_config_file.html)
