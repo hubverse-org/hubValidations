@@ -53,7 +53,6 @@ reference:
   - try_check
   - expand_model_out_grid
   - get_tbl_compound_taskid_set
-  - get_config_derived_task_ids
   - match_tbl_to_model_task
   - get_target_task_id
 
