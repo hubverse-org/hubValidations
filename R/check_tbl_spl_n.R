@@ -132,19 +132,19 @@ n_mismatch_errors <- function(n_tbl, idx_rows, tbl_chr) {
   rows_by_idx <- split(seq_len(nrow(idx_rows)), idx_rows$compound_idx)
   purrr::map(
     purrr::set_names(n_tbl$compound_idx),
-    ~ {
+    function(idx) {
       # The rows one sample holds within this compound idx. A coarser sample
       # holds rows in other compound idxs too, which are left out.
-      rows <- rows_by_idx[[.x]]
+      rows <- rows_by_idx[[idx]]
       spl_d <- idx_rows$output_type_id[rows[1L]]
       rows <- rows[idx_rows$output_type_id[rows] == spl_d]
       compound_idx_tbl <- tbl_chr[
         idx_rows$row_idx[rows],
         setdiff(names(tbl_chr), c("output_type_id", "value", "output_type"))
       ]
-      row <- n_tbl[n_tbl$compound_idx == .x, ] |> as.vector()
+      row <- n_tbl[n_tbl$compound_idx == idx, ] |> as.vector()
       list(
-        compound_idx = .x,
+        compound_idx = idx,
         n = row$n,
         min_samples_per_task = row$n_min,
         max_samples_per_task = row$n_max,
