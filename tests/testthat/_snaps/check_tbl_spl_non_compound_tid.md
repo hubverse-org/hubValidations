@@ -14,7 +14,7 @@
     Output
       <error/check_error>
       Error:
-      ! Task ID combinations of non compound task id values not consistent across modeling task samples.  Samples "1" and "102" do not match most frequent non compound task ID combination for their modeling task. See `errors` attribute for details.
+      ! Task ID combinations of non compound task id values not consistent across modeling task samples.  Samples "1" and "102" do not match the most frequent non compound task ID combination for their modeling task for compound task ID values (reference_date: 2022-10-22, location: 01) and (reference_date: 2022-10-22, location: 02). See `errors` attribute for details.
 
 ---
 
@@ -27,6 +27,13 @@
       
       [[1]]$output_type_ids
       [1] "1"   "102"
+      
+      [[1]]$slices
+      # A tibble: 2 x 4
+        output_type_id compound_idx reference_date location
+        <chr>          <chr>        <chr>          <chr>   
+      1 1              2            2022-10-22     01      
+      2 102            3            2022-10-22     02      
       
       [[1]]$frequent
       # A tibble: 3 x 3

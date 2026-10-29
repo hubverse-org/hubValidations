@@ -3,14 +3,18 @@
 #' @inherit check_tbl_colnames params
 #' @inherit check_tbl_col_types return
 #' @inheritParams check_tbl_spl_compound_tid
-#' @details Output of the check includes an `errors` element, a list of items,
+#' @details A sample coarser than the configured `compound_taskid_set` covers
+#' several compound modeling tasks, and counts as one sample for each. See the
+#' Compound modeling tasks section of [check_tbl_spl_compound_taskid_set()].
+#'
+#' Output of the check includes an `errors` element, a list of items,
 #' one for each compound_idx failing validation, with the following structure:
 #' - `compound_idx`: the compound idx that failed validation of number of samples.
 #' - `n`: the number of samples counted for the compound idx.
 #' - `min_samples_per_task`: the minimum number of samples required for the compound idx.
 #' - `max_samples_per_task`: the maximum number of samples required for the compound idx.
-#' - `compound_idx_tbl`: a tibble of the expected structure for samples belonging to
-#' the compound idx.
+#' - `compound_idx_tbl`: a tibble of the rows one sample holds within the
+#' compound idx.
 #' See [hubverse documentation on samples](https://docs.hubverse.io/en/latest/user-guide/sample-output-type.html)
 #' for more details.
 #' @export
@@ -27,12 +31,6 @@ check_tbl_spl_n <- function(
     cli::cli_abort("Valid {.var compound_taskid_set} must be provided.")
   }
   config_tasks <- read_config(hub_path, "tasks")
-  if (is.null(compound_taskid_set)) {
-    compound_taskid_set <- get_round_compound_task_ids(
-      config_tasks,
-      round_id
-    )
-  }
 
   if (
     isFALSE(has_spls_tbl(tbl_chr)) ||
@@ -41,7 +39,7 @@ check_tbl_spl_n <- function(
     return(skip_v3_spl_check(file_path))
   }
 
-  hash_tbl <- spl_hash_tbl(
+  spl_idx <- spl_idx_tbl(
     tbl_chr,
     round_id,
     config_tasks,
@@ -50,11 +48,11 @@ check_tbl_spl_n <- function(
   )
   n_ranges <- get_round_spl_n_ranges(config_tasks, round_id)
 
-  n_tbl <- dplyr::group_by(hash_tbl, .data$compound_idx) |>
-    dplyr::summarise(
-      n = dplyr::n_distinct(.data$output_type_id),
-      mt_id = unique(.data$mt_id)
-    )
+  # A coarser sample covers several compound idxs and counts towards each.
+  # Slices are distinct, so counting a compound idx's slices counts its samples.
+  n_tbl <- spl_slice_tbl(spl_idx$rows) |>
+    dplyr::count(.data$mt_id, .data$compound_idx) |>
+    dplyr::select("compound_idx", "n", "mt_id")
 
   # First check that all compound_idx have the same number of samples
   # If not, return check failure.
@@ -94,12 +92,8 @@ check_tbl_spl_n <- function(
     details <- NULL
     errors <- NULL
   } else {
-    errors <- n_mismatch_errors(
-      n_tbl,
-      hash_tbl,
-      tbl_chr
-    )
-    details <- n_mismatch_details(n_tbl)
+    errors <- n_mismatch_errors(n_tbl, spl_idx$rows, tbl_chr)
+    details <- n_mismatch_details(n_tbl, spl_idx, tbl_chr)
   }
 
   capture_check_cnd(
@@ -134,19 +128,23 @@ get_round_spl_n_ranges <- function(config_tasks, round_id) {
     purrr::list_rbind()
 }
 
-n_mismatch_errors <- function(n_tbl, hash_tbl, tbl_chr) {
-  tbl_chr <- tbl_chr[tbl_chr$output_type == "sample", names(tbl_chr) != "value"]
+n_mismatch_errors <- function(n_tbl, idx_rows, tbl_chr) {
+  rows_by_idx <- split(seq_len(nrow(idx_rows)), idx_rows$compound_idx)
   purrr::map(
     purrr::set_names(n_tbl$compound_idx),
-    ~ {
-      spl_d <- hash_tbl$output_type_id[hash_tbl$compound_idx == .x][1L]
+    function(idx) {
+      # The rows one sample holds within this compound idx. A coarser sample
+      # holds rows in other compound idxs too, which are left out.
+      rows <- rows_by_idx[[idx]]
+      spl_d <- idx_rows$output_type_id[rows[1L]]
+      rows <- rows[idx_rows$output_type_id[rows] == spl_d]
       compound_idx_tbl <- tbl_chr[
-        tbl_chr$output_type_id == spl_d,
+        idx_rows$row_idx[rows],
         setdiff(names(tbl_chr), c("output_type_id", "value", "output_type"))
       ]
-      row <- n_tbl[n_tbl$compound_idx == .x, ] |> as.vector()
+      row <- n_tbl[n_tbl$compound_idx == idx, ] |> as.vector()
       list(
-        compound_idx = .x,
+        compound_idx = idx,
         n = row$n,
         min_samples_per_task = row$n_min,
         max_samples_per_task = row$n_max,
@@ -157,18 +155,18 @@ n_mismatch_errors <- function(n_tbl, hash_tbl, tbl_chr) {
 }
 
 
-n_mismatch_details <- function(n_tbl) {
+n_mismatch_details <- function(n_tbl, spl_idx, tbl_chr) {
   # nolint start: object_usage_linter
-  cat_msg <- function(compound_idx, type) {
+  cat_msg <- function(units, type) {
     switch(
       type,
       less = paste0(
         "File contains less than the minimum required number of samples per task ",
-        "for compound idx{?s} {.val {compound_idx}}"
+        "for compound task ID values {units}"
       ),
       more = paste0(
         "File contains more than the maximum required number of samples per task ",
-        "for compound idx{?s} {.val {compound_idx}}"
+        "for compound task ID values {units}"
       )
     ) |>
       cli::format_inline()
@@ -182,7 +180,7 @@ n_mismatch_details <- function(n_tbl) {
       if (length(compound_idx) == 0L) {
         return(NULL)
       } else {
-        cat_msg(compound_idx, .x)
+        cat_msg(compound_idx_labels(compound_idx, spl_idx, tbl_chr), .x)
       }
     }
   ) |>
