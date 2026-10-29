@@ -36,6 +36,12 @@ contain \code{NA}s. Defaults to extracting derived task IDs from \code{config_ta
 A list of vectors of compound task IDs detected in the tbl, one for each
 modeling task in the round. If \code{compact} is TRUE, modeling tasks returning NULL
 elements will be removed.
+
+Samples in a modeling task can have different compound task ID sets. The
+vector then holds every task ID detected as compound for any of its samples,
+and the \code{sets} attribute lists each set with the output type IDs of its
+samples. See the Compound modeling tasks section of
+\code{\link[=check_tbl_spl_compound_taskid_set]{check_tbl_spl_compound_taskid_set()}} for an example.
 }
 \description{
 Detect the compound_taskid_set for a tbl for each modeling task in a given round.
