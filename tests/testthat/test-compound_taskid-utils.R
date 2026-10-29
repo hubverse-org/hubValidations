@@ -108,6 +108,29 @@ test_that("test get_tbl_compound_taskid_set utilities", {
   )
 })
 
+test_that("errors name the invalid compound task IDs of each finer set (#400)", {
+  # Sample "1" holds one horizon, so it is finer by `horizon`. Sample "2" holds
+  # one target, so it is finer by `target`.
+  tbl_chr <- tibble::tibble(
+    location = "a",
+    horizon = c("1", "1", "1", "2"),
+    target = c("x", "y", "x", "x"),
+    output_type_id = c("1", "1", "2", "2")
+  )
+  out <- get_mt_compound_taskid_set(
+    tbl_chr,
+    config_comp_tids = "location",
+    task_ids = c("location", "horizon", "target"),
+    error = FALSE
+  )
+  errors <- attr(out, "errors")
+  expect_equal(purrr::map(errors, "output_type_ids"), list("1", "2"))
+  expect_equal(
+    purrr::map(errors, "invalid_tbl_comp_tids"),
+    list("horizon", "target")
+  )
+})
+
 test_that("detect_coarser_compound_taskid_set filters out NULL and matching mts", {
   # mt 1: NULL detected (skip), mt 2: matches (skip), mt 3: coarser
   detected <- list(
@@ -176,8 +199,7 @@ test_that("coarser_compound_taskid_set_warnings builds a single warning listing 
     result[[1]]$message,
     paste0(
       "Coarser-than-configured `compound_taskid_set` detected for ",
-      "modeling tasks 2 and 4. See check message and compound_taskid_set ",
-      "fields for specifics."
+      "modeling tasks 2 and 4. See check message for specifics."
     )
   )
 })

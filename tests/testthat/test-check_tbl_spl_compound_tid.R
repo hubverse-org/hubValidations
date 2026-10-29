@@ -35,7 +35,7 @@ test_that("check_tbl_spl_compound_tid works", {
   # the samples beside it cover one.
   expect_s3_class(
     check_tbl_spl_compound_taskid_set(tbl_error, round_id, file_path, hub_path),
-    c("check_error")
+    c("check_success")
   )
   expect_s3_class(
     check_tbl_spl_overlap(tbl_error, round_id, file_path, hub_path),

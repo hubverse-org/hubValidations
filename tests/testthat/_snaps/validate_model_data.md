@@ -434,7 +434,7 @@
         ..$ use_cli_format: logi TRUE
         ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
        $ spl_compound_taskid_set:List of 7
-        ..$ message            : chr "All samples in a model task conform to single, unique compound task ID set that matches the configured\n    `co"| __truncated__
+        ..$ message            : chr "All samples in a model task conform to the configured `compound_taskid_set`. \n "
         ..$ where              : chr "flu-base/2022-10-22-flu-base.csv"
         ..$ errors             : NULL
         ..$ warnings           : NULL

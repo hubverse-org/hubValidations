@@ -12,6 +12,12 @@
 #' @return A list of vectors of compound task IDs detected in the tbl, one for each
 #' modeling task in the round. If `compact` is TRUE, modeling tasks returning NULL
 #' elements will be removed.
+#'
+#' Samples in a modeling task can have different compound task ID sets. The
+#' vector then holds every task ID detected as compound for any of its samples,
+#' and the `sets` attribute lists each set with the output type IDs of its
+#' samples. See the Compound modeling tasks section of
+#' [check_tbl_spl_compound_taskid_set()] for an example.
 #' @export
 #' @examples
 #' hub_path <- system.file("testhubs/samples", package = "hubValidations")
@@ -160,34 +166,19 @@ get_mt_compound_taskid_set <- function(
 
   output_type_ids <- spl_uniq[["output_type_id"]]
 
-  tbl_comp_tids <- true_to_names_vector(is_compound_taskid)
-
-  if (length(tbl_comp_tids) > 1L) {
-    error_msg <- "More than 1 unique {.var compound_taskid_set} detected."
-    if (error) {
-      error_bullets <- purrr::map_chr(
-        tbl_comp_tids,
-        .f = function(.x) {
-          paste0("{.val ", .x, "}") |>
-            paste(collapse = ", ") |>
-            stats::setNames("*") |>
-            rlang::format_error_bullets()
-        }
-      )
-      cli::cli_abort(c("x" = error_msg, error_bullets), call = call)
-    }
-    # Attach error attributes
-    attributes(tbl_comp_tids) <- list(
-      errors = get_comp_tid_sample_ids(is_compound_taskid, output_type_ids),
-      msg = cli::format_inline(
-        error_msg,
-        " See `errors` attribute for details."
-      )
-    )
-    return(tbl_comp_tids)
+  # Samples in one modeling task can have different compound task ID sets, as
+  # in the example in the docs of `check_tbl_spl_compound_taskid_set()`. Each
+  # set is valid if it matches or is coarser than the configured set, that is,
+  # if it is a subset. So the union of the sets is a subset of the configured
+  # set exactly when every set is.
+  spl_sets <- get_comp_tid_sample_ids(is_compound_taskid, output_type_ids)
+  tbl_comp_tids <- intersect(
+    task_ids,
+    unlist(purrr::map(spl_sets, "tbl_comp_tids"))
+  )
+  if (length(spl_sets) > 1L) {
+    attr(tbl_comp_tids, "sets") <- spl_sets
   }
-
-  tbl_comp_tids <- unlist(tbl_comp_tids)
 
   if (!all(tbl_comp_tids %in% config_comp_tids)) {
     invalid_tbl_comp_tids <- setdiff(tbl_comp_tids, config_comp_tids)
@@ -210,13 +201,16 @@ get_mt_compound_taskid_set <- function(
     }
 
     # Attach error attributes
-    errors <- get_comp_tid_sample_ids(is_compound_taskid, output_type_ids) |>
+    errors <- spl_sets |>
       purrr::map(function(.x) {
         if (any(.x$tbl_comp_tids %in% invalid_tbl_comp_tids)) {
           c(
             list(
               config_comp_tids = config_comp_tids,
-              invalid_tbl_comp_tids = invalid_tbl_comp_tids
+              invalid_tbl_comp_tids = setdiff(
+                .x$tbl_comp_tids,
+                config_comp_tids
+              )
             ),
             .x
           )
@@ -246,33 +240,31 @@ true_to_names_vector <- function(x, cols = NULL, unique = TRUE) {
 }
 
 # Get list of vectors of output type IDs of samples conforming to each compound task ID
-# set detected from a sample compound task id membership matrix.
-#  Should be used at the modeling task level.
+# set detected from a sample compound task id membership matrix, in the order
+# the sets first appear. Should be used at the modeling task level.
 get_comp_tid_sample_ids <- function(is_compound_taskid, output_type_ids) {
-  is_compound_taskid <- tibble::as_tibble(is_compound_taskid) |>
-    dplyr::group_by_all()
+  is_compound_taskid <- tibble::as_tibble(is_compound_taskid)
+  set_key <- do.call(paste, unname(as.list(is_compound_taskid)))
+  first <- !duplicated(set_key)
+  set_key <- factor(set_key, levels = set_key[first])
 
   purrr::map2(
-    .x = dplyr::group_map(
-      is_compound_taskid,
-      ~ list(
-        output_type_ids = output_type_ids[as.integer(rownames(.x))]
-      )
-    ),
-    .y = true_to_names_vector(dplyr::group_keys(is_compound_taskid)),
-    ~ c(list(tbl_comp_tids = .y), .x)
+    .x = true_to_names_vector(is_compound_taskid[first, ], unique = FALSE),
+    .y = unname(split(output_type_ids, set_key)),
+    ~ list(tbl_comp_tids = .x, output_type_ids = .y)
   )
 }
 
-#' Detect model tasks where detected compound_taskid_set is coarser than
+#' Detect groups of samples whose detected compound_taskid_set is coarser than
 #' configured.
 #' @param detected List of detected compound_taskid_set vectors (one per model
-#'   task).
+#'   task), as returned by `get_tbl_compound_taskid_set()`.
 #' @param configured List of configured compound_taskid_set vectors (one per
 #'   model task).
-#' @returns List of info entries (one per coarser model task) with fields
-#'   `mt_idx`, `detected`, `configured`. Empty list if no model tasks are
-#'   coarser.
+#' @returns List of info entries (one per coarser set of samples) with fields
+#'   `mt_idx`, `detected`, `configured` and `output_type_ids`.
+#'   `output_type_ids` is `NULL` when all samples in the modeling task share
+#'   the set. Empty list if no samples are coarser.
 #' @noRd
 detect_coarser_compound_taskid_set <- function(detected, configured) {
   purrr::pmap(
@@ -281,15 +273,22 @@ detect_coarser_compound_taskid_set <- function(detected, configured) {
       if (is.null(det) || is.null(conf)) {
         return(NULL)
       }
-      if (length(det) < length(conf) || !all(conf %in% det)) {
-        list(
-          mt_idx = mt_idx,
-          detected = det,
-          configured = conf
-        )
-      }
+      spl_sets <- attr(det, "sets") %||%
+        list(list(tbl_comp_tids = det, output_type_ids = NULL))
+      purrr::map(spl_sets, function(spl_set) {
+        set <- spl_set$tbl_comp_tids
+        if (length(set) < length(conf) || !all(conf %in% set)) {
+          list(
+            mt_idx = mt_idx,
+            detected = set,
+            configured = conf,
+            output_type_ids = spl_set$output_type_ids
+          )
+        }
+      })
     }
   ) |>
+    purrr::list_flatten() |>
     purrr::compact()
 }
 
@@ -305,13 +304,12 @@ coarser_compound_taskid_set_warnings <- function(coarser_info) {
   if (length(coarser_info) == 0L) {
     return(NULL)
   }
-  mt_idx <- purrr::map_int(coarser_info, "mt_idx") # nolint: object_usage_linter
+  mt_idx <- unique(purrr::map_int(coarser_info, "mt_idx")) # nolint: object_usage_linter
   n_mts <- length(mt_idx) # nolint: object_usage_linter
   msg <- cli::format_inline(
     "Coarser-than-configured {.var compound_taskid_set} detected for ",
     "{cli::qty(n_mts)}modeling task{?s} {.val {mt_idx}}. ",
-    "See check {.field message} and {.field compound_taskid_set} fields ",
-    "for specifics."
+    "See check {.field message} for specifics."
   )
   list(capture_validation_warning(msg = msg))
 }
@@ -329,9 +327,14 @@ compile_coarser_details <- function(coarser_info) {
     mt_idx <- info$mt_idx # nolint: object_usage_linter
     det_label <- if (length(info$detected) == 0L) "none" else info$detected # nolint: object_usage_linter
     conf <- info$configured # nolint: object_usage_linter
+    spl_ids <- info$output_type_ids # nolint: object_usage_linter
     cli::format_inline(
       "mt {mt_idx}: detected ({.val {det_label}}) is coarser than ",
-      "configured ({.val {conf}})."
+      "configured ({.val {conf}})",
+      if (!is.null(spl_ids)) {
+        " for {cli::qty(spl_ids)}sample{?s} {.val {spl_ids}}"
+      },
+      "."
     )
   }) |>
     paste(collapse = " ")
