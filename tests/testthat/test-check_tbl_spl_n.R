@@ -103,9 +103,9 @@ test_that("Overriding compound_taskid_set in check_tbl_spl_n works", {
     n_samples = 1L
   )
 
-  # Validation of coarser files should return check failure.
-  # Also, because there is a mismatch in compound taskid set, the compound_idx
-  # value are inconsistent.
+  # Validation of coarser files should return check failure. Each coarser
+  # sample counts towards every configured compound_idx it covers, so every
+  # compound_idx has one sample, short of the minimum.
   expect_snapshot(
     str(
       check_tbl_spl_n(tbl_coarse, round_id, file_path, hub_path)

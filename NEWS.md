@@ -1,5 +1,14 @@
 # hubValidations (development version)
 
+## Breaking Changes
+
+* New check `check_tbl_spl_overlap()` fails samples that partly overlap. For example, with a `compound_taskid_set` of `reference_date` and `location`, samples with a compound task ID set of `reference_date` only are joint across locations, and a sample joint across locations `A1` and `A2` beside a sample joint across `A2` and `B` fails. `validate_model_data()`, `validate_submission()` and `validate_pr()` run it, and their output contains a new `spl_overlap` element. Their new `allow_overlapping_samples` argument skips it (#402).
+* `validate_model_data()`, and so `validate_submission()` and `validate_pr()`, no longer run `check_tbl_spl_compound_tid()`, and their output no longer contains a `spl_compound_tid` element (#377).
+
+## Bug fixes
+
+* `check_tbl_spl_n()` and `check_tbl_spl_non_compound_tid()` now check a coarser sample in every combination of compound task ID values it covers. `check_tbl_spl_n()` previously counted it towards one combination, so it could report the wrong combinations as short of samples. In the `errors` attributes, `compound_idx` values are now always numbered from the configured `compound_taskid_set`, `check_tbl_spl_non_compound_tid()` gains a `slices` element giving the compound task ID values of each mismatch, and each `compound_idx_tbl` of `check_tbl_spl_n()` holds only one sample's rows within that combination (#377).
+
 # hubValidations 3.0.0
 
 ## Breaking Changes

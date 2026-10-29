@@ -29,14 +29,25 @@ test_that("check_tbl_spl_compound_tid works", {
 
   expect_snapshot(error_check$errors)
 
-  # Ensure other checks pass
+  # `validate_model_data()` no longer runs this check, so the checks it does run
+  # must catch the row moved to location "02". With `location` in the
+  # configured `compound_taskid_set`, sample "1" now covers two locations, and
+  # the samples beside it cover one.
+  expect_s3_class(
+    check_tbl_spl_compound_taskid_set(tbl_error, round_id, file_path, hub_path),
+    c("check_error")
+  )
+  expect_s3_class(
+    check_tbl_spl_overlap(tbl_error, round_id, file_path, hub_path),
+    c("check_error")
+  )
   expect_s3_class(
     check_tbl_spl_non_compound_tid(tbl_error, round_id, file_path, hub_path),
-    c("check_success")
+    c("check_error")
   )
   expect_s3_class(
     check_tbl_spl_n(tbl_error, round_id, file_path, hub_path),
-    c("check_success")
+    c("check_failure")
   )
 })
 

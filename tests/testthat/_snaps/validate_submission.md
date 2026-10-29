@@ -1188,11 +1188,11 @@
         .. ..$ call               : chr "check_tbl_spl_compound_taskid_set"
         .. ..$ use_cli_format     : logi TRUE
         .. ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
-        ..$ spl_compound_tid       :List of 5
-        .. ..$ message       : chr "Each sample compound task ID contains single, unique value. \n "
+        ..$ spl_overlap            :List of 5
+        .. ..$ message       : chr "Samples that share a combination of compound task ID values all cover the same combinations. \n "
         .. ..$ where         : chr "flu-base/2022-10-22-flu-base.csv"
         .. ..$ errors        : NULL
-        .. ..$ call          : chr "check_tbl_spl_compound_tid"
+        .. ..$ call          : chr "check_tbl_spl_overlap"
         .. ..$ use_cli_format: logi TRUE
         .. ..- attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
         ..$ spl_non_compound_tid   :List of 5

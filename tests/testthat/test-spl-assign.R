@@ -24,21 +24,20 @@ test_that("sample rows assign to the same modeling tasks as they did through the
   }
 })
 
-test_that("the sample hash table is built as it was through the grid", {
+test_that("sample rows get the compound indices they got through the grid", {
   for (fixture in spl_fixtures()) {
     config_tasks <- read_config(fixture[["hub_path"]], "tasks")
     round_id <- fixture[["round_id"]]
     tbl <- read_spl_fixture(fixture)
 
     expect_equal(
-      spl_hash_tbl(tbl, round_id, config_tasks),
-      spl_hash_tbl_via_grid(tbl, round_id, config_tasks),
+      spl_idx_cols(spl_idx_tbl(tbl, round_id, config_tasks)),
+      spl_idx_tbl_via_grid(tbl, round_id, config_tasks),
       info = fixture[["hub_path"]]
     )
 
-    # Samples can be coarser than the config declares, in which case the checks
-    # pass the set they detected instead of the configured one, and the
-    # compound indices are numbered from that.
+    # The checks number compound indices from the configured set, but a
+    # caller can pass another, such as the set detected in the file.
     detected <- get_tbl_compound_taskid_set(
       tbl,
       config_tasks,
@@ -47,8 +46,8 @@ test_that("the sample hash table is built as it was through the grid", {
       error = FALSE
     )
     expect_equal(
-      spl_hash_tbl(tbl, round_id, config_tasks, detected),
-      spl_hash_tbl_via_grid(tbl, round_id, config_tasks, detected),
+      spl_idx_cols(spl_idx_tbl(tbl, round_id, config_tasks, detected)),
+      spl_idx_tbl_via_grid(tbl, round_id, config_tasks, detected),
       info = fixture[["hub_path"]]
     )
   }
@@ -82,8 +81,8 @@ test_that("a modeling task with no samples is numbered as it was through the gri
   expect_null(detected[[1L]])
 
   expect_equal(
-    spl_hash_tbl(tbl, round_id, config_tasks, detected),
-    spl_hash_tbl_via_grid(tbl, round_id, config_tasks, detected)
+    spl_idx_cols(spl_idx_tbl(tbl, round_id, config_tasks, detected)),
+    spl_idx_tbl_via_grid(tbl, round_id, config_tasks, detected)
   )
 })
 
@@ -107,12 +106,12 @@ test_that("the order a compound_taskid_set is written in does not change compoun
   permuted <- purrr::map(declared, rev)
 
   expect_equal(
-    spl_hash_tbl(tbl, round_id, config_tasks, permuted),
-    spl_hash_tbl_via_grid(tbl, round_id, config_tasks, permuted)
+    spl_idx_cols(spl_idx_tbl(tbl, round_id, config_tasks, permuted)),
+    spl_idx_tbl_via_grid(tbl, round_id, config_tasks, permuted)
   )
   expect_equal(
-    spl_hash_tbl(tbl, round_id, config_tasks, permuted),
-    spl_hash_tbl(tbl, round_id, config_tasks, declared)
+    spl_idx_cols(spl_idx_tbl(tbl, round_id, config_tasks, permuted)),
+    spl_idx_cols(spl_idx_tbl(tbl, round_id, config_tasks, declared))
   )
 })
 

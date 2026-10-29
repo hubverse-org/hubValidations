@@ -30,11 +30,21 @@ assign_spl_tbl_rows <- function(
   )
 }
 
-## --- Hash Table Utils --------------------------------------------------------
-#' Build the sample hash table, one row per sample
+## --- Sample index utils ------------------------------------------------------
+#' Build the sample index, one row per submitted sample row
 #'
-#' The sample metadata captured in this table is used by the subsequent sample
-#' check functions to validate various sample characteristics.
+#' The sample checks validate samples against the compound modeling tasks the
+#' config defines. Each combination of configured compound task ID values is
+#' one compound modeling task, identified by its compound idx. A sample that
+#' matches the configured `compound_taskid_set` covers one compound idx. A
+#' coarser sample covers several. A slice is the part of a sample that covers
+#' one compound idx.
+#'
+#' For example, take a configured `compound_taskid_set` of `reference_date`
+#' and `location`. Each compound idx is then one location for one reference
+#' date. A sample with a compound task ID set of `reference_date` only, joint
+#' across locations `A1` and `A2`, has two slices: its `A1` rows and its `A2`
+#' rows. Other functions in this file refer to this example.
 #'
 #' Modeling tasks are handled separately, since each can declare its own
 #' `compound_taskid_set`. Rows carrying values the config does not allow are
@@ -50,18 +60,34 @@ assign_spl_tbl_rows <- function(
 #' its task IDs is compound.
 #' @param derived_task_ids a character vector of derived task IDs. Defaults to
 #' derived task IDs set in the config.
+#' @param non_comp_key Logical. Whether to add the `non_comp_key` column. In
+#' the example above, take a modeling task whose other task IDs are `horizon`
+#' and `target`. Each row
+#' holds one combination of `horizon` and `target` values, such as horizon `1`
+#' with target `"x"`. `non_comp_key` gives each distinct combination an
+#' integer, the same for every row holding it.
 #'
-#' @returns A tibble with one row per sample and the columns:
-#' - `compound_idx`: which combination of compound task ID values the sample was
-#'   drawn for, taken as the commonest across its rows
-#' - `n_compound_idx`: how many such combinations its rows carry, which is 1 for
-#'   a well formed sample
-#' - `output_type_id`: the sample's own identifier
-#' - `hash_non_comp_tid`: a hash of its non compound task ID values, so two
-#'   samples can be compared for covering the same ones
-#' - `mt_id`: which modeling task the sample belongs to
+#' `check_tbl_spl_non_compound_tid()` requires every slice in a modeling task
+#' to hold the same combinations. If one slice holds horizons `1` to `4` for
+#' target `"x"`, every other slice must hold those four combinations too. With
+#' one integer per row, the check compares slices by counting keys instead of
+#' comparing several columns of values. Only that check needs the column.
+#'
+#' @returns A list with:
+#' - `rows`: a tibble with one row per sample row and the columns `mt_id`
+#'   (which modeling task the row belongs to), `output_type_id` (the sample
+#'   the row belongs to), `compound_idx` (which compound modeling task the row
+#'   belongs to), `row_idx` (the row's index in `tbl`) and, when requested,
+#'   `non_comp_key` (see the `non_comp_key` argument).
+#' - `comp_tids`: a list with one element per modeling task in the round. Each
+#'   element is a character vector of the names of the modeling task's compound
+#'   task IDs, in config order and without derived task IDs. It is `NULL` for a
+#'   modeling task without samples.
+#' - `non_comp_tids`: a list in the same shape, holding the names of the other
+#'   task IDs of each modeling task.
+#' @importFrom rlang %||%
 #' @noRd
-spl_hash_tbl <- function(
+spl_idx_tbl <- function(
   tbl,
   round_id,
   config_tasks,
@@ -69,9 +95,11 @@ spl_hash_tbl <- function(
   derived_task_ids = get_config_derived_task_ids(
     config_tasks,
     round_id
-  )
+  ),
+  non_comp_key = FALSE
 ) {
-  tbl <- tbl[tbl$output_type == "sample", names(tbl) != "value"]
+  spl_rows <- which(tbl$output_type == "sample")
+  tbl <- tbl[spl_rows, names(tbl) != "value"]
   # `derived_taskids_to_na()` replaces a derived task ID's config values with
   # `NA` as the config is read. So when a derived task ID is in the compound
   # task ID set, the index worked out below can only find its value if the
@@ -81,22 +109,10 @@ spl_hash_tbl <- function(
   }
 
   # A `NULL` argument means: use the set each modeling task's config declares.
-  # Fetch those, so that either way there is one set per modeling task to
-  # iterate over below.
-  if (is.null(compound_taskid_set)) {
-    mt_compound_taskids <- get_round_compound_task_ids(
-      config_tasks,
-      round_id
-    )
-  } else {
-    mt_compound_taskids <- compound_taskid_set
-  }
+  mt_compound_taskids <- compound_taskid_set %||%
+    get_round_compound_task_ids(config_tasks, round_id)
 
   call <- rlang::caller_env()
-  # Split tbl across modeling tasks, then give each row a compound index: a
-  # number identifying which combination of compound task ID values that row
-  # carries. The checks below use it to test that every row of a sample carries
-  # the same combination.
   mt_row_idx <- assign_spl_tbl_rows(
     tbl,
     config_tasks = config_tasks,
@@ -104,6 +120,9 @@ spl_hash_tbl <- function(
     derived_task_ids = derived_task_ids,
     call = call
   )
+  # The numbering also holds each modeling task's compound task ID names. A
+  # `NULL` set, which means every task ID is compound, is replaced there by
+  # the names themselves.
   mt_numbering <- get_mt_compound_idx_numbering(
     config_tasks = config_tasks,
     round_id = round_id,
@@ -113,111 +132,226 @@ spl_hash_tbl <- function(
   )
   round_task_ids <- hubUtils::get_round_task_id_names(config_tasks, round_id)
 
-  # Each modeling task's rows are subset and summarised inside the loop, so
-  # memory holds `tbl` plus one modeling task's subset at a time, never a second
-  # copy of the whole table.
-  purrr::pmap(
-    list(mt_row_idx, mt_numbering, mt_compound_taskids),
-    function(row_idx, numbering, compound_taskids) {
+  # Derived task IDs are left out. A derived task ID can hold several values
+  # within one compound idx, so a message naming the compound idx by its
+  # values would show an arbitrary one.
+  mt_comp_tids <- purrr::map(
+    mt_numbering,
+    \(.x) if (!is.null(.x)) setdiff(names(.x$comp_tid_values), derived_task_ids)
+  )
+  mt_non_comp_tids <- purrr::map(
+    mt_numbering,
+    \(.x) if (!is.null(.x)) setdiff(round_task_ids, names(.x$comp_tid_values))
+  )
+
+  # Sample rows holding values the config does not allow are left out, so
+  # `rows` can be empty. Callers use its columns either way, so an empty
+  # `rows` is built from this zero-row template of the columns and types.
+  ptype <- tibble::tibble(
+    mt_id = integer(),
+    output_type_id = character(),
+    compound_idx = character(),
+    row_idx = integer()
+  )
+  if (non_comp_key) {
+    ptype$non_comp_key <- integer()
+  }
+
+  rows <- purrr::pmap(
+    list(mt_row_idx, mt_numbering, mt_non_comp_tids, seq_along(mt_row_idx)),
+    function(row_idx, numbering, non_comp_tids, mt_id) {
       if (is.null(row_idx) || is.null(numbering) || length(row_idx) == 0L) {
         return(NULL)
       }
       mt_tbl <- tbl[row_idx, ]
-      mt_tbl[["compound_idx"]] <- get_compound_idx(mt_tbl, numbering)
-      get_mt_spl_hash_tbl(
-        tbl = mt_tbl,
-        compound_taskids = compound_taskids,
-        round_task_ids = round_task_ids
+      mt_rows <- tibble::tibble(
+        mt_id = mt_id,
+        output_type_id = mt_tbl$output_type_id,
+        compound_idx = get_compound_idx(mt_tbl, numbering),
+        row_idx = spl_rows[row_idx]
       )
+      if (non_comp_key) {
+        mt_rows$non_comp_key <- get_group_indices(mt_tbl[non_comp_tids])
+      }
+      mt_rows
     }
   ) |>
-    purrr::set_names(seq_along(mt_row_idx)) |>
-    purrr::compact() |>
-    # add an mt_id column to each tbl that indicates the modeling task group
-    purrr::imap(~ dplyr::mutate(.x, mt_id = as.integer(.y))) |>
-    purrr::list_rbind()
+    purrr::list_rbind(ptype = ptype)
+
+  list(rows = rows, comp_tids = mt_comp_tids, non_comp_tids = mt_non_comp_tids)
 }
 
-#' Create a spl hash table for samples in a single modeling task group.
+# One row per slice (see `spl_idx_tbl()`). The `row_idx` kept is that of one
+# of the slice's rows, from which its compound task ID values can be read.
+spl_slice_tbl <- function(idx_rows) {
+  dplyr::distinct(
+    idx_rows,
+    dplyr::across(dplyr::all_of(c("mt_id", "output_type_id", "compound_idx"))),
+    .keep_all = TRUE
+  )
+}
+
+#' Find samples that share compound idxs without covering the same ones
 #'
-#' @param tbl a model output data table.
-#' @param compound_taskids a character vector containing names of task IDs,
-#' for the given modeling task in the round, that make up the compound task ID set.
-#' If `NULL` is provided, a compound task ID set of all task IDs is used.
-#' @param round_task_ids a character vector containing names of all task IDs for
-#' a given modeling task in the round.
+#' Samples that cover one compound idx must all cover the same compound idxs.
+#' The samples of a modeling task then fall into groups, and each group covers
+#' compound idxs no other group covers. In the example of `spl_idx_tbl()`, a
+#' sample joint across locations `A1` and `A2` can sit beside samples for
+#' location `B`, but not beside a sample joint across `A2` and `B`.
 #'
-#' @returns a sample hash tibble with one row per sample idx and columns containing:
-#' - the compound index associated with each sample
-#' - the number of compound indices in each sample
-#' - the sample idx
-#' - a hash of the values of non_compound_taskids in each sample
+#' Each compound idx is labelled with the first sample covering it. The rule
+#' holds exactly when every sample carries a single label and every sample with
+#' a label covers every compound idx with that label. Both are counts, so the
+#' test needs no comparison of one sample's compound idxs against another's.
+#'
+#' @param slice_tbl output of `spl_slice_tbl()`.
+#' @returns The rows of `slice_tbl` belonging to samples that break the rule,
+#'   or that cover a compound idx such a sample covers.
 #' @noRd
-get_mt_spl_hash_tbl <- function(tbl, compound_taskids, round_task_ids) {
-  if (is.null(tbl)) {
-    return(NULL)
+overlapping_spl_slices <- function(slice_tbl) {
+  if (nrow(slice_tbl) == 0L) {
+    return(slice_tbl)
   }
+  spl <- get_group_indices(slice_tbl[c("mt_id", "output_type_id")])
+  idx <- get_group_indices(slice_tbl[c("mt_id", "compound_idx")])
 
-  non_compound_taskids <- setdiff(
-    round_task_ids,
-    compound_taskids
-  )
+  ord <- order(idx, spl)
+  first <- ord[!duplicated(idx[ord])]
+  idx_label <- integer(max(idx))
+  idx_label[idx[first]] <- spl[first]
+  label <- idx_label[idx]
 
-  tbl <- tbl |>
-    dplyr::group_by(
-      .data$output_type_id
-    ) |>
-    # arrange by non_compound_taskids to ensure consistent ordering of values
-    # when creating hashes of non_compound_taskid values.
-    dplyr::arrange(
-      dplyr::pick(dplyr::all_of(non_compound_taskids)),
-      .by_group = TRUE
-    )
+  n_spl <- max(spl)
+  # Each distinct sample and label pair, as one number. Both are at most the
+  # number of rows, so the product stays well within exact double range.
+  spl_label <- !duplicated(spl * (n_spl + 1) + label)
+  n_labels <- tabulate(spl[spl_label], nbins = n_spl)
+  label_n_spl <- tabulate(label[spl_label], nbins = n_spl)
+  label_n_idx <- tabulate(idx_label, nbins = n_spl)
+  label_n_slices <- tabulate(label, nbins = n_spl)
+  complete <- label_n_slices == label_n_spl * label_n_idx
 
-  # split tbl by sample idx (contained in the output_type_id column)
-  split(tbl, f = tbl$output_type_id) |>
-    purrr::map(
-      ~ sample_properties_tbl(.x, non_compound_taskids)
-    ) |>
-    purrr::list_rbind()
+  bad_spl <- unique(spl[n_labels[spl] > 1L | !complete[label]])
+  # A sample covering only compound idxs that a rule-breaking sample also
+  # covers can carry a single, complete label. It is involved all the same.
+  bad_idx <- unique(idx[spl %in% bad_spl])
+  slice_tbl[spl %in% unique(spl[idx %in% bad_idx]), ]
 }
 
-sample_properties_tbl <- function(x, non_compound_taskids) {
-  # Create tibble of sample properties for each sample idx to be used to
-  # validate various sample expectations.
-  tibble::tibble(
-    # get the value of the most common compound_idx in the sample. Used to
-    # determine which compound_idx the sample belongs to. Using this approach to
-    # ensure errors in sample indexing do not affect attempt to assign a
-    # sample to a compound_idx.
-    compound_idx = names(sort(table(x$compound_idx), decreasing = TRUE))[1L],
-    # Number of compound_idx values in the sample. Used to detect misallocation
-    # of sample ids.
-    n_compound_idx = length(unique(x$compound_idx)),
-    # capture value of sample idx.
-    output_type_id = unique(x$output_type_id),
-    # Create hash of values of non_compound_taskids to check for consistency
-    # across sample.
-    hash_non_comp_tid = rlang::hash(x[, non_compound_taskids])
+#' Find slices whose non compound task ID values differ from most slices
+#'
+#' Every slice in a modeling task should hold the same combinations of non
+#' compound task ID values, as the `non_comp_key` argument of `spl_idx_tbl()`
+#' describes. The reference is the set of combinations covered
+#' by the most slices in the modeling task. A slice covering any other set does
+#' not match. Where two sets are covered by equally many slices, the one whose
+#' first slice comes first in sorted order is the reference.
+#'
+#' @param idx_rows the `rows` of `spl_idx_tbl()`, built with
+#'   `non_comp_key = TRUE`.
+#' @returns A list with:
+#' - `slices`: the mismatched slices, with columns `mt_id`, `output_type_id`,
+#'   `compound_idx` and `row_idx`, the index in `tbl` of one of the slice's
+#'   rows.
+#' - `reference`: for each modeling task with mismatched slices, the reference
+#'   combinations, with columns `mt_id` and `row_idx`, the index in `tbl` of a
+#'   row holding the combination.
+#' @noRd
+mismatched_non_comp_slices <- function(idx_rows) {
+  slice_cols <- c("mt_id", "output_type_id", "compound_idx")
+  no_mismatch <- list(
+    slices = idx_rows[0L, c(slice_cols, "row_idx")],
+    reference = idx_rows[0L, c("mt_id", "row_idx")]
+  )
+  if (nrow(idx_rows) == 0L) {
+    return(no_mismatch)
+  }
+  # Each distinct slice and combination pair, as one number. Both are at most
+  # the number of rows, so the product stays well within exact double range.
+  slice <- get_group_indices(idx_rows[slice_cols])
+  n_key <- max(idx_rows$non_comp_key)
+  keep <- !duplicated(slice * (n_key + 1) + idx_rows$non_comp_key)
+  pairs <- idx_rows[keep, ]
+  slice <- slice[keep]
+
+  # Every combination present in every slice means every slice matches. This
+  # is a count per combination, so a file that passes never builds the sets
+  # below. `non_comp_key` numbers combinations within a modeling task, so the
+  # count is per modeling task and combination.
+  mt_n_slices <- tabulate(pairs$mt_id[!duplicated(slice)])
+  mt_key <- (pairs$mt_id - 1) * n_key + pairs$non_comp_key
+  key_n <- tabulate(mt_key)
+  present <- which(key_n > 0L)
+  key_mt <- (present - 1) %/% n_key + 1
+  if (all(key_n[present] == mt_n_slices[key_mt])) {
+    return(no_mismatch)
+  }
+
+  # `slice` numbers the slices from 1 with none missing, so splitting by it
+  # returns the slices' sets in that order.
+  slice_set <- vapply(
+    split(pairs$non_comp_key, slice),
+    \(key) paste(sort(key), collapse = ","),
+    character(1)
+  )
+  first_row <- match(seq_along(slice_set), slice)
+  set_tbl <- tibble::tibble(
+    mt_id = pairs$mt_id[first_row],
+    slice = seq_along(slice_set),
+    set = slice_set
+  )
+  reference_set <- dplyr::add_count(set_tbl, .data$mt_id, .data$set) |>
+    dplyr::arrange(.data$mt_id, dplyr::desc(.data$n), .data$slice) |>
+    dplyr::distinct(.data$mt_id, .keep_all = TRUE)
+
+  ref_slice <- reference_set$slice[match(set_tbl$mt_id, reference_set$mt_id)]
+  bad_slice <- set_tbl$slice[set_tbl$set != slice_set[ref_slice]]
+  bad <- pairs[first_row[bad_slice], c(slice_cols, "row_idx")]
+  reference <- pairs[
+    slice %in% reference_set$slice & pairs$mt_id %in% bad$mt_id,
+    c("mt_id", "row_idx")
+  ]
+  list(slices = bad, reference = reference)
+}
+
+# Slices with the compound task ID values of their compound idx, read from the
+# row each slice keeps.
+spl_slice_values <- function(slices, comp_tids, tbl) {
+  dplyr::bind_cols(
+    slices[, c("output_type_id", "compound_idx")],
+    tbl[slices$row_idx, comp_tids]
   )
 }
 
-# Get output type IDs (`sample_idx`s`) associated with a given hash from the
-# sample hash table
-get_hash_out_type_ids <- function(
-  hash_tbl,
-  hash,
-  hash_type = "hash_non_comp_tid",
-  n = NULL
-) {
-  has_hash <- hash_tbl[[hash_type]] %in% hash
-  out <- hash_tbl$output_type_id[has_hash]
-
-  if (is.null(n)) {
-    out
-  } else {
-    utils::head(out, n)
-  }
+#' Name compound idxs by the compound task ID values they stand for
+#'
+#' A compound idx is a position in the config's combinations of compound task ID
+#' values, which a submitter cannot read off their file. Messages name each one
+#' by its values instead.
+#'
+#' @param compound_idx character vector of compound idxs.
+#' @param spl_idx output of `spl_idx_tbl()`.
+#' @param tbl the table `spl_idx` was built from.
+#' @returns A character vector, one label per compound idx, such as
+#'   `"(reference_date: 2022-10-22, location: US)"`.
+#' @noRd
+compound_idx_labels <- function(compound_idx, spl_idx, tbl) {
+  first <- match(compound_idx, spl_idx$rows$compound_idx)
+  purrr::map2_chr(
+    spl_idx$rows$row_idx[first],
+    spl_idx$rows$mt_id[first],
+    function(row_idx, mt_id) {
+      comp_tids <- spl_idx$comp_tids[[mt_id]]
+      if (length(comp_tids) == 0L) {
+        return(paste0("(modeling task ", mt_id, ")"))
+      }
+      values <- unlist(tbl[row_idx, comp_tids], use.names = FALSE)
+      # Messages pass through `cli::format_inline()` again when the check
+      # condition is built, so braces in values must be escaped.
+      values <- gsub("([{}])", "\\1\\1", values)
+      paste0("(", paste0(comp_tids, ": ", values, collapse = ", "), ")")
+    }
+  )
 }
 
 #' Get the compound task ID set for each modeling task in a round.

@@ -1,13 +1,24 @@
 #' Check model output data tbl samples contain single unique values for each
 #' compound task ID within individual samples
 #'
+#' `r lifecycle::badge("superseded")`
+#'
+#' Samples coarser than the configured `compound_taskid_set` hold several
+#' values of a compound task ID, and are valid. So `validate_model_data()` no
+#' longer runs this check. It remains available as a custom check.
+#'
+#' Note that a sample can also hold several values because some of its rows
+#' were given the wrong sample ID. [check_tbl_spl_overlap()] catches this when
+#' the sample then covers different compound modeling tasks from the samples
+#' beside it.
+#'
 #' @inherit check_tbl_colnames params
 #' @inherit check_tbl_colnames return
 #' @inheritParams check_tbl_spl_mt_unique
 #' @inheritParams check_tbl_values
-#' @param compound_taskid_set a list of `compound_taskid_set`s (characters vector of compound task IDs),
-#' one for each modeling task. Used to override the compound task ID set in the config file,
-#' for example, when validating coarser samples.
+#' @param compound_taskid_set a list of `compound_taskid_set`s (characters
+#' vector of compound task IDs), one for each modeling task. Used to override
+#' the compound task ID set in the config file.
 #' @details Output of the check includes an `errors` element, a list of items,
 #' one for each sample failing validation, with the following structure:
 #' - `mt_id`: Index identifying the config modeling task the sample is associated with.
@@ -44,14 +55,16 @@ check_tbl_spl_compound_tid <- function(
     return(skip_v3_spl_check(file_path))
   }
 
-  hash_tbl <- spl_hash_tbl(
+  n_tbl <- spl_idx_tbl(
     tbl_chr,
     round_id,
     config_tasks,
     compound_taskid_set,
     derived_task_ids = derived_task_ids
-  )
-  n_tbl <- hash_tbl[hash_tbl$n_compound_idx > 1L, ]
+  )$rows |>
+    spl_slice_tbl() |>
+    dplyr::count(.data$mt_id, .data$output_type_id, name = "n_compound_idx") |>
+    dplyr::filter(.data$n_compound_idx > 1L)
 
   check <- nrow(n_tbl) == 0L
 

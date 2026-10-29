@@ -4,6 +4,7 @@
 #' This check detects the compound task ID sets of samples, implied by the `output_type_id`
 #' and task ID values, and checks them for internal consistency and compliance with
 #' the `compound_taskid_set` defined for each round modeling task in the `tasks.json` config.
+#' See the Compound modeling tasks section.
 #' @inheritParams check_tbl_spl_mt_unique
 #' @inheritParams check_tbl_values
 #' @inherit check_tbl_colnames params
@@ -29,6 +30,27 @@
 #' The name of each element is the index identifying the config modeling task the sample is associated with `mt_id`.
 #' See [hubverse documentation on samples](https://docs.hubverse.io/en/latest/user-guide/sample-output-type.html)
 #' for more details.
+#' @section Compound modeling tasks:
+#' Samples are validated against the configured `compound_taskid_set` only.
+#' Each combination of configured compound task ID values is one compound
+#' modeling task, identified in check output by its `compound_idx`. A sample
+#' that matches the configured set covers one compound modeling task. A
+#' coarser sample covers several. The sample checks split a coarser sample
+#' into one part per compound modeling task, and validate and count each part
+#' as a sample of that compound modeling task. A finer sample covers only part
+#' of a compound modeling task, so it fails.
+#'
+#' For example, take a configured `compound_taskid_set` of `reference_date`
+#' and `location`. Each compound modeling task is then one location for one
+#' reference date, and a sample that matches the configured set is a
+#' trajectory across horizons for one location.
+#' - A sample with a compound task ID set of `reference_date` only is coarser.
+#'   It is joint across locations as well as horizons. If it covers locations
+#'   `A1` and `A2`, it is validated as one sample for `A1` and one for `A2`.
+#' - A sample with a compound task ID set of `reference_date`, `location` and
+#'   `horizon` is finer. It covers one horizon of a trajectory, and fails.
+#'
+#' The other sample checks refer to this example.
 #' @export
 check_tbl_spl_compound_taskid_set <- function(
   tbl_chr,

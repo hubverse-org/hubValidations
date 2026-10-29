@@ -33,9 +33,9 @@ in the \code{arrow} package.
 The hub must be fully configured with valid \code{admin.json} and \code{tasks.json}
 files within the \code{hub-config} directory.}
 
-\item{compound_taskid_set}{a list of \code{compound_taskid_set}s (characters vector of compound task IDs),
-one for each modeling task. Used to override the compound task ID set in the config file,
-for example, when validating coarser samples.}
+\item{compound_taskid_set}{a list of \code{compound_taskid_set}s (characters
+vector of compound task IDs), one for each modeling task. Used to override
+the compound task ID set in the config file.}
 
 \item{derived_task_ids}{Character vector of derived task ID names (task IDs whose
 values depend on other task IDs) to ignore during validation. Defaults to
@@ -56,6 +56,11 @@ Check model output data tbl samples contain single unique combination of
 non-compound task ID values across all samples
 }
 \details{
+A sample coarser than the configured \code{compound_taskid_set} covers
+several compound modeling tasks. Its rows in each one are compared
+separately. See the Compound modeling tasks section of
+\code{\link[=check_tbl_spl_compound_taskid_set]{check_tbl_spl_compound_taskid_set()}}.
+
 Output of the check includes an \code{errors} element, a list of items,
 one for each modeling task containing samples failing validation,
 with the following structure:
@@ -64,6 +69,10 @@ with the following structure:
 \item \code{output_type_ids}: The output type IDs of samples that do not match the most frequent
 non-compound task ID value combination across all
 samples in the modeling task.
+\item \code{slices}: a tibble with one row for each sample and compound modeling task
+in which the sample does not match, giving the sample's \code{output_type_id},
+the \code{compound_idx} and the compound task ID values of the compound modeling
+task.
 \item \code{frequent}: The most frequent non-compound task ID value combination
 across all samples in the modeling task to which all samples were compared.
 See \href{https://docs.hubverse.io/en/latest/user-guide/sample-output-type.html}{hubverse documentation on samples}

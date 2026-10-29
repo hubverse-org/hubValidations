@@ -33,9 +33,9 @@ in the \code{arrow} package.
 The hub must be fully configured with valid \code{admin.json} and \code{tasks.json}
 files within the \code{hub-config} directory.}
 
-\item{compound_taskid_set}{a list of \code{compound_taskid_set}s (characters vector of compound task IDs),
-one for each modeling task. Used to override the compound task ID set in the config file,
-for example, when validating coarser samples.}
+\item{compound_taskid_set}{a list of \code{compound_taskid_set}s (characters
+vector of compound task IDs), one for each modeling task. Used to override
+the compound task ID set in the config file.}
 
 \item{derived_task_ids}{Character vector of derived task ID names (task IDs whose
 values depend on other task IDs) to ignore during validation. Defaults to
@@ -52,10 +52,18 @@ Depending on whether validation has succeeded, one of:
 Returned object also inherits from subclass \verb{<hub_check>}.
 }
 \description{
-Check model output data tbl samples contain single unique values for each
-compound task ID within individual samples
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
 }
 \details{
+Samples coarser than the configured \code{compound_taskid_set} hold several
+values of a compound task ID, and are valid. So \code{validate_model_data()} no
+longer runs this check. It remains available as a custom check.
+
+Note that a sample can also hold several values because some of its rows
+were given the wrong sample ID. \code{\link[=check_tbl_spl_overlap]{check_tbl_spl_overlap()}} catches this when
+the sample then covers different compound modeling tasks from the samples
+beside it.
+
 Output of the check includes an \code{errors} element, a list of items,
 one for each sample failing validation, with the following structure:
 \itemize{
