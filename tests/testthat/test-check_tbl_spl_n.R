@@ -111,6 +111,8 @@ test_that("Overriding compound_taskid_set in check_tbl_spl_n works", {
       check_tbl_spl_n(tbl_coarse, round_id, file_path, hub_path)
     )
   )
+  res <- check_tbl_spl_n(tbl_coarse, round_id, file_path, hub_path)
+  expect_false(is.unsorted(as.integer(names(res$errors))))
 
   # Validation providing coarser compound taskid still fails because the coarser
   # structure means the same rows are spread across fewer samples. But the

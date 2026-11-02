@@ -178,6 +178,294 @@
         .. .. ..$ location       : chr "US"
         .. .. ..$ variant        : chr "AA"
         .. .. ..$ target_end_date: chr "2022-10-22"
+        ..$ 5  :List of 5
+        .. ..$ compound_idx        : chr "5"
+        .. ..$ n                   : int 1
+        .. ..$ min_samples_per_task: int 9
+        .. ..$ max_samples_per_task: int 10
+        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
+        .. .. ..$ reference_date : chr "2022-10-22"
+        .. .. ..$ target         : chr "wk inc flu hosp"
+        .. .. ..$ horizon        : chr "0"
+        .. .. ..$ location       : chr "01"
+        .. .. ..$ variant        : chr "AA"
+        .. .. ..$ target_end_date: chr "2022-10-22"
+        ..$ 9  :List of 5
+        .. ..$ compound_idx        : chr "9"
+        .. ..$ n                   : int 1
+        .. ..$ min_samples_per_task: int 9
+        .. ..$ max_samples_per_task: int 10
+        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
+        .. .. ..$ reference_date : chr "2022-10-22"
+        .. .. ..$ target         : chr "wk inc flu hosp"
+        .. .. ..$ horizon        : chr "0"
+        .. .. ..$ location       : chr "02"
+        .. .. ..$ variant        : chr "AA"
+        .. .. ..$ target_end_date: chr "2022-10-22"
+        ..$ 13 :List of 5
+        .. ..$ compound_idx        : chr "13"
+        .. ..$ n                   : int 1
+        .. ..$ min_samples_per_task: int 9
+        .. ..$ max_samples_per_task: int 10
+        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
+        .. .. ..$ reference_date : chr "2022-10-22"
+        .. .. ..$ target         : chr "wk inc flu hosp"
+        .. .. ..$ horizon        : chr "0"
+        .. .. ..$ location       : chr "04"
+        .. .. ..$ variant        : chr "AA"
+        .. .. ..$ target_end_date: chr "2022-10-22"
+        ..$ 17 :List of 5
+        .. ..$ compound_idx        : chr "17"
+        .. ..$ n                   : int 1
+        .. ..$ min_samples_per_task: int 9
+        .. ..$ max_samples_per_task: int 10
+        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
+        .. .. ..$ reference_date : chr "2022-10-22"
+        .. .. ..$ target         : chr "wk inc flu hosp"
+        .. .. ..$ horizon        : chr "0"
+        .. .. ..$ location       : chr "05"
+        .. .. ..$ variant        : chr "AA"
+        .. .. ..$ target_end_date: chr "2022-10-22"
+        ..$ 21 :List of 5
+        .. ..$ compound_idx        : chr "21"
+        .. ..$ n                   : int 1
+        .. ..$ min_samples_per_task: int 9
+        .. ..$ max_samples_per_task: int 10
+        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
+        .. .. ..$ reference_date : chr "2022-10-22"
+        .. .. ..$ target         : chr "wk inc flu hosp"
+        .. .. ..$ horizon        : chr "0"
+        .. .. ..$ location       : chr "US"
+        .. .. ..$ variant        : chr "BB"
+        .. .. ..$ target_end_date: chr "2022-10-22"
+        ..$ 25 :List of 5
+        .. ..$ compound_idx        : chr "25"
+        .. ..$ n                   : int 1
+        .. ..$ min_samples_per_task: int 9
+        .. ..$ max_samples_per_task: int 10
+        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
+        .. .. ..$ reference_date : chr "2022-10-22"
+        .. .. ..$ target         : chr "wk inc flu hosp"
+        .. .. ..$ horizon        : chr "0"
+        .. .. ..$ location       : chr "01"
+        .. .. ..$ variant        : chr "BB"
+        .. .. ..$ target_end_date: chr "2022-10-22"
+        ..$ 29 :List of 5
+        .. ..$ compound_idx        : chr "29"
+        .. ..$ n                   : int 1
+        .. ..$ min_samples_per_task: int 9
+        .. ..$ max_samples_per_task: int 10
+        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
+        .. .. ..$ reference_date : chr "2022-10-22"
+        .. .. ..$ target         : chr "wk inc flu hosp"
+        .. .. ..$ horizon        : chr "0"
+        .. .. ..$ location       : chr "02"
+        .. .. ..$ variant        : chr "BB"
+        .. .. ..$ target_end_date: chr "2022-10-22"
+        ..$ 33 :List of 5
+        .. ..$ compound_idx        : chr "33"
+        .. ..$ n                   : int 1
+        .. ..$ min_samples_per_task: int 9
+        .. ..$ max_samples_per_task: int 10
+        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
+        .. .. ..$ reference_date : chr "2022-10-22"
+        .. .. ..$ target         : chr "wk inc flu hosp"
+        .. .. ..$ horizon        : chr "0"
+        .. .. ..$ location       : chr "04"
+        .. .. ..$ variant        : chr "BB"
+        .. .. ..$ target_end_date: chr "2022-10-22"
+        ..$ 37 :List of 5
+        .. ..$ compound_idx        : chr "37"
+        .. ..$ n                   : int 1
+        .. ..$ min_samples_per_task: int 9
+        .. ..$ max_samples_per_task: int 10
+        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
+        .. .. ..$ reference_date : chr "2022-10-22"
+        .. .. ..$ target         : chr "wk inc flu hosp"
+        .. .. ..$ horizon        : chr "0"
+        .. .. ..$ location       : chr "05"
+        .. .. ..$ variant        : chr "BB"
+        .. .. ..$ target_end_date: chr "2022-10-22"
+        ..$ 41 :List of 5
+        .. ..$ compound_idx        : chr "41"
+        .. ..$ n                   : int 1
+        .. ..$ min_samples_per_task: int 9
+        .. ..$ max_samples_per_task: int 10
+        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
+        .. .. ..$ reference_date : chr "2022-10-22"
+        .. .. ..$ target         : chr "wk inc flu hosp"
+        .. .. ..$ horizon        : chr "0"
+        .. .. ..$ location       : chr "US"
+        .. .. ..$ variant        : chr "CC"
+        .. .. ..$ target_end_date: chr "2022-10-22"
+        ..$ 45 :List of 5
+        .. ..$ compound_idx        : chr "45"
+        .. ..$ n                   : int 1
+        .. ..$ min_samples_per_task: int 9
+        .. ..$ max_samples_per_task: int 10
+        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
+        .. .. ..$ reference_date : chr "2022-10-22"
+        .. .. ..$ target         : chr "wk inc flu hosp"
+        .. .. ..$ horizon        : chr "0"
+        .. .. ..$ location       : chr "01"
+        .. .. ..$ variant        : chr "CC"
+        .. .. ..$ target_end_date: chr "2022-10-22"
+        ..$ 49 :List of 5
+        .. ..$ compound_idx        : chr "49"
+        .. ..$ n                   : int 1
+        .. ..$ min_samples_per_task: int 9
+        .. ..$ max_samples_per_task: int 10
+        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
+        .. .. ..$ reference_date : chr "2022-10-22"
+        .. .. ..$ target         : chr "wk inc flu hosp"
+        .. .. ..$ horizon        : chr "0"
+        .. .. ..$ location       : chr "02"
+        .. .. ..$ variant        : chr "CC"
+        .. .. ..$ target_end_date: chr "2022-10-22"
+        ..$ 53 :List of 5
+        .. ..$ compound_idx        : chr "53"
+        .. ..$ n                   : int 1
+        .. ..$ min_samples_per_task: int 9
+        .. ..$ max_samples_per_task: int 10
+        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
+        .. .. ..$ reference_date : chr "2022-10-22"
+        .. .. ..$ target         : chr "wk inc flu hosp"
+        .. .. ..$ horizon        : chr "0"
+        .. .. ..$ location       : chr "04"
+        .. .. ..$ variant        : chr "CC"
+        .. .. ..$ target_end_date: chr "2022-10-22"
+        ..$ 57 :List of 5
+        .. ..$ compound_idx        : chr "57"
+        .. ..$ n                   : int 1
+        .. ..$ min_samples_per_task: int 9
+        .. ..$ max_samples_per_task: int 10
+        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
+        .. .. ..$ reference_date : chr "2022-10-22"
+        .. .. ..$ target         : chr "wk inc flu hosp"
+        .. .. ..$ horizon        : chr "0"
+        .. .. ..$ location       : chr "05"
+        .. .. ..$ variant        : chr "CC"
+        .. .. ..$ target_end_date: chr "2022-10-22"
+        ..$ 61 :List of 5
+        .. ..$ compound_idx        : chr "61"
+        .. ..$ n                   : int 1
+        .. ..$ min_samples_per_task: int 9
+        .. ..$ max_samples_per_task: int 10
+        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
+        .. .. ..$ reference_date : chr "2022-10-22"
+        .. .. ..$ target         : chr "wk inc flu hosp"
+        .. .. ..$ horizon        : chr "0"
+        .. .. ..$ location       : chr "US"
+        .. .. ..$ variant        : chr "DD"
+        .. .. ..$ target_end_date: chr "2022-10-22"
+        ..$ 65 :List of 5
+        .. ..$ compound_idx        : chr "65"
+        .. ..$ n                   : int 1
+        .. ..$ min_samples_per_task: int 9
+        .. ..$ max_samples_per_task: int 10
+        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
+        .. .. ..$ reference_date : chr "2022-10-22"
+        .. .. ..$ target         : chr "wk inc flu hosp"
+        .. .. ..$ horizon        : chr "0"
+        .. .. ..$ location       : chr "01"
+        .. .. ..$ variant        : chr "DD"
+        .. .. ..$ target_end_date: chr "2022-10-22"
+        ..$ 69 :List of 5
+        .. ..$ compound_idx        : chr "69"
+        .. ..$ n                   : int 1
+        .. ..$ min_samples_per_task: int 9
+        .. ..$ max_samples_per_task: int 10
+        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
+        .. .. ..$ reference_date : chr "2022-10-22"
+        .. .. ..$ target         : chr "wk inc flu hosp"
+        .. .. ..$ horizon        : chr "0"
+        .. .. ..$ location       : chr "02"
+        .. .. ..$ variant        : chr "DD"
+        .. .. ..$ target_end_date: chr "2022-10-22"
+        ..$ 73 :List of 5
+        .. ..$ compound_idx        : chr "73"
+        .. ..$ n                   : int 1
+        .. ..$ min_samples_per_task: int 9
+        .. ..$ max_samples_per_task: int 10
+        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
+        .. .. ..$ reference_date : chr "2022-10-22"
+        .. .. ..$ target         : chr "wk inc flu hosp"
+        .. .. ..$ horizon        : chr "0"
+        .. .. ..$ location       : chr "04"
+        .. .. ..$ variant        : chr "DD"
+        .. .. ..$ target_end_date: chr "2022-10-22"
+        ..$ 77 :List of 5
+        .. ..$ compound_idx        : chr "77"
+        .. ..$ n                   : int 1
+        .. ..$ min_samples_per_task: int 9
+        .. ..$ max_samples_per_task: int 10
+        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
+        .. .. ..$ reference_date : chr "2022-10-22"
+        .. .. ..$ target         : chr "wk inc flu hosp"
+        .. .. ..$ horizon        : chr "0"
+        .. .. ..$ location       : chr "05"
+        .. .. ..$ variant        : chr "DD"
+        .. .. ..$ target_end_date: chr "2022-10-22"
+        ..$ 82 :List of 5
+        .. ..$ compound_idx        : chr "82"
+        .. ..$ n                   : int 1
+        .. ..$ min_samples_per_task: int 9
+        .. ..$ max_samples_per_task: int 10
+        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
+        .. .. ..$ reference_date : chr "2022-10-22"
+        .. .. ..$ target         : chr "wk inc flu hosp"
+        .. .. ..$ horizon        : chr "1"
+        .. .. ..$ location       : chr "US"
+        .. .. ..$ variant        : chr "AA"
+        .. .. ..$ target_end_date: chr "2022-10-29"
+        ..$ 86 :List of 5
+        .. ..$ compound_idx        : chr "86"
+        .. ..$ n                   : int 1
+        .. ..$ min_samples_per_task: int 9
+        .. ..$ max_samples_per_task: int 10
+        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
+        .. .. ..$ reference_date : chr "2022-10-22"
+        .. .. ..$ target         : chr "wk inc flu hosp"
+        .. .. ..$ horizon        : chr "1"
+        .. .. ..$ location       : chr "01"
+        .. .. ..$ variant        : chr "AA"
+        .. .. ..$ target_end_date: chr "2022-10-29"
+        ..$ 90 :List of 5
+        .. ..$ compound_idx        : chr "90"
+        .. ..$ n                   : int 1
+        .. ..$ min_samples_per_task: int 9
+        .. ..$ max_samples_per_task: int 10
+        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
+        .. .. ..$ reference_date : chr "2022-10-22"
+        .. .. ..$ target         : chr "wk inc flu hosp"
+        .. .. ..$ horizon        : chr "1"
+        .. .. ..$ location       : chr "02"
+        .. .. ..$ variant        : chr "AA"
+        .. .. ..$ target_end_date: chr "2022-10-29"
+        ..$ 94 :List of 5
+        .. ..$ compound_idx        : chr "94"
+        .. ..$ n                   : int 1
+        .. ..$ min_samples_per_task: int 9
+        .. ..$ max_samples_per_task: int 10
+        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
+        .. .. ..$ reference_date : chr "2022-10-22"
+        .. .. ..$ target         : chr "wk inc flu hosp"
+        .. .. ..$ horizon        : chr "1"
+        .. .. ..$ location       : chr "04"
+        .. .. ..$ variant        : chr "AA"
+        .. .. ..$ target_end_date: chr "2022-10-29"
+        ..$ 98 :List of 5
+        .. ..$ compound_idx        : chr "98"
+        .. ..$ n                   : int 1
+        .. ..$ min_samples_per_task: int 9
+        .. ..$ max_samples_per_task: int 10
+        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
+        .. .. ..$ reference_date : chr "2022-10-22"
+        .. .. ..$ target         : chr "wk inc flu hosp"
+        .. .. ..$ horizon        : chr "1"
+        .. .. ..$ location       : chr "05"
+        .. .. ..$ variant        : chr "AA"
+        .. .. ..$ target_end_date: chr "2022-10-29"
         ..$ 102:List of 5
         .. ..$ compound_idx        : chr "102"
         .. ..$ n                   : int 1
@@ -262,18 +550,6 @@
         .. .. ..$ location       : chr "01"
         .. .. ..$ variant        : chr "CC"
         .. .. ..$ target_end_date: chr "2022-10-29"
-        ..$ 13 :List of 5
-        .. ..$ compound_idx        : chr "13"
-        .. ..$ n                   : int 1
-        .. ..$ min_samples_per_task: int 9
-        .. ..$ max_samples_per_task: int 10
-        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
-        .. .. ..$ reference_date : chr "2022-10-22"
-        .. .. ..$ target         : chr "wk inc flu hosp"
-        .. .. ..$ horizon        : chr "0"
-        .. .. ..$ location       : chr "04"
-        .. .. ..$ variant        : chr "AA"
-        .. .. ..$ target_end_date: chr "2022-10-22"
         ..$ 130:List of 5
         .. ..$ compound_idx        : chr "130"
         .. ..$ n                   : int 1
@@ -394,18 +670,6 @@
         .. .. ..$ location       : chr "01"
         .. .. ..$ variant        : chr "AA"
         .. .. ..$ target_end_date: chr "2022-11-05"
-        ..$ 17 :List of 5
-        .. ..$ compound_idx        : chr "17"
-        .. ..$ n                   : int 1
-        .. ..$ min_samples_per_task: int 9
-        .. ..$ max_samples_per_task: int 10
-        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
-        .. .. ..$ reference_date : chr "2022-10-22"
-        .. .. ..$ target         : chr "wk inc flu hosp"
-        .. .. ..$ horizon        : chr "0"
-        .. .. ..$ location       : chr "05"
-        .. .. ..$ variant        : chr "AA"
-        .. .. ..$ target_end_date: chr "2022-10-22"
         ..$ 171:List of 5
         .. ..$ compound_idx        : chr "171"
         .. ..$ n                   : int 1
@@ -526,18 +790,6 @@
         .. .. ..$ location       : chr "01"
         .. .. ..$ variant        : chr "CC"
         .. .. ..$ target_end_date: chr "2022-11-05"
-        ..$ 21 :List of 5
-        .. ..$ compound_idx        : chr "21"
-        .. ..$ n                   : int 1
-        .. ..$ min_samples_per_task: int 9
-        .. ..$ max_samples_per_task: int 10
-        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
-        .. .. ..$ reference_date : chr "2022-10-22"
-        .. .. ..$ target         : chr "wk inc flu hosp"
-        .. .. ..$ horizon        : chr "0"
-        .. .. ..$ location       : chr "US"
-        .. .. ..$ variant        : chr "BB"
-        .. .. ..$ target_end_date: chr "2022-10-22"
         ..$ 211:List of 5
         .. ..$ compound_idx        : chr "211"
         .. ..$ n                   : int 1
@@ -658,18 +910,6 @@
         .. .. ..$ location       : chr "01"
         .. .. ..$ variant        : chr "AA"
         .. .. ..$ target_end_date: chr "2022-11-12"
-        ..$ 25 :List of 5
-        .. ..$ compound_idx        : chr "25"
-        .. ..$ n                   : int 1
-        .. ..$ min_samples_per_task: int 9
-        .. ..$ max_samples_per_task: int 10
-        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
-        .. .. ..$ reference_date : chr "2022-10-22"
-        .. .. ..$ target         : chr "wk inc flu hosp"
-        .. .. ..$ horizon        : chr "0"
-        .. .. ..$ location       : chr "01"
-        .. .. ..$ variant        : chr "BB"
-        .. .. ..$ target_end_date: chr "2022-10-22"
         ..$ 252:List of 5
         .. ..$ compound_idx        : chr "252"
         .. ..$ n                   : int 1
@@ -790,18 +1030,6 @@
         .. .. ..$ location       : chr "01"
         .. .. ..$ variant        : chr "CC"
         .. .. ..$ target_end_date: chr "2022-11-12"
-        ..$ 29 :List of 5
-        .. ..$ compound_idx        : chr "29"
-        .. ..$ n                   : int 1
-        .. ..$ min_samples_per_task: int 9
-        .. ..$ max_samples_per_task: int 10
-        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
-        .. .. ..$ reference_date : chr "2022-10-22"
-        .. .. ..$ target         : chr "wk inc flu hosp"
-        .. .. ..$ horizon        : chr "0"
-        .. .. ..$ location       : chr "02"
-        .. .. ..$ variant        : chr "BB"
-        .. .. ..$ target_end_date: chr "2022-10-22"
         ..$ 292:List of 5
         .. ..$ compound_idx        : chr "292"
         .. ..$ n                   : int 1
@@ -898,234 +1126,6 @@
         .. .. ..$ location       : chr "05"
         .. .. ..$ variant        : chr "DD"
         .. .. ..$ target_end_date: chr "2022-11-12"
-        ..$ 33 :List of 5
-        .. ..$ compound_idx        : chr "33"
-        .. ..$ n                   : int 1
-        .. ..$ min_samples_per_task: int 9
-        .. ..$ max_samples_per_task: int 10
-        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
-        .. .. ..$ reference_date : chr "2022-10-22"
-        .. .. ..$ target         : chr "wk inc flu hosp"
-        .. .. ..$ horizon        : chr "0"
-        .. .. ..$ location       : chr "04"
-        .. .. ..$ variant        : chr "BB"
-        .. .. ..$ target_end_date: chr "2022-10-22"
-        ..$ 37 :List of 5
-        .. ..$ compound_idx        : chr "37"
-        .. ..$ n                   : int 1
-        .. ..$ min_samples_per_task: int 9
-        .. ..$ max_samples_per_task: int 10
-        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
-        .. .. ..$ reference_date : chr "2022-10-22"
-        .. .. ..$ target         : chr "wk inc flu hosp"
-        .. .. ..$ horizon        : chr "0"
-        .. .. ..$ location       : chr "05"
-        .. .. ..$ variant        : chr "BB"
-        .. .. ..$ target_end_date: chr "2022-10-22"
-        ..$ 41 :List of 5
-        .. ..$ compound_idx        : chr "41"
-        .. ..$ n                   : int 1
-        .. ..$ min_samples_per_task: int 9
-        .. ..$ max_samples_per_task: int 10
-        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
-        .. .. ..$ reference_date : chr "2022-10-22"
-        .. .. ..$ target         : chr "wk inc flu hosp"
-        .. .. ..$ horizon        : chr "0"
-        .. .. ..$ location       : chr "US"
-        .. .. ..$ variant        : chr "CC"
-        .. .. ..$ target_end_date: chr "2022-10-22"
-        ..$ 45 :List of 5
-        .. ..$ compound_idx        : chr "45"
-        .. ..$ n                   : int 1
-        .. ..$ min_samples_per_task: int 9
-        .. ..$ max_samples_per_task: int 10
-        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
-        .. .. ..$ reference_date : chr "2022-10-22"
-        .. .. ..$ target         : chr "wk inc flu hosp"
-        .. .. ..$ horizon        : chr "0"
-        .. .. ..$ location       : chr "01"
-        .. .. ..$ variant        : chr "CC"
-        .. .. ..$ target_end_date: chr "2022-10-22"
-        ..$ 49 :List of 5
-        .. ..$ compound_idx        : chr "49"
-        .. ..$ n                   : int 1
-        .. ..$ min_samples_per_task: int 9
-        .. ..$ max_samples_per_task: int 10
-        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
-        .. .. ..$ reference_date : chr "2022-10-22"
-        .. .. ..$ target         : chr "wk inc flu hosp"
-        .. .. ..$ horizon        : chr "0"
-        .. .. ..$ location       : chr "02"
-        .. .. ..$ variant        : chr "CC"
-        .. .. ..$ target_end_date: chr "2022-10-22"
-        ..$ 5  :List of 5
-        .. ..$ compound_idx        : chr "5"
-        .. ..$ n                   : int 1
-        .. ..$ min_samples_per_task: int 9
-        .. ..$ max_samples_per_task: int 10
-        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
-        .. .. ..$ reference_date : chr "2022-10-22"
-        .. .. ..$ target         : chr "wk inc flu hosp"
-        .. .. ..$ horizon        : chr "0"
-        .. .. ..$ location       : chr "01"
-        .. .. ..$ variant        : chr "AA"
-        .. .. ..$ target_end_date: chr "2022-10-22"
-        ..$ 53 :List of 5
-        .. ..$ compound_idx        : chr "53"
-        .. ..$ n                   : int 1
-        .. ..$ min_samples_per_task: int 9
-        .. ..$ max_samples_per_task: int 10
-        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
-        .. .. ..$ reference_date : chr "2022-10-22"
-        .. .. ..$ target         : chr "wk inc flu hosp"
-        .. .. ..$ horizon        : chr "0"
-        .. .. ..$ location       : chr "04"
-        .. .. ..$ variant        : chr "CC"
-        .. .. ..$ target_end_date: chr "2022-10-22"
-        ..$ 57 :List of 5
-        .. ..$ compound_idx        : chr "57"
-        .. ..$ n                   : int 1
-        .. ..$ min_samples_per_task: int 9
-        .. ..$ max_samples_per_task: int 10
-        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
-        .. .. ..$ reference_date : chr "2022-10-22"
-        .. .. ..$ target         : chr "wk inc flu hosp"
-        .. .. ..$ horizon        : chr "0"
-        .. .. ..$ location       : chr "05"
-        .. .. ..$ variant        : chr "CC"
-        .. .. ..$ target_end_date: chr "2022-10-22"
-        ..$ 61 :List of 5
-        .. ..$ compound_idx        : chr "61"
-        .. ..$ n                   : int 1
-        .. ..$ min_samples_per_task: int 9
-        .. ..$ max_samples_per_task: int 10
-        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
-        .. .. ..$ reference_date : chr "2022-10-22"
-        .. .. ..$ target         : chr "wk inc flu hosp"
-        .. .. ..$ horizon        : chr "0"
-        .. .. ..$ location       : chr "US"
-        .. .. ..$ variant        : chr "DD"
-        .. .. ..$ target_end_date: chr "2022-10-22"
-        ..$ 65 :List of 5
-        .. ..$ compound_idx        : chr "65"
-        .. ..$ n                   : int 1
-        .. ..$ min_samples_per_task: int 9
-        .. ..$ max_samples_per_task: int 10
-        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
-        .. .. ..$ reference_date : chr "2022-10-22"
-        .. .. ..$ target         : chr "wk inc flu hosp"
-        .. .. ..$ horizon        : chr "0"
-        .. .. ..$ location       : chr "01"
-        .. .. ..$ variant        : chr "DD"
-        .. .. ..$ target_end_date: chr "2022-10-22"
-        ..$ 69 :List of 5
-        .. ..$ compound_idx        : chr "69"
-        .. ..$ n                   : int 1
-        .. ..$ min_samples_per_task: int 9
-        .. ..$ max_samples_per_task: int 10
-        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
-        .. .. ..$ reference_date : chr "2022-10-22"
-        .. .. ..$ target         : chr "wk inc flu hosp"
-        .. .. ..$ horizon        : chr "0"
-        .. .. ..$ location       : chr "02"
-        .. .. ..$ variant        : chr "DD"
-        .. .. ..$ target_end_date: chr "2022-10-22"
-        ..$ 73 :List of 5
-        .. ..$ compound_idx        : chr "73"
-        .. ..$ n                   : int 1
-        .. ..$ min_samples_per_task: int 9
-        .. ..$ max_samples_per_task: int 10
-        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
-        .. .. ..$ reference_date : chr "2022-10-22"
-        .. .. ..$ target         : chr "wk inc flu hosp"
-        .. .. ..$ horizon        : chr "0"
-        .. .. ..$ location       : chr "04"
-        .. .. ..$ variant        : chr "DD"
-        .. .. ..$ target_end_date: chr "2022-10-22"
-        ..$ 77 :List of 5
-        .. ..$ compound_idx        : chr "77"
-        .. ..$ n                   : int 1
-        .. ..$ min_samples_per_task: int 9
-        .. ..$ max_samples_per_task: int 10
-        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
-        .. .. ..$ reference_date : chr "2022-10-22"
-        .. .. ..$ target         : chr "wk inc flu hosp"
-        .. .. ..$ horizon        : chr "0"
-        .. .. ..$ location       : chr "05"
-        .. .. ..$ variant        : chr "DD"
-        .. .. ..$ target_end_date: chr "2022-10-22"
-        ..$ 82 :List of 5
-        .. ..$ compound_idx        : chr "82"
-        .. ..$ n                   : int 1
-        .. ..$ min_samples_per_task: int 9
-        .. ..$ max_samples_per_task: int 10
-        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
-        .. .. ..$ reference_date : chr "2022-10-22"
-        .. .. ..$ target         : chr "wk inc flu hosp"
-        .. .. ..$ horizon        : chr "1"
-        .. .. ..$ location       : chr "US"
-        .. .. ..$ variant        : chr "AA"
-        .. .. ..$ target_end_date: chr "2022-10-29"
-        ..$ 86 :List of 5
-        .. ..$ compound_idx        : chr "86"
-        .. ..$ n                   : int 1
-        .. ..$ min_samples_per_task: int 9
-        .. ..$ max_samples_per_task: int 10
-        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
-        .. .. ..$ reference_date : chr "2022-10-22"
-        .. .. ..$ target         : chr "wk inc flu hosp"
-        .. .. ..$ horizon        : chr "1"
-        .. .. ..$ location       : chr "01"
-        .. .. ..$ variant        : chr "AA"
-        .. .. ..$ target_end_date: chr "2022-10-29"
-        ..$ 9  :List of 5
-        .. ..$ compound_idx        : chr "9"
-        .. ..$ n                   : int 1
-        .. ..$ min_samples_per_task: int 9
-        .. ..$ max_samples_per_task: int 10
-        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
-        .. .. ..$ reference_date : chr "2022-10-22"
-        .. .. ..$ target         : chr "wk inc flu hosp"
-        .. .. ..$ horizon        : chr "0"
-        .. .. ..$ location       : chr "02"
-        .. .. ..$ variant        : chr "AA"
-        .. .. ..$ target_end_date: chr "2022-10-22"
-        ..$ 90 :List of 5
-        .. ..$ compound_idx        : chr "90"
-        .. ..$ n                   : int 1
-        .. ..$ min_samples_per_task: int 9
-        .. ..$ max_samples_per_task: int 10
-        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
-        .. .. ..$ reference_date : chr "2022-10-22"
-        .. .. ..$ target         : chr "wk inc flu hosp"
-        .. .. ..$ horizon        : chr "1"
-        .. .. ..$ location       : chr "02"
-        .. .. ..$ variant        : chr "AA"
-        .. .. ..$ target_end_date: chr "2022-10-29"
-        ..$ 94 :List of 5
-        .. ..$ compound_idx        : chr "94"
-        .. ..$ n                   : int 1
-        .. ..$ min_samples_per_task: int 9
-        .. ..$ max_samples_per_task: int 10
-        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
-        .. .. ..$ reference_date : chr "2022-10-22"
-        .. .. ..$ target         : chr "wk inc flu hosp"
-        .. .. ..$ horizon        : chr "1"
-        .. .. ..$ location       : chr "04"
-        .. .. ..$ variant        : chr "AA"
-        .. .. ..$ target_end_date: chr "2022-10-29"
-        ..$ 98 :List of 5
-        .. ..$ compound_idx        : chr "98"
-        .. ..$ n                   : int 1
-        .. ..$ min_samples_per_task: int 9
-        .. ..$ max_samples_per_task: int 10
-        .. ..$ compound_idx_tbl    : tibble [1 x 6] (S3: tbl_df/tbl/data.frame)
-        .. .. ..$ reference_date : chr "2022-10-22"
-        .. .. ..$ target         : chr "wk inc flu hosp"
-        .. .. ..$ horizon        : chr "1"
-        .. .. ..$ location       : chr "05"
-        .. .. ..$ variant        : chr "AA"
-        .. .. ..$ target_end_date: chr "2022-10-29"
        $ call          : chr "check_tbl_spl_n"
        $ use_cli_format: logi TRUE
        - attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_error" "error" ...
