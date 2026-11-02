@@ -218,9 +218,9 @@ get_mt_compound_taskid_set <- function(
       }) |>
       purrr::compact()
 
-    attributes(tbl_comp_tids) <- list(
-      errors = errors,
-      msg = cli::format_inline(paste(error_vec, collapse = " "))
+    attr(tbl_comp_tids, "errors") <- errors
+    attr(tbl_comp_tids, "msg") <- cli::format_inline(
+      paste(error_vec, collapse = " ")
     )
   }
   tbl_comp_tids

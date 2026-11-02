@@ -108,7 +108,7 @@ test_that("test get_tbl_compound_taskid_set utilities", {
   )
 })
 
-test_that("errors name the invalid compound task IDs of each finer set (#400)", {
+test_that("errors name the invalid compound task IDs of each finer set and keep sets (#400)", {
   # Sample "1" holds one horizon, so it is finer by `horizon`. Sample "2" holds
   # one target, so it is finer by `target`.
   tbl_chr <- tibble::tibble(
@@ -128,6 +128,10 @@ test_that("errors name the invalid compound task IDs of each finer set (#400)", 
   expect_equal(
     purrr::map(errors, "invalid_tbl_comp_tids"),
     list("horizon", "target")
+  )
+  expect_equal(
+    purrr::map(attr(out, "sets"), "output_type_ids"),
+    list("1", "2")
   )
 })
 
