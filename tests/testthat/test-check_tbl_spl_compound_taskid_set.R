@@ -183,8 +183,8 @@ test_that("Coarser compound_taskid_set triggers check-level warning", {
   expect_equal(
     result$message,
     paste0(
-      "All samples in a model task conform to single, unique compound ",
-      "task ID set that matches or is\n    coarser than the configured ",
+      "All samples in a model task conform to compound task ID sets that ",
+      "match or are coarser than the configured ",
       "`compound_taskid_set`. \n mt 2: detected (\"reference_date\" and ",
       "\"location\") is coarser than configured (\"reference_date\", ",
       "\"horizon\", \"location\", \"variant\", and \"target_end_date\")."
@@ -411,4 +411,56 @@ test_that("check_tbl_spl_compound_taskid_set defaults to round-level derived tas
     check_tbl_spl_compound_taskid_set(tbl, round_id, file_path, hub_path),
     "check_success"
   )
+})
+
+test_that("samples in a modeling task can have different valid compound task ID sets (#400)", {
+  # The config's `compound_taskid_set` is `reference_date` and `location`.
+  # Giving the location "02" samples the IDs of the location "01" samples makes
+  # samples 1 to 100 joint across both locations, which is coarser than
+  # configured. Samples for the other locations still match the configured set.
+  hub_path <- withr::local_tempdir()
+  fs::dir_copy(
+    system.file("testhubs/samples", package = "hubValidations"),
+    hub_path,
+    overwrite = TRUE
+  )
+  file_path <- "flu-base/2022-10-22-flu-base.csv"
+  round_id <- "2022-10-22"
+  tbl <- read_model_out_file(file_path, hub_path, coerce_types = "chr")
+  is_02 <- tbl$output_type == "sample" & tbl$location == "02"
+  tbl$output_type_id[is_02] <- as.character(
+    as.integer(tbl$output_type_id[is_02]) - 100L
+  )
+  utils::write.csv(
+    tbl,
+    fs::path(hub_path, "model-output", file_path),
+    row.names = FALSE
+  )
+
+  result <- check_tbl_spl_compound_taskid_set(
+    tbl,
+    round_id,
+    file_path,
+    hub_path
+  )
+  expect_s3_class(result, "check_success")
+  expect_equal(
+    attr(result$compound_taskid_set[["2"]], "sets"),
+    list(
+      list(
+        tbl_comp_tids = "reference_date",
+        output_type_ids = sort(as.character(1:100))
+      ),
+      list(
+        tbl_comp_tids = c("reference_date", "location"),
+        output_type_ids = sort(as.character(c(201:400, 5201:5300)))
+      )
+    )
+  )
+  expect_match(result$message, "for samples \"1\", \"10\", \"100\"")
+
+  checks <- validate_model_data(hub_path, file_path)
+  spl_checks <- c("spl_compound_taskid_set", "spl_non_compound_tid", "spl_n")
+  expect_true(all(spl_checks %in% names(checks)))
+  expect_true(all(purrr::map_lgl(checks, \(.x) !is_any_error(.x))))
 })

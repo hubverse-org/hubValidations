@@ -48,31 +48,27 @@ Returned object also inherits from subclass \verb{<hub_check>}.
 }
 \description{
 This check detects the compound task ID sets of samples, implied by the \code{output_type_id}
-and task ID values, and checks them for internal consistency and compliance with
+and task ID values, and checks them for compliance with
 the \code{compound_taskid_set} defined for each round modeling task in the \code{tasks.json} config.
-See the Compound modeling tasks section.
+Samples in a modeling task may have different compound task ID sets, as long
+as each matches or is coarser than the configured set. See the Compound
+modeling tasks section.
 }
 \details{
 If the check fails, the output of the check includes an \code{errors} element,
 a list of items, one for each modeling task failing validation.
 The structure depends on the reason the check failed.
 
-If the check failed because more that a single unique \code{compound_taskid_set} was found
-for a given model task, the \code{errors} object will be a list with one element for each
-\code{compound_taskid_set} detected and will have the following structure:
-\itemize{
-\item \code{tbl_comp_tids}: a compound task id set detected in the the tbl.
-\item \code{output_type_ids}: The output type ID of the sample that does not contain a
-single, unique value for each compound task ID.
-}
-
 If the check failed because task IDs the hub does not accept as compound task IDs
 were identified as such (i.e. samples describe "finer" compound modeling tasks)
-for a given model task, the \code{errors} object will be a list with the structure
-described above as well as the additional following elements:
+for a given model task, the \code{errors} object will be a list with one element
+for each finer compound task ID set detected, with the following structure:
 \itemize{
 \item \code{config_comp_tids}: the \code{compound_taskid_set} the modeling task config expects.
 \item \code{invalid_tbl_comp_tids}: the names of invalid compound task IDs.
+\item \code{tbl_comp_tids}: the finer compound task ID set detected in the tbl.
+\item \code{output_type_ids}: The output type IDs of the samples with that compound
+task ID set.
 }
 
 The name of each element is the index identifying the config modeling task the sample is associated with \code{mt_id}.

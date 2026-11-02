@@ -2,9 +2,11 @@
 #' match or are coarser than the expected set defined in the config.
 #'
 #' This check detects the compound task ID sets of samples, implied by the `output_type_id`
-#' and task ID values, and checks them for internal consistency and compliance with
+#' and task ID values, and checks them for compliance with
 #' the `compound_taskid_set` defined for each round modeling task in the `tasks.json` config.
-#' See the Compound modeling tasks section.
+#' Samples in a modeling task may have different compound task ID sets, as long
+#' as each matches or is coarser than the configured set. See the Compound
+#' modeling tasks section.
 #' @inheritParams check_tbl_spl_mt_unique
 #' @inheritParams check_tbl_values
 #' @inherit check_tbl_colnames params
@@ -13,19 +15,15 @@
 #' a list of items, one for each modeling task failing validation.
 #' The structure depends on the reason the check failed.
 #'
-#' If the check failed because more that a single unique `compound_taskid_set` was found
-#' for a given model task, the `errors` object will be a list with one element for each
-#' `compound_taskid_set` detected and will have the following structure:
-#' - `tbl_comp_tids`: a compound task id set detected in the the tbl.
-#' - `output_type_ids`: The output type ID of the sample that does not contain a
-#' single, unique value for each compound task ID.
-#'
 #' If the check failed because task IDs the hub does not accept as compound task IDs
 #' were identified as such (i.e. samples describe "finer" compound modeling tasks)
-#' for a given model task, the `errors` object will be a list with the structure
-#' described above as well as the additional following elements:
+#' for a given model task, the `errors` object will be a list with one element
+#' for each finer compound task ID set detected, with the following structure:
 #' - `config_comp_tids`: the `compound_taskid_set` the modeling task config expects.
 #' - `invalid_tbl_comp_tids`: the names of invalid compound task IDs.
+#' - `tbl_comp_tids`: the finer compound task ID set detected in the tbl.
+#' - `output_type_ids`: The output type IDs of the samples with that compound
+#' task ID set.
 #'
 #' The name of each element is the index identifying the config modeling task the sample is associated with `mt_id`.
 #' See [hubverse documentation on samples](https://docs.hubverse.io/en/latest/user-guide/sample-output-type.html)
@@ -95,13 +93,13 @@ check_tbl_spl_compound_taskid_set <- function(
   any_coarser <- length(coarser_info) > 0L
 
   msg_attribute <- if (!check || any_coarser) {
-    "to single, unique compound task ID set that matches or is
-    coarser than the configured {.var compound_taskid_set}."
+    paste(
+      "to compound task ID sets that match or are coarser than the",
+      "configured {.var compound_taskid_set}."
+    )
   } else {
-    "to single, unique compound task ID set that matches the configured
-    {.var compound_taskid_set}."
+    "to the configured {.var compound_taskid_set}."
   }
-
   details <- if (any_coarser) {
     compile_coarser_details(coarser_info)
   } else {
