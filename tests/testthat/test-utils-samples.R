@@ -154,6 +154,23 @@ test_that("spl_idx_tbl leaves derived task IDs out of comp_tids", {
   expect_equal(spl_idx$comp_tids[[2]], c("reference_date", "location"))
 })
 
+test_that("compound_idx_labels orders compound idxs numerically", {
+  spl_idx <- list(
+    rows = tibble::tibble(
+      compound_idx = c("s10", "s2", "s1"),
+      row_idx = 1:3,
+      mt_id = 1L
+    ),
+    comp_tids = list("location")
+  )
+  tbl <- tibble::tibble(location = c("c", "b", "a"))
+
+  expect_equal(
+    compound_idx_labels(c("s10", "s2", "s1"), spl_idx, tbl),
+    c("(location: a)", "(location: b)", "(location: c)")
+  )
+})
+
 test_that("compound_idx_labels escapes braces", {
   spl_idx <- list(
     rows = tibble::tibble(compound_idx = "1", row_idx = 1L, mt_id = 1L),

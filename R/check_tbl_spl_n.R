@@ -53,6 +53,7 @@ check_tbl_spl_n <- function(
   n_tbl <- spl_slice_tbl(spl_idx$rows) |>
     dplyr::count(.data$mt_id, .data$compound_idx) |>
     dplyr::select("compound_idx", "n", "mt_id")
+  n_tbl <- n_tbl[compound_idx_order(n_tbl$compound_idx), ]
 
   # First check that all compound_idx have the same number of samples
   # If not, return check failure.

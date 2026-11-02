@@ -332,10 +332,11 @@ spl_slice_values <- function(slices, comp_tids, tbl) {
 #' @param compound_idx character vector of compound idxs.
 #' @param spl_idx output of `spl_idx_tbl()`.
 #' @param tbl the table `spl_idx` was built from.
-#' @returns A character vector, one label per compound idx, such as
-#'   `"(reference_date: 2022-10-22, location: US)"`.
+#' @returns A character vector, one label per compound idx in numeric order,
+#'   such as `"(reference_date: 2022-10-22, location: US)"`.
 #' @noRd
 compound_idx_labels <- function(compound_idx, spl_idx, tbl) {
+  compound_idx <- compound_idx[compound_idx_order(compound_idx)]
   first <- match(compound_idx, spl_idx$rows$compound_idx)
   purrr::map2_chr(
     spl_idx$rows$row_idx[first],
@@ -638,6 +639,12 @@ get_compound_idx <- function(mt_tbl, numbering) {
   idx <- idx + numbering[["start_idx"]]
 
   format_compound_idx(idx, numbering[["character_ids"]])
+}
+
+# Compound idxs are character, and carry an "s" prefix when sample IDs are
+# character, so they are ordered by their numeric part.
+compound_idx_order <- function(compound_idx) {
+  order(as.numeric(sub("^s", "", compound_idx)))
 }
 
 # The character form of a compound index, as the checks report it and
