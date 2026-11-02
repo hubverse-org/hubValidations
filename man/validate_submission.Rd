@@ -14,7 +14,8 @@ validate_submission(
   skip_submit_window_check = FALSE,
   skip_check_config = FALSE,
   submit_window_ref_date_from = c("file", "file_path"),
-  derived_task_ids = NULL
+  derived_task_ids = NULL,
+  allow_overlapping_samples = FALSE
 )
 }
 \arguments{
@@ -73,6 +74,10 @@ values depend on other task IDs). The required values and sample checks
 leave these columns out.
 If \code{NULL}, defaults to extracting derived task IDs from hub \code{task.json}. See
 \code{\link[=get_hub_derived_task_ids]{get_hub_derived_task_ids()}} for more details.}
+
+\item{allow_overlapping_samples}{Logical. Whether samples may partly overlap,
+that is, share some compound modeling tasks but not all. If \code{TRUE}, the
+\code{spl_overlap} check is skipped. See \code{\link[=check_tbl_spl_overlap]{check_tbl_spl_overlap()}} for details.}
 }
 \value{
 A \code{hub_validations_collection} object containing validation results
@@ -266,23 +271,23 @@ Details of checks performed by \code{validate_submission()}\if{html}{\out{
    <td style="text-align:left;"> errors: list containing item for each failing modeling task. Exact structure dependent on type of validation failure. See check function documentation for more details. </td>
   </tr>
   <tr>
-   <td style="text-align:left;font-weight: bold;"> spl_compound_tid </td>
-   <td style="text-align:left;"> Samples contain single unique values for each compound task ID within individual samples (v3 and above schema only). </td>
+   <td style="text-align:left;font-weight: bold;"> spl_overlap </td>
+   <td style="text-align:left;"> Samples that share a combination of compound task ID values cover the same combinations. Skipped when allow_overlapping_samples is TRUE (v3 and above schema only). </td>
    <td style="text-align:left;"> TRUE </td>
    <td style="text-align:left;"> check_error </td>
-   <td style="text-align:left;"> errors: list containing item for each sample failing validation with breakdown of unique values for each compound task ID. </td>
+   <td style="text-align:left;"> errors: list containing item for each failing modeling task with output type ids of the samples involved and a table of the compound task ID values each covers. </td>
   </tr>
   <tr>
    <td style="text-align:left;font-weight: bold;"> spl_non_compound_tid </td>
-   <td style="text-align:left;"> Samples contain single unique combination of non-compound task ID values across all samples (v3 and above schema only). </td>
+   <td style="text-align:left;"> Samples contain single unique combination of non-compound task ID values across all samples, within each compound task ID value combination they cover (v3 and above schema only). </td>
    <td style="text-align:left;"> TRUE </td>
    <td style="text-align:left;"> check_error </td>
-   <td style="text-align:left;"> errors: list containing item for each modeling task with vectors of output type ids of samples failing validation and example table of most frequent non-compound task ID value combination
-across all samples in the modeling task </td>
+   <td style="text-align:left;"> errors: list containing item for each modeling task with vectors of output type ids of samples failing validation, a table of the compound task ID values they fail for and example table of most frequent non-compound task ID value combination
+across all samples in the modeling task. </td>
   </tr>
   <tr>
    <td style="text-align:left;font-weight: bold;"> spl_n </td>
-   <td style="text-align:left;"> Number of samples for a given compound idx falls within accepted compound task range (v3 and above schema only). </td>
+   <td style="text-align:left;"> Number of samples for a given compound idx falls within accepted compound task range. Samples coarser than the configured compound task id set count towards each compound idx they cover (v3 and above schema only). </td>
    <td style="text-align:left;"> FALSE </td>
    <td style="text-align:left;"> check_failure </td>
    <td style="text-align:left;"> errors: list containing item for each compound_idx failing validation with sample count, metadata on expected samples and example table of expected structure for samples belonging to

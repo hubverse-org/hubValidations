@@ -150,10 +150,10 @@
         .. ..$ call          : chr "check_tbl_spl_compound_taskid_set"
         .. ..$ use_cli_format: logi TRUE
         .. ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
-        ..$ spl_compound_tid       :List of 4
-        .. ..$ message       : chr "No v3 samples found in model output data to check. Skipping `check_tbl_spl_compound_tid` check."
+        ..$ spl_overlap            :List of 4
+        .. ..$ message       : chr "No v3 samples found in model output data to check. Skipping `check_tbl_spl_overlap` check."
         .. ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
-        .. ..$ call          : chr "check_tbl_spl_compound_tid"
+        .. ..$ call          : chr "check_tbl_spl_overlap"
         .. ..$ use_cli_format: logi TRUE
         .. ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
         ..$ spl_non_compound_tid   :List of 4
@@ -432,10 +432,10 @@
         .. ..$ call          : chr "check_tbl_spl_compound_taskid_set"
         .. ..$ use_cli_format: logi TRUE
         .. ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
-        ..$ spl_compound_tid       :List of 4
-        .. ..$ message       : chr "No v3 samples found in model output data to check. Skipping `check_tbl_spl_compound_tid` check."
+        ..$ spl_overlap            :List of 4
+        .. ..$ message       : chr "No v3 samples found in model output data to check. Skipping `check_tbl_spl_overlap` check."
         .. ..$ where         : 'fs_path' chr "hub-baseline/2022-10-08-hub-baseline.csv"
-        .. ..$ call          : chr "check_tbl_spl_compound_tid"
+        .. ..$ call          : chr "check_tbl_spl_overlap"
         .. ..$ use_cli_format: logi TRUE
         .. ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
         ..$ spl_non_compound_tid   :List of 4
@@ -598,10 +598,10 @@
         .. ..$ call          : chr "check_tbl_spl_compound_taskid_set"
         .. ..$ use_cli_format: logi TRUE
         .. ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
-        ..$ spl_compound_tid       :List of 4
-        .. ..$ message       : chr "No v3 samples found in model output data to check. Skipping `check_tbl_spl_compound_tid` check."
+        ..$ spl_overlap            :List of 4
+        .. ..$ message       : chr "No v3 samples found in model output data to check. Skipping `check_tbl_spl_overlap` check."
         .. ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
-        .. ..$ call          : chr "check_tbl_spl_compound_tid"
+        .. ..$ call          : chr "check_tbl_spl_overlap"
         .. ..$ use_cli_format: logi TRUE
         .. ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
         ..$ spl_non_compound_tid   :List of 4
@@ -799,10 +799,10 @@
         .. ..$ call          : chr "check_tbl_spl_compound_taskid_set"
         .. ..$ use_cli_format: logi TRUE
         .. ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
-        ..$ spl_compound_tid       :List of 4
-        .. ..$ message       : chr "No v3 samples found in model output data to check. Skipping `check_tbl_spl_compound_tid` check."
+        ..$ spl_overlap            :List of 4
+        .. ..$ message       : chr "No v3 samples found in model output data to check. Skipping `check_tbl_spl_overlap` check."
         .. ..$ where         : 'fs_path' chr "hub-baseline/2022-10-08-hub-baseline.csv"
-        .. ..$ call          : chr "check_tbl_spl_compound_tid"
+        .. ..$ call          : chr "check_tbl_spl_overlap"
         .. ..$ use_cli_format: logi TRUE
         .. ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
         ..$ spl_non_compound_tid   :List of 4
@@ -965,10 +965,10 @@
         .. ..$ call          : chr "check_tbl_spl_compound_taskid_set"
         .. ..$ use_cli_format: logi TRUE
         .. ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
-        ..$ spl_compound_tid       :List of 4
-        .. ..$ message       : chr "No v3 samples found in model output data to check. Skipping `check_tbl_spl_compound_tid` check."
+        ..$ spl_overlap            :List of 4
+        .. ..$ message       : chr "No v3 samples found in model output data to check. Skipping `check_tbl_spl_overlap` check."
         .. ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
-        .. ..$ call          : chr "check_tbl_spl_compound_tid"
+        .. ..$ call          : chr "check_tbl_spl_overlap"
         .. ..$ use_cli_format: logi TRUE
         .. ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
         ..$ spl_non_compound_tid   :List of 4
@@ -1166,10 +1166,10 @@
         .. ..$ call          : chr "check_tbl_spl_compound_taskid_set"
         .. ..$ use_cli_format: logi TRUE
         .. ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
-        ..$ spl_compound_tid       :List of 4
-        .. ..$ message       : chr "No v3 samples found in model output data to check. Skipping `check_tbl_spl_compound_tid` check."
+        ..$ spl_overlap            :List of 4
+        .. ..$ message       : chr "No v3 samples found in model output data to check. Skipping `check_tbl_spl_overlap` check."
         .. ..$ where         : 'fs_path' chr "hub-baseline/2022-10-08-hub-baseline.csv"
-        .. ..$ call          : chr "check_tbl_spl_compound_tid"
+        .. ..$ call          : chr "check_tbl_spl_overlap"
         .. ..$ use_cli_format: logi TRUE
         .. ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
         ..$ spl_non_compound_tid   :List of 4
@@ -1331,10 +1331,10 @@
         .. ..$ call          : chr "check_tbl_spl_compound_taskid_set"
         .. ..$ use_cli_format: logi TRUE
         .. ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
-        ..$ spl_compound_tid       :List of 4
-        .. ..$ message       : chr "No v3 samples found in model output data to check. Skipping `check_tbl_spl_compound_tid` check."
+        ..$ spl_overlap            :List of 4
+        .. ..$ message       : chr "No v3 samples found in model output data to check. Skipping `check_tbl_spl_overlap` check."
         .. ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
-        .. ..$ call          : chr "check_tbl_spl_compound_tid"
+        .. ..$ call          : chr "check_tbl_spl_overlap"
         .. ..$ use_cli_format: logi TRUE
         .. ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
         ..$ spl_non_compound_tid   :List of 4
@@ -1530,10 +1530,10 @@
         .. ..$ call          : chr "check_tbl_spl_compound_taskid_set"
         .. ..$ use_cli_format: logi TRUE
         .. ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
-        ..$ spl_compound_tid       :List of 4
-        .. ..$ message       : chr "No v3 samples found in model output data to check. Skipping `check_tbl_spl_compound_tid` check."
+        ..$ spl_overlap            :List of 4
+        .. ..$ message       : chr "No v3 samples found in model output data to check. Skipping `check_tbl_spl_overlap` check."
         .. ..$ where         : 'fs_path' chr "hub-baseline/2022-10-08-hub-baseline.csv"
-        .. ..$ call          : chr "check_tbl_spl_compound_tid"
+        .. ..$ call          : chr "check_tbl_spl_overlap"
         .. ..$ use_cli_format: logi TRUE
         .. ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
         ..$ spl_non_compound_tid   :List of 4
@@ -1689,10 +1689,10 @@
         .. ..$ call          : chr "check_tbl_spl_compound_taskid_set"
         .. ..$ use_cli_format: logi TRUE
         .. ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
-        ..$ spl_compound_tid       :List of 4
-        .. ..$ message       : chr "No v3 samples found in model output data to check. Skipping `check_tbl_spl_compound_tid` check."
+        ..$ spl_overlap            :List of 4
+        .. ..$ message       : chr "No v3 samples found in model output data to check. Skipping `check_tbl_spl_overlap` check."
         .. ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
-        .. ..$ call          : chr "check_tbl_spl_compound_tid"
+        .. ..$ call          : chr "check_tbl_spl_overlap"
         .. ..$ use_cli_format: logi TRUE
         .. ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
         ..$ spl_non_compound_tid   :List of 4
@@ -1870,10 +1870,10 @@
         .. ..$ call          : chr "check_tbl_spl_compound_taskid_set"
         .. ..$ use_cli_format: logi TRUE
         .. ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
-        ..$ spl_compound_tid       :List of 4
-        .. ..$ message       : chr "No v3 samples found in model output data to check. Skipping `check_tbl_spl_compound_tid` check."
+        ..$ spl_overlap            :List of 4
+        .. ..$ message       : chr "No v3 samples found in model output data to check. Skipping `check_tbl_spl_overlap` check."
         .. ..$ where         : 'fs_path' chr "hub-baseline/2022-10-08-hub-baseline.csv"
-        .. ..$ call          : chr "check_tbl_spl_compound_tid"
+        .. ..$ call          : chr "check_tbl_spl_overlap"
         .. ..$ use_cli_format: logi TRUE
         .. ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
         ..$ spl_non_compound_tid   :List of 4
@@ -2029,10 +2029,10 @@
         .. ..$ call          : chr "check_tbl_spl_compound_taskid_set"
         .. ..$ use_cli_format: logi TRUE
         .. ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
-        ..$ spl_compound_tid       :List of 4
-        .. ..$ message       : chr "No v3 samples found in model output data to check. Skipping `check_tbl_spl_compound_tid` check."
+        ..$ spl_overlap            :List of 4
+        .. ..$ message       : chr "No v3 samples found in model output data to check. Skipping `check_tbl_spl_overlap` check."
         .. ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
-        .. ..$ call          : chr "check_tbl_spl_compound_tid"
+        .. ..$ call          : chr "check_tbl_spl_overlap"
         .. ..$ use_cli_format: logi TRUE
         .. ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
         ..$ spl_non_compound_tid   :List of 4
@@ -2231,10 +2231,10 @@
         .. ..$ call          : chr "check_tbl_spl_compound_taskid_set"
         .. ..$ use_cli_format: logi TRUE
         .. ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
-        ..$ spl_compound_tid       :List of 4
-        .. ..$ message       : chr "No v3 samples found in model output data to check. Skipping `check_tbl_spl_compound_tid` check."
+        ..$ spl_overlap            :List of 4
+        .. ..$ message       : chr "No v3 samples found in model output data to check. Skipping `check_tbl_spl_overlap` check."
         .. ..$ where         : 'fs_path' chr "team1-goodmodel/2022-10-22-team1-goodmodel.csv"
-        .. ..$ call          : chr "check_tbl_spl_compound_tid"
+        .. ..$ call          : chr "check_tbl_spl_overlap"
         .. ..$ use_cli_format: logi TRUE
         .. ..- attr(*, "class")= chr [1:5] "check_info" "hub_check" "rlang_message" "message" ...
         ..$ spl_non_compound_tid   :List of 4

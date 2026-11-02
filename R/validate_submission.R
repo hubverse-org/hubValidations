@@ -76,9 +76,11 @@ validate_submission <- function(
     "file",
     "file_path"
   ),
-  derived_task_ids = NULL
+  derived_task_ids = NULL,
+  allow_overlapping_samples = FALSE
 ) {
   output_type_id_datatype <- rlang::arg_match(output_type_id_datatype)
+  checkmate::assert_flag(allow_overlapping_samples)
 
   # Config validation (separate from file validation)
   config_validations <- NULL
@@ -121,7 +123,8 @@ validate_submission <- function(
     round_id_col = round_id_col,
     output_type_id_datatype = output_type_id_datatype,
     validations_cfg_path = validations_cfg_path,
-    derived_task_ids = derived_task_ids
+    derived_task_ids = derived_task_ids,
+    allow_overlapping_samples = allow_overlapping_samples
   )
 
   new_hub_validations_collection(

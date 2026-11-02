@@ -50,6 +50,7 @@ Returned object also inherits from subclass \verb{<hub_check>}.
 This check detects the compound task ID sets of samples, implied by the \code{output_type_id}
 and task ID values, and checks them for internal consistency and compliance with
 the \code{compound_taskid_set} defined for each round modeling task in the \code{tasks.json} config.
+See the Compound modeling tasks section.
 }
 \details{
 If the check fails, the output of the check includes an \code{errors} element,
@@ -78,3 +79,29 @@ The name of each element is the index identifying the config modeling task the s
 See \href{https://docs.hubverse.io/en/latest/user-guide/sample-output-type.html}{hubverse documentation on samples}
 for more details.
 }
+\section{Compound modeling tasks}{
+
+Samples are validated against the configured \code{compound_taskid_set} only.
+Each combination of configured compound task ID values is one compound
+modeling task, identified in check output by its \code{compound_idx}. A sample
+that matches the configured set covers one compound modeling task. A
+coarser sample covers several. The sample checks split a coarser sample
+into one part per compound modeling task, and validate and count each part
+as a sample of that compound modeling task. A finer sample covers only part
+of a compound modeling task, so it fails.
+
+For example, take a configured \code{compound_taskid_set} of \code{reference_date}
+and \code{location}. Each compound modeling task is then one location for one
+reference date, and a sample that matches the configured set is a
+trajectory across horizons for one location.
+\itemize{
+\item A sample with a compound task ID set of \code{reference_date} only is coarser.
+It is joint across locations as well as horizons. If it covers locations
+\code{A1} and \code{A2}, it is validated as one sample for \code{A1} and one for \code{A2}.
+\item A sample with a compound task ID set of \code{reference_date}, \code{location} and
+\code{horizon} is finer. It covers one horizon of a trajectory, and fails.
+}
+
+The other sample checks refer to this example.
+}
+
