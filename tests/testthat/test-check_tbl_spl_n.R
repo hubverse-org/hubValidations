@@ -106,13 +106,27 @@ test_that("Overriding compound_taskid_set in check_tbl_spl_n works", {
   # Validation of coarser files should return check failure. Each coarser
   # sample counts towards every configured compound_idx it covers, so every
   # compound_idx has one sample, short of the minimum.
-  expect_snapshot(
-    str(
-      check_tbl_spl_n(tbl_coarse, round_id, file_path, hub_path)
-    )
-  )
   res <- check_tbl_spl_n(tbl_coarse, round_id, file_path, hub_path)
+  expect_snapshot(res)
+  expect_s3_class(res, "check_failure")
+  expect_length(res$errors, 80L)
   expect_false(is.unsorted(as.integer(names(res$errors))))
+  expect_equal(unique(purrr::map_int(res$errors, "n")), 1L)
+  expect_equal(unique(purrr::map_int(res$errors, "min_samples_per_task")), 9L)
+  expect_equal(unique(purrr::map_int(res$errors, "max_samples_per_task")), 10L)
+  expect_equal(res$errors[["1"]]$compound_idx, "1")
+  expect_equal(
+    res$errors[["1"]]$compound_idx_tbl,
+    tibble::tibble(
+      reference_date = "2022-10-22",
+      target = "wk inc flu hosp",
+      horizon = "0",
+      location = "US",
+      variant = "AA",
+      target_end_date = "2022-10-22"
+    ),
+    ignore_attr = TRUE
+  )
 
   # Validation providing coarser compound taskid still fails because the coarser
   # structure means the same rows are spread across fewer samples. But the

@@ -1,3 +1,18 @@
+# Expected results of the checks on a valid model output file in the
+# ci-testhub-simple hub. The hub has no sample output types, so the sample
+# checks are skipped.
+valid_file_checks <- c(
+  file_checks,
+  data_checks,
+  replace(spl_checks, names(spl_checks), "check_info")
+)
+# The team1-goodmodel metadata file is removed on the test-mod-del branch.
+no_metadata_file_checks <- replace(
+  valid_file_checks,
+  "metadata_exists",
+  "check_failure"
+)
+
 test_that("validate_pr works on valid PR", {
   skip_if_offline()
 
@@ -19,7 +34,13 @@ test_that("validate_pr works on valid PR", {
   )
 
   expect_s3_class(checks, "hub_validations_collection")
-  expect_snapshot(str(checks))
+  expect_equal(
+    purrr::map(checks, first_classes),
+    list(
+      "hub-config" = valid_config,
+      "team1-goodmodel/2022-10-22-team1-goodmodel.csv" = valid_file_checks
+    )
+  )
   expect_invisible(suppressMessages(check_for_errors(checks)))
   expect_message(
     check_for_errors(checks),
@@ -48,7 +69,27 @@ test_that("validate_pr works on invalid PR", {
   )
 
   expect_s3_class(invalid_checks, "hub_validations_collection")
-  expect_snapshot(str(invalid_checks))
+  file_path <- "hub-baseline/2022-10-22-hub-baseline.parquet"
+  expect_equal(
+    purrr::map(invalid_checks, first_classes),
+    rlang::list2(
+      "hub-config" = valid_config,
+      # The file is missing a task ID column, so validation stops at colnames.
+      !!file_path := c(
+        file_checks,
+        data_checks[
+          c(
+            "file_read",
+            "valid_round_id_col",
+            "unique_round_id",
+            "match_round_id"
+          )
+        ],
+        colnames = "check_error"
+      )
+    )
+  )
+  expect_snapshot(invalid_checks[[file_path]][["colnames"]])
 
   expect_error(
     suppressMessages(check_for_errors(invalid_checks))
@@ -80,7 +121,27 @@ test_that("validate_pr flags modifications and deletions in PR", {
   )
 
   expect_s3_class(mod_checks_error, "hub_validations_collection")
-  expect_snapshot(str(mod_checks_error))
+  expect_equal(
+    purrr::map(mod_checks_error, first_classes),
+    list(
+      "hub-config" = valid_config,
+      "hub-baseline/2022-10-08-hub-baseline.csv" = c(
+        valid_file_checks,
+        valid_file_status = "check_error"
+      ),
+      "team1-goodmodel/2022-10-22-team1-goodmodel.csv" = no_metadata_file_checks,
+      "team1-goodmodel/2022-10-15-team1-goodmodel.csv" = c(
+        valid_file_status = "check_error"
+      ),
+      "team1-goodmodel.yaml" = c(valid_file_status = "check_error")
+    )
+  )
+  mod_files <- c(
+    "hub-baseline/2022-10-08-hub-baseline.csv",
+    "team1-goodmodel/2022-10-15-team1-goodmodel.csv",
+    "team1-goodmodel.yaml"
+  )
+  expect_snapshot(purrr::map(mod_checks_error[mod_files], "valid_file_status"))
   expect_error(
     suppressMessages(check_for_errors(mod_checks_error))
   )
@@ -112,7 +173,22 @@ test_that("validate_pr flags modifications and deletions in PR", {
     )
   )
   expect_s3_class(mod_checks_warn, "hub_validations_collection")
-  expect_snapshot(str(mod_checks_warn))
+  expect_equal(
+    purrr::map(mod_checks_warn, first_classes),
+    list(
+      "hub-config" = valid_config,
+      "hub-baseline/2022-10-08-hub-baseline.csv" = c(
+        valid_file_checks,
+        valid_file_status = "check_failure"
+      ),
+      "team1-goodmodel/2022-10-22-team1-goodmodel.csv" = no_metadata_file_checks,
+      "team1-goodmodel/2022-10-15-team1-goodmodel.csv" = c(
+        valid_file_status = "check_failure"
+      ),
+      "team1-goodmodel.yaml" = c(valid_file_status = "check_failure")
+    )
+  )
+  expect_snapshot(purrr::map(mod_checks_warn[mod_files], "valid_file_status"))
   expect_error(
     suppressMessages(check_for_errors(mod_checks_warn))
   )
@@ -127,7 +203,24 @@ test_that("validate_pr flags modifications and deletions in PR", {
     )
   )
   expect_s3_class(mod_checks_message, "hub_validations_collection")
-  expect_snapshot(str(mod_checks_message))
+  expect_equal(
+    purrr::map(mod_checks_message, first_classes),
+    list(
+      "hub-config" = valid_config,
+      "hub-baseline/2022-10-08-hub-baseline.csv" = c(
+        valid_file_checks,
+        valid_file_status = "check_info"
+      ),
+      "team1-goodmodel/2022-10-22-team1-goodmodel.csv" = no_metadata_file_checks,
+      "team1-goodmodel/2022-10-15-team1-goodmodel.csv" = c(
+        valid_file_status = "check_info"
+      ),
+      "team1-goodmodel.yaml" = c(valid_file_status = "check_info")
+    )
+  )
+  expect_snapshot(
+    purrr::map(mod_checks_message[mod_files], "valid_file_status")
+  )
   # With file_modification_check = "message", modifications are check_info
   # All file status checks use the standard name "valid_file_status"
   # Modified files that are also validated will have both regular checks and valid_file_status
@@ -171,7 +264,14 @@ test_that("validate_pr flags modifications and deletions in PR", {
     )
   )
   expect_s3_class(mod_checks_none, "hub_validations_collection")
-  expect_snapshot(str(mod_checks_none))
+  expect_equal(
+    purrr::map(mod_checks_none, first_classes),
+    list(
+      "hub-config" = valid_config,
+      "hub-baseline/2022-10-08-hub-baseline.csv" = valid_file_checks,
+      "team1-goodmodel/2022-10-22-team1-goodmodel.csv" = no_metadata_file_checks
+    )
+  )
   # With file_modification_check = "none", no modification checks are added
   expect_false(
     "team1-goodmodel/2022-10-15-team1-goodmodel.csv" %in% names(mod_checks_none)
@@ -195,7 +295,20 @@ test_that("validate_pr flags modifications and deletions in PR", {
     )
   )
   expect_s3_class(mod_checks_in_window, "hub_validations_collection")
-  expect_snapshot(str(mod_checks_in_window))
+  # The modification falls within the submission window, so only the
+  # removed files are flagged.
+  expect_equal(
+    purrr::map(mod_checks_in_window, first_classes),
+    list(
+      "hub-config" = valid_config,
+      "hub-baseline/2022-10-08-hub-baseline.csv" = valid_file_checks,
+      "team1-goodmodel/2022-10-22-team1-goodmodel.csv" = no_metadata_file_checks,
+      "team1-goodmodel/2022-10-15-team1-goodmodel.csv" = c(
+        valid_file_status = "check_error"
+      ),
+      "team1-goodmodel.yaml" = c(valid_file_status = "check_error")
+    )
+  )
 })
 
 
@@ -219,7 +332,21 @@ test_that("validate_pr handles errors in determining submission window & file re
     )
   )
   expect_s3_class(mod_checks_exec_error, "hub_validations_collection")
-  expect_snapshot(str(mod_checks_exec_error))
+  file_path <- "team1-goodmodel/2022-10-team1-goodmodel.csv"
+  expect_equal(
+    purrr::map(mod_checks_exec_error, first_classes),
+    rlang::list2(
+      "hub-config" = valid_config,
+      "team1-goodmodel/2022-10-22-team1-goodmodel.csv" = valid_file_checks,
+      !!file_path := c(
+        file_exists = "check_success",
+        file_name = "check_error",
+        valid_file_status = "check_exec_error"
+      )
+    )
+  )
+  expect_snapshot(mod_checks_exec_error[[file_path]][["file_name"]])
+  expect_snapshot(mod_checks_exec_error[[file_path]][["valid_file_status"]])
   expect_error(
     suppressMessages(check_for_errors(mod_checks_exec_error))
   )
@@ -247,7 +374,16 @@ test_that("validate_pr works on valid PR using v2.0.0 schema and old orgname", {
   )
 
   expect_s3_class(checks, "hub_validations_collection")
-  expect_snapshot(str(checks))
+  # The v2.0.0 schema has no sample output type, so no sample checks run.
+  expect_equal(
+    purrr::map(checks, first_classes),
+    list(
+      "hub-config" = valid_config,
+      "team1-goodmodel/2022-10-22-team1-goodmodel.csv" = valid_file_checks[
+        !startsWith(names(valid_file_checks), "spl_")
+      ]
+    )
+  )
   expect_invisible(suppressMessages(check_for_errors(checks)))
   expect_message(
     check_for_errors(checks),

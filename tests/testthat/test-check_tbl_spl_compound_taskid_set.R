@@ -85,24 +85,35 @@ test_that("Different compound_taskid_sets work", {
   )
 
   # Validation of coarser compound_taskid_set works
-  expect_snapshot(
-    str(
-      check_tbl_spl_compound_taskid_set(
-        tbl_coarse_location,
-        "2022-10-29",
-        create_file_path("2022-10-29"),
-        hub_path
-      )
-    )
+  res <- check_tbl_spl_compound_taskid_set(
+    tbl_coarse_location,
+    "2022-10-29",
+    create_file_path("2022-10-29"),
+    hub_path
   )
-  expect_snapshot(
-    str(
-      check_tbl_spl_compound_taskid_set(
-        tbl_coarse_horizon,
-        "2022-11-05",
-        create_file_path("2022-11-05"),
-        hub_path
-      )
+  expect_snapshot(res)
+  expect_s3_class(res, "check_success")
+  expect_length(res$warnings, 1L)
+  expect_s3_class(res$warnings[[1]], "validation_warning")
+  expect_equal(
+    res$compound_taskid_set,
+    list(`1` = NULL, `2` = c("reference_date", "location"))
+  )
+
+  res <- check_tbl_spl_compound_taskid_set(
+    tbl_coarse_horizon,
+    "2022-11-05",
+    create_file_path("2022-11-05"),
+    hub_path
+  )
+  expect_snapshot(res)
+  expect_s3_class(res, "check_success")
+  expect_length(res$warnings, 1L)
+  expect_equal(
+    res$compound_taskid_set,
+    list(
+      `1` = NULL,
+      `2` = c("reference_date", "horizon", "target_end_date")
     )
   )
 
@@ -128,28 +139,43 @@ test_that("Different compound_taskid_sets work", {
   local_mocked_bindings(
     read_config = function(...) config_tasks_full_ctids
   )
-  expect_snapshot(
-    str(
-      check_tbl_spl_compound_taskid_set(
-        tbl_coarse_horizon,
-        "2022-11-05",
-        create_file_path("2022-11-05"),
-        hub_path
-      )
-    )
+  res <- check_tbl_spl_compound_taskid_set(
+    tbl_coarse_horizon,
+    "2022-11-05",
+    create_file_path("2022-11-05"),
+    hub_path
   )
+  expect_snapshot(res)
+  expect_s3_class(res, "check_error")
+  expect_null(res$warnings)
+  expect_true(is.na(res$compound_taskid_set))
+  expect_named(res$errors, "2")
+  mt_error <- res$errors[["2"]][[1]]
+  expect_equal(
+    mt_error$config_comp_tids,
+    c("reference_date", "horizon", "location", "variant")
+  )
+  expect_equal(mt_error$invalid_tbl_comp_tids, "target_end_date")
+  expect_equal(
+    mt_error$tbl_comp_tids,
+    c("reference_date", "horizon", "target_end_date")
+  )
+  expect_length(mt_error$output_type_ids, 40L)
   # Specifying the derived task IDs allows validation to pass and excludes derived
   # task IDs from the compound_taskid_set
-  expect_snapshot(
-    str(
-      check_tbl_spl_compound_taskid_set(
-        tbl_coarse_horizon,
-        "2022-11-05",
-        create_file_path("2022-11-05"),
-        hub_path,
-        derived_task_ids = "target_end_date"
-      )
-    )
+  res <- check_tbl_spl_compound_taskid_set(
+    tbl_coarse_horizon,
+    "2022-11-05",
+    create_file_path("2022-11-05"),
+    hub_path,
+    derived_task_ids = "target_end_date"
+  )
+  expect_snapshot(res)
+  expect_s3_class(res, "check_success")
+  expect_length(res$warnings, 1L)
+  expect_equal(
+    res$compound_taskid_set,
+    list(`1` = NULL, `2` = c("reference_date", "horizon"))
   )
 })
 
@@ -248,16 +274,26 @@ test_that("Finer compound_taskid_sets work", {
       test_path("testdata/hub-spl")
     )
   )
-  expect_snapshot(
-    str(
-      check_tbl_spl_compound_taskid_set(
-        tbl_fine,
-        "2022-10-22",
-        create_file_path("2022-10-22"),
-        test_path("testdata/hub-spl")
-      )
-    )
+  res <- check_tbl_spl_compound_taskid_set(
+    tbl_fine,
+    "2022-10-22",
+    create_file_path("2022-10-22"),
+    test_path("testdata/hub-spl")
   )
+  expect_s3_class(res, "check_error")
+  expect_true(is.na(res$compound_taskid_set))
+  expect_named(res$errors, "2")
+  mt_error <- res$errors[["2"]][[1]]
+  expect_equal(
+    mt_error$config_comp_tids,
+    c("reference_date", "horizon", "location", "target_end_date")
+  )
+  expect_equal(mt_error$invalid_tbl_comp_tids, "variant")
+  expect_equal(
+    mt_error$tbl_comp_tids,
+    c("reference_date", "horizon", "location", "variant", "target_end_date")
+  )
+  expect_length(mt_error$output_type_ids, 800L)
 })
 
 test_that("Ignoring derived_task_ids in check_tbl_spl_compound_taskid_set works", {

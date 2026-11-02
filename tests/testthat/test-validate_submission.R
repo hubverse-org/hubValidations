@@ -4,99 +4,86 @@ test_that("validate_submission works", {
   hub_path <- system.file("testhubs/simple", package = "hubValidations")
 
   # File that passes validation
-  expect_snapshot(
-    str(
-      validate_submission(
-        hub_path,
-        file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv",
-        skip_submit_window_check = TRUE,
-        skip_check_config = TRUE
-      )
-    )
+  file_path <- "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+  res <- validate_submission(
+    hub_path,
+    file_path = file_path,
+    skip_submit_window_check = TRUE,
+    skip_check_config = TRUE
   )
-  expect_s3_class(
-    validate_submission(
-      hub_path,
-      file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv",
-      skip_submit_window_check = TRUE,
-      skip_check_config = TRUE
-    ),
-    c("hub_validations_collection")
-  )
+  expect_s3_class(res, c("hub_validations_collection"))
+  expect_named(res, file_path)
+  expect_equal(first_classes(res[[file_path]]), c(file_checks, data_checks))
 
   # File with validation error ----
   # Missing file
-  expect_snapshot(
-    str(
-      validate_submission(
-        hub_path,
-        file_path = "team1-goodmodel/2022-10-15-team1-goodmodel.csv",
-        skip_submit_window_check = TRUE,
-        skip_check_config = TRUE
-      )
-    )
+  file_path <- "team1-goodmodel/2022-10-15-team1-goodmodel.csv"
+  res <- validate_submission(
+    hub_path,
+    file_path = file_path,
+    skip_submit_window_check = TRUE,
+    skip_check_config = TRUE
   )
-  expect_s3_class(
-    validate_submission(
-      hub_path,
-      file_path = "team1-goodmodel/2022-10-15-team1-goodmodel.csv",
-      skip_submit_window_check = TRUE,
-      skip_check_config = TRUE
-    ),
-    c("hub_validations_collection")
+  expect_s3_class(res, c("hub_validations_collection"))
+  expect_named(res, file_path)
+  expect_equal(
+    first_classes(res[[file_path]]),
+    c(file_exists = "check_error")
   )
+  expect_snapshot(res[[file_path]][["file_exists"]])
 
   # Wrong submission location & missing data column (age_group)
-  expect_snapshot(
-    str(
-      validate_submission(
-        hub_path,
-        file_path = "team1-goodmodel/2022-10-15-hub-baseline.csv",
-        skip_submit_window_check = TRUE,
-        skip_check_config = TRUE
-      )
+  file_path <- "team1-goodmodel/2022-10-15-hub-baseline.csv"
+  res <- validate_submission(
+    hub_path,
+    file_path = file_path,
+    skip_submit_window_check = TRUE,
+    skip_check_config = TRUE
+  )
+  expect_s3_class(res, c("hub_validations_collection"))
+  expect_named(res, file_path)
+  expect_equal(
+    first_classes(res[[file_path]]),
+    c(
+      replace(file_checks, "file_location", "check_failure"),
+      data_checks[c("file_read", "valid_round_id_col", "unique_round_id")],
+      match_round_id = "check_error"
     )
   )
-  expect_s3_class(
-    validate_submission(
-      hub_path,
-      file_path = "team1-goodmodel/2022-10-15-hub-baseline.csv",
-      skip_submit_window_check = TRUE,
-      skip_check_config = TRUE
-    ),
-    c("hub_validations_collection")
-  )
+  expect_snapshot(res[[file_path]][["file_location"]])
+  expect_snapshot(res[[file_path]][["match_round_id"]])
 
-  expect_snapshot(
-    str(
-      validate_submission(
-        hub_path,
-        file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv",
-        round_id_col = "random_col",
-        skip_submit_window_check = TRUE,
-        skip_check_config = TRUE
-      )
+  file_path <- "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+  res <- validate_submission(
+    hub_path,
+    file_path = file_path,
+    round_id_col = "random_col",
+    skip_submit_window_check = TRUE,
+    skip_check_config = TRUE
+  )
+  expect_equal(
+    first_classes(res[[file_path]]),
+    c(
+      file_checks,
+      file_read = "check_success",
+      valid_round_id_col = "check_failure",
+      unique_round_id = "check_error"
     )
   )
 
   # File that passes validation & checks config
-  expect_snapshot(
-    str(
-      validate_submission(
-        hub_path,
-        file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv",
-        skip_submit_window_check = TRUE
-      )
-    )
+  res <- validate_submission(
+    hub_path,
+    file_path = file_path,
+    skip_submit_window_check = TRUE
   )
-  expect_s3_class(
-    validate_submission(
-      hub_path,
-      file_path = "team1-goodmodel/2022-10-08-team1-goodmodel.csv",
-      skip_submit_window_check = TRUE
-    ),
-    c("hub_validations_collection")
+  expect_s3_class(res, c("hub_validations_collection"))
+  expect_named(res, c("hub-config", file_path))
+  expect_equal(
+    first_classes(res[["hub-config"]]),
+    valid_config
   )
+  expect_equal(first_classes(res[[file_path]]), c(file_checks, data_checks))
 })
 
 test_that("validate_submission submission within window works", {
@@ -108,14 +95,12 @@ test_that("validate_submission submission within window works", {
   local_mocked_bindings(
     Sys.time = function(...) lubridate::as_datetime("2022-10-08 18:01:00 EEST")
   )
-  expect_snapshot(
-    str(
-      validate_submission(
-        hub_path,
-        file_path = file_path
-      )[[file_path]][["submission_time"]]
-    )
-  )
+  res <- validate_submission(
+    hub_path,
+    file_path = file_path
+  )[[file_path]][["submission_time"]]
+  expect_s3_class(res, "check_success")
+  expect_snapshot(res)
 })
 
 test_that("validate_submission submission outside window fails correctly", {
@@ -127,28 +112,29 @@ test_that("validate_submission submission outside window fails correctly", {
   local_mocked_bindings(
     Sys.time = function(...) lubridate::as_datetime("2023-10-08 18:01:00 EEST")
   )
-  expect_snapshot(
-    str(
-      validate_submission(
-        hub_path,
-        file_path = file_path
-      )[[file_path]][["submission_time"]]
-    )
-  )
+  res <- validate_submission(
+    hub_path,
+    file_path = file_path
+  )[[file_path]][["submission_time"]]
+  expect_s3_class(res, "check_failure")
+  expect_snapshot(res)
 })
 
 test_that("validate_submission csv file read in and validated according to schema.", {
   skip_if_offline()
 
-  expect_snapshot(
-    str(
-      validate_submission(
-        hub_path = test_path("testdata/hub"),
-        file_path = "hub-baseline/2023-04-24-hub-baseline.csv",
-        skip_submit_window_check = TRUE
-      )
-    )
+  file_path <- "hub-baseline/2023-04-24-hub-baseline.csv"
+  res <- validate_submission(
+    hub_path = test_path("testdata/hub"),
+    file_path = file_path,
+    skip_submit_window_check = TRUE
   )
+  expect_named(res, c("hub-config", file_path))
+  expect_equal(
+    first_classes(res[["hub-config"]]),
+    valid_config
+  )
+  expect_equal(first_classes(res[[file_path]]), c(file_checks, data_checks))
 })
 
 test_that("validate_submission fails when csv cannot be parsed according to schema.", {
@@ -168,46 +154,24 @@ test_that("validate_submission fails when csv cannot be parsed according to sche
 test_that("File containing task ID with all null properties validate correctly", {
   skip_if_offline()
 
-  expect_snapshot(
-    str(
-      validate_submission(
-        hub_path = test_path("testdata/hub-nul"),
-        file_path = "team-model/2023-11-26-team-model.parquet",
-        skip_submit_window_check = TRUE
-      )
-    )
+  file_path <- "team-model/2023-11-26-team-model.parquet"
+  res <- validate_submission(
+    hub_path = test_path("testdata/hub-nul"),
+    file_path = file_path,
+    skip_submit_window_check = TRUE
   )
-  expect_true(
-    suppressMessages(
-      check_for_errors(
-        validate_submission(
-          hub_path = test_path("testdata/hub-nul"),
-          file_path = "team-model/2023-11-26-team-model.parquet",
-          skip_submit_window_check = TRUE
-        )
-      )
-    )
+  expect_named(res, c("hub-config", file_path))
+  expect_equal(first_classes(res[[file_path]]), c(file_checks, data_checks))
+  expect_true(suppressMessages(check_for_errors(res)))
+  file_path <- "team-model/2023-11-19-team-model.parquet"
+  res <- validate_submission(
+    hub_path = test_path("testdata/hub-nul"),
+    file_path = file_path,
+    skip_submit_window_check = TRUE
   )
-  expect_snapshot(
-    str(
-      validate_submission(
-        hub_path = test_path("testdata/hub-nul"),
-        file_path = "team-model/2023-11-19-team-model.parquet",
-        skip_submit_window_check = TRUE
-      )
-    )
-  )
-  expect_true(
-    suppressMessages(
-      check_for_errors(
-        validate_submission(
-          hub_path = test_path("testdata/hub-nul"),
-          file_path = "team-model/2023-11-19-team-model.parquet",
-          skip_submit_window_check = TRUE
-        )
-      )
-    )
-  )
+  expect_named(res, c("hub-config", file_path))
+  expect_equal(first_classes(res[[file_path]]), c(file_checks, data_checks))
+  expect_true(suppressMessages(check_for_errors(res)))
 })
 
 test_that("validate_submission works with v3 samples.", {
@@ -335,15 +299,17 @@ test_that("validate_submission handles overriding output type id data type corre
 test_that("validate_submission validates derived task ID values", {
   skip_if_offline()
   # Validation passes
-  expect_snapshot(
-    str(
-      validate_submission(
-        hub_path = system.file("testhubs/samples", package = "hubValidations"),
-        file_path = "flu-base/2022-10-22-flu-base.csv",
-        skip_submit_window_check = TRUE,
-        derived_task_ids = "target_end_date"
-      )
-    )
+  file_path <- "flu-base/2022-10-22-flu-base.csv"
+  res <- validate_submission(
+    hub_path = system.file("testhubs/samples", package = "hubValidations"),
+    file_path = file_path,
+    skip_submit_window_check = TRUE,
+    derived_task_ids = "target_end_date"
+  )
+  expect_named(res, c("hub-config", file_path))
+  expect_equal(
+    first_classes(res[[file_path]]),
+    c(file_checks, spl_data_checks, horizon_timediff = "check_success")
   )
 
   # An invalid derived task ID value, introduced through mocking, fails the
@@ -399,8 +365,9 @@ test_that("validate_submission returns check_failure when duplicate files per ro
     skip_submit_window_check = TRUE,
     skip_check_config = TRUE
   )
-  expect_snapshot(
-    str(dup_model_out_val)
+  expect_equal(
+    first_classes(dup_model_out_val[[dup_file_path]]),
+    c(replace(file_checks, "file_n", "check_failure"), data_checks)
   )
   expect_snapshot(
     dup_model_out_val[[dup_file_path]][["file_n"]]

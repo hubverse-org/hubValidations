@@ -1,27 +1,27 @@
 test_that("execute_custom_checks works", {
-  expect_snapshot(
-    str(
-      test_custom_checks_caller(
-        validations_cfg_path = testthat::test_path(
-          "testdata",
-          "config",
-          "validations.yml"
-        )
-      )
+  res <- test_custom_checks_caller(
+    validations_cfg_path = testthat::test_path(
+      "testdata",
+      "config",
+      "validations.yml"
     )
   )
+  expect_snapshot(res)
+  expect_s3_class(res, "hub_validations")
+  expect_named(res, "horizon_timediff")
+  expect_s3_class(res$horizon_timediff, "check_success")
 
-  expect_snapshot(
-    str(
-      test_custom_checks_caller(
-        validations_cfg_path = testthat::test_path(
-          "testdata",
-          "config",
-          "validations-error.yml"
-        )
-      )
+  res <- test_custom_checks_caller(
+    validations_cfg_path = testthat::test_path(
+      "testdata",
+      "config",
+      "validations-error.yml"
     )
   )
+  expect_snapshot(res)
+  expect_s3_class(res, "hub_validations")
+  expect_named(res, "horizon_timediff")
+  expect_s3_class(res$horizon_timediff, "check_failure")
 })
 
 

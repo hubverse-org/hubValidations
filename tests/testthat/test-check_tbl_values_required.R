@@ -17,9 +17,8 @@ test_that("check_tbl_values_required works with 1 model task & completely opt co
     file_path,
     hub_path
   )
-  expect_snapshot(
-    str(missing_req_block)
-  )
+  expect_snapshot(missing_req_block)
+  expect_s3_class(missing_req_block, "check_failure")
   expect_false("mean" %in% missing_req_block$missing$output_type)
 
   expect_equal(
@@ -34,9 +33,7 @@ test_that("check_tbl_values_required works with 1 model task & completely opt co
     file_path,
     hub_path
   )
-  expect_snapshot(
-    str(res_missing_otid)
-  )
+  expect_s3_class(res_missing_otid, "check_failure")
   expect_false("mean" %in% res_missing_otid$missing$output_type)
 
   expect_equal(
@@ -63,9 +60,7 @@ test_that("check_tbl_values_required works with 2 separate model tasks & complet
     file_path,
     hub_path
   )
-  expect_snapshot(
-    str(missing_required)
-  )
+  expect_s3_class(missing_required, "check_failure")
   expect_equal(
     missing_required$missing,
     tbl_hub[24:25, names(tbl_hub) != "value"]
@@ -77,9 +72,7 @@ test_that("check_tbl_values_required works with 2 separate model tasks & complet
     file_path,
     hub_path
   )
-  expect_snapshot(
-    str(missing_opt_otid)
-  )
+  expect_s3_class(missing_opt_otid, "check_failure")
   expect_equal(
     missing_opt_otid$missing,
     tbl_hub[1:2, names(tbl_hub) != "value"]
@@ -97,9 +90,7 @@ test_that("check_tbl_values_required works with 2 separate model tasks & complet
     file_path,
     hub_path
   )
-  expect_snapshot(
-    str(missing_pmf)
-  )
+  expect_s3_class(missing_pmf, "check_failure")
   expect_equal(
     missing_pmf$missing$output_type_id,
     c("decrease", "stable", "increase", "large_increase")
@@ -128,8 +119,21 @@ test_that("check_tbl_values_required works with 2 separate model tasks & complet
     file_path,
     hub_path
   )
-  expect_snapshot(
-    str(missing_horizon)
+  expect_s3_class(missing_horizon, "check_failure")
+  expect_equal(missing_horizon$missing$horizon, rep(1:2, c(4L, 5L)))
+  expect_equal(
+    missing_horizon$missing$output_type_id,
+    c(
+      "decrease",
+      "stable",
+      "increase",
+      "large_increase",
+      "large_decrease",
+      "decrease",
+      "stable",
+      "increase",
+      "large_increase"
+    )
   )
 })
 
@@ -223,7 +227,24 @@ test_that("check_tbl_values_required works with v3 spec samples", {
     file_path = file_path,
     hub_path = hub_path
   )$missing
-  expect_snapshot(missing)
+  expect_tbl(
+    missing,
+    nrow = 21L,
+    types = c(
+      location = "character",
+      reference_date = "Date",
+      horizon = "integer",
+      target_end_date = "Date",
+      target = "character",
+      output_type = "character",
+      output_type_id = "character"
+    ),
+    values = list(
+      target_end_date = as.Date(c("2022-10-22", "2022-10-29", "2022-11-05")),
+      target = c("wk flu hosp rate category", "wk inc flu hosp"),
+      output_type_id = c("high", "low", "moderate", "very high", NA)
+    )
+  )
   # Missing required values reported should include optional values
   # (e.g optional horizons 0:2) and output types (e.g. mean & median)
   # for which other locations have been submitted but the required
@@ -315,7 +336,26 @@ test_that("(#123) check_tbl_values_required works with all optional output types
   # Check output correct
   expect_snapshot(opt_output_type_ids_result)
   # Missing output structure correct
-  expect_snapshot(opt_output_type_ids_result$missing)
+  missing <- opt_output_type_ids_result$missing
+  expect_tbl(
+    missing,
+    nrow = 168L,
+    types = c(
+      nowcast_date = "Date",
+      target_date = "Date",
+      clade = "character",
+      location = "character",
+      output_type = "character",
+      output_type_id = "character"
+    ),
+    values = list(
+      nowcast_date = as.Date("2024-10-02"),
+      location = c("AL", "CA"),
+      output_type = "sample",
+      output_type_id = NA_character_
+    )
+  )
+  expect_length(unique(missing$target_date), 42L)
   # Missing clades identified correctly
   expect_equal(
     unique(opt_output_type_ids_result$missing$clade),

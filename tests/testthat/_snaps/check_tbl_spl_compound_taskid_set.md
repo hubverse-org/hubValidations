@@ -130,98 +130,38 @@
 # Different compound_taskid_sets work
 
     Code
-      str(check_tbl_spl_compound_taskid_set(tbl_coarse_location, "2022-10-29",
-        create_file_path("2022-10-29"), hub_path))
+      res
     Output
-      List of 7
-       $ message            : chr "All samples in a model task conform to compound task ID sets that match or are coarser than the configured `com"| __truncated__
-       $ where              : 'fs_path' chr "flu-base/2022-10-29-flu-base.parquet"
-       $ errors             : NULL
-       $ warnings           :List of 1
-        ..$ :List of 4
-        .. ..$ message       : chr "Coarser-than-configured `compound_taskid_set` detected for modeling task 2. See check message for specifics."
-        .. ..$ where         : NULL
-        .. ..$ call          : chr "coarser_compound_taskid_set_warnings"
-        .. ..$ use_cli_format: logi TRUE
-        .. ..- attr(*, "class")= chr [1:4] "validation_warning" "rlang_warning" "warning" "condition"
-       $ compound_taskid_set:List of 2
-        ..$ 1: NULL
-        ..$ 2: chr [1:2] "reference_date" "location"
-       $ call               : chr "check_tbl_spl_compound_taskid_set"
-       $ use_cli_format     : logi TRUE
-       - attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+      <message/check_success>
+      Message:
+      All samples in a model task conform to compound task ID sets that match or are coarser than the configured `compound_taskid_set`.  mt 2: detected ("reference_date" and "location") is coarser than configured ("reference_date", "horizon", "location", "variant", and "target_end_date").
 
 ---
 
     Code
-      str(check_tbl_spl_compound_taskid_set(tbl_coarse_horizon, "2022-11-05",
-        create_file_path("2022-11-05"), hub_path))
+      res
     Output
-      List of 7
-       $ message            : chr "All samples in a model task conform to compound task ID sets that match or are coarser than the configured `com"| __truncated__
-       $ where              : 'fs_path' chr "flu-base/2022-11-05-flu-base.parquet"
-       $ errors             : NULL
-       $ warnings           :List of 1
-        ..$ :List of 4
-        .. ..$ message       : chr "Coarser-than-configured `compound_taskid_set` detected for modeling task 2. See check message for specifics."
-        .. ..$ where         : NULL
-        .. ..$ call          : chr "coarser_compound_taskid_set_warnings"
-        .. ..$ use_cli_format: logi TRUE
-        .. ..- attr(*, "class")= chr [1:4] "validation_warning" "rlang_warning" "warning" "condition"
-       $ compound_taskid_set:List of 2
-        ..$ 1: NULL
-        ..$ 2: chr [1:3] "reference_date" "horizon" "target_end_date"
-       $ call               : chr "check_tbl_spl_compound_taskid_set"
-       $ use_cli_format     : logi TRUE
-       - attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+      <message/check_success>
+      Message:
+      All samples in a model task conform to compound task ID sets that match or are coarser than the configured `compound_taskid_set`.  mt 2: detected ("reference_date", "horizon", and "target_end_date") is coarser than configured ("reference_date", "horizon", "location", "variant", and "target_end_date").
 
 ---
 
     Code
-      str(check_tbl_spl_compound_taskid_set(tbl_coarse_horizon, "2022-11-05",
-        create_file_path("2022-11-05"), hub_path))
+      res
     Output
-      List of 9
-       $ message            : chr "All samples in a model task do not conform to compound task ID sets that match or are coarser than the configur"| __truncated__
-       $ trace              : NULL
-       $ parent             : NULL
-       $ where              : 'fs_path' chr "flu-base/2022-11-05-flu-base.parquet"
-       $ errors             :List of 1
-        ..$ 2:List of 1
-        .. ..$ :List of 4
-        .. .. ..$ config_comp_tids     : chr [1:4] "reference_date" "horizon" "location" "variant"
-        .. .. ..$ invalid_tbl_comp_tids: chr "target_end_date"
-        .. .. ..$ tbl_comp_tids        : chr [1:3] "reference_date" "horizon" "target_end_date"
-        .. .. ..$ output_type_ids      : chr [1:40] "1" "10" "11" "12" ...
-       $ warnings           : NULL
-       $ compound_taskid_set: logi NA
-       $ call               : chr "check_tbl_spl_compound_taskid_set"
-       $ use_cli_format     : logi TRUE
-       - attr(*, "class")= chr [1:5] "check_error" "hub_check" "rlang_error" "error" ...
+      <error/check_error>
+      Error:
+      ! All samples in a model task do not conform to compound task ID sets that match or are coarser than the configured `compound_taskid_set`.  mt 2: Detected a finer `compound_taskid_set` than the hub accepts. "target_end_date" identified as compound task ID in file but not accepted by the hub. Compound task IDs should be one of "reference_date", "horizon", "location", and "variant".
 
 ---
 
     Code
-      str(check_tbl_spl_compound_taskid_set(tbl_coarse_horizon, "2022-11-05",
-        create_file_path("2022-11-05"), hub_path, derived_task_ids = "target_end_date"))
+      res
     Output
-      List of 7
-       $ message            : chr "All samples in a model task conform to compound task ID sets that match or are coarser than the configured `com"| __truncated__
-       $ where              : 'fs_path' chr "flu-base/2022-11-05-flu-base.parquet"
-       $ errors             : NULL
-       $ warnings           :List of 1
-        ..$ :List of 4
-        .. ..$ message       : chr "Coarser-than-configured `compound_taskid_set` detected for modeling task 2. See check message for specifics."
-        .. ..$ where         : NULL
-        .. ..$ call          : chr "coarser_compound_taskid_set_warnings"
-        .. ..$ use_cli_format: logi TRUE
-        .. ..- attr(*, "class")= chr [1:4] "validation_warning" "rlang_warning" "warning" "condition"
-       $ compound_taskid_set:List of 2
-        ..$ 1: NULL
-        ..$ 2: chr [1:2] "reference_date" "horizon"
-       $ call               : chr "check_tbl_spl_compound_taskid_set"
-       $ use_cli_format     : logi TRUE
-       - attr(*, "class")= chr [1:5] "check_success" "hub_check" "rlang_message" "message" ...
+      <message/check_success>
+      Message:
+      All samples in a model task conform to compound task ID sets that match or are coarser than the configured `compound_taskid_set`.  mt 2: detected ("reference_date" and "horizon") is coarser than configured ("reference_date", "horizon", "location", and "variant").
 
 # Finer compound_taskid_sets work
 
@@ -232,30 +172,6 @@
       <error/check_error>
       Error:
       ! All samples in a model task do not conform to compound task ID sets that match or are coarser than the configured `compound_taskid_set`.  mt 2: Detected a finer `compound_taskid_set` than the hub accepts. "variant" identified as compound task ID in file but not accepted by the hub. Compound task IDs should be one of "reference_date", "horizon", "location", and "target_end_date".
-
----
-
-    Code
-      str(check_tbl_spl_compound_taskid_set(tbl_fine, "2022-10-22", create_file_path(
-        "2022-10-22"), test_path("testdata/hub-spl")))
-    Output
-      List of 9
-       $ message            : chr "All samples in a model task do not conform to compound task ID sets that match or are coarser than the configur"| __truncated__
-       $ trace              : NULL
-       $ parent             : NULL
-       $ where              : 'fs_path' chr "flu-base/2022-10-22-flu-base.parquet"
-       $ errors             :List of 1
-        ..$ 2:List of 1
-        .. ..$ :List of 4
-        .. .. ..$ config_comp_tids     : chr [1:4] "reference_date" "horizon" "location" "target_end_date"
-        .. .. ..$ invalid_tbl_comp_tids: chr "variant"
-        .. .. ..$ tbl_comp_tids        : chr [1:5] "reference_date" "horizon" "location" "variant" ...
-        .. .. ..$ output_type_ids      : chr [1:800] "1" "10" "100" "101" ...
-       $ warnings           : NULL
-       $ compound_taskid_set: logi NA
-       $ call               : chr "check_tbl_spl_compound_taskid_set"
-       $ use_cli_format     : logi TRUE
-       - attr(*, "class")= chr [1:5] "check_error" "hub_check" "rlang_error" "error" ...
 
 # Ignoring derived_task_ids in check_tbl_spl_compound_taskid_set works
 

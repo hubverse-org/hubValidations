@@ -7,25 +7,56 @@ test_that("match_tbl_to_model_task works", {
   )
   config_tasks <- read_config(hub_path, "tasks")
 
-  expect_snapshot(
-    match_tbl_to_model_task(tbl, config_tasks, round_id = "2022-10-22")
-  )
-  expect_snapshot(
-    match_tbl_to_model_task(
-      tbl,
-      config_tasks,
-      round_id = "2022-10-22",
-      output_types = "sample"
+  res <- match_tbl_to_model_task(tbl, config_tasks, round_id = "2022-10-22")
+  expect_equal(purrr::map_int(res, nrow), c(60L, 1530L))
+  expect_named(
+    res[[1]],
+    c(
+      "reference_date",
+      "target",
+      "horizon",
+      "location",
+      "target_end_date",
+      "output_type",
+      "output_type_id",
+      "value"
     )
   )
-  expect_snapshot(
-    match_tbl_to_model_task(
-      tbl,
-      config_tasks,
-      round_id = "2022-10-22",
-      order_by_config = TRUE
-    )
+  expect_equal(
+    purrr::map(res, ~ unique(.x$target)),
+    list("wk flu hosp rate category", "wk inc flu hosp")
   )
+  expect_equal(
+    purrr::map(res, ~ sort(unique(.x$output_type))),
+    list("pmf", c("mean", "median", "sample"))
+  )
+
+  res_spl <- match_tbl_to_model_task(
+    tbl,
+    config_tasks,
+    round_id = "2022-10-22",
+    output_types = "sample"
+  )
+  expect_null(res_spl[[1]])
+  expect_equal(nrow(res_spl[[2]]), 1500L)
+  expect_equal(unique(res_spl[[2]]$output_type), "sample")
+
+  # Ordering by config returns the same rows, in the order of the values the
+  # config lists.
+  res_ord <- match_tbl_to_model_task(
+    tbl,
+    config_tasks,
+    round_id = "2022-10-22",
+    order_by_config = TRUE
+  )
+  sort_rows <- function(x) dplyr::arrange(x, dplyr::across(dplyr::everything()))
+  expect_equal(purrr::map(res_ord, sort_rows), purrr::map(res, sort_rows))
+  expect_equal(
+    head(res_ord[[1]]$location, 6L),
+    c("US", "01", "02", "04", "05", "US")
+  )
+  expect_equal(head(res_ord[[1]]$horizon, 6L), c(rep("0", 5L), "1"))
+  expect_equal(res_ord[[2]]$output_type[1], "mean")
 })
 
 test_that("matching splits data the same way the expanded grid did", {

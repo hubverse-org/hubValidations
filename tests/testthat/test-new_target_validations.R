@@ -1,50 +1,39 @@
 test_that("new_target_validations works", {
-  expect_snapshot(str(new_target_validations()))
-  expect_s3_class(
-    new_target_validations(),
-    c("target_validations", "hub_validations")
-  )
+  empty <- new_target_validations()
+  expect_s3_class(empty, c("target_validations", "hub_validations"))
+  expect_length(empty, 0L)
 
   hub_path <- system.file("testhubs/v5/target_file", package = "hubUtils")
   file_path <- "time-series.csv"
 
-  expect_snapshot(
-    str(
-      new_target_validations(
-        target_file_name = check_target_file_name(file_path),
-        target_file_ext_valid = check_target_file_ext_valid(file_path)
-      )
-    )
+  res <- new_target_validations(
+    target_file_name = check_target_file_name(file_path),
+    target_file_ext_valid = check_target_file_ext_valid(file_path)
   )
-
-  expect_s3_class(
-    new_target_validations(
-      target_file_name = check_target_file_name(file_path),
-      target_file_ext_valid = check_target_file_ext_valid(file_path)
-    ),
-    c("target_validations", "hub_validations")
+  expect_s3_class(res, c("target_validations", "hub_validations"))
+  expect_equal(
+    first_classes(res),
+    c(target_file_name = "check_info", target_file_ext_valid = "check_success")
   )
+  expect_equal(attr(res, "where"), file_path)
 })
 
 test_that("new_target_validations works with hive partitioned target files", {
   file_path <- "time-series/target=wk%20flu%20hosp%20rate/part-0.parquet"
 
-  expect_snapshot(
-    str(
-      new_target_validations(
-        target_file_name = check_target_file_name(file_path),
-        target_file_ext_valid = check_target_file_ext_valid(file_path)
-      )
+  res <- new_target_validations(
+    target_file_name = check_target_file_name(file_path),
+    target_file_ext_valid = check_target_file_ext_valid(file_path)
+  )
+  expect_s3_class(res, c("target_validations", "hub_validations"))
+  expect_equal(
+    first_classes(res),
+    c(
+      target_file_name = "check_success",
+      target_file_ext_valid = "check_success"
     )
   )
-
-  expect_s3_class(
-    new_target_validations(
-      target_file_name = check_target_file_name(file_path),
-      target_file_ext_valid = check_target_file_ext_valid(file_path)
-    ),
-    c("target_validations", "hub_validations")
-  )
+  expect_equal(attr(res, "where"), file_path)
 })
 
 # ---- target_validations_collection tests ----

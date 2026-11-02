@@ -14,14 +14,13 @@ test_that("check_valid_round_id_col works", {
       hub_path = hub_path
     )
   )
-  expect_snapshot(
-    str(
-      check_valid_round_id_col(
-        tbl = tbl,
-        file_path = file_path,
-        hub_path = hub_path
-      )
-    )
+  expect_s3_class(
+    check_valid_round_id_col(
+      tbl = tbl,
+      file_path = file_path,
+      hub_path = hub_path
+    ),
+    "check_success"
   )
   expect_snapshot(
     check_valid_round_id_col(
@@ -31,13 +30,14 @@ test_that("check_valid_round_id_col works", {
       round_id_col = "origin_date"
     )
   )
-  expect_snapshot(
-    str(check_valid_round_id_col(
+  expect_s3_class(
+    check_valid_round_id_col(
       tbl = tbl,
       round_id_col = "origin_date",
       file_path = file_path,
       hub_path = hub_path
-    ))
+    ),
+    "check_success"
   )
 
   # Fails with warning when round_id_col invalid

@@ -129,11 +129,13 @@ test_that("Overriding compound_taskid_set in check_tbl_spl_compound_tid works", 
 
   # Validation of coarser file with config compound_taskid_set succeeds as the
   # subset of non compound task IDs remains consistent across samples.
-  expect_snapshot(
-    str(
-      check_tbl_spl_non_compound_tid(tbl_coarse, round_id, file_path, hub_path)
-    )
+  res <- check_tbl_spl_non_compound_tid(
+    tbl_coarse,
+    round_id,
+    file_path,
+    hub_path
   )
+  expect_s3_class(res, "check_success")
 
   # Validation providing coarser compound taskid set consistent with the data
   # also succeeds.
