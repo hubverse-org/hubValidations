@@ -6,11 +6,11 @@ first_classes <- function(x) purrr::map_chr(x, ~ class(.x)[1])
 # For each column named in `values`, also expect its sorted unique values, with
 # `NA` last.
 expect_tbl <- function(x, nrow, types, values = list()) {
-  expect_s3_class(x, "tbl_df")
-  expect_equal(nrow(x), nrow)
-  expect_equal(first_classes(x), types)
+  testthat::expect_s3_class(x, "tbl_df")
+  testthat::expect_equal(nrow(x), nrow)
+  testthat::expect_equal(first_classes(x), types)
   for (col in names(values)) {
-    expect_equal(
+    testthat::expect_equal(
       sort(unique(x[[col]]), na.last = TRUE, method = "radix"),
       values[[col]],
       label = col
@@ -22,12 +22,12 @@ expect_tbl <- function(x, nrow, types, values = list()) {
 # tibble, or list of tibbles, `tbl`.
 expect_arrow_tbl <- function(x, tbl) {
   if (!inherits(x, "Table")) {
-    expect_length(x, length(tbl))
+    testthat::expect_length(x, length(tbl))
     purrr::walk2(x, tbl, expect_arrow_tbl)
     return(invisible(x))
   }
-  expect_s3_class(x, "Table")
-  expect_equal(tibble::as_tibble(x), tbl)
+  testthat::expect_s3_class(x, "Table")
+  testthat::expect_equal(tibble::as_tibble(x), tbl)
 }
 
 # The quantile levels the simple and flusight test hubs accept.
