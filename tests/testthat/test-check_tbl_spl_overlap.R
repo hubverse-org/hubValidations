@@ -87,3 +87,14 @@ test_that("allow_overlapping_samples must be a single logical value", {
     "allow_overlapping_samples"
   )
 })
+
+test_that("check_tbl_spl_overlap shows sample IDs containing braces (#406)", {
+  hub_path <- system.file("testhubs/samples", package = "hubValidations")
+  file_path <- "flu-base/2022-10-22-flu-base.csv"
+  tbl <- overlap_tbl(hub_path, file_path)
+  tbl <- brace_spl_ids(tbl)
+
+  result <- check_tbl_spl_overlap(tbl, "2022-10-22", file_path, hub_path)
+  expect_s3_class(result, "check_error")
+  expect_match(result$message, "samples \"s{id1}\", \"s{id2}\"", fixed = TRUE)
+})

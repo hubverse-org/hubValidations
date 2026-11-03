@@ -189,3 +189,20 @@ test_that("Ignoring derived_task_ids in check_tbl_spl_compound_tid works", {
     )
   )
 })
+
+test_that("check_tbl_spl_non_compound_tid shows sample IDs containing braces (#406)", {
+  hub_path <- system.file("testhubs/samples", package = "hubValidations")
+  file_path <- "flu-base/2022-10-22-flu-base.csv"
+  tbl <- read_model_out_file(file_path, hub_path, coerce_types = "chr")
+  tbl <- brace_spl_ids(tbl)
+  tbl <- tbl[-which(tbl$output_type_id == "s{id150}")[1], ]
+
+  result <- check_tbl_spl_non_compound_tid(
+    tbl,
+    "2022-10-22",
+    file_path,
+    hub_path
+  )
+  expect_s3_class(result, "check_error")
+  expect_match(result$message, "Sample \"s{id150}\" does not", fixed = TRUE)
+})

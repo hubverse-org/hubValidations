@@ -500,3 +500,26 @@ test_that("samples in a modeling task can have different valid compound task ID 
   expect_true(all(spl_checks %in% names(checks)))
   expect_true(all(purrr::map_lgl(checks, \(.x) !is_any_error(.x))))
 })
+
+test_that("coarser compound task ID set details show sample IDs containing braces (#406)", {
+  # As in the test above, samples 1 to 100 become joint across locations "01"
+  # and "02", which is coarser than configured.
+  hub_path <- system.file("testhubs/samples", package = "hubValidations")
+  file_path <- "flu-base/2022-10-22-flu-base.csv"
+  tbl <- read_model_out_file(file_path, hub_path, coerce_types = "chr")
+  is_02 <- tbl$output_type == "sample" & tbl$location == "02"
+  tbl$output_type_id[is_02] <- as.character(
+    as.integer(tbl$output_type_id[is_02]) - 100L
+  )
+  tbl <- brace_spl_ids(tbl)
+
+  result <- check_tbl_spl_compound_taskid_set(
+    tbl,
+    "2022-10-22",
+    file_path,
+    hub_path
+  )
+  expect_s3_class(result, "check_success")
+  expect_match(result$message, "for samples \"s{id100}\",", fixed = TRUE)
+  expect_match(result$message, "\"s{id1}\",", fixed = TRUE)
+})

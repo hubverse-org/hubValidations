@@ -88,12 +88,21 @@ data_checks <- c(
 # Expected results of the sample checks on a valid file in the samples test
 # hub.
 spl_checks <- c(
+  spl_ids = "check_success",
   spl_mt_unique = "check_success",
   spl_compound_taskid_set = "check_success",
   spl_overlap = "check_success",
   spl_non_compound_tid = "check_success",
   spl_n = "check_success"
 )
+
+# Wrap every sample `output_type_id` of `tbl` in braces, so sample "1" becomes
+# "s{id1}". Check messages must show such IDs as submitted.
+brace_spl_ids <- function(tbl) {
+  is_spl <- tbl$output_type == "sample"
+  tbl$output_type_id[is_spl] <- paste0("s{id", tbl$output_type_id[is_spl], "}")
+  tbl
+}
 
 # Expected results of the data and sample checks on a valid file in the
 # samples test hub. The hub has pmf output but no quantile or cdf output.

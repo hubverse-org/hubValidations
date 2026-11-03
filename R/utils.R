@@ -121,3 +121,14 @@ get_metadata_file_name <- function(
   }
   fs::path(model_id, ext = ext)
 }
+
+#' Escape braces in submitted values shown in a check message
+#'
+#' Check details built with `cli::format_inline()` pass through
+#' `cli::format_inline()` again in `capture_check_cnd()`. A brace in a value
+#' interpolated into the details is then read as cli markup. Escape values
+#' before the first pass so they print as submitted.
+#' @noRd
+escape_braces <- function(x) {
+  gsub("([{}])", "\\1\\1", x)
+}

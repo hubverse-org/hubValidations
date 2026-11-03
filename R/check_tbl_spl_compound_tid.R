@@ -82,7 +82,8 @@ check_tbl_spl_compound_tid <- function(
     output_type_ids <- purrr::map(errors, ~ .x$output_type_id) |> # nolint: object_usage_linter
       purrr::flatten_chr() |>
       unique() |>
-      sort()
+      sort() |>
+      escape_braces()
 
     details <- cli::format_inline(
       "Sample{?s} {.val {output_type_ids}} d{?oes/o} not contain ",
