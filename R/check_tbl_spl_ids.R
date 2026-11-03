@@ -12,8 +12,8 @@
 #'   written with digits only and without leading zeros, such as `"0"` or
 #'   `"12"`. `"01"`, `"1.0"` and `"1e3"` fail.
 #' - When `type` is `"character"`, each sample ID must have at most
-#'   `max_length` characters, and contain only ASCII letters, digits, `_` and
-#'   `-`.
+#'   `max_length` characters, and contain only ASCII letters, digits, `_`,
+#'   `-` and `.`.
 #'
 #' Every sample row must also have a non-empty `output_type_id`.
 #'
@@ -29,7 +29,7 @@
 #'   - `integer`: the sample IDs that are not non-negative integers.
 #'   - `max_length`: the sample IDs longer than `max_length`.
 #'   - `characters`: the sample IDs that contain characters other than ASCII
-#'     letters, digits, `_` and `-`.
+#'     letters, digits, `_`, `-` and `.`.
 #'
 #' See [hubverse documentation on samples](https://docs.hubverse.io/en/latest/user-guide/sample-output-type.html)
 #' for more details.
@@ -91,7 +91,7 @@ check_tbl_spl_ids <- function(
 }
 
 # The characters a character sample ID may contain.
-spl_id_pattern <- "^[A-Za-z0-9_-]+$"
+spl_id_pattern <- "^[A-Za-z0-9_.-]+$"
 # The canonical form of an integer sample ID.
 spl_id_int_pattern <- "^(0|[1-9][0-9]*)$"
 
@@ -156,7 +156,7 @@ spl_id_problem_phrase <- function(value, problem, max_length) {
       max_length = "{?is/are} longer than the {.var max_length} of {max_length}",
       characters = paste(
         "contain{?s/} characters other than ASCII letters, digits,",
-        "{.val _} and {.val -}"
+        "{.val _}, {.val -} and {.val .}"
       )
     )
   )

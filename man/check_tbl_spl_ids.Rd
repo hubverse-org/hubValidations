@@ -58,8 +58,8 @@ The format required of sample \code{output_type_id}s depends on the \code{type} 
 written with digits only and without leading zeros, such as \code{"0"} or
 \code{"12"}. \code{"01"}, \code{"1.0"} and \code{"1e3"} fail.
 \item When \code{type} is \code{"character"}, each sample ID must have at most
-\code{max_length} characters, and contain only ASCII letters, digits, \verb{_} and
-\code{-}.
+\code{max_length} characters, and contain only ASCII letters, digits, \verb{_},
+\code{-} and \code{.}.
 }
 
 Every sample row must also have a non-empty \code{output_type_id}.
@@ -78,7 +78,7 @@ modeling task in the config. Each element has the following structure:
 \item \code{integer}: the sample IDs that are not non-negative integers.
 \item \code{max_length}: the sample IDs longer than \code{max_length}.
 \item \code{characters}: the sample IDs that contain characters other than ASCII
-letters, digits, \verb{_} and \code{-}.
+letters, digits, \verb{_}, \code{-} and \code{.}.
 }
 }
 

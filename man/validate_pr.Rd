@@ -307,7 +307,7 @@ Details of checks performed by \code{validate_submission()}\if{html}{\out{<table
   </tr>
   <tr>
    <td style="text-align:left;font-weight: bold;"> spl_ids </td>
-   <td style="text-align:left;"> Sample output_type_ids match the type and max_length configured for their modeling task. Character sample IDs may contain only ASCII letters, digits, _ and -. Every sample row has an output_type_id (v3 and above schema only). </td>
+   <td style="text-align:left;"> Sample output_type_ids match the type and max_length configured for their modeling task. Character sample IDs may contain only ASCII letters, digits, underscores, hyphens and periods. Every sample row has an output_type_id (v3 and above schema only). </td>
    <td style="text-align:left;"> TRUE </td>
    <td style="text-align:left;"> check_error </td>
    <td style="text-align:left;"> errors: list containing item for each failing modeling task with the configured type and max_length and the problems found, each with the sample IDs failing validation or the number of rows missing one. </td>

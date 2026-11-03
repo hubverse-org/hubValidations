@@ -11,7 +11,7 @@ test_that("check_tbl_spl_ids passes valid integer and character sample IDs", {
   hub_path <- test_path("testdata/hub-now")
   file_path <- "UMass-HMLR/2024-10-02-UMass-HMLR.parquet"
   tbl <- read_model_out_file(file_path, hub_path, coerce_types = "chr")
-  tbl$output_type_id <- paste0(tbl$output_type_id, "_run-sample")
+  tbl$output_type_id <- paste0(tbl$output_type_id, "_run.sample")
   expect_equal(unique(nchar(tbl$output_type_id)), 15L)
   expect_s3_class(
     check_tbl_spl_ids(tbl, "2024-10-02", file_path, hub_path),
@@ -50,7 +50,7 @@ test_that("check_tbl_spl_ids fails character sample IDs that are too long or con
   invalid <- c(
     AL01 = "AL01_run-sample1",
     CA02 = "CA02{x}",
-    CA03 = "CA03.run-sample1"
+    CA03 = "CA03:run-sample1"
   )
   for (id in names(invalid)) {
     tbl$output_type_id[tbl$output_type_id == id] <- invalid[[id]]

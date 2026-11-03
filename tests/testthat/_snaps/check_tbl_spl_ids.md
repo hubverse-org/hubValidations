@@ -14,7 +14,7 @@
     Output
       <error/check_error>
       Error:
-      ! Sample `output_type_id`s do not match the required sample ID format.  mt 1: sample IDs "AL01_run-sample1" and "CA03.run-sample1" are longer than the `max_length` of 15 and sample IDs "CA02{x}" and "CA03.run-sample1" contain characters other than ASCII letters, digits, "_" and "-". See `errors` attribute for details.
+      ! Sample `output_type_id`s do not match the required sample ID format.  mt 1: sample IDs "AL01_run-sample1" and "CA03:run-sample1" are longer than the `max_length` of 15 and sample IDs "CA02{x}" and "CA03:run-sample1" contain characters other than ASCII letters, digits, "_", "-" and ".". See `errors` attribute for details.
 
 # check_tbl_spl_ids fails sample rows with a missing or empty output_type_id (#406)
 
