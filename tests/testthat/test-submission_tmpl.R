@@ -4,26 +4,30 @@ test_that("submission_tmpl works correctly with path to hub", {
   x <- submission_tmpl(hub_path, round_id = "2023-01-30")
   expect_tbl(
     x,
-    nrow = 3132L,
+    n_rows = 3132L,
     types = c(flusight_grid_types, value = "numeric"),
     values = list(
       forecast_date = as.Date("2023-01-30"),
       target = c("wk ahead inc flu hosp", "wk flu hosp rate change"),
       horizon = 1:2,
-      output_type = c("mean", "pmf", "quantile")
+      location = hub_locations,
+      output_type = c("mean", "pmf", "quantile"),
+      output_type_id = flusight_output_type_ids
     )
   )
 
   x <- submission_tmpl(hub_path, round_id = "2023-01-16")
   expect_tbl(
     x,
-    nrow = 3132L,
+    n_rows = 3132L,
     types = c(flusight_grid_types, value = "numeric"),
     values = list(
       forecast_date = as.Date("2023-01-16"),
       target = c("wk ahead inc flu hosp", "wk flu hosp rate change"),
       horizon = 1:2,
-      output_type = c("mean", "pmf", "quantile")
+      location = hub_locations,
+      output_type = c("mean", "pmf", "quantile"),
+      output_type_id = flusight_output_type_ids
     )
   )
   expect_equal(
@@ -43,7 +47,7 @@ test_that("submission_tmpl works correctly with path to hub", {
   )
   expect_tbl(
     x,
-    nrow = 0L,
+    n_rows = 0L,
     types = c(flusight_grid_types, value = "numeric")
   )
   expect_equal(
@@ -68,7 +72,7 @@ test_that("submission_tmpl works correctly with path to hub", {
   )
   expect_tbl(
     x,
-    nrow = 28L,
+    n_rows = 28L,
     types = c(flusight_grid_types, value = "numeric"),
     values = list(
       forecast_date = as.Date("2023-01-16"),
@@ -100,12 +104,13 @@ test_that("submission_tmpl works correctly with path to hub", {
   )
   expect_tbl(
     x,
-    nrow = 5184L,
+    n_rows = 5184L,
     types = c(simple_grid_types, value = "integer"),
     values = list(
       origin_date = as.Date("2022-10-01"),
       target = "wk inc flu hosp",
       horizon = 1:4,
+      location = hub_locations,
       output_type = c("mean", "quantile"),
       output_type_id = c(hub_quantiles, NA)
     )
@@ -121,7 +126,7 @@ test_that("submission_tmpl works correctly with path to hub", {
   )
   expect_tbl(
     x,
-    nrow = 23L,
+    n_rows = 23L,
     types = c(simple_grid_types, value = "integer"),
     values = list(
       origin_date = as.Date("2022-10-01"),
@@ -142,7 +147,7 @@ test_that("submission_tmpl works correctly with path to hub", {
   )
   expect_tbl(
     x,
-    nrow = 23L,
+    n_rows = 23L,
     types = c(simple_age_grid_types, value = "integer"),
     values = list(
       origin_date = as.Date("2022-10-29"),
@@ -162,7 +167,7 @@ test_that("submission_tmpl works correctly with path to hub", {
   )
   expect_tbl(
     x,
-    nrow = 0L,
+    n_rows = 0L,
     types = c(simple_age_grid_types, value = "integer")
   )
 })
@@ -172,7 +177,7 @@ test_that("submission_tmpl works correctly with path to task config file", {
   x <- submission_tmpl(config_path, round_id = "2022-12-26")
   expect_tbl(
     x,
-    nrow = 42L,
+    n_rows = 42L,
     types = c(flusight_grid_types, value = "numeric"),
     values = list(
       target = c("wk ahead inc flu hosp", "wk flu hosp rate change"),
@@ -298,18 +303,11 @@ test_that("submission_tmpl handles samples correctly", {
   tmpl <- submission_tmpl(config_path, round_id = "2022-12-26")
   expect_tbl(
     tmpl,
-    nrow = 42L,
+    n_rows = 42L,
     types = c(flusight_grid_types, value = "numeric"),
     values = list(output_type = c("mean", "pmf", "sample"))
   )
   expect_snapshot(dplyr::filter(tmpl, .data$output_type == "sample"))
-  # A compound_taskid_set override changes only the sample IDs, so the other
-  # rows match the template and the sample rows are snapshotted.
-  expect_spl_override <- function(x, tmpl) {
-    is_spl <- x$output_type == "sample"
-    expect_equal(x[!is_spl, ], tmpl[tmpl$output_type != "sample", ])
-    expect_snapshot(x[is_spl, ])
-  }
 
   expect_equal(
     submission_tmpl(
@@ -380,7 +378,7 @@ test_that("submission_tmpl ignoring derived task ids works", {
   # The derived task ID is left NA, and every row is its own sample.
   expect_tbl(
     x,
-    nrow = 80L,
+    n_rows = 80L,
     types = c(
       reference_date = "Date",
       target = "character",

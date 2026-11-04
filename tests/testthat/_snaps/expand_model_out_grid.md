@@ -378,9 +378,9 @@
 ---
 
     Code
-      expand_model_out_grid(jsonlite::fromJSON(test_path("testdata", "configs",
-        "both_null_tasks_all.json"), simplifyVector = TRUE, simplifyDataFrame = FALSE),
-      round_id = "2023-11-26")
+      dplyr::filter(expand_model_out_grid(jsonlite::fromJSON(test_path("testdata",
+        "configs", "both_null_tasks_all.json"), simplifyVector = TRUE,
+      simplifyDataFrame = FALSE), round_id = "2023-11-26"), is.na(horizon))
     Condition
       Error in `map2()`:
       i In index: 3.
