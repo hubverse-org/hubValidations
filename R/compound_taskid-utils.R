@@ -146,6 +146,10 @@ spl_comp_tid_membership <- function(
   is_compound_taskid <- purrr::map(
     purrr::set_names(task_ids),
     function(task_id) {
+      # A derived task ID's values follow from other task IDs, so they say
+      # nothing about how samples were drawn. Its flag comes from the
+      # configured set instead, so it never makes a sample look coarser or
+      # finer than configured.
       if (task_id %in% derived_task_ids) {
         return(rep(task_id %in% config_comp_tids, length(output_type_ids)))
       }
