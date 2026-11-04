@@ -14,6 +14,10 @@
 * The `errors` attribute of `check_tbl_spl_compound_taskid_set()` and `get_tbl_compound_taskid_set()` now lists the correct `output_type_ids` for each detected compound task ID set (#400).
 * Sample checks called on their own now show sample `output_type_id`s containing `{` or `}` as submitted. Previously such a check failed with an execution error or showed the ID without its braces. Printing validation results that contain such an ID could also error (#406).
 
+## Other changes
+
+* Validating files that contain samples is faster. On a file of 13 million sample rows, the sample checks in `validate_model_data()`, `validate_submission()` and `validate_pr()` take about half as long (#401).
+
 # hubValidations 3.0.0
 
 ## Breaking Changes

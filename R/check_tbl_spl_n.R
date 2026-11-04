@@ -2,6 +2,7 @@
 #' for a given compound idx.
 #' @inherit check_tbl_colnames params
 #' @inherit check_tbl_col_types return
+#' @inheritParams check_tbl_spl_mt_unique
 #' @inheritParams check_tbl_spl_compound_tid
 #' @details A sample coarser than the configured `compound_taskid_set` covers
 #' several compound modeling tasks, and counts as one sample for each. See the
@@ -24,12 +25,14 @@ check_tbl_spl_n <- function(
   file_path,
   hub_path,
   compound_taskid_set = NULL,
-  derived_task_ids = get_hub_derived_task_ids(hub_path, round_id)
+  derived_task_ids = get_hub_derived_task_ids(hub_path, round_id),
+  spl_idx = NULL
 ) {
   assert_tbl_chr(tbl_chr)
   if (!is.null(compound_taskid_set) && isTRUE(is.na(compound_taskid_set))) {
     cli::cli_abort("Valid {.var compound_taskid_set} must be provided.")
   }
+  rlang::check_exclusive(compound_taskid_set, spl_idx, .require = FALSE)
   config_tasks <- read_config(hub_path, "tasks")
 
   if (
@@ -39,13 +42,14 @@ check_tbl_spl_n <- function(
     return(skip_v3_spl_check(file_path))
   }
 
-  spl_idx <- spl_idx_tbl(
-    tbl_chr,
-    round_id,
-    config_tasks,
-    compound_taskid_set,
-    derived_task_ids = derived_task_ids
-  )
+  spl_idx <- spl_idx %||%
+    spl_idx_tbl(
+      tbl_chr,
+      round_id,
+      config_tasks,
+      compound_taskid_set,
+      derived_task_ids = derived_task_ids
+    )
   n_ranges <- get_round_spl_n_ranges(config_tasks, round_id)
 
   # A coarser sample covers several compound idxs and counts towards each.

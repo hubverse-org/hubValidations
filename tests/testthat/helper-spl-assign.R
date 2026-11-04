@@ -110,6 +110,42 @@ spl_mt_rows_via_grid <- function(
   )
 }
 
+# Detects a modeling task's compound task ID sets from its rows, as given by
+# `spl_mt_rows_via_grid()`, without the sample index. A reference for
+# `get_tbl_compound_taskid_set()`.
+mt_compound_taskid_set_via_tbl <- function(
+  tbl_chr,
+  config_comp_tids,
+  task_ids
+) {
+  if (is.null(tbl_chr) || is.null(config_comp_tids) || nrow(tbl_chr) == 0L) {
+    return(NULL)
+  }
+  spl_uniq <- tbl_chr[, c(task_ids, "output_type_id")] |>
+    dplyr::group_by(.data[["output_type_id"]]) |>
+    dplyr::summarise(
+      dplyr::across(dplyr::everything(), \(.x) dplyr::n_distinct(.x) == 1L)
+    )
+  tbl_non_uniq <- tbl_chr[, task_ids] |>
+    purrr::map(~ dplyr::n_distinct(.x) > 1L) |>
+    tibble::as_tibble()
+  tbl_non_uniq[, config_comp_tids] <- TRUE
+  is_compound_taskid <- apply(
+    spl_uniq[, task_ids],
+    1,
+    function(x) x & tbl_non_uniq[, task_ids],
+    simplify = FALSE
+  ) |>
+    purrr::reduce(rbind)
+
+  get_mt_compound_taskid_set(
+    tibble::as_tibble(is_compound_taskid),
+    spl_uniq[["output_type_id"]],
+    config_comp_tids,
+    error = FALSE
+  )
+}
+
 # Every hub in the test suite with a sample submission, so the comparison covers
 # a single modeling task and several, a declared compound task ID set and none,
 # character and numeric sample IDs, and derived task IDs.

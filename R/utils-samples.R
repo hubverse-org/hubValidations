@@ -181,6 +181,32 @@ spl_idx_tbl <- function(
   list(rows = rows, comp_tids = mt_comp_tids, non_comp_tids = mt_non_comp_tids)
 }
 
+# The sample index `validate_model_data()` shares between the sample checks.
+# `NULL` when the file has no samples. Also `NULL` when the index cannot be
+# built, so that each check tries to build its own and reports the error as
+# its own.
+shared_spl_idx <- function(tbl_chr, round_id, hub_path, derived_task_ids) {
+  if (!has_spls_tbl(tbl_chr)) {
+    return(NULL)
+  }
+  tryCatch(
+    spl_idx_tbl(
+      tbl_chr,
+      round_id,
+      read_config(hub_path, "tasks"),
+      derived_task_ids = derived_task_ids,
+      non_comp_key = TRUE
+    ),
+    error = function(e) NULL
+  )
+}
+
+# Split `x`, aligned with the `rows` of `spl_idx`, into one element per
+# modeling task in the round, named by its index.
+split_by_mt <- function(x, spl_idx) {
+  split(x, factor(spl_idx$rows$mt_id, levels = seq_along(spl_idx$comp_tids)))
+}
+
 # One row per slice (see `spl_idx_tbl()`). The `row_idx` kept is that of one
 # of the slice's rows, from which its compound task ID values can be read.
 spl_slice_tbl <- function(idx_rows) {
