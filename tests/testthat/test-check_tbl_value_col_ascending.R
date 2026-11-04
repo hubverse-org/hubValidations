@@ -53,8 +53,7 @@ test_that("check_tbl_value_col_ascending errors correctly", {
       horizon = "1",
       location = "US",
       output_type = "quantile"
-    ),
-    ignore_attr = TRUE
+    )
   )
 
   hub_path <- system.file("testhubs/flusight", package = "hubUtils")
@@ -81,7 +80,7 @@ test_that("check_tbl_value_col_ascending errors correctly", {
     file_meta$round_id
   )
   expect_s3_class(res, "check_failure")
-  expect_equal(res$error_tbl, expected, ignore_attr = TRUE)
+  expect_equal(res$error_tbl, expected)
 
   res <- check_tbl_value_col_ascending(
     rbind(tbl, tbl_error),
@@ -90,7 +89,7 @@ test_that("check_tbl_value_col_ascending errors correctly", {
     file_meta$round_id
   )
   expect_s3_class(res, "check_failure")
-  expect_equal(res$error_tbl, expected, ignore_attr = TRUE)
+  expect_equal(res$error_tbl, expected)
 })
 
 test_that("check_tbl_value_col_ascending skips correctly", {
@@ -192,7 +191,7 @@ test_that("(#78) check_tbl_value_col_ascending will sort even if the data doesn'
   actual <- res_with_err$error_tbl
 
   expect_s3_class(res_with_err, "check_failure")
-  expect_equal(actual, expected, ignore_attr = TRUE)
+  expect_equal(actual, expected)
 })
 
 test_that("(#78) check_tbl_value_col_ascending works when output type IDs differ by target", {

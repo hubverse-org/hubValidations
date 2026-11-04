@@ -25,12 +25,12 @@ test_that("check_tbl_value_col_sum1 errors correctly", {
   res <- check_tbl_value_col_sum1(tbl, file_path)
   expect_snapshot(res)
   expect_s3_class(res, "check_failure")
-  expect_equal(res$error_tbl, expected, ignore_attr = TRUE)
+  expect_equal(res$error_tbl, expected)
 
   tbl$value[3] <- 0.8
   res <- check_tbl_value_col_sum1(tbl, file_path)
   expect_s3_class(res, "check_failure")
-  expect_equal(res$error_tbl, expected, ignore_attr = TRUE)
+  expect_equal(res$error_tbl, expected)
 
   tbl$value[1] <- 0.818
   tbl$value[2] <- 0.180
