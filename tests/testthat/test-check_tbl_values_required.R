@@ -108,8 +108,7 @@ test_that("check_tbl_values_required works with 2 separate model tasks & complet
       round_id,
       file_path,
       hub_path
-    ),
-    ignore_attr = TRUE
+    )
   )
 
   pmf_row$horizon <- "1"

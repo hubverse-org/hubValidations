@@ -40,6 +40,23 @@ test_that("expand_model_out_grid works correctly", {
       output_type = c("pmf", "quantile")
     )
   )
+  # Each output type holds its own required output type IDs, and only those.
+  expect_equal(
+    purrr::map(
+      split(x$output_type_id, x$output_type),
+      \(id) sort(id, method = "radix")
+    ),
+    list(
+      pmf = c(
+        "decrease",
+        "increase",
+        "large_decrease",
+        "large_increase",
+        "stable"
+      ),
+      quantile = as.character(hub_quantiles)
+    )
+  )
 
   # Specifying a round in a hub with multiple rounds
   hub_con <- hubData::connect_hub(
@@ -127,7 +144,8 @@ test_that("expand_model_out_grid works correctly", {
       required_vals_only = TRUE,
       as_arrow_table = TRUE
     ),
-    x
+    x,
+    hub_arrow_types(config_tasks)
   )
   expect_arrow_tbl(
     expand_model_out_grid(
@@ -137,7 +155,8 @@ test_that("expand_model_out_grid works correctly", {
       all_character = TRUE,
       as_arrow_table = TRUE
     ),
-    x_chr
+    x_chr,
+    hub_arrow_types(config_tasks, all_character = TRUE)
   )
 
   x <- expand_model_out_grid(
@@ -262,7 +281,8 @@ test_that("expand_model_out_grid output controls work correctly", {
       all_character = TRUE,
       as_arrow_table = TRUE
     ),
-    x
+    x,
+    hub_arrow_types(config_tasks, all_character = TRUE)
   )
   x <- expand_model_out_grid(
     config_tasks,
@@ -288,7 +308,8 @@ test_that("expand_model_out_grid output controls work correctly", {
       all_character = TRUE,
       as_arrow_table = TRUE
     ),
-    x
+    x,
+    hub_arrow_types(config_tasks, all_character = TRUE)
   )
   x_split <- expand_model_out_grid(
     config_tasks,
@@ -311,7 +332,8 @@ test_that("expand_model_out_grid output controls work correctly", {
       as_arrow_table = TRUE,
       bind_model_tasks = FALSE
     ),
-    x_split
+    x_split,
+    hub_arrow_types(config_tasks, all_character = TRUE)
   )
 })
 
@@ -357,21 +379,26 @@ test_that("expand_model_out_grid output controls with samples work correctly", {
       all_character = TRUE
     )
   )
-  expect_arrow_tbl(
-    expand_model_out_grid(
+  expect_warning(
+    x_arrow <- expand_model_out_grid(
       config_tasks,
       round_id = "2022-12-26",
       include_sample_ids = TRUE,
       required_vals_only = TRUE,
       as_arrow_table = TRUE
     ),
-    expand_model_out_grid(
+    "all optional values"
+  )
+  expect_warning(
+    x <- expand_model_out_grid(
       config_tasks,
       round_id = "2022-12-26",
       include_sample_ids = TRUE,
       required_vals_only = TRUE
-    )
+    ),
+    "all optional values"
   )
+  expect_arrow_tbl(x_arrow, x, hub_arrow_types(config_tasks))
   # Hub with sample output type and compound task ID structure
   config_tasks <- read_config_file(
     system.file("config", "tasks-comp-tid.json", package = "hubValidations")
@@ -389,6 +416,20 @@ test_that("expand_model_out_grid output controls with samples work correctly", {
   )
   expect_equal(purrr::map_int(x_split, nrow), c(12L, 30L))
   expect_equal(dplyr::bind_rows(x_split), grid_spl)
+  # The first modeling task's `compound_taskid_set` is `forecast_date`,
+  # `target` and `horizon`, so its samples are joint across locations. Each
+  # horizon gets one sample ID, shared by all three locations.
+  expect_equal(
+    grid_spl[
+      grid_spl$output_type == "sample",
+      c("horizon", "location", "output_type_id")
+    ],
+    tibble::tibble(
+      horizon = rep(c(2L, 1L), each = 3L),
+      location = rep(c("US", "01", "02"), times = 2L),
+      output_type_id = rep(c("1", "2"), each = 3L)
+    )
+  )
   expect_snapshot(
     expand_model_out_grid(
       config_tasks,

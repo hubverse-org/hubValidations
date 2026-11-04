@@ -1,12 +1,3 @@
-# Expected results of the metadata checks that run before the schema check
-# on a metadata file in the simple test hub.
-metadata_checks <- c(
-  metadata_schema_exists = "check_success",
-  metadata_file_exists = "check_success",
-  metadata_file_ext = "check_success",
-  metadata_file_location = "check_success"
-)
-
 test_that("validate_model_metadata works", {
   hub_path <- system.file("testhubs/simple", package = "hubValidations")
 

@@ -41,22 +41,37 @@ test_that("match_tbl_to_model_task works", {
   expect_equal(nrow(res_spl[[2]]), 1500L)
   expect_equal(unique(res_spl[[2]]$output_type), "sample")
 
-  # Ordering by config returns the same rows, in the order of the values the
-  # config lists.
+  # Ordering by config returns the same rows, sorted on the position of their
+  # values in the config: output type, then output type ID, then task IDs, with
+  # `required` values before `optional` ones. The other task IDs hold one value
+  # in each modeling task. Sample IDs have no position in the config, so
+  # sample rows are sorted on their task IDs alone.
   res_ord <- match_tbl_to_model_task(
     tbl,
     config_tasks,
     round_id = "2022-10-22",
     order_by_config = TRUE
   )
-  sort_rows <- function(x) dplyr::arrange(x, dplyr::across(dplyr::everything()))
-  expect_equal(purrr::map(res_ord, sort_rows), purrr::map(res, sort_rows))
+  mts <- hubUtils::get_round_model_tasks(config_tasks, "2022-10-22")
+  config_pos <- function(x, values) match(x, unlist(values))
   expect_equal(
-    head(res_ord[[1]]$location, 6L),
-    c("US", "01", "02", "04", "05", "US")
+    res_ord[[1]],
+    dplyr::arrange(
+      res[[1]],
+      config_pos(.data$output_type_id, mts[[1]]$output_type$pmf$output_type_id),
+      config_pos(.data$horizon, mts[[1]]$task_ids$horizon),
+      config_pos(.data$location, mts[[1]]$task_ids$location)
+    )
   )
-  expect_equal(head(res_ord[[1]]$horizon, 6L), c(rep("0", 5L), "1"))
-  expect_equal(res_ord[[2]]$output_type[1], "mean")
+  expect_equal(
+    res_ord[[2]],
+    dplyr::arrange(
+      res[[2]],
+      config_pos(.data$output_type, names(mts[[2]]$output_type)),
+      config_pos(.data$horizon, mts[[2]]$task_ids$horizon),
+      config_pos(.data$location, mts[[2]]$task_ids$location)
+    )
+  )
 })
 
 test_that("matching splits data the same way the expanded grid did", {

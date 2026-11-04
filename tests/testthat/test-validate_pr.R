@@ -1,18 +1,3 @@
-# Expected results of the checks on a valid model output file in the
-# ci-testhub-simple hub. The hub has no sample output types, so the sample
-# checks are skipped.
-valid_file_checks <- c(
-  file_checks,
-  data_checks,
-  replace(spl_checks, names(spl_checks), "check_info")
-)
-# The team1-goodmodel metadata file is removed on the test-mod-del branch.
-no_metadata_file_checks <- replace(
-  valid_file_checks,
-  "metadata_exists",
-  "check_failure"
-)
-
 test_that("validate_pr works on valid PR", {
   skip_if_offline()
 
