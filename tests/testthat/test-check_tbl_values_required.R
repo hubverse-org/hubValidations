@@ -229,7 +229,7 @@ test_that("check_tbl_values_required works with v3 spec samples", {
   )$missing
   expect_tbl(
     missing,
-    nrow = 21L,
+    n_rows = 21L,
     types = c(
       location = "character",
       reference_date = "Date",
@@ -339,7 +339,7 @@ test_that("(#123) check_tbl_values_required works with all optional output types
   missing <- opt_output_type_ids_result$missing
   expect_tbl(
     missing,
-    nrow = 168L,
+    n_rows = 168L,
     types = c(
       nowcast_date = "Date",
       target_date = "Date",

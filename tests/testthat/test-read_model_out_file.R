@@ -5,7 +5,7 @@ test_that("read_model_out_file works", {
   )
   expect_tbl(
     x,
-    nrow = 47L,
+    n_rows = 47L,
     types = c(
       origin_date = "Date",
       target = "character",
@@ -34,7 +34,7 @@ test_that("read_model_out_file correctly uses hub schema to read character cols 
   )
   expect_tbl(
     x,
-    nrow = 48L,
+    n_rows = 48L,
     types = c(
       forecast_date = "Date",
       target_end_date = "Date",

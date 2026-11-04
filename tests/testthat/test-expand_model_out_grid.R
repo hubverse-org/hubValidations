@@ -7,13 +7,15 @@ test_that("expand_model_out_grid works correctly", {
   x <- expand_model_out_grid(config_tasks, round_id = "2023-01-02")
   expect_tbl(
     x,
-    nrow = 3132L,
+    n_rows = 3132L,
     types = flusight_grid_types,
     values = list(
       forecast_date = as.Date("2023-01-02"),
       target = c("wk ahead inc flu hosp", "wk flu hosp rate change"),
       horizon = 1:2,
-      output_type = c("mean", "pmf", "quantile")
+      location = hub_locations,
+      output_type = c("mean", "pmf", "quantile"),
+      output_type_id = flusight_output_type_ids
     )
   )
   x <- expand_model_out_grid(
@@ -23,7 +25,7 @@ test_that("expand_model_out_grid works correctly", {
   )
   expect_tbl(
     x,
-    nrow = 28L,
+    n_rows = 28L,
     types = c(
       forecast_date = "Date",
       horizon = "integer",
@@ -51,12 +53,13 @@ test_that("expand_model_out_grid works correctly", {
   )
   expect_tbl(
     x,
-    nrow = 5184L,
+    n_rows = 5184L,
     types = simple_grid_types,
     values = list(
       origin_date = as.Date("2022-10-01"),
       target = "wk inc flu hosp",
       horizon = 1:4,
+      location = hub_locations,
       output_type = c("mean", "quantile"),
       output_type_id = c(hub_quantiles, NA)
     )
@@ -69,7 +72,7 @@ test_that("expand_model_out_grid works correctly", {
   )
   expect_tbl(
     x,
-    nrow = 23L,
+    n_rows = 23L,
     types = c(
       origin_date = "Date",
       target = "character",
@@ -92,7 +95,7 @@ test_that("expand_model_out_grid works correctly", {
   )
   expect_tbl(
     x,
-    nrow = 23L,
+    n_rows = 23L,
     types = c(
       origin_date = "Date",
       target = "character",
@@ -116,10 +119,7 @@ test_that("expand_model_out_grid works correctly", {
     required_vals_only = TRUE,
     all_character = TRUE
   )
-  expect_equal(
-    x_chr,
-    dplyr::mutate(x, dplyr::across(dplyr::everything(), as.character))
-  )
+  expect_equal(x_chr, as_chr(x))
   expect_arrow_tbl(
     expand_model_out_grid(
       config_tasks,
@@ -155,7 +155,7 @@ test_that("expand_model_out_grid works correctly", {
     dplyr::filter(is.na(horizon))
   expect_tbl(
     x,
-    nrow = 24L,
+    n_rows = 24L,
     types = simple_age_grid_types,
     values = list(
       origin_date = as.Date("2023-11-26"),
@@ -246,10 +246,6 @@ test_that("expand_model_out_grid output controls work correctly", {
     system.file("testhubs/flusight", package = "hubUtils")
   )
   config_tasks <- attr(hub_con, "config_tasks")
-  as_chr <- function(x) {
-    dplyr::mutate(x, dplyr::across(dplyr::everything(), as.character))
-  }
-
   x <- expand_model_out_grid(
     config_tasks,
     round_id = "2023-01-02",
@@ -330,7 +326,7 @@ test_that("expand_model_out_grid output controls with samples work correctly", {
 
   expect_tbl(
     expand_model_out_grid(config_tasks, round_id = "2022-12-26"),
-    nrow = 42L,
+    n_rows = 42L,
     types = flusight_grid_types,
     values = list(
       output_type = c("mean", "pmf", "sample"),
@@ -407,7 +403,7 @@ test_that("expand_model_out_grid output controls with samples work correctly", {
   )
   expect_tbl(
     expand_model_out_grid(config_tasks, round_id = "2022-12-26"),
-    nrow = 66L,
+    n_rows = 66L,
     types = flusight_grid_types,
     values = list(
       output_type = c("mean", "pmf", "sample"),
@@ -451,16 +447,10 @@ test_that("expand_model_out_grid output controls with samples work correctly", {
       dplyr::filter(.data$output_type == "sample")
   )
 
-  # Override config compound_taskid_set. An override changes only the sample
-  # IDs, so the other rows match the grid and the sample rows are snapshotted.
+  # Override config compound_taskid_set.
   config_tasks <- read_config_file(
     system.file("config", "tasks-comp-tid.json", package = "hubValidations")
   )
-  expect_spl_override <- function(x, grid) {
-    is_spl <- x$output_type == "sample"
-    expect_equal(x[!is_spl, ], grid[grid$output_type != "sample", ])
-    expect_snapshot(x[is_spl, ])
-  }
   # Create coarser samples
   x <- expand_model_out_grid(
     config_tasks,
@@ -678,7 +668,7 @@ test_that("force_output_types works as expected with v4", {
   expect_equal(purrr::map_int(v4_opt_qntl_force, nrow), c(0L, 23L))
   expect_tbl(
     v4_opt_qntl_force[[2]],
-    nrow = 23L,
+    n_rows = 23L,
     types = c(
       forecast_date = "Date",
       horizon = "integer",
@@ -713,7 +703,7 @@ test_that("force_output_types works as expected with v4", {
   )
   expect_tbl(
     v4_force_all,
-    nrow = 29L,
+    n_rows = 29L,
     types = c(
       forecast_date = "Date",
       horizon = "integer",
@@ -791,7 +781,7 @@ test_that("expand_model_out_grid derived_task_ids ignoring works", {
       output_types = "sample",
       derived_task_ids = "target_end_date"
     ),
-    nrow = 80L,
+    n_rows = 80L,
     types = c(
       reference_date = "Date",
       target = "character",
@@ -880,7 +870,8 @@ test_that("expand_model_out_grid errors correctly", {
         simplifyDataFrame = FALSE
       ),
       round_id = "2023-11-26"
-    ),
+    ) |>
+      dplyr::filter(is.na(horizon)),
     error = TRUE
   )
 
@@ -979,7 +970,7 @@ test_that("v4 required output type ID values extracted correctly", {
   )
   expect_tbl(
     x,
-    nrow = 540L,
+    n_rows = 540L,
     types = c(
       forecast_date = "Date",
       target = "character",
@@ -990,9 +981,11 @@ test_that("v4 required output type ID values extracted correctly", {
       output_type_id = "character"
     ),
     values = list(
+      forecast_date = as.Date("2023-05-01"),
       target = "wk flu hosp rate change",
       horizon = 1:2,
       target_date = as.Date(NA),
+      location = hub_locations,
       output_type = "pmf",
       output_type_id = c(
         "decrease",
@@ -1003,7 +996,6 @@ test_that("v4 required output type ID values extracted correctly", {
       )
     )
   )
-  expect_length(unique(x$location), 54L)
 
   expect_length(
     expand_model_out_grid(
