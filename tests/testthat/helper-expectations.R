@@ -2,12 +2,13 @@
 # `hub_validations` object or each column of a tibble.
 first_classes <- function(x) purrr::map_chr(x, ~ class(.x)[1])
 
-# Expect a tibble with `n_rows` rows and the column names and classes in `types`.
-# For each column named in `values`, also expect its sorted unique values, with
-# `NA` last.
+# Expect a tibble with `n_rows` distinct rows and the column names and classes
+# in `types`. For each column named in `values`, also expect its sorted unique
+# values, with `NA` last.
 expect_tbl <- function(x, n_rows, types, values = list()) {
   testthat::expect_s3_class(x, "tbl_df")
   testthat::expect_equal(nrow(x), n_rows)
+  testthat::expect_equal(nrow(dplyr::distinct(x)), n_rows)
   testthat::expect_equal(first_classes(x), types)
   for (col in names(values)) {
     testthat::expect_equal(
@@ -19,17 +20,29 @@ expect_tbl <- function(x, n_rows, types, values = list()) {
 }
 
 # Expect an arrow Table, or a list of them, holding the same data as the
-# tibble, or list of tibbles, `tbl`. Each Table must also have the arrow column
-# types that `arrow::arrow_table()` gives the corresponding tibble.
-expect_arrow_tbl <- function(x, tbl) {
+# tibble, or list of tibbles, `tbl`. Each column must have the arrow type
+# `types` gives it, as returned by `hub_arrow_types()`.
+expect_arrow_tbl <- function(x, tbl, types) {
   if (is.list(x) && !is.data.frame(x)) {
     testthat::expect_length(x, length(tbl))
-    purrr::walk2(x, tbl, expect_arrow_tbl)
+    purrr::walk2(x, tbl, \(x, tbl) expect_arrow_tbl(x, tbl, types))
     return(invisible(x))
   }
   testthat::expect_s3_class(x, "Table")
-  testthat::expect_equal(arrow_types(x), arrow_types(arrow::arrow_table(tbl)))
+  testthat::expect_equal(arrow_types(x), types[names(x)])
   testthat::expect_equal(tibble::as_tibble(x), tbl)
+}
+
+# The arrow type of each column of the hub schema of `config_tasks`, named by
+# column. With `all_character = TRUE`, every column is a string.
+hub_arrow_types <- function(config_tasks, all_character = FALSE) {
+  schema <- hubData::create_hub_schema(config_tasks, partitions = NULL)
+  types <- purrr::map_chr(schema$fields, ~ .x$type$ToString()) |>
+    purrr::set_names(names(schema))
+  if (all_character) {
+    types[] <- "string"
+  }
+  types
 }
 
 # Expect `x`, a grid or template built with a `compound_taskid_set` override,
@@ -96,6 +109,15 @@ simple_grid_types <- c(
   location = "character",
   output_type = "character",
   output_type_id = "numeric"
+)
+
+# Expected results of the metadata checks that run before the schema check
+# on a metadata file in the simple test hub.
+metadata_checks <- c(
+  metadata_schema_exists = "check_success",
+  metadata_file_exists = "check_success",
+  metadata_file_ext = "check_success",
+  metadata_file_location = "check_success"
 )
 
 # Expected results of the config check on a valid hub.
@@ -166,4 +188,21 @@ simple_age_grid_types <- append(
   simple_grid_types,
   c(age_group = "character"),
   after = 4L
+)
+
+# Expected results of the checks on a valid model output file in the
+# ci-testhub-simple hub. The hub has no sample output types, so the sample
+# checks are skipped.
+valid_file_checks <- c(
+  file_checks,
+  data_checks,
+  replace(spl_checks, names(spl_checks), "check_info")
+)
+
+# Expected results of the checks on the same file when its metadata file is
+# missing, as on the test-mod-del branch of ci-testhub-simple.
+no_metadata_file_checks <- replace(
+  valid_file_checks,
+  "metadata_exists",
+  "check_failure"
 )

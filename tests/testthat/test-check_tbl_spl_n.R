@@ -124,8 +124,7 @@ test_that("Overriding compound_taskid_set in check_tbl_spl_n works", {
       location = "US",
       variant = "AA",
       target_end_date = "2022-10-22"
-    ),
-    ignore_attr = TRUE
+    )
   )
 
   # Validation providing coarser compound taskid still fails because the coarser
