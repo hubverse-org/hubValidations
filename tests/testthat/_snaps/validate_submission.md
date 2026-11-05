@@ -25,6 +25,24 @@
       Error:
       ! All `round_id_col` "origin_date" values must match submission `round_id` from file name.  `round_id` value 2022-10-08 does not match submission `round_id` "2022-10-15"
 
+---
+
+    Code
+      res[[file_path]][["valid_round_id_col"]]
+    Output
+      <error/check_failure>
+      Error:
+      ! `round_id_col` name must be valid.  Must be one of "origin_date", "target", "horizon", and "location" not "random_col".
+
+---
+
+    Code
+      res[[file_path]][["unique_round_id"]]
+    Output
+      <error/check_error>
+      Error:
+      ! `round_id_col` name must be valid.  Must be one of "origin_date", "target", "horizon", and "location" not "random_col".
+
 # validate_submission submission within window works
 
     Code

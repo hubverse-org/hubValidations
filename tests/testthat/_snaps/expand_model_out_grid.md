@@ -75,51 +75,6 @@
       11 2022-12-26    wk ahead inc flu d~       1 01       sample                   4
       12 2022-12-26    wk ahead inc flu d~       1 02       sample                   4
 
----
-
-    Code
-      x[is_spl, ]
-    Output
-      # A tibble: 6 x 6
-        forecast_date target               horizon location output_type output_type_id
-        <date>        <chr>                  <int> <chr>    <chr>       <chr>         
-      1 2022-12-26    wk ahead inc flu ho~       2 US       sample      1             
-      2 2022-12-26    wk ahead inc flu ho~       1 US       sample      1             
-      3 2022-12-26    wk ahead inc flu ho~       2 01       sample      1             
-      4 2022-12-26    wk ahead inc flu ho~       1 01       sample      1             
-      5 2022-12-26    wk ahead inc flu ho~       2 02       sample      1             
-      6 2022-12-26    wk ahead inc flu ho~       1 02       sample      1             
-
----
-
-    Code
-      x[is_spl, ]
-    Output
-      # A tibble: 6 x 6
-        forecast_date target               horizon location output_type output_type_id
-        <date>        <chr>                  <int> <chr>    <chr>       <chr>         
-      1 2022-12-26    wk ahead inc flu ho~       2 US       sample      1             
-      2 2022-12-26    wk ahead inc flu ho~       1 US       sample      2             
-      3 2022-12-26    wk ahead inc flu ho~       2 01       sample      3             
-      4 2022-12-26    wk ahead inc flu ho~       1 01       sample      4             
-      5 2022-12-26    wk ahead inc flu ho~       2 02       sample      5             
-      6 2022-12-26    wk ahead inc flu ho~       1 02       sample      6             
-
----
-
-    Code
-      x[is_spl, ]
-    Output
-      # A tibble: 6 x 6
-        forecast_date target               horizon location output_type output_type_id
-        <date>        <chr>                  <int> <chr>    <chr>       <chr>         
-      1 2022-12-26    wk ahead inc flu ho~       2 US       sample      1             
-      2 2022-12-26    wk ahead inc flu ho~       1 US       sample      2             
-      3 2022-12-26    wk ahead inc flu ho~       2 01       sample      3             
-      4 2022-12-26    wk ahead inc flu ho~       1 01       sample      4             
-      5 2022-12-26    wk ahead inc flu ho~       2 02       sample      5             
-      6 2022-12-26    wk ahead inc flu ho~       1 02       sample      6             
-
 # expand_model_out_grid output type subsetting works
 
     Code
@@ -182,18 +137,6 @@
 # force_output_types works as expected with v4
 
     Code
-      v4_opt_spls
-    Output
-      [[1]]
-      # A tibble: 0 x 0
-      
-      [[2]]
-      # A tibble: 0 x 0
-      
-
----
-
-    Code
       v4_opt_spls_force
     Output
       [[1]]
@@ -230,18 +173,6 @@
 ---
 
     Code
-      v4_opt_mdn
-    Output
-      [[1]]
-      # A tibble: 0 x 0
-      
-      [[2]]
-      # A tibble: 0 x 0
-      
-
----
-
-    Code
       v4_opt_mdn_force
     Output
       [[1]]
@@ -255,18 +186,6 @@
       2 2022-10-22     01       AA      median      <NA>          
       3 2022-10-22     US       BB      median      <NA>          
       4 2022-10-22     01       BB      median      <NA>          
-      
-
----
-
-    Code
-      v4_opt_qntl
-    Output
-      [[1]]
-      # A tibble: 0 x 0
-      
-      [[2]]
-      # A tibble: 0 x 0
       
 
 ---

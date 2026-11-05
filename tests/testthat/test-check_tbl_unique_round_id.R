@@ -18,14 +18,16 @@ test_that("check_tbl_unique_round_id works", {
       round_id_col = "origin_date"
     )
   )
-  expect_s3_class(
+  expect_check(
     check_tbl_unique_round_id(
       tbl = tbl,
       round_id_col = "origin_date",
       file_path = file_path,
       hub_path = hub_path
     ),
-    "check_success"
+    success_class,
+    file_path,
+    "check_tbl_unique_round_id"
   )
 })
 
@@ -56,13 +58,15 @@ test_that("check_tbl_unique_round_id fails correctly", {
       round_id_col = "random_column"
     )
   )
-  expect_s3_class(
+  expect_check(
     check_tbl_unique_round_id(
       tbl = multiple_rids,
       file_path = file_path,
       hub_path = hub_path,
       round_id_col = "random_column"
     ),
-    "check_error"
+    error_class,
+    file_path,
+    "check_tbl_unique_round_id"
   )
 })

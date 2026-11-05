@@ -6,6 +6,7 @@ test_that("validate_model_data works", {
   expect_equal(first_classes(res), data_checks)
 
   res <- validate_model_data(hub_path, file_path = "2020-10-06-random-path.csv")
+  expect_s3_class(res, "hub_validations")
   expect_equal(
     first_classes(res),
     c(file_read = "check_error")
@@ -13,6 +14,7 @@ test_that("validate_model_data works", {
   expect_snapshot(res$file_read)
 
   res <- validate_model_data(hub_path, file_path, round_id_col = "random_col")
+  expect_s3_class(res, "hub_validations")
   expect_equal(
     first_classes(res),
     c(
@@ -27,6 +29,7 @@ test_that("validate_model_data works", {
   hub_path <- system.file("testhubs/flusight", package = "hubUtils")
   file_path <- "hub-ensemble/2023-05-08-hub-ensemble.parquet"
   res <- validate_model_data(hub_path, file_path)
+  expect_s3_class(res, "hub_validations")
   expect_equal(first_classes(res), data_checks)
 })
 
@@ -59,7 +62,9 @@ cli::test_that_cli("validate_model_data print method work", {
     validate_model_data(hub_path, file_path)
   )
   # File with validation error
-  validate_model_data(hub_path, file_path, round_id_col = "random_col")
+  expect_snapshot(
+    validate_model_data(hub_path, file_path, round_id_col = "random_col")
+  )
 })
 
 
@@ -85,5 +90,9 @@ test_that("validate_model_data with v3 sample data works", {
   expect_equal(
     first_classes(res),
     c(spl_data_checks, horizon_timediff = "check_success")
+  )
+  expect_equal(
+    res$spl_compound_taskid_set$compound_taskid_set,
+    list(`1` = NULL, `2` = c("reference_date", "location"))
   )
 })

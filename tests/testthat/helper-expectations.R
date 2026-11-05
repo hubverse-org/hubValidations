@@ -3,13 +3,33 @@
 first_classes <- function(x) purrr::map_chr(x, ~ class(.x)[1])
 
 # Expect a tibble with `n_rows` distinct rows and the column names and classes
-# in `types`. For each column named in `values`, also expect its sorted unique
-# values, with `NA` last.
-expect_tbl <- function(x, n_rows, types, values = list()) {
+# in `types`. Every column in `types` must be checked in one of three ways:
+# - `values`: for each column named, the sorted unique values, with `NA` last.
+# - `counts`: the expected `dplyr::count()` of `x` by the columns it names,
+#   which also pins which values of those columns appear together.
+# - `unchecked`: columns deliberately left out, such as those pinned by an
+#   exact check elsewhere in the test.
+expect_tbl <- function(
+  x,
+  n_rows,
+  types,
+  values = list(),
+  counts = NULL,
+  unchecked = character()
+) {
   testthat::expect_s3_class(x, "tbl_df")
   testthat::expect_equal(nrow(x), n_rows)
   testthat::expect_equal(nrow(dplyr::distinct(x)), n_rows)
   testthat::expect_equal(first_classes(x), types)
+  count_cols <- setdiff(names(counts), "n")
+  missing <- setdiff(names(types), c(names(values), count_cols, unchecked))
+  testthat::expect(
+    length(missing) == 0L,
+    paste(
+      "Columns not checked by `values`, `counts` or `unchecked`:",
+      paste(missing, collapse = ", ")
+    )
+  )
   for (col in names(values)) {
     testthat::expect_equal(
       sort(unique(x[[col]]), na.last = TRUE, method = "radix"),
@@ -17,11 +37,17 @@ expect_tbl <- function(x, n_rows, types, values = list()) {
       label = col
     )
   }
+  if (!is.null(counts)) {
+    testthat::expect_equal(
+      dplyr::count(x, dplyr::across(dplyr::all_of(count_cols))),
+      counts
+    )
+  }
 }
 
 # Expect an arrow Table, or a list of them, holding the same data as the
-# tibble, or list of tibbles, `tbl`. Each column must have the arrow type
-# `types` gives it, as returned by `hub_arrow_types()`.
+# tibble, or list of tibbles, `tbl`. `types` gives the expected arrow type of
+# each column, named by column, as literal strings such as `"int32"`.
 expect_arrow_tbl <- function(x, tbl, types) {
   if (is.list(x) && !is.data.frame(x)) {
     testthat::expect_length(x, length(tbl))
@@ -33,28 +59,84 @@ expect_arrow_tbl <- function(x, tbl, types) {
   testthat::expect_equal(tibble::as_tibble(x), tbl)
 }
 
-# The arrow type of each column of the hub schema of `config_tasks`, named by
-# column. With `all_character = TRUE`, every column is a string.
-hub_arrow_types <- function(config_tasks, all_character = FALSE) {
-  schema <- hubData::create_hub_schema(config_tasks, partitions = NULL)
-  types <- purrr::map_chr(schema$fields, ~ .x$type$ToString()) |>
-    purrr::set_names(names(schema))
-  if (all_character) {
-    types[] <- "string"
-  }
-  types
+# The arrow types of an all character table with the columns of `tbl`.
+string_types <- function(tbl) {
+  purrr::set_names(rep("string", ncol(tbl)), names(tbl))
 }
 
 # Expect `x`, a grid or template built with a `compound_taskid_set` override,
-# to match `tbl`, built without one, apart from its sample rows. An override
-# changes only the sample IDs, so the sample rows are snapshotted.
-expect_spl_override <- function(x, tbl) {
+# to match `tbl`, built without one, apart from the sample IDs. An override
+# changes only how rows are grouped into samples, so `x` must hold the same
+# rows as `tbl`, and its sample rows the sample IDs `spl_ids`, in row order.
+expect_spl_override <- function(x, tbl, spl_ids) {
   is_spl <- x$output_type == "sample"
+  tbl_spl <- tbl[tbl$output_type == "sample", ]
   testthat::expect_equal(x[!is_spl, ], tbl[tbl$output_type != "sample", ])
-  testthat::expect_snapshot(x[is_spl, ])
+  sort_rows <- function(y) {
+    y <- y[names(y) != "output_type_id"]
+    dplyr::arrange(y, dplyr::pick(dplyr::everything()))
+  }
+  testthat::expect_equal(sort_rows(x[is_spl, ]), sort_rows(tbl_spl))
+  testthat::expect_equal(x$output_type_id[is_spl], spl_ids)
 }
 
-# `x` with every column converted to character.
+# Class vectors of check results.
+success_class <- c(
+  "check_success",
+  "hub_check",
+  "rlang_message",
+  "message",
+  "condition"
+)
+failure_class <- c(
+  "check_failure",
+  "hub_check",
+  "rlang_error",
+  "error",
+  "condition"
+)
+error_class <- c(
+  "check_error",
+  "hub_check",
+  "rlang_error",
+  "error",
+  "condition"
+)
+
+# Class vector of validation warnings.
+warning_class <- c(
+  "validation_warning",
+  "rlang_warning",
+  "warning",
+  "condition"
+)
+
+# Expect a validations object with exactly the class vector `class`, holding
+# checks whose first classes are `checks`. With `where`, also expect the
+# object and each of its checks to name `where` as the file validated.
+expect_validations <- function(x, class, checks, where = NULL) {
+  testthat::expect_s3_class(x, class, exact = TRUE)
+  testthat::expect_equal(first_classes(x), checks)
+  if (!is.null(where)) {
+    testthat::expect_equal(attr(x, "where"), where)
+    testthat::expect_equal(
+      unname(purrr::map_chr(x, ~ as.character(.x$where))),
+      rep(where, length(x))
+    )
+  }
+}
+
+# Expect a check result with exactly the class vector `class`, and the given
+# `where` and `call`.
+expect_check <- function(x, class, where, call) {
+  testthat::expect_s3_class(x, class, exact = TRUE)
+  testthat::expect_equal(x$where, where)
+  testthat::expect_equal(x$call, call)
+}
+
+# `x` with every column converted to character. Base `as.character()` rather
+# than `hubData::coerce_to_character()`, which the code under test uses, so
+# that the expected value does not come from the code being tested.
 as_chr <- function(x) {
   dplyr::mutate(x, dplyr::across(dplyr::everything(), as.character))
 }
@@ -134,9 +216,8 @@ file_checks <- c(
   metadata_exists = "check_success"
 )
 
-# Expected results of the data checks on the valid model output files the
-# tests use from the simple and flusight test hubs. These files have quantile
-# but no cdf or pmf output.
+# Expected results of the data checks on a valid model output file without
+# pmf output, so the pmf sum check reports `check_info`.
 data_checks <- c(
   file_read = "check_success",
   valid_round_id_col = "check_success",
@@ -206,3 +287,19 @@ no_metadata_file_checks <- replace(
   "metadata_exists",
   "check_failure"
 )
+
+# Expect a passing check result carrying the single warning that samples in
+# modeling task 2 are coarser than configured.
+expect_coarser_warning <- function(res) {
+  expect_null(res$errors)
+  expect_length(res$warnings, 1L)
+  expect_s3_class(res$warnings[[1]], warning_class, exact = TRUE)
+  expect_equal(
+    res$warnings[[1]]$message,
+    paste(
+      "Coarser-than-configured `compound_taskid_set` detected for modeling",
+      "task 2. See check message for specifics."
+    )
+  )
+  expect_equal(res$warnings[[1]]$call, "coarser_compound_taskid_set_warnings")
+}

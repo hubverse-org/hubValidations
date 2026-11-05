@@ -25,6 +25,15 @@
       Message:
       Required task ID/output type/output type ID combinations all present.
 
+---
+
+    Code
+      missing_required
+    Output
+      <error/check_failure>
+      Error:
+      ! Required task ID/output type/output type ID combinations missing.  See `missing` attribute for details.
+
 # check_tbl_values_required works with v3 spec samples
 
     Code

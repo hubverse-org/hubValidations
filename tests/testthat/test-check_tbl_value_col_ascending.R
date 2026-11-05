@@ -44,7 +44,7 @@ test_that("check_tbl_value_col_ascending errors correctly", {
     file_meta$round_id
   )
   expect_snapshot(res)
-  expect_s3_class(res, "check_failure")
+  expect_check(res, failure_class, file_path, "check_tbl_value_col_ascending")
   expect_equal(
     res$error_tbl,
     tibble::tibble(
@@ -79,7 +79,7 @@ test_that("check_tbl_value_col_ascending errors correctly", {
     hub_path,
     file_meta$round_id
   )
-  expect_s3_class(res, "check_failure")
+  expect_check(res, failure_class, file_path, "check_tbl_value_col_ascending")
   expect_equal(res$error_tbl, expected)
 
   res <- check_tbl_value_col_ascending(
@@ -88,7 +88,7 @@ test_that("check_tbl_value_col_ascending errors correctly", {
     hub_path,
     file_meta$round_id
   )
-  expect_s3_class(res, "check_failure")
+  expect_check(res, failure_class, file_path, "check_tbl_value_col_ascending")
   expect_equal(res$error_tbl, expected)
 })
 

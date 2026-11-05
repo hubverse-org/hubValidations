@@ -135,7 +135,8 @@ test_that("Overriding compound_taskid_set in check_tbl_spl_compound_tid works", 
     file_path,
     hub_path
   )
-  expect_s3_class(res, "check_success")
+  expect_check(res, success_class, file_path, "check_tbl_spl_non_compound_tid")
+  expect_null(res$errors)
 
   # Validation providing coarser compound taskid set consistent with the data
   # also succeeds.

@@ -66,6 +66,18 @@
       v [value_col_non_desc]: Quantile or cdf `value` values increase when ordered by `output_type_id`.
       i [value_col_sum1]: No pmf output types to check for sum of 1. Check skipped.
 
+---
+
+    Code
+      validate_model_data(hub_path, file_path, round_id_col = "random_col")
+    Message
+      
+      -- team1-goodmodel/2022-10-08-team1-goodmodel.csv ----
+      
+      v [file_read]: File could be read successfully.
+      x [valid_round_id_col]: `round_id_col` name must be valid.  Must be one of "origin_date", "target", "horizon", and "location" not "random_col".
+      (x) [unique_round_id]: `round_id_col` name must be valid.  Must be one of "origin_date", "target", "horizon", and "location" not "random_col".
+
 # validate_model_data print method work [ansi]
 
     Code
@@ -86,6 +98,18 @@
       [1m[22m[32mv[39m [90m[value_col_valid][39m: Values in column `value` all valid with respect to modeling task config.
       [1m[22m[32mv[39m [90m[value_col_non_desc][39m: Quantile or cdf `value` values increase when ordered by `output_type_id`.
       [1m[22m[36mi[39m [90m[value_col_sum1][39m: No pmf output types to check for sum of 1. Check skipped.
+
+---
+
+    Code
+      validate_model_data(hub_path, file_path, round_id_col = "random_col")
+    Message
+      
+      [35m-- [4m[1mteam1-goodmodel/2022-10-08-team1-goodmodel.csv[22m[24m ----[39m
+      
+      [1m[22m[32mv[39m [90m[file_read][39m: File could be read successfully.
+      [1m[22m[31mx[39m [90m[valid_round_id_col][39m: `round_id_col` name must be valid.  Must be one of [34m"origin_date"[39m, [34m"target"[39m, [34m"horizon"[39m, and [34m"location"[39m not [34m"random_col"[39m.
+      [1m[22m[31m(x)[39m [90m[unique_round_id][39m: `round_id_col` name must be valid.  Must be one of [34m"origin_date"[39m, [34m"target"[39m, [34m"horizon"[39m, and [34m"location"[39m not [34m"random_col"[39m.
 
 # validate_model_data print method work [unicode]
 
@@ -108,6 +132,18 @@
       ✔ [value_col_non_desc]: Quantile or cdf `value` values increase when ordered by `output_type_id`.
       ℹ [value_col_sum1]: No pmf output types to check for sum of 1. Check skipped.
 
+---
+
+    Code
+      validate_model_data(hub_path, file_path, round_id_col = "random_col")
+    Message
+      
+      ── team1-goodmodel/2022-10-08-team1-goodmodel.csv ────
+      
+      ✔ [file_read]: File could be read successfully.
+      ✖ [valid_round_id_col]: `round_id_col` name must be valid.  Must be one of "origin_date", "target", "horizon", and "location" not "random_col".
+      ⓧ [unique_round_id]: `round_id_col` name must be valid.  Must be one of "origin_date", "target", "horizon", and "location" not "random_col".
+
 # validate_model_data print method work [fancy]
 
     Code
@@ -128,6 +164,18 @@
       [1m[22m[32m✔[39m [90m[value_col_valid][39m: Values in column `value` all valid with respect to modeling task config.
       [1m[22m[32m✔[39m [90m[value_col_non_desc][39m: Quantile or cdf `value` values increase when ordered by `output_type_id`.
       [1m[22m[36mℹ[39m [90m[value_col_sum1][39m: No pmf output types to check for sum of 1. Check skipped.
+
+---
+
+    Code
+      validate_model_data(hub_path, file_path, round_id_col = "random_col")
+    Message
+      
+      [35m── [4m[1mteam1-goodmodel/2022-10-08-team1-goodmodel.csv[22m[24m ────[39m
+      
+      [1m[22m[32m✔[39m [90m[file_read][39m: File could be read successfully.
+      [1m[22m[31m✖[39m [90m[valid_round_id_col][39m: `round_id_col` name must be valid.  Must be one of [34m"origin_date"[39m, [34m"target"[39m, [34m"horizon"[39m, and [34m"location"[39m not [34m"random_col"[39m.
+      [1m[22m[31mⓧ[39m [90m[unique_round_id][39m: `round_id_col` name must be valid.  Must be one of [34m"origin_date"[39m, [34m"target"[39m, [34m"horizon"[39m, and [34m"location"[39m not [34m"random_col"[39m.
 
 # validate_model_data errors correctly
 

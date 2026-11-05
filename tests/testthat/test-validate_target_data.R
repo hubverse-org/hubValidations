@@ -6,7 +6,11 @@ test_that("validate_target_data works on single time-series target data file", {
     file_path = "time-series.csv",
     target_type = "time-series"
   )
-  expect_s3_class(res_ts, c("target_validations", "hub_validations"))
+  expect_s3_class(
+    res_ts,
+    c("target_validations", "hub_validations", "list"),
+    exact = TRUE
+  )
   expect_named(
     res_ts,
     c(
@@ -35,7 +39,11 @@ test_that("validate_target_data works on single oracle-output target data file",
     file_path = "oracle-output.csv",
     target_type = "oracle-output"
   )
-  expect_s3_class(res_oo, c("target_validations", "hub_validations"))
+  expect_s3_class(
+    res_oo,
+    c("target_validations", "hub_validations", "list"),
+    exact = TRUE
+  )
   expect_named(
     res_oo,
     c(
@@ -64,7 +72,11 @@ test_that("validate_target_data works on multi-file time-series target data file
     file_path = "time-series/target=flu_hosp_rate/part-0.parquet",
     target_type = "time-series"
   )
-  expect_s3_class(res_ts, c("target_validations", "hub_validations"))
+  expect_s3_class(
+    res_ts,
+    c("target_validations", "hub_validations", "list"),
+    exact = TRUE
+  )
   expect_named(
     res_ts,
     c(
@@ -93,7 +105,11 @@ test_that("validate_target_data works on  multi-file oracle-output target data f
     file_path = "oracle-output/output_type=cdf/part-0.parquet",
     target_type = "oracle-output"
   )
-  expect_s3_class(res_oo, c("target_validations", "hub_validations"))
+  expect_s3_class(
+    res_oo,
+    c("target_validations", "hub_validations", "list"),
+    exact = TRUE
+  )
   expect_named(
     res_oo,
     c(
@@ -155,7 +171,11 @@ test_that("validate_target_data works with v6 target-data.json config", {
     file_path = "time-series.csv",
     target_type = "time-series"
   )
-  expect_s3_class(res_ts, c("target_validations", "hub_validations"))
+  expect_s3_class(
+    res_ts,
+    c("target_validations", "hub_validations", "list"),
+    exact = TRUE
+  )
   expect_message(
     check_for_errors(res_ts),
     "All validation checks have been successful."
@@ -166,7 +186,11 @@ test_that("validate_target_data works with v6 target-data.json config", {
     file_path = "oracle-output.csv",
     target_type = "oracle-output"
   )
-  expect_s3_class(res_oo, c("target_validations", "hub_validations"))
+  expect_s3_class(
+    res_oo,
+    c("target_validations", "hub_validations", "list"),
+    exact = TRUE
+  )
   expect_message(
     check_for_errors(res_oo),
     "All validation checks have been successful."
