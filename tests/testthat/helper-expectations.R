@@ -291,15 +291,18 @@ no_metadata_file_checks <- replace(
 # Expect a passing check result carrying the single warning that samples in
 # modeling task 2 are coarser than configured.
 expect_coarser_warning <- function(res) {
-  expect_null(res$errors)
-  expect_length(res$warnings, 1L)
-  expect_s3_class(res$warnings[[1]], warning_class, exact = TRUE)
-  expect_equal(
+  testthat::expect_null(res$errors)
+  testthat::expect_length(res$warnings, 1L)
+  testthat::expect_s3_class(res$warnings[[1]], warning_class, exact = TRUE)
+  testthat::expect_equal(
     res$warnings[[1]]$message,
     paste(
       "Coarser-than-configured `compound_taskid_set` detected for modeling",
       "task 2. See check message for specifics."
     )
   )
-  expect_equal(res$warnings[[1]]$call, "coarser_compound_taskid_set_warnings")
+  testthat::expect_equal(
+    res$warnings[[1]]$call,
+    "coarser_compound_taskid_set_warnings"
+  )
 }
