@@ -124,7 +124,7 @@ overlapping_spl_errors <- function(overlap_slices, mt_comp_tids, tbl_chr) {
 compile_overlap_details <- function(overlap_errors) {
   purrr::imap_chr(overlap_errors, function(.x, .y) {
     mt_id <- .y # nolint: object_usage_linter
-    spl_ids <- .x$output_type_ids # nolint: object_usage_linter
+    spl_ids <- escape_braces(.x$output_type_ids) # nolint: object_usage_linter
     cli::format_inline(
       "mt {mt_id}: {cli::qty(spl_ids)}sample{?s} {.val {spl_ids}} ",
       "share{?s/} compound task ID values with samples that cover different ",

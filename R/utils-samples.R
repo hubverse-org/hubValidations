@@ -347,9 +347,7 @@ compound_idx_labels <- function(compound_idx, spl_idx, tbl) {
         return(paste0("(modeling task ", mt_id, ")"))
       }
       values <- unlist(tbl[row_idx, comp_tids], use.names = FALSE)
-      # Messages pass through `cli::format_inline()` again when the check
-      # condition is built, so braces in values must be escaped.
-      values <- gsub("([{}])", "\\1\\1", values)
+      values <- escape_braces(values)
       paste0("(", paste0(comp_tids, ": ", values, collapse = ", "), ")")
     }
   )

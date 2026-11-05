@@ -74,7 +74,8 @@ check_tbl_spl_mt_unique <- function(
         output_type_ids = dup_otids
       )
 
-      display_otids <- cli::cli_vec(dup_otids, style = list(vec_trunc = 10)) # nolint: object_usage_linter
+      display_otids <- escape_braces(dup_otids) |> # nolint: object_usage_linter
+        cli::cli_vec(style = list(vec_trunc = 10))
       details <- cli::format_inline(
         "{.val {length(dup_otids)}} sample {.var output_type_id}{?s} ",
         "{?is/are} associated with multiple modeling tasks: ",
