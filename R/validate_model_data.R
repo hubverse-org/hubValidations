@@ -243,13 +243,15 @@ validate_model_data <- function(
 
   # -- v3 sample checks ----
   if (hubUtils::is_v3_hub(hub_path)) {
+    spl_idx <- shared_spl_idx(tbl_chr, round_id, hub_path, derived_task_ids)
     checks$spl_ids <- try_check(
       check_tbl_spl_ids(
         tbl_chr,
         round_id = round_id,
         file_path = file_path,
         hub_path = hub_path,
-        derived_task_ids = derived_task_ids
+        derived_task_ids = derived_task_ids,
+        spl_idx = spl_idx
       ),
       file_path
     )
@@ -262,7 +264,8 @@ validate_model_data <- function(
         round_id = round_id,
         file_path = file_path,
         hub_path = hub_path,
-        derived_task_ids = derived_task_ids
+        derived_task_ids = derived_task_ids,
+        spl_idx = spl_idx
       ),
       file_path
     )
@@ -275,7 +278,8 @@ validate_model_data <- function(
         round_id = round_id,
         file_path = file_path,
         hub_path = hub_path,
-        derived_task_ids = derived_task_ids
+        derived_task_ids = derived_task_ids,
+        spl_idx = spl_idx
       ),
       file_path
     )
@@ -295,7 +299,8 @@ validate_model_data <- function(
           round_id = round_id,
           file_path = file_path,
           hub_path = hub_path,
-          derived_task_ids = derived_task_ids
+          derived_task_ids = derived_task_ids,
+          spl_idx = spl_idx
         ),
         file_path
       )
@@ -309,7 +314,8 @@ validate_model_data <- function(
         round_id = round_id,
         file_path = file_path,
         hub_path = hub_path,
-        derived_task_ids = derived_task_ids
+        derived_task_ids = derived_task_ids,
+        spl_idx = spl_idx
       ),
       file_path
     )
@@ -322,7 +328,8 @@ validate_model_data <- function(
         round_id = round_id,
         file_path = file_path,
         hub_path = hub_path,
-        derived_task_ids = derived_task_ids
+        derived_task_ids = derived_task_ids,
+        spl_idx = spl_idx
       ),
       file_path
     )

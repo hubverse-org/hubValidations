@@ -10,7 +10,8 @@ get_tbl_compound_taskid_set(
   round_id,
   compact = TRUE,
   error = TRUE,
-  derived_task_ids = get_config_derived_task_ids(config_tasks, round_id)
+  derived_task_ids = get_config_derived_task_ids(config_tasks, round_id),
+  spl_idx = NULL
 )
 }
 \arguments{
@@ -31,6 +32,10 @@ returned with error attributes attached.}
 values depend on other task IDs) to ignore. Columns for such task ids will
 contain \code{NA}s. Defaults to extracting derived task IDs from \code{config_tasks}. See
 \code{\link[=get_config_derived_task_ids]{get_config_derived_task_ids()}} for more details.}
+
+\item{spl_idx}{for internal use. \code{validate_model_data()} indexes the sample
+rows of \code{tbl_chr} once and passes the index to each sample check. \code{NULL},
+the default, builds the index from \code{tbl_chr}.}
 }
 \value{
 A list of vectors of compound task IDs detected in the tbl, one for each

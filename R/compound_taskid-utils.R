@@ -7,6 +7,7 @@
 #' If FALSE and an error is detected, the detected compound task ID set will be
 #' returned with error attributes attached.
 #' @inheritParams expand_model_out_grid
+#' @inheritParams check_tbl_spl_mt_unique
 #' @inheritParams check_tbl_values
 #'
 #' @return A list of vectors of compound task IDs detected in the tbl, one for each
@@ -43,47 +44,47 @@ get_tbl_compound_taskid_set <- function(
   derived_task_ids = get_config_derived_task_ids(
     config_tasks,
     round_id
-  )
+  ),
+  spl_idx = NULL
 ) {
   assert_tbl_chr(tbl_chr)
-  if (!inherits(tbl_chr, "tbl_df")) {
-    tbl_chr <- dplyr::as_tibble(tbl_chr)
-  }
-  # Detection counts how many distinct values each task ID takes. A derived task
-  # ID's values follow from the others, so blank them to keep them out of the
-  # count.
-  if (!is.null(derived_task_ids)) {
-    tbl_chr[, derived_task_ids] <- NA_character_
-  }
-  tbl_chr <- tbl_chr[tbl_chr$output_type == "sample", names(tbl_chr) != "value"]
+  spl_idx <- spl_idx %||%
+    spl_idx_tbl(
+      tbl_chr,
+      round_id,
+      config_tasks,
+      derived_task_ids = derived_task_ids
+    )
 
   mt_compound_taskids <- get_round_compound_task_ids(
     config_tasks,
     round_id
   )
-
   task_ids <- hubUtils::get_round_task_id_names(config_tasks, round_id)
 
   call <- rlang::current_env()
-  # Each modeling task declares its own compound task ID set, so the submitted
-  # sample rows have to be separated into modeling tasks first.
-  # `assign_spl_tbl_rows()` returns the row indexes of each modeling task's
-  # rows, which are the first input to the map below. That detects the
-  # compound task ID set each modeling task's submitted rows use, and checks
-  # it against the set the config declares.
+  # Each modeling task declares its own compound task ID set, so the sample
+  # index is split into modeling tasks first.
+  mt_rows <- split_by_mt(seq_len(nrow(spl_idx$rows)), spl_idx) |>
+    unname()
   tbl_compound_taskids <- purrr::map2(
-    assign_spl_tbl_rows(
-      tbl_chr,
-      config_tasks = config_tasks,
-      round_id = round_id,
-      derived_task_ids = derived_task_ids
-    ),
+    mt_rows,
     mt_compound_taskids,
-    function(row_idx, compound_taskids) {
-      get_mt_compound_taskid_set(
-        tbl_chr[row_idx, ],
+    function(rows, compound_taskids) {
+      if (is.null(compound_taskids) || length(rows) == 0L) {
+        return(NULL)
+      }
+      membership <- spl_comp_tid_membership(
+        spl_idx$rows[rows, c("output_type_id", "row_idx")],
+        tbl_chr,
         compound_taskids,
         task_ids,
+        derived_task_ids
+      )
+      get_mt_compound_taskid_set(
+        membership$is_compound_taskid,
+        membership$output_type_ids,
+        compound_taskids,
         error = error,
         call = call
       )
@@ -104,68 +105,112 @@ get_tbl_compound_taskid_set <- function(
   tbl_compound_taskids
 }
 
-# Detect the compound_taskid_set for a tbl for a single modeling task.
-get_mt_compound_taskid_set <- function(
+#' Find which task IDs each sample of a modeling task is compound across
+#'
+#' A task ID is compound for a sample when the sample holds a single value of
+#' it. A task ID that holds a single value across the whole modeling task says
+#' nothing about how samples were drawn, so it is compound only if the config
+#' lists it as compound. A derived task ID is compound exactly when the config
+#' lists it, since its values follow from the other task IDs.
+#'
+#' @param idx_rows the `output_type_id` and `row_idx` columns of the `rows` of
+#'   `spl_idx_tbl()`, for one modeling task.
+#' @param tbl_chr the table the index was built from.
+#' @param config_comp_tids the modeling task's configured compound task IDs.
+#' @param task_ids the round's task ID names.
+#' @param derived_task_ids a character vector of derived task IDs.
+#' @returns A list with:
+#' - `is_compound_taskid`: a tibble with one logical column per task ID and
+#'   one row per sample.
+#' - `output_type_ids`: the samples' output type IDs, in the order of the rows
+#'   of `is_compound_taskid`.
+#' @noRd
+spl_comp_tid_membership <- function(
+  idx_rows,
   tbl_chr,
   config_comp_tids,
   task_ids,
-  error = TRUE,
-  call = NULL
+  derived_task_ids
 ) {
-  if (any(is.null(tbl_chr), is.null(config_comp_tids))) {
-    return(NULL)
-  }
+  # Samples are numbered in C-locale order, which is the order the `sets`
+  # attribute lists their output type IDs in.
+  first <- which(!duplicated(idx_rows$output_type_id))
+  first <- first[order(
+    idx_rows$output_type_id[first],
+    method = "radix",
+    na.last = TRUE
+  )]
+  output_type_ids <- idx_rows$output_type_id[first]
+  spl <- match(idx_rows$output_type_id, output_type_ids)
 
-  if (nrow(tbl_chr) == 0L) {
-    return(NULL)
-  }
-  if (is.null(call)) {
-    call <- rlang::current_env()
-  }
-  out_tid <- hubUtils::std_colnames["output_type_id"]
-
-  # Count number of unique values per sample (output_type_id) for each task ID column and
-  # return TRUE if 1 which would indicate a task ID can be considered a compound_taskid
-  spl_uniq <- tbl_chr[, c(task_ids, out_tid)] |>
-    dplyr::group_by(.data[[out_tid]]) |>
-    dplyr::summarise(
-      dplyr::across(
-        dplyr::everything(),
-        function(.x) {
-          dplyr::n_distinct(.x) == 1L
-        }
-      )
-    )
-
-  # Count number of unique values for each task ID column across tbl_chr and
-  # return TRUE if greater than 1.
-  # The aim of this check is to distinguish between false positives, resulting
-  # from task ids that can only take a single value or where only 1 value
-  # is required or all are optional and only one has been provided, so here we also check
-  # whether the value is consistent across other samples. If a single unique value
-  # is consistent across all samples for a task id, it cannot be considered a
-  # compound_taskid and therefore FALSE will be returned. Note that this check
-  # only applies to task ids that are not members of the compound_taskids set.
-  # compound_taskids set vars will always be set to TRUE in this check.
-  tbl_non_uniq <- tbl_chr[, task_ids] |>
-    purrr::map(~ dplyr::n_distinct(.x) > 1L) |>
-    tibble::as_tibble()
-  tbl_non_uniq[, config_comp_tids] <- TRUE
-
-  # Create a sample (output_type_id) vs compound_taskid membership boolean matrix.
-  # For a task id to be considered a compound_taskid, a unique value must be TRUE
-  # at the sample level and we need to ensure it's not a false positive.
-  # Here we combine the two checks.
-  is_compound_taskid <- apply(
-    spl_uniq[, task_ids],
-    1,
-    function(x) x & tbl_non_uniq[, task_ids],
-    simplify = FALSE
+  is_compound_taskid <- purrr::map(
+    purrr::set_names(task_ids),
+    function(task_id) {
+      # A derived task ID's values follow from other task IDs, so they say
+      # nothing about how samples were drawn. Its flag comes from the
+      # configured set instead, so it never makes a sample look coarser or
+      # finer than configured.
+      if (task_id %in% derived_task_ids) {
+        return(rep(task_id %in% config_comp_tids, length(output_type_ids)))
+      }
+      values <- tbl_chr[[task_id]][idx_rows$row_idx]
+      first_values <- values[first]
+      single_value <- tabulate(
+        spl[differs_from(values, first_values[spl])],
+        nbins = length(output_type_ids)
+      ) ==
+        0L
+      if (task_id %in% config_comp_tids) {
+        return(single_value)
+      }
+      # A task ID varies across the modeling task when some sample holds more
+      # than one value of it, or when samples hold different single values.
+      varies <- !all(single_value) ||
+        any(differs_from(first_values, first_values[1L]))
+      single_value & varies
+    }
   ) |>
-    purrr::reduce(rbind)
+    tibble::as_tibble()
 
-  output_type_ids <- spl_uniq[["output_type_id"]]
+  list(
+    is_compound_taskid = is_compound_taskid,
+    output_type_ids = output_type_ids
+  )
+}
 
+# Element-wise `x != y`, with `NA` treated as a value like any other. `y` is
+# either as long as `x` or a single value.
+differs_from <- function(x, y) {
+  differs <- x != y
+  na <- which(is.na(differs))
+  if (length(na) > 0L) {
+    y_na <- if (length(y) == 1L) is.na(y) else is.na(y[na])
+    differs[na] <- is.na(x[na]) != y_na
+  }
+  differs
+}
+
+#' Collect the compound task ID sets detected for a modeling task's samples
+#'
+#' @param is_compound_taskid a sample by task ID logical table, as returned by
+#'   `spl_comp_tid_membership()`.
+#' @param output_type_ids the samples' output type IDs, in the order of the
+#'   rows of `is_compound_taskid`.
+#' @param config_comp_tids the modeling task's configured compound task IDs.
+#' @inheritParams get_tbl_compound_taskid_set
+#' @param call the environment errors are reported from.
+#' @returns A character vector of every task ID detected as compound for any
+#'   sample, with the `sets` attribute when samples have different sets, and
+#'   the `errors` and `msg` attributes when a set is finer than configured.
+#' @noRd
+get_mt_compound_taskid_set <- function(
+  is_compound_taskid,
+  output_type_ids,
+  config_comp_tids,
+  error = TRUE,
+  call = rlang::caller_env()
+) {
+  task_ids <- names(is_compound_taskid)
   # Samples in one modeling task can have different compound task ID sets, as
   # in the example in the docs of `check_tbl_spl_compound_taskid_set()`. Each
   # set is valid if it matches or is coarser than the configured set, that is,
