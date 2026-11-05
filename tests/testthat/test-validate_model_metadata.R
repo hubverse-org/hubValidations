@@ -48,4 +48,11 @@ test_that("validate_model_metadata works", {
     )
   )
   expect_snapshot(res$metadata_file_exists)
+  # Model output and metadata files share the file exists check.
+  expect_check(
+    res$metadata_file_exists,
+    error_class,
+    where = "2020-10-06-random-path.csv",
+    call = "check_file_exists"
+  )
 })

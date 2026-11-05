@@ -1,21 +1,27 @@
+validations_class <- c("target_validations", "hub_validations", "list")
+collection_class <- c(
+  "target_validations_collection",
+  "hub_validations_collection",
+  "list"
+)
+
 test_that("new_target_validations works", {
   empty <- new_target_validations()
-  expect_s3_class(empty, c("target_validations", "hub_validations"))
+  expect_s3_class(empty, validations_class, exact = TRUE)
   expect_length(empty, 0L)
 
-  hub_path <- system.file("testhubs/v5/target_file", package = "hubUtils")
   file_path <- "time-series.csv"
 
   res <- new_target_validations(
     target_file_name = check_target_file_name(file_path),
     target_file_ext_valid = check_target_file_ext_valid(file_path)
   )
-  expect_s3_class(res, c("target_validations", "hub_validations"))
-  expect_equal(
-    first_classes(res),
-    c(target_file_name = "check_info", target_file_ext_valid = "check_success")
+  expect_validations(
+    res,
+    validations_class,
+    c(target_file_name = "check_info", target_file_ext_valid = "check_success"),
+    where = file_path
   )
-  expect_equal(attr(res, "where"), file_path)
 })
 
 test_that("new_target_validations works with hive partitioned target files", {
@@ -25,15 +31,15 @@ test_that("new_target_validations works with hive partitioned target files", {
     target_file_name = check_target_file_name(file_path),
     target_file_ext_valid = check_target_file_ext_valid(file_path)
   )
-  expect_s3_class(res, c("target_validations", "hub_validations"))
-  expect_equal(
-    first_classes(res),
+  expect_validations(
+    res,
+    validations_class,
     c(
       target_file_name = "check_success",
       target_file_ext_valid = "check_success"
-    )
+    ),
+    where = file_path
   )
-  expect_equal(attr(res, "where"), file_path)
 })
 
 # ---- target_validations_collection tests ----
@@ -41,9 +47,7 @@ test_that("new_target_validations works with hive partitioned target files", {
 test_that("new_target_validations_collection creates empty collection", {
   collection <- new_target_validations_collection()
 
-  expect_s3_class(collection, "target_validations_collection")
-  expect_s3_class(collection, "hub_validations_collection")
-  expect_s3_class(collection, "list")
+  expect_s3_class(collection, collection_class, exact = TRUE)
   expect_equal(length(collection), 0)
   expect_null(names(collection))
 })
@@ -58,11 +62,15 @@ test_that("new_target_validations_collection creates collection from single elem
 
   collection <- new_target_validations_collection(validations)
 
-  expect_s3_class(collection, "target_validations_collection")
-  expect_s3_class(collection, "hub_validations_collection")
+  expect_s3_class(collection, collection_class, exact = TRUE)
   expect_equal(length(collection), 1)
   expect_equal(names(collection), file_path)
-  expect_s3_class(collection[[1]], "target_validations")
+  expect_validations(
+    collection[[1]],
+    validations_class,
+    c(target_file_name = "check_info", target_file_ext_valid = "check_success"),
+    where = file_path
+  )
 })
 
 test_that("new_target_validations_collection creates collection from multiple elements", {
@@ -78,11 +86,21 @@ test_that("new_target_validations_collection creates collection from multiple el
 
   collection <- new_target_validations_collection(validations_1, validations_2)
 
-  expect_s3_class(collection, "target_validations_collection")
+  expect_s3_class(collection, collection_class, exact = TRUE)
   expect_equal(length(collection), 2)
   expect_equal(names(collection), c(file_path_1, file_path_2))
-  expect_s3_class(collection[[1]], "target_validations")
-  expect_s3_class(collection[[2]], "target_validations")
+  expect_validations(
+    collection[[1]],
+    validations_class,
+    c(target_file_name = "check_info"),
+    where = file_path_1
+  )
+  expect_validations(
+    collection[[2]],
+    validations_class,
+    c(target_file_name = "check_success"),
+    where = file_path_2
+  )
 })
 
 test_that("new_target_validations_collection ignores NULL elements", {
@@ -137,8 +155,7 @@ test_that("as_target_validations_collection converts list to collection", {
   x <- list(validations_1, validations_2)
   collection <- as_target_validations_collection(x)
 
-  expect_s3_class(collection, "target_validations_collection")
-  expect_s3_class(collection, "hub_validations_collection")
+  expect_s3_class(collection, collection_class, exact = TRUE)
   expect_equal(length(collection), 2)
   expect_equal(names(collection), c(file_path_1, file_path_2))
 })
@@ -203,7 +220,7 @@ test_that("target collection filters out empty target_validations objects", {
   empty_validations <- new_target_validations()
 
   collection <- new_target_validations_collection(empty_validations)
-  expect_s3_class(collection, "target_validations_collection")
+  expect_s3_class(collection, collection_class, exact = TRUE)
   expect_equal(length(collection), 0)
 
   # Multiple empties also result in empty collection
@@ -211,7 +228,7 @@ test_that("target collection filters out empty target_validations objects", {
     empty_validations,
     new_target_validations()
   )
-  expect_s3_class(collection, "target_validations_collection")
+  expect_s3_class(collection, collection_class, exact = TRUE)
   expect_equal(length(collection), 0)
 
   # But if mixed with valid ones, valid are kept
@@ -224,7 +241,7 @@ test_that("target collection filters out empty target_validations objects", {
     empty_validations,
     valid_validations
   )
-  expect_s3_class(collection, "target_validations_collection")
+  expect_s3_class(collection, collection_class, exact = TRUE)
   expect_equal(length(collection), 1)
   expect_equal(names(collection), file_path)
 })
@@ -237,7 +254,7 @@ test_that("as_target_validations_collection filters out empty target_validations
     empty_validations,
     new_target_validations()
   ))
-  expect_s3_class(collection, "target_validations_collection")
+  expect_s3_class(collection, collection_class, exact = TRUE)
   expect_equal(length(collection), 0)
 
   # Mixed with valid keeps valid
@@ -250,7 +267,7 @@ test_that("as_target_validations_collection filters out empty target_validations
     empty_validations,
     valid_validations
   ))
-  expect_s3_class(collection, "target_validations_collection")
+  expect_s3_class(collection, collection_class, exact = TRUE)
   expect_equal(length(collection), 1)
   expect_equal(names(collection), file_path)
 })
@@ -268,7 +285,7 @@ test_that("new_target_validations_collection merges validations for same file", 
   # Two validations for the same file should be merged
   collection <- new_target_validations_collection(validations_1, validations_2)
 
-  expect_s3_class(collection, "target_validations_collection")
+  expect_s3_class(collection, collection_class, exact = TRUE)
   expect_equal(length(collection), 1)
   expect_equal(names(collection), file_path)
   expect_equal(
@@ -290,7 +307,7 @@ test_that("as_target_validations_collection merges validations for same file", {
   x <- list(validations_1, validations_2)
   collection <- as_target_validations_collection(x)
 
-  expect_s3_class(collection, "target_validations_collection")
+  expect_s3_class(collection, collection_class, exact = TRUE)
   expect_equal(length(collection), 1)
   expect_equal(names(collection), file_path)
   expect_equal(

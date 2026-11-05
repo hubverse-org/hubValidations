@@ -16,6 +16,15 @@
       Error:
       ! Values in `value` column do not sum to 1 for all unique task ID value combination of pmf output types.  See `error_tbl` attribute for details.
 
+---
+
+    Code
+      res
+    Output
+      <message/check_success>
+      Message:
+      Values in `value` column do sum to 1 for all unique task ID value combination of pmf output types.
+
 # check_tbl_value_col_sum1 skips correctly
 
     Code

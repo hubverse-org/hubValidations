@@ -108,13 +108,36 @@ test_that("Overriding compound_taskid_set in check_tbl_spl_n works", {
   # compound_idx has one sample, short of the minimum.
   res <- check_tbl_spl_n(tbl_coarse, round_id, file_path, hub_path)
   expect_snapshot(res)
-  expect_s3_class(res, "check_failure")
-  expect_length(res$errors, 80L)
-  expect_false(is.unsorted(as.integer(names(res$errors))))
+  expect_check(res, failure_class, file_path, "check_tbl_spl_n")
+  # fmt: skip
+  compound_idx <- c(
+    "1", "5", "9", "13", "17", "21", "25", "29", "33", "37", "41", "45", "49",
+    "53", "57", "61", "65", "69", "73", "77", "82", "86", "90", "94", "98",
+    "102", "106", "110", "114", "118", "122", "126", "130", "134", "138",
+    "142", "146", "150", "154", "158", "163", "167", "171", "175", "179",
+    "183", "187", "191", "195", "199", "203", "207", "211", "215", "219",
+    "223", "227", "231", "235", "239", "244", "248", "252", "256", "260",
+    "264", "268", "272", "276", "280", "284", "288", "292", "296", "300",
+    "304", "308", "312", "316", "320"
+  )
+  expect_named(res$errors, compound_idx)
+  expect_equal(
+    unname(purrr::map_chr(res$errors, "compound_idx")),
+    compound_idx
+  )
+  expect_equal(
+    unique(purrr::map(res$errors, names)),
+    list(c(
+      "compound_idx",
+      "n",
+      "min_samples_per_task",
+      "max_samples_per_task",
+      "compound_idx_tbl"
+    ))
+  )
   expect_equal(unique(purrr::map_int(res$errors, "n")), 1L)
   expect_equal(unique(purrr::map_int(res$errors, "min_samples_per_task")), 9L)
   expect_equal(unique(purrr::map_int(res$errors, "max_samples_per_task")), 10L)
-  expect_equal(res$errors[["1"]]$compound_idx, "1")
   expect_equal(
     res$errors[["1"]]$compound_idx_tbl,
     tibble::tibble(
@@ -124,6 +147,35 @@ test_that("Overriding compound_taskid_set in check_tbl_spl_n works", {
       location = "US",
       variant = "AA",
       target_end_date = "2022-10-22"
+    )
+  )
+  compound_idx_tbl <- purrr::map_dfr(res$errors, "compound_idx_tbl")
+  expect_tbl(
+    compound_idx_tbl,
+    n_rows = 80L,
+    types = c(
+      reference_date = "character",
+      target = "character",
+      horizon = "character",
+      location = "character",
+      variant = "character",
+      target_end_date = "character"
+    ),
+    values = list(
+      reference_date = "2022-10-22",
+      target = "wk inc flu hosp",
+      location = c("01", "02", "04", "05", "US"),
+      variant = c("AA", "BB", "CC", "DD")
+    ),
+    counts = tibble::tibble(
+      horizon = c("0", "1", "2", "3"),
+      target_end_date = c(
+        "2022-10-22",
+        "2022-10-29",
+        "2022-11-05",
+        "2022-11-12"
+      ),
+      n = 20L
     )
   )
 
