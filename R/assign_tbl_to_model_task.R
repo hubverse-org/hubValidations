@@ -41,9 +41,8 @@
 #' value itself.
 #'
 #' In the config a task ID's values are split into `required` and `optional`.
-#' `extract_round_property_values()` collapses the two into a single order when
-#' it extracts them, `required` values first, then `optional` ones, and that is
-#' the order sorted on.
+#' The value sets collapse the two into a single order, `required` values
+#' first, then `optional` ones, and that is the order sorted on.
 #'
 #' Sample rows have no config order to sort on, because their `output_type_id`
 #' values are identifiers the submitter chose. They all tie on that key, so

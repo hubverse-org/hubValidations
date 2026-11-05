@@ -1,5 +1,11 @@
 # hubValidations (development version)
 
+## Bug fixes
+
+* Fixed a bug where `check_tbl_derived_task_id_vals()` rejected `NA` in a derived task ID column, even in the rows of a modeling task that does not use that task ID, where `NA` is the only valid value (#387).
+* Fixed a bug where the message of a failing `check_tbl_values()` named `NA` as an invalid value in a column that another modeling task lists as `null`. Called directly on a table holding another round's ID in the round ID column, it now names that ID as an invalid value rather than reporting an invalid combination (#387).
+* Fixed a bug where a derived task ID was ignored if the round's first modeling task left it out of its config. `expand_model_out_grid()` and `submission_tmpl()` then filled its column with the config's values instead of `NA` (#387).
+
 # hubValidations 3.0.0
 
 ## Breaking Changes

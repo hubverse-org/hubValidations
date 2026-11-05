@@ -48,7 +48,7 @@ check_tbl_derived_task_id_vals <- function(
   }
   config_tasks <- read_config(hub_path, "tasks")
 
-  derived_task_id_vals <- get_round_config_values(
+  derived_task_id_vals <- get_round_pooled_values(
     config_tasks = config_tasks,
     round_id = round_id
   )[derived_task_ids]

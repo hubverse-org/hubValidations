@@ -312,3 +312,36 @@ test_that("check_tbl_values(derived_task_ids) is deprecated and has no effect", 
     check_tbl_values(tbl_chr, round_id, file_path, hub_path)
   )
 })
+
+test_that("check_tbl_values does not name valid pre v2 output type IDs as invalid", {
+  # Hubs on schema versions earlier than v2.0.0 hold output type IDs in
+  # `type_id`.
+  hub_path <- system.file("testhubs/simple-dprc", package = "hubUtils")
+  file_path <- "hub-baseline/2022-10-08-hub-baseline.csv"
+  round_id <- "2022-10-08"
+  tbl_chr <- suppressWarnings(
+    read_model_out_file(file_path, hub_path, coerce_types = "chr")
+  )
+  tbl_chr[1, "location"] <- "zz_invalid"
+
+  res <- suppressWarnings(
+    check_tbl_values(tbl_chr, round_id, file_path, hub_path)
+  )
+  msg <- gsub("\\s+", " ", res$message)
+  expect_match(msg, "Column `location` contains invalid value")
+  expect_no_match(msg, "output_type_id")
+})
+
+test_that("check_tbl_values names another round's ID as an invalid value", {
+  hub_path <- system.file("testhubs/simple", package = "hubValidations")
+  file_path <- "hub-baseline/2022-10-08-hub-baseline.csv"
+  round_id <- "2022-10-08"
+  tbl_chr <- read_model_out_file(file_path, hub_path, coerce_types = "chr")
+  tbl_chr[1, "origin_date"] <- "2022-10-01"
+
+  res <- check_tbl_values(tbl_chr, round_id, file_path, hub_path)
+  expect_match(
+    gsub("\\s+", " ", res$message),
+    'Column `origin_date` contains invalid value "2022-10-01"'
+  )
+})
