@@ -65,7 +65,7 @@ test_that("check_tbl_spl_mt_unique detects samples spanning model tasks", {
     hub_path
   )
   expect_s3_class(error_check, "check_error")
-  expect_true(length(error_check$errors$output_type_ids) > 0)
+  expect_equal(error_check$errors$output_type_ids, c("1", "2"))
   expect_equal(error_check$errors$mt_ids, c(1L, 2L))
 })
 

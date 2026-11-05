@@ -31,6 +31,16 @@
 ---
 
     Code
+      mod_checks_error[["team1-goodmodel/2022-10-22-team1-goodmodel.csv"]][[
+        "metadata_exists"]]
+    Output
+      <error/check_failure>
+      Error:
+      ! Metadata file does not exist at path 'model-metadata/team1-goodmodel.yml' or 'model-metadata/team1-goodmodel.yaml'.
+
+---
+
+    Code
       purrr::map(mod_checks_warn[mod_files], "valid_file_status")
     Output
       $`hub-baseline/2022-10-08-hub-baseline.csv`

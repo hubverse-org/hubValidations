@@ -53,7 +53,11 @@ test_that("capture_check_cnd works", {
     msg_attribute = "consistent with expected round task IDs and std column names.",
     msg_verbs = c("are", "must always be")
   )
-  expect_s3_class(res, c("check_failure", "hub_check", "rlang_error"))
+  expect_s3_class(res, failure_class, exact = TRUE)
+  expect_named(
+    res,
+    c("message", "trace", "parent", "where", "call", "use_cli_format")
+  )
   expect_equal(res$where, "test/file.csv")
 })
 

@@ -92,9 +92,13 @@ test_that("Different compound_taskid_sets work", {
     hub_path
   )
   expect_snapshot(res)
-  expect_s3_class(res, "check_success")
-  expect_length(res$warnings, 1L)
-  expect_s3_class(res$warnings[[1]], "validation_warning")
+  expect_check(
+    res,
+    success_class,
+    fs::path("flu-base/2022-10-29-flu-base.parquet"),
+    "check_tbl_spl_compound_taskid_set"
+  )
+  expect_coarser_warning(res)
   expect_equal(
     res$compound_taskid_set,
     list(`1` = NULL, `2` = c("reference_date", "location"))
@@ -107,8 +111,13 @@ test_that("Different compound_taskid_sets work", {
     hub_path
   )
   expect_snapshot(res)
-  expect_s3_class(res, "check_success")
-  expect_length(res$warnings, 1L)
+  expect_check(
+    res,
+    success_class,
+    fs::path("flu-base/2022-11-05-flu-base.parquet"),
+    "check_tbl_spl_compound_taskid_set"
+  )
+  expect_coarser_warning(res)
   expect_equal(
     res$compound_taskid_set,
     list(
@@ -146,11 +155,26 @@ test_that("Different compound_taskid_sets work", {
     hub_path
   )
   expect_snapshot(res)
-  expect_s3_class(res, "check_error")
+  expect_check(
+    res,
+    error_class,
+    fs::path("flu-base/2022-11-05-flu-base.parquet"),
+    "check_tbl_spl_compound_taskid_set"
+  )
   expect_null(res$warnings)
-  expect_true(is.na(res$compound_taskid_set))
+  expect_identical(res$compound_taskid_set, NA)
   expect_named(res$errors, "2")
+  expect_length(res$errors[["2"]], 1L)
   mt_error <- res$errors[["2"]][[1]]
+  expect_named(
+    mt_error,
+    c(
+      "config_comp_tids",
+      "invalid_tbl_comp_tids",
+      "tbl_comp_tids",
+      "output_type_ids"
+    )
+  )
   expect_equal(
     mt_error$config_comp_tids,
     c("reference_date", "horizon", "location", "variant")
@@ -160,7 +184,7 @@ test_that("Different compound_taskid_sets work", {
     mt_error$tbl_comp_tids,
     c("reference_date", "horizon", "target_end_date")
   )
-  expect_length(mt_error$output_type_ids, 40L)
+  expect_setequal(mt_error$output_type_ids, as.character(1:40))
   # Specifying the derived task IDs allows validation to pass and excludes derived
   # task IDs from the compound_taskid_set
   res <- check_tbl_spl_compound_taskid_set(
@@ -171,8 +195,13 @@ test_that("Different compound_taskid_sets work", {
     derived_task_ids = "target_end_date"
   )
   expect_snapshot(res)
-  expect_s3_class(res, "check_success")
-  expect_length(res$warnings, 1L)
+  expect_check(
+    res,
+    success_class,
+    fs::path("flu-base/2022-11-05-flu-base.parquet"),
+    "check_tbl_spl_compound_taskid_set"
+  )
+  expect_coarser_warning(res)
   expect_equal(
     res$compound_taskid_set,
     list(`1` = NULL, `2` = c("reference_date", "horizon"))
@@ -201,8 +230,13 @@ test_that("Coarser compound_taskid_set triggers check-level warning", {
   )
 
   # Check passes but with a warning
-  expect_s3_class(result, "check_success")
-  expect_true(length(result$warnings) > 0)
+  expect_check(
+    result,
+    success_class,
+    file_path,
+    "check_tbl_spl_compound_taskid_set"
+  )
+  expect_coarser_warning(result)
 
   # Full check message explicitly states the coarser outcome and carries
   # per-modeling-task detected vs configured details.
@@ -280,10 +314,26 @@ test_that("Finer compound_taskid_sets work", {
     create_file_path("2022-10-22"),
     test_path("testdata/hub-spl")
   )
-  expect_s3_class(res, "check_error")
-  expect_true(is.na(res$compound_taskid_set))
+  expect_check(
+    res,
+    error_class,
+    fs::path("flu-base/2022-10-22-flu-base.parquet"),
+    "check_tbl_spl_compound_taskid_set"
+  )
+  expect_null(res$warnings)
+  expect_identical(res$compound_taskid_set, NA)
   expect_named(res$errors, "2")
+  expect_length(res$errors[["2"]], 1L)
   mt_error <- res$errors[["2"]][[1]]
+  expect_named(
+    mt_error,
+    c(
+      "config_comp_tids",
+      "invalid_tbl_comp_tids",
+      "tbl_comp_tids",
+      "output_type_ids"
+    )
+  )
   expect_equal(
     mt_error$config_comp_tids,
     c("reference_date", "horizon", "location", "target_end_date")
@@ -293,7 +343,7 @@ test_that("Finer compound_taskid_sets work", {
     mt_error$tbl_comp_tids,
     c("reference_date", "horizon", "location", "variant", "target_end_date")
   )
-  expect_length(mt_error$output_type_ids, 800L)
+  expect_setequal(mt_error$output_type_ids, as.character(1:800))
 })
 
 test_that("Ignoring derived_task_ids in check_tbl_spl_compound_taskid_set works", {

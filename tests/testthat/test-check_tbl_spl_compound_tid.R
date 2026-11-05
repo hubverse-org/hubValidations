@@ -74,14 +74,18 @@ test_that("Overriding compound_taskid_set in check_tbl_spl_compound_tid works", 
   # Normal validation should return check failure
   res <- check_tbl_spl_compound_tid(tbl_coarse, round_id, file_path, hub_path)
   expect_snapshot(res)
-  expect_s3_class(res, "check_error")
+  expect_check(res, error_class, file_path, "check_tbl_spl_compound_tid")
+  expect_equal(
+    unique(purrr::map(res$errors, names)),
+    list(c("mt_id", "output_type_id", "values"))
+  )
   expect_equal(purrr::map_int(res$errors, "mt_id"), rep(2L, 4L))
   expect_equal(
     purrr::map_chr(res$errors, "output_type_id"),
     c("1", "2", "3", "4")
   )
   expect_equal(
-    unname(purrr::map(res$errors, "values")),
+    purrr::map(res$errors, "values"),
     rep(
       list(list(
         location = c("US", "01", "02", "04", "05"),
