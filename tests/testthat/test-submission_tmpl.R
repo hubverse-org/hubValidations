@@ -1,13 +1,45 @@
 test_that("submission_tmpl works correctly with path to hub", {
   hub_path <- system.file("testhubs/flusight", package = "hubUtils")
 
-  expect_snapshot(str(
-    submission_tmpl(hub_path, round_id = "2023-01-30")
-  ))
+  x <- submission_tmpl(hub_path, round_id = "2023-01-30")
+  expect_tbl(
+    x,
+    n_rows = 3132L,
+    types = c(flusight_grid_types, value = "numeric"),
+    values = list(
+      forecast_date = as.Date("2023-01-30"),
+      horizon = 1:2,
+      location = hub_locations,
+      output_type_id = flusight_output_type_ids,
+      value = NA_real_
+    ),
+    counts = tibble::tibble(
+      target = c(
+        "wk ahead inc flu hosp",
+        "wk ahead inc flu hosp",
+        "wk flu hosp rate change"
+      ),
+      output_type = c("mean", "quantile", "pmf"),
+      n = c(108L, 2484L, 540L)
+    )
+  )
+  expect_equal(
+    x[1:4, c("target", "horizon", "location", "output_type", "output_type_id")],
+    tibble::tibble(
+      target = "wk flu hosp rate change",
+      horizon = c(2L, 1L, 2L, 1L),
+      location = c("US", "US", "01", "01"),
+      output_type = "pmf",
+      output_type_id = "large_decrease"
+    )
+  )
 
-  expect_snapshot(str(
-    submission_tmpl(hub_path, round_id = "2023-01-16")
-  ))
+  x_jan16 <- submission_tmpl(hub_path, round_id = "2023-01-16")
+  expect_equal(unique(x_jan16$forecast_date), as.Date("2023-01-16"))
+  expect_equal(
+    dplyr::select(x_jan16, -forecast_date),
+    dplyr::select(x, -forecast_date)
+  )
   expect_equal(
     unique(suppressMessages(
       submission_tmpl(
@@ -18,13 +50,25 @@ test_that("submission_tmpl works correctly with path to hub", {
     as.Date("2022-12-19")
   )
 
-  expect_snapshot(str(
-    submission_tmpl(
-      hub_path,
-      round_id = "2023-01-16",
-      required_vals_only = TRUE
+  x <- submission_tmpl(
+    hub_path,
+    round_id = "2023-01-16",
+    required_vals_only = TRUE
+  )
+  expect_tbl(
+    x,
+    n_rows = 0L,
+    types = c(flusight_grid_types, value = "numeric"),
+    values = list(
+      forecast_date = as.Date(character()),
+      target = character(),
+      horizon = integer(),
+      location = character(),
+      output_type = character(),
+      output_type_id = character(),
+      value = numeric()
     )
-  ))
+  )
   expect_equal(
     unique(suppressMessages(
       submission_tmpl(
@@ -37,14 +81,39 @@ test_that("submission_tmpl works correctly with path to hub", {
     as.Date("2022-12-19")
   )
 
-  expect_snapshot(str(
-    submission_tmpl(
+  expect_snapshot(
+    x <- submission_tmpl(
       hub_path,
       round_id = "2023-01-16",
       required_vals_only = TRUE,
       complete_cases_only = FALSE
     )
-  ))
+  )
+  expect_tbl(
+    x,
+    n_rows = 28L,
+    types = c(flusight_grid_types, value = "numeric"),
+    values = list(
+      forecast_date = as.Date("2023-01-16"),
+      target = NA_character_,
+      horizon = 2L,
+      location = "US",
+      output_type = c("pmf", "quantile"),
+      value = NA_real_
+    ),
+    unchecked = "output_type_id"
+  )
+  expect_equal(
+    x$output_type_id,
+    c(
+      "large_decrease",
+      "decrease",
+      "stable",
+      "increase",
+      "large_increase",
+      as.character(hub_quantiles)
+    )
+  )
 
   expect_equal(
     unique(suppressMessages(
@@ -61,45 +130,138 @@ test_that("submission_tmpl works correctly with path to hub", {
   # Specifying a round in a hub with multiple rounds
   hub_path <- system.file("testhubs/simple", package = "hubUtils")
 
-  expect_snapshot(str(
-    submission_tmpl(
-      hub_path,
-      round_id = "2022-10-01"
+  x <- submission_tmpl(
+    hub_path,
+    round_id = "2022-10-01"
+  )
+  expect_tbl(
+    x,
+    n_rows = 5184L,
+    types = c(simple_grid_types, value = "integer"),
+    values = list(
+      origin_date = as.Date("2022-10-01"),
+      target = "wk inc flu hosp",
+      horizon = 1:4,
+      location = hub_locations,
+      output_type_id = c(hub_quantiles, NA),
+      value = NA_integer_
+    ),
+    counts = tibble::tibble(
+      output_type = c("mean", "quantile"),
+      n = c(216L, 4968L)
     )
-  ))
+  )
+  expect_equal(
+    x[1:4, c("horizon", "location", "output_type")],
+    tibble::tibble(horizon = 1:4, location = "US", output_type = "mean")
+  )
 
-  expect_snapshot(str(
-    submission_tmpl(
+  expect_snapshot(
+    x <- submission_tmpl(
       hub_path,
       round_id = "2022-10-01",
       required_vals_only = TRUE,
       complete_cases_only = FALSE
     )
-  ))
-  expect_snapshot(str(
-    submission_tmpl(
+  )
+  expect_tbl(
+    x,
+    n_rows = 23L,
+    types = c(simple_grid_types, value = "integer"),
+    values = list(
+      origin_date = as.Date("2022-10-01"),
+      target = "wk inc flu hosp",
+      horizon = 1L,
+      location = NA_character_,
+      output_type = "quantile",
+      output_type_id = hub_quantiles,
+      value = NA_integer_
+    )
+  )
+  expect_equal(x$output_type_id, hub_quantiles)
+  expect_snapshot(
+    x <- submission_tmpl(
       hub_path,
       round_id = "2022-10-29",
       required_vals_only = TRUE,
       complete_cases_only = FALSE
     )
-  ))
-
-  expect_snapshot(str(
-    submission_tmpl(
-      hub_path,
-      round_id = "2022-10-29",
-      required_vals_only = TRUE
+  )
+  expect_tbl(
+    x,
+    n_rows = 23L,
+    types = c(simple_age_grid_types, value = "integer"),
+    values = list(
+      origin_date = as.Date("2022-10-29"),
+      target = "wk inc flu hosp",
+      horizon = 1L,
+      location = NA_character_,
+      age_group = "65+",
+      output_type = "quantile",
+      output_type_id = hub_quantiles,
+      value = NA_integer_
     )
-  ))
+  )
+  expect_equal(x$output_type_id, hub_quantiles)
+
+  x <- submission_tmpl(
+    hub_path,
+    round_id = "2022-10-29",
+    required_vals_only = TRUE
+  )
+  expect_tbl(
+    x,
+    n_rows = 0L,
+    types = c(simple_age_grid_types, value = "integer"),
+    values = list(
+      origin_date = as.Date(character()),
+      target = character(),
+      horizon = integer(),
+      location = character(),
+      age_group = character(),
+      output_type = character(),
+      output_type_id = numeric(),
+      value = integer()
+    )
+  )
 })
 
 test_that("submission_tmpl works correctly with path to task config file", {
   config_path <- system.file("config", "tasks.json", package = "hubValidations")
-  expect_snapshot(
-    submission_tmpl(
-      config_path,
-      round_id = "2022-12-26"
+  x <- submission_tmpl(config_path, round_id = "2022-12-26")
+  expect_tbl(
+    x,
+    n_rows = 42L,
+    types = c(flusight_grid_types, value = "numeric"),
+    values = list(
+      forecast_date = as.Date("2022-12-26"),
+      target = c("wk ahead inc flu hosp", "wk flu hosp rate change"),
+      horizon = 1:2,
+      location = c("01", "02", "US"),
+      output_type_id = c(
+        "decrease",
+        "increase",
+        "large_decrease",
+        "large_increase",
+        paste0("s", 1:6),
+        "stable",
+        NA
+      ),
+      value = NA_real_
+    ),
+    counts = tibble::tibble(
+      output_type = c("mean", "pmf", "sample"),
+      n = c(6L, 30L, 6L)
+    )
+  )
+  # The config sets no `compound_taskid_set`, so it defaults to every task ID
+  # and each sample row is its own sample.
+  expect_equal(
+    x[x$output_type == "sample", c("horizon", "location", "output_type_id")],
+    tibble::tibble(
+      horizon = rep(c(2L, 1L), 3),
+      location = rep(c("US", "01", "02"), each = 2),
+      output_type_id = paste0("s", 1:6)
     )
   )
 
@@ -118,23 +280,22 @@ test_that("submission_tmpl works correctly with deprecated args", {
     system.file("testhubs/flusight", package = "hubUtils")
   )
 
-  expect_snapshot(str(
+  expect_equal(
+    submission_tmpl(hub_con = hub_con, round_id = "2023-01-30"),
     submission_tmpl(
-      hub_con = hub_con,
+      system.file("testhubs/flusight", package = "hubUtils"),
       round_id = "2023-01-30"
     )
-  ))
+  )
 
   # Using config_tasks instead of hub_con
-  expect_snapshot(
+  config_path <- system.file("config", "tasks.json", package = "hubValidations")
+  expect_equal(
     submission_tmpl(
-      config_tasks = read_config_file(system.file(
-        "config",
-        "tasks.json",
-        package = "hubValidations"
-      )),
+      config_tasks = read_config_file(config_path),
       round_id = "2022-12-26"
-    )
+    ),
+    submission_tmpl(config_path, round_id = "2022-12-26")
   )
 })
 
@@ -208,18 +369,46 @@ test_that("submission_tmpl handles samples correctly", {
     "tasks-comp-tid.json",
     package = "hubValidations"
   )
-  expect_snapshot(
-    submission_tmpl(
-      config_path,
-      round_id = "2022-12-26"
+  tmpl <- submission_tmpl(config_path, round_id = "2022-12-26")
+  expect_tbl(
+    tmpl,
+    n_rows = 42L,
+    types = c(flusight_grid_types, value = "numeric"),
+    values = list(
+      forecast_date = as.Date("2022-12-26"),
+      target = c("wk ahead inc flu hosp", "wk flu hosp rate change"),
+      horizon = 1:2,
+      location = c("01", "02", "US"),
+      output_type_id = c(
+        "1",
+        "2",
+        "decrease",
+        "increase",
+        "large_decrease",
+        "large_increase",
+        "stable",
+        NA
+      ),
+      value = NA_real_
+    ),
+    counts = tibble::tibble(
+      output_type = c("mean", "pmf", "sample"),
+      n = c(6L, 30L, 6L)
     )
   )
-  expect_snapshot(
-    submission_tmpl(
-      config_path,
-      round_id = "2022-12-26"
-    ) |>
-      dplyr::filter(.data$output_type == "sample")
+  # The configured `compound_taskid_set` is forecast_date, target and horizon,
+  # so the sample rows form one sample per horizon.
+  expect_equal(
+    tmpl[tmpl$output_type == "sample", ],
+    tibble::tibble(
+      forecast_date = as.Date("2022-12-26"),
+      target = "wk ahead inc flu hosp",
+      horizon = rep(c(2L, 1L), each = 3L),
+      location = rep(c("US", "01", "02"), times = 2L),
+      output_type = "sample",
+      output_type_id = rep(c("1", "2"), each = 3L),
+      value = NA_real_
+    )
   )
 
   expect_equal(
@@ -236,39 +425,77 @@ test_that("submission_tmpl handles samples correctly", {
   )
 
   # Override config compound task ID structure
-  expect_snapshot(
-    submission_tmpl(
-      config_path,
-      round_id = "2022-12-26",
-      compound_taskid_set = list(
-        c("forecast_date", "target"),
-        NULL
-      )
+  x <- submission_tmpl(
+    config_path,
+    round_id = "2022-12-26",
+    compound_taskid_set = list(
+      c("forecast_date", "target"),
+      NULL
     )
   )
+  expect_spl_override(x, tmpl, spl_ids = rep("1", 6L))
 
   # Check that everything works with a single compound_taskid_set column
-  expect_snapshot(
-    submission_tmpl(
-      config_path,
-      round_id = "2022-12-26",
-      compound_taskid_set = list(
-        c("forecast_date"),
-        NULL
-      )
+  x <- submission_tmpl(
+    config_path,
+    round_id = "2022-12-26",
+    compound_taskid_set = list(
+      c("forecast_date"),
+      NULL
     )
   )
+  expect_spl_override(x, tmpl, spl_ids = rep("1", 6L))
 
   # Check that a list with `NULL` compound_taskid_set specification results in
   # all task ids being included in the compound_taskid_set
-  expect_snapshot(
-    submission_tmpl(
-      config_path,
+  x <- submission_tmpl(
+    config_path,
+    round_id = "2022-12-26",
+    compound_taskid_set = list(
+      NULL,
+      NULL
+    )
+  )
+  expect_spl_override(x, tmpl, spl_ids = as.character(1:6))
+
+  # `target` takes a single value in the sample modeling task above, so a
+  # `compound_taskid_set` of forecast_date alone groups rows as forecast_date
+  # and target do. A config with a second target tells the two apart: joint
+  # across targets, or one sample per target.
+  config <- jsonlite::read_json(config_path, simplifyVector = FALSE)
+  config$rounds[[1]]$model_tasks[[1]]$task_ids$target$optional <- list(
+    "wk ahead inc flu hosp",
+    "wk ahead inc flu death"
+  )
+  two_targets <- withr::local_tempfile(fileext = ".json")
+  jsonlite::write_json(
+    config,
+    two_targets,
+    auto_unbox = TRUE,
+    null = "null",
+    pretty = TRUE
+  )
+  spl_targets <- function(compound_taskid_set) {
+    x <- submission_tmpl(
+      two_targets,
       round_id = "2022-12-26",
-      compound_taskid_set = list(
-        NULL,
-        NULL
-      )
+      compound_taskid_set = compound_taskid_set
+    )
+    x <- x[x$output_type == "sample", c("target", "output_type_id")]
+    dplyr::distinct(x)
+  }
+  expect_equal(
+    spl_targets(list("forecast_date", NULL)),
+    tibble::tibble(
+      target = c("wk ahead inc flu hosp", "wk ahead inc flu death"),
+      output_type_id = "1"
+    )
+  )
+  expect_equal(
+    spl_targets(list(c("forecast_date", "target"), NULL)),
+    tibble::tibble(
+      target = c("wk ahead inc flu hosp", "wk ahead inc flu death"),
+      output_type_id = c("1", "2")
     )
   )
 
@@ -284,13 +511,49 @@ test_that("submission_tmpl handles samples correctly", {
 
 test_that("submission_tmpl ignoring derived task ids works", {
   hub_path <- test_path("testdata", "hub-spl")
-  expect_snapshot(
-    submission_tmpl(
-      hub_path,
-      round_id = "2022-10-22",
-      output_types = "sample",
-      derived_task_ids = "target_end_date",
-      complete_cases_only = FALSE
+  x <- submission_tmpl(
+    hub_path,
+    round_id = "2022-10-22",
+    output_types = "sample",
+    derived_task_ids = "target_end_date",
+    complete_cases_only = FALSE
+  )
+  # The configured `compound_taskid_set` holds every task ID but target, which
+  # has one value, so every row is its own sample. The derived task ID is left
+  # NA.
+  expect_tbl(
+    x,
+    n_rows = 80L,
+    types = c(
+      reference_date = "Date",
+      target = "character",
+      horizon = "integer",
+      location = "character",
+      variant = "character",
+      target_end_date = "Date",
+      output_type = "character",
+      output_type_id = "character",
+      value = "numeric"
+    ),
+    values = list(
+      reference_date = as.Date("2022-10-22"),
+      target = "wk inc flu hosp",
+      horizon = 0:3,
+      location = c("01", "02", "04", "05", "US"),
+      variant = c("AA", "BB", "CC", "DD"),
+      target_end_date = as.Date(NA),
+      output_type = "sample",
+      value = NA_real_
+    ),
+    unchecked = "output_type_id"
+  )
+  expect_equal(x$output_type_id, as.character(1:80))
+  expect_equal(
+    x[1:5, c("horizon", "location", "variant")],
+    tibble::tibble(
+      horizon = c(0:3, 0L),
+      location = c(rep("US", 4), "01"),
+      variant = "AA"
     )
   )
 })

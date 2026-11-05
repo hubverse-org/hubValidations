@@ -1,270 +1,4 @@
-# expand_model_out_grid works correctly
-
-    Code
-      str(expand_model_out_grid(config_tasks, round_id = "2023-01-02"))
-    Output
-      tibble [3,132 x 6] (S3: tbl_df/tbl/data.frame)
-       $ forecast_date : Date[1:3132], format: "2023-01-02" "2023-01-02" ...
-       $ target        : chr [1:3132] "wk flu hosp rate change" "wk flu hosp rate change" "wk flu hosp rate change" "wk flu hosp rate change" ...
-       $ horizon       : int [1:3132] 2 1 2 1 2 1 2 1 2 1 ...
-       $ location      : chr [1:3132] "US" "US" "01" "01" ...
-       $ output_type   : chr [1:3132] "pmf" "pmf" "pmf" "pmf" ...
-       $ output_type_id: chr [1:3132] "large_decrease" "large_decrease" "large_decrease" "large_decrease" ...
-
----
-
-    Code
-      str(expand_model_out_grid(config_tasks, round_id = "2023-01-02",
-        required_vals_only = TRUE))
-    Output
-      tibble [28 x 5] (S3: tbl_df/tbl/data.frame)
-       $ forecast_date : Date[1:28], format: "2023-01-02" "2023-01-02" ...
-       $ horizon       : int [1:28] 2 2 2 2 2 2 2 2 2 2 ...
-       $ location      : chr [1:28] "US" "US" "US" "US" ...
-       $ output_type   : chr [1:28] "pmf" "pmf" "pmf" "pmf" ...
-       $ output_type_id: chr [1:28] "large_decrease" "decrease" "stable" "increase" ...
-
----
-
-    Code
-      str(expand_model_out_grid(config_tasks, round_id = "2022-10-01"))
-    Output
-      tibble [5,184 x 6] (S3: tbl_df/tbl/data.frame)
-       $ origin_date   : Date[1:5184], format: "2022-10-01" "2022-10-01" ...
-       $ target        : chr [1:5184] "wk inc flu hosp" "wk inc flu hosp" "wk inc flu hosp" "wk inc flu hosp" ...
-       $ horizon       : int [1:5184] 1 2 3 4 1 2 3 4 1 2 ...
-       $ location      : chr [1:5184] "US" "US" "US" "US" ...
-       $ output_type   : chr [1:5184] "mean" "mean" "mean" "mean" ...
-       $ output_type_id: num [1:5184] NA NA NA NA NA NA NA NA NA NA ...
-
----
-
-    Code
-      str(expand_model_out_grid(config_tasks, round_id = "2022-10-01",
-        required_vals_only = TRUE))
-    Output
-      tibble [23 x 5] (S3: tbl_df/tbl/data.frame)
-       $ origin_date   : Date[1:23], format: "2022-10-01" "2022-10-01" ...
-       $ target        : chr [1:23] "wk inc flu hosp" "wk inc flu hosp" "wk inc flu hosp" "wk inc flu hosp" ...
-       $ horizon       : int [1:23] 1 1 1 1 1 1 1 1 1 1 ...
-       $ output_type   : chr [1:23] "quantile" "quantile" "quantile" "quantile" ...
-       $ output_type_id: num [1:23] 0.01 0.025 0.05 0.1 0.15 0.2 0.25 0.3 0.35 0.4 ...
-
----
-
-    Code
-      str(expand_model_out_grid(config_tasks, round_id = "2022-10-29",
-        required_vals_only = TRUE))
-    Output
-      tibble [23 x 6] (S3: tbl_df/tbl/data.frame)
-       $ origin_date   : Date[1:23], format: "2022-10-29" "2022-10-29" ...
-       $ target        : chr [1:23] "wk inc flu hosp" "wk inc flu hosp" "wk inc flu hosp" "wk inc flu hosp" ...
-       $ horizon       : int [1:23] 1 1 1 1 1 1 1 1 1 1 ...
-       $ age_group     : chr [1:23] "65+" "65+" "65+" "65+" ...
-       $ output_type   : chr [1:23] "quantile" "quantile" "quantile" "quantile" ...
-       $ output_type_id: num [1:23] 0.01 0.025 0.05 0.1 0.15 0.2 0.25 0.3 0.35 0.4 ...
-
----
-
-    Code
-      str(expand_model_out_grid(config_tasks, round_id = "2022-10-29",
-        required_vals_only = TRUE, all_character = TRUE))
-    Output
-      tibble [23 x 6] (S3: tbl_df/tbl/data.frame)
-       $ origin_date   : chr [1:23] "2022-10-29" "2022-10-29" "2022-10-29" "2022-10-29" ...
-       $ target        : chr [1:23] "wk inc flu hosp" "wk inc flu hosp" "wk inc flu hosp" "wk inc flu hosp" ...
-       $ horizon       : chr [1:23] "1" "1" "1" "1" ...
-       $ age_group     : chr [1:23] "65+" "65+" "65+" "65+" ...
-       $ output_type   : chr [1:23] "quantile" "quantile" "quantile" "quantile" ...
-       $ output_type_id: chr [1:23] "0.01" "0.025" "0.05" "0.1" ...
-
----
-
-    Code
-      expand_model_out_grid(config_tasks, round_id = "2022-10-29",
-        required_vals_only = TRUE, as_arrow_table = TRUE)
-    Output
-      Table
-      23 rows x 6 columns
-      $origin_date <date32[day]>
-      $target <string>
-      $horizon <int32>
-      $age_group <string>
-      $output_type <string>
-      $output_type_id <double>
-      
-      See $metadata for additional Schema metadata
-
----
-
-    Code
-      expand_model_out_grid(config_tasks, round_id = "2022-10-29",
-        required_vals_only = TRUE, all_character = TRUE, as_arrow_table = TRUE)
-    Output
-      Table
-      23 rows x 6 columns
-      $origin_date <string>
-      $target <string>
-      $horizon <string>
-      $age_group <string>
-      $output_type <string>
-      $output_type_id <string>
-
----
-
-    Code
-      str(dplyr::filter(expand_model_out_grid(jsonlite::fromJSON(test_path("testdata",
-        "configs", "both_null_tasks.json"), simplifyVector = TRUE, simplifyDataFrame = FALSE),
-      round_id = "2023-11-26"), is.na(horizon)))
-    Output
-      tibble [24 x 7] (S3: tbl_df/tbl/data.frame)
-       $ origin_date   : Date[1:24], format: "2023-11-26" "2023-11-26" ...
-       $ target        : chr [1:24] "peak time hosp" "peak time hosp" "peak time hosp" "peak time hosp" ...
-       $ horizon       : int [1:24] NA NA NA NA NA NA NA NA NA NA ...
-       $ location      : chr [1:24] "US" "01" "02" "US" ...
-       $ age_group     : chr [1:24] "0-130" "0-130" "0-130" "0-0.99" ...
-       $ output_type   : chr [1:24] "cdf" "cdf" "cdf" "cdf" ...
-       $ output_type_id: num [1:24] 1 1 1 1 1 1 1 1 1 1 ...
-
----
-
-    Code
-      str(dplyr::filter(expand_model_out_grid(jsonlite::fromJSON(test_path("testdata",
-        "configs", "both_null_tasks_swap.json"), simplifyVector = TRUE,
-      simplifyDataFrame = FALSE), round_id = "2023-11-26"), is.na(horizon)))
-    Output
-      tibble [24 x 7] (S3: tbl_df/tbl/data.frame)
-       $ origin_date   : Date[1:24], format: "2023-11-26" "2023-11-26" ...
-       $ target        : chr [1:24] "peak time hosp" "peak time hosp" "peak time hosp" "peak time hosp" ...
-       $ horizon       : int [1:24] NA NA NA NA NA NA NA NA NA NA ...
-       $ location      : chr [1:24] "US" "01" "02" "US" ...
-       $ age_group     : chr [1:24] "0-130" "0-130" "0-130" "0-0.99" ...
-       $ output_type   : chr [1:24] "cdf" "cdf" "cdf" "cdf" ...
-       $ output_type_id: num [1:24] 1 1 1 1 1 1 1 1 1 1 ...
-
-# expand_model_out_grid output controls work correctly
-
-    Code
-      str(expand_model_out_grid(config_tasks, round_id = "2023-01-02", all_character = TRUE))
-    Output
-      tibble [3,132 x 6] (S3: tbl_df/tbl/data.frame)
-       $ forecast_date : chr [1:3132] "2023-01-02" "2023-01-02" "2023-01-02" "2023-01-02" ...
-       $ target        : chr [1:3132] "wk flu hosp rate change" "wk flu hosp rate change" "wk flu hosp rate change" "wk flu hosp rate change" ...
-       $ horizon       : chr [1:3132] "2" "1" "2" "1" ...
-       $ location      : chr [1:3132] "US" "US" "01" "01" ...
-       $ output_type   : chr [1:3132] "pmf" "pmf" "pmf" "pmf" ...
-       $ output_type_id: chr [1:3132] "large_decrease" "large_decrease" "large_decrease" "large_decrease" ...
-
----
-
-    Code
-      expand_model_out_grid(config_tasks, round_id = "2023-01-02", all_character = TRUE,
-        as_arrow_table = TRUE)
-    Output
-      Table
-      3132 rows x 6 columns
-      $forecast_date <string>
-      $target <string>
-      $horizon <string>
-      $location <string>
-      $output_type <string>
-      $output_type_id <string>
-
----
-
-    Code
-      str(expand_model_out_grid(config_tasks, round_id = "2023-01-02",
-        required_vals_only = TRUE, all_character = TRUE))
-    Output
-      tibble [28 x 5] (S3: tbl_df/tbl/data.frame)
-       $ forecast_date : chr [1:28] "2023-01-02" "2023-01-02" "2023-01-02" "2023-01-02" ...
-       $ horizon       : chr [1:28] "2" "2" "2" "2" ...
-       $ location      : chr [1:28] "US" "US" "US" "US" ...
-       $ output_type   : chr [1:28] "pmf" "pmf" "pmf" "pmf" ...
-       $ output_type_id: chr [1:28] "large_decrease" "decrease" "stable" "increase" ...
-
----
-
-    Code
-      expand_model_out_grid(config_tasks, round_id = "2023-01-02",
-        required_vals_only = TRUE, all_character = TRUE, as_arrow_table = TRUE)
-    Output
-      Table
-      28 rows x 5 columns
-      $forecast_date <string>
-      $horizon <string>
-      $location <string>
-      $output_type <string>
-      $output_type_id <string>
-
----
-
-    Code
-      str(expand_model_out_grid(config_tasks, round_id = "2023-01-02",
-        required_vals_only = TRUE, all_character = TRUE, as_arrow_table = FALSE,
-        bind_model_tasks = FALSE))
-    Output
-      List of 2
-       $ : tibble [5 x 5] (S3: tbl_df/tbl/data.frame)
-        ..$ forecast_date : chr [1:5] "2023-01-02" "2023-01-02" "2023-01-02" "2023-01-02" ...
-        ..$ horizon       : chr [1:5] "2" "2" "2" "2" ...
-        ..$ location      : chr [1:5] "US" "US" "US" "US" ...
-        ..$ output_type   : chr [1:5] "pmf" "pmf" "pmf" "pmf" ...
-        ..$ output_type_id: chr [1:5] "large_decrease" "decrease" "stable" "increase" ...
-       $ : tibble [23 x 5] (S3: tbl_df/tbl/data.frame)
-        ..$ forecast_date : chr [1:23] "2023-01-02" "2023-01-02" "2023-01-02" "2023-01-02" ...
-        ..$ horizon       : chr [1:23] "2" "2" "2" "2" ...
-        ..$ location      : chr [1:23] "US" "US" "US" "US" ...
-        ..$ output_type   : chr [1:23] "quantile" "quantile" "quantile" "quantile" ...
-        ..$ output_type_id: chr [1:23] "0.01" "0.025" "0.05" "0.1" ...
-
----
-
-    Code
-      expand_model_out_grid(config_tasks, round_id = "2023-01-02",
-        required_vals_only = TRUE, all_character = TRUE, as_arrow_table = TRUE,
-        bind_model_tasks = FALSE)
-    Output
-      [[1]]
-      Table
-      5 rows x 5 columns
-      $forecast_date <string>
-      $horizon <string>
-      $location <string>
-      $output_type <string>
-      $output_type_id <string>
-      
-      [[2]]
-      Table
-      23 rows x 5 columns
-      $forecast_date <string>
-      $horizon <string>
-      $location <string>
-      $output_type <string>
-      $output_type_id <string>
-      
-
 # expand_model_out_grid output controls with samples work correctly
-
-    Code
-      expand_model_out_grid(config_tasks, round_id = "2022-12-26")
-    Output
-      # A tibble: 42 x 6
-         forecast_date target              horizon location output_type output_type_id
-         <date>        <chr>                 <int> <chr>    <chr>       <chr>         
-       1 2022-12-26    wk ahead inc flu h~       2 US       sample      <NA>          
-       2 2022-12-26    wk ahead inc flu h~       1 US       sample      <NA>          
-       3 2022-12-26    wk ahead inc flu h~       2 01       sample      <NA>          
-       4 2022-12-26    wk ahead inc flu h~       1 01       sample      <NA>          
-       5 2022-12-26    wk ahead inc flu h~       2 02       sample      <NA>          
-       6 2022-12-26    wk ahead inc flu h~       1 02       sample      <NA>          
-       7 2022-12-26    wk ahead inc flu h~       2 US       mean        <NA>          
-       8 2022-12-26    wk ahead inc flu h~       1 US       mean        <NA>          
-       9 2022-12-26    wk ahead inc flu h~       2 01       mean        <NA>          
-      10 2022-12-26    wk ahead inc flu h~       1 01       mean        <NA>          
-      # i 32 more rows
-
----
 
     Code
       dplyr::filter(expand_model_out_grid(config_tasks, round_id = "2022-12-26",
@@ -303,65 +37,6 @@
 
     Code
       expand_model_out_grid(config_tasks, round_id = "2022-12-26",
-        include_sample_ids = TRUE, required_vals_only = TRUE, as_arrow_table = TRUE)
-    Condition
-      Warning:
-      The compound task ID target has all optional values. Representation of compound sample modeling tasks is not fully specified.
-    Output
-      Table
-      6 rows x 5 columns
-      $forecast_date <date32[day]>
-      $horizon <int32>
-      $location <string>
-      $output_type <string>
-      $output_type_id <string>
-      
-      See $metadata for additional Schema metadata
-
----
-
-    Code
-      expand_model_out_grid(config_tasks, round_id = "2022-12-26",
-        include_sample_ids = TRUE, bind_model_tasks = FALSE)
-    Output
-      [[1]]
-      # A tibble: 12 x 6
-         forecast_date target              horizon location output_type output_type_id
-         <date>        <chr>                 <int> <chr>    <chr>       <chr>         
-       1 2022-12-26    wk ahead inc flu h~       2 US       mean        <NA>          
-       2 2022-12-26    wk ahead inc flu h~       1 US       mean        <NA>          
-       3 2022-12-26    wk ahead inc flu h~       2 01       mean        <NA>          
-       4 2022-12-26    wk ahead inc flu h~       1 01       mean        <NA>          
-       5 2022-12-26    wk ahead inc flu h~       2 02       mean        <NA>          
-       6 2022-12-26    wk ahead inc flu h~       1 02       mean        <NA>          
-       7 2022-12-26    wk ahead inc flu h~       2 US       sample      1             
-       8 2022-12-26    wk ahead inc flu h~       2 01       sample      1             
-       9 2022-12-26    wk ahead inc flu h~       2 02       sample      1             
-      10 2022-12-26    wk ahead inc flu h~       1 US       sample      2             
-      11 2022-12-26    wk ahead inc flu h~       1 01       sample      2             
-      12 2022-12-26    wk ahead inc flu h~       1 02       sample      2             
-      
-      [[2]]
-      # A tibble: 30 x 6
-         forecast_date target              horizon location output_type output_type_id
-         <date>        <chr>                 <int> <chr>    <chr>       <chr>         
-       1 2022-12-26    wk flu hosp rate c~       2 US       pmf         large_decrease
-       2 2022-12-26    wk flu hosp rate c~       1 US       pmf         large_decrease
-       3 2022-12-26    wk flu hosp rate c~       2 01       pmf         large_decrease
-       4 2022-12-26    wk flu hosp rate c~       1 01       pmf         large_decrease
-       5 2022-12-26    wk flu hosp rate c~       2 02       pmf         large_decrease
-       6 2022-12-26    wk flu hosp rate c~       1 02       pmf         large_decrease
-       7 2022-12-26    wk flu hosp rate c~       2 US       pmf         decrease      
-       8 2022-12-26    wk flu hosp rate c~       1 US       pmf         decrease      
-       9 2022-12-26    wk flu hosp rate c~       2 01       pmf         decrease      
-      10 2022-12-26    wk flu hosp rate c~       1 01       pmf         decrease      
-      # i 20 more rows
-      
-
----
-
-    Code
-      expand_model_out_grid(config_tasks, round_id = "2022-12-26",
         include_sample_ids = TRUE, required_vals_only = TRUE)
     Condition
       Warning:
@@ -376,26 +51,6 @@
       4 2022-12-26          2 US       pmf         stable        
       5 2022-12-26          2 US       pmf         increase      
       6 2022-12-26          2 US       pmf         large_increase
-
----
-
-    Code
-      expand_model_out_grid(config_tasks, round_id = "2022-12-26")
-    Output
-      # A tibble: 66 x 6
-         forecast_date target              horizon location output_type output_type_id
-         <date>        <chr>                 <int> <chr>    <chr>       <chr>         
-       1 2022-12-26    wk ahead inc flu h~       2 US       sample      1             
-       2 2022-12-26    wk ahead inc flu h~       1 US       sample      1             
-       3 2022-12-26    wk ahead inc flu h~       2 01       sample      1             
-       4 2022-12-26    wk ahead inc flu h~       1 01       sample      1             
-       5 2022-12-26    wk ahead inc flu h~       2 02       sample      1             
-       6 2022-12-26    wk ahead inc flu h~       1 02       sample      1             
-       7 2022-12-26    wk ahead inc flu h~       2 US       sample      2             
-       8 2022-12-26    wk ahead inc flu h~       1 US       sample      2             
-       9 2022-12-26    wk ahead inc flu h~       2 01       sample      2             
-      10 2022-12-26    wk ahead inc flu h~       1 01       sample      2             
-      # i 56 more rows
 
 ---
 
@@ -420,107 +75,7 @@
       11 2022-12-26    wk ahead inc flu d~       1 01       sample                   4
       12 2022-12-26    wk ahead inc flu d~       1 02       sample                   4
 
----
-
-    Code
-      expand_model_out_grid(config_tasks, round_id = "2022-12-26",
-        include_sample_ids = TRUE, compound_taskid_set = list(c("forecast_date",
-          "target"), NULL))
-    Output
-      # A tibble: 42 x 6
-         forecast_date target              horizon location output_type output_type_id
-         <date>        <chr>                 <int> <chr>    <chr>       <chr>         
-       1 2022-12-26    wk ahead inc flu h~       2 US       mean        <NA>          
-       2 2022-12-26    wk ahead inc flu h~       1 US       mean        <NA>          
-       3 2022-12-26    wk ahead inc flu h~       2 01       mean        <NA>          
-       4 2022-12-26    wk ahead inc flu h~       1 01       mean        <NA>          
-       5 2022-12-26    wk ahead inc flu h~       2 02       mean        <NA>          
-       6 2022-12-26    wk ahead inc flu h~       1 02       mean        <NA>          
-       7 2022-12-26    wk ahead inc flu h~       2 US       sample      1             
-       8 2022-12-26    wk ahead inc flu h~       1 US       sample      1             
-       9 2022-12-26    wk ahead inc flu h~       2 01       sample      1             
-      10 2022-12-26    wk ahead inc flu h~       1 01       sample      1             
-      # i 32 more rows
-
----
-
-    Code
-      expand_model_out_grid(config_tasks, round_id = "2022-12-26",
-        include_sample_ids = TRUE, compound_taskid_set = list(c("forecast_date",
-          "target", "horizon", "location"), NULL))
-    Output
-      # A tibble: 42 x 6
-         forecast_date target              horizon location output_type output_type_id
-         <date>        <chr>                 <int> <chr>    <chr>       <chr>         
-       1 2022-12-26    wk ahead inc flu h~       2 US       mean        <NA>          
-       2 2022-12-26    wk ahead inc flu h~       1 US       mean        <NA>          
-       3 2022-12-26    wk ahead inc flu h~       2 01       mean        <NA>          
-       4 2022-12-26    wk ahead inc flu h~       1 01       mean        <NA>          
-       5 2022-12-26    wk ahead inc flu h~       2 02       mean        <NA>          
-       6 2022-12-26    wk ahead inc flu h~       1 02       mean        <NA>          
-       7 2022-12-26    wk ahead inc flu h~       2 US       sample      1             
-       8 2022-12-26    wk ahead inc flu h~       1 US       sample      2             
-       9 2022-12-26    wk ahead inc flu h~       2 01       sample      3             
-      10 2022-12-26    wk ahead inc flu h~       1 01       sample      4             
-      # i 32 more rows
-
----
-
-    Code
-      expand_model_out_grid(config_tasks, round_id = "2022-12-26",
-        include_sample_ids = TRUE, compound_taskid_set = list(NULL, NULL))
-    Output
-      # A tibble: 42 x 6
-         forecast_date target              horizon location output_type output_type_id
-         <date>        <chr>                 <int> <chr>    <chr>       <chr>         
-       1 2022-12-26    wk ahead inc flu h~       2 US       mean        <NA>          
-       2 2022-12-26    wk ahead inc flu h~       1 US       mean        <NA>          
-       3 2022-12-26    wk ahead inc flu h~       2 01       mean        <NA>          
-       4 2022-12-26    wk ahead inc flu h~       1 01       mean        <NA>          
-       5 2022-12-26    wk ahead inc flu h~       2 02       mean        <NA>          
-       6 2022-12-26    wk ahead inc flu h~       1 02       mean        <NA>          
-       7 2022-12-26    wk ahead inc flu h~       2 US       sample      1             
-       8 2022-12-26    wk ahead inc flu h~       1 US       sample      2             
-       9 2022-12-26    wk ahead inc flu h~       2 01       sample      3             
-      10 2022-12-26    wk ahead inc flu h~       1 01       sample      4             
-      # i 32 more rows
-
 # expand_model_out_grid output type subsetting works
-
-    Code
-      expand_model_out_grid(config_tasks, round_id = "2022-12-26",
-        include_sample_ids = TRUE, bind_model_tasks = FALSE, output_types = c("pmf",
-          "sample"), )
-    Output
-      [[1]]
-      # A tibble: 6 x 6
-        forecast_date target               horizon location output_type output_type_id
-        <date>        <chr>                  <int> <chr>    <chr>       <chr>         
-      1 2022-12-26    wk ahead inc flu ho~       2 US       sample      1             
-      2 2022-12-26    wk ahead inc flu ho~       2 01       sample      1             
-      3 2022-12-26    wk ahead inc flu ho~       2 02       sample      1             
-      4 2022-12-26    wk ahead inc flu ho~       1 US       sample      2             
-      5 2022-12-26    wk ahead inc flu ho~       1 01       sample      2             
-      6 2022-12-26    wk ahead inc flu ho~       1 02       sample      2             
-      
-      [[2]]
-      # A tibble: 30 x 6
-         forecast_date target              horizon location output_type output_type_id
-         <date>        <chr>                 <int> <chr>    <chr>       <chr>         
-       1 2022-12-26    wk flu hosp rate c~       2 US       pmf         large_decrease
-       2 2022-12-26    wk flu hosp rate c~       1 US       pmf         large_decrease
-       3 2022-12-26    wk flu hosp rate c~       2 01       pmf         large_decrease
-       4 2022-12-26    wk flu hosp rate c~       1 01       pmf         large_decrease
-       5 2022-12-26    wk flu hosp rate c~       2 02       pmf         large_decrease
-       6 2022-12-26    wk flu hosp rate c~       1 02       pmf         large_decrease
-       7 2022-12-26    wk flu hosp rate c~       2 US       pmf         decrease      
-       8 2022-12-26    wk flu hosp rate c~       1 US       pmf         decrease      
-       9 2022-12-26    wk flu hosp rate c~       2 01       pmf         decrease      
-      10 2022-12-26    wk flu hosp rate c~       1 01       pmf         decrease      
-      # i 20 more rows
-      
-
----
 
     Code
       expand_model_out_grid(config_tasks, round_id = "2022-12-26",
@@ -582,18 +137,6 @@
 # force_output_types works as expected with v4
 
     Code
-      v4_opt_spls
-    Output
-      [[1]]
-      # A tibble: 0 x 0
-      
-      [[2]]
-      # A tibble: 0 x 0
-      
-
----
-
-    Code
       v4_opt_spls_force
     Output
       [[1]]
@@ -630,18 +173,6 @@
 ---
 
     Code
-      v4_opt_mdn
-    Output
-      [[1]]
-      # A tibble: 0 x 0
-      
-      [[2]]
-      # A tibble: 0 x 0
-      
-
----
-
-    Code
       v4_opt_mdn_force
     Output
       [[1]]
@@ -660,43 +191,6 @@
 ---
 
     Code
-      v4_opt_qntl
-    Output
-      [[1]]
-      # A tibble: 0 x 0
-      
-      [[2]]
-      # A tibble: 0 x 0
-      
-
----
-
-    Code
-      v4_opt_qntl_force
-    Output
-      [[1]]
-      # A tibble: 0 x 0
-      
-      [[2]]
-      # A tibble: 23 x 5
-         forecast_date horizon location output_type output_type_id
-         <date>          <int> <chr>    <chr>       <chr>         
-       1 2023-04-24          2 US       quantile    0.01          
-       2 2023-04-24          2 US       quantile    0.025         
-       3 2023-04-24          2 US       quantile    0.05          
-       4 2023-04-24          2 US       quantile    0.1           
-       5 2023-04-24          2 US       quantile    0.15          
-       6 2023-04-24          2 US       quantile    0.2           
-       7 2023-04-24          2 US       quantile    0.25          
-       8 2023-04-24          2 US       quantile    0.3           
-       9 2023-04-24          2 US       quantile    0.35          
-      10 2023-04-24          2 US       quantile    0.4           
-      # i 13 more rows
-      
-
----
-
-    Code
       v4_req_only
     Output
       # A tibble: 2 x 3
@@ -704,26 +198,6 @@
         <date>          <int> <chr>   
       1 2023-04-24          2 US      
       2 2023-04-24          2 US      
-
----
-
-    Code
-      v4_force_all
-    Output
-      # A tibble: 29 x 5
-         forecast_date horizon location output_type output_type_id
-         <date>          <int> <chr>    <chr>       <chr>         
-       1 2023-04-24          2 US       pmf         large_decrease
-       2 2023-04-24          2 US       pmf         decrease      
-       3 2023-04-24          2 US       pmf         stable        
-       4 2023-04-24          2 US       pmf         increase      
-       5 2023-04-24          2 US       pmf         large_increase
-       6 2023-04-24          2 US       quantile    0.01          
-       7 2023-04-24          2 US       quantile    0.025         
-       8 2023-04-24          2 US       quantile    0.05          
-       9 2023-04-24          2 US       quantile    0.1           
-      10 2023-04-24          2 US       quantile    0.15          
-      # i 19 more rows
 
 # force_output_types works as expected with v3
 
@@ -768,29 +242,6 @@
       20 2022-10-22     01       BB      sample      <NA>          
 
 # expand_model_out_grid derived_task_ids ignoring works
-
-    Code
-      expand_model_out_grid(config_tasks, round_id = "2022-10-22",
-        include_sample_ids = FALSE, bind_model_tasks = TRUE, output_types = "sample",
-        derived_task_ids = "target_end_date")
-    Output
-      # A tibble: 80 x 8
-         reference_date target    horizon location variant target_end_date output_type
-         <date>         <chr>       <int> <chr>    <chr>   <date>          <chr>      
-       1 2022-10-22     wk inc f~       0 US       AA      NA              sample     
-       2 2022-10-22     wk inc f~       1 US       AA      NA              sample     
-       3 2022-10-22     wk inc f~       2 US       AA      NA              sample     
-       4 2022-10-22     wk inc f~       3 US       AA      NA              sample     
-       5 2022-10-22     wk inc f~       0 01       AA      NA              sample     
-       6 2022-10-22     wk inc f~       1 01       AA      NA              sample     
-       7 2022-10-22     wk inc f~       2 01       AA      NA              sample     
-       8 2022-10-22     wk inc f~       3 01       AA      NA              sample     
-       9 2022-10-22     wk inc f~       0 02       AA      NA              sample     
-      10 2022-10-22     wk inc f~       1 02       AA      NA              sample     
-      # i 70 more rows
-      # i 1 more variable: output_type_id <chr>
-
----
 
     Code
       expand_model_out_grid(config_tasks, round_id = "2022-10-22",
@@ -846,9 +297,9 @@
 ---
 
     Code
-      str(dplyr::filter(expand_model_out_grid(jsonlite::fromJSON(test_path("testdata",
+      dplyr::filter(expand_model_out_grid(jsonlite::fromJSON(test_path("testdata",
         "configs", "both_null_tasks_all.json"), simplifyVector = TRUE,
-      simplifyDataFrame = FALSE), round_id = "2023-11-26"), is.na(horizon)))
+      simplifyDataFrame = FALSE), round_id = "2023-11-26"), is.na(horizon))
     Condition
       Error in `map2()`:
       i In index: 3.
@@ -887,25 +338,4 @@
       Error in `expand_model_out_grid()`:
       x `compound_taskid_set` must have one element for each modeling task in the round.
       i The round has 2 modeling tasks but `compound_taskid_set` has 0.
-
-# v4 required output type ID values extracted correctly
-
-    Code
-      expand_model_out_grid(config_tasks = config_tasks, round_id = round_id,
-        output_types = "pmf", derived_task_ids = get_hub_derived_task_ids(hub_path))
-    Output
-      # A tibble: 540 x 7
-         forecast_date target  horizon target_date location output_type output_type_id
-         <date>        <chr>     <int> <date>      <chr>    <chr>       <chr>         
-       1 2023-05-01    wk flu~       2 NA          US       pmf         large_decrease
-       2 2023-05-01    wk flu~       1 NA          US       pmf         large_decrease
-       3 2023-05-01    wk flu~       2 NA          01       pmf         large_decrease
-       4 2023-05-01    wk flu~       1 NA          01       pmf         large_decrease
-       5 2023-05-01    wk flu~       2 NA          02       pmf         large_decrease
-       6 2023-05-01    wk flu~       1 NA          02       pmf         large_decrease
-       7 2023-05-01    wk flu~       2 NA          04       pmf         large_decrease
-       8 2023-05-01    wk flu~       1 NA          04       pmf         large_decrease
-       9 2023-05-01    wk flu~       2 NA          05       pmf         large_decrease
-      10 2023-05-01    wk flu~       1 NA          05       pmf         large_decrease
-      # i 530 more rows
 

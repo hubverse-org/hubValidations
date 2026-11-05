@@ -18,15 +18,16 @@ test_that("check_tbl_unique_round_id works", {
       round_id_col = "origin_date"
     )
   )
-  expect_snapshot(
-    str(
-      check_tbl_unique_round_id(
-        tbl = tbl,
-        round_id_col = "origin_date",
-        file_path = file_path,
-        hub_path = hub_path
-      )
-    )
+  expect_check(
+    check_tbl_unique_round_id(
+      tbl = tbl,
+      round_id_col = "origin_date",
+      file_path = file_path,
+      hub_path = hub_path
+    ),
+    success_class,
+    file_path,
+    "check_tbl_unique_round_id"
   )
 })
 
@@ -57,14 +58,15 @@ test_that("check_tbl_unique_round_id fails correctly", {
       round_id_col = "random_column"
     )
   )
-  expect_snapshot(
-    str(
-      check_tbl_unique_round_id(
-        tbl = multiple_rids,
-        file_path = file_path,
-        hub_path = hub_path,
-        round_id_col = "random_column"
-      )
-    )
+  expect_check(
+    check_tbl_unique_round_id(
+      tbl = multiple_rids,
+      file_path = file_path,
+      hub_path = hub_path,
+      round_id_col = "random_column"
+    ),
+    error_class,
+    file_path,
+    "check_tbl_unique_round_id"
   )
 })
