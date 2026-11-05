@@ -72,10 +72,9 @@ spl_hash_tbl <- function(
   )
 ) {
   tbl <- tbl[tbl$output_type == "sample", names(tbl) != "value"]
-  # `derived_taskids_to_na()` replaces a derived task ID's config values with
-  # `NA` as the config is read. So when a derived task ID is in the compound
-  # task ID set, the index worked out below can only find its value if the
-  # column holds `NA` too.
+  # The config's values for a derived task ID come back as `NA`. So when a
+  # derived task ID is in the compound task ID set, the index worked out below
+  # can only find its value if the column holds `NA` too.
   if (!is.null(derived_task_ids)) {
     tbl[, derived_task_ids] <- NA_character_
   }

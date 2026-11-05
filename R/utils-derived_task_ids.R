@@ -1,28 +1,3 @@
-#' Set derived task_ids to have `NA` values when creating expanded grids of valid
-#' values
-#'
-#' @param model_task A single `model_task` object.
-#' @param derived_task_ids character vector of derived task ID names.
-#'
-#' @returns If `derived_task_ids` is not `NULL`, a modified `model_task` object
-#' with the `required` values of any derived task IDs set to `NULL` and the
-#' `optional` values set to `NA`. Otherwise, the original `model_task` object
-#' is returned.
-#' @noRd
-derived_taskids_to_na <- function(model_task, derived_task_ids) {
-  if (is.null(derived_task_ids)) {
-    return(model_task)
-  }
-  purrr::modify_at(
-    model_task,
-    .at = derived_task_ids,
-    .f = ~ list(
-      required = NULL,
-      optional = NA
-    )
-  )
-}
-
 #' Ensure that derived task IDs are valid task IDs and do not have required values.
 #'
 #' @param derived_task_ids character vector of derived task ID names.
@@ -59,10 +34,12 @@ validate_derived_task_ids <- function(
   model_tasks <- hubUtils::get_round_model_tasks(config_tasks, round_id)
   has_required <- purrr::map(
     model_tasks,
-    ~ .x[["task_ids"]][valid_task_ids] |>
+    \(model_task) {
       purrr::map_lgl(
-        ~ !is.null(.x$required)
+        purrr::set_names(valid_task_ids),
+        \(task_id) !is.null(model_task[["task_ids"]][[task_id]][["required"]])
       )
+    }
   ) |>
     purrr::reduce(`|`)
   if (any(has_required)) {
