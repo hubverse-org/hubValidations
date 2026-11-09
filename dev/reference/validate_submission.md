@@ -168,26 +168,6 @@ validate_submission(hub_path, file_path)
 #> ✔ [file_n]: Number of accepted model output files per round met.
 #> ✔ [metadata_exists]: Metadata file exists at path
 #>   model-metadata/team1-goodmodel.yaml.
-#> ✖ [submission_time]: Submission time must be within accepted submission window
-#>   for round.  Current time "2026-10-14 12:59:25 UTC" is outside window
-#>   2022-10-02 EDT--2022-10-09 23:59:59 EDT.
-#> ✔ [file_read]: File could be read successfully.
-#> ✔ [valid_round_id_col]: `round_id_col` name is valid.
-#> ✔ [unique_round_id]: `round_id` column "origin_date" contains a single, unique
-#>   round ID value.
-#> ✔ [match_round_id]: All `round_id_col` "origin_date" values match submission
-#>   `round_id` from file name.
-#> ✔ [colnames]: Column names are consistent with expected round task IDs and std
-#>   column names.
-#> ✔ [col_types]: Column data types match hub schema.
-#> ✔ [valid_vals]: `tbl` contains valid values/value combinations.
-#> ✔ [rows_unique]: All combinations of task ID
-#>   column/`output_type`/`output_type_id` values are unique.
-#> ✔ [req_vals]: Required task ID/output type/output type ID combinations all
-#>   present.
-#> ✔ [value_col_valid]: Values in column `value` all valid with respect to
-#>   modeling task config.
-#> ✔ [value_col_non_desc]: Quantile or cdf `value` values increase when ordered by
-#>   `output_type_id`.
-#> ℹ [value_col_sum1]: No pmf output types to check for sum of 1. Check skipped.
+#> █ [submission_time]: EXEC ERROR: Error in C_force_tz(to_posixct(time), tz,
+#>   roll_dst) : CCTZ: Unrecognized output timezone: "US/Eastern"
 ```

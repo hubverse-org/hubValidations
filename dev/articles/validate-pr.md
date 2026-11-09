@@ -245,8 +245,10 @@ v
 #>   Skipping `check_tbl_spl_non_compound_tid` check.
 #> ℹ [spl_n]: No v3 samples found in model output data to check. Skipping
 #>   `check_tbl_spl_n` check.
-#> ⓧ [valid_file_status]: Previously submitted model output files must not be
-#>   modified.  model-output/hub-baseline/2022-10-08-hub-baseline.csv modified.
+#> █ [valid_file_status]: Could not check submission window for file
+#>   "hub-baseline/2022-10-08-hub-baseline.csv". EXEC ERROR: Error in
+#>   C_force_tz(to_posixct(time), tz, roll_dst) : CCTZ: Unrecognized output
+#>   timezone: "US/Eastern"
 #> 
 #> 
 #> ── team1-goodmodel/2022-10-22-team1-goodmodel.csv ────
@@ -298,9 +300,10 @@ v
 #> 
 #> 
 #> 
-#> ⓧ [valid_file_status]: Previously submitted model output files must not be
-#>   removed.  model-output/team1-goodmodel/2022-10-15-team1-goodmodel.csv
-#>   removed.
+#> █ [valid_file_status]: Could not check submission window for file
+#>   "team1-goodmodel/2022-10-15-team1-goodmodel.csv". EXEC ERROR: Error in
+#>   C_force_tz(to_posixct(time), tz, roll_dst) : CCTZ: Unrecognized output
+#>   timezone: "US/Eastern"
 #> 
 #> 
 #> ── team1-goodmodel.yaml ────
