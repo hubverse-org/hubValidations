@@ -48,33 +48,56 @@ Returned object also inherits from subclass \verb{<hub_check>}.
 }
 \description{
 This check detects the compound task ID sets of samples, implied by the \code{output_type_id}
-and task ID values, and checks them for internal consistency and compliance with
+and task ID values, and checks them for compliance with
 the \code{compound_taskid_set} defined for each round modeling task in the \code{tasks.json} config.
+Samples in a modeling task may have different compound task ID sets, as long
+as each matches or is coarser than the configured set. See the Compound
+modeling tasks section.
 }
 \details{
 If the check fails, the output of the check includes an \code{errors} element,
 a list of items, one for each modeling task failing validation.
 The structure depends on the reason the check failed.
 
-If the check failed because more that a single unique \code{compound_taskid_set} was found
-for a given model task, the \code{errors} object will be a list with one element for each
-\code{compound_taskid_set} detected and will have the following structure:
-\itemize{
-\item \code{tbl_comp_tids}: a compound task id set detected in the the tbl.
-\item \code{output_type_ids}: The output type ID of the sample that does not contain a
-single, unique value for each compound task ID.
-}
-
 If the check failed because task IDs the hub does not accept as compound task IDs
 were identified as such (i.e. samples describe "finer" compound modeling tasks)
-for a given model task, the \code{errors} object will be a list with the structure
-described above as well as the additional following elements:
+for a given model task, the \code{errors} object will be a list with one element
+for each finer compound task ID set detected, with the following structure:
 \itemize{
 \item \code{config_comp_tids}: the \code{compound_taskid_set} the modeling task config expects.
 \item \code{invalid_tbl_comp_tids}: the names of invalid compound task IDs.
+\item \code{tbl_comp_tids}: the finer compound task ID set detected in the tbl.
+\item \code{output_type_ids}: The output type IDs of the samples with that compound
+task ID set.
 }
 
 The name of each element is the index identifying the config modeling task the sample is associated with \code{mt_id}.
 See \href{https://docs.hubverse.io/en/latest/user-guide/sample-output-type.html}{hubverse documentation on samples}
 for more details.
 }
+\section{Compound modeling tasks}{
+
+Samples are validated against the configured \code{compound_taskid_set} only.
+Each combination of configured compound task ID values is one compound
+modeling task, identified in check output by its \code{compound_idx}. A sample
+that matches the configured set covers one compound modeling task. A
+coarser sample covers several. The sample checks split a coarser sample
+into one part per compound modeling task, and validate and count each part
+as a sample of that compound modeling task. A finer sample covers only part
+of a compound modeling task, so it fails.
+
+For example, take a configured \code{compound_taskid_set} of \code{reference_date}
+and \code{location}. Each compound modeling task is then one location for one
+reference date, and a sample that matches the configured set is a
+trajectory across horizons for one location.
+\itemize{
+\item A sample with a compound task ID set of \code{reference_date} only is coarser.
+It is joint across locations as well as horizons. If it covers locations
+\code{A1} and \code{A2}, it is validated as one sample for \code{A1} and one for \code{A2}.
+\item A sample with a compound task ID set of \code{reference_date}, \code{location} and
+\code{horizon} is finer. It covers one horizon of a trajectory, and fails.
+}
+
+The other sample checks refer to this example.
+}
+

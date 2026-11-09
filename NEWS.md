@@ -1,7 +1,16 @@
 # hubValidations (development version)
 
+## Breaking Changes
+
+* Samples in one modeling task may now have different compound task ID sets, as long as each matches or is coarser than the configured `compound_taskid_set`. For example, with a `compound_taskid_set` of `reference_date` and `location`, each sample is a trajectory across horizons for a single location. A file can now also contain samples with a compound task ID set of `reference_date` only, which are joint across locations as well as horizons. Samples joint across locations `A1` and `A2` can sit beside samples for location `B` alone (#400).
+* New check `check_tbl_spl_overlap()` fails samples that partly overlap. For example, with a `compound_taskid_set` of `reference_date` and `location`, samples with a compound task ID set of `reference_date` only are joint across locations, and a sample joint across locations `A1` and `A2` beside a sample joint across `A2` and `B` fails. `validate_model_data()`, `validate_submission()` and `validate_pr()` run it, and their output contains a new `spl_overlap` element. Their new `allow_overlapping_samples` argument skips it (#402).
+* `validate_model_data()`, and so `validate_submission()` and `validate_pr()`, no longer run `check_tbl_spl_compound_tid()`, and their output no longer contains a `spl_compound_tid` element (#377).
+* `get_tbl_compound_taskid_set()` no longer errors when samples in a modeling task have different compound task ID sets. It returns every task ID detected as compound, with each set in a `sets` attribute (#400).
+
 ## Bug fixes
 
+* `check_tbl_spl_n()` and `check_tbl_spl_non_compound_tid()` now check a coarser sample in every combination of compound task ID values it covers. `check_tbl_spl_n()` previously counted it towards one combination, so it could report the wrong combinations as short of samples. In the `errors` attributes, `compound_idx` values are now always numbered from the configured `compound_taskid_set`, `check_tbl_spl_non_compound_tid()` gains a `slices` element giving the compound task ID values of each mismatch, and each `compound_idx_tbl` of `check_tbl_spl_n()` holds only one sample's rows within that combination (#377).
+* The `errors` attribute of `check_tbl_spl_compound_taskid_set()` and `get_tbl_compound_taskid_set()` now lists the correct `output_type_ids` for each detected compound task ID set (#400).
 * Fixed a bug where `check_tbl_derived_task_id_vals()` rejected `NA` in a derived task ID column, even in the rows of a modeling task that does not use that task ID, where `NA` is the only valid value (#387).
 * Fixed a bug where the message of a failing `check_tbl_values()` named `NA` as an invalid value in a column that another modeling task lists as `null`. Called directly on a table holding another round's ID in the round ID column, it now names that ID as an invalid value rather than reporting an invalid combination (#387).
 * Fixed a bug where a derived task ID was ignored if the round's first modeling task left it out of its config. `expand_model_out_grid()` and `submission_tmpl()` then filled its column with the config's values instead of `NA` (#387).

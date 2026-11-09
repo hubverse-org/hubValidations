@@ -2,8 +2,8 @@
 # sample grid for each modeling task and join the data to it. Kept here as the
 # reference the new code is checked against.
 
-# What `spl_hash_tbl()` used to do to split a table across modeling tasks and
-# give each row its compound index.
+# What the sample checks used to do to split a table across modeling tasks
+# and give each row its compound index.
 spl_mt_tbls_via_grid <- function(
   tbl,
   round_id,
@@ -41,40 +41,36 @@ spl_mt_tbls_via_grid <- function(
   )
 }
 
-# `spl_hash_tbl()` as it was, on top of the grid split above. Everything from
-# `get_mt_spl_hash_tbl()` onwards is untouched, so this differs from the current
-# function only in how rows reach their modeling task and compound index.
-spl_hash_tbl_via_grid <- function(
+# Each sample row's modeling task and compound index, as the grid split above
+# gave them.
+spl_idx_tbl_via_grid <- function(
   tbl,
   round_id,
   config_tasks,
   compound_taskid_set = NULL,
   derived_task_ids = get_config_derived_task_ids(config_tasks, round_id)
 ) {
-  mt_tbls <- spl_mt_tbls_via_grid(
+  spl_mt_tbls_via_grid(
     tbl,
     round_id = round_id,
     config_tasks = config_tasks,
     compound_taskid_set = compound_taskid_set,
     derived_task_ids = derived_task_ids
-  )
-
-  if (is.null(compound_taskid_set)) {
-    compound_taskid_set <- get_round_compound_task_ids(config_tasks, round_id)
-  }
-
-  purrr::map2(
-    mt_tbls,
-    compound_taskid_set,
-    ~ hubValidations:::get_mt_spl_hash_tbl(
-      tbl = .x,
-      compound_taskids = .y,
-      round_task_ids = hubUtils::get_round_task_id_names(config_tasks, round_id)
-    )
   ) |>
     purrr::compact() |>
-    purrr::imap(~ dplyr::mutate(.x, mt_id = as.integer(.y))) |>
+    purrr::imap(
+      ~ tibble::tibble(
+        mt_id = as.integer(.y),
+        output_type_id = .x$output_type_id,
+        compound_idx = .x$compound_idx
+      )
+    ) |>
     purrr::list_rbind()
+}
+
+# The columns of `spl_idx_tbl()` that `spl_idx_tbl_via_grid()` reproduces.
+spl_idx_cols <- function(spl_idx) {
+  spl_idx$rows[, c("mt_id", "output_type_id", "compound_idx")]
 }
 
 # What `get_tbl_compound_taskid_set()` used to do to split a table across

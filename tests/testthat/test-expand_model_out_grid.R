@@ -4,16 +4,63 @@ test_that("expand_model_out_grid works correctly", {
   )
   config_tasks <- attr(hub_con, "config_tasks")
 
-  expect_snapshot(str(
-    expand_model_out_grid(config_tasks, round_id = "2023-01-02")
-  ))
-  expect_snapshot(str(
-    expand_model_out_grid(
-      config_tasks,
-      round_id = "2023-01-02",
-      required_vals_only = TRUE
+  x <- expand_model_out_grid(config_tasks, round_id = "2023-01-02")
+  expect_tbl(
+    x,
+    n_rows = 3132L,
+    types = flusight_grid_types,
+    values = list(
+      forecast_date = as.Date("2023-01-02"),
+      location = hub_locations,
+      output_type_id = flusight_output_type_ids
+    ),
+    # Each target has its own output types.
+    counts = tibble::tibble(
+      target = rep(
+        c("wk ahead inc flu hosp", "wk flu hosp rate change"),
+        c(4L, 2L)
+      ),
+      output_type = rep(c("mean", "quantile", "pmf"), each = 2L),
+      horizon = rep(1:2, times = 3L),
+      n = rep(c(54L, 1242L, 270L), each = 2L)
     )
-  ))
+  )
+  x <- expand_model_out_grid(
+    config_tasks,
+    round_id = "2023-01-02",
+    required_vals_only = TRUE
+  )
+  expect_tbl(
+    x,
+    n_rows = 28L,
+    types = c(
+      forecast_date = "Date",
+      horizon = "integer",
+      location = "character",
+      output_type = "character",
+      output_type_id = "character"
+    ),
+    values = list(
+      forecast_date = as.Date("2023-01-02"),
+      horizon = 2L,
+      location = "US",
+      output_type = c("pmf", "quantile")
+    ),
+    unchecked = "output_type_id"
+  )
+  # Each output type holds its own required output type IDs, in config order.
+  expect_equal(x$output_type, rep(c("pmf", "quantile"), c(5L, 23L)))
+  expect_equal(
+    x$output_type_id,
+    c(
+      "large_decrease",
+      "decrease",
+      "stable",
+      "increase",
+      "large_increase",
+      as.character(hub_quantiles)
+    )
+  )
 
   # Specifying a round in a hub with multiple rounds
   hub_con <- hubData::connect_hub(
@@ -21,87 +68,172 @@ test_that("expand_model_out_grid works correctly", {
   )
   config_tasks <- attr(hub_con, "config_tasks")
 
-  expect_snapshot(str(
-    expand_model_out_grid(
-      config_tasks,
-      round_id = "2022-10-01"
+  x <- expand_model_out_grid(
+    config_tasks,
+    round_id = "2022-10-01"
+  )
+  expect_tbl(
+    x,
+    n_rows = 5184L,
+    types = simple_grid_types,
+    values = list(
+      origin_date = as.Date("2022-10-01"),
+      target = "wk inc flu hosp",
+      horizon = 1:4,
+      location = hub_locations,
+      output_type = c("mean", "quantile"),
+      output_type_id = c(hub_quantiles, NA)
     )
-  ))
+  )
+  # Only mean rows have no output type ID.
+  expect_equal(
+    dplyr::count(x, output_type, no_id = is.na(output_type_id)),
+    tibble::tibble(
+      output_type = c("mean", "quantile"),
+      no_id = c(TRUE, FALSE),
+      n = c(216L, 4968L)
+    )
+  )
 
-  expect_snapshot(str(
-    expand_model_out_grid(
-      config_tasks,
-      round_id = "2022-10-01",
-      required_vals_only = TRUE
+  x <- expand_model_out_grid(
+    config_tasks,
+    round_id = "2022-10-01",
+    required_vals_only = TRUE
+  )
+  expect_tbl(
+    x,
+    n_rows = 23L,
+    types = c(
+      origin_date = "Date",
+      target = "character",
+      horizon = "integer",
+      output_type = "character",
+      output_type_id = "numeric"
+    ),
+    values = list(
+      origin_date = as.Date("2022-10-01"),
+      target = "wk inc flu hosp",
+      horizon = 1L,
+      output_type = "quantile",
+      output_type_id = hub_quantiles
     )
-  ))
-  expect_snapshot(str(
-    expand_model_out_grid(
-      config_tasks,
-      round_id = "2022-10-29",
-      required_vals_only = TRUE
+  )
+  expect_equal(x$output_type_id, hub_quantiles)
+  x <- expand_model_out_grid(
+    config_tasks,
+    round_id = "2022-10-29",
+    required_vals_only = TRUE
+  )
+  expect_tbl(
+    x,
+    n_rows = 23L,
+    types = c(
+      origin_date = "Date",
+      target = "character",
+      horizon = "integer",
+      age_group = "character",
+      output_type = "character",
+      output_type_id = "numeric"
+    ),
+    values = list(
+      origin_date = as.Date("2022-10-29"),
+      target = "wk inc flu hosp",
+      horizon = 1L,
+      age_group = "65+",
+      output_type = "quantile",
+      output_type_id = hub_quantiles
     )
-  ))
-  expect_snapshot(str(
-    expand_model_out_grid(
-      config_tasks,
-      round_id = "2022-10-29",
-      required_vals_only = TRUE,
-      all_character = TRUE
-    )
-  ))
-  expect_snapshot(
+  )
+  expect_equal(x$output_type_id, hub_quantiles)
+  x_chr <- expand_model_out_grid(
+    config_tasks,
+    round_id = "2022-10-29",
+    required_vals_only = TRUE,
+    all_character = TRUE
+  )
+  expect_equal(x_chr, as_chr(x))
+  expect_arrow_tbl(
     expand_model_out_grid(
       config_tasks,
       round_id = "2022-10-29",
       required_vals_only = TRUE,
       as_arrow_table = TRUE
+    ),
+    x,
+    c(
+      origin_date = "date32[day]",
+      target = "string",
+      horizon = "int32",
+      age_group = "string",
+      output_type = "string",
+      output_type_id = "double"
     )
   )
-  expect_snapshot(
+  expect_arrow_tbl(
     expand_model_out_grid(
       config_tasks,
       round_id = "2022-10-29",
       required_vals_only = TRUE,
       all_character = TRUE,
       as_arrow_table = TRUE
+    ),
+    x_chr,
+    string_types(x_chr)
+  )
+
+  x <- expand_model_out_grid(
+    jsonlite::fromJSON(
+      test_path(
+        "testdata",
+        "configs",
+        "both_null_tasks.json"
+      ),
+      simplifyVector = TRUE,
+      simplifyDataFrame = FALSE
+    ),
+    round_id = "2023-11-26"
+  ) |>
+    dplyr::filter(is.na(horizon))
+  expect_tbl(
+    x,
+    n_rows = 24L,
+    types = simple_age_grid_types,
+    values = list(
+      origin_date = as.Date("2023-11-26"),
+      target = "peak time hosp",
+      horizon = NA_integer_,
+      location = c("01", "02", "US"),
+      age_group = c(
+        "0-0.99",
+        "0-130",
+        "1-4",
+        "18-49",
+        "5-17",
+        "5-64",
+        "50-64",
+        "65-130"
+      ),
+      output_type = "cdf",
+      output_type_id = 1
     )
   )
 
-  expect_snapshot(
-    str(
-      expand_model_out_grid(
-        jsonlite::fromJSON(
-          test_path(
-            "testdata",
-            "configs",
-            "both_null_tasks.json"
-          ),
-          simplifyVector = TRUE,
-          simplifyDataFrame = FALSE
+  # Swapping the order of the two model tasks gives the same rows.
+  expect_equal(
+    expand_model_out_grid(
+      jsonlite::fromJSON(
+        test_path(
+          "testdata",
+          "configs",
+          "both_null_tasks_swap.json"
         ),
-        round_id = "2023-11-26"
-      ) |>
-        dplyr::filter(is.na(horizon))
-    )
-  )
-
-  expect_snapshot(
-    str(
-      expand_model_out_grid(
-        jsonlite::fromJSON(
-          test_path(
-            "testdata",
-            "configs",
-            "both_null_tasks_swap.json"
-          ),
-          simplifyVector = TRUE,
-          simplifyDataFrame = FALSE
-        ),
-        round_id = "2023-11-26"
-      ) |>
-        dplyr::filter(is.na(horizon))
-    )
+        simplifyVector = TRUE,
+        simplifyDataFrame = FALSE
+      ),
+      round_id = "2023-11-26"
+    ) |>
+      dplyr::filter(is.na(horizon)),
+    x
   )
 })
 
@@ -155,50 +287,65 @@ test_that("expand_model_out_grid output controls work correctly", {
     system.file("testhubs/flusight", package = "hubUtils")
   )
   config_tasks <- attr(hub_con, "config_tasks")
-
-  expect_snapshot(str(
-    expand_model_out_grid(
-      config_tasks,
-      round_id = "2023-01-02",
-      all_character = TRUE
-    )
-  ))
-  expect_snapshot(
+  x <- expand_model_out_grid(
+    config_tasks,
+    round_id = "2023-01-02",
+    all_character = TRUE
+  )
+  expect_equal(
+    x,
+    as_chr(expand_model_out_grid(config_tasks, round_id = "2023-01-02"))
+  )
+  expect_arrow_tbl(
     expand_model_out_grid(
       config_tasks,
       round_id = "2023-01-02",
       all_character = TRUE,
       as_arrow_table = TRUE
+    ),
+    x,
+    string_types(x)
+  )
+  x <- expand_model_out_grid(
+    config_tasks,
+    round_id = "2023-01-02",
+    required_vals_only = TRUE,
+    all_character = TRUE
+  )
+  expect_equal(
+    x,
+    as_chr(
+      expand_model_out_grid(
+        config_tasks,
+        round_id = "2023-01-02",
+        required_vals_only = TRUE
+      )
     )
   )
-  expect_snapshot(str(
-    expand_model_out_grid(
-      config_tasks,
-      round_id = "2023-01-02",
-      required_vals_only = TRUE,
-      all_character = TRUE
-    )
-  ))
-  expect_snapshot(
+  expect_arrow_tbl(
     expand_model_out_grid(
       config_tasks,
       round_id = "2023-01-02",
       required_vals_only = TRUE,
       all_character = TRUE,
       as_arrow_table = TRUE
-    )
+    ),
+    x,
+    string_types(x)
   )
-  expect_snapshot(str(
-    expand_model_out_grid(
-      config_tasks,
-      round_id = "2023-01-02",
-      required_vals_only = TRUE,
-      all_character = TRUE,
-      as_arrow_table = FALSE,
-      bind_model_tasks = FALSE
-    )
-  ))
-  expect_snapshot(
+  x_split <- expand_model_out_grid(
+    config_tasks,
+    round_id = "2023-01-02",
+    required_vals_only = TRUE,
+    all_character = TRUE,
+    as_arrow_table = FALSE,
+    bind_model_tasks = FALSE
+  )
+  expect_equal(purrr::map_int(x_split, nrow), c(5L, 23L))
+  expect_equal(dplyr::bind_rows(x_split), x)
+  expect_equal(unique(x_split[[1]]$output_type), "pmf")
+  expect_equal(unique(x_split[[2]]$output_type), "quantile")
+  expect_arrow_tbl(
     expand_model_out_grid(
       config_tasks,
       round_id = "2023-01-02",
@@ -206,7 +353,9 @@ test_that("expand_model_out_grid output controls work correctly", {
       all_character = TRUE,
       as_arrow_table = TRUE,
       bind_model_tasks = FALSE
-    )
+    ),
+    x_split,
+    string_types(x_split[[1]])
   )
 })
 
@@ -219,8 +368,32 @@ test_that("expand_model_out_grid output controls with samples work correctly", {
     package = "hubValidations"
   ))
 
-  expect_snapshot(
-    expand_model_out_grid(config_tasks, round_id = "2022-12-26")
+  x <- expand_model_out_grid(config_tasks, round_id = "2022-12-26")
+  expect_tbl(
+    x,
+    n_rows = 42L,
+    types = flusight_grid_types,
+    values = list(
+      forecast_date = as.Date("2022-12-26"),
+      horizon = 1:2,
+      location = c("01", "02", "US"),
+      output_type_id = c(
+        "decrease",
+        "increase",
+        "large_decrease",
+        "large_increase",
+        "stable",
+        NA
+      )
+    ),
+    counts = tibble::tibble(
+      target = rep(
+        c("wk ahead inc flu hosp", "wk flu hosp rate change"),
+        c(2L, 1L)
+      ),
+      output_type = c("mean", "sample", "pmf"),
+      n = c(6L, 6L, 30L)
+    )
   )
   expect_snapshot(
     expand_model_out_grid(
@@ -239,25 +412,105 @@ test_that("expand_model_out_grid output controls with samples work correctly", {
       all_character = TRUE
     )
   )
-  expect_snapshot(
-    expand_model_out_grid(
+  expect_warning(
+    x_arrow <- expand_model_out_grid(
       config_tasks,
       round_id = "2022-12-26",
       include_sample_ids = TRUE,
       required_vals_only = TRUE,
       as_arrow_table = TRUE
+    ),
+    "compound task ID target has all optional values"
+  )
+  expect_warning(
+    x <- expand_model_out_grid(
+      config_tasks,
+      round_id = "2022-12-26",
+      include_sample_ids = TRUE,
+      required_vals_only = TRUE
+    ),
+    "compound task ID target has all optional values"
+  )
+  expect_equal(
+    x,
+    tibble::tibble(
+      forecast_date = as.Date("2022-12-26"),
+      horizon = 2L,
+      location = "US",
+      output_type = c("sample", rep("pmf", 5L)),
+      output_type_id = c(
+        "s1",
+        "large_decrease",
+        "decrease",
+        "stable",
+        "increase",
+        "large_increase"
+      )
+    )
+  )
+  expect_arrow_tbl(
+    x_arrow,
+    x,
+    c(
+      forecast_date = "date32[day]",
+      horizon = "int32",
+      location = "string",
+      output_type = "string",
+      output_type_id = "string"
     )
   )
   # Hub with sample output type and compound task ID structure
   config_tasks <- read_config_file(
     system.file("config", "tasks-comp-tid.json", package = "hubValidations")
   )
-  expect_snapshot(
-    expand_model_out_grid(
-      config_tasks,
-      round_id = "2022-12-26",
-      include_sample_ids = TRUE,
-      bind_model_tasks = FALSE
+  grid_spl <- expand_model_out_grid(
+    config_tasks,
+    round_id = "2022-12-26",
+    include_sample_ids = TRUE
+  )
+  x_split <- expand_model_out_grid(
+    config_tasks,
+    round_id = "2022-12-26",
+    include_sample_ids = TRUE,
+    bind_model_tasks = FALSE
+  )
+  expect_length(x_split, 2L)
+  expect_equal(dplyr::bind_rows(x_split), grid_spl)
+  # The first modeling task's `compound_taskid_set` is `forecast_date`,
+  # `target` and `horizon`, so its samples are joint across locations. Each
+  # horizon gets one sample ID, shared by all three locations.
+  expect_equal(
+    x_split[[1]],
+    tibble::tibble(
+      forecast_date = as.Date("2022-12-26"),
+      target = "wk ahead inc flu hosp",
+      horizon = c(rep(c(2L, 1L), times = 3L), rep(c(2L, 1L), each = 3L)),
+      location = c(
+        rep(c("US", "01", "02"), each = 2L),
+        rep(c("US", "01", "02"), times = 2L)
+      ),
+      output_type = rep(c("mean", "sample"), each = 6L),
+      output_type_id = c(rep(NA, 6L), rep(c("1", "2"), each = 3L))
+    )
+  )
+  # 2 horizons x 3 locations x 5 categories, so every combination is present.
+  expect_tbl(
+    x_split[[2]],
+    n_rows = 30L,
+    types = flusight_grid_types,
+    values = list(
+      forecast_date = as.Date("2022-12-26"),
+      target = "wk flu hosp rate change",
+      horizon = 1:2,
+      location = c("01", "02", "US"),
+      output_type = "pmf",
+      output_type_id = c(
+        "decrease",
+        "increase",
+        "large_decrease",
+        "large_increase",
+        "stable"
+      )
     )
   )
   expect_snapshot(
@@ -272,8 +525,52 @@ test_that("expand_model_out_grid output controls with samples work correctly", {
   config_tasks <- read_config_file(
     test_path("testdata", "configs", "tasks-samples-old-schema.json")
   )
-  expect_snapshot(
-    expand_model_out_grid(config_tasks, round_id = "2022-12-26")
+  x <- expand_model_out_grid(config_tasks, round_id = "2022-12-26")
+  expect_tbl(
+    x,
+    n_rows = 66L,
+    types = flusight_grid_types,
+    values = list(
+      forecast_date = as.Date("2022-12-26"),
+      horizon = 1:2,
+      location = c("01", "02", "US"),
+      output_type_id = c(
+        as.character(1:5),
+        "decrease",
+        "increase",
+        "large_decrease",
+        "large_increase",
+        "stable",
+        NA
+      )
+    ),
+    counts = tibble::tibble(
+      target = rep(
+        c("wk ahead inc flu hosp", "wk flu hosp rate change"),
+        c(2L, 1L)
+      ),
+      output_type = c("mean", "sample", "pmf"),
+      n = c(6L, 30L, 30L)
+    )
+  )
+  # The old specification lists sample IDs 1 to 5 as output type IDs, so they
+  # appear only on sample rows.
+  expect_equal(
+    purrr::map(
+      split(x$output_type_id, x$output_type),
+      \(id) sort(unique(id), na.last = TRUE, method = "radix")
+    ),
+    list(
+      mean = NA_character_,
+      pmf = c(
+        "decrease",
+        "increase",
+        "large_decrease",
+        "large_increase",
+        "stable"
+      ),
+      sample = as.character(1:5)
+    )
   )
   # check that included sample IDs are not generated for older versions
   # of the sample specification
@@ -304,46 +601,43 @@ test_that("expand_model_out_grid output controls with samples work correctly", {
       dplyr::filter(.data$output_type == "sample")
   )
 
-  # Override config compound_taskid_set
+  # Override config compound_taskid_set.
   config_tasks <- read_config_file(
     system.file("config", "tasks-comp-tid.json", package = "hubValidations")
   )
   # Create coarser samples
-  expect_snapshot(
-    expand_model_out_grid(
-      config_tasks,
-      round_id = "2022-12-26",
-      include_sample_ids = TRUE,
-      compound_taskid_set = list(
-        c("forecast_date", "target"),
-        NULL
-      )
+  x <- expand_model_out_grid(
+    config_tasks,
+    round_id = "2022-12-26",
+    include_sample_ids = TRUE,
+    compound_taskid_set = list(
+      c("forecast_date", "target"),
+      NULL
     )
   )
+  expect_spl_override(x, grid_spl, spl_ids = rep("1", 6L))
   # Create finer samples
-  expect_snapshot(
-    expand_model_out_grid(
-      config_tasks,
-      round_id = "2022-12-26",
-      include_sample_ids = TRUE,
-      compound_taskid_set = list(
-        c("forecast_date", "target", "horizon", "location"),
-        NULL
-      )
+  x <- expand_model_out_grid(
+    config_tasks,
+    round_id = "2022-12-26",
+    include_sample_ids = TRUE,
+    compound_taskid_set = list(
+      c("forecast_date", "target", "horizon", "location"),
+      NULL
     )
   )
+  expect_spl_override(x, grid_spl, spl_ids = as.character(1:6))
   # Create samples with full compound_taskid_set
-  expect_snapshot(
-    expand_model_out_grid(
-      config_tasks,
-      round_id = "2022-12-26",
-      include_sample_ids = TRUE,
-      compound_taskid_set = list(
-        NULL,
-        NULL
-      )
+  x <- expand_model_out_grid(
+    config_tasks,
+    round_id = "2022-12-26",
+    include_sample_ids = TRUE,
+    compound_taskid_set = list(
+      NULL,
+      NULL
     )
   )
+  expect_spl_override(x, grid_spl, spl_ids = as.character(1:6))
 })
 
 
@@ -351,14 +645,26 @@ test_that("expand_model_out_grid output type subsetting works", {
   config_tasks <- read_config_file(
     system.file("config", "tasks-comp-tid.json", package = "hubValidations")
   )
-  expect_snapshot(
+  x_split <- expand_model_out_grid(
+    config_tasks,
+    round_id = "2022-12-26",
+    include_sample_ids = TRUE,
+    bind_model_tasks = FALSE,
+    output_types = c("pmf", "sample"),
+  )
+  expect_equal(
+    purrr::map(x_split, ~ unique(.x$output_type)),
+    list("sample", "pmf")
+  )
+  expect_equal(purrr::map_int(x_split, nrow), c(6L, 30L))
+  expect_equal(
+    dplyr::bind_rows(x_split),
     expand_model_out_grid(
       config_tasks,
       round_id = "2022-12-26",
-      include_sample_ids = TRUE,
-      bind_model_tasks = FALSE,
-      output_types = c("pmf", "sample"),
-    )
+      include_sample_ids = TRUE
+    ) |>
+      dplyr::filter(.data$output_type %in% c("pmf", "sample"))
   )
 
   expect_snapshot(
@@ -427,8 +733,7 @@ test_that("force_output_types works as expected with v4", {
     required_vals_only = TRUE,
     force_output_types = FALSE
   )
-  expect_equal(lengths(v4_opt_spls), c(0L, 0L))
-  expect_snapshot(v4_opt_spls)
+  expect_equal(purrr::map(v4_opt_spls, dim), list(c(0L, 0L), c(0L, 0L)))
   # With forcing, a grid that includes sample output type ids as required.
 
   v4_opt_spls_force <- expand_model_out_grid(
@@ -470,8 +775,7 @@ test_that("force_output_types works as expected with v4", {
     required_vals_only = TRUE,
     force_output_types = FALSE
   )
-  expect_equal(lengths(v4_opt_spls), c(0L, 0L))
-  expect_snapshot(v4_opt_mdn)
+  expect_equal(purrr::map(v4_opt_mdn, dim), list(c(0L, 0L), c(0L, 0L)))
   # With forcing, a grid that includes median output type ids as required.
   v4_opt_mdn_force <- expand_model_out_grid(
     config_tasks,
@@ -502,8 +806,7 @@ test_that("force_output_types works as expected with v4", {
     required_vals_only = TRUE,
     force_output_types = FALSE
   )
-  expect_equal(lengths(v4_opt_spls), c(0L, 0L))
-  expect_snapshot(v4_opt_qntl)
+  expect_equal(purrr::map(v4_opt_qntl, dim), list(c(0L, 0L), c(0L, 0L)))
   # With forcing, a grid that includes quantile output type ids as required.
   v4_opt_qntl_force <- expand_model_out_grid(
     config_tasks,
@@ -514,7 +817,30 @@ test_that("force_output_types works as expected with v4", {
     required_vals_only = TRUE,
     force_output_types = TRUE
   )
-  expect_snapshot(v4_opt_qntl_force)
+  expect_length(v4_opt_qntl_force, 2L)
+  expect_equal(dim(v4_opt_qntl_force[[1]]), c(0L, 0L))
+  expect_tbl(
+    v4_opt_qntl_force[[2]],
+    n_rows = 23L,
+    types = c(
+      forecast_date = "Date",
+      horizon = "integer",
+      location = "character",
+      output_type = "character",
+      output_type_id = "character"
+    ),
+    values = list(
+      forecast_date = as.Date("2023-04-24"),
+      horizon = 2L,
+      location = "US",
+      output_type = "quantile"
+    ),
+    unchecked = "output_type_id"
+  )
+  expect_equal(
+    v4_opt_qntl_force[[2]]$output_type_id,
+    as.character(hub_quantiles)
+  )
   # test with all output types ----
   v4_req_only <- expand_model_out_grid(
     config_tasks,
@@ -534,7 +860,40 @@ test_that("force_output_types works as expected with v4", {
     required_vals_only = TRUE,
     force_output_types = TRUE
   )
-  expect_snapshot(v4_force_all)
+  expect_tbl(
+    v4_force_all,
+    n_rows = 29L,
+    types = c(
+      forecast_date = "Date",
+      horizon = "integer",
+      location = "character",
+      output_type = "character",
+      output_type_id = "character"
+    ),
+    values = list(
+      forecast_date = as.Date("2023-04-24"),
+      horizon = 2L,
+      location = "US",
+      output_type = c("mean", "pmf", "quantile")
+    ),
+    unchecked = "output_type_id"
+  )
+  expect_equal(
+    v4_force_all$output_type,
+    rep(c("pmf", "quantile", "mean"), c(5L, 23L, 1L))
+  )
+  expect_equal(
+    v4_force_all$output_type_id,
+    c(
+      "large_decrease",
+      "decrease",
+      "stable",
+      "increase",
+      "large_increase",
+      as.character(hub_quantiles),
+      NA
+    )
+  )
 })
 test_that("force_output_types works as expected with v3", {
   # Test behaviour with v3 config where median is optional
@@ -581,7 +940,8 @@ test_that("force_output_types works as expected with v3", {
 test_that("expand_model_out_grid derived_task_ids ignoring works", {
   config_tasks <- read_config(test_path("testdata", "hub-spl"))
 
-  expect_snapshot(
+  # The derived task ID is left NA.
+  expect_tbl(
     expand_model_out_grid(
       config_tasks,
       round_id = "2022-10-22",
@@ -589,6 +949,27 @@ test_that("expand_model_out_grid derived_task_ids ignoring works", {
       bind_model_tasks = TRUE,
       output_types = "sample",
       derived_task_ids = "target_end_date"
+    ),
+    n_rows = 80L,
+    types = c(
+      reference_date = "Date",
+      target = "character",
+      horizon = "integer",
+      location = "character",
+      variant = "character",
+      target_end_date = "Date",
+      output_type = "character",
+      output_type_id = "character"
+    ),
+    values = list(
+      reference_date = as.Date("2022-10-22"),
+      target = "wk inc flu hosp",
+      horizon = 0:3,
+      location = c("01", "02", "04", "05", "US"),
+      variant = c("AA", "BB", "CC", "DD"),
+      target_end_date = as.Date(NA),
+      output_type = "sample",
+      output_type_id = NA_character_
     )
   )
   expect_snapshot(
@@ -649,21 +1030,19 @@ test_that("expand_model_out_grid errors correctly", {
   # TODO: re-snapshot when error better handled by create_hub_schema
   # when all horizon properties are null
   expect_snapshot(
-    str(
-      expand_model_out_grid(
-        jsonlite::fromJSON(
-          test_path(
-            "testdata",
-            "configs",
-            "both_null_tasks_all.json"
-          ),
-          simplifyVector = TRUE,
-          simplifyDataFrame = FALSE
+    expand_model_out_grid(
+      jsonlite::fromJSON(
+        test_path(
+          "testdata",
+          "configs",
+          "both_null_tasks_all.json"
         ),
-        round_id = "2023-11-26"
-      ) |>
-        dplyr::filter(is.na(horizon))
-    ),
+        simplifyVector = TRUE,
+        simplifyDataFrame = FALSE
+      ),
+      round_id = "2023-11-26"
+    ) |>
+      dplyr::filter(is.na(horizon)),
     error = TRUE
   )
 
@@ -754,23 +1133,51 @@ test_that("v4 required output type ID values extracted correctly", {
   round_id <- parse_file_name(file_name)$round_id
   config_tasks <- read_config(hub_path = hub_path)
 
-  expect_snapshot(
-    expand_model_out_grid(
-      config_tasks = config_tasks,
-      round_id = round_id,
-      output_types = "pmf",
-      derived_task_ids = get_hub_derived_task_ids(hub_path)
+  x <- expand_model_out_grid(
+    config_tasks = config_tasks,
+    round_id = round_id,
+    output_types = "pmf",
+    derived_task_ids = get_hub_derived_task_ids(hub_path)
+  )
+  expect_tbl(
+    x,
+    n_rows = 540L,
+    types = c(
+      forecast_date = "Date",
+      target = "character",
+      horizon = "integer",
+      target_date = "Date",
+      location = "character",
+      output_type = "character",
+      output_type_id = "character"
+    ),
+    values = list(
+      forecast_date = as.Date("2023-05-01"),
+      target = "wk flu hosp rate change",
+      horizon = 1:2,
+      target_date = as.Date(NA),
+      location = hub_locations,
+      output_type = "pmf",
+      output_type_id = c(
+        "decrease",
+        "increase",
+        "large_decrease",
+        "large_increase",
+        "stable"
+      )
     )
   )
 
-  expect_length(
-    expand_model_out_grid(
-      config_tasks = config_tasks,
-      round_id = round_id,
-      output_types = "pmf",
-      required_vals_only = TRUE
+  expect_equal(
+    dim(
+      expand_model_out_grid(
+        config_tasks = config_tasks,
+        round_id = round_id,
+        output_types = "pmf",
+        required_vals_only = TRUE
+      )
     ),
-    0L
+    c(0L, 0L)
   )
 
   force_pmf <- expand_model_out_grid(
@@ -780,10 +1187,21 @@ test_that("v4 required output type ID values extracted correctly", {
     required_vals_only = TRUE,
     force_output_types = TRUE
   )
-  expect_length(force_pmf, 5L)
   expect_equal(
-    force_pmf$output_type_id,
-    c("large_decrease", "decrease", "stable", "increase", "large_increase")
+    force_pmf,
+    tibble::tibble(
+      forecast_date = as.Date("2023-05-01"),
+      horizon = 2L,
+      location = "US",
+      output_type = "pmf",
+      output_type_id = c(
+        "large_decrease",
+        "decrease",
+        "stable",
+        "increase",
+        "large_increase"
+      )
+    )
   )
 })
 

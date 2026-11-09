@@ -46,17 +46,15 @@ test_that("capture_check_cnd works", {
       msg_verbs = c("are", "must always be")
     )
   )
-  expect_snapshot(
-    str(
-      capture_check_cnd(
-        check = FALSE,
-        file_path = "test/file.csv",
-        msg_subject = "Column names",
-        msg_attribute = "consistent with expected round task IDs and std column names.",
-        msg_verbs = c("are", "must always be")
-      )
-    )
+  res <- capture_check_cnd(
+    check = FALSE,
+    file_path = "test/file.csv",
+    msg_subject = "Column names",
+    msg_attribute = "consistent with expected round task IDs and std column names.",
+    msg_verbs = c("are", "must always be")
   )
+  expect_s3_class(res, failure_class, exact = TRUE)
+  expect_equal(res$where, "test/file.csv")
 })
 
 test_that("capture_check_cnd fails correctly", {
