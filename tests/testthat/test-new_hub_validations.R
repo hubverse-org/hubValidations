@@ -1,38 +1,31 @@
 test_that("new_hub_validations works", {
-  expect_snapshot(str(new_hub_validations()))
-  expect_s3_class(
-    new_hub_validations(),
-    c("hub_validations")
-  )
+  empty <- new_hub_validations()
+  expect_s3_class(empty, c("hub_validations", "list"), exact = TRUE)
+  expect_length(empty, 0L)
 
   hub_path <- system.file("testhubs/simple", package = "hubValidations")
   file_path <- "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
 
-  expect_snapshot(
-    str(
-      new_hub_validations(
-        file_exists = check_file_exists(file_path, hub_path),
-        file_name = check_file_name(file_path)
-      )
-    )
+  res <- new_hub_validations(
+    file_exists = check_file_exists(file_path, hub_path),
+    file_name = check_file_name(file_path)
   )
-
-  expect_s3_class(
-    new_hub_validations(
-      file_exists = check_file_exists(file_path, hub_path),
-      file_name = check_file_name(file_path)
-    ),
-    c("hub_validations")
+  expect_validations(
+    res,
+    c("hub_validations", "list"),
+    c(file_exists = "check_success", file_name = "check_success"),
+    where = file_path
   )
 })
 
 # ---- hub_validations_collection tests ----
 
+collection_class <- c("hub_validations_collection", "list")
+
 test_that("new_hub_validations_collection creates empty collection", {
   collection <- new_hub_validations_collection()
 
-  expect_s3_class(collection, "hub_validations_collection")
-  expect_s3_class(collection, "list")
+  expect_s3_class(collection, collection_class, exact = TRUE)
   expect_equal(length(collection), 0)
   expect_null(names(collection))
 })
@@ -48,10 +41,15 @@ test_that("new_hub_validations_collection creates collection from single element
 
   collection <- new_hub_validations_collection(validations)
 
-  expect_s3_class(collection, "hub_validations_collection")
+  expect_s3_class(collection, collection_class, exact = TRUE)
   expect_equal(length(collection), 1)
   expect_equal(names(collection), file_path)
-  expect_s3_class(collection[[1]], "hub_validations")
+  expect_validations(
+    collection[[1]],
+    c("hub_validations", "list"),
+    c(file_exists = "check_success", file_name = "check_success"),
+    where = file_path
+  )
 })
 
 test_that("new_hub_validations_collection creates collection from multiple elements", {
@@ -70,11 +68,21 @@ test_that("new_hub_validations_collection creates collection from multiple eleme
 
   collection <- new_hub_validations_collection(validations_1, validations_2)
 
-  expect_s3_class(collection, "hub_validations_collection")
+  expect_s3_class(collection, collection_class, exact = TRUE)
   expect_equal(length(collection), 2)
   expect_equal(names(collection), c(file_path_1, file_path_2))
-  expect_s3_class(collection[[1]], "hub_validations")
-  expect_s3_class(collection[[2]], "hub_validations")
+  expect_validations(
+    collection[[1]],
+    c("hub_validations", "list"),
+    c(file_exists = "check_success", file_name = "check_success"),
+    where = file_path_1
+  )
+  expect_validations(
+    collection[[2]],
+    c("hub_validations", "list"),
+    c(file_exists = "check_error", file_name = "check_success"),
+    where = file_path_2
+  )
 })
 
 test_that("new_hub_validations_collection ignores NULL elements", {
@@ -118,7 +126,7 @@ test_that("as_hub_validations_collection converts list to collection", {
   x <- list(validations_1, validations_2)
   collection <- as_hub_validations_collection(x)
 
-  expect_s3_class(collection, "hub_validations_collection")
+  expect_s3_class(collection, collection_class, exact = TRUE)
   expect_equal(length(collection), 2)
   expect_equal(names(collection), c(file_path_1, file_path_2))
 })
@@ -179,7 +187,7 @@ test_that("collection filters out empty hub_validations objects", {
   empty_validations <- new_hub_validations()
 
   collection <- new_hub_validations_collection(empty_validations)
-  expect_s3_class(collection, "hub_validations_collection")
+  expect_s3_class(collection, collection_class, exact = TRUE)
   expect_equal(length(collection), 0)
 
   # Multiple empties also result in empty collection
@@ -187,7 +195,7 @@ test_that("collection filters out empty hub_validations objects", {
     empty_validations,
     new_hub_validations()
   )
-  expect_s3_class(collection, "hub_validations_collection")
+  expect_s3_class(collection, collection_class, exact = TRUE)
   expect_equal(length(collection), 0)
 
   # But if mixed with valid ones, valid are kept
@@ -201,7 +209,7 @@ test_that("collection filters out empty hub_validations objects", {
     empty_validations,
     valid_validations
   )
-  expect_s3_class(collection, "hub_validations_collection")
+  expect_s3_class(collection, collection_class, exact = TRUE)
   expect_equal(length(collection), 1)
   expect_equal(names(collection), file_path)
 })
@@ -214,7 +222,7 @@ test_that("as_hub_validations_collection filters out empty hub_validations objec
     empty_validations,
     new_hub_validations()
   ))
-  expect_s3_class(collection, "hub_validations_collection")
+  expect_s3_class(collection, collection_class, exact = TRUE)
   expect_equal(length(collection), 0)
 
   # Mixed with valid keeps valid
@@ -228,7 +236,7 @@ test_that("as_hub_validations_collection filters out empty hub_validations objec
     empty_validations,
     valid_validations
   ))
-  expect_s3_class(collection, "hub_validations_collection")
+  expect_s3_class(collection, collection_class, exact = TRUE)
   expect_equal(length(collection), 1)
   expect_equal(names(collection), file_path)
 })
@@ -248,7 +256,7 @@ test_that("new_hub_validations_collection merges validations for same file", {
 
   collection <- new_hub_validations_collection(validations_1, validations_2)
 
-  expect_s3_class(collection, "hub_validations_collection")
+  expect_s3_class(collection, collection_class, exact = TRUE)
   expect_equal(length(collection), 1)
   expect_equal(names(collection), file_path)
   expect_equal(names(collection[[file_path]]), c("file_exists", "file_name"))
@@ -268,7 +276,7 @@ test_that("as_hub_validations_collection merges validations for same file", {
   x <- list(validations_1, validations_2)
   collection <- as_hub_validations_collection(x)
 
-  expect_s3_class(collection, "hub_validations_collection")
+  expect_s3_class(collection, collection_class, exact = TRUE)
   expect_equal(length(collection), 1)
   expect_equal(names(collection), file_path)
   expect_equal(names(collection[[file_path]]), c("file_exists", "file_name"))

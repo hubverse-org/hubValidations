@@ -50,22 +50,6 @@
       Error:
       ! Column names must always be consistent with expected round task IDs and std column names.
 
----
-
-    Code
-      str(capture_check_cnd(check = FALSE, file_path = "test/file.csv", msg_subject = "Column names",
-        msg_attribute = "consistent with expected round task IDs and std column names.",
-        msg_verbs = c("are", "must always be")))
-    Output
-      List of 6
-       $ message       : chr "Column names must always be consistent with expected round task IDs and std column names. \n "
-       $ trace         : NULL
-       $ parent        : NULL
-       $ where         : chr "test/file.csv"
-       $ call          : chr "eval"
-       $ use_cli_format: logi TRUE
-       - attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_error" "error" ...
-
 # capture_check_cnd fails correctly
 
     Code

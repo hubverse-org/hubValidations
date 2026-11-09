@@ -37,13 +37,23 @@ test_that("check_tbl_value_col_ascending errors correctly", {
 
   tbl$value[c(1, 10)] <- 150
 
-  expect_snapshot(
-    str(check_tbl_value_col_ascending(
-      tbl,
-      file_path,
-      hub_path,
-      file_meta$round_id
-    ))
+  res <- check_tbl_value_col_ascending(
+    tbl,
+    file_path,
+    hub_path,
+    file_meta$round_id
+  )
+  expect_snapshot(res)
+  expect_check(res, failure_class, file_path, "check_tbl_value_col_ascending")
+  expect_equal(
+    res$error_tbl,
+    tibble::tibble(
+      origin_date = "2022-10-08",
+      target = "wk inc flu hosp",
+      horizon = "1",
+      location = "US",
+      output_type = "quantile"
+    )
   )
 
   hub_path <- system.file("testhubs/flusight", package = "hubUtils")
@@ -55,27 +65,31 @@ test_that("check_tbl_value_col_ascending errors correctly", {
   # causes the test to fail
   # tbl_error$target <- "wk ahead inc covid hosp"
   tbl_error$value[1] <- 800
+  expected <- tibble::tibble(
+    forecast_date = "2023-05-08",
+    target = "wk ahead inc flu hosp",
+    horizon = "1",
+    location = "US",
+    output_type = "quantile"
+  )
 
-  expect_snapshot(
-    str(
-      check_tbl_value_col_ascending(
-        tbl_error,
-        file_path,
-        hub_path,
-        file_meta$round_id
-      )
-    )
+  res <- check_tbl_value_col_ascending(
+    tbl_error,
+    file_path,
+    hub_path,
+    file_meta$round_id
   )
-  expect_snapshot(
-    str(
-      check_tbl_value_col_ascending(
-        rbind(tbl, tbl_error),
-        file_path,
-        hub_path,
-        file_meta$round_id
-      )
-    )
+  expect_check(res, failure_class, file_path, "check_tbl_value_col_ascending")
+  expect_equal(res$error_tbl, expected)
+
+  res <- check_tbl_value_col_ascending(
+    rbind(tbl, tbl_error),
+    file_path,
+    hub_path,
+    file_meta$round_id
   )
+  expect_check(res, failure_class, file_path, "check_tbl_value_col_ascending")
+  expect_equal(res$error_tbl, expected)
 })
 
 test_that("check_tbl_value_col_ascending skips correctly", {
@@ -177,7 +191,7 @@ test_that("(#78) check_tbl_value_col_ascending will sort even if the data doesn'
   actual <- res_with_err$error_tbl
 
   expect_s3_class(res_with_err, "check_failure")
-  expect_equal(actual, expected, ignore_attr = TRUE)
+  expect_equal(actual, expected)
 })
 
 test_that("(#78) check_tbl_value_col_ascending works when output type IDs differ by target", {

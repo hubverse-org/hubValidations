@@ -17,10 +17,13 @@ test_that("check_tbl_values_required works with 1 model task & completely opt co
     file_path,
     hub_path
   )
-  expect_snapshot(
-    str(missing_req_block)
+  expect_snapshot(missing_req_block)
+  expect_check(
+    missing_req_block,
+    failure_class,
+    file_path,
+    "check_tbl_values_required"
   )
-  expect_false("mean" %in% missing_req_block$missing$output_type)
 
   expect_equal(
     missing_req_block$missing,
@@ -34,10 +37,12 @@ test_that("check_tbl_values_required works with 1 model task & completely opt co
     file_path,
     hub_path
   )
-  expect_snapshot(
-    str(res_missing_otid)
+  expect_check(
+    res_missing_otid,
+    failure_class,
+    file_path,
+    "check_tbl_values_required"
   )
-  expect_false("mean" %in% res_missing_otid$missing$output_type)
 
   expect_equal(
     res_missing_otid$missing,
@@ -63,8 +68,12 @@ test_that("check_tbl_values_required works with 2 separate model tasks & complet
     file_path,
     hub_path
   )
-  expect_snapshot(
-    str(missing_required)
+  expect_snapshot(missing_required)
+  expect_check(
+    missing_required,
+    failure_class,
+    file_path,
+    "check_tbl_values_required"
   )
   expect_equal(
     missing_required$missing,
@@ -77,8 +86,11 @@ test_that("check_tbl_values_required works with 2 separate model tasks & complet
     file_path,
     hub_path
   )
-  expect_snapshot(
-    str(missing_opt_otid)
+  expect_check(
+    missing_opt_otid,
+    failure_class,
+    file_path,
+    "check_tbl_values_required"
   )
   expect_equal(
     missing_opt_otid$missing,
@@ -97,12 +109,22 @@ test_that("check_tbl_values_required works with 2 separate model tasks & complet
     file_path,
     hub_path
   )
-  expect_snapshot(
-    str(missing_pmf)
+  expect_check(
+    missing_pmf,
+    failure_class,
+    file_path,
+    "check_tbl_values_required"
   )
   expect_equal(
-    missing_pmf$missing$output_type_id,
-    c("decrease", "stable", "increase", "large_increase")
+    missing_pmf$missing,
+    tibble::tibble(
+      forecast_date = as.Date("2023-05-08"),
+      horizon = 2L,
+      target = "wk flu hosp rate change",
+      location = "US",
+      output_type = "pmf",
+      output_type_id = c("decrease", "stable", "increase", "large_increase")
+    )
   )
 
   expect_equal(
@@ -117,8 +139,7 @@ test_that("check_tbl_values_required works with 2 separate model tasks & complet
       round_id,
       file_path,
       hub_path
-    ),
-    ignore_attr = TRUE
+    )
   )
 
   pmf_row$horizon <- "1"
@@ -128,8 +149,32 @@ test_that("check_tbl_values_required works with 2 separate model tasks & complet
     file_path,
     hub_path
   )
-  expect_snapshot(
-    str(missing_horizon)
+  expect_check(
+    missing_horizon,
+    failure_class,
+    file_path,
+    "check_tbl_values_required"
+  )
+  expect_equal(
+    missing_horizon$missing,
+    tibble::tibble(
+      forecast_date = as.Date("2023-05-08"),
+      horizon = rep(1:2, c(4L, 5L)),
+      target = "wk flu hosp rate change",
+      location = "US",
+      output_type = "pmf",
+      output_type_id = c(
+        "decrease",
+        "stable",
+        "increase",
+        "large_increase",
+        "large_decrease",
+        "decrease",
+        "stable",
+        "increase",
+        "large_increase"
+      )
+    )
   )
 })
 
@@ -223,7 +268,28 @@ test_that("check_tbl_values_required works with v3 spec samples", {
     file_path = file_path,
     hub_path = hub_path
   )$missing
-  expect_snapshot(missing)
+  expect_tbl(
+    missing,
+    n_rows = 21L,
+    types = c(
+      location = "character",
+      reference_date = "Date",
+      horizon = "integer",
+      target_end_date = "Date",
+      target = "character",
+      output_type = "character",
+      output_type_id = "character"
+    ),
+    values = list(
+      location = "US",
+      reference_date = as.Date("2022-10-22"),
+      horizon = 0:2,
+      target_end_date = as.Date(c("2022-10-22", "2022-10-29", "2022-11-05")),
+      target = c("wk flu hosp rate category", "wk inc flu hosp"),
+      output_type = c("mean", "median", "pmf", "sample"),
+      output_type_id = c("high", "low", "moderate", "very high", NA)
+    )
+  )
   # Missing required values reported should include optional values
   # (e.g optional horizons 0:2) and output types (e.g. mean & median)
   # for which other locations have been submitted but the required
@@ -315,7 +381,31 @@ test_that("(#123) check_tbl_values_required works with all optional output types
   # Check output correct
   expect_snapshot(opt_output_type_ids_result)
   # Missing output structure correct
-  expect_snapshot(opt_output_type_ids_result$missing)
+  missing <- opt_output_type_ids_result$missing
+  expect_tbl(
+    missing,
+    n_rows = 168L,
+    types = c(
+      nowcast_date = "Date",
+      target_date = "Date",
+      clade = "character",
+      location = "character",
+      output_type = "character",
+      output_type_id = "character"
+    ),
+    values = list(
+      nowcast_date = as.Date("2024-10-02"),
+      target_date = seq(
+        as.Date("2024-09-01"),
+        as.Date("2024-10-12"),
+        by = "day"
+      ),
+      clade = c("24A", "24B"),
+      location = c("AL", "CA"),
+      output_type = "sample",
+      output_type_id = NA_character_
+    )
+  )
   # Missing clades identified correctly
   expect_equal(
     unique(opt_output_type_ids_result$missing$clade),
@@ -359,7 +449,7 @@ test_that("check_tbl_values_required works with v4 hubs", {
     derived_task_ids = "target_date"
   )
   missing <- missing_required$missing
-  expect_true(nrow(missing) == 2L)
+  expect_equal(nrow(missing), 2L)
   expect_equal(
     missing[, names(missing) != "target_date"],
     tbl_hub[24:25, !names(tbl_hub) %in% c("target_date", "value")]
