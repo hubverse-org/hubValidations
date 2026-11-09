@@ -7,23 +7,120 @@ test_that("match_tbl_to_model_task works", {
   )
   config_tasks <- read_config(hub_path, "tasks")
 
-  expect_snapshot(
-    match_tbl_to_model_task(tbl, config_tasks, round_id = "2022-10-22")
-  )
-  expect_snapshot(
-    match_tbl_to_model_task(
-      tbl,
-      config_tasks,
-      round_id = "2022-10-22",
-      output_types = "sample"
+  res <- match_tbl_to_model_task(tbl, config_tasks, round_id = "2022-10-22")
+  expect_equal(purrr::map_int(res, nrow), c(60L, 1530L))
+  chr_types <- purrr::set_names(
+    rep("character", 8),
+    c(
+      "reference_date",
+      "target",
+      "horizon",
+      "location",
+      "target_end_date",
+      "output_type",
+      "output_type_id",
+      "value"
     )
   )
-  expect_snapshot(
-    match_tbl_to_model_task(
-      tbl,
-      config_tasks,
-      round_id = "2022-10-22",
-      order_by_config = TRUE
+  purrr::walk(res, ~ expect_equal(first_classes(.x), chr_types))
+  expect_equal(
+    purrr::map(res, ~ unique(.x$target)),
+    list("wk flu hosp rate category", "wk inc flu hosp")
+  )
+  expect_equal(
+    sort(unique(res[[1]]$output_type_id)),
+    c("high", "low", "moderate", "very high")
+  )
+  expect_equal(
+    dplyr::count(res[[2]], output_type),
+    tibble::tibble(
+      output_type = c("mean", "median", "sample"),
+      n = c(15L, 15L, 1500L)
+    )
+  )
+  # Rows keep the order of the file.
+  expect_equal(
+    res[[1]][1:5, c("horizon", "location", "output_type_id")],
+    tibble::tibble(
+      horizon = c("0", "0", "0", "0", "1"),
+      location = "01",
+      output_type_id = c("low", "moderate", "high", "very high", "low")
+    )
+  )
+  expect_equal(
+    res[[2]][1:4, c("horizon", "location", "output_type")],
+    tibble::tibble(
+      horizon = c("0", "1", "2", "0"),
+      location = c("US", "US", "US", "01"),
+      output_type = "median"
+    )
+  )
+
+  res_spl <- match_tbl_to_model_task(
+    tbl,
+    config_tasks,
+    round_id = "2022-10-22",
+    output_types = "sample"
+  )
+  expect_null(res_spl[[1]])
+  expect_equal(res_spl[[2]], res[[2]][res[[2]]$output_type == "sample", ])
+  expect_equal(dplyr::n_distinct(res_spl[[2]]$output_type_id), 500L)
+
+  res_ord <- match_tbl_to_model_task(
+    tbl,
+    config_tasks,
+    round_id = "2022-10-22",
+    order_by_config = TRUE
+  )
+  # Rows sort on output type, then output type ID, then horizon, then
+  # location, each in config order. Required locations (US, 01) come before
+  # optional ones. Sample IDs have no config order, so sample rows that share
+  # task IDs keep the order of the file.
+  cols <- c("horizon", "location", "output_type", "output_type_id")
+  expect_equal(
+    res_ord[[1]][c(1:6, 30, 31, 59, 60), cols],
+    tibble::tibble(
+      horizon = c("0", "0", "0", "0", "0", "1", "2", "0", "2", "2"),
+      location = c("US", "01", "02", "04", "05", "US", "05", "US", "04", "05"),
+      output_type = "pmf",
+      output_type_id = c(
+        rep("low", 6),
+        "moderate",
+        "high",
+        "very high",
+        "very high"
+      )
+    )
+  )
+  expect_equal(
+    res_ord[[2]][c(1:6, 16, 30, 31, 32, 1529, 1530), cols],
+    tibble::tibble(
+      horizon = c("0", "0", "0", "0", "0", "1", "0", "2", "0", "0", "2", "2"),
+      location = c(
+        "US",
+        "01",
+        "02",
+        "04",
+        "05",
+        "US",
+        "US",
+        "05",
+        "US",
+        "US",
+        "05",
+        "05"
+      ),
+      output_type = c(rep("mean", 6), "median", "median", rep("sample", 4)),
+      output_type_id = c(rep(NA_character_, 8), "5201", "5202", "399", "400")
+    )
+  )
+  # Ordering returns the same rows as matching without it.
+  purrr::walk2(
+    res_ord,
+    res,
+    ~ expect_equal(
+      dplyr::arrange(.x, dplyr::pick(dplyr::everything())),
+      dplyr::arrange(.y, dplyr::pick(dplyr::everything()))
     )
   )
 })
@@ -145,6 +242,7 @@ test_that("order_by_config sorts on output type, then its IDs, then task IDs", {
     stringsAsFactors = FALSE
   )
   tbl$value <- "1"
+  withr::local_seed(1)
   tbl <- tbl[sample(nrow(tbl)), ]
 
   ordered <- match_tbl_to_model_task(

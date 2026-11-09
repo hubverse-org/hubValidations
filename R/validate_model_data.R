@@ -5,6 +5,9 @@
 #' leave these columns out.
 #' If `NULL`, defaults to extracting derived task IDs from hub `task.json`. See
 #' [get_hub_derived_task_ids()] for more details.
+#' @param allow_overlapping_samples Logical. Whether samples may partly overlap,
+#' that is, share some compound modeling tasks but not all. If `TRUE`, the
+#' `spl_overlap` check is skipped. See [check_tbl_spl_overlap()] for details.
 #' @inheritParams check_tbl_unique_round_id
 #' @inheritParams validate_model_file
 #' @inheritParams hubData::create_hub_schema
@@ -50,9 +53,11 @@ validate_model_data <- function(
     "Date"
   ),
   validations_cfg_path = NULL,
-  derived_task_ids = NULL
+  derived_task_ids = NULL,
+  allow_overlapping_samples = FALSE
 ) {
   checks <- new_hub_validations()
+  checkmate::assert_flag(allow_overlapping_samples)
 
   file_meta <- parse_file_name(file_path)
   round_id <- file_meta$round_id
@@ -263,21 +268,26 @@ validate_model_data <- function(
     )
     if (is_any_error(checks$spl_compound_taskid_set)) {
       return(checks)
-    } else {
-      compound_taskid_set <- checks$spl_compound_taskid_set$compound_taskid_set
     }
-    checks$spl_compound_tid <- try_check(
-      check_tbl_spl_compound_tid(
-        tbl_chr,
-        round_id = round_id,
+    checks$spl_overlap <- if (allow_overlapping_samples) {
+      capture_check_info(
         file_path = file_path,
-        hub_path = hub_path,
-        compound_taskid_set = compound_taskid_set,
-        derived_task_ids = derived_task_ids
-      ),
-      file_path
-    )
-    if (is_any_error(checks$spl_compound_tid)) {
+        msg = "{.arg allow_overlapping_samples} is {.code TRUE}. Skipping {.code check_tbl_spl_overlap} check.",
+        call = quote(check_tbl_spl_overlap())
+      )
+    } else {
+      try_check(
+        check_tbl_spl_overlap(
+          tbl_chr,
+          round_id = round_id,
+          file_path = file_path,
+          hub_path = hub_path,
+          derived_task_ids = derived_task_ids
+        ),
+        file_path
+      )
+    }
+    if (is_any_error(checks$spl_overlap)) {
       return(checks)
     }
     checks$spl_non_compound_tid <- try_check(
@@ -286,7 +296,6 @@ validate_model_data <- function(
         round_id = round_id,
         file_path = file_path,
         hub_path = hub_path,
-        compound_taskid_set = compound_taskid_set,
         derived_task_ids = derived_task_ids
       ),
       file_path
@@ -300,7 +309,6 @@ validate_model_data <- function(
         round_id = round_id,
         file_path = file_path,
         hub_path = hub_path,
-        compound_taskid_set = compound_taskid_set,
         derived_task_ids = derived_task_ids
       ),
       file_path

@@ -148,9 +148,11 @@ validate_pr <- function(
     "file",
     "file_path"
   ),
-  derived_task_ids = NULL
+  derived_task_ids = NULL,
+  allow_overlapping_samples = FALSE
 ) {
   file_modification_check <- rlang::arg_match(file_modification_check)
+  checkmate::assert_flag(allow_overlapping_samples)
   if (file_modification_check == "warn") {
     lifecycle::deprecate_warn(
       "0.6.1",
@@ -231,6 +233,7 @@ validate_pr <- function(
             validations_cfg_path = validations_cfg_path,
             skip_submit_window_check = skip_submit_window_check,
             derived_task_ids = derived_task_ids,
+            allow_overlapping_samples = allow_overlapping_samples,
             skip_check_config = TRUE
           )
         }

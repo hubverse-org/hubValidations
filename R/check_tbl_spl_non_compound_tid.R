@@ -3,13 +3,22 @@
 #' @inherit check_tbl_colnames params
 #' @inheritParams check_tbl_spl_compound_tid
 #' @inherit check_tbl_colnames return
-#' @details Output of the check includes an `errors` element, a list of items,
+#' @details A sample coarser than the configured `compound_taskid_set` covers
+#' several compound modeling tasks. Its rows in each one are compared
+#' separately. See the Compound modeling tasks section of
+#' [check_tbl_spl_compound_taskid_set()].
+#'
+#' Output of the check includes an `errors` element, a list of items,
 #' one for each modeling task containing samples failing validation,
 #' with the following structure:
 #' - `mt_id`: Index identifying the config modeling task the samples are associated with.
 #' - `output_type_ids`: The output type IDs of samples that do not match the most frequent
 #' non-compound task ID value combination across all
 #' samples in the modeling task.
+#' - `slices`: a tibble with one row for each sample and compound modeling task
+#' in which the sample does not match, giving the sample's `output_type_id`,
+#' the `compound_idx` and the compound task ID values of the compound modeling
+#' task.
 #' - `frequent`: The most frequent non-compound task ID value combination
 #' across all samples in the modeling task to which all samples were compared.
 #' See [hubverse documentation on samples](https://docs.hubverse.io/en/latest/user-guide/sample-output-type.html)
@@ -28,12 +37,6 @@ check_tbl_spl_non_compound_tid <- function(
     cli::cli_abort("Valid {.var compound_taskid_set} must be provided.")
   }
   config_tasks <- read_config(hub_path, "tasks")
-  if (is.null(compound_taskid_set)) {
-    compound_taskid_set <- get_round_compound_task_ids(
-      config_tasks,
-      round_id
-    )
-  }
 
   if (
     isFALSE(has_spls_tbl(tbl_chr)) ||
@@ -42,18 +45,19 @@ check_tbl_spl_non_compound_tid <- function(
     return(skip_v3_spl_check(file_path))
   }
 
-  hash_tbl <- spl_hash_tbl(
+  spl_idx <- spl_idx_tbl(
     tbl_chr,
     round_id,
     config_tasks,
     compound_taskid_set,
-    derived_task_ids = derived_task_ids
+    derived_task_ids = derived_task_ids,
+    non_comp_key = TRUE
   )
 
   # Check that no output_type_id spans multiple model tasks. This should be
   # caught upstream by check_tbl_spl_mt_unique, but we handle it defensively
   # here to produce an informative error instead of a cryptic dplyr crash.
-  otid_mt <- unique(hash_tbl[, c("output_type_id", "mt_id")])
+  otid_mt <- dplyr::distinct(spl_idx$rows, .data$output_type_id, .data$mt_id)
   dup_otids <- otid_mt$output_type_id[duplicated(otid_mt$output_type_id)]
   if (length(dup_otids) > 0L) {
     cli::cli_abort(
@@ -65,33 +69,30 @@ check_tbl_spl_non_compound_tid <- function(
     )
   }
 
-  n_tbl <- dplyr::group_by(hash_tbl, .data$mt_id) |>
-    dplyr::summarise(
-      n = dplyr::n_distinct(.data$hash_non_comp_tid)
-    ) |>
-    dplyr::filter(.data$n > 1L)
+  mismatched <- mismatched_non_comp_slices(spl_idx$rows)
 
-  check <- nrow(n_tbl) == 0L
+  check <- nrow(mismatched$slices) == 0L
 
   if (check) {
     details <- NULL
     errors <- NULL
   } else {
-    errors <- non_comptid_mismatch_errors(
-      mt_ids = unique(n_tbl$mt_id),
-      hash_tbl,
-      tbl_chr,
-      config_tasks,
-      round_id,
-      compound_taskid_set
-    )
+    errors <- non_comptid_mismatch_errors(mismatched, spl_idx, tbl_chr)
     output_type_ids <- purrr::map(errors, ~ .x$output_type_ids) |> # nolint: object_usage_linter
       unlist(use.names = FALSE)
+    mismatched_idx <- unique(mismatched$slices$compound_idx)
+    units <- compound_idx_labels(mismatched_idx, spl_idx, tbl_chr) # nolint: object_usage_linter
 
-    details <- cli::format_inline(
-      "Sample{?s} {.val {output_type_ids}} d{?oes/o} not match most frequent ",
-      "non compound task ID combination for {?its/their} modeling task. ",
-      "See {.var errors} attribute for details."
+    details <- paste(
+      cli::format_inline(
+        "Sample{?s} {.val {output_type_ids}} d{?oes/o} not match the most ",
+        "frequent non compound task ID combination for {?its/their} modeling ",
+        "task"
+      ),
+      cli::format_inline(
+        "for compound task ID values {units}. ",
+        "See {.var errors} attribute for details."
+      )
     )
   }
 
@@ -107,47 +108,21 @@ check_tbl_spl_non_compound_tid <- function(
   )
 }
 
-non_comptid_mismatch_errors <- function(
-  mt_ids,
-  hash_tbl,
-  tbl_chr,
-  config_tasks,
-  round_id,
-  compound_taskid_set
-) {
-  tbl_chr <- tbl_chr[tbl_chr$output_type == "sample", names(tbl_chr) != "value"]
-
-  round_taskids <- hubUtils::get_round_task_id_names(
-    config_tasks,
-    round_id
-  )
-
+non_comptid_mismatch_errors <- function(mismatched, spl_idx, tbl_chr) {
   purrr::map(
-    mt_ids,
-    function(.x, hash_tbl, tbl_chr, compound_taskid_set) {
-      mt_hashes <- hash_tbl$hash_non_comp_tid[hash_tbl$mt_id == .x] |>
-        table() |>
-        sort(decreasing = TRUE) |>
-        names()
-
-      spl_id <- get_hash_out_type_ids(
-        hash_tbl = hash_tbl,
-        hash = utils::head(mt_hashes, 1L),
-        n = 1L
-      )
-      mt_compound_taskid_set <- compound_taskid_set[[.x]]
+    unique(mismatched$slices$mt_id),
+    function(mt_id) {
+      slices <- mismatched$slices[mismatched$slices$mt_id == mt_id, ]
+      ref_rows <- mismatched$reference$row_idx[
+        mismatched$reference$mt_id == mt_id
+      ]
 
       list(
-        mt_id = .x,
-        output_type_ids = get_hash_out_type_ids(hash_tbl, mt_hashes[-1L]),
-        frequent = tbl_chr[
-          tbl_chr$output_type_id == spl_id,
-          setdiff(round_taskids, mt_compound_taskid_set)
-        ]
+        mt_id = mt_id,
+        output_type_ids = unique(slices$output_type_id),
+        slices = spl_slice_values(slices, spl_idx$comp_tids[[mt_id]], tbl_chr),
+        frequent = tbl_chr[ref_rows, spl_idx$non_comp_tids[[mt_id]]]
       )
-    },
-    hash_tbl = hash_tbl,
-    tbl_chr = tbl_chr,
-    compound_taskid_set = compound_taskid_set
+    }
   )
 }

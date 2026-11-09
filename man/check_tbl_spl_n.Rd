@@ -33,9 +33,9 @@ in the \code{arrow} package.
 The hub must be fully configured with valid \code{admin.json} and \code{tasks.json}
 files within the \code{hub-config} directory.}
 
-\item{compound_taskid_set}{a list of \code{compound_taskid_set}s (characters vector of compound task IDs),
-one for each modeling task. Used to override the compound task ID set in the config file,
-for example, when validating coarser samples.}
+\item{compound_taskid_set}{a list of \code{compound_taskid_set}s (characters
+vector of compound task IDs), one for each modeling task. Used to override
+the compound task ID set in the config file.}
 
 \item{derived_task_ids}{Character vector of derived task ID names (task IDs whose
 values depend on other task IDs) to ignore during validation. Defaults to
@@ -56,6 +56,10 @@ Check model output data tbl samples contain the appropriate number of samples
 for a given compound idx.
 }
 \details{
+A sample coarser than the configured \code{compound_taskid_set} covers
+several compound modeling tasks, and counts as one sample for each. See the
+Compound modeling tasks section of \code{\link[=check_tbl_spl_compound_taskid_set]{check_tbl_spl_compound_taskid_set()}}.
+
 Output of the check includes an \code{errors} element, a list of items,
 one for each compound_idx failing validation, with the following structure:
 \itemize{
@@ -63,8 +67,8 @@ one for each compound_idx failing validation, with the following structure:
 \item \code{n}: the number of samples counted for the compound idx.
 \item \code{min_samples_per_task}: the minimum number of samples required for the compound idx.
 \item \code{max_samples_per_task}: the maximum number of samples required for the compound idx.
-\item \code{compound_idx_tbl}: a tibble of the expected structure for samples belonging to
-the compound idx.
+\item \code{compound_idx_tbl}: a tibble of the rows one sample holds within the
+compound idx.
 See \href{https://docs.hubverse.io/en/latest/user-guide/sample-output-type.html}{hubverse documentation on samples}
 for more details.
 }

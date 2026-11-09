@@ -1,27 +1,27 @@
 test_that("execute_custom_checks works", {
-  expect_snapshot(
-    str(
-      test_custom_checks_caller(
-        validations_cfg_path = testthat::test_path(
-          "testdata",
-          "config",
-          "validations.yml"
-        )
-      )
+  res <- test_custom_checks_caller(
+    validations_cfg_path = testthat::test_path(
+      "testdata",
+      "config",
+      "validations.yml"
     )
   )
+  expect_snapshot(res)
+  expect_s3_class(res, "hub_validations")
+  expect_named(res, "horizon_timediff")
+  expect_s3_class(res$horizon_timediff, "check_success")
 
-  expect_snapshot(
-    str(
-      test_custom_checks_caller(
-        validations_cfg_path = testthat::test_path(
-          "testdata",
-          "config",
-          "validations-error.yml"
-        )
-      )
+  res <- test_custom_checks_caller(
+    validations_cfg_path = testthat::test_path(
+      "testdata",
+      "config",
+      "validations-error.yml"
     )
   )
+  expect_snapshot(res)
+  expect_s3_class(res, "hub_validations")
+  expect_named(res, "horizon_timediff")
+  expect_s3_class(res$horizon_timediff, "check_failure")
 })
 
 
@@ -84,7 +84,7 @@ test_that("execute_custom_checks return early when appropriate", {
   early_ret_exec_error <- test_custom_checks_caller(hub2)
   expect_snapshot(early_ret_exec_error)
   expect_length(early_ret_exec_error, 1L)
-  expect_false("check_2" %in% names(early_ret_custom))
+  expect_false("check_2" %in% names(early_ret_exec_error))
 
   # When the first custom check returns an check_failure class object, custom check
   # execution should proceed

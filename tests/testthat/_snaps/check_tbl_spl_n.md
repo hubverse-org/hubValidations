@@ -37,7 +37,7 @@
     Output
       <error/check_failure>
       Error:
-      ! Required samples per compound idx task not present.  File contains less than the minimum required number of samples per task for compound idxs "1", "2", "3", "4", and "5". See `errors` attribute for details.
+      ! Required samples per compound idx task not present.  File contains less than the minimum required number of samples per task for compound task ID values (reference_date: 2022-10-22, location: US), (reference_date: 2022-10-22, location: 01), (reference_date: 2022-10-22, location: 02), (reference_date: 2022-10-22, location: 04), and (reference_date: 2022-10-22, location: 05). See `errors` attribute for details.
 
 ---
 
@@ -158,65 +158,11 @@
 # Overriding compound_taskid_set in check_tbl_spl_n works
 
     Code
-      str(check_tbl_spl_n(tbl_coarse, round_id, file_path, hub_path))
+      res
     Output
-      List of 7
-       $ message       : chr "Required samples per compound idx task not present.  \n File contains less than the minimum required number of "| __truncated__
-       $ trace         : NULL
-       $ parent        : NULL
-       $ where         : chr "flu-base/2022-10-22-flu-base.csv"
-       $ errors        :List of 4
-        ..$ 1  :List of 5
-        .. ..$ compound_idx        : chr "1"
-        .. ..$ n                   : int 1
-        .. ..$ min_samples_per_task: int 9
-        .. ..$ max_samples_per_task: int 10
-        .. ..$ compound_idx_tbl    : tibble [20 x 6] (S3: tbl_df/tbl/data.frame)
-        .. .. ..$ reference_date : chr [1:20] "2022-10-22" "2022-10-22" "2022-10-22" "2022-10-22" ...
-        .. .. ..$ target         : chr [1:20] "wk inc flu hosp" "wk inc flu hosp" "wk inc flu hosp" "wk inc flu hosp" ...
-        .. .. ..$ horizon        : chr [1:20] "0" "0" "0" "0" ...
-        .. .. ..$ location       : chr [1:20] "US" "01" "02" "04" ...
-        .. .. ..$ variant        : chr [1:20] "AA" "AA" "AA" "AA" ...
-        .. .. ..$ target_end_date: chr [1:20] "2022-10-22" "2022-10-22" "2022-10-22" "2022-10-22" ...
-        ..$ 102:List of 5
-        .. ..$ compound_idx        : chr "102"
-        .. ..$ n                   : int 1
-        .. ..$ min_samples_per_task: int 9
-        .. ..$ max_samples_per_task: int 10
-        .. ..$ compound_idx_tbl    : tibble [20 x 6] (S3: tbl_df/tbl/data.frame)
-        .. .. ..$ reference_date : chr [1:20] "2022-10-22" "2022-10-22" "2022-10-22" "2022-10-22" ...
-        .. .. ..$ target         : chr [1:20] "wk inc flu hosp" "wk inc flu hosp" "wk inc flu hosp" "wk inc flu hosp" ...
-        .. .. ..$ horizon        : chr [1:20] "1" "1" "1" "1" ...
-        .. .. ..$ location       : chr [1:20] "US" "01" "02" "04" ...
-        .. .. ..$ variant        : chr [1:20] "AA" "AA" "AA" "AA" ...
-        .. .. ..$ target_end_date: chr [1:20] "2022-10-29" "2022-10-29" "2022-10-29" "2022-10-29" ...
-        ..$ 163:List of 5
-        .. ..$ compound_idx        : chr "163"
-        .. ..$ n                   : int 1
-        .. ..$ min_samples_per_task: int 9
-        .. ..$ max_samples_per_task: int 10
-        .. ..$ compound_idx_tbl    : tibble [20 x 6] (S3: tbl_df/tbl/data.frame)
-        .. .. ..$ reference_date : chr [1:20] "2022-10-22" "2022-10-22" "2022-10-22" "2022-10-22" ...
-        .. .. ..$ target         : chr [1:20] "wk inc flu hosp" "wk inc flu hosp" "wk inc flu hosp" "wk inc flu hosp" ...
-        .. .. ..$ horizon        : chr [1:20] "2" "2" "2" "2" ...
-        .. .. ..$ location       : chr [1:20] "US" "01" "02" "04" ...
-        .. .. ..$ variant        : chr [1:20] "AA" "AA" "AA" "AA" ...
-        .. .. ..$ target_end_date: chr [1:20] "2022-11-05" "2022-11-05" "2022-11-05" "2022-11-05" ...
-        ..$ 244:List of 5
-        .. ..$ compound_idx        : chr "244"
-        .. ..$ n                   : int 1
-        .. ..$ min_samples_per_task: int 9
-        .. ..$ max_samples_per_task: int 10
-        .. ..$ compound_idx_tbl    : tibble [20 x 6] (S3: tbl_df/tbl/data.frame)
-        .. .. ..$ reference_date : chr [1:20] "2022-10-22" "2022-10-22" "2022-10-22" "2022-10-22" ...
-        .. .. ..$ target         : chr [1:20] "wk inc flu hosp" "wk inc flu hosp" "wk inc flu hosp" "wk inc flu hosp" ...
-        .. .. ..$ horizon        : chr [1:20] "3" "3" "3" "3" ...
-        .. .. ..$ location       : chr [1:20] "US" "01" "02" "04" ...
-        .. .. ..$ variant        : chr [1:20] "AA" "AA" "AA" "AA" ...
-        .. .. ..$ target_end_date: chr [1:20] "2022-11-12" "2022-11-12" "2022-11-12" "2022-11-12" ...
-       $ call          : chr "check_tbl_spl_n"
-       $ use_cli_format: logi TRUE
-       - attr(*, "class")= chr [1:5] "check_failure" "hub_check" "rlang_error" "error" ...
+      <error/check_failure>
+      Error:
+      ! Required samples per compound idx task not present.  File contains less than the minimum required number of samples per task for compound task ID values (reference_date: 2022-10-22, horizon: 0, location: US, variant: AA, target_end_date: 2022-10-22), (reference_date: 2022-10-22, horizon: 0, location: 01, variant: AA, target_end_date: 2022-10-22), (reference_date: 2022-10-22, horizon: 0, location: 02, variant: AA, target_end_date: 2022-10-22), (reference_date: 2022-10-22, horizon: 0, location: 04, variant: AA, target_end_date: 2022-10-22), (reference_date: 2022-10-22, horizon: 0, location: 05, variant: AA, target_end_date: 2022-10-22), (reference_date: 2022-10-22, horizon: 0, location: US, variant: BB, target_end_date: 2022-10-22), (reference_date: 2022-10-22, horizon: 0, location: 01, variant: BB, target_end_date: 2022-10-22), (reference_date: 2022-10-22, horizon: 0, location: 02, variant: BB, target_end_date: 2022-10-22), (reference_date: 2022-10-22, horizon: 0, location: 04, variant: BB, target_end_date: 2022-10-22), (reference_date: 2022-10-22, horizon: 0, location: 05, variant: BB, target_end_date: 2022-10-22), (reference_date: 2022-10-22, horizon: 0, location: US, variant: CC, target_end_date: 2022-10-22), (reference_date: 2022-10-22, horizon: 0, location: 01, variant: CC, target_end_date: 2022-10-22), (reference_date: 2022-10-22, horizon: 0, location: 02, variant: CC, target_end_date: 2022-10-22), (reference_date: 2022-10-22, horizon: 0, location: 04, variant: CC, target_end_date: 2022-10-22), (reference_date: 2022-10-22, horizon: 0, location: 05, variant: CC, target_end_date: 2022-10-22), (reference_date: 2022-10-22, horizon: 0, location: US, variant: DD, target_end_date: 2022-10-22), (reference_date: 2022-10-22, horizon: 0, location: 01, variant: DD, target_end_date: 2022-10-22), (reference_date: 2022-10-22, horizon: 0, location: 02, variant: DD, target_end_date: 2022-10-22), ..., (reference_date: 2022-10-22, horizon: 3, location: 04, variant: DD, target_end_date: 2022-11-12), and (reference_date: 2022-10-22, horizon: 3, location: 05, variant: DD, target_end_date: 2022-11-12). See `errors` attribute for details.
 
 ---
 
@@ -225,7 +171,7 @@
     Output
       <error/check_failure>
       Error:
-      ! Required samples per compound idx task not present.  File contains less than the minimum required number of samples per task for compound idxs "1", "2", "3", and "4". See `errors` attribute for details.
+      ! Required samples per compound idx task not present.  File contains less than the minimum required number of samples per task for compound task ID values (reference_date: 2022-10-22, horizon: 0), (reference_date: 2022-10-22, horizon: 1), (reference_date: 2022-10-22, horizon: 2), and (reference_date: 2022-10-22, horizon: 3). See `errors` attribute for details.
 
 ---
 

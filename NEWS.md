@@ -1,7 +1,16 @@
 # hubValidations (development version)
 
+## Breaking Changes
+
+* Samples in one modeling task may now have different compound task ID sets, as long as each matches or is coarser than the configured `compound_taskid_set`. For example, with a `compound_taskid_set` of `reference_date` and `location`, each sample is a trajectory across horizons for a single location. A file can now also contain samples with a compound task ID set of `reference_date` only, which are joint across locations as well as horizons. Samples joint across locations `A1` and `A2` can sit beside samples for location `B` alone (#400).
+* New check `check_tbl_spl_overlap()` fails samples that partly overlap. For example, with a `compound_taskid_set` of `reference_date` and `location`, samples with a compound task ID set of `reference_date` only are joint across locations, and a sample joint across locations `A1` and `A2` beside a sample joint across `A2` and `B` fails. `validate_model_data()`, `validate_submission()` and `validate_pr()` run it, and their output contains a new `spl_overlap` element. Their new `allow_overlapping_samples` argument skips it (#402).
+* `validate_model_data()`, and so `validate_submission()` and `validate_pr()`, no longer run `check_tbl_spl_compound_tid()`, and their output no longer contains a `spl_compound_tid` element (#377).
+* `get_tbl_compound_taskid_set()` no longer errors when samples in a modeling task have different compound task ID sets. It returns every task ID detected as compound, with each set in a `sets` attribute (#400).
+
 ## Bug fixes
 
+* `check_tbl_spl_n()` and `check_tbl_spl_non_compound_tid()` now check a coarser sample in every combination of compound task ID values it covers. `check_tbl_spl_n()` previously counted it towards one combination, so it could report the wrong combinations as short of samples. In the `errors` attributes, `compound_idx` values are now always numbered from the configured `compound_taskid_set`, `check_tbl_spl_non_compound_tid()` gains a `slices` element giving the compound task ID values of each mismatch, and each `compound_idx_tbl` of `check_tbl_spl_n()` holds only one sample's rows within that combination (#377).
+* The `errors` attribute of `check_tbl_spl_compound_taskid_set()` and `get_tbl_compound_taskid_set()` now lists the correct `output_type_ids` for each detected compound task ID set (#400).
 * `check_submission_time()`, and so `validate_submission()` and `validate_pr()`, no longer errors when a hub's `admin.json` sets a legacy timezone name, such as `US/Eastern`, on a system that does not recognise legacy names, such as Ubuntu 26.04 and the GitHub Actions runners that use it. A timezone the system does not recognise now gives a clear error, suggesting a valid timezone name, such as `America/New_York` (#419).
 
 # hubValidations 3.0.0
