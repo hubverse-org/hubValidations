@@ -1,27 +1,30 @@
+validations_class <- c("hub_validations", "list")
+
 test_that("validate_model_data works", {
   hub_path <- system.file("testhubs/simple", package = "hubValidations")
   file_path <- "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
   res <- validate_model_data(hub_path, file_path)
-  expect_s3_class(res, "hub_validations")
-  expect_equal(first_classes(res), data_checks)
+  expect_validations(res, validations_class, data_checks, where = file_path)
 
   res <- validate_model_data(hub_path, file_path = "2020-10-06-random-path.csv")
-  expect_s3_class(res, "hub_validations")
-  expect_equal(
-    first_classes(res),
-    c(file_read = "check_error")
+  expect_validations(
+    res,
+    validations_class,
+    c(file_read = "check_error"),
+    where = "2020-10-06-random-path.csv"
   )
   expect_snapshot(res$file_read)
 
   res <- validate_model_data(hub_path, file_path, round_id_col = "random_col")
-  expect_s3_class(res, "hub_validations")
-  expect_equal(
-    first_classes(res),
+  expect_validations(
+    res,
+    validations_class,
     c(
       file_read = "check_success",
       valid_round_id_col = "check_failure",
       unique_round_id = "check_error"
-    )
+    ),
+    where = file_path
   )
   expect_snapshot(res$valid_round_id_col)
   expect_snapshot(res$unique_round_id)
@@ -29,8 +32,7 @@ test_that("validate_model_data works", {
   hub_path <- system.file("testhubs/flusight", package = "hubUtils")
   file_path <- "hub-ensemble/2023-05-08-hub-ensemble.parquet"
   res <- validate_model_data(hub_path, file_path)
-  expect_s3_class(res, "hub_validations")
-  expect_equal(first_classes(res), data_checks)
+  expect_validations(res, validations_class, data_checks, where = file_path)
 })
 
 
@@ -87,9 +89,11 @@ test_that("validate_model_data with v3 sample data works", {
       package = "hubValidations"
     )
   )
-  expect_equal(
-    first_classes(res),
-    c(spl_data_checks, horizon_timediff = "check_success")
+  expect_validations(
+    res,
+    validations_class,
+    c(spl_data_checks, horizon_timediff = "check_success"),
+    where = "flu-base/2022-10-22-flu-base.csv"
   )
   expect_equal(
     res$spl_compound_taskid_set$compound_taskid_set,
