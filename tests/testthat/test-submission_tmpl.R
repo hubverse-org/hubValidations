@@ -463,10 +463,20 @@ test_that("submission_tmpl handles samples correctly", {
   # and target do. A config with a second target tells the two apart: joint
   # across targets, or one sample per target.
   config <- jsonlite::read_json(config_path, simplifyVector = FALSE)
-  config$rounds[[1]]$model_tasks[[1]]$task_ids$target$optional <- list(
+  mt <- config$rounds[[1]]$model_tasks[[1]]
+  mt$task_ids$target$optional <- list(
     "wk ahead inc flu hosp",
     "wk ahead inc flu death"
   )
+  death_metadata <- mt$target_metadata[[1]]
+  death_metadata$target_id <- "wk ahead inc flu death"
+  death_metadata$target_name <- "weekly influenza death incidence"
+  death_metadata$description <-
+    "This target represents the counts of new deaths per horizon week."
+  death_metadata$target_units <- "count"
+  death_metadata$target_keys$target <- list("wk ahead inc flu death")
+  mt$target_metadata <- c(mt$target_metadata, list(death_metadata))
+  config$rounds[[1]]$model_tasks[[1]] <- mt
   two_targets <- withr::local_tempfile(fileext = ".json")
   jsonlite::write_json(
     config,

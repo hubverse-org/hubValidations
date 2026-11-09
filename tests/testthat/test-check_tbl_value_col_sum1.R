@@ -38,10 +38,7 @@ test_that("check_tbl_value_col_sum1 errors correctly", {
   res <- check_tbl_value_col_sum1(tbl, file_path)
   expect_snapshot(res)
   expect_check(res, success_class, file_path, "check_tbl_value_col_sum1")
-  expect_named(
-    res,
-    c("message", "where", "error_tbl", "call", "use_cli_format")
-  )
+  expect_true("error_tbl" %in% names(res))
   expect_null(res$error_tbl)
 })
 

@@ -1,15 +1,19 @@
 test_that("check_metadata_file_location works", {
-  expect_s3_class(
+  expect_check(
     check_metadata_file_location("hub-baseline.yml"),
-    c("check_success", "rlang_message", "message", "condition")
+    success_class,
+    where = "hub-baseline.yml",
+    call = "check_metadata_file_location"
   )
   expect_snapshot(
     check_metadata_file_location("hub-baseline.yml")
   )
 
-  expect_s3_class(
+  expect_check(
     check_metadata_file_location("random_folder/hub-baseline.yml"),
-    c("check_error", "rlang_error", "error", "condition")
+    failure_class,
+    where = "random_folder/hub-baseline.yml",
+    call = "check_metadata_file_location"
   )
   expect_snapshot(
     check_metadata_file_location("random_folder/hub-baseline.yml")

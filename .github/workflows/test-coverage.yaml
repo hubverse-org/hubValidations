@@ -19,6 +19,13 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      # The test hubs set US/Eastern, which Ubuntu 26.04 recognises only with
+      # tzdata-legacy installed.
+      - name: Install legacy timezone names
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends tzdata-legacy
+
       - uses: r-lib/actions/setup-r@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05 #v2.14.0
         with:
           use-public-rspm: true
