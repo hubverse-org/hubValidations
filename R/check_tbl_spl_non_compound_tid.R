@@ -79,7 +79,8 @@ check_tbl_spl_non_compound_tid <- function(
   } else {
     errors <- non_comptid_mismatch_errors(mismatched, spl_idx, tbl_chr)
     output_type_ids <- purrr::map(errors, ~ .x$output_type_ids) |> # nolint: object_usage_linter
-      unlist(use.names = FALSE)
+      unlist(use.names = FALSE) |>
+      escape_braces()
     mismatched_idx <- unique(mismatched$slices$compound_idx)
     units <- compound_idx_labels(mismatched_idx, spl_idx, tbl_chr) # nolint: object_usage_linter
 

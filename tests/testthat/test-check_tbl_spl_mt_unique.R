@@ -90,3 +90,16 @@ test_that("check_tbl_spl_mt_unique skips when no v3 samples present", {
     "check_info"
   )
 })
+
+test_that("check_tbl_spl_mt_unique shows sample IDs containing braces (#406)", {
+  hub_path <- test_path("testdata/hub-spl-multi-mt")
+  file_path <- "team-model/2022-10-22-team-model.csv"
+  tbl <- read_model_out_file(file_path, hub_path, coerce_types = "chr")
+  tbl$output_type_id[tbl$target == "ed_visits"] <-
+    tbl$output_type_id[tbl$target == "hosp"]
+  tbl <- brace_spl_ids(tbl)
+
+  result <- check_tbl_spl_mt_unique(tbl, "2022-10-22", file_path, hub_path)
+  expect_s3_class(result, "check_error")
+  expect_match(result$message, "\"s{id1}\"", fixed = TRUE)
+})
