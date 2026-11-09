@@ -50,8 +50,7 @@ check_tbl_spl_non_compound_tid(
 
   a list of `compound_taskid_set`s (characters vector of compound task
   IDs), one for each modeling task. Used to override the compound task
-  ID set in the config file, for example, when validating coarser
-  samples.
+  ID set in the config file.
 
 - derived_task_ids:
 
@@ -73,6 +72,11 @@ Returned object also inherits from subclass `<hub_check>`.
 
 ## Details
 
+A sample coarser than the configured `compound_taskid_set` covers
+several compound modeling tasks. Its rows in each one are compared
+separately. See the Compound modeling tasks section of
+[`check_tbl_spl_compound_taskid_set()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_spl_compound_taskid_set.md).
+
 Output of the check includes an `errors` element, a list of items, one
 for each modeling task containing samples failing validation, with the
 following structure:
@@ -83,6 +87,11 @@ following structure:
 - `output_type_ids`: The output type IDs of samples that do not match
   the most frequent non-compound task ID value combination across all
   samples in the modeling task.
+
+- `slices`: a tibble with one row for each sample and compound modeling
+  task in which the sample does not match, giving the sample's
+  `output_type_id`, the `compound_idx` and the compound task ID values
+  of the compound modeling task.
 
 - `frequent`: The most frequent non-compound task ID value combination
   across all samples in the modeling task to which all samples were

@@ -17,7 +17,8 @@ validate_pr(
   file_modification_check = c("error", "failure", "warn", "message", "none"),
   allow_submit_window_mods = TRUE,
   submit_window_ref_date_from = c("file", "file_path"),
-  derived_task_ids = NULL
+  derived_task_ids = NULL,
+  allow_overlapping_samples = FALSE
 )
 ```
 
@@ -122,6 +123,14 @@ validate_pr(
   [`get_hub_derived_task_ids()`](https://hubverse-org.github.io/hubUtils/reference/get_hub_timezone.html)
   for more details.
 
+- allow_overlapping_samples:
+
+  Logical. Whether samples may partly overlap, that is, share some
+  compound modeling tasks but not all. If `TRUE`, the `spl_overlap`
+  check is skipped. See
+  [`check_tbl_spl_overlap()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_spl_overlap.md)
+  for details.
+
 ## Value
 
 An object of class `hub_validations_collection`, a collection of
@@ -205,10 +214,10 @@ Details of checks performed by
 | value_col_non_desc | Values in \`value\` column are non-decreasing as output_type_ids increase for all unique task ID /output type value combinations. Applies to \`quantile\` or \`cdf\` output types only | FALSE | check_failure | error_tbl: table of rows affected |
 | value_col_sum1 | Values in the \`value\` column of \`pmf\` output type data for each unique task ID combination sum to 1. | FALSE | check_failure | error_tbl: table of rows affected |
 | spl_mt_unique | Individual sample output_type_ids do not span multiple model tasks. | TRUE | check_error | errors: list with mt_ids (model task indices the overlapping samples span) and output_type_ids (sample IDs appearing in multiple model tasks). |
-| spl_compound_taskid_set | Sample compound task id sets for each modeling task match or are coarser than the expected set defined in tasks.json config. | TRUE | check_error | errors: list containing item for each failing modeling task. Exact structure dependent on type of validation failure. See check function documentation for more details. |
-| spl_compound_tid | Samples contain single unique values for each compound task ID within individual samples (v3 and above schema only). | TRUE | check_error | errors: list containing item for each sample failing validation with breakdown of unique values for each compound task ID. |
-| spl_non_compound_tid | Samples contain single unique combination of non-compound task ID values across all samples (v3 and above schema only). | TRUE | check_error | errors: list containing item for each modeling task with vectors of output type ids of samples failing validation and example table of most frequent non-compound task ID value combination across all samples in the modeling task |
-| spl_n | Number of samples for a given compound idx falls within accepted compound task range (v3 and above schema only). | FALSE | check_failure | errors: list containing item for each compound_idx failing validation with sample count, metadata on expected samples and example table of expected structure for samples belonging to the compound idx in question. |
+| spl_compound_taskid_set | Sample compound task id sets for each modeling task match or are coarser than the expected set defined in tasks.json config. Samples in a modeling task may have different compound task id sets. | TRUE | check_error | errors: list containing item for each failing modeling task. Exact structure dependent on type of validation failure. See check function documentation for more details. |
+| spl_overlap | Samples that share a combination of compound task ID values cover the same combinations. Skipped when allow_overlapping_samples is TRUE (v3 and above schema only). | TRUE | check_error | errors: list containing item for each failing modeling task with output type ids of the samples involved and a table of the compound task ID values each covers. |
+| spl_non_compound_tid | Samples contain single unique combination of non-compound task ID values across all samples, within each compound task ID value combination they cover (v3 and above schema only). | TRUE | check_error | errors: list containing item for each modeling task with vectors of output type ids of samples failing validation, a table of the compound task ID values they fail for and example table of most frequent non-compound task ID value combination across all samples in the modeling task. |
+| spl_n | Number of samples for a given compound idx falls within accepted compound task range. Samples coarser than the configured compound task id set count towards each compound idx they cover (v3 and above schema only). | FALSE | check_failure | errors: list containing item for each compound_idx failing validation with sample count, metadata on expected samples and example table of expected structure for samples belonging to the compound idx in question. |
 
 ### Checks on model metadata files
 

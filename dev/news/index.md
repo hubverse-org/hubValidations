@@ -2,6 +2,72 @@
 
 ## hubValidations (development version)
 
+### Breaking Changes
+
+- Samples in one modeling task may now have different compound task ID
+  sets, as long as each matches or is coarser than the configured
+  `compound_taskid_set`. For example, with a `compound_taskid_set` of
+  `reference_date` and `location`, each sample is a trajectory across
+  horizons for a single location. A file can now also contain samples
+  with a compound task ID set of `reference_date` only, which are joint
+  across locations as well as horizons. Samples joint across locations
+  `A1` and `A2` can sit beside samples for location `B` alone
+  ([\#400](https://github.com/hubverse-org/hubValidations/issues/400)).
+- New check
+  [`check_tbl_spl_overlap()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_spl_overlap.md)
+  fails samples that partly overlap. For example, with a
+  `compound_taskid_set` of `reference_date` and `location`, samples with
+  a compound task ID set of `reference_date` only are joint across
+  locations, and a sample joint across locations `A1` and `A2` beside a
+  sample joint across `A2` and `B` fails.
+  [`validate_model_data()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_model_data.md),
+  [`validate_submission()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_submission.md)
+  and
+  [`validate_pr()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_pr.md)
+  run it, and their output contains a new `spl_overlap` element. Their
+  new `allow_overlapping_samples` argument skips it
+  ([\#402](https://github.com/hubverse-org/hubValidations/issues/402)).
+- [`validate_model_data()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_model_data.md),
+  and so
+  [`validate_submission()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_submission.md)
+  and
+  [`validate_pr()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_pr.md),
+  no longer run
+  [`check_tbl_spl_compound_tid()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_spl_compound_tid.md),
+  and their output no longer contains a `spl_compound_tid` element
+  ([\#377](https://github.com/hubverse-org/hubValidations/issues/377)).
+- [`get_tbl_compound_taskid_set()`](https://hubverse-org.github.io/hubValidations/dev/reference/get_tbl_compound_taskid_set.md)
+  no longer errors when samples in a modeling task have different
+  compound task ID sets. It returns every task ID detected as compound,
+  with each set in a `sets` attribute
+  ([\#400](https://github.com/hubverse-org/hubValidations/issues/400)).
+
+### Bug fixes
+
+- [`check_tbl_spl_n()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_spl_n.md)
+  and
+  [`check_tbl_spl_non_compound_tid()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_spl_non_compound_tid.md)
+  now check a coarser sample in every combination of compound task ID
+  values it covers.
+  [`check_tbl_spl_n()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_spl_n.md)
+  previously counted it towards one combination, so it could report the
+  wrong combinations as short of samples. In the `errors` attributes,
+  `compound_idx` values are now always numbered from the configured
+  `compound_taskid_set`,
+  [`check_tbl_spl_non_compound_tid()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_spl_non_compound_tid.md)
+  gains a `slices` element giving the compound task ID values of each
+  mismatch, and each `compound_idx_tbl` of
+  [`check_tbl_spl_n()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_spl_n.md)
+  holds only one sample’s rows within that combination
+  ([\#377](https://github.com/hubverse-org/hubValidations/issues/377)).
+- The `errors` attribute of
+  [`check_tbl_spl_compound_taskid_set()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_spl_compound_taskid_set.md)
+  and
+  [`get_tbl_compound_taskid_set()`](https://hubverse-org.github.io/hubValidations/dev/reference/get_tbl_compound_taskid_set.md)
+  now lists the correct `output_type_ids` for each detected compound
+  task ID set
+  ([\#400](https://github.com/hubverse-org/hubValidations/issues/400)).
+
 ## hubValidations 3.0.0
 
 ### Breaking Changes

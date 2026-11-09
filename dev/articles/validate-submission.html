@@ -700,7 +700,8 @@ spl_compound_taskid_set
 </td>
 <td style="text-align:left;">
 Sample compound task id sets for each modeling task match or are coarser
-than the expected set defined in tasks.json config.
+than the expected set defined in tasks.json config. Samples in a
+modeling task may have different compound task id sets.
 </td>
 <td style="text-align:left;">
 TRUE
@@ -716,11 +717,12 @@ documentation for more details.
 </tr>
 <tr>
 <td style="text-align:left;font-weight: bold;">
-spl_compound_tid
+spl_overlap
 </td>
 <td style="text-align:left;">
-Samples contain single unique values for each compound task ID within
-individual samples (v3 and above schema only).
+Samples that share a combination of compound task ID values cover the
+same combinations. Skipped when allow_overlapping_samples is TRUE (v3
+and above schema only).
 </td>
 <td style="text-align:left;">
 TRUE
@@ -729,8 +731,9 @@ TRUE
 check_error
 </td>
 <td style="text-align:left;">
-errors: list containing item for each sample failing validation with
-breakdown of unique values for each compound task ID.
+errors: list containing item for each failing modeling task with output
+type ids of the samples involved and a table of the compound task ID
+values each covers.
 </td>
 </tr>
 <tr>
@@ -739,7 +742,8 @@ spl_non_compound_tid
 </td>
 <td style="text-align:left;">
 Samples contain single unique combination of non-compound task ID values
-across all samples (v3 and above schema only).
+across all samples, within each compound task ID value combination they
+cover (v3 and above schema only).
 </td>
 <td style="text-align:left;">
 TRUE
@@ -749,9 +753,10 @@ check_error
 </td>
 <td style="text-align:left;">
 errors: list containing item for each modeling task with vectors of
-output type ids of samples failing validation and example table of most
-frequent non-compound task ID value combination across all samples in
-the modeling task.
+output type ids of samples failing validation, a table of the compound
+task ID values they fail for and example table of most frequent
+non-compound task ID value combination across all samples in the
+modeling task.
 </td>
 </tr>
 <tr>
@@ -760,7 +765,9 @@ spl_n
 </td>
 <td style="text-align:left;">
 Number of samples for a given compound idx falls within accepted
-compound task range (v3 and above schema only).
+compound task range. Samples coarser than the configured compound task
+id set count towards each compound idx they cover (v3 and above schema
+only).
 </td>
 <td style="text-align:left;">
 FALSE

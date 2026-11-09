@@ -1,7 +1,6 @@
 # Check model output data tbl samples contain single unique values for each compound task ID within individual samples
 
-Check model output data tbl samples contain single unique values for
-each compound task ID within individual samples
+**\[superseded\]**
 
 ## Usage
 
@@ -50,8 +49,7 @@ check_tbl_spl_compound_tid(
 
   a list of `compound_taskid_set`s (characters vector of compound task
   IDs), one for each modeling task. Used to override the compound task
-  ID set in the config file, for example, when validating coarser
-  samples.
+  ID set in the config file.
 
 - derived_task_ids:
 
@@ -72,6 +70,17 @@ Depending on whether validation has succeeded, one of:
 Returned object also inherits from subclass `<hub_check>`.
 
 ## Details
+
+Samples coarser than the configured `compound_taskid_set` hold several
+values of a compound task ID, and are valid. So
+[`validate_model_data()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_model_data.md)
+no longer runs this check. It remains available as a custom check.
+
+Note that a sample can also hold several values because some of its rows
+were given the wrong sample ID.
+[`check_tbl_spl_overlap()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_spl_overlap.md)
+catches this when the sample then covers different compound modeling
+tasks from the samples beside it.
 
 Output of the check includes an `errors` element, a list of items, one
 for each sample failing validation, with the following structure:

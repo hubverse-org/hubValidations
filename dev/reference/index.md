@@ -180,8 +180,9 @@ Unit validation checks. All return `hub_check` S3 class objects.
   the config.
 
 - [`check_tbl_spl_compound_tid()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_spl_compound_tid.md)
-  : Check model output data tbl samples contain single unique values for
-  each compound task ID within individual samples
+  **\[superseded\]** : Check model output data tbl samples contain
+  single unique values for each compound task ID within individual
+  samples
 
 - [`check_tbl_spl_mt_unique()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_spl_mt_unique.md)
   : Check that individual sample output_type_ids do not span multiple
@@ -194,6 +195,10 @@ Unit validation checks. All return `hub_check` S3 class objects.
 - [`check_tbl_spl_non_compound_tid()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_spl_non_compound_tid.md)
   : Check model output data tbl samples contain single unique
   combination of non-compound task ID values across all samples
+
+- [`check_tbl_spl_overlap()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_spl_overlap.md)
+  : Check model output data tbl samples that share a compound modeling
+  task cover the same compound modeling tasks
 
 - [`check_tbl_unique_round_id()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_unique_round_id.md)
   : Check model output data tbl contains a single unique round ID.

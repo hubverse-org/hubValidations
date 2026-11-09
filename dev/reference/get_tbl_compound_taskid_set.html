@@ -99,6 +99,11 @@ contain <code>NA</code>s. Defaults to extracting derived task IDs from <code>con
     <p>A list of vectors of compound task IDs detected in the tbl, one for each
 modeling task in the round. If <code>compact</code> is TRUE, modeling tasks returning NULL
 elements will be removed.</p>
+<p>Samples in a modeling task can have different compound task ID sets. The
+vector then holds every task ID detected as compound for any of its samples,
+and the <code>sets</code> attribute lists each set with the output type IDs of its
+samples. See the Compound modeling tasks section of
+<code><a href="check_tbl_spl_compound_taskid_set.html">check_tbl_spl_compound_taskid_set()</a></code> for an example.</p>
     </div>
 
     <div class="section level2">

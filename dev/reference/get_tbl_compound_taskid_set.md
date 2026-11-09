@@ -57,6 +57,13 @@ A list of vectors of compound task IDs detected in the tbl, one for each
 modeling task in the round. If `compact` is TRUE, modeling tasks
 returning NULL elements will be removed.
 
+Samples in a modeling task can have different compound task ID sets. The
+vector then holds every task ID detected as compound for any of its
+samples, and the `sets` attribute lists each set with the output type
+IDs of its samples. See the Compound modeling tasks section of
+[`check_tbl_spl_compound_taskid_set()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_spl_compound_taskid_set.md)
+for an example.
+
 ## Examples
 
 ``` r

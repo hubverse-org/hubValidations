@@ -94,9 +94,9 @@ files within the <code>hub-config</code> directory.</p></dd>
 
 
 <dt id="arg-compound-taskid-set">compound_taskid_set<a class="anchor" aria-label="anchor" href="#arg-compound-taskid-set"></a></dt>
-<dd><p>a list of <code>compound_taskid_set</code>s (characters vector of compound task IDs),
-one for each modeling task. Used to override the compound task ID set in the config file,
-for example, when validating coarser samples.</p></dd>
+<dd><p>a list of <code>compound_taskid_set</code>s (characters
+vector of compound task IDs), one for each modeling task. Used to override
+the compound task ID set in the config file.</p></dd>
 
 
 <dt id="arg-derived-task-ids">derived_task_ids<a class="anchor" aria-label="anchor" href="#arg-derived-task-ids"></a></dt>
@@ -114,13 +114,16 @@ extracting derived task IDs from hub <code>task.json</code>. See
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Output of the check includes an <code>errors</code> element, a list of items,
+    <p>A sample coarser than the configured <code>compound_taskid_set</code> covers
+several compound modeling tasks, and counts as one sample for each. See the
+Compound modeling tasks section of <code><a href="check_tbl_spl_compound_taskid_set.html">check_tbl_spl_compound_taskid_set()</a></code>.</p>
+<p>Output of the check includes an <code>errors</code> element, a list of items,
 one for each compound_idx failing validation, with the following structure:</p><ul><li><p><code>compound_idx</code>: the compound idx that failed validation of number of samples.</p></li>
 <li><p><code>n</code>: the number of samples counted for the compound idx.</p></li>
 <li><p><code>min_samples_per_task</code>: the minimum number of samples required for the compound idx.</p></li>
 <li><p><code>max_samples_per_task</code>: the maximum number of samples required for the compound idx.</p></li>
-<li><p><code>compound_idx_tbl</code>: a tibble of the expected structure for samples belonging to
-the compound idx.
+<li><p><code>compound_idx_tbl</code>: a tibble of the rows one sample holds within the
+compound idx.
 See <a href="https://docs.hubverse.io/en/latest/user-guide/sample-output-type.html" class="external-link">hubverse documentation on samples</a>
 for more details.</p></li>
 </ul></div>

@@ -94,9 +94,9 @@ files within the <code>hub-config</code> directory.</p></dd>
 
 
 <dt id="arg-compound-taskid-set">compound_taskid_set<a class="anchor" aria-label="anchor" href="#arg-compound-taskid-set"></a></dt>
-<dd><p>a list of <code>compound_taskid_set</code>s (characters vector of compound task IDs),
-one for each modeling task. Used to override the compound task ID set in the config file,
-for example, when validating coarser samples.</p></dd>
+<dd><p>a list of <code>compound_taskid_set</code>s (characters
+vector of compound task IDs), one for each modeling task. Used to override
+the compound task ID set in the config file.</p></dd>
 
 
 <dt id="arg-derived-task-ids">derived_task_ids<a class="anchor" aria-label="anchor" href="#arg-derived-task-ids"></a></dt>
@@ -114,12 +114,20 @@ extracting derived task IDs from hub <code>task.json</code>. See
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Output of the check includes an <code>errors</code> element, a list of items,
+    <p>A sample coarser than the configured <code>compound_taskid_set</code> covers
+several compound modeling tasks. Its rows in each one are compared
+separately. See the Compound modeling tasks section of
+<code><a href="check_tbl_spl_compound_taskid_set.html">check_tbl_spl_compound_taskid_set()</a></code>.</p>
+<p>Output of the check includes an <code>errors</code> element, a list of items,
 one for each modeling task containing samples failing validation,
 with the following structure:</p><ul><li><p><code>mt_id</code>: Index identifying the config modeling task the samples are associated with.</p></li>
 <li><p><code>output_type_ids</code>: The output type IDs of samples that do not match the most frequent
 non-compound task ID value combination across all
 samples in the modeling task.</p></li>
+<li><p><code>slices</code>: a tibble with one row for each sample and compound modeling task
+in which the sample does not match, giving the sample's <code>output_type_id</code>,
+the <code>compound_idx</code> and the compound task ID values of the compound modeling
+task.</p></li>
 <li><p><code>frequent</code>: The most frequent non-compound task ID value combination
 across all samples in the modeling task to which all samples were compared.
 See <a href="https://docs.hubverse.io/en/latest/user-guide/sample-output-type.html" class="external-link">hubverse documentation on samples</a>

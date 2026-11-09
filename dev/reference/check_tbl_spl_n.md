@@ -50,8 +50,7 @@ check_tbl_spl_n(
 
   a list of `compound_taskid_set`s (characters vector of compound task
   IDs), one for each modeling task. Used to override the compound task
-  ID set in the config file, for example, when validating coarser
-  samples.
+  ID set in the config file.
 
 - derived_task_ids:
 
@@ -73,6 +72,11 @@ Returned object also inherits from subclass `<hub_check>`.
 
 ## Details
 
+A sample coarser than the configured `compound_taskid_set` covers
+several compound modeling tasks, and counts as one sample for each. See
+the Compound modeling tasks section of
+[`check_tbl_spl_compound_taskid_set()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_spl_compound_taskid_set.md).
+
 Output of the check includes an `errors` element, a list of items, one
 for each compound_idx failing validation, with the following structure:
 
@@ -87,7 +91,7 @@ for each compound_idx failing validation, with the following structure:
 - `max_samples_per_task`: the maximum number of samples required for the
   compound idx.
 
-- `compound_idx_tbl`: a tibble of the expected structure for samples
-  belonging to the compound idx. See [hubverse documentation on
+- `compound_idx_tbl`: a tibble of the rows one sample holds within the
+  compound idx. See [hubverse documentation on
   samples](https://docs.hubverse.io/en/latest/user-guide/sample-output-type.html)
   for more details.
