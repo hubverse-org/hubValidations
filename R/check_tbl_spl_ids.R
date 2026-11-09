@@ -39,7 +39,8 @@ check_tbl_spl_ids <- function(
   round_id,
   file_path,
   hub_path,
-  derived_task_ids = get_hub_derived_task_ids(hub_path, round_id)
+  derived_task_ids = get_hub_derived_task_ids(hub_path, round_id),
+  spl_idx = NULL
 ) {
   assert_tbl_chr(tbl_chr)
   config_tasks <- read_config(hub_path, "tasks")
@@ -51,20 +52,19 @@ check_tbl_spl_ids <- function(
     return(skip_v3_spl_check(file_path))
   }
 
-  out_tid <- hubUtils::std_colnames["output_type_id"]
-  spl_tbl <- tbl_chr[tbl_chr$output_type == "sample", names(tbl_chr) != "value"]
-
-  mt_row_idx <- assign_spl_tbl_rows(
-    spl_tbl,
-    config_tasks = config_tasks,
-    round_id = round_id,
-    derived_task_ids = derived_task_ids
-  )
+  spl_idx <- spl_idx %||%
+    spl_idx_tbl(
+      tbl_chr,
+      round_id,
+      config_tasks,
+      derived_task_ids = derived_task_ids
+    )
   round_mt <- hubUtils::get_round_model_tasks(config_tasks, round_id)
+  mt_spl_ids <- split_by_mt(spl_idx$rows$output_type_id, spl_idx)
 
-  errors <- purrr::map2(round_mt, mt_row_idx, function(mt, row_idx) {
+  errors <- purrr::map2(round_mt, mt_spl_ids, function(mt, ids) {
     spl_params <- get_mt_sample_params(mt)
-    problems <- spl_id_problems(spl_tbl[[out_tid]][row_idx], spl_params)
+    problems <- spl_id_problems(ids, spl_params)
     if (length(problems) == 0L) {
       return(NULL)
     }

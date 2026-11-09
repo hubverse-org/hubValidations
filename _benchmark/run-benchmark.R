@@ -516,7 +516,7 @@ for (variant in variants) {
           ".rds"
         )
       )
-      unlink(cache_path)
+      unlink(c(cache_path, spl_idx_path(cache_path)))
       # One baseline for each way of reading the submission that is in use, because
       # the fixed cost being subtracted is loading the package *and* reading the
       # data that way. Subtracting a baseline that read nothing from a check that
@@ -534,6 +534,9 @@ for (variant in variants) {
       # being hidden inside another check's.
       if (any(vapply(CHECKS, \(x) isTRUE(x$compound_taskid_set), NA))) {
         benchmark_peak("prepare_compound_taskid_set", size, hub, cache_path)
+      }
+      if (any(vapply(CHECKS, \(x) isTRUE(x$spl_idx), NA))) {
+        benchmark_peak("prepare_spl_idx", size, hub, cache_path)
       }
       for (spec in CHECKS) {
         benchmark_peak(spec$name, size, hub, cache_path)

@@ -15,6 +15,7 @@
 #                                 so their figures exclude the setup.
 #   prepare_compound_taskid_set   work out the compound task ID set and save it, so
 #                                 that none of the measured checks has to.
+#   prepare_spl_idx               build the sample index and save it, likewise.
 
 options(scipen = 999)
 
@@ -41,7 +42,8 @@ source(file.path(benchmark_dir, "check-calls.R"))
 
 BASELINE_PREFIX <- "baseline_load_only_"
 is_baseline <- startsWith(check_name, BASELINE_PREFIX)
-is_prepare <- identical(check_name, "prepare_compound_taskid_set")
+is_prepare <- check_name %in%
+  c("prepare_compound_taskid_set", "prepare_spl_idx")
 
 # A baseline reads the submission one way and then stops. Subtracting it from a
 # check given the submission the same way leaves that check's own cost.
@@ -75,10 +77,15 @@ if (is.finite(time_limit)) {
 if (is_baseline) {
   elapsed <- c(elapsed = 0)
   result <- NULL
-} else if (is_prepare) {
+} else if (identical(check_name, "prepare_compound_taskid_set")) {
   elapsed <- system.time(
     result <- read_compound_taskid_set(cache_path, ctx)
   )
+} else if (is_prepare) {
+  # Saving a sample index of millions of rows takes long enough to distort the
+  # figure, so only building it is timed.
+  elapsed <- system.time(result <- build_spl_idx(ctx))
+  saveRDS(result, spl_idx_path(cache_path))
 } else {
   elapsed <- system.time(result <- check_call(check_name, ctx)())
 }

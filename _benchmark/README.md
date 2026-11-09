@@ -160,7 +160,10 @@ Some rows in `peak-results.csv` are setup rather than checks.
 `baseline_load_only_*` loads the package and reads the submission but runs no
 check, so subtract it from a check that read the submission the same way.
 `prepare_compound_taskid_set` works out a value the sample checks need, once, so
-none of them is charged for it.
+none of them is charged for it. `prepare_spl_idx` does the same for the sample
+index, which `validate_model_data()` builds once and gives to every sample check.
+Add it to those checks' figures to compare against a run from before the index
+was shared.
 
 Every row also records `label`, `hubvalidations`, `hubutils`, `hubdata`, `sysname`,
 `machine` and `r_version`. Numbers are only comparable on the same machine.

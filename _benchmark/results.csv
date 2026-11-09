@@ -5,3 +5,5 @@
 "grid-free-assignment-355","S","acefa",18000,25200,1,2.5,188,"ok",0,"ak/grid-free-assignment/355@18eb721-dirty","1.2.1.9000","2.2.2.9000","Darwin","arm64","4.5.2"
 "grid-free-assignment-355","M","acefa",460000,237510,1,26.2,672,"ok",0,"ak/grid-free-assignment/355@18eb721-dirty","1.2.1.9000","2.2.2.9000","Darwin","arm64","4.5.2"
 "grid-free-assignment-355","L","acefa",13000000,3887250,1,1771.2,16149,"ok",0,"ak/grid-free-assignment/355@18eb721-dirty","1.2.1.9000","2.2.2.9000","Darwin","arm64","4.5.2"
+"spl-idx-once-401","L","acefa",13000000,3887250,1,138.2,15571,"ok",0,"ak/spl-idx-once/401@3ba57a4-dirty","1.3.0","2.2.2.9000","Darwin","arm64","4.6.1"
+"baseline-406-401","L","acefa",13000000,3887250,1,164.2,16427,"ok",0,"HEAD@3ba57a4","1.3.0","2.2.2.9000","Darwin","arm64","4.6.1"

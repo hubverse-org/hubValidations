@@ -1,6 +1,7 @@
 #' Check model output data tbl samples contain single unique combination of
 #' non-compound task ID values across all samples
 #' @inherit check_tbl_colnames params
+#' @inheritParams check_tbl_spl_mt_unique
 #' @inheritParams check_tbl_spl_compound_tid
 #' @inherit check_tbl_colnames return
 #' @details A sample coarser than the configured `compound_taskid_set` covers
@@ -30,12 +31,14 @@ check_tbl_spl_non_compound_tid <- function(
   file_path,
   hub_path,
   compound_taskid_set = NULL,
-  derived_task_ids = get_hub_derived_task_ids(hub_path, round_id)
+  derived_task_ids = get_hub_derived_task_ids(hub_path, round_id),
+  spl_idx = NULL
 ) {
   assert_tbl_chr(tbl_chr)
   if (!is.null(compound_taskid_set) && isTRUE(is.na(compound_taskid_set))) {
     cli::cli_abort("Valid {.var compound_taskid_set} must be provided.")
   }
+  rlang::check_exclusive(compound_taskid_set, spl_idx, .require = FALSE)
   config_tasks <- read_config(hub_path, "tasks")
 
   if (
@@ -45,14 +48,15 @@ check_tbl_spl_non_compound_tid <- function(
     return(skip_v3_spl_check(file_path))
   }
 
-  spl_idx <- spl_idx_tbl(
-    tbl_chr,
-    round_id,
-    config_tasks,
-    compound_taskid_set,
-    derived_task_ids = derived_task_ids,
-    non_comp_key = TRUE
-  )
+  spl_idx <- spl_idx %||%
+    spl_idx_tbl(
+      tbl_chr,
+      round_id,
+      config_tasks,
+      compound_taskid_set,
+      derived_task_ids = derived_task_ids,
+      non_comp_key = TRUE
+    )
 
   # Check that no output_type_id spans multiple model tasks. This should be
   # caught upstream by check_tbl_spl_mt_unique, but we handle it defensively
