@@ -85,24 +85,44 @@ test_that("Different compound_taskid_sets work", {
   )
 
   # Validation of coarser compound_taskid_set works
-  expect_snapshot(
-    str(
-      check_tbl_spl_compound_taskid_set(
-        tbl_coarse_location,
-        "2022-10-29",
-        create_file_path("2022-10-29"),
-        hub_path
-      )
-    )
+  res <- check_tbl_spl_compound_taskid_set(
+    tbl_coarse_location,
+    "2022-10-29",
+    create_file_path("2022-10-29"),
+    hub_path
   )
-  expect_snapshot(
-    str(
-      check_tbl_spl_compound_taskid_set(
-        tbl_coarse_horizon,
-        "2022-11-05",
-        create_file_path("2022-11-05"),
-        hub_path
-      )
+  expect_snapshot(res)
+  expect_check(
+    res,
+    success_class,
+    fs::path("flu-base/2022-10-29-flu-base.parquet"),
+    "check_tbl_spl_compound_taskid_set"
+  )
+  expect_coarser_warning(res)
+  expect_equal(
+    res$compound_taskid_set,
+    list(`1` = NULL, `2` = c("reference_date", "location"))
+  )
+
+  res <- check_tbl_spl_compound_taskid_set(
+    tbl_coarse_horizon,
+    "2022-11-05",
+    create_file_path("2022-11-05"),
+    hub_path
+  )
+  expect_snapshot(res)
+  expect_check(
+    res,
+    success_class,
+    fs::path("flu-base/2022-11-05-flu-base.parquet"),
+    "check_tbl_spl_compound_taskid_set"
+  )
+  expect_coarser_warning(res)
+  expect_equal(
+    res$compound_taskid_set,
+    list(
+      `1` = NULL,
+      `2` = c("reference_date", "horizon", "target_end_date")
     )
   )
 
@@ -128,28 +148,63 @@ test_that("Different compound_taskid_sets work", {
   local_mocked_bindings(
     read_config = function(...) config_tasks_full_ctids
   )
-  expect_snapshot(
-    str(
-      check_tbl_spl_compound_taskid_set(
-        tbl_coarse_horizon,
-        "2022-11-05",
-        create_file_path("2022-11-05"),
-        hub_path
-      )
+  res <- check_tbl_spl_compound_taskid_set(
+    tbl_coarse_horizon,
+    "2022-11-05",
+    create_file_path("2022-11-05"),
+    hub_path
+  )
+  expect_snapshot(res)
+  expect_check(
+    res,
+    error_class,
+    fs::path("flu-base/2022-11-05-flu-base.parquet"),
+    "check_tbl_spl_compound_taskid_set"
+  )
+  expect_null(res$warnings)
+  expect_identical(res$compound_taskid_set, NA)
+  expect_named(res$errors, "2")
+  expect_length(res$errors[["2"]], 1L)
+  mt_error <- res$errors[["2"]][[1]]
+  expect_named(
+    mt_error,
+    c(
+      "config_comp_tids",
+      "invalid_tbl_comp_tids",
+      "tbl_comp_tids",
+      "output_type_ids"
     )
   )
+  expect_equal(
+    mt_error$config_comp_tids,
+    c("reference_date", "horizon", "location", "variant")
+  )
+  expect_equal(mt_error$invalid_tbl_comp_tids, "target_end_date")
+  expect_equal(
+    mt_error$tbl_comp_tids,
+    c("reference_date", "horizon", "target_end_date")
+  )
+  expect_setequal(mt_error$output_type_ids, as.character(1:40))
   # Specifying the derived task IDs allows validation to pass and excludes derived
   # task IDs from the compound_taskid_set
-  expect_snapshot(
-    str(
-      check_tbl_spl_compound_taskid_set(
-        tbl_coarse_horizon,
-        "2022-11-05",
-        create_file_path("2022-11-05"),
-        hub_path,
-        derived_task_ids = "target_end_date"
-      )
-    )
+  res <- check_tbl_spl_compound_taskid_set(
+    tbl_coarse_horizon,
+    "2022-11-05",
+    create_file_path("2022-11-05"),
+    hub_path,
+    derived_task_ids = "target_end_date"
+  )
+  expect_snapshot(res)
+  expect_check(
+    res,
+    success_class,
+    fs::path("flu-base/2022-11-05-flu-base.parquet"),
+    "check_tbl_spl_compound_taskid_set"
+  )
+  expect_coarser_warning(res)
+  expect_equal(
+    res$compound_taskid_set,
+    list(`1` = NULL, `2` = c("reference_date", "horizon"))
   )
 })
 
@@ -175,16 +230,21 @@ test_that("Coarser compound_taskid_set triggers check-level warning", {
   )
 
   # Check passes but with a warning
-  expect_s3_class(result, "check_success")
-  expect_true(length(result$warnings) > 0)
+  expect_check(
+    result,
+    success_class,
+    file_path,
+    "check_tbl_spl_compound_taskid_set"
+  )
+  expect_coarser_warning(result)
 
   # Full check message explicitly states the coarser outcome and carries
   # per-modeling-task detected vs configured details.
   expect_equal(
     result$message,
     paste0(
-      "All samples in a model task conform to single, unique compound ",
-      "task ID set that matches or is\n    coarser than the configured ",
+      "All samples in a model task conform to compound task ID sets that ",
+      "match or are coarser than the configured ",
       "`compound_taskid_set`. \n mt 2: detected (\"reference_date\" and ",
       "\"location\") is coarser than configured (\"reference_date\", ",
       "\"horizon\", \"location\", \"variant\", and \"target_end_date\")."
@@ -248,16 +308,42 @@ test_that("Finer compound_taskid_sets work", {
       test_path("testdata/hub-spl")
     )
   )
-  expect_snapshot(
-    str(
-      check_tbl_spl_compound_taskid_set(
-        tbl_fine,
-        "2022-10-22",
-        create_file_path("2022-10-22"),
-        test_path("testdata/hub-spl")
-      )
+  res <- check_tbl_spl_compound_taskid_set(
+    tbl_fine,
+    "2022-10-22",
+    create_file_path("2022-10-22"),
+    test_path("testdata/hub-spl")
+  )
+  expect_check(
+    res,
+    error_class,
+    fs::path("flu-base/2022-10-22-flu-base.parquet"),
+    "check_tbl_spl_compound_taskid_set"
+  )
+  expect_null(res$warnings)
+  expect_identical(res$compound_taskid_set, NA)
+  expect_named(res$errors, "2")
+  expect_length(res$errors[["2"]], 1L)
+  mt_error <- res$errors[["2"]][[1]]
+  expect_named(
+    mt_error,
+    c(
+      "config_comp_tids",
+      "invalid_tbl_comp_tids",
+      "tbl_comp_tids",
+      "output_type_ids"
     )
   )
+  expect_equal(
+    mt_error$config_comp_tids,
+    c("reference_date", "horizon", "location", "target_end_date")
+  )
+  expect_equal(mt_error$invalid_tbl_comp_tids, "variant")
+  expect_equal(
+    mt_error$tbl_comp_tids,
+    c("reference_date", "horizon", "location", "variant", "target_end_date")
+  )
+  expect_setequal(mt_error$output_type_ids, as.character(1:800))
 })
 
 test_that("Ignoring derived_task_ids in check_tbl_spl_compound_taskid_set works", {
@@ -411,4 +497,56 @@ test_that("check_tbl_spl_compound_taskid_set defaults to round-level derived tas
     check_tbl_spl_compound_taskid_set(tbl, round_id, file_path, hub_path),
     "check_success"
   )
+})
+
+test_that("samples in a modeling task can have different valid compound task ID sets (#400)", {
+  # The config's `compound_taskid_set` is `reference_date` and `location`.
+  # Giving the location "02" samples the IDs of the location "01" samples makes
+  # samples 1 to 100 joint across both locations, which is coarser than
+  # configured. Samples for the other locations still match the configured set.
+  hub_path <- withr::local_tempdir()
+  fs::dir_copy(
+    system.file("testhubs/samples", package = "hubValidations"),
+    hub_path,
+    overwrite = TRUE
+  )
+  file_path <- "flu-base/2022-10-22-flu-base.csv"
+  round_id <- "2022-10-22"
+  tbl <- read_model_out_file(file_path, hub_path, coerce_types = "chr")
+  is_02 <- tbl$output_type == "sample" & tbl$location == "02"
+  tbl$output_type_id[is_02] <- as.character(
+    as.integer(tbl$output_type_id[is_02]) - 100L
+  )
+  utils::write.csv(
+    tbl,
+    fs::path(hub_path, "model-output", file_path),
+    row.names = FALSE
+  )
+
+  result <- check_tbl_spl_compound_taskid_set(
+    tbl,
+    round_id,
+    file_path,
+    hub_path
+  )
+  expect_s3_class(result, "check_success")
+  expect_equal(
+    attr(result$compound_taskid_set[["2"]], "sets"),
+    list(
+      list(
+        tbl_comp_tids = "reference_date",
+        output_type_ids = sort(as.character(1:100))
+      ),
+      list(
+        tbl_comp_tids = c("reference_date", "location"),
+        output_type_ids = sort(as.character(c(201:400, 5201:5300)))
+      )
+    )
+  )
+  expect_match(result$message, "for samples \"1\", \"10\", \"100\"")
+
+  checks <- validate_model_data(hub_path, file_path)
+  spl_checks <- c("spl_compound_taskid_set", "spl_non_compound_tid", "spl_n")
+  expect_true(all(spl_checks %in% names(checks)))
+  expect_true(all(purrr::map_lgl(checks, \(.x) !is_any_error(.x))))
 })

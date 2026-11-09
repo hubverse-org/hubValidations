@@ -10,14 +10,15 @@ test_that("check_tbl_match_round_id works", {
       hub_path = hub_path
     )
   )
-  expect_snapshot(
-    str(
-      check_tbl_match_round_id(
-        tbl = tbl,
-        file_path = file_path,
-        hub_path = hub_path
-      )
-    )
+  expect_check(
+    check_tbl_match_round_id(
+      tbl = tbl,
+      file_path = file_path,
+      hub_path = hub_path
+    ),
+    success_class,
+    file_path,
+    "check_tbl_match_round_id"
   )
 
   # Supply round_id_col
@@ -57,14 +58,15 @@ test_that("check_tbl_match_round_id fails correctly", {
       round_id_col = "random_column"
     )
   )
-  expect_snapshot(
-    str(
-      check_tbl_match_round_id(
-        tbl = tbl,
-        file_path = file_path,
-        hub_path = hub_path,
-        round_id_col = "random_column"
-      )
-    )
+  expect_check(
+    check_tbl_match_round_id(
+      tbl = tbl,
+      file_path = file_path,
+      hub_path = hub_path,
+      round_id_col = "random_column"
+    ),
+    error_class,
+    file_path,
+    "check_tbl_match_round_id"
   )
 })
