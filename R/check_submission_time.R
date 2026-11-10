@@ -49,13 +49,14 @@ get_submission_window <- function(
   ref_date_from = c(
     "file", # nolint
     "file_path"
-  )
+  ),
+  call = rlang::caller_env()
 ) {
   ref_date_from <- rlang::arg_match(ref_date_from)
   submission_config <- get_file_round_config(file_path, hub_path)[[
     "submissions_due"
   ]]
-  hub_tz <- get_hub_timezone(hub_path)
+  hub_tz <- resolve_hub_timezone(get_hub_timezone(hub_path), call = call)
 
   if (!is.null(submission_config[["relative_to"]])) {
     relative_date <- switch(
@@ -99,4 +100,53 @@ file_within_submission_window <- function(
 ) {
   submission_window <- get_submission_window(hub_path, file_path, ref_date_from)
   Sys.time() %within% submission_window
+}
+
+#' Resolve a hub's timezone to a name this system recognises
+#'
+#' Hubs often set a legacy timezone name, such as `US/Eastern`, in `admin.json`.
+#' Some systems, such as Ubuntu 26.04 without the `tzdata-legacy` package, do
+#' not recognise legacy names. On those systems a legacy name is replaced with
+#' the canonical name it links to, such as `America/New_York`, which follows
+#' the same rules.
+#'
+#' @param tz A timezone name.
+#' @param call The execution environment of the calling function, used in the
+#'   error message.
+#'
+#' @returns `tz` if this system recognises it, otherwise the canonical name it
+#'   links to. Errors if neither is recognised.
+#' @noRd
+resolve_hub_timezone <- function(tz, call = rlang::caller_env()) {
+  if (tz_recognised(tz)) {
+    return(tz)
+  }
+  canonical <- unname(tz_legacy_links[tz])
+  if (!is.na(canonical) && tz_recognised(canonical)) {
+    return(canonical)
+  }
+  # Suggest the canonical name for a legacy name, otherwise an example.
+  if (is.na(canonical)) {
+    canonical <- "America/New_York"
+  }
+  cli::cli_abort(
+    c(
+      "Hub timezone {.val {tz}} is not recognised on this system.",
+      "i" = "Check that {.field timezone} in {.path hub-config/admin.json}
+             is a valid tz database name, such as {.val {canonical}}.",
+      "i" = "Check that the system has a timezone database (tzdata)
+             installed."
+    ),
+    call = call
+  )
+}
+
+# Whether the date library recognises a timezone name. Tried directly, as
+# get_submission_window() uses it, because R's list of timezone names can come
+# from a different tz database than the one the date library reads.
+tz_recognised <- function(tz) {
+  !inherits(
+    try(lubridate::ymd("2000-01-01", tz = tz), silent = TRUE),
+    "try-error"
+  )
 }
