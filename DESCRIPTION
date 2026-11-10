@@ -45,7 +45,7 @@ Imports:
     gh,
     hubAdmin (>= 1.9.0),
     hubData (>= 2.1.0),
-    hubUtils (>= 1.2.0),
+    hubUtils (>= 1.3.0),
     jsonlite,
     jsonvalidate,
     lifecycle,
@@ -54,8 +54,7 @@ Imports:
     rlang,
     stringr,
     tibble,
-    whisker,
-    yaml
+    whisker
 Suggests: 
     covr,
     curl,

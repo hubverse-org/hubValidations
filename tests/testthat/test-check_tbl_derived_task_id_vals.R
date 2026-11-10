@@ -35,3 +35,19 @@ test_that("check_tbl_derived_task_ids_vals works", {
     )
   )
 })
+
+test_that("check_tbl_derived_task_id_vals accepts NA where a modeling task does not use the derived task ID", {
+  # `target_end_date` is derived, and the two peak modeling tasks list it as
+  # null, so their rows hold `NA` in that column.
+  hub_path <- test_path("testdata/hub-177")
+  file_path <- "FluSight-baseline/2024-12-14-FluSight-baseline.parquet"
+  round_id <- "2024-12-14"
+  tbl <- read_model_out_file(file_path, hub_path, coerce_types = "chr")
+  tbl[1, "target"] <- "peak inc flu hosp"
+  tbl[1, "target_end_date"] <- NA_character_
+
+  expect_s3_class(
+    check_tbl_derived_task_id_vals(tbl, round_id, file_path, hub_path),
+    "check_success"
+  )
+})
