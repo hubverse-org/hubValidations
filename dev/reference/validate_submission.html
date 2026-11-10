@@ -331,8 +331,28 @@ the compound idx in question. </td>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_n]</span>: Number of accepted model output files per round met.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[metadata_exists]</span>: Metadata file exists at path</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">model-metadata/team1-goodmodel.yaml</span>.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">█</span> <span style="color: #B2B2B2;">[submission_time]</span>: EXEC ERROR: Error in C_force_tz(to_posixct(time), tz,</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   roll_dst) : CCTZ: Unrecognized output timezone: "US/Eastern"</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[submission_time]</span>: Submission time must be within accepted submission window</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   for round.  Current time <span style="color: #0000BB;">"2026-11-10 08:38:27 UTC"</span> is outside window</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_read]</span>: File could be read successfully.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_round_id_col]</span>: `round_id_col` name is valid.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[unique_round_id]</span>: `round_id` column <span style="color: #0000BB;">"origin_date"</span> contains a single, unique</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   round ID value.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[match_round_id]</span>: All `round_id_col` <span style="color: #0000BB;">"origin_date"</span> values match submission</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   `round_id` from file name.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[colnames]</span>: Column names are consistent with expected round task IDs and std</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   column names.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[col_types]</span>: Column data types match hub schema.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_vals]</span>: `tbl` contains valid values/value combinations.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[rows_unique]</span>: All combinations of task ID</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   column/`output_type`/`output_type_id` values are unique.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[req_vals]</span>: Required task ID/output type/output type ID combinations all</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   present.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[value_col_valid]</span>: Values in column `value` all valid with respect to</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   modeling task config.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[value_col_non_desc]</span>: Quantile or cdf `value` values increase when ordered by</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   `output_type_id`.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[value_col_sum1]</span>: No pmf output types to check for sum of 1. Check skipped.</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

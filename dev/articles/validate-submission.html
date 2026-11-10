@@ -136,8 +136,28 @@ standard validation checks and returns their results in the form of a
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_n]</span>: Number of accepted model output files per round met.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[metadata_exists]</span>: Metadata file exists at path</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">model-metadata/team1-goodmodel.yaml</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #BB0000;">█</span> <span style="color: #B2B2B2;">[submission_time]</span>: EXEC ERROR: Error in C_force_tz(to_posixct(time), tz,</span></span>
-<span><span class="co">#&gt;   roll_dst) : CCTZ: Unrecognized output timezone: "US/Eastern"</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[submission_time]</span>: Submission time must be within accepted submission window</span></span>
+<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2026-11-10 08:39:01 UTC"</span> is outside window</span></span>
+<span><span class="co">#&gt;   <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_read]</span>: File could be read successfully.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_round_id_col]</span>: `round_id_col` name is valid.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[unique_round_id]</span>: `round_id` column <span style="color: #0000BB;">"origin_date"</span> contains a single, unique</span></span>
+<span><span class="co">#&gt;   round ID value.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[match_round_id]</span>: All `round_id_col` <span style="color: #0000BB;">"origin_date"</span> values match submission</span></span>
+<span><span class="co">#&gt;   `round_id` from file name.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[colnames]</span>: Column names are consistent with expected round task IDs and std</span></span>
+<span><span class="co">#&gt;   column names.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[col_types]</span>: Column data types match hub schema.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_vals]</span>: `tbl` contains valid values/value combinations.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[rows_unique]</span>: All combinations of task ID</span></span>
+<span><span class="co">#&gt;   column/`output_type`/`output_type_id` values are unique.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[req_vals]</span>: Required task ID/output type/output type ID combinations all</span></span>
+<span><span class="co">#&gt;   present.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[value_col_valid]</span>: Values in column `value` all valid with respect to</span></span>
+<span><span class="co">#&gt;   modeling task config.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[value_col_non_desc]</span>: Quantile or cdf `value` values increase when ordered by</span></span>
+<span><span class="co">#&gt;   `output_type_id`.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #B2B2B2;">[value_col_sum1]</span>: No pmf output types to check for sum of 1. Check skipped.</span></span></code></pre></div>
 <p>For more details on the structure of
 <code>&lt;hub_validations&gt;</code> objects, including how to access
 more information on individual checks, see
@@ -178,8 +198,16 @@ and the function re-run for validation to proceed further.</p>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_n]</span>: Number of accepted model output files per round met.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[metadata_exists]</span>: Metadata file exists at path</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">model-metadata/hub-baseline.yml</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #BB0000;">█</span> <span style="color: #B2B2B2;">[submission_time]</span>: EXEC ERROR: Error in C_force_tz(to_posixct(time), tz,</span></span>
-<span><span class="co">#&gt;   roll_dst) : CCTZ: Unrecognized output timezone: "US/Eastern"</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[submission_time]</span>: Submission time must be within accepted submission window</span></span>
+<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2026-11-10 08:39:02 UTC"</span> is outside window</span></span>
+<span><span class="co">#&gt;   <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_read]</span>: File could be read successfully.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_round_id_col]</span>: `round_id_col` name is valid.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[unique_round_id]</span>: `round_id` column <span style="color: #0000BB;">"origin_date"</span> contains a single, unique</span></span>
+<span><span class="co">#&gt;   round ID value.</span></span>
+<span><span class="co">#&gt; <span style="color: #BB0000;">ⓧ</span> <span style="color: #B2B2B2;">[match_round_id]</span>: All `round_id_col` <span style="color: #0000BB;">"origin_date"</span> values must match</span></span>
+<span><span class="co">#&gt;   submission `round_id` from file name.  `round_id` value <span style="color: #0000BB;">2022-10-08</span> does not</span></span>
+<span><span class="co">#&gt;   match submission `round_id` <span style="color: #0000BB;">"2022-10-15"</span></span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="execution-errors">Execution Errors<a class="anchor" aria-label="anchor" href="#execution-errors"></a>
@@ -205,8 +233,9 @@ will be summarised.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">team1-goodmodel/2022-10-08-team1-goodmodel.csv</span><span style="color: #BB00BB;"> ────</span></span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #BB0000;">█</span> <span style="color: #B2B2B2;">[submission_time]</span>: EXEC ERROR: Error in C_force_tz(to_posixct(time), tz,</span></span>
-<span><span class="co">#&gt;   roll_dst) : CCTZ: Unrecognized output timezone: "US/Eastern"</span></span>
+<span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[submission_time]</span>: Submission time must be within accepted submission window</span></span>
+<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2026-11-10 08:39:03 UTC"</span> is outside window</span></span>
+<span><span class="co">#&gt;   <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `check_for_errors()`:</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> </span></span>
 <span><span class="co">#&gt; The validation checks produced some failures/errors reported above.</span></span></code></pre></div>

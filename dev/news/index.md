@@ -87,6 +87,17 @@
   [`submission_tmpl()`](https://hubverse-org.github.io/hubValidations/dev/reference/submission_tmpl.md)
   then filled its column with the config’s values instead of `NA`
   ([\#387](https://github.com/hubverse-org/hubValidations/issues/387)).
+- [`check_submission_time()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_submission_time.md),
+  and so
+  [`validate_submission()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_submission.md)
+  and
+  [`validate_pr()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_pr.md),
+  no longer errors when a hub’s `admin.json` sets a legacy timezone
+  name, such as `US/Eastern`, on a system that does not recognise legacy
+  names, such as Ubuntu 26.04 and the GitHub Actions runners that use
+  it. A timezone the system does not recognise now gives a clear error,
+  suggesting a valid timezone name, such as `America/New_York`
+  ([\#419](https://github.com/hubverse-org/hubValidations/issues/419)).
 
 ## hubValidations 3.0.0
 
