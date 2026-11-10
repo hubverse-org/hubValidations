@@ -11,7 +11,7 @@ check_metadata_file_name <- function(file_path, hub_path = ".") {
     subdir = "model-metadata",
     file_path = file_path
   )
-  metadata <- yaml::read_yaml(abs_metadata_path)
+  metadata <- hubUtils::read_model_metadata(abs_metadata_path)
 
   if ("model_id" %in% names(metadata)) {
     model_id <- metadata$model_id
