@@ -67,6 +67,26 @@
   now lists the correct `output_type_ids` for each detected compound
   task ID set
   ([\#400](https://github.com/hubverse-org/hubValidations/issues/400)).
+- Fixed a bug where
+  [`check_tbl_derived_task_id_vals()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_derived_task_id_vals.md)
+  rejected `NA` in a derived task ID column, even in the rows of a
+  modeling task that does not use that task ID, where `NA` is the only
+  valid value
+  ([\#387](https://github.com/hubverse-org/hubValidations/issues/387)).
+- Fixed a bug where the message of a failing
+  [`check_tbl_values()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_values.md)
+  named `NA` as an invalid value in a column that another modeling task
+  lists as `null`. Called directly on a table holding another round’s ID
+  in the round ID column, it now names that ID as an invalid value
+  rather than reporting an invalid combination
+  ([\#387](https://github.com/hubverse-org/hubValidations/issues/387)).
+- Fixed a bug where a derived task ID was ignored if the round’s first
+  modeling task left it out of its config.
+  [`expand_model_out_grid()`](https://hubverse-org.github.io/hubValidations/dev/reference/expand_model_out_grid.md)
+  and
+  [`submission_tmpl()`](https://hubverse-org.github.io/hubValidations/dev/reference/submission_tmpl.md)
+  then filled its column with the config’s values instead of `NA`
+  ([\#387](https://github.com/hubverse-org/hubValidations/issues/387)).
 
 ## hubValidations 3.0.0
 
