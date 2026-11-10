@@ -133,8 +133,9 @@ resolve_hub_timezone <- function(tz, call = rlang::caller_env()) {
     c(
       "Hub timezone {.val {tz}} is not recognised on this system.",
       "i" = "Check that {.field timezone} in {.path hub-config/admin.json}
-             is a valid tz database name, such as {.val {canonical}}, and
-             that the system has a timezone database (tzdata) installed."
+             is a valid tz database name, such as {.val {canonical}}.",
+      "i" = "Check that the system has a timezone database (tzdata)
+             installed."
     ),
     call = call
   )
