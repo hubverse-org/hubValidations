@@ -108,6 +108,14 @@ test_that("check_tbl_spl_ids reports sample IDs that are not valid UTF-8 (#406)"
   expect_match(result$message, "\"a<ff>\"", fixed = TRUE)
 })
 
+test_that("spl_id_problems errors on a sample ID type it does not know", {
+  expect_error(
+    spl_id_problems("1", list(type = "double")),
+    class = "rlang_error",
+    regexp = "Unknown sample"
+  )
+})
+
 test_that("validate_model_data stops the sample checks on invalid sample IDs (#406)", {
   hub_path <- withr::local_tempdir()
   fs::dir_copy(

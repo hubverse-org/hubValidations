@@ -132,3 +132,13 @@ get_metadata_file_name <- function(
 escape_braces <- function(x) {
   gsub("([{}])", "\\1\\1", x)
 }
+
+#' Format sample IDs for a check message
+#'
+#' Escapes braces with `escape_braces()` and limits `{.val}` interpolation to
+#' the first 10 IDs.
+#' @noRd
+fmt_spl_ids <- function(x) {
+  escape_braces(x) |>
+    cli::cli_vec(style = list(vec_trunc = 10))
+}
