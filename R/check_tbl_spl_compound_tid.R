@@ -83,7 +83,7 @@ check_tbl_spl_compound_tid <- function(
       purrr::flatten_chr() |>
       unique() |>
       sort() |>
-      escape_braces()
+      fmt_spl_ids()
 
     details <- cli::format_inline(
       "Sample{?s} {.val {output_type_ids}} d{?oes/o} not contain ",

@@ -101,17 +101,30 @@ spl_id_problems <- function(ids, spl_params) {
   is_missing <- is.na(ids) | ids == ""
   missing <- sum(is_missing)
   ids <- unique(ids[!is_missing])
-  # Note that `nchar()` errors on strings that are not valid UTF-8, unless
-  # `allowNA = TRUE`, which returns `NA` for them instead. Such IDs fail the
-  # byte-wise pattern match and are reported under `characters`.
-  problems <- if (identical(spl_params$type, "character")) {
-    n_chars <- nchar(ids, allowNA = TRUE)
-    list(
-      max_length = ids[!is.na(n_chars) & n_chars > spl_params$max_length],
-      characters = ids[!grepl(spl_id_pattern, ids, useBytes = TRUE)]
+  # IDs that are not valid UTF-8 fail the pattern and are not measured,
+  # because `nchar()` and `grepl()` cannot read them.
+  is_valid <- validUTF8(ids)
+  fails <- function(pattern) {
+    out <- !is_valid
+    out[is_valid] <- !grepl(pattern, ids[is_valid])
+    ids[out]
+  }
+  # A modeling task without samples has no `spl_params`, and no IDs to check.
+  problems <- if (length(ids) > 0L) {
+    switch(
+      spl_params$type,
+      character = list(
+        max_length = ids[is_valid][
+          nchar(ids[is_valid]) > spl_params$max_length
+        ],
+        characters = fails(spl_id_pattern)
+      ),
+      integer = list(integer = fails(spl_id_int_pattern)),
+      cli::cli_abort(
+        "Unknown sample {.field type} {.val {spl_params$type}}.",
+        .internal = TRUE
+      )
     )
-  } else {
-    list(integer = ids[!grepl(spl_id_int_pattern, ids, useBytes = TRUE)])
   }
   problems <- c(list(missing = if (missing > 0L) missing), problems)
   problems[lengths(problems) > 0L]
@@ -146,8 +159,7 @@ spl_id_problem_phrase <- function(value, problem, max_length) {
   # cli warns on strings that are not valid UTF-8, so invalid bytes are shown
   # as hex codes, such as "a<ff>".
   spl_ids <- iconv(value, "UTF-8", "UTF-8", sub = "byte") |> # nolint: object_usage_linter
-    escape_braces() |>
-    cli::cli_vec(style = list(vec_trunc = 10))
+    fmt_spl_ids()
   cli::format_inline(
     "{cli::qty(spl_ids)}sample ID{?s} {.val {spl_ids}} ",
     switch(

@@ -571,5 +571,5 @@ test_that("coarser compound task ID set details show sample IDs containing brace
   )
   expect_s3_class(result, "check_success")
   expect_match(result$message, "for samples \"s{id100}\",", fixed = TRUE)
-  expect_match(result$message, "\"s{id1}\",", fixed = TRUE)
+  expect_match(result$message, "\"s{id10}\",", fixed = TRUE)
 })

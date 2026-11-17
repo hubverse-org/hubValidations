@@ -327,7 +327,7 @@ compile_coarser_details <- function(coarser_info) {
     mt_idx <- info$mt_idx # nolint: object_usage_linter
     det_label <- if (length(info$detected) == 0L) "none" else info$detected # nolint: object_usage_linter
     conf <- info$configured # nolint: object_usage_linter
-    spl_ids <- escape_braces(info$output_type_ids) # nolint: object_usage_linter
+    spl_ids <- fmt_spl_ids(info$output_type_ids) # nolint: object_usage_linter
     cli::format_inline(
       "mt {mt_idx}: detected ({.val {det_label}}) is coarser than ",
       "configured ({.val {conf}})",
