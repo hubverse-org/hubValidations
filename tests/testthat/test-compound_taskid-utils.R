@@ -288,3 +288,12 @@ test_that("coarser_compound_taskid_set_warnings builds a single warning listing 
 test_that("coarser_compound_taskid_set_warnings returns NULL on empty input", {
   expect_null(coarser_compound_taskid_set_warnings(list()))
 })
+
+test_that("differs_from treats NA as a value like any other (#401)", {
+  expect_equal(
+    differs_from(c("a", NA, NA, "b"), c("a", NA, "a", NA)),
+    c(FALSE, FALSE, TRUE, TRUE)
+  )
+  expect_equal(differs_from(c("a", NA), NA_character_), c(TRUE, FALSE))
+  expect_equal(differs_from(c("a", NA), "a"), c(FALSE, TRUE))
+})

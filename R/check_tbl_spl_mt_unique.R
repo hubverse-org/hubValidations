@@ -7,9 +7,10 @@
 #' values depend on other task IDs) to ignore during validation. Defaults to
 #' extracting derived task IDs from hub `task.json`. See
 #' [get_hub_derived_task_ids()] for more details.
-#' @param spl_idx for internal use. `validate_model_data()` indexes the sample
-#' rows of `tbl_chr` once and passes the index to each sample check. `NULL`,
-#' the default, builds the index from `tbl_chr`.
+#' @param spl_idx for internal use. The sample index, which assigns each sample
+#' row of `tbl_chr` to its modeling task. `validate_model_data()` builds it once
+#' and shares it between the sample checks. `NULL`, the default, builds it from
+#' `tbl_chr`.
 #' @details
 #' Different model tasks can have different sample configurations
 #' (`compound_taskid_set`, `min/max_samples_per_task`, etc.), so samples should
@@ -40,13 +41,13 @@ check_tbl_spl_mt_unique <- function(
     return(skip_v3_spl_check(file_path))
   }
 
-  spl_idx <- spl_idx %||%
-    spl_idx_tbl(
-      tbl_chr,
-      round_id,
-      config_tasks,
-      derived_task_ids = derived_task_ids
-    )
+  spl_idx <- get_spl_idx(
+    spl_idx,
+    tbl_chr,
+    round_id,
+    config_tasks,
+    derived_task_ids = derived_task_ids
+  )
 
   # If fewer than 2 model tasks have samples, no overlap is possible
   n_mt <- length(spl_idx$comp_tids)

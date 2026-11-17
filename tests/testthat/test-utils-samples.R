@@ -262,15 +262,50 @@ test_that("sample checks return the same result given the sample index (#401)", 
   expect_same_given_idx(tbl, round_id, file_path, hub_path)
 })
 
-test_that("sample checks error when given both compound_taskid_set and spl_idx (#401)", {
+test_that("sample checks accept compound_taskid_set or spl_idx, not both (#401)", {
   hub_path <- system.file("testhubs/samples", package = "hubValidations")
   file_path <- "flu-base/2022-10-22-flu-base.csv"
   round_id <- "2022-10-22"
   tbl <- read_model_out_file(file_path, hub_path, coerce_types = "chr")
-  spl_idx <- spl_idx_tbl(tbl, round_id, read_config(hub_path, "tasks"))
+  spl_idx <- spl_idx_tbl(
+    tbl,
+    round_id,
+    read_config(hub_path, "tasks"),
+    non_comp_key = TRUE
+  )
   compound_taskid_set <- list(NULL, "reference_date")
 
   for (check in list(check_tbl_spl_n, check_tbl_spl_non_compound_tid)) {
+    # A caller that forwards its own `NULL` defaults gets the same result as
+    # one that leaves the argument out.
+    expect_equal(
+      check(
+        tbl,
+        round_id,
+        file_path,
+        hub_path,
+        compound_taskid_set = compound_taskid_set,
+        spl_idx = NULL
+      )$message,
+      check(
+        tbl,
+        round_id,
+        file_path,
+        hub_path,
+        compound_taskid_set = compound_taskid_set
+      )$message
+    )
+    expect_equal(
+      check(
+        tbl,
+        round_id,
+        file_path,
+        hub_path,
+        compound_taskid_set = NULL,
+        spl_idx = spl_idx
+      )$message,
+      check(tbl, round_id, file_path, hub_path, spl_idx = spl_idx)$message
+    )
     expect_error(
       check(
         tbl,
@@ -280,7 +315,84 @@ test_that("sample checks error when given both compound_taskid_set and spl_idx (
         compound_taskid_set = compound_taskid_set,
         spl_idx = spl_idx
       ),
-      "Exactly one of `compound_taskid_set` or `spl_idx`"
+      "not both"
     )
   }
+
+  # A file without samples is skipped before the arguments are compared.
+  hub_path <- system.file("testhubs/simple", package = "hubValidations")
+  file_path <- "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+  tbl <- read_model_out_file(file_path, hub_path, coerce_types = "chr")
+  expect_s3_class(
+    check_tbl_spl_n(
+      tbl,
+      "2022-10-08",
+      file_path,
+      hub_path,
+      compound_taskid_set = compound_taskid_set,
+      spl_idx = spl_idx
+    ),
+    "check_info"
+  )
+})
+
+test_that("sample checks error on a spl_idx that does not index tbl_chr (#401)", {
+  hub_path <- system.file("testhubs/samples", package = "hubValidations")
+  file_path <- "flu-base/2022-10-22-flu-base.csv"
+  round_id <- "2022-10-22"
+  tbl <- read_model_out_file(file_path, hub_path, coerce_types = "chr")
+  config_tasks <- read_config(hub_path, "tasks")
+
+  # Built from a table with its first 50 sample rows dropped.
+  dropped <- tbl[-which(tbl$output_type == "sample")[1:50], ]
+  dropped_idx <- spl_idx_tbl(dropped, round_id, config_tasks)
+  for (check in list(
+    check_tbl_spl_ids,
+    check_tbl_spl_mt_unique,
+    check_tbl_spl_compound_taskid_set,
+    check_tbl_spl_overlap,
+    check_tbl_spl_non_compound_tid,
+    check_tbl_spl_n
+  )) {
+    expect_error(
+      check(tbl, round_id, file_path, hub_path, spl_idx = dropped_idx),
+      "is not a sample index of `tbl_chr`"
+    )
+  }
+
+  # Built without the `non_comp_key` column that this check needs.
+  expect_error(
+    check_tbl_spl_non_compound_tid(
+      tbl,
+      round_id,
+      file_path,
+      hub_path,
+      spl_idx = spl_idx_tbl(tbl, round_id, config_tasks)
+    ),
+    "is not a sample index of `tbl_chr`"
+  )
+})
+
+test_that("shared_spl_idx returns NULL when the index cannot be built (#401)", {
+  hub_path <- withr::local_tempdir()
+  fs::dir_copy(
+    system.file("testhubs/samples", package = "hubValidations"),
+    hub_path,
+    overwrite = TRUE
+  )
+  # A `compound_taskid_set` naming a task ID the round does not have.
+  config_path <- fs::path(hub_path, "hub-config", "tasks.json")
+  config <- jsonlite::read_json(config_path)
+  sample_type <- config$rounds[[1]]$model_tasks[[2]]$output_type$sample
+  sample_type$output_type_id_params$compound_taskid_set <- list(
+    "reference_date",
+    "location",
+    "foo"
+  )
+  config$rounds[[1]]$model_tasks[[2]]$output_type$sample <- sample_type
+  jsonlite::write_json(config, config_path, auto_unbox = TRUE, null = "null")
+
+  file_path <- "flu-base/2022-10-22-flu-base.csv"
+  tbl <- read_model_out_file(file_path, hub_path, coerce_types = "chr")
+  expect_null(shared_spl_idx(tbl, "2022-10-22", hub_path, NULL))
 })

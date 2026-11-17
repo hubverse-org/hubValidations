@@ -48,13 +48,13 @@ get_tbl_compound_taskid_set <- function(
   spl_idx = NULL
 ) {
   assert_tbl_chr(tbl_chr)
-  spl_idx <- spl_idx %||%
-    spl_idx_tbl(
-      tbl_chr,
-      round_id,
-      config_tasks,
-      derived_task_ids = derived_task_ids
-    )
+  spl_idx <- get_spl_idx(
+    spl_idx,
+    tbl_chr,
+    round_id,
+    config_tasks,
+    derived_task_ids = derived_task_ids
+  )
 
   mt_compound_taskids <- get_round_compound_task_ids(
     config_tasks,
@@ -105,13 +105,23 @@ get_tbl_compound_taskid_set <- function(
   tbl_compound_taskids
 }
 
-#' Find which task IDs each sample of a modeling task is compound across
+#' Detect the compound task ID set of each sample in a modeling task
 #'
-#' A task ID is compound for a sample when the sample holds a single value of
-#' it. A task ID that holds a single value across the whole modeling task says
-#' nothing about how samples were drawn, so it is compound only if the config
-#' lists it as compound. A derived task ID is compound exactly when the config
-#' lists it, since its values follow from the other task IDs.
+#' A sample's compound task ID set is the task IDs that have one value across
+#' all of the sample's rows. For example, take a modeling task configured with
+#' a `compound_taskid_set` of `reference_date` and `location`. A trajectory
+#' for location `"25"` has one `reference_date` and one `location`, and several
+#' `horizon`s. Its set is `reference_date` and `location`, and it is joint
+#' across `horizon`.
+#'
+#' The data cannot decide two kinds of task ID, so the configured set does:
+#' - A task ID with one value across the whole modeling task, such as `target`
+#'   in a modeling task for a single target. Every sample has one value of it,
+#'   whether or not samples were drawn separately for each value. It is in a
+#'   sample's set only if the configured set lists it.
+#' - A derived task ID, such as `target_end_date`. Its values follow from other
+#'   task IDs. It is in a sample's set exactly when the configured set lists
+#'   it.
 #'
 #' @param idx_rows the `output_type_id` and `row_idx` columns of the `rows` of
 #'   `spl_idx_tbl()`, for one modeling task.
@@ -120,8 +130,8 @@ get_tbl_compound_taskid_set <- function(
 #' @param task_ids the round's task ID names.
 #' @param derived_task_ids a character vector of derived task IDs.
 #' @returns A list with:
-#' - `is_compound_taskid`: a tibble with one logical column per task ID and
-#'   one row per sample.
+#' - `is_compound_taskid`: a tibble with one row per sample and one logical
+#'   column per task ID, `TRUE` when the task ID is in the sample's set.
 #' - `output_type_ids`: the samples' output type IDs, in the order of the rows
 #'   of `is_compound_taskid`.
 #' @noRd
@@ -146,10 +156,6 @@ spl_comp_tid_membership <- function(
   is_compound_taskid <- purrr::map(
     purrr::set_names(task_ids),
     function(task_id) {
-      # A derived task ID's values follow from other task IDs, so they say
-      # nothing about how samples were drawn. Its flag comes from the
-      # configured set instead, so it never makes a sample look coarser or
-      # finer than configured.
       if (task_id %in% derived_task_ids) {
         return(rep(task_id %in% config_comp_tids, length(output_type_ids)))
       }

@@ -52,13 +52,13 @@ check_tbl_spl_ids <- function(
     return(skip_v3_spl_check(file_path))
   }
 
-  spl_idx <- spl_idx %||%
-    spl_idx_tbl(
-      tbl_chr,
-      round_id,
-      config_tasks,
-      derived_task_ids = derived_task_ids
-    )
+  spl_idx <- get_spl_idx(
+    spl_idx,
+    tbl_chr,
+    round_id,
+    config_tasks,
+    derived_task_ids = derived_task_ids
+  )
   round_mt <- hubUtils::get_round_model_tasks(config_tasks, round_id)
   mt_spl_ids <- split_by_mt(spl_idx$rows$output_type_id, spl_idx)
 

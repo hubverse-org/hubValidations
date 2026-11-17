@@ -53,13 +53,13 @@ check_tbl_spl_overlap <- function(
     return(skip_v3_spl_check(file_path))
   }
 
-  spl_idx <- spl_idx %||%
-    spl_idx_tbl(
-      tbl_chr,
-      round_id,
-      config_tasks,
-      derived_task_ids = derived_task_ids
-    )
+  spl_idx <- get_spl_idx(
+    spl_idx,
+    tbl_chr,
+    round_id,
+    config_tasks,
+    derived_task_ids = derived_task_ids
+  )
   errors <- overlapping_spl_errors(
     overlapping_spl_slices(spl_slice_tbl(spl_idx$rows)),
     spl_idx$comp_tids,

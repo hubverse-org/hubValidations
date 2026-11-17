@@ -96,7 +96,8 @@ spl_idx_tbl <- function(
     config_tasks,
     round_id
   ),
-  non_comp_key = FALSE
+  non_comp_key = FALSE,
+  call = rlang::caller_env()
 ) {
   spl_rows <- which(tbl$output_type == "sample")
   tbl <- tbl[spl_rows, names(tbl) != "value"]
@@ -112,7 +113,6 @@ spl_idx_tbl <- function(
   mt_compound_taskids <- compound_taskid_set %||%
     get_round_compound_task_ids(config_tasks, round_id)
 
-  call <- rlang::caller_env()
   mt_row_idx <- assign_spl_tbl_rows(
     tbl,
     config_tasks = config_tasks,
@@ -183,8 +183,8 @@ spl_idx_tbl <- function(
 
 # The sample index `validate_model_data()` shares between the sample checks.
 # `NULL` when the file has no samples. Also `NULL` when the index cannot be
-# built, so that each check tries to build its own and reports the error as
-# its own.
+# built. `check_tbl_spl_ids()` then builds its own and reports the error, and
+# the other sample checks do not run.
 shared_spl_idx <- function(tbl_chr, round_id, hub_path, derived_task_ids) {
   if (!has_spls_tbl(tbl_chr)) {
     return(NULL)
@@ -201,8 +201,59 @@ shared_spl_idx <- function(tbl_chr, round_id, hub_path, derived_task_ids) {
   )
 }
 
+# The sample index a sample check works from: `spl_idx` when supplied, after
+# checking that it indexes `tbl_chr`, otherwise one built from `tbl_chr`.
+# Note that a supplied index already embodies a compound task ID set, so it
+# cannot be combined with `compound_taskid_set`.
+get_spl_idx <- function(
+  spl_idx,
+  tbl_chr,
+  round_id,
+  config_tasks,
+  derived_task_ids,
+  compound_taskid_set = NULL,
+  non_comp_key = FALSE,
+  call = rlang::caller_env()
+) {
+  if (is.null(spl_idx)) {
+    return(spl_idx_tbl(
+      tbl_chr,
+      round_id,
+      config_tasks,
+      compound_taskid_set,
+      derived_task_ids = derived_task_ids,
+      non_comp_key = non_comp_key,
+      call = call
+    ))
+  }
+  if (!is.null(compound_taskid_set)) {
+    cli::cli_abort(
+      "Supply {.arg compound_taskid_set} or {.arg spl_idx}, not both.",
+      call = call
+    )
+  }
+  n_mt <- length(hubUtils::get_round_model_tasks(config_tasks, round_id))
+  row_idx <- spl_idx$rows$row_idx
+  matches_tbl <- is.data.frame(spl_idx$rows) &&
+    length(spl_idx$comp_tids) == n_mt &&
+    all(row_idx >= 1L & row_idx <= nrow(tbl_chr)) &&
+    identical(spl_idx$rows$output_type_id, tbl_chr$output_type_id[row_idx]) &&
+    (!non_comp_key || "non_comp_key" %in% names(spl_idx$rows))
+  if (!matches_tbl) {
+    cli::cli_abort(
+      c(
+        "{.arg spl_idx} is not a sample index of {.arg tbl_chr} for round
+        {.val {round_id}}.",
+        i = "Leave {.arg spl_idx} as {.code NULL} to build one."
+      ),
+      call = call
+    )
+  }
+  spl_idx
+}
+
 # Split `x`, aligned with the `rows` of `spl_idx`, into one element per
-# modeling task in the round, named by its index.
+# modeling task in the round, named by its position in the round.
 split_by_mt <- function(x, spl_idx) {
   split(x, factor(spl_idx$rows$mt_id, levels = seq_along(spl_idx$comp_tids)))
 }

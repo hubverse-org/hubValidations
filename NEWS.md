@@ -16,7 +16,7 @@
 
 ## Other changes
 
-* Validating files that contain samples is faster. On a file of 13 million sample rows, the sample checks in `validate_model_data()`, `validate_submission()` and `validate_pr()` take about half as long (#401).
+* Validating files that contain samples is faster than in 3.0.0, including the new sample checks. On our benchmark files, `validate_submission()` takes about 25% less time and 20% less memory on a file of 13 million sample rows, and about 70% less time on a file of 460,000 rows split into 7 modeling tasks (#377, #401).
 
 # hubValidations 3.0.0
 
