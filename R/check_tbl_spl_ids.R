@@ -1,0 +1,186 @@
+#' Check that sample output_type_ids match the configured type and max_length
+#' and contain only allowed characters
+#'
+#' @inherit check_tbl_colnames params
+#' @inherit check_tbl_colnames return
+#' @inheritParams check_tbl_spl_mt_unique
+#' @inheritParams check_tbl_values
+#' @details
+#' The format required of sample `output_type_id`s depends on the `type` and
+#' `max_length` each modeling task sets in `output_type_id_params`:
+#' - When `type` is `"integer"`, each sample ID must be a non-negative integer
+#'   written with digits only and without leading zeros, such as `"0"` or
+#'   `"12"`. `"01"`, `"1.0"` and `"1e3"` fail.
+#' - When `type` is `"character"`, each sample ID must have at most
+#'   `max_length` characters, and contain only ASCII letters, digits, `_`,
+#'   `-` and `.`.
+#'
+#' Every sample row must also have a non-empty `output_type_id`.
+#'
+#' Output of the check includes an `errors` element, a list with one element
+#' for each modeling task failing validation, named by the index of the
+#' modeling task in the config. Each element has the following structure:
+#' - `type`: the configured sample ID `type`.
+#' - `max_length`: the configured `max_length`. Only present when `type` is
+#'   `"character"`.
+#' - `problems`: a list with one element for each problem found:
+#'   - `missing`: the number of sample rows with a missing or empty
+#'     `output_type_id`.
+#'   - `integer`: the sample IDs that are not non-negative integers.
+#'   - `max_length`: the sample IDs longer than `max_length`.
+#'   - `characters`: the sample IDs that contain characters other than ASCII
+#'     letters, digits, `_`, `-` and `.`.
+#'
+#' See [hubverse documentation on samples](https://docs.hubverse.io/en/latest/user-guide/sample-output-type.html)
+#' for more details.
+#' @export
+check_tbl_spl_ids <- function(
+  tbl_chr,
+  round_id,
+  file_path,
+  hub_path,
+  derived_task_ids = get_hub_derived_task_ids(hub_path, round_id),
+  spl_idx = NULL
+) {
+  assert_tbl_chr(tbl_chr)
+  config_tasks <- read_config(hub_path, "tasks")
+
+  if (
+    isFALSE(has_spls_tbl(tbl_chr)) ||
+      isFALSE(hubUtils::is_v3_config(config_tasks))
+  ) {
+    return(skip_v3_spl_check(file_path))
+  }
+
+  spl_idx <- get_spl_idx(
+    spl_idx,
+    tbl_chr,
+    round_id,
+    config_tasks,
+    derived_task_ids = derived_task_ids
+  )
+  round_mt <- hubUtils::get_round_model_tasks(config_tasks, round_id)
+  mt_spl_ids <- split_by_mt(spl_idx$rows$output_type_id, spl_idx)
+
+  errors <- purrr::map2(round_mt, mt_spl_ids, function(mt, ids) {
+    spl_params <- get_mt_sample_params(mt)
+    problems <- spl_id_problems(ids, spl_params)
+    if (length(problems) == 0L) {
+      return(NULL)
+    }
+    c(
+      spl_params["type"],
+      if (spl_params$type == "character") spl_params["max_length"],
+      list(problems = problems)
+    )
+  }) |>
+    purrr::set_names(seq_along(round_mt)) |>
+    purrr::compact()
+
+  check <- length(errors) == 0L
+
+  capture_check_cnd(
+    check = check,
+    file_path = file_path,
+    msg_subject = "Sample `output_type_id`s",
+    msg_attribute = "the required sample ID format.",
+    msg_verbs = c("match", "do not match"),
+    details = if (!check) compile_spl_ids_details(errors),
+    errors = if (!check) errors,
+    error = TRUE
+  )
+}
+
+# The characters a character sample ID may contain.
+spl_id_pattern <- "^[A-Za-z0-9_.-]+$"
+# The canonical form of an integer sample ID.
+spl_id_int_pattern <- "^(0|[1-9][0-9]*)$"
+# A number in scientific notation, such as "1e+05".
+spl_id_sci_pattern <- "^[0-9]+(\\.[0-9]+)?[eE][+-]?[0-9]+$"
+
+# The `problems` of the `output_type_id`s `ids` of one modeling task, given
+# its sample `output_type_id_params`, as documented in `check_tbl_spl_ids()`.
+spl_id_problems <- function(ids, spl_params) {
+  is_missing <- is.na(ids) | ids == ""
+  missing <- sum(is_missing)
+  ids <- unique(ids[!is_missing])
+  # IDs that are not valid UTF-8 fail the pattern and are not measured,
+  # because `nchar()` and `grepl()` cannot read them.
+  is_valid <- validUTF8(ids)
+  fails <- function(pattern) {
+    out <- !is_valid
+    out[is_valid] <- !grepl(pattern, ids[is_valid])
+    ids[out]
+  }
+  # A modeling task without samples has no `spl_params`, and no IDs to check.
+  problems <- if (length(ids) > 0L) {
+    switch(
+      spl_params$type,
+      character = list(
+        max_length = ids[is_valid][
+          nchar(ids[is_valid]) > spl_params$max_length
+        ],
+        characters = fails(spl_id_pattern)
+      ),
+      integer = list(integer = fails(spl_id_int_pattern)),
+      cli::cli_abort(
+        "Unknown sample {.field type} {.val {spl_params$type}}.",
+        .internal = TRUE
+      )
+    )
+  }
+  problems <- c(list(missing = if (missing > 0L) missing), problems)
+  problems[lengths(problems) > 0L]
+}
+
+compile_spl_ids_details <- function(errors) {
+  details <- purrr::imap_chr(errors, function(.x, .y) {
+    phrases <- purrr::imap_chr(
+      .x$problems,
+      \(value, problem) spl_id_problem_phrase(value, problem, .x$max_length)
+    )
+    paste0("mt ", .y, ": ", cli::ansi_collapse(phrases), ".")
+  })
+  not_int <- unlist(purrr::map(errors, \(.x) .x$problems$integer))
+  c(
+    details,
+    if (length(not_int) > 0L) {
+      "Integer sample IDs must contain digits only, without leading zeros."
+    },
+    # R writes some whole numbers, such as 100000, in scientific notation.
+    if (any(grepl(spl_id_sci_pattern, not_int))) {
+      paste(
+        "Some sample IDs are in scientific notation. Write them out in full,",
+        "for example with {.code format(x, scientific = FALSE)} in R."
+      )
+    },
+    "See {.var errors} attribute for details."
+  ) |>
+    paste(collapse = " ")
+}
+
+# One clause of the details of `check_tbl_spl_ids()`, describing `value`, an
+# element of `problems` named `problem`.
+spl_id_problem_phrase <- function(value, problem, max_length) {
+  if (problem == "missing") {
+    return(cli::format_inline(
+      "{value} sample row{?s} ha{?s/ve} no {.var output_type_id}"
+    ))
+  }
+  # cli warns on strings that are not valid UTF-8, so invalid bytes are shown
+  # as hex codes, such as "a<ff>".
+  spl_ids <- iconv(value, "UTF-8", "UTF-8", sub = "byte") |> # nolint: object_usage_linter
+    fmt_spl_ids()
+  cli::format_inline(
+    "{cli::qty(spl_ids)}sample ID{?s} {.val {spl_ids}} ",
+    switch(
+      problem,
+      integer = "{?is not a non-negative integer/are not non-negative integers}",
+      max_length = "{?is/are} longer than the {.var max_length} of {max_length}",
+      characters = paste(
+        "contain{?s/} characters other than ASCII letters, digits,",
+        "{.val _}, {.val -} and {.val .}"
+      )
+    )
+  )
+}

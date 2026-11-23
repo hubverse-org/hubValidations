@@ -117,10 +117,21 @@ test_that("errors name the invalid compound task IDs of each finer set and keep 
     target = c("x", "y", "x", "x"),
     output_type_id = c("1", "1", "2", "2")
   )
-  out <- get_mt_compound_taskid_set(
+  membership <- spl_comp_tid_membership(
+    tibble::tibble(
+      mt_id = 1L,
+      output_type_id = tbl_chr$output_type_id,
+      row_idx = seq_len(nrow(tbl_chr))
+    ),
     tbl_chr,
     config_comp_tids = "location",
     task_ids = c("location", "horizon", "target"),
+    derived_task_ids = NULL
+  )
+  out <- get_mt_compound_taskid_set(
+    membership$is_compound_taskid,
+    membership$output_type_ids,
+    config_comp_tids = "location",
     error = FALSE
   )
   errors <- attr(out, "errors")
@@ -132,6 +143,72 @@ test_that("errors name the invalid compound task IDs of each finer set and keep 
   expect_equal(
     purrr::map(attr(out, "sets"), "output_type_ids"),
     list("1", "2")
+  )
+})
+
+test_that("a derived task ID is compound exactly when the config lists it (#401)", {
+  # Modeling task 2 lists `target_end_date` in its `compound_taskid_set`.
+  # Varying it within each sample does not drop it from the detected set.
+  hub_path <- test_path("testdata/hub-spl")
+  config_tasks <- read_config(hub_path, "tasks")
+  tbl <- read_model_out_file(
+    "flu-base/2022-10-22-flu-base.parquet",
+    hub_path,
+    coerce_types = "chr"
+  )
+  tbl$target_end_date <- as.character(seq_len(nrow(tbl)))
+  expect_equal(
+    get_tbl_compound_taskid_set(
+      tbl,
+      config_tasks,
+      "2022-10-22",
+      derived_task_ids = "target_end_date"
+    )[["2"]],
+    c("reference_date", "horizon", "location", "variant", "target_end_date")
+  )
+
+  # Modeling task 2 does not list `target_end_date`. Holding one value of it
+  # per sample, and different values across samples, does not make it
+  # compound.
+  hub_path <- system.file("testhubs/samples", package = "hubValidations")
+  config_tasks <- read_config(hub_path, "tasks")
+  tbl <- read_model_out_file(
+    "flu-base/2022-10-22-flu-base.csv",
+    hub_path,
+    coerce_types = "chr"
+  )
+  tbl$target_end_date <- tbl$output_type_id
+  expect_equal(
+    get_tbl_compound_taskid_set(
+      tbl,
+      config_tasks,
+      "2022-10-22",
+      derived_task_ids = "target_end_date"
+    )[["2"]],
+    c("reference_date", "location")
+  )
+})
+
+test_that("a sample with a missing output type ID is detected as its own sample (#401)", {
+  tbl_chr <- tibble::tibble(
+    location = c("a", "b", "a", "b", "a", "b"),
+    horizon = c("1", "1", "1", "1", "1", "1"),
+    output_type_id = c("1", "1", "2", "2", NA, NA)
+  )
+  membership <- spl_comp_tid_membership(
+    tibble::tibble(
+      output_type_id = tbl_chr$output_type_id,
+      row_idx = seq_len(nrow(tbl_chr))
+    ),
+    tbl_chr,
+    config_comp_tids = "location",
+    task_ids = c("location", "horizon"),
+    derived_task_ids = NULL
+  )
+  expect_equal(membership$output_type_ids, c("1", "2", NA))
+  expect_equal(
+    membership$is_compound_taskid,
+    tibble::tibble(location = rep(FALSE, 3), horizon = rep(FALSE, 3))
   )
 })
 
@@ -210,4 +287,13 @@ test_that("coarser_compound_taskid_set_warnings builds a single warning listing 
 
 test_that("coarser_compound_taskid_set_warnings returns NULL on empty input", {
   expect_null(coarser_compound_taskid_set_warnings(list()))
+})
+
+test_that("differs_from treats NA as a value like any other (#401)", {
+  expect_equal(
+    differs_from(c("a", NA, NA, "b"), c("a", NA, "a", NA)),
+    c(FALSE, FALSE, TRUE, TRUE)
+  )
+  expect_equal(differs_from(c("a", NA), NA_character_), c(TRUE, FALSE))
+  expect_equal(differs_from(c("a", NA), "a"), c(FALSE, TRUE))
 })

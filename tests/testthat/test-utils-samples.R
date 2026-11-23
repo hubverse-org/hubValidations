@@ -185,3 +185,249 @@ test_that("compound_idx_labels escapes braces", {
     "values (location: {x})"
   )
 })
+
+test_that("sample checks return the same result given the sample index (#401)", {
+  spl_checks <- list(
+    check_tbl_spl_ids,
+    check_tbl_spl_mt_unique,
+    check_tbl_spl_compound_taskid_set,
+    check_tbl_spl_overlap,
+    check_tbl_spl_non_compound_tid,
+    check_tbl_spl_n
+  )
+  expect_same_given_idx <- function(tbl, round_id, file_path, hub_path) {
+    # Built as `validate_model_data()` builds it.
+    spl_idx <- spl_idx_tbl(
+      tbl,
+      round_id,
+      read_config(hub_path, "tasks"),
+      derived_task_ids = get_hub_derived_task_ids(hub_path, round_id),
+      non_comp_key = TRUE
+    )
+    # `check_tbl_spl_non_compound_tid()` errors on samples that span modeling
+    # tasks, so errors are compared by their message.
+    run <- function(check, ...) {
+      tryCatch(
+        check(tbl, round_id, file_path, hub_path, ...),
+        error = conditionMessage
+      )
+    }
+    for (check in spl_checks) {
+      expect_equal(run(check, spl_idx = spl_idx), run(check))
+    }
+  }
+
+  # The config's `compound_taskid_set` is `reference_date` and `location`.
+  hub_path <- system.file("testhubs/samples", package = "hubValidations")
+  file_path <- "flu-base/2022-10-22-flu-base.csv"
+  round_id <- "2022-10-22"
+  tbl <- read_model_out_file(file_path, hub_path, coerce_types = "chr")
+  is_spl <- tbl$output_type == "sample"
+  expect_same_given_idx(tbl, round_id, file_path, hub_path)
+
+  # Fails `spl_ids`.
+  bad_ids <- tbl
+  bad_ids$output_type_id[is_spl & tbl$output_type_id == "1"] <- "s1"
+  expect_same_given_idx(bad_ids, round_id, file_path, hub_path)
+
+  # Sample 101 split into one sample per horizon, which is finer than
+  # configured, and one row of sample 1 dropped. Fails
+  # `spl_compound_taskid_set`, `spl_non_compound_tid` and `spl_n`.
+  finer <- tbl
+  is_101 <- is_spl & tbl$output_type_id == "101"
+  finer$output_type_id[is_101] <- paste0("90", tbl$horizon[is_101])
+  finer <- finer[-which(is_spl & tbl$output_type_id == "1")[1L], ]
+  expect_same_given_idx(finer, round_id, file_path, hub_path)
+
+  # Samples 1 to 50 joint across locations "01" and "02", and samples 201 to
+  # 250 across "02" and "04". Fails `spl_overlap`.
+  overlap <- tbl
+  spl_id <- suppressWarnings(as.integer(tbl$output_type_id))
+  is_02 <- is_spl & tbl$location == "02"
+  overlap$output_type_id[is_02 & spl_id <= 150L] <- as.character(
+    spl_id[is_02 & spl_id <= 150L] - 100L
+  )
+  overlap$output_type_id[is_02 & spl_id > 150L] <- as.character(
+    spl_id[is_02 & spl_id > 150L] + 50L
+  )
+  expect_same_given_idx(overlap, round_id, file_path, hub_path)
+
+  # Sample IDs shared across modeling tasks. Fails `spl_mt_unique`.
+  hub_path <- test_path("testdata/hub-spl-multi-mt")
+  file_path <- "team-model/2022-10-22-team-model.csv"
+  tbl <- read_model_out_file(file_path, hub_path, coerce_types = "chr")
+  expect_same_given_idx(tbl, round_id, file_path, hub_path)
+  tbl$output_type_id[tbl$target == "ed_visits"] <-
+    tbl$output_type_id[tbl$target == "hosp"]
+  expect_same_given_idx(tbl, round_id, file_path, hub_path)
+})
+
+test_that("sample checks accept compound_taskid_set or spl_idx, not both (#401)", {
+  hub_path <- system.file("testhubs/samples", package = "hubValidations")
+  file_path <- "flu-base/2022-10-22-flu-base.csv"
+  round_id <- "2022-10-22"
+  tbl <- read_model_out_file(file_path, hub_path, coerce_types = "chr")
+  spl_idx <- spl_idx_tbl(
+    tbl,
+    round_id,
+    read_config(hub_path, "tasks"),
+    non_comp_key = TRUE
+  )
+  compound_taskid_set <- list(NULL, "reference_date")
+
+  for (check in list(check_tbl_spl_n, check_tbl_spl_non_compound_tid)) {
+    # A caller that forwards its own `NULL` defaults gets the same result as
+    # one that leaves the argument out.
+    expect_equal(
+      check(
+        tbl,
+        round_id,
+        file_path,
+        hub_path,
+        compound_taskid_set = compound_taskid_set,
+        spl_idx = NULL
+      )$message,
+      check(
+        tbl,
+        round_id,
+        file_path,
+        hub_path,
+        compound_taskid_set = compound_taskid_set
+      )$message
+    )
+    expect_equal(
+      check(
+        tbl,
+        round_id,
+        file_path,
+        hub_path,
+        compound_taskid_set = NULL,
+        spl_idx = spl_idx
+      )$message,
+      check(tbl, round_id, file_path, hub_path, spl_idx = spl_idx)$message
+    )
+    expect_error(
+      check(
+        tbl,
+        round_id,
+        file_path,
+        hub_path,
+        compound_taskid_set = compound_taskid_set,
+        spl_idx = spl_idx
+      ),
+      "not both"
+    )
+  }
+
+  # A file without samples is skipped before the arguments are compared.
+  hub_path <- system.file("testhubs/simple", package = "hubValidations")
+  file_path <- "team1-goodmodel/2022-10-08-team1-goodmodel.csv"
+  tbl <- read_model_out_file(file_path, hub_path, coerce_types = "chr")
+  expect_s3_class(
+    check_tbl_spl_n(
+      tbl,
+      "2022-10-08",
+      file_path,
+      hub_path,
+      compound_taskid_set = compound_taskid_set,
+      spl_idx = spl_idx
+    ),
+    "check_info"
+  )
+})
+
+test_that("sample checks error on a spl_idx that does not index tbl_chr (#401)", {
+  hub_path <- system.file("testhubs/samples", package = "hubValidations")
+  file_path <- "flu-base/2022-10-22-flu-base.csv"
+  round_id <- "2022-10-22"
+  tbl <- read_model_out_file(file_path, hub_path, coerce_types = "chr")
+  config_tasks <- read_config(hub_path, "tasks")
+
+  # Built from a table with its first 50 sample rows dropped.
+  dropped <- tbl[-which(tbl$output_type == "sample")[1:50], ]
+  dropped_idx <- spl_idx_tbl(dropped, round_id, config_tasks)
+  for (check in list(
+    check_tbl_spl_ids,
+    check_tbl_spl_mt_unique,
+    check_tbl_spl_compound_taskid_set,
+    check_tbl_spl_overlap,
+    check_tbl_spl_non_compound_tid,
+    check_tbl_spl_n
+  )) {
+    expect_error(
+      check(tbl, round_id, file_path, hub_path, spl_idx = dropped_idx),
+      "is not a sample index of `tbl_chr`"
+    )
+  }
+
+  # Built without the `non_comp_key` column that this check needs.
+  expect_error(
+    check_tbl_spl_non_compound_tid(
+      tbl,
+      round_id,
+      file_path,
+      hub_path,
+      spl_idx = spl_idx_tbl(tbl, round_id, config_tasks)
+    ),
+    "is not a sample index of `tbl_chr`"
+  )
+
+  # Not a list, and a list with a missing row position and sample ID.
+  na_idx <- spl_idx_tbl(tbl, round_id, config_tasks)
+  na_idx$rows$row_idx[1] <- NA_integer_
+  na_idx$rows$output_type_id[1] <- NA_character_
+  for (bad_idx in list("not an index", na_idx)) {
+    expect_error(
+      check_tbl_spl_mt_unique(
+        tbl,
+        round_id,
+        file_path,
+        hub_path,
+        spl_idx = bad_idx
+      ),
+      "is not a sample index of `tbl_chr`"
+    )
+  }
+})
+
+test_that("shared_spl_idx returns NULL and sample functions error when the index cannot be built (#401)", {
+  hub_path <- withr::local_tempdir()
+  fs::dir_copy(
+    system.file("testhubs/samples", package = "hubValidations"),
+    hub_path,
+    overwrite = TRUE
+  )
+  # A `compound_taskid_set` naming a task ID the round does not have.
+  config_path <- fs::path(hub_path, "hub-config", "tasks.json")
+  config <- jsonlite::read_json(config_path)
+  sample_type <- config$rounds[[1]]$model_tasks[[2]]$output_type$sample
+  sample_type$output_type_id_params$compound_taskid_set <- list(
+    "reference_date",
+    "location",
+    "foo"
+  )
+  config$rounds[[1]]$model_tasks[[2]]$output_type$sample <- sample_type
+  jsonlite::write_json(config, config_path, auto_unbox = TRUE, null = "null")
+
+  file_path <- "flu-base/2022-10-22-flu-base.csv"
+  tbl <- read_model_out_file(file_path, hub_path, coerce_types = "chr")
+  expect_null(shared_spl_idx(tbl, "2022-10-22", hub_path, NULL))
+
+  for (check in list(
+    check_tbl_spl_mt_unique,
+    check_tbl_spl_compound_taskid_set
+  )) {
+    expect_error(
+      check(tbl, "2022-10-22", file_path, hub_path),
+      "\"foo\" is not valid task ID"
+    )
+  }
+  expect_error(
+    get_tbl_compound_taskid_set(
+      tbl,
+      read_config(hub_path, "tasks"),
+      "2022-10-22"
+    ),
+    "\"foo\" is not valid task ID"
+  )
+})

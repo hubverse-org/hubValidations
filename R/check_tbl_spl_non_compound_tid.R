@@ -1,6 +1,7 @@
 #' Check model output data tbl samples contain single unique combination of
 #' non-compound task ID values across all samples
 #' @inherit check_tbl_colnames params
+#' @inheritParams check_tbl_spl_mt_unique
 #' @inheritParams check_tbl_spl_compound_tid
 #' @inherit check_tbl_colnames return
 #' @details A sample coarser than the configured `compound_taskid_set` covers
@@ -30,7 +31,8 @@ check_tbl_spl_non_compound_tid <- function(
   file_path,
   hub_path,
   compound_taskid_set = NULL,
-  derived_task_ids = get_hub_derived_task_ids(hub_path, round_id)
+  derived_task_ids = get_hub_derived_task_ids(hub_path, round_id),
+  spl_idx = NULL
 ) {
   assert_tbl_chr(tbl_chr)
   if (!is.null(compound_taskid_set) && isTRUE(is.na(compound_taskid_set))) {
@@ -45,12 +47,13 @@ check_tbl_spl_non_compound_tid <- function(
     return(skip_v3_spl_check(file_path))
   }
 
-  spl_idx <- spl_idx_tbl(
+  spl_idx <- get_spl_idx(
+    spl_idx,
     tbl_chr,
     round_id,
     config_tasks,
-    compound_taskid_set,
     derived_task_ids = derived_task_ids,
+    compound_taskid_set = compound_taskid_set,
     non_comp_key = TRUE
   )
 
@@ -79,7 +82,8 @@ check_tbl_spl_non_compound_tid <- function(
   } else {
     errors <- non_comptid_mismatch_errors(mismatched, spl_idx, tbl_chr)
     output_type_ids <- purrr::map(errors, ~ .x$output_type_ids) |> # nolint: object_usage_linter
-      unlist(use.names = FALSE)
+      unlist(use.names = FALSE) |>
+      fmt_spl_ids()
     mismatched_idx <- unique(mismatched$slices$compound_idx)
     units <- compound_idx_labels(mismatched_idx, spl_idx, tbl_chr) # nolint: object_usage_linter
 

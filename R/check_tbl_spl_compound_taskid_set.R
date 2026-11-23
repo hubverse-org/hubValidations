@@ -55,7 +55,8 @@ check_tbl_spl_compound_taskid_set <- function(
   round_id,
   file_path,
   hub_path,
-  derived_task_ids = get_hub_derived_task_ids(hub_path, round_id)
+  derived_task_ids = get_hub_derived_task_ids(hub_path, round_id),
+  spl_idx = NULL
 ) {
   assert_tbl_chr(tbl_chr)
   config_tasks <- read_config(hub_path, "tasks")
@@ -73,7 +74,8 @@ check_tbl_spl_compound_taskid_set <- function(
     round_id,
     compact = FALSE,
     error = FALSE,
-    derived_task_ids = derived_task_ids
+    derived_task_ids = derived_task_ids,
+    spl_idx = spl_idx
   )
 
   check <- purrr::map_lgl(

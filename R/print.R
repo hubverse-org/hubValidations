@@ -210,11 +210,12 @@ print_check <- function(checks, show_check_warnings = FALSE) {
       TRUE ~ "*"
     )
 
+    # `check$message` is already formatted, so it is substituted as a value,
+    # which cli does not parse for markup.
     msg <- stats::setNames(
-      paste(
+      paste0(
         apply_cli_span_class(check_name, class = "check_name"),
-        check$message,
-        sep = ": "
+        ": {check$message}"
       ),
       bullet
     )
@@ -229,7 +230,7 @@ print_check <- function(checks, show_check_warnings = FALSE) {
         theme = list(div = list(`margin-left` = 2, color = "silver"))
       )
       for (w in check$warnings) {
-        cli::cli_alert_warning(w$message)
+        cli::cli_alert_warning("{w$message}")
       }
       cli::cli_end()
     }

@@ -7,6 +7,10 @@
 #' values depend on other task IDs) to ignore during validation. Defaults to
 #' extracting derived task IDs from hub `task.json`. See
 #' [get_hub_derived_task_ids()] for more details.
+#' @param spl_idx for internal use. The sample index, which assigns each sample
+#' row of `tbl_chr` to its modeling task. `validate_model_data()` builds it once
+#' and shares it between the sample checks. `NULL`, the default, builds it from
+#' `tbl_chr`.
 #' @details
 #' Different model tasks can have different sample configurations
 #' (`compound_taskid_set`, `min/max_samples_per_task`, etc.), so samples should
@@ -24,7 +28,8 @@ check_tbl_spl_mt_unique <- function(
   round_id,
   file_path,
   hub_path,
-  derived_task_ids = get_hub_derived_task_ids(hub_path, round_id)
+  derived_task_ids = get_hub_derived_task_ids(hub_path, round_id),
+  spl_idx = NULL
 ) {
   assert_tbl_chr(tbl_chr)
   config_tasks <- read_config(hub_path, "tasks")
@@ -36,26 +41,23 @@ check_tbl_spl_mt_unique <- function(
     return(skip_v3_spl_check(file_path))
   }
 
-  out_tid <- hubUtils::std_colnames["output_type_id"]
-  spl_tbl <- tbl_chr[tbl_chr$output_type == "sample", names(tbl_chr) != "value"]
-
-  mt_row_idx <- assign_spl_tbl_rows(
-    spl_tbl,
-    config_tasks = config_tasks,
-    round_id = round_id,
+  spl_idx <- get_spl_idx(
+    spl_idx,
+    tbl_chr,
+    round_id,
+    config_tasks,
     derived_task_ids = derived_task_ids
   )
 
   # If fewer than 2 model tasks have samples, no overlap is possible
-  n_spl_mts <- sum(!purrr::map_lgl(mt_row_idx, is.null))
-  if (n_spl_mts < 2L) {
+  n_mt <- length(spl_idx$comp_tids)
+  if (sum(tabulate(spl_idx$rows$mt_id, nbins = n_mt) > 0L) < 2L) {
     check <- TRUE
     details <- NULL
     errors <- NULL
   } else {
-    mt_otids <- mt_row_idx |>
-      purrr::set_names(seq_along(mt_row_idx)) |>
-      purrr::map(\(row_idx) unique(spl_tbl[[out_tid]][row_idx]))
+    mt_otids <- split_by_mt(spl_idx$rows$output_type_id, spl_idx) |>
+      purrr::map(unique)
 
     otid_counts <- table(unlist(mt_otids, use.names = FALSE))
     dup_otids <- names(otid_counts[otid_counts > 1L])
@@ -74,7 +76,7 @@ check_tbl_spl_mt_unique <- function(
         output_type_ids = dup_otids
       )
 
-      display_otids <- cli::cli_vec(dup_otids, style = list(vec_trunc = 10)) # nolint: object_usage_linter
+      display_otids <- fmt_spl_ids(dup_otids) # nolint: object_usage_linter
       details <- cli::format_inline(
         "{.val {length(dup_otids)}} sample {.var output_type_id}{?s} ",
         "{?is/are} associated with multiple modeling tasks: ",

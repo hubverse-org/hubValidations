@@ -10,7 +10,8 @@ check_tbl_spl_overlap(
   round_id,
   file_path,
   hub_path,
-  derived_task_ids = get_hub_derived_task_ids(hub_path, round_id)
+  derived_task_ids = get_hub_derived_task_ids(hub_path, round_id),
+  spl_idx = NULL
 )
 }
 \arguments{
@@ -36,6 +37,11 @@ files within the \code{hub-config} directory.}
 values depend on other task IDs) to ignore during validation. Defaults to
 extracting derived task IDs from hub \code{task.json}. See
 \code{\link[=get_hub_derived_task_ids]{get_hub_derived_task_ids()}} for more details.}
+
+\item{spl_idx}{for internal use. The sample index, which assigns each sample
+row of \code{tbl_chr} to its modeling task. \code{validate_model_data()} builds it once
+and shares it between the sample checks. \code{NULL}, the default, builds it from
+\code{tbl_chr}.}
 }
 \value{
 Depending on whether validation has succeeded, one of:

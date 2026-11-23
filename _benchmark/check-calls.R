@@ -8,10 +8,12 @@
 #                        the all-character one, "typed" for real column types, "none" if
 #                        it needs no data.
 #   compound_taskid_set  TRUE if the check takes a compound task ID set.
+#   spl_idx              TRUE if the check is given the sample index, as
+#                        validate_model_data() gives it.
 #
-# check_context() reads only what a check's `tbl` and `compound_taskid_set` say it uses,
-# so the memory measured against a check is its own and not the cost of loading data it
-# never touched.
+# check_context() reads only what a check's `tbl`, `compound_taskid_set` and `spl_idx`
+# say it uses, so the memory measured against a check is its own and not the cost of
+# loading data it never touched.
 CHECKS <- list(
   # Not a check. This is the shared code beneath check_tbl_value_col and
   # check_tbl_value_col_ascending that works out which model task each row belongs
@@ -27,26 +29,21 @@ CHECKS <- list(
   list(name = "check_tbl_value_col", tbl = "chr"),
   list(name = "check_tbl_value_col_ascending", tbl = "chr"),
   list(name = "check_tbl_rows_unique", tbl = "chr"),
-  list(name = "check_tbl_spl_mt_unique", tbl = "chr"),
+  list(name = "check_tbl_spl_ids", tbl = "chr", spl_idx = TRUE),
+  list(name = "check_tbl_spl_mt_unique", tbl = "chr", spl_idx = TRUE),
   list(
     name = "check_tbl_spl_compound_taskid_set",
-    tbl = "chr"
+    tbl = "chr",
+    spl_idx = TRUE
   ),
   list(
     name = "check_tbl_spl_compound_tid",
     tbl = "chr",
     compound_taskid_set = TRUE
   ),
-  list(
-    name = "check_tbl_spl_non_compound_tid",
-    tbl = "chr",
-    compound_taskid_set = TRUE
-  ),
-  list(
-    name = "check_tbl_spl_n",
-    tbl = "chr",
-    compound_taskid_set = TRUE
-  )
+  list(name = "check_tbl_spl_overlap", tbl = "chr", spl_idx = TRUE),
+  list(name = "check_tbl_spl_non_compound_tid", tbl = "chr", spl_idx = TRUE),
+  list(name = "check_tbl_spl_n", tbl = "chr", spl_idx = TRUE)
 )
 
 check_spec <- function(name) {
@@ -160,13 +157,24 @@ check_call <- function(name, ctx) {
     check_tbl_rows_unique = function() {
       check_tbl_rows_unique(ctx$tbl_chr, ctx$file_path, ctx$hub_path)
     },
+    check_tbl_spl_ids = function() {
+      check_tbl_spl_ids(
+        ctx$tbl_chr,
+        ctx$round_id,
+        ctx$file_path,
+        ctx$hub_path,
+        derived_task_ids = ctx$derived_task_ids,
+        spl_idx = ctx$spl_idx
+      )
+    },
     check_tbl_spl_mt_unique = function() {
       check_tbl_spl_mt_unique(
         ctx$tbl_chr,
         ctx$round_id,
         ctx$file_path,
         ctx$hub_path,
-        derived_task_ids = ctx$derived_task_ids
+        derived_task_ids = ctx$derived_task_ids,
+        spl_idx = ctx$spl_idx
       )
     },
     check_tbl_spl_compound_taskid_set = function() {
@@ -175,7 +183,8 @@ check_call <- function(name, ctx) {
         ctx$round_id,
         ctx$file_path,
         ctx$hub_path,
-        derived_task_ids = ctx$derived_task_ids
+        derived_task_ids = ctx$derived_task_ids,
+        spl_idx = ctx$spl_idx
       )
     },
     check_tbl_spl_compound_tid = function() {
@@ -188,14 +197,24 @@ check_call <- function(name, ctx) {
         derived_task_ids = ctx$derived_task_ids
       )
     },
+    check_tbl_spl_overlap = function() {
+      check_tbl_spl_overlap(
+        ctx$tbl_chr,
+        ctx$round_id,
+        ctx$file_path,
+        ctx$hub_path,
+        derived_task_ids = ctx$derived_task_ids,
+        spl_idx = ctx$spl_idx
+      )
+    },
     check_tbl_spl_non_compound_tid = function() {
       check_tbl_spl_non_compound_tid(
         ctx$tbl_chr,
         ctx$round_id,
         ctx$file_path,
         ctx$hub_path,
-        compound_taskid_set = ctx$compound_taskid_set,
-        derived_task_ids = ctx$derived_task_ids
+        derived_task_ids = ctx$derived_task_ids,
+        spl_idx = ctx$spl_idx
       )
     },
     check_tbl_spl_n = function() {
@@ -204,8 +223,8 @@ check_call <- function(name, ctx) {
         ctx$round_id,
         ctx$file_path,
         ctx$hub_path,
-        compound_taskid_set = ctx$compound_taskid_set,
-        derived_task_ids = ctx$derived_task_ids
+        derived_task_ids = ctx$derived_task_ids,
+        spl_idx = ctx$spl_idx
       )
     },
     stop("No call defined for check '", name, "'", call. = FALSE)
@@ -271,7 +290,42 @@ check_context <- function(
       allow_derive = allow_derive
     )
   }
+  if (isTRUE(spec$spl_idx)) {
+    ctx$spl_idx <- read_spl_idx(
+      spl_idx_path(compound_taskid_set_path),
+      ctx,
+      allow_derive = allow_derive
+    )
+  }
   ctx
+}
+
+# The sample index is cached next to the compound task ID set, for the same
+# reason: validate_model_data() builds it once for all the sample checks, so
+# none of them is charged for it.
+spl_idx_path <- function(compound_taskid_set_path) {
+  if (is.null(compound_taskid_set_path)) {
+    return(NULL)
+  }
+  file.path(
+    dirname(compound_taskid_set_path),
+    paste0("spl-idx-", basename(compound_taskid_set_path))
+  )
+}
+
+read_spl_idx <- function(path, ctx, allow_derive = TRUE) {
+  read_cached(path, "sample index", \() build_spl_idx(ctx), allow_derive)
+}
+
+# Built as validate_model_data() builds it.
+build_spl_idx <- function(ctx) {
+  spl_idx_tbl(
+    ctx$tbl_chr,
+    ctx$round_id,
+    ctx$config,
+    derived_task_ids = ctx$derived_task_ids,
+    non_comp_key = TRUE
+  )
 }
 
 # check_tbl_spl_compound_taskid_set() wants the all-character version of the
@@ -291,25 +345,38 @@ derive_compound_taskid_set <- function(ctx) {
 }
 
 read_compound_taskid_set <- function(path, ctx, allow_derive = TRUE) {
+  read_cached(
+    path,
+    "compound task ID set",
+    \() derive_compound_taskid_set(ctx),
+    allow_derive
+  )
+}
+
+# Reads a value a prepare step saved, or works it out with `derive()` and
+# saves it.
+read_cached <- function(path, what, derive, allow_derive = TRUE) {
   if (!is.null(path) && file.exists(path)) {
     return(readRDS(path))
   }
-  # Stopping here, rather than quietly working the set out, keeps a missing file
-  # visible. The prepare step is what creates it, and if that step was killed (on
-  # the largest sizes, running out of memory is the likely way), working it out here
-  # would fold that whole job into this check's memory figure and report it as the
-  # check's own.
+  # Stopping here, rather than quietly working the value out, keeps a missing
+  # file visible. The prepare step is what creates it, and if that step was
+  # killed (on the largest sizes, running out of memory is the likely way),
+  # working it out here would fold that whole job into this check's memory
+  # figure and report it as the check's own.
   if (!allow_derive) {
     stop(
-      "No compound task ID set cache at '",
+      "No ",
+      what,
+      " cache at '",
       path,
       "'; the prepare step must run first.",
       call. = FALSE
     )
   }
-  set <- derive_compound_taskid_set(ctx)
+  value <- derive()
   if (!is.null(path)) {
-    saveRDS(set, path)
+    saveRDS(value, path)
   }
-  set
+  value
 }
