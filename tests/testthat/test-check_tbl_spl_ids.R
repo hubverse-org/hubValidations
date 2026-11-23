@@ -42,6 +42,43 @@ test_that("check_tbl_spl_ids fails sample IDs that are not non-negative integers
   expect_match(result$message, "\"s{id1}\"", fixed = TRUE)
 })
 
+test_that("check_tbl_spl_ids suggests writing out sample IDs in scientific notation in full (#406)", {
+  hub_path <- system.file("testhubs/samples", package = "hubValidations")
+  file_path <- "flu-base/2022-10-22-flu-base.csv"
+  tbl <- read_model_out_file(file_path, hub_path, coerce_types = "chr")
+  is_spl <- tbl$output_type == "sample"
+  tbl$output_type_id[is_spl & tbl$output_type_id == "1"] <- "1e+05"
+  tbl$output_type_id[is_spl & tbl$output_type_id == "2"] <- "2.5E-3"
+
+  result <- check_tbl_spl_ids(tbl, "2022-10-22", file_path, hub_path)
+  expect_snapshot(result)
+  expect_equal(
+    result$errors[["2"]]$problems,
+    list(integer = c("1e+05", "2.5E-3"))
+  )
+})
+
+test_that("check_tbl_spl_ids leaves max_length out of errors for integer sample IDs (#406)", {
+  hub_path <- system.file("testhubs/samples", package = "hubValidations")
+  file_path <- "flu-base/2022-10-22-flu-base.csv"
+  tbl <- read_model_out_file(file_path, hub_path, coerce_types = "chr")
+  tbl$output_type_id[
+    tbl$output_type == "sample" & tbl$output_type_id == "1"
+  ] <- "s1"
+  # The schema allows `max_length` with an integer `type`, and ignores it.
+  config_tasks <- read_config(hub_path, "tasks")
+  config_tasks$rounds[[1]]$model_tasks[[
+    2
+  ]]$output_type$sample$output_type_id_params$max_length <- 5L
+  local_mocked_bindings(read_config = function(...) config_tasks)
+
+  result <- check_tbl_spl_ids(tbl, "2022-10-22", file_path, hub_path)
+  expect_equal(
+    result$errors[["2"]],
+    list(type = "integer", problems = list(integer = "s1"))
+  )
+})
+
 test_that("check_tbl_spl_ids fails character sample IDs that are too long or contain disallowed characters (#406)", {
   # The hub-now config sets `type` to "character" and `max_length` to 15.
   hub_path <- test_path("testdata/hub-now")
@@ -93,6 +130,7 @@ test_that("check_tbl_spl_ids fails sample rows with a missing or empty output_ty
     result$errors[["2"]]$problems,
     list(missing = sum(is_missing), integer = "s3")
   )
+  expect_no_match(result$message, "scientific notation", fixed = TRUE)
 })
 
 test_that("check_tbl_spl_ids reports sample IDs that are not valid UTF-8 (#406)", {
