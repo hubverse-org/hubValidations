@@ -36,6 +36,27 @@
   [`check_tbl_spl_compound_tid()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_spl_compound_tid.md),
   and their output no longer contains a `spl_compound_tid` element
   ([\#377](https://github.com/hubverse-org/hubValidations/issues/377)).
+- New check
+  [`check_tbl_spl_ids()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_spl_ids.md)
+  fails sample `output_type_id`s that do not match the `type` and
+  `max_length` configured in `output_type_id_params`. When `type` is
+  `"integer"`, each sample ID must be a non-negative integer written
+  with digits only and without leading zeros, so `"s1"`, `"1.5"` and
+  `"01"` fail. When `type` is `"character"`, each sample ID must have at
+  most `max_length` characters and contain only ASCII letters, digits,
+  `_`, `-` and `.`, so a file that passed before can now fail if its
+  sample IDs contain other characters. It also fails sample rows with a
+  missing or empty `output_type_id`.
+  [`validate_model_data()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_model_data.md),
+  [`validate_submission()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_submission.md)
+  and
+  [`validate_pr()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_pr.md)
+  run it before the other sample checks, and their output contains a new
+  `spl_ids` element. When it fails, the other sample checks do not run.
+  Sample IDs longer than the `max_length` set in the hub’s config were
+  previously accepted by mistake, and now fail
+  [`check_tbl_spl_ids()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_spl_ids.md)
+  ([\#406](https://github.com/hubverse-org/hubValidations/issues/406)).
 - [`get_tbl_compound_taskid_set()`](https://hubverse-org.github.io/hubValidations/dev/reference/get_tbl_compound_taskid_set.md)
   no longer errors when samples in a modeling task have different
   compound task ID sets. It returns every task ID detected as compound,
@@ -67,6 +88,11 @@
   now lists the correct `output_type_ids` for each detected compound
   task ID set
   ([\#400](https://github.com/hubverse-org/hubValidations/issues/400)).
+- Sample checks called on their own now show sample `output_type_id`s
+  containing `{` or `}` as submitted. Previously such a check failed
+  with an execution error or showed the ID without its braces. Printing
+  validation results that contain such an ID could also error
+  ([\#406](https://github.com/hubverse-org/hubValidations/issues/406)).
 - Fixed a bug where
   [`check_tbl_derived_task_id_vals()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_derived_task_id_vals.md)
   rejected `NA` in a derived task ID column, even in the rows of a
@@ -98,6 +124,26 @@
   it. A timezone the system does not recognise now gives a clear error,
   suggesting a valid timezone name, such as `America/New_York`
   ([\#419](https://github.com/hubverse-org/hubValidations/issues/419)).
+- [`check_tbl_spl_mt_unique()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_spl_mt_unique.md),
+  [`check_tbl_spl_compound_taskid_set()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_spl_compound_taskid_set.md)
+  and
+  [`get_tbl_compound_taskid_set()`](https://hubverse-org.github.io/hubValidations/dev/reference/get_tbl_compound_taskid_set.md)
+  now error when a modeling task’s `compound_taskid_set` names a task ID
+  the round does not have. The two checks previously passed, and
+  [`get_tbl_compound_taskid_set()`](https://hubverse-org.github.io/hubValidations/dev/reference/get_tbl_compound_taskid_set.md)
+  returned a result
+  ([\#401](https://github.com/hubverse-org/hubValidations/issues/401)).
+
+### Other changes
+
+- Validating files that contain samples is faster than in 3.0.0,
+  including the new sample checks. On our benchmark files,
+  [`validate_submission()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_submission.md)
+  takes about 25% less time and 20% less memory on a file of 13 million
+  sample rows, and about 70% less time on a file of 460,000 rows split
+  into 7 modeling tasks. Files with many samples gain the most
+  ([\#377](https://github.com/hubverse-org/hubValidations/issues/377),
+  [\#401](https://github.com/hubverse-org/hubValidations/issues/401)).
 
 ## hubValidations 3.0.0
 

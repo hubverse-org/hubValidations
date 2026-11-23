@@ -104,8 +104,8 @@ validate_model_metadata(hub_path,
 #> ✔ [metadata_file_location]: Metadata file directory name matches
 #>   "model-metadata".
 #> ⓧ [metadata_matches_schema]: Metadata file contents must be consistent with
-#>   schema specifications.  - must have required property 'model_details' . -
+#>   schema specifications.  - must have required property 'model_details' .  -
 #>   must NOT have additional properties; saw unexpected property
-#>   'models_details'. - must NOT have additional properties; saw unexpected
-#>   property 'ensemble_of_hub_models"'. - /include_ensemble must be boolean .
+#>   'models_details'.  - must NOT have additional properties; saw unexpected
+#>   property 'ensemble_of_hub_models"'.  - /include_ensemble must be boolean .
 ```

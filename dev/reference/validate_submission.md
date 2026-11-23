@@ -148,6 +148,7 @@ Details of checks performed by `validate_submission()`
 | value_col_valid | Values in \`value\` column are coercible to data type configured for each output type | FALSE | check_failure |  |
 | value_col_non_desc | Values in \`value\` column are non-decreasing as output_type_ids increase for all unique task ID /output type value combinations. Applies to \`quantile\` or \`cdf\` output types only | FALSE | check_failure | error_tbl: table of rows affected |
 | value_col_sum1 | Values in the \`value\` column of \`pmf\` output type data for each unique task ID combination sum to 1. | FALSE | check_failure | error_tbl: table of rows affected |
+| spl_ids | Sample output_type_ids match the type and max_length configured for their modeling task. Character sample IDs may contain only ASCII letters, digits, underscores, hyphens and periods. Every sample row has an output_type_id (v3 and above schema only). | TRUE | check_error | errors: list containing item for each failing modeling task with the configured type and max_length and the problems found, each with the sample IDs failing validation or the number of rows missing one. |
 | spl_mt_unique | Individual sample output_type_ids do not span multiple model tasks. | TRUE | check_error | errors: list with mt_ids (model task indices the overlapping samples span) and output_type_ids (sample IDs appearing in multiple model tasks). |
 | spl_compound_taskid_set | Sample compound task id sets for each modeling task match or are coarser than the expected set defined in tasks.json config. Samples in a modeling task may have different compound task id sets. | TRUE | check_error | errors: list containing item for each failing modeling task. Exact structure dependent on type of validation failure. See check function documentation for more details. |
 | spl_overlap | Samples that share a combination of compound task ID values cover the same combinations. Skipped when allow_overlapping_samples is TRUE (v3 and above schema only). | TRUE | check_error | errors: list containing item for each failing modeling task with output type ids of the samples involved and a table of the compound task ID values each covers. |
@@ -178,7 +179,7 @@ validate_submission(hub_path, file_path)
 #> ✔ [metadata_exists]: Metadata file exists at path
 #>   model-metadata/team1-goodmodel.yaml.
 #> ✖ [submission_time]: Submission time must be within accepted submission window
-#>   for round.  Current time "2026-11-10 08:47:33 UTC" is outside window
+#>   for round.  Current time "2026-11-23 12:58:25 UTC" is outside window
 #>   2022-10-02 EDT--2022-10-09 23:59:59 EDT.
 #> ✔ [file_read]: File could be read successfully.
 #> ✔ [valid_round_id_col]: `round_id_col` name is valid.

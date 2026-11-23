@@ -11,7 +11,8 @@ check_tbl_spl_mt_unique(
   round_id,
   file_path,
   hub_path,
-  derived_task_ids = get_hub_derived_task_ids(hub_path, round_id)
+  derived_task_ids = get_hub_derived_task_ids(hub_path, round_id),
+  spl_idx = NULL
 )
 ```
 
@@ -52,6 +53,14 @@ check_tbl_spl_mt_unique(
   extracting derived task IDs from hub `task.json`. See
   [`get_hub_derived_task_ids()`](https://hubverse-org.github.io/hubUtils/reference/get_hub_timezone.html)
   for more details.
+
+- spl_idx:
+
+  for internal use. The sample index, which assigns each sample row of
+  `tbl_chr` to its modeling task.
+  [`validate_model_data()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_model_data.md)
+  builds it once and shares it between the sample checks. `NULL`, the
+  default, builds it from `tbl_chr`.
 
 ## Value
 

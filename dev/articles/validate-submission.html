@@ -137,7 +137,7 @@ standard validation checks and returns their results in the form of a
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[metadata_exists]</span>: Metadata file exists at path</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">model-metadata/team1-goodmodel.yaml</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[submission_time]</span>: Submission time must be within accepted submission window</span></span>
-<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2026-11-10 08:48:03 UTC"</span> is outside window</span></span>
+<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2026-11-23 12:58:57 UTC"</span> is outside window</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_read]</span>: File could be read successfully.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_round_id_col]</span>: `round_id_col` name is valid.</span></span>
@@ -199,7 +199,7 @@ and the function re-run for validation to proceed further.</p>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[metadata_exists]</span>: Metadata file exists at path</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">model-metadata/hub-baseline.yml</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[submission_time]</span>: Submission time must be within accepted submission window</span></span>
-<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2026-11-10 08:48:04 UTC"</span> is outside window</span></span>
+<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2026-11-23 12:58:58 UTC"</span> is outside window</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[file_read]</span>: File could be read successfully.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[valid_round_id_col]</span>: `round_id_col` name is valid.</span></span>
@@ -234,7 +234,7 @@ will be summarised.</p>
 <span><span class="co">#&gt; <span style="color: #BB00BB;">── </span><span style="color: #BB00BB; font-weight: bold; text-decoration: underline;">team1-goodmodel/2022-10-08-team1-goodmodel.csv</span><span style="color: #BB00BB;"> ────</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #B2B2B2;">[submission_time]</span>: Submission time must be within accepted submission window</span></span>
-<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2026-11-10 08:48:05 UTC"</span> is outside window</span></span>
+<span><span class="co">#&gt;   for round.  Current time <span style="color: #0000BB;">"2026-11-23 12:58:59 UTC"</span> is outside window</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">2022-10-02 EDT--2022-10-09 23:59:59 EDT</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `check_for_errors()`:</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> </span></span>
@@ -706,6 +706,28 @@ error_tbl: table of rows affected
 </tr>
 <tr>
 <td style="text-align:left;font-weight: bold;">
+spl_ids
+</td>
+<td style="text-align:left;">
+Sample output_type_ids match the type and max_length configured for
+their modeling task. Character sample IDs may contain only ASCII
+letters, digits, underscores, hyphens and periods. Every sample row has
+an output_type_id (v3 and above schema only).
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:left;">
+check_error
+</td>
+<td style="text-align:left;">
+errors: list containing item for each failing modeling task with the
+configured type and max_length and the problems found, each with the
+sample IDs failing validation or the number of rows missing one.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
 spl_mt_unique
 </td>
 <td style="text-align:left;">
@@ -1098,10 +1120,10 @@ class object.</p>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">hub-config/model-metadata-schema.json</span>.<span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[metadata_file_exists]</span>: File exists at path</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">model-metadata/team1-goodmodel.yaml</span>.<span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[metadata_file_ext]</span>: Metadata file extension is <span style="color: #0000BB;">"yml"</span> or <span style="color: #0000BB;">"yaml"</span>.<span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">[metadata_file_location]</span>: Metadata file directory name matches</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">"model-metadata"</span>.<span style="color: #BB0000;">ⓧ</span> <span style="color: #B2B2B2;">[metadata_matches_schema]</span>: Metadata file contents must be consistent with</span></span>
-<span><span class="co">#&gt;   schema specifications.  - must have required property 'model_details' . -</span></span>
+<span><span class="co">#&gt;   schema specifications.  - must have required property 'model_details' .  -</span></span>
 <span><span class="co">#&gt;   must NOT have additional properties; saw unexpected property</span></span>
-<span><span class="co">#&gt;   'models_details'. - must NOT have additional properties; saw unexpected</span></span>
-<span><span class="co">#&gt;   property 'ensemble_of_hub_models"'. - /include_ensemble must be boolean .</span></span></code></pre></div>
+<span><span class="co">#&gt;   'models_details'.  - must NOT have additional properties; saw unexpected</span></span>
+<span><span class="co">#&gt;   property 'ensemble_of_hub_models"'.  - /include_ensemble must be boolean .</span></span></code></pre></div>
 <p>For more details on the structure of
 <code>&lt;hub_validations&gt;</code> objects, including how to access
 more information on individual checks, see

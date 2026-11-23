@@ -235,6 +235,8 @@ v
 #> ✔ [value_col_non_desc]: Quantile or cdf `value` values increase when ordered by
 #>   `output_type_id`.
 #> ℹ [value_col_sum1]: No pmf output types to check for sum of 1. Check skipped.
+#> ℹ [spl_ids]: No v3 samples found in model output data to check. Skipping
+#>   `check_tbl_spl_ids` check.
 #> ℹ [spl_mt_unique]: No v3 samples found in model output data to check. Skipping
 #>   `check_tbl_spl_mt_unique` check.
 #> ℹ [spl_compound_taskid_set]: No v3 samples found in model output data to check.
@@ -282,6 +284,8 @@ v
 #> ✔ [value_col_non_desc]: Quantile or cdf `value` values increase when ordered by
 #>   `output_type_id`.
 #> ℹ [value_col_sum1]: No pmf output types to check for sum of 1. Check skipped.
+#> ℹ [spl_ids]: No v3 samples found in model output data to check. Skipping
+#>   `check_tbl_spl_ids` check.
 #> ℹ [spl_mt_unique]: No v3 samples found in model output data to check. Skipping
 #>   `check_tbl_spl_mt_unique` check.
 #> ℹ [spl_compound_taskid_set]: No v3 samples found in model output data to check.
@@ -584,7 +588,8 @@ check_for_errors(v_pass, verbose = TRUE)
 #>   column/`output_type`/`output_type_id` values are unique.✔ [req_vals]: Required task ID/output type/output type ID combinations all
 #>   present.✔ [value_col_valid]: Values in column `value` all valid with respect to
 #>   modeling task config.✔ [value_col_non_desc]: Quantile or cdf `value` values increase when ordered by
-#>   `output_type_id`.ℹ [value_col_sum1]: No pmf output types to check for sum of 1. Check skipped.ℹ [spl_mt_unique]: No v3 samples found in model output data to check. Skipping
+#>   `output_type_id`.ℹ [value_col_sum1]: No pmf output types to check for sum of 1. Check skipped.ℹ [spl_ids]: No v3 samples found in model output data to check. Skipping
+#>   `check_tbl_spl_ids` check.ℹ [spl_mt_unique]: No v3 samples found in model output data to check. Skipping
 #>   `check_tbl_spl_mt_unique` check.ℹ [spl_compound_taskid_set]: No v3 samples found in model output data to check.
 #>   Skipping `check_tbl_spl_compound_taskid_set` check.ℹ [spl_overlap]: No v3 samples found in model output data to check. Skipping
 #>   `check_tbl_spl_overlap` check.ℹ [spl_non_compound_tid]: No v3 samples found in model output data to check.
@@ -652,6 +657,8 @@ v_pass[["team1-goodmodel/2022-10-22-team1-goodmodel.csv"]]
 #> ✔ [value_col_non_desc]: Quantile or cdf `value` values increase when ordered by
 #>   `output_type_id`.
 #> ℹ [value_col_sum1]: No pmf output types to check for sum of 1. Check skipped.
+#> ℹ [spl_ids]: No v3 samples found in model output data to check. Skipping
+#>   `check_tbl_spl_ids` check.
 #> ℹ [spl_mt_unique]: No v3 samples found in model output data to check. Skipping
 #>   `check_tbl_spl_mt_unique` check.
 #> ℹ [spl_compound_taskid_set]: No v3 samples found in model output data to check.
@@ -706,6 +713,7 @@ on how to access more information about specific checks, see
 | value_col_valid | Values in `value` column are coercible to data type configured for each output type | FALSE | check_failure |  |
 | value_col_non_desc | Values in `value` column are non-decreasing as output_type_ids increase for all unique task ID /output type value combinations. Applies to `quantile` or `cdf` output types only | FALSE | check_failure | error_tbl: table of rows affected |
 | value_col_sum1 | Values in the `value` column of `pmf` output type data for each unique task ID combination sum to 1. | FALSE | check_failure | error_tbl: table of rows affected |
+| spl_ids | Sample output_type_ids match the type and max_length configured for their modeling task. Character sample IDs may contain only ASCII letters, digits, underscores, hyphens and periods. Every sample row has an output_type_id (v3 and above schema only). | TRUE | check_error | errors: list containing item for each failing modeling task with the configured type and max_length and the problems found, each with the sample IDs failing validation or the number of rows missing one. |
 | spl_mt_unique | Individual sample output_type_ids do not span multiple model tasks. | TRUE | check_error | errors: list with mt_ids (model task indices the overlapping samples span) and output_type_ids (sample IDs appearing in multiple model tasks). |
 | spl_compound_taskid_set | Sample compound task id sets for each modeling task match or are coarser than the expected set defined in tasks.json config. Samples in a modeling task may have different compound task id sets. | TRUE | check_error | errors: list containing item for each failing modeling task. Exact structure dependent on type of validation failure. See check function documentation for more details. |
 | spl_overlap | Samples that share a combination of compound task ID values cover the same combinations. Skipped when allow_overlapping_samples is TRUE (v3 and above schema only). | TRUE | check_error | errors: list containing item for each failing modeling task with output type ids of the samples involved and a table of the compound task ID values each covers. |

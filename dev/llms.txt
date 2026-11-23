@@ -251,6 +251,10 @@ Unit validation checks. All return `hub_check` S3 class objects.
   single unique values for each compound task ID within individual
   samples
 
+- [`check_tbl_spl_ids()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_spl_ids.md)
+  : Check that sample output_type_ids match the configured type and
+  max_length and contain only allowed characters
+
 - [`check_tbl_spl_mt_unique()`](https://hubverse-org.github.io/hubValidations/dev/reference/check_tbl_spl_mt_unique.md)
   : Check that individual sample output_type_ids do not span multiple
   model tasks

@@ -55,7 +55,8 @@
 <span>  <span class="va">round_id</span>,</span>
 <span>  <span class="va">file_path</span>,</span>
 <span>  <span class="va">hub_path</span>,</span>
-<span>  derived_task_ids <span class="op">=</span> <span class="fu"><a href="https://hubverse-org.github.io/hubUtils/reference/get_hub_timezone.html" class="external-link">get_hub_derived_task_ids</a></span><span class="op">(</span><span class="va">hub_path</span>, <span class="va">round_id</span><span class="op">)</span></span>
+<span>  derived_task_ids <span class="op">=</span> <span class="fu"><a href="https://hubverse-org.github.io/hubUtils/reference/get_hub_timezone.html" class="external-link">get_hub_derived_task_ids</a></span><span class="op">(</span><span class="va">hub_path</span>, <span class="va">round_id</span><span class="op">)</span>,</span>
+<span>  spl_idx <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -94,6 +95,13 @@ files within the <code>hub-config</code> directory.</p></dd>
 values depend on other task IDs) to ignore during validation. Defaults to
 extracting derived task IDs from hub <code>task.json</code>. See
 <code><a href="https://hubverse-org.github.io/hubUtils/reference/get_hub_timezone.html" class="external-link">get_hub_derived_task_ids()</a></code> for more details.</p></dd>
+
+
+<dt id="arg-spl-idx">spl_idx<a class="anchor" aria-label="anchor" href="#arg-spl-idx"></a></dt>
+<dd><p>for internal use. The sample index, which assigns each sample
+row of <code>tbl_chr</code> to its modeling task. <code><a href="validate_model_data.html">validate_model_data()</a></code> builds it once
+and shares it between the sample checks. <code>NULL</code>, the default, builds it from
+<code>tbl_chr</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">

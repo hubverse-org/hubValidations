@@ -1,0 +1,114 @@
+# Check that sample output_type_ids match the configured type and max_length and contain only allowed characters
+
+Check that sample output_type_ids match the configured type and
+max_length and contain only allowed characters
+
+## Usage
+
+``` r
+check_tbl_spl_ids(
+  tbl_chr,
+  round_id,
+  file_path,
+  hub_path,
+  derived_task_ids = get_hub_derived_task_ids(hub_path, round_id),
+  spl_idx = NULL
+)
+```
+
+## Arguments
+
+- tbl_chr:
+
+  a tibble/data.frame of the contents of the file being validated.
+  Column types must **all be character**.
+
+- round_id:
+
+  character string. The round identifier.
+
+- file_path:
+
+  character string. Path to the file being validated relative to the
+  hub's model-output directory.
+
+- hub_path:
+
+  Either a character string path to a local Modeling Hub directory or an
+  object of class `<SubTreeFileSystem>` created using functions
+  [`s3_bucket()`](https://arrow.apache.org/docs/r/reference/s3_bucket.html)
+  or
+  [`gs_bucket()`](https://arrow.apache.org/docs/r/reference/gs_bucket.html)
+  by providing a string S3 or GCS bucket name or path to a Modeling Hub
+  directory stored in the cloud. For more details consult the [Using
+  cloud storage (S3,
+  GCS)](https://arrow.apache.org/docs/r/articles/fs.html) in the `arrow`
+  package. The hub must be fully configured with valid `admin.json` and
+  `tasks.json` files within the `hub-config` directory.
+
+- derived_task_ids:
+
+  Character vector of derived task ID names (task IDs whose values
+  depend on other task IDs) to ignore during validation. Defaults to
+  extracting derived task IDs from hub `task.json`. See
+  [`get_hub_derived_task_ids()`](https://hubverse-org.github.io/hubUtils/reference/get_hub_timezone.html)
+  for more details.
+
+- spl_idx:
+
+  for internal use. The sample index, which assigns each sample row of
+  `tbl_chr` to its modeling task.
+  [`validate_model_data()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_model_data.md)
+  builds it once and shares it between the sample checks. `NULL`, the
+  default, builds it from `tbl_chr`.
+
+## Value
+
+Depending on whether validation has succeeded, one of:
+
+- `<message/check_success>` condition class object.
+
+- `<error/check_error>` condition class object.
+
+Returned object also inherits from subclass `<hub_check>`.
+
+## Details
+
+The format required of sample `output_type_id`s depends on the `type`
+and `max_length` each modeling task sets in `output_type_id_params`:
+
+- When `type` is `"integer"`, each sample ID must be a non-negative
+  integer written with digits only and without leading zeros, such as
+  `"0"` or `"12"`. `"01"`, `"1.0"` and `"1e3"` fail.
+
+- When `type` is `"character"`, each sample ID must have at most
+  `max_length` characters, and contain only ASCII letters, digits, `_`,
+  `-` and `.`.
+
+Every sample row must also have a non-empty `output_type_id`.
+
+Output of the check includes an `errors` element, a list with one
+element for each modeling task failing validation, named by the index of
+the modeling task in the config. Each element has the following
+structure:
+
+- `type`: the configured sample ID `type`.
+
+- `max_length`: the configured `max_length`. Only present when `type` is
+  `"character"`.
+
+- `problems`: a list with one element for each problem found:
+
+  - `missing`: the number of sample rows with a missing or empty
+    `output_type_id`.
+
+  - `integer`: the sample IDs that are not non-negative integers.
+
+  - `max_length`: the sample IDs longer than `max_length`.
+
+  - `characters`: the sample IDs that contain characters other than
+    ASCII letters, digits, `_`, `-` and `.`.
+
+See [hubverse documentation on
+samples](https://docs.hubverse.io/en/latest/user-guide/sample-output-type.html)
+for more details.

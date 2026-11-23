@@ -12,7 +12,8 @@ get_tbl_compound_taskid_set(
   round_id,
   compact = TRUE,
   error = TRUE,
-  derived_task_ids = get_config_derived_task_ids(config_tasks, round_id)
+  derived_task_ids = get_config_derived_task_ids(config_tasks, round_id),
+  spl_idx = NULL
 )
 ```
 
@@ -50,6 +51,14 @@ get_tbl_compound_taskid_set(
   `config_tasks`. See
   [`get_config_derived_task_ids()`](https://hubverse-org.github.io/hubUtils/reference/get_derived_task_ids_config.html)
   for more details.
+
+- spl_idx:
+
+  for internal use. The sample index, which assigns each sample row of
+  `tbl_chr` to its modeling task.
+  [`validate_model_data()`](https://hubverse-org.github.io/hubValidations/dev/reference/validate_model_data.md)
+  builds it once and shares it between the sample checks. `NULL`, the
+  default, builds it from `tbl_chr`.
 
 ## Value
 
