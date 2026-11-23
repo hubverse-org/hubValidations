@@ -17,6 +17,7 @@
 * Fixed a bug where the message of a failing `check_tbl_values()` named `NA` as an invalid value in a column that another modeling task lists as `null`. Called directly on a table holding another round's ID in the round ID column, it now names that ID as an invalid value rather than reporting an invalid combination (#387).
 * Fixed a bug where a derived task ID was ignored if the round's first modeling task left it out of its config. `expand_model_out_grid()` and `submission_tmpl()` then filled its column with the config's values instead of `NA` (#387).
 * `check_submission_time()`, and so `validate_submission()` and `validate_pr()`, no longer errors when a hub's `admin.json` sets a legacy timezone name, such as `US/Eastern`, on a system that does not recognise legacy names, such as Ubuntu 26.04 and the GitHub Actions runners that use it. A timezone the system does not recognise now gives a clear error, suggesting a valid timezone name, such as `America/New_York` (#419).
+* `check_tbl_spl_mt_unique()`, `check_tbl_spl_compound_taskid_set()` and `get_tbl_compound_taskid_set()` now error when a modeling task's `compound_taskid_set` names a task ID the round does not have. The two checks previously passed, and `get_tbl_compound_taskid_set()` returned a result (#401).
 
 ## Other changes
 

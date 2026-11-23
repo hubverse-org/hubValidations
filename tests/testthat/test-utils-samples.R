@@ -371,9 +371,26 @@ test_that("sample checks error on a spl_idx that does not index tbl_chr (#401)",
     ),
     "is not a sample index of `tbl_chr`"
   )
+
+  # Not a list, and a list with a missing row position and sample ID.
+  na_idx <- spl_idx_tbl(tbl, round_id, config_tasks)
+  na_idx$rows$row_idx[1] <- NA_integer_
+  na_idx$rows$output_type_id[1] <- NA_character_
+  for (bad_idx in list("not an index", na_idx)) {
+    expect_error(
+      check_tbl_spl_mt_unique(
+        tbl,
+        round_id,
+        file_path,
+        hub_path,
+        spl_idx = bad_idx
+      ),
+      "is not a sample index of `tbl_chr`"
+    )
+  }
 })
 
-test_that("shared_spl_idx returns NULL when the index cannot be built (#401)", {
+test_that("shared_spl_idx returns NULL and sample functions error when the index cannot be built (#401)", {
   hub_path <- withr::local_tempdir()
   fs::dir_copy(
     system.file("testhubs/samples", package = "hubValidations"),
@@ -395,4 +412,22 @@ test_that("shared_spl_idx returns NULL when the index cannot be built (#401)", {
   file_path <- "flu-base/2022-10-22-flu-base.csv"
   tbl <- read_model_out_file(file_path, hub_path, coerce_types = "chr")
   expect_null(shared_spl_idx(tbl, "2022-10-22", hub_path, NULL))
+
+  for (check in list(
+    check_tbl_spl_mt_unique,
+    check_tbl_spl_compound_taskid_set
+  )) {
+    expect_error(
+      check(tbl, "2022-10-22", file_path, hub_path),
+      "\"foo\" is not valid task ID"
+    )
+  }
+  expect_error(
+    get_tbl_compound_taskid_set(
+      tbl,
+      read_config(hub_path, "tasks"),
+      "2022-10-22"
+    ),
+    "\"foo\" is not valid task ID"
+  )
 })

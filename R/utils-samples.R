@@ -232,12 +232,15 @@ get_spl_idx <- function(
     )
   }
   n_mt <- length(hubUtils::get_round_model_tasks(config_tasks, round_id))
-  row_idx <- spl_idx$rows$row_idx
-  matches_tbl <- is.data.frame(spl_idx$rows) &&
-    length(spl_idx$comp_tids) == n_mt &&
-    all(row_idx >= 1L & row_idx <= nrow(tbl_chr)) &&
-    identical(spl_idx$rows$output_type_id, tbl_chr$output_type_id[row_idx]) &&
-    (!non_comp_key || "non_comp_key" %in% names(spl_idx$rows))
+  matches_tbl <- is.list(spl_idx) && is.data.frame(spl_idx$rows)
+  if (matches_tbl) {
+    row_idx <- spl_idx$rows$row_idx
+    matches_tbl <- length(spl_idx$comp_tids) == n_mt &&
+      !anyNA(row_idx) &&
+      all(row_idx >= 1L & row_idx <= nrow(tbl_chr)) &&
+      identical(spl_idx$rows$output_type_id, tbl_chr$output_type_id[row_idx]) &&
+      (!non_comp_key || "non_comp_key" %in% names(spl_idx$rows))
+  }
   if (!matches_tbl) {
     cli::cli_abort(
       c(
