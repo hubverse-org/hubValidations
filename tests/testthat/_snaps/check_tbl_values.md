@@ -64,5 +64,7 @@
     Output
       <error/check_error>
       Error:
-      ! `tbl` contains invalid values/value combinations.  Column `target_end_date` contains invalid value NA.
+      ! `tbl` contains invalid values/value combinations.
+      
+      Additionally row 1 contains invalid combinations of valid values.  See `error_tbl` for details.
 

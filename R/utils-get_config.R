@@ -18,21 +18,16 @@
 #' combination of those values. These lists hold the same information per
 #' column, unexpanded.
 #'
-#' Three things about configs make reading them more than a lookup, and
-#' `extract_round_property_values()` handles all three. It is shared with
-#' [expand_model_out_grid()], so a grid and these value sets cannot disagree
-#' about what a config allows.
-#'
-#' - A task ID a modeling task does not use is either listed as `null` or left
-#'   out of that modeling task altogether. Both come back as `NA`, which is what
-#'   the column holds for those rows.
-#' - Which `output_type_id` values are valid depends on the output type, so
-#'   `output_type_ids` holds a separate vector for each output type rather than
-#'   one vector covering them all.
-#' - `round_id` is pinned to the round being read, for a hub that takes its
-#'   round IDs from a task ID variable.
+#' The sets come from [hubUtils::get_round_value_sets_config()], which
+#' [expand_model_out_grid()] also uses, so a grid and these value sets cannot
+#' disagree about the values a config allows. Note that each modeling task holds
+#' every task ID in the round. A task ID that other modeling tasks use but this
+#' one does not, whether listed as `null` or left out, comes back as `NA`,
+#' which is what the column holds in this modeling task's rows.
 #'
 #' @inheritParams expand_model_out_grid
+#' @param call The environment of the calling function. Errors and warnings
+#'   from reading the config are attributed to it.
 #'
 #' @returns A list with one element per modeling task in the round, each a list
 #' of `task_ids` and `output_type_ids` as above. Values come back as character,
@@ -46,47 +41,23 @@ get_config_mt_value_sets <- function(
   derived_task_ids = NULL,
   call = rlang::caller_env()
 ) {
-  output_types <- validate_output_types(
-    output_types,
+  hubUtils::get_round_value_sets_config(
     config_tasks,
     round_id,
-    call = call
-  )
-  derived_task_ids <- validate_derived_task_ids(
-    derived_task_ids,
-    config_tasks,
-    round_id,
-    call = call
-  )
-  property_values <- extract_round_property_values(
-    config_tasks,
-    round_id = round_id,
     output_types = output_types,
-    derived_task_ids = derived_task_ids
-  )
-
-  round_task_ids <- hubUtils::get_round_task_id_names(config_tasks, round_id)
-
-  purrr::map2(
-    purrr::map(property_values[["task_ids"]], purrr::compact),
-    property_values[["output_type"]],
-    \(task_ids, output_type) {
-      # A modeling task that does not use a task ID lists it as null, or leaves
-      # it out altogether. A peak timing target might not use `horizon`, for
-      # instance, and its rows carry `NA` in that column, so `NA` is the only
-      # value the modeling task allows there. `extract_round_property_values()`
-      # above has already turned the ones listed as null into `NA`; this handles
-      # the ones left out, which would otherwise go untested and let the
-      # modeling task allow any value at all.
-      omitted <- setdiff(round_task_ids, names(task_ids))
-      task_ids[omitted] <- list(NA)
-
+    derived_task_ids = derived_task_ids,
+    call = call
+  ) |>
+    purrr::map(\(value_sets) {
+      task_ids <- flatten_values(value_sets[["task_ids"]])
+      task_ids[lengths(task_ids) == 0L] <- list(NA)
+      output_type_ids <- flatten_values(value_sets[["output_type_ids"]]) |>
+        purrr::compact()
       list(
         task_ids = config_values_to_character(task_ids),
-        output_type_ids = config_values_to_character(output_type)
+        output_type_ids = config_values_to_character(output_type_ids)
       )
-    }
-  )
+    })
 }
 
 # Convert a modeling task's value sets to character.
@@ -105,4 +76,15 @@ config_values_to_character <- function(x) {
     x,
     \(values) as.vector(arrow::Array$create(values)$cast(arrow::string()))
   )
+}
+
+# Make each element of a list of config values a vector.
+#
+# A config written with `jsonlite::toJSON()` stores a `null` property as `{}`,
+# which reads back as an empty list. `c()` of an empty list and a vector is a
+# list, so values from such a config can come back as a list of scalars, or as
+# an empty list where both properties are `{}`. Each of those becomes a vector,
+# or `NULL` when empty, so callers treat it like a `null` property.
+flatten_values <- function(x) {
+  purrr::map(x, \(values) unlist(values, use.names = FALSE))
 }

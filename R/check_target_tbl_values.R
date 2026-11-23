@@ -643,3 +643,28 @@ determine_date_col <- function(
   # Date relaxation will be skipped
   NULL
 }
+
+#' Convert all null task IDs to standard format
+#'
+#' A task ID that a model task does not use has both elements `NULL`. Setting
+#' `required` to `NA` gives it the value its column holds in that model task's
+#' rows.
+#' @param model_task A `model_task` object.
+#'
+#' @returns A `model_task` object with all null task IDs converted to a standard
+#' format.
+#' @noRd
+null_taskids_to_na <- function(model_task) {
+  to_na <- purrr::map_lgl(
+    model_task,
+    ~ all(purrr::map_lgl(.x, is.null))
+  )
+  purrr::modify_if(
+    model_task,
+    .p = to_na,
+    ~ list(
+      required = NA,
+      optional = NULL
+    )
+  )
+}
