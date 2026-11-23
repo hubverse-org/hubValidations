@@ -5,7 +5,16 @@
     Output
       <error/check_error>
       Error:
-      ! Sample `output_type_id`s do not match the required sample ID format.  mt 2: sample IDs "s1", "1.5", "1.0", "1e3", "+1", " 1", "01", "-1", and "s{id1}" are not non-negative integers. Integer sample IDs must contain digits only, without leading zeros. See `errors` attribute for details.
+      ! Sample `output_type_id`s do not match the required sample ID format.  mt 2: sample IDs "s1", "1.5", "1.0", "1e3", "+1", " 1", "01", "-1", and "s{id1}" are not non-negative integers. Integer sample IDs must contain digits only, without leading zeros. Some sample IDs are in scientific notation. Write them out in full, for example with `format(x, scientific = FALSE)` in R. See `errors` attribute for details.
+
+# check_tbl_spl_ids suggests writing out sample IDs in scientific notation in full (#406)
+
+    Code
+      result
+    Output
+      <error/check_error>
+      Error:
+      ! Sample `output_type_id`s do not match the required sample ID format.  mt 2: sample IDs "1e+05" and "2.5E-3" are not non-negative integers. Integer sample IDs must contain digits only, without leading zeros. Some sample IDs are in scientific notation. Write them out in full, for example with `format(x, scientific = FALSE)` in R. See `errors` attribute for details.
 
 # check_tbl_spl_ids fails character sample IDs that are too long or contain disallowed characters (#406)
 

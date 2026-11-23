@@ -69,7 +69,8 @@ check_tbl_spl_ids <- function(
       return(NULL)
     }
     c(
-      spl_params[intersect(c("type", "max_length"), names(spl_params))],
+      spl_params["type"],
+      if (spl_params$type == "character") spl_params["max_length"],
       list(problems = problems)
     )
   }) |>
@@ -94,6 +95,8 @@ check_tbl_spl_ids <- function(
 spl_id_pattern <- "^[A-Za-z0-9_.-]+$"
 # The canonical form of an integer sample ID.
 spl_id_int_pattern <- "^(0|[1-9][0-9]*)$"
+# A number in scientific notation, such as "1e+05".
+spl_id_sci_pattern <- "^[0-9]+(\\.[0-9]+)?[eE][+-]?[0-9]+$"
 
 # The `problems` of the `output_type_id`s `ids` of one modeling task, given
 # its sample `output_type_id_params`, as documented in `check_tbl_spl_ids()`.
@@ -138,10 +141,18 @@ compile_spl_ids_details <- function(errors) {
     )
     paste0("mt ", .y, ": ", cli::ansi_collapse(phrases), ".")
   })
+  not_int <- unlist(purrr::map(errors, \(.x) .x$problems$integer))
   c(
     details,
-    if (any(purrr::map_lgl(errors, \(.x) "integer" %in% names(.x$problems)))) {
+    if (length(not_int) > 0L) {
       "Integer sample IDs must contain digits only, without leading zeros."
+    },
+    # R writes some whole numbers, such as 100000, in scientific notation.
+    if (any(grepl(spl_id_sci_pattern, not_int))) {
+      paste(
+        "Some sample IDs are in scientific notation. Write them out in full,",
+        "for example with {.code format(x, scientific = FALSE)} in R."
+      )
     },
     "See {.var errors} attribute for details."
   ) |>
