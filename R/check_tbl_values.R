@@ -146,7 +146,7 @@ summarise_invalid_values <- function(
     vals[[output_type_id]][is_sample] <- NA_character_
   }
 
-  uniq_config <- get_round_config_values(config_tasks, round_id)[names(vals)]
+  uniq_config <- get_round_pooled_values(config_tasks, round_id)[names(vals)]
 
   invalid_vals <- purrr::map2(
     purrr::map(vals, unique),

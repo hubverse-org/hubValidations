@@ -108,11 +108,10 @@ summarise_invalid_values_via_grid <- function(
   invalid_row_idx <- which(is.na(valid_tbl$valid))
   cols <- setdiff(names(valid_tbl), c("value", "valid", "rowid"))
   uniq_tbl <- purrr::map(valid_tbl[invalid_row_idx, cols], unique)
-  uniq_config <- get_round_config_values(
-    config_tasks,
-    round_id,
-    derived_task_ids
-  )[cols]
+  uniq_config <- get_round_pooled_values(config_tasks, round_id)
+  # The grid holds `NA` in derived task ID columns, and so does `valid_tbl`.
+  uniq_config[derived_task_ids] <- list(NA_character_)
+  uniq_config <- uniq_config[cols]
 
   invalid_vals <- purrr::map2(
     uniq_tbl,

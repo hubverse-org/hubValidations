@@ -224,35 +224,45 @@ expand_model_out_grid <- function(
 ) {
   checkmate::assert_list(compound_taskid_set, null.ok = TRUE)
   output_type_id_datatype <- rlang::arg_match(output_type_id_datatype)
-  output_types <- validate_output_types(output_types, config_tasks, round_id)
-  derived_task_ids <- validate_derived_task_ids(
-    derived_task_ids,
+  value_sets <- hubUtils::get_round_value_sets_config(
     config_tasks,
-    round_id
+    round_id,
+    required_vals_only = required_vals_only,
+    force_output_types = force_output_types,
+    output_types = output_types,
+    derived_task_ids = derived_task_ids,
+    call = rlang::current_env()
   )
   round_config <- get_round_config(config_tasks, round_id)
+  round_id_var <- if (isTRUE(round_config[["round_id_from_variable"]])) {
+    round_config[["round_id"]]
+  }
   # Create a logical variable to control what is returned by expand_model_task_grid.
   # See function documentation for details.
   all_output_types <- is.null(output_types) # nolint: object_usage_linter
 
-  property_values <- extract_round_property_values(
-    config_tasks,
-    round_id = round_id,
-    output_types = output_types,
-    derived_task_ids = derived_task_ids,
-    required_vals_only = required_vals_only,
-    force_output_types = force_output_types
-  )
-
   # Expand output grid individually for each modeling task.
   grid <- purrr::map2(
-    property_values[["task_ids"]],
-    property_values[["output_type"]],
-    ~ expand_model_task_grid(
-      task_id_values = .x,
-      output_type_values = .y,
-      all_output_types = all_output_types
-    )
+    round_config[["model_tasks"]],
+    value_sets,
+    \(model_task, mt_value_sets) {
+      grid_task_ids <- get_grid_task_id_names(
+        model_task,
+        round_id_var,
+        required_vals_only = required_vals_only,
+        derived_task_ids = derived_task_ids
+      )
+      expand_model_task_grid(
+        task_id_values = flatten_values(
+          mt_value_sets[["task_ids"]][grid_task_ids]
+        ),
+        output_type_values = flatten_values(
+          mt_value_sets[["output_type_ids"]]
+        ) |>
+          purrr::compact(),
+        all_output_types = all_output_types
+      )
+    }
   )
 
   if (include_sample_ids) {
@@ -277,107 +287,45 @@ expand_model_out_grid <- function(
   )
 }
 
-#' Read the values each modeling task lists for each of its columns
+#' Task ID columns of a modeling task's grid
 #'
-#' Reads a round's config and returns, for each modeling task, the values it
-#' lists in each of its columns. Along the way it sets derived and unused task
-#' IDs to `NA`, pins the round ID column to the round being read, and collapses
-#' each property's `required` and `optional` values into one vector, `required`
-#' first.
+#' [hubUtils::get_round_value_sets_config()] gives each modeling task every task
+#' ID in the round. A task ID that other modeling tasks use but this one leaves
+#' out of its config comes back as `NA`, as does one with no values to expand.
+#' A modeling task's grid leaves out some of those columns, and this function
+#' names the ones it keeps:
 #'
-#' Two functions share this. [expand_model_out_grid()] expands the values into
-#' a grid; `get_config_mt_value_sets()` keeps them as sets. Sharing it means the
-#' two cannot disagree about what a config allows.
+#' - task IDs the modeling task lists in its config, in config order.
+#' - With `required_vals_only = TRUE`, only those with required values, those
+#'   listed as `null`, and the round ID task ID of a round that takes its round
+#'   IDs from a task ID. Derived task IDs are left out.
 #'
+#' Note that when modeling task grids are bound, columns left out of one grid
+#' but present in another are padded with `NA`.
+#'
+#' @param model_task A `model_task` object from a round configuration.
+#' @param round_id_var The round ID task ID of a round that takes its round
+#'   IDs from a task ID, otherwise `NULL`.
 #' @inheritParams expand_model_out_grid
 #'
-#' @returns A list of two, `task_ids` and `output_type`, each with one element
-#' per modeling task in the round.
+#' @returns A character vector of task ID names.
 #' @noRd
-extract_round_property_values <- function(
-  config_tasks,
-  round_id,
-  output_types,
-  derived_task_ids,
-  required_vals_only = FALSE,
-  force_output_types = FALSE
+get_grid_task_id_names <- function(
+  model_task,
+  round_id_var,
+  required_vals_only,
+  derived_task_ids
 ) {
-  round_config <- get_round_config(config_tasks, round_id)
-
-  task_ids <- purrr::map(
-    round_config[["model_tasks"]],
-    ~ .x[["task_ids"]] |>
-      derived_taskids_to_na(derived_task_ids) |>
-      null_taskids_to_na()
-  ) |>
-    # Fix round_id value to current round_id in round_id variable column
-    fix_round_id(
-      round_id = round_id,
-      round_config = round_config,
-      round_ids = hubUtils::get_round_ids(config_tasks)
-    ) |>
-    extract_property_values(required_vals_only = required_vals_only)
-
-  # Get output type id property according to config schema version
-  # TODO: remove back-compatibility with schema versions < v2.0.0 when support
-  # retired
-  config_tid <- hubUtils::get_config_tid(config_tasks = config_tasks)
-
-  output_type <- subset_round_output_types(round_config, output_types) |>
-    extract_round_output_type_ids(config_tid, force_output_types) |>
-    extract_property_values(required_vals_only = required_vals_only) |>
-    purrr::map(~ purrr::compact(.x))
-
-  list(task_ids = task_ids, output_type = output_type)
-}
-
-# Subset output types according to `output_types` from all model_task objects in
-# a round. If `output_types` is `NULL`, all output types for each model task are
-# returned.
-subset_round_output_types <- function(round_config, output_types) {
-  purrr::map(
-    round_config[["model_tasks"]],
-    ~ subset_mt_output_types(.x, output_types)
+  task_ids <- model_task[["task_ids"]]
+  if (!required_vals_only) {
+    return(names(task_ids))
+  }
+  has_required <- purrr::map_lgl(
+    task_ids,
+    \(x) !is.null(x[["required"]]) || is.null(x[["optional"]])
   )
-}
-
-#' Subset model_task object output types according to `output_types`.
-#'
-#' @param model_task A model_task object from a round configuration.
-#' @param output_types Character vector of output type names to subset. If
-#' n`output_types` is `NULL`, all output types are returned.
-#'
-#' @returns A subset of `model_task` containing only the output types in
-#'  `output_types`.
-#' @noRd
-subset_mt_output_types <- function(model_task, output_types) {
-  out <- model_task[["output_type"]]
-  if (is.null(output_types)) {
-    out
-  } else {
-    mt_output_types <- output_types[output_types %in% names(out)]
-    out[mt_output_types]
-  }
-}
-
-#' Extracts/collapses individual task ID/output type ID values depending on
-#' whether all or just required values are needed.
-#'
-#' @param x A `task_ids` object or list of `output_type_ids` from a `model_task`
-#' object.
-#' @param required_vals_only Logical. Whether to return only required values.
-#'
-#' @returns A named list containining vectors of task ID/output type ID values,
-#' one for each element in `x`. If `required_vals_only = TRUE`, only required
-#' values are returned. Otherwise, all values are collapsed into a single vector
-#' and returned.
-#' @noRd
-extract_property_values <- function(x, required_vals_only = FALSE) {
-  if (required_vals_only) {
-    purrr::map(x, ~ .x |> purrr::map(~ .x[["required"]]))
-  } else {
-    purrr::modify_depth(x, .depth = 2, ~ unlist(.x, use.names = FALSE))
-  }
+  keep <- has_required | names(task_ids) %in% round_id_var
+  setdiff(names(task_ids)[keep], derived_task_ids)
 }
 
 #' Create a model task level expanded grid of valid values
@@ -440,47 +388,6 @@ expand_model_task_grid <- function(
     purrr::list_rbind()
 }
 
-
-#' Fix the `round_id` in a `round_id` task ID variable
-#'
-#' Given expanded grids are always constructed for a specific round, this function
-#' fixes the value of a `round_id` task ID variable when `round_id_from_variable = TRUE`
-#' in the round configuration to a single `round_id` value.
-#' @param x A list representation of `model_task` objects, subset to contain only
-#' `task_ids` objects.
-#' @param round_id The round ID to set in the `round_id` variable column.
-#' @param round_config The round configuration object.
-#' @param round_ids A character vector of valid round IDs.
-#'
-#' @returns If `round_config$round_id_from_variable` is `TRUE`, the `required`
-#' value of the task ID in `x` defined by the `round_config$round_id` property
-#' is set to the single `round_id` value.
-#' If `round_config$round_id_from_variable` is `FALSE`, `x` is returned unchanged.
-#' @noRd
-fix_round_id <- function(x, round_id, round_config, round_ids) {
-  if (!round_config[["round_id_from_variable"]] || is.null(round_id)) {
-    return(x)
-  }
-  round_id <- rlang::arg_match(round_id, values = round_ids)
-  round_id_var <- round_config[["round_id"]]
-
-  # Iterate over each `model_task` object and set the `required` value in the
-  # `round_id` task ID variable to the single `round_id` value. Set optional
-  # to `NULL` as a round_id value is always required.
-  purrr::map(
-    x,
-    function(model_task) {
-      purrr::modify_at(
-        model_task,
-        .at = round_id_var,
-        .f = ~ list(
-          required = round_id,
-          optional = NULL
-        )
-      )
-    }
-  )
-}
 
 #' Process expanded grids of modeling task valid values before returning.
 #'
@@ -588,129 +495,4 @@ pad_missing_cols <- function(x, all_cols) {
     return(cbind(x, missing_cols)[, all_cols])
   }
   x
-}
-
-#' Convert all null task IDs to standard format
-#'
-#' In situations where a task ID is not relevant to a model task, both elements will
-#' be `NULL`. To convert to a standard format that with a valid value in the
-#' expanded grid, we set the `required` value to `NA` and the `optional` value to
-#' `NULL`.
-#' @param model_task A `model_task` object.
-#'
-#' @returns A `model_task` object with all null task IDs converted to a standard
-#' format.
-#' @noRd
-null_taskids_to_na <- function(model_task) {
-  to_na <- purrr::map_lgl(
-    model_task,
-    ~ all(purrr::map_lgl(.x, is.null))
-  )
-  purrr::modify_if(
-    model_task,
-    .p = to_na,
-    ~ list(
-      required = NA,
-      optional = NULL
-    )
-  )
-}
-
-#' Extract the `output_type_id` values for each `output_type` in each `model_task`
-#' object in a round
-#'
-#' @param x List. An R representation all `model_task` objects for a single round,
-#' one element for each model task. Each `model_task` must be subset to contain
-#' only `output_type` properties (i.e. the output of `subset_round_output_types()`).
-#' @param config_tid Character string. The name of the output_type_id column in the
-#' config schema used for back-compatibility with schema versions < v2.0.0.
-#' @param force_output_types Logical. Whether to force all `output_type_id`s to
-#' be required.
-#'
-#' @returns list containing an element for each model task. Each model task elements
-#'  is a named list, with one element per `output_type`. Each named `output_type`
-#'  element contains the `output_type_id`s in a standardised format (i.e. having
-#'  `required` and `optional` vectors of values.
-#' @noRd
-extract_round_output_type_ids <- function(
-  x,
-  config_tid,
-  force_output_types = FALSE
-) {
-  purrr::map(
-    x,
-    ~ extract_model_task_output_type_ids(
-      .x,
-      config_tid,
-      force_output_types
-    )
-  )
-}
-
-#' Extract and standardise the `output_type_id` values from a `model_task` object.
-#'
-#' The function extracts the `output_type_id` element from each output type in a
-#' model task object. If the output type id values are already standardised, they
-#' are returned as is. If not (e.g if they are post v4 output type IDs),
-#' they are standardised to a std format that contains both a `required` and
-#' `optional` element. See documentation of the `standardise_output_types_ids()`
-#' function for more details.
-#' @param x List. An R representation of the `output_types` property of a single
-#' `model_task` (the output of `subset_mt_output_types()`).
-#' @param config_tid Character string. The name of the output_type_id column in the
-#' config schema used for back-compatibility with schema versions < v2.0.0.
-#' @param force_output_types Logical. Whether to force all output types to be
-#' required. Used for forcing consistent behaviour when creating pre v4 grids with
-#' that of post v4 grids.
-#'
-#' @returns a named list of standardised `output_type_id` objects, one element
-#' for each output type in a given the model task.
-#' @noRd
-extract_model_task_output_type_ids <- function(
-  x,
-  config_tid,
-  force_output_types = FALSE
-) {
-  purrr::map(
-    x,
-    function(output_type) {
-      is_required <- is_required_output_type(output_type) || force_output_types
-      process_output_type_ids(
-        output_type_ids = output_type[[config_tid]],
-        force_output_types = force_output_types,
-        is_required = is_required
-      )
-    }
-  )
-}
-
-#' Process output_type_ids to ensure they are in a standard format.
-#'
-#' This function is used to convert post v4 output type IDs to the standard
-#' (pre v4) format that contains both a `required` and `optional` element. This
-#' in turn allows the use of existing infrastructure to process post v4 output
-#' type IDs in the same way as pre v4 output type IDs and task IDs.
-#' @param output_type_ids A list representation of an `output_type_id` object.
-#' @param force_output_types Logical. Whether to force all output types to be
-#' required. Used for forcing consistent behaviour when formatting pre v4 output
-#' type IDs to conform to the post v4 expectation of all output type IDs being
-#' required when an output type is requested.
-#' @param is_required Logical. Whether the output type is required.
-#'
-#' @returns A standardised `output_type_id` object that has a `required` and
-#' `optional` element.
-#' @noRd
-process_output_type_ids <- function(
-  output_type_ids,
-  force_output_types,
-  is_required
-) {
-  is_std <- std_output_type_ids(output_type_ids)
-  if (is_std && !force_output_types) {
-    return(output_type_ids)
-  }
-  if (is_std && force_output_types) {
-    return(as_required(output_type_ids))
-  }
-  standardise_output_types_ids(output_type_ids, is_required)
 }

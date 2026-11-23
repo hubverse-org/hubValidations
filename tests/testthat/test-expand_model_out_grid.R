@@ -1204,3 +1204,40 @@ test_that("v4 required output type ID values extracted correctly", {
     )
   )
 })
+
+test_that("expand_model_out_grid leaves out task IDs a modeling task does not list", {
+  # Only the second modeling task lists `age_group`.
+  config_tasks <- read_config_file(
+    test_path("testdata", "configs", "tasks-samples-tid-from-sample.json")
+  )
+  grids <- expand_model_out_grid(
+    config_tasks,
+    round_id = "2022-12-12",
+    bind_model_tasks = FALSE
+  )
+  expect_named(
+    grids[[1]],
+    c(
+      "forecast_date",
+      "target",
+      "horizon",
+      "location",
+      "output_type",
+      "output_type_id"
+    )
+  )
+  expect_true("age_group" %in% names(grids[[2]]))
+})
+
+test_that("expand_model_out_grid treats a derived task ID the first modeling task does not list as derived", {
+  config_tasks <- read_config(test_path("testdata/hub-177"))
+  config_tasks$rounds[[1]]$model_tasks[[1]]$task_ids$target_end_date <- NULL
+  round_id <- hubUtils::get_round_ids(config_tasks)[1]
+
+  grid <- expand_model_out_grid(
+    config_tasks,
+    round_id = round_id,
+    derived_task_ids = "target_end_date"
+  )
+  expect_true(all(is.na(grid$target_end_date)))
+})
